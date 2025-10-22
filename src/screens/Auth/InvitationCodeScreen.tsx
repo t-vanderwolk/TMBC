@@ -8,6 +8,7 @@ import { supabase } from "../../lib/supabase";
 import { RootStackParamList } from "../../navigation/AppNavigator";
 import ScreenContainer from "../../components/ScreenContainer";
 import TMCard from "../../components/TMCard";
+import { colors } from "../../styles/theme";
 
 type InvitationCodeNavigation = NativeStackNavigationProp<
   RootStackParamList,
@@ -74,16 +75,16 @@ export default function InvitationCodeScreen() {
       <ScreenContainer
         scrollable
         keyboardShouldPersistTaps="handled"
-        contentClassName="px-6 py-12 gap-8"
+        contentClassName="py-12 gap-8"
       >
         <TMCard className="gap-3 bg-white/70">
-          <TMText className="text-mauve text-sm font-semibold uppercase tracking-widest text-center">
+          <TMText className="text-mauve text-sm font-semibold uppercase tracking-[0.3em] text-center">
             Welcome In
           </TMText>
-          <TMText className="text-charcoal text-2xl font-bold text-center">
+          <TMText className="font-greatVibes text-4xl text-charcoal text-center">
             Enter Your Invite Code
           </TMText>
-          <TMText className="text-charcoal/75 text-sm text-center">
+          <TMText className="text-charcoal/75 text-base text-center">
             Validate your one-time code to unlock your Taylor-Made Baby Co.
             membership and questionnaire.
           </TMText>
@@ -99,13 +100,13 @@ export default function InvitationCodeScreen() {
               onChangeText={setInviteCode}
               autoCapitalize="characters"
               placeholder="TMBC-2025"
-              placeholderTextColor="#C8A1B4"
+              placeholderTextColor={colors.mauve}
               className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-center text-lg tracking-[4px] text-charcoal"
             />
           </View>
 
           {errorMessage ? (
-            <TMText className="text-red-500 text-sm text-center">
+            <TMText className="text-gold text-sm text-center">
               {errorMessage}
             </TMText>
           ) : null}

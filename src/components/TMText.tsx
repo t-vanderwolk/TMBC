@@ -1,15 +1,33 @@
 import React from "react";
-import { Text, TextProps } from "react-native";
+import { Text } from "react-native";
+import { cn } from "../lib/cn";
 
-type TMTextProps = TextProps & {
-  children: React.ReactNode;
+type TMTextProps = {
+  variant?: "heading" | "subheading" | "body";
   className?: string;
-};
+  children: React.ReactNode;
+} & React.ComponentProps<typeof Text>;
 
-export default function TMText({ children, className, ...props }: TMTextProps) {
+const TMText = ({
+  variant = "body",
+  className = "",
+  children,
+  ...props
+}: TMTextProps) => {
+  const style =
+    variant === "heading"
+      ? "font-greatVibes text-4xl text-mauve text-center"
+      : variant === "subheading"
+      ? "font-playfair text-lg text-charcoal text-center"
+      : "font-nunito text-base text-charcoal";
+
   return (
-    <Text className={`text-charcoal ${className ?? ""}`} {...props}>
+    <Text className={cn(`${style} ${className}`)} {...props}>
       {children}
     </Text>
   );
-}
+};
+
+TMText.displayName = "TMText";
+
+export default TMText;

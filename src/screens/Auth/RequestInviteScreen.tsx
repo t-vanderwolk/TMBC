@@ -11,6 +11,7 @@ import TMButton from "../../components/TMButton";
 import { supabase } from "../../lib/supabase";
 import ScreenContainer from "../../components/ScreenContainer";
 import TMCard from "../../components/TMCard";
+import { colors } from "../../styles/theme";
 
 const roleOptions = [
   { label: "Member", value: "member" as const },
@@ -78,16 +79,16 @@ export default function RequestInviteScreen() {
       <ScreenContainer
         scrollable
         keyboardShouldPersistTaps="handled"
-        contentClassName="px-6 py-12 gap-8"
+        contentClassName="py-12 gap-8"
       >
         <TMCard className="gap-3 bg-white/70">
-          <TMText className="text-mauve text-sm font-semibold uppercase tracking-widest text-center">
+          <TMText className="text-mauve text-sm font-semibold uppercase tracking-[0.3em] text-center">
             Join Taylor-Made Baby Co.
           </TMText>
-          <TMText className="text-charcoal text-2xl font-bold text-center">
+          <TMText className="font-greatVibes text-4xl text-charcoal text-center">
             Request an Invite
           </TMText>
-          <TMText className="text-charcoal/75 text-sm text-center">
+          <TMText className="text-charcoal/75 text-base text-center">
             Tell us a little about yourself so we can match you with the right
             concierge team and community circles.
           </TMText>
@@ -103,7 +104,7 @@ export default function RequestInviteScreen() {
                 value={name}
                 onChangeText={setName}
                 placeholder="Taylor Smith"
-                placeholderTextColor="#C8A1B4"
+                placeholderTextColor={colors.mauve}
                 className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
               />
             </View>
@@ -118,7 +119,7 @@ export default function RequestInviteScreen() {
                 placeholder="you@email.com"
                 keyboardType="email-address"
                 autoCapitalize="none"
-                placeholderTextColor="#C8A1B4"
+                placeholderTextColor={colors.mauve}
                 className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
               />
             </View>
@@ -155,7 +156,7 @@ export default function RequestInviteScreen() {
           </View>
 
           {errorMessage ? (
-            <TMText className="text-red-500 text-sm">{errorMessage}</TMText>
+            <TMText className="text-gold text-sm">{errorMessage}</TMText>
           ) : null}
 
           {statusMessage ? (

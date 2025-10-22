@@ -4,59 +4,57 @@ import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NavigationProp } from "@react-navigation/native";
 import TMText from "../../components/TMText";
-import { supabase } from "../../lib/supabase";
 import ScreenContainer from "../../components/ScreenContainer";
 import TMCard from "../../components/TMCard";
 import TMButton from "../../components/TMButton";
 import type { RootStackParamList } from "../../navigation/AppNavigator";
 import type { MainNavRoute } from "../../components/TMNavbar";
+import { colors } from "../../styles/theme";
+import { useAuth } from "../../hooks/useAuth";
 
-export default function DashboardScreen() {
+type FeatherName = React.ComponentProps<typeof Feather>["name"];
+
+export default function MemberDashboardScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { profile } = useAuth();
 
-  React.useEffect(() => {
-    const fetchProfiles = async () => {
-      const { data, error } = await supabase.from("profiles").select("*");
-
-      if (error) {
-        console.error("Supabase profiles error:", error);
-        return;
-      }
-
-      console.log("Supabase profiles data:", data);
-    };
-
-    fetchProfiles();
-  }, []);
+  const quickActions: Array<{ label: string; icon: FeatherName; route: MainNavRoute }> = React.useMemo(
+    () => [
+      { label: "Learn", icon: "book-open", route: "Academy" },
+      { label: "Prepare", icon: "gift", route: "Registry" },
+      { label: "Connect", icon: "users", route: "Community" },
+      { label: "Concierge", icon: "message-circle", route: "Concierge" },
+      { label: "Journal", icon: "feather", route: "Journal" },
+    ],
+    []
+  );
 
   return (
-    <ScreenContainer
-      activeRoute="Dashboard"
-      contentClassName="px-6 pt-6 gap-6"
-    >
-      <View className="bg-white/70 rounded-3xl px-6 py-6 shadow-sm border border-mauve/10">
-        <TMText className="text-charcoal text-sm font-semibold uppercase tracking-widest">
+    <ScreenContainer activeRoute="MemberDashboard" contentClassName="gap-6 pt-4">
+      <TMCard className="gap-3 bg-ivory/95">
+        <TMText className="text-sm font-semibold uppercase tracking-[0.3em] text-charcoal/70">
           Welcome Back
         </TMText>
-        <TMText className="text-mauve text-3xl font-bold mt-1">
+        <TMText className="font-greatVibes text-4xl text-mauve">
           Your Taylor-Made Journey
         </TMText>
-        <TMText className="text-charcoal/80 text-base mt-3">
-          Here&apos;s what we curated for you today. Explore each space to stay
-          supported, inspired, and organized.
+        <TMText className="font-nunito text-base text-charcoal/80">
+          {profile?.full_name
+            ? `Hi ${profile.full_name.split(" ")[0]}, here is your personalized outlook for today.`
+            : "Here&apos;s what we curated for you today. Explore each space to stay supported, inspired, and organized."}
         </TMText>
-      </View>
+      </TMCard>
 
       <View className="gap-4">
-        <TMText className="text-charcoal text-xl font-semibold">
+        <TMText className="font-playfair text-xl text-charcoal">
           Spotlight
         </TMText>
-        <TMCard className="flex-row items-center gap-4 border border-mauve/10">
+        <TMCard className="flex-row items-center gap-4">
           <View className="h-12 w-12 rounded-full bg-mauve/15 items-center justify-center">
-            <Feather name="calendar" size={24} color="#C8A1B4" />
+            <Feather name="calendar" size={24} color={colors.mauve} />
           </View>
           <View className="flex-1">
-            <TMText className="text-charcoal font-semibold">
+            <TMText className="font-nunito text-base text-charcoal font-semibold">
               Upcoming Concierge Session
             </TMText>
             <TMText className="text-charcoal/70 text-sm">
@@ -73,27 +71,16 @@ export default function DashboardScreen() {
       </View>
 
       <View className="gap-4">
-        <TMText className="text-charcoal text-xl font-semibold">
+        <TMText className="font-playfair text-xl text-charcoal">
           Quick Actions
         </TMText>
         <View className="flex-row flex-wrap gap-4">
-          {(
-            [
-              { label: "Academy", icon: "book-open", route: "Academy" },
-              { label: "Registry", icon: "gift", route: "Registry" },
-              { label: "Community", icon: "users", route: "Community" },
-              { label: "Concierge", icon: "message-circle", route: "Concierge" },
-              { label: "Journal", icon: "feather", route: "Journal" },
-            ] as Array<{ label: string; icon: FeatherName; route: MainNavRoute }>
-          ).map((item) => (
-            <TMCard
-              key={item.label}
-              className="w-[47%] gap-3 border border-mauve/10"
-            >
+          {quickActions.map((item) => (
+            <TMCard key={item.label} className="w-[47%] gap-3">
               <View className="h-10 w-10 rounded-full bg-blush/30 items-center justify-center">
-                <Feather name={item.icon} size={20} color="#3E2F35" />
+                <Feather name={item.icon} size={20} color={colors.charcoal} />
               </View>
-              <TMText className="text-charcoal text-lg font-semibold">
+              <TMText className="font-nunito text-lg text-charcoal font-semibold">
                 {item.label}
               </TMText>
               <TMText className="text-charcoal/70 text-sm">
@@ -101,9 +88,8 @@ export default function DashboardScreen() {
               </TMText>
               <TMButton
                 label="Open"
-                variant="ghost"
+                variant="outline"
                 className="px-0"
-                textClassName="text-mauve"
                 onPress={() => navigation.navigate(item.route)}
               />
             </TMCard>
@@ -112,10 +98,10 @@ export default function DashboardScreen() {
       </View>
 
       <View className="gap-4 mb-12">
-        <TMText className="text-charcoal text-xl font-semibold">
+        <TMText className="font-playfair text-xl text-charcoal">
           Today&apos;s Notes
         </TMText>
-        <TMCard className="border border-mauve/10">
+        <TMCard>
           <TMText className="text-charcoal/70 text-sm">
             Keep a quick reflection about today&apos;s milestone, or jot down a
             reminder for your concierge.
@@ -131,4 +117,3 @@ export default function DashboardScreen() {
     </ScreenContainer>
   );
 }
-type FeatherName = React.ComponentProps<typeof Feather>["name"];

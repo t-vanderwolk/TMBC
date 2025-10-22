@@ -5,6 +5,7 @@ import ScreenContainer from "../../components/ScreenContainer";
 import TMText from "../../components/TMText";
 import TMCard from "../../components/TMCard";
 import TMButton from "../../components/TMButton";
+import { colors } from "../../styles/theme";
 
 const featuredModules = [
   {
@@ -23,18 +24,15 @@ const featuredModules = [
 
 export default function AcademyScreen() {
   return (
-    <ScreenContainer
-      activeRoute="Academy"
-      contentClassName="px-6 pt-6 pb-16 gap-6"
-    >
-      <TMCard className="gap-3">
-        <TMText className="text-mauve text-sm font-semibold uppercase tracking-widest">
+    <ScreenContainer activeRoute="Academy" contentClassName="gap-6 pb-16">
+      <TMCard className="gap-3 bg-ivory/95">
+        <TMText className="text-mauve text-sm font-semibold uppercase tracking-[0.3em]">
           Learning Library
         </TMText>
-        <TMText className="text-charcoal text-2xl font-bold">
+        <TMText className="font-greatVibes text-4xl text-charcoal">
           Weekly Academy Picks
         </TMText>
-        <TMText className="text-charcoal/75 text-sm">
+        <TMText className="text-charcoal/75 text-base">
           Curated sessions that match your baby&apos;s milestones and your current
           focus.
         </TMText>
@@ -45,10 +43,10 @@ export default function AcademyScreen() {
           <TMCard key={module.title} className="gap-4">
             <View className="flex-row items-center gap-4">
               <View className="h-12 w-12 rounded-full bg-mauve/15 items-center justify-center">
-                <Feather name={module.icon as any} size={22} color="#C8A1B4" />
+                <Feather name={module.icon as any} size={22} color={colors.mauve} />
               </View>
               <View className="flex-1 gap-1">
-                <TMText className="text-charcoal text-lg font-semibold">
+                <TMText className="font-nunito text-lg text-charcoal font-semibold">
                   {module.title}
                 </TMText>
                 <TMText className="text-charcoal/60 text-sm">
@@ -64,8 +62,8 @@ export default function AcademyScreen() {
         ))}
       </View>
 
-      <TMCard className="gap-3 bg-blush/15 border-blush/30">
-        <TMText className="text-charcoal text-lg font-semibold">
+      <TMCard className="gap-3 bg-blush/15 border-blush/40">
+        <TMText className="font-playfair text-lg text-charcoal">
           Need a guided path?
         </TMText>
         <TMText className="text-charcoal/70 text-sm">

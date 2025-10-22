@@ -7,6 +7,7 @@ import { RootStackParamList } from "../../navigation/AppNavigator";
 import { supabase } from "../../lib/supabase";
 import ScreenContainer from "../../components/ScreenContainer";
 import TMCard from "../../components/TMCard";
+import { colors } from "../../styles/theme";
 
 type ProfileQuestionnaireProps = NativeStackScreenProps<
   RootStackParamList,
@@ -25,6 +26,8 @@ export default function ProfileQuestionnaireScreen({
   const [nurseryStyle, setNurseryStyle] = React.useState("");
   const [topConcerns, setTopConcerns] = React.useState("");
   const [registryReady, setRegistryReady] = React.useState(false);
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
@@ -42,32 +45,84 @@ export default function ProfileQuestionnaireScreen({
 
     const trimmedName = name.trim();
 
+    if (password.length < 8) {
+      setErrorMessage("Password must be at least 8 characters long.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
 
-    const {
-      data: profileData,
-      error: profileError,
-    } = await supabase
+    const { data: existingProfile } = await supabase
       .from("profiles")
-      .insert({
-        email: trimmedEmail,
-        full_name: trimmedName || null,
-        name: trimmedName || null,
-        role: "member",
-      })
-      .select()
-      .single();
+      .select("*")
+      .eq("email", trimmedEmail)
+      .maybeSingle();
 
-    if (profileError || !profileData) {
-      if ((profileError?.code ?? "") === "23505") {
-        setErrorMessage(
-          "We already have a profile for this email. Try logging in or request support."
-        );
-      } else {
-        setErrorMessage(
-          "We couldn't save your profile. Please double-check the details and try again."
-        );
+    const { data: signUpData, error: signUpError } = await supabase.auth
+      .signUp({
+        email: trimmedEmail,
+        password,
+        options: {
+          data: {
+            full_name: trimmedName || undefined,
+          },
+        },
+      });
+
+    if (signUpError) {
+      setErrorMessage(signUpError.message);
+      setLoading(false);
+      return;
+    }
+
+    let userId = signUpData.user?.id ?? signUpData.session?.user.id;
+
+    if (!userId) {
+      const { data: signInData, error: signInError } =
+        await supabase.auth.signInWithPassword({
+          email: trimmedEmail,
+          password,
+        });
+      if (signInError) {
+        setErrorMessage(signInError.message);
+        setLoading(false);
+        return;
       }
+      userId = signInData.session?.user.id;
+    }
+
+    if (!userId) {
+      setErrorMessage(
+        "We couldn't finalize your account. Please contact support."
+      );
+      setLoading(false);
+      return;
+    }
+
+    const profilePayload = {
+      id: existingProfile?.id ?? userId,
+      user_id: userId,
+      email: trimmedEmail,
+      full_name: trimmedName || existingProfile?.full_name || null,
+      name: trimmedName || existingProfile?.name || null,
+      role: "member" as const,
+      onboarding_completed: true,
+      mentor_id: existingProfile?.mentor_id ?? null,
+    };
+
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .upsert(profilePayload, { onConflict: "email" });
+
+    if (profileError) {
+      setErrorMessage(
+        "We couldn't save your profile. Please double-check the details and try again."
+      );
       setLoading(false);
       return;
     }
@@ -77,18 +132,20 @@ export default function ProfileQuestionnaireScreen({
       error: questionnaireError,
     } = await supabase
       .from("profile_questionnaire")
-      .insert({
-        profile_id: profileData.id,
-        due_date: dueDate ? dueDate : null,
-        nursery_style: nurseryStyle.trim() || null,
-        top_concerns: topConcerns.trim() || null,
-        registry_ready: registryReady,
-      })
+      .upsert(
+        {
+          profile_id: profilePayload.id,
+          due_date: dueDate ? dueDate : null,
+          nursery_style: nurseryStyle.trim() || null,
+          top_concerns: topConcerns.trim() || null,
+          registry_ready: registryReady,
+        },
+        { onConflict: "profile_id" }
+      )
       .select()
       .single();
 
     if (questionnaireError || !questionnaireData) {
-      await supabase.from("profiles").delete().eq("id", profileData.id);
       setErrorMessage(
         "We saved your profile but not the questionnaire. Please try again."
       );
@@ -104,7 +161,7 @@ export default function ProfileQuestionnaireScreen({
       .update({
         used: true,
         used_at: new Date().toISOString(),
-        assigned_to: profileData.id,
+        assigned_to: profilePayload.id,
       })
       .eq("id", inviteCodeId)
       .eq("used", false)
@@ -112,11 +169,6 @@ export default function ProfileQuestionnaireScreen({
       .maybeSingle();
 
     if (updateError || !updatedInvite) {
-      await supabase
-        .from("profile_questionnaire")
-        .delete()
-        .eq("id", questionnaireData.id);
-      await supabase.from("profiles").delete().eq("id", profileData.id);
       setErrorMessage(
         "We couldn't finalize your invite. Please contact support with your code."
       );
@@ -128,7 +180,7 @@ export default function ProfileQuestionnaireScreen({
 
     navigation.reset({
       index: 0,
-      routes: [{ name: "Dashboard" }],
+      routes: [{ name: "MemberDashboard" }],
     });
   }, [
     dueDate,
@@ -150,19 +202,19 @@ export default function ProfileQuestionnaireScreen({
       <ScreenContainer
         scrollable
         keyboardShouldPersistTaps="handled"
-        contentClassName="px-6 py-12 gap-8"
+        contentClassName="py-12 gap-8"
       >
         <TMCard className="gap-3 bg-white/70">
-          <TMText className="text-mauve text-sm font-semibold uppercase tracking-widest text-center">
+          <TMText className="text-mauve text-sm font-semibold uppercase tracking-[0.3em] text-center">
             Final Step
           </TMText>
-          <TMText className="text-charcoal text-2xl font-bold text-center">
+          <TMText className="font-greatVibes text-4xl text-charcoal text-center">
             Tell Us About You
           </TMText>
           <TMText className="text-charcoal text-base text-center">
             Invite code <TMText className="text-mauve font-semibold">{inviteCode}</TMText>
           </TMText>
-          <TMText className="text-charcoal/75 text-sm text-center">
+          <TMText className="text-charcoal/75 text-base text-center">
             Share a few details so we can tailor your concierge experience,
             Academy path, and community circles.
           </TMText>
@@ -178,7 +230,7 @@ export default function ProfileQuestionnaireScreen({
                 value={name}
                 onChangeText={setName}
                 placeholder="Taylor Smith"
-                placeholderTextColor="#C8A1B4"
+                placeholderTextColor={colors.mauve}
                 className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
               />
             </View>
@@ -193,7 +245,7 @@ export default function ProfileQuestionnaireScreen({
                 placeholder="you@email.com"
                 autoCapitalize="none"
                 keyboardType="email-address"
-                placeholderTextColor="#C8A1B4"
+                placeholderTextColor={colors.mauve}
                 className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
               />
             </View>
@@ -206,7 +258,7 @@ export default function ProfileQuestionnaireScreen({
                 value={dueDate}
                 onChangeText={setDueDate}
                 placeholder="YYYY-MM-DD"
-                placeholderTextColor="#C8A1B4"
+                placeholderTextColor={colors.mauve}
                 className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
               />
             </View>
@@ -221,25 +273,47 @@ export default function ProfileQuestionnaireScreen({
                 multiline
                 numberOfLines={3}
                 placeholder="Soft neutrals with mauve accents"
-                placeholderTextColor="#C8A1B4"
+                placeholderTextColor={colors.mauve}
                 className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
               />
             </View>
 
-            <View>
-              <TMText className="text-charcoal text-sm mb-2 font-semibold">
-                Top parenting concerns
-              </TMText>
-              <TextInput
-                value={topConcerns}
-                onChangeText={setTopConcerns}
-                multiline
-                numberOfLines={4}
-                placeholder="Sleep support, registry planning, nursery setup"
-                placeholderTextColor="#C8A1B4"
-                className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
-              />
-            </View>
+              <View>
+                <TMText className="text-charcoal text-sm mb-2 font-semibold">
+                  Top parenting concerns
+                </TMText>
+                <TextInput
+                  value={topConcerns}
+                  onChangeText={setTopConcerns}
+                  multiline
+                  numberOfLines={4}
+                  placeholder="Sleep support, registry planning, nursery setup"
+                  placeholderTextColor={colors.mauve}
+                  className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
+                />
+              </View>
+
+              <View className="gap-3">
+                <TMText className="text-charcoal text-sm font-semibold">
+                  Create a password
+                </TMText>
+                <TextInput
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder="Enter a secure password"
+                  placeholderTextColor={colors.mauve}
+                  secureTextEntry
+                  className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
+                />
+                <TextInput
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  placeholder="Confirm password"
+                  placeholderTextColor={colors.mauve}
+                  secureTextEntry
+                  className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
+                />
+              </View>
 
             <View className="flex-row items-center justify-between rounded-2xl border border-mauve/30 bg-white px-4 py-3">
               <View className="flex-1 pr-3">
@@ -253,14 +327,14 @@ export default function ProfileQuestionnaireScreen({
               <Switch
                 value={registryReady}
                 onValueChange={setRegistryReady}
-                trackColor={{ false: "#EAC9D1", true: "#C8A1B4" }}
-                thumbColor={registryReady ? "#FFFAF8" : "#FFFAF8"}
+                trackColor={{ false: colors.blush, true: colors.mauve }}
+                thumbColor={colors.ivory}
               />
             </View>
           </View>
 
           {errorMessage ? (
-            <TMText className="text-red-500 text-sm">{errorMessage}</TMText>
+            <TMText className="text-gold text-sm">{errorMessage}</TMText>
           ) : null}
 
           <TMButton

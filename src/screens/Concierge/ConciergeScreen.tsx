@@ -5,6 +5,7 @@ import ScreenContainer from "../../components/ScreenContainer";
 import TMText from "../../components/TMText";
 import TMCard from "../../components/TMCard";
 import TMButton from "../../components/TMButton";
+import { colors } from "../../styles/theme";
 
 const conciergeHighlights = [
   {
@@ -21,18 +22,15 @@ const conciergeHighlights = [
 
 export default function ConciergeScreen() {
   return (
-    <ScreenContainer
-      activeRoute="Concierge"
-      contentClassName="px-6 pt-6 pb-16 gap-6"
-    >
+    <ScreenContainer activeRoute="Concierge" contentClassName="gap-6 pb-16">
       <TMCard className="gap-3 bg-mauve/15 border-mauve/30">
-        <TMText className="text-mauve text-sm font-semibold uppercase tracking-widest">
+        <TMText className="text-mauve text-sm font-semibold uppercase tracking-[0.3em]">
           Concierge Desk
         </TMText>
-        <TMText className="text-charcoal text-2xl font-bold">
+        <TMText className="font-greatVibes text-4xl text-charcoal">
           Your Dedicated Support Team
         </TMText>
-        <TMText className="text-charcoal/75 text-sm">
+        <TMText className="text-charcoal/75 text-base">
           Ask us anything. We&apos;ll craft responses that fit your family, your
           space, and your style.
         </TMText>
@@ -43,9 +41,9 @@ export default function ConciergeScreen() {
           <TMCard key={highlight.title} className="gap-3">
             <View className="flex-row items-center gap-4">
               <View className="h-12 w-12 rounded-full bg-gold/20 items-center justify-center">
-                <Feather name={highlight.icon as any} size={22} color="#3E2F35" />
+                <Feather name={highlight.icon as any} size={22} color={colors.charcoal} />
               </View>
-              <TMText className="text-charcoal text-lg font-semibold">
+              <TMText className="font-nunito text-lg text-charcoal font-semibold">
                 {highlight.title}
               </TMText>
             </View>
@@ -58,7 +56,7 @@ export default function ConciergeScreen() {
       </View>
 
       <TMCard className="gap-3">
-        <TMText className="text-charcoal text-lg font-semibold">
+        <TMText className="font-playfair text-lg text-charcoal">
           Office Hours
         </TMText>
         <TMText className="text-charcoal/70 text-sm">

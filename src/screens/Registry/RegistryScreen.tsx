@@ -5,6 +5,7 @@ import ScreenContainer from "../../components/ScreenContainer";
 import TMText from "../../components/TMText";
 import TMCard from "../../components/TMCard";
 import TMButton from "../../components/TMButton";
+import { colors } from "../../styles/theme";
 
 const categories = [
   {
@@ -26,18 +27,15 @@ const categories = [
 
 export default function RegistryScreen() {
   return (
-    <ScreenContainer
-      activeRoute="Registry"
-      contentClassName="px-6 pt-6 pb-16 gap-6"
-    >
+    <ScreenContainer activeRoute="Registry" contentClassName="gap-6 pb-16">
       <TMCard className="gap-3 bg-gold/15 border-gold/30">
-        <TMText className="text-mauve text-sm font-semibold uppercase tracking-widest">
+        <TMText className="text-mauve text-sm font-semibold uppercase tracking-[0.3em]">
           Registry Concierge
         </TMText>
-        <TMText className="text-charcoal text-2xl font-bold">
+        <TMText className="font-greatVibes text-4xl text-charcoal">
           Curate Your Signature Collection
         </TMText>
-        <TMText className="text-charcoal/75 text-sm">
+        <TMText className="text-charcoal/75 text-base">
           We&apos;ll help you build a registry that matches your parenting style
           and aesthetic vision.
         </TMText>
@@ -48,9 +46,9 @@ export default function RegistryScreen() {
           <TMCard key={category.title} className="gap-3 border-mauve/10">
             <View className="flex-row items-center gap-4">
               <View className="h-12 w-12 rounded-full bg-mauve/12 items-center justify-center">
-                <Feather name={category.icon as any} size={22} color="#C8A1B4" />
+                <Feather name={category.icon as any} size={22} color={colors.mauve} />
               </View>
-              <TMText className="text-charcoal text-lg font-semibold">
+              <TMText className="font-nunito text-lg text-charcoal font-semibold">
                 {category.title}
               </TMText>
             </View>
@@ -63,7 +61,7 @@ export default function RegistryScreen() {
       </View>
 
       <TMCard className="gap-3">
-        <TMText className="text-charcoal text-lg font-semibold">
+        <TMText className="font-playfair text-lg text-charcoal">
           Concierge Tip
         </TMText>
         <TMText className="text-charcoal/70 text-sm">

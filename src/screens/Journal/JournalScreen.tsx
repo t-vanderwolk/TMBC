@@ -6,7 +6,7 @@ import TMButton from "../../components/TMButton";
 
 const prompts = [
   {
-    title: "Today&apos;s Little Moment",
+    title: "Today's Little Moment",
     prompt:
       "What made your baby smile today? Capture the details so you can relive it later.",
   },
@@ -19,18 +19,15 @@ const prompts = [
 
 export default function JournalScreen() {
   return (
-    <ScreenContainer
-      activeRoute="Journal"
-      contentClassName="px-6 pt-6 pb-16 gap-6"
-    >
-      <TMCard className="gap-3 bg-ivory/90">
-        <TMText className="text-mauve text-sm font-semibold uppercase tracking-widest">
+    <ScreenContainer activeRoute="Journal" contentClassName="gap-6 pb-16">
+      <TMCard className="gap-3 bg-ivory/95">
+        <TMText className="text-mauve text-sm font-semibold uppercase tracking-[0.3em]">
           Reflections
         </TMText>
-        <TMText className="text-charcoal text-2xl font-bold">
+        <TMText className="font-greatVibes text-4xl text-charcoal">
           Keep the Story of This Season
         </TMText>
-        <TMText className="text-charcoal/75 text-sm">
+        <TMText className="text-charcoal/75 text-base">
           Capture milestones, shifts, and heart moments. Your journal is private
           unless you choose to share it with your concierge.
         </TMText>
@@ -39,7 +36,7 @@ export default function JournalScreen() {
 
       {prompts.map((item) => (
         <TMCard key={item.title} className="gap-3">
-          <TMText className="text-charcoal text-lg font-semibold">
+          <TMText className="font-playfair text-lg text-charcoal">
             {item.title}
           </TMText>
           <TMText className="text-charcoal/70 text-sm">{item.prompt}</TMText>
@@ -48,7 +45,7 @@ export default function JournalScreen() {
       ))}
 
       <TMCard className="gap-3">
-        <TMText className="text-charcoal text-lg font-semibold">
+        <TMText className="font-playfair text-lg text-charcoal">
           Share with Concierge
         </TMText>
         <TMText className="text-charcoal/70 text-sm">

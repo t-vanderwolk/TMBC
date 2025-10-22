@@ -1,20 +1,29 @@
 import React from "react";
 import { View, ViewProps } from "react-native";
+import { cn } from "../lib/cn";
 
-type TMCardProps = ViewProps & {
-  children: React.ReactNode;
+export type TMCardProps = ViewProps & {
   className?: string;
+  children: React.ReactNode;
 };
 
-export default function TMCard({ children, className, ...props }: TMCardProps) {
-  return (
-    <View
-      className={`rounded-3xl bg-white/80 border border-mauve/10 shadow-sm p-5 ${
-        className ?? ""
-      }`}
-      {...props}
-    >
-      {children}
-    </View>
-  );
-}
+const TMCard = React.forwardRef<View, TMCardProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <View
+        ref={ref}
+        className={cn(
+          "rounded-2xl bg-ivory border border-mauve/20 shadow-soft p-5",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </View>
+    );
+  }
+);
+
+TMCard.displayName = "TMCard";
+
+export default TMCard;

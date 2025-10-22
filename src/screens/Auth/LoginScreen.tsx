@@ -7,6 +7,8 @@ import { RootStackParamList } from "../../navigation/AppNavigator";
 import { supabase } from "../../lib/supabase";
 import ScreenContainer from "../../components/ScreenContainer";
 import TMCard from "../../components/TMCard";
+import { useAuth } from "../../hooks/useAuth";
+import { colors } from "../../styles/theme";
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, "Login">;
 
@@ -15,6 +17,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const { refreshProfile, role } = useAuth();
 
   const handleLogin = React.useCallback(async () => {
     if (loading) return;
@@ -64,13 +67,36 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
       return;
     }
 
-    setLoading(false);
+    const userId = authData.session?.user.id;
+
+    await refreshProfile();
+
+    let targetRole: "admin" | "mentor" | "member" = role ?? "member";
+    if (userId) {
+      const { data: roleRow } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (roleRow?.role) {
+        targetRole = roleRow.role;
+      }
+    }
+
+    const targetRoute =
+      targetRole === "admin"
+        ? "AdminDashboard"
+        : targetRole === "mentor"
+        ? "MentorDashboard"
+        : "MemberDashboard";
 
     navigation.reset({
       index: 0,
-      routes: [{ name: "Dashboard" }],
+      routes: [{ name: targetRoute }],
     });
-  }, [email, loading, navigation, password]);
+
+    setLoading(false);
+  }, [email, loading, navigation, password, refreshProfile, role]);
 
   return (
     <KeyboardAvoidingView
@@ -80,16 +106,16 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
       <ScreenContainer
         scrollable
         keyboardShouldPersistTaps="handled"
-        contentClassName="px-6 py-12 gap-8"
+        contentClassName="py-12 gap-8"
       >
         <TMCard className="gap-3 bg-white/70">
-          <TMText className="text-mauve text-sm font-semibold uppercase tracking-widest text-center">
+          <TMText className="text-mauve text-sm font-semibold uppercase tracking-[0.3em] text-center">
             Welcome Back
           </TMText>
-          <TMText className="text-charcoal text-2xl font-bold text-center">
+          <TMText className="font-greatVibes text-4xl text-charcoal text-center">
             Sign in to Continue
           </TMText>
-          <TMText className="text-charcoal/75 text-sm text-center">
+          <TMText className="text-charcoal/75 text-base text-center">
             Use the email and password you created after redeeming your invite
             code.
           </TMText>
@@ -106,7 +132,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
               placeholder="you@email.com"
               autoCapitalize="none"
               keyboardType="email-address"
-              placeholderTextColor="#C8A1B4"
+              placeholderTextColor={colors.mauve}
               className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
             />
           </View>
@@ -119,14 +145,14 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
               value={password}
               onChangeText={setPassword}
               placeholder="••••••••"
-              placeholderTextColor="#C8A1B4"
+              placeholderTextColor={colors.mauve}
               secureTextEntry
               className="rounded-2xl border border-mauve/30 bg-white px-4 py-3 text-charcoal"
             />
           </View>
 
           {errorMessage ? (
-            <TMText className="text-red-500 text-sm">{errorMessage}</TMText>
+            <TMText className="text-gold text-sm">{errorMessage}</TMText>
           ) : null}
 
           <TMButton

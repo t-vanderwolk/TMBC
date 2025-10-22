@@ -5,6 +5,7 @@ import ScreenContainer from "../../components/ScreenContainer";
 import TMText from "../../components/TMText";
 import TMCard from "../../components/TMCard";
 import TMButton from "../../components/TMButton";
+import { colors } from "../../styles/theme";
 
 const circles = [
   {
@@ -23,18 +24,15 @@ const circles = [
 
 export default function CommunityScreen() {
   return (
-    <ScreenContainer
-      activeRoute="Community"
-      contentClassName="px-6 pt-6 pb-16 gap-6"
-    >
+    <ScreenContainer activeRoute="Community" contentClassName="gap-6 pb-16">
       <TMCard className="gap-3 bg-blush/15 border-blush/30">
-        <TMText className="text-mauve text-sm font-semibold uppercase tracking-widest">
+        <TMText className="text-mauve text-sm font-semibold uppercase tracking-[0.3em]">
           Community Circles
         </TMText>
-        <TMText className="text-charcoal text-2xl font-bold">
+        <TMText className="font-greatVibes text-4xl text-charcoal">
           Gentle Spaces, Real Conversations
         </TMText>
-        <TMText className="text-charcoal/75 text-sm">
+        <TMText className="text-charcoal/75 text-base">
           Connect with other parents walking a similar path. Celebrate the tiny
           wins, ask the tender questions.
         </TMText>
@@ -45,10 +43,10 @@ export default function CommunityScreen() {
           <TMCard key={circle.name} className="gap-3">
             <View className="flex-row items-center gap-4">
               <View className="h-12 w-12 rounded-full bg-mauve/12 items-center justify-center">
-                <Feather name={circle.icon as any} size={22} color="#C8A1B4" />
+                <Feather name={circle.icon as any} size={22} color={colors.mauve} />
               </View>
               <View className="flex-1">
-                <TMText className="text-charcoal text-lg font-semibold">
+                <TMText className="font-nunito text-lg text-charcoal font-semibold">
                   {circle.name}
                 </TMText>
                 <TMText className="text-charcoal/60 text-sm">
@@ -65,7 +63,7 @@ export default function CommunityScreen() {
       </View>
 
       <TMCard className="gap-3">
-        <TMText className="text-charcoal text-lg font-semibold">
+        <TMText className="font-playfair text-lg text-charcoal">
           Community Guidelines
         </TMText>
         <TMText className="text-charcoal/70 text-sm">

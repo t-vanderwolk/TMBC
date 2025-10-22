@@ -1,55 +1,34 @@
 import React from "react";
-import { Pressable, PressableProps, Text } from "react-native";
+import { TouchableOpacity, Text } from "react-native";
+import { cn } from "../lib/cn";
 
-type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
-
-type TMButtonProps = PressableProps & {
-  label: string;
+type TMButtonProps = {
+  title: string;
+  variant?: "primary" | "secondary" | "outline";
   className?: string;
-  textClassName?: string;
-  variant?: ButtonVariant;
-};
+} & React.ComponentProps<typeof TouchableOpacity>;
 
-const buttonVariants: Record<ButtonVariant, string> = {
-  primary: "bg-mauve",
-  secondary: "bg-gold",
-  outline: "bg-transparent border border-mauve/40",
-  ghost: "bg-transparent",
-};
-
-const textVariants: Record<ButtonVariant, string> = {
-  primary: "text-ivory",
-  secondary: "text-charcoal",
-  outline: "text-mauve",
-  ghost: "text-mauve",
-};
-
-export default function TMButton({
-  label,
-  className,
-  textClassName,
+const TMButton = ({
+  title,
   variant = "primary",
-  disabled,
+  className = "",
   ...props
-}: TMButtonProps) {
-  const buttonClass = `${
-    buttonVariants[variant]
-  } rounded-full px-6 py-3 flex-row items-center justify-center ${
-    disabled ? "opacity-60" : ""
-  } ${className ?? ""}`;
-
-  const textClass = `${textVariants[variant]} text-base font-semibold text-center ${
-    textClassName ?? ""
-  }`;
+}: TMButtonProps) => {
+  const base = "rounded-full py-3 px-6 font-nunito text-center shadow-sm";
+  const style =
+    variant === "primary"
+      ? "bg-mauve text-ivory"
+      : variant === "secondary"
+      ? "bg-blush text-charcoal"
+      : "border border-mauve text-mauve";
 
   return (
-    <Pressable
-      className={buttonClass}
-      accessibilityRole="button"
-      disabled={disabled}
-      {...props}
-    >
-      <Text className={textClass}>{label}</Text>
-    </Pressable>
+    <TouchableOpacity className={cn(`${base} ${style} ${className}`)} {...props}>
+      <Text className="font-nunito font-semibold text-center">{title}</Text>
+    </TouchableOpacity>
   );
-}
+};
+
+TMButton.displayName = "TMButton";
+
+export default TMButton;

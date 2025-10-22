@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./App.{js,jsx,ts,tsx}", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
@@ -10,7 +9,11 @@ module.exports = {
         gold: "#D9C48E",
         charcoal: "#3E2F35",
       },
+      fontFamily: {
+        greatVibes: ["GreatVibes", "cursive"],
+        nunito: ["Nunito", "sans-serif"],
+        playfair: ["PlayfairDisplay", "serif"],
+      },
     },
   },
-  plugins: [],
 };
