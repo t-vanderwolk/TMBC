@@ -11,8 +11,14 @@ import adminRoutes from './routes/admin.routes';
 import { errorHandler } from './middleware/errorHandler';
 
 const appInstance = express();
+const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:3000';
 
-appInstance.use(cors());
+appInstance.use(
+  cors({
+    origin: allowedOrigin,
+    credentials: true,
+  }),
+);
 appInstance.use(express.json());
 
 appInstance.use('/api/auth', authRoutes);

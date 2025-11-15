@@ -1,0 +1,10 @@
+{
+  "/not-found": "app/not-found.js",
+  "/page": "app/page.js",
+  "/(marketing)/how-it-works/page": "app/(marketing)/how-it-works/page.js",
+  "/(marketing)/membership/page": "app/(marketing)/membership/page.js",
+  "/(marketing)/blog/page": "app/(marketing)/blog/page.js",
+  "/login/page": "app/login/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/academy/page": "app/dashboard/academy/page.js"
+}

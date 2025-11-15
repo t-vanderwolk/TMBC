@@ -1,9 +1,10 @@
 import { Router } from 'express';
 
+import { getRegistryDashboard } from '../controllers/registry.controller';
+import { requireAuth } from '../middleware/authMiddleware';
+
 const router = Router();
 
-router.get('/', (_req, res) => {
-  res.json({ status: 'ok', route: 'registry' });
-});
+router.get('/', requireAuth, getRegistryDashboard);
 
 export default router;

@@ -1,70 +1,32 @@
-import { Role } from '@prisma/client';
-import { NextFunction, Request, Response } from 'express';
-import { JwtPayload } from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 
-import { prisma } from '../utils/prisma';
-import { verifyToken } from '../utils/jwt';
+export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
 
-export interface AuthenticatedRequest extends Request {
-  user?: {
-    id: string;
-    role: Role;
-    email: string;
-    name: string | null;
-  };
-}
-
-interface TokenPayload extends JwtPayload {
-  userId: string;
-  role: Role;
-}
-
-const unauthorized = (res: Response) => {
-  res.status(401).json({ message: 'Unauthorized' });
-};
-
-export const requireAuth = async (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction,
-) => {
   try {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return unauthorized(res);
-    }
-
-    const token = authHeader.split(' ')[1];
-    const payload = verifyToken(token) as TokenPayload;
-
-    const user = await prisma.user.findUnique({
-      where: { id: payload.userId },
-    });
-
-    if (!user) {
-      return unauthorized(res);
-    }
-
-    req.user = user;
+    const payload = jwt.verify(token, process.env.JWT_SECRET!);
+    (req as any).user = payload;
     next();
-  } catch (error) {
-    unauthorized(res);
+  } catch {
+    return res.status(401).json({ error: 'Invalid token' });
   }
 };
 
-export const requireRole =
-  (role: Role | Role[]) =>
-  (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const roles = Array.isArray(role) ? role : [role];
+export const requireRole = (role: 'admin' | 'mentor') => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const user = (req as any).user;
+    if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
-    if (!req.user) {
-      return unauthorized(res);
+    if (role === 'mentor' && (user.role === 'mentor' || user.role === 'admin')) {
+      return next();
     }
 
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ message: 'Forbidden' });
+    if (role === 'admin' && user.role === 'admin') {
+      return next();
     }
 
-    next();
+    return res.status(403).json({ error: 'Forbidden' });
   };
+};

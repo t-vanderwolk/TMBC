@@ -6,10 +6,11 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc",
     "start": "node dist/server.js",
-    "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:generate": "prisma generate",
+    "prisma:seed": "ts-node --transpile-only prisma/seed.ts",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
@@ -27,6 +28,7 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.11.30",
     "prisma": "^5.11.0",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.2"
   }

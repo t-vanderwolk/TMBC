@@ -11,7 +11,7 @@ const DashboardPage = () => {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm uppercase tracking-[0.4em] text-tmMauve">Dashboard</p>
-        <h1 className="font-serif text-4xl">Welcome to your Taylor-Made Dashboard</h1>
+        <h1 className="text-4xl">Welcome to your Taylor-Made Dashboard</h1>
         <p className="text-sm text-tmCharcoal/80">Choose where to begin below. Modules will unlock throughout beta.</p>
       </header>
       <div className="grid gap-6 md:grid-cols-3">
@@ -19,9 +19,9 @@ const DashboardPage = () => {
           <Link
             key={card.title}
             href={card.href}
-            className="rounded-3xl border border-tmMauve/30 bg-white/80 p-6 shadow-soft transition hover:-translate-y-1"
+            className="card-surface transition hover:-translate-y-1"
           >
-            <h2 className="font-serif text-2xl">{card.title}</h2>
+            <h2 className="text-2xl">{card.title}</h2>
             <p className="mt-2 text-sm text-tmCharcoal/80">{card.description}</p>
           </Link>
         ))}

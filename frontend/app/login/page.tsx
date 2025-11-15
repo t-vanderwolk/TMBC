@@ -1,40 +1,118 @@
 'use client';
 
+'use client';
+
 import Link from 'next/link';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { api } from '@/lib/api';
+import { Auth } from '@/lib/auth';
 
 const LoginPage = () => {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
+    if (loading) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await api.post('/api/auth/login', { email, password });
+      const token = res.data.token;
+
+      Auth.save(token);
+
+      const payload = Auth.decode();
+
+      if (!payload || !payload.role) {
+        Auth.clear();
+        throw new Error('Invalid session data');
+      }
+
+      const role = String(payload.role).toLowerCase();
+
+      if (role === 'admin') {
+        router.push('/dashboard/admin');
+      } else if (role === 'mentor') {
+        router.push('/dashboard/mentor');
+      } else {
+        router.push('/dashboard');
+      }
+    } catch (err: any) {
+      const message = err?.response?.data?.message || 'Login failed. Please check your credentials.';
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="mx-auto max-w-xl rounded-3xl border border-tmMauve/30 bg-white/80 p-8 shadow-soft">
-      <p className="text-sm uppercase tracking-[0.4em] text-tmMauve">Member Login</p>
-      <h1 className="mt-2 font-serif text-4xl">Welcome back</h1>
-      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+    <div className="section-wrap">
+      <div className="card-surface mx-auto max-w-xl">
+        <p className="text-xs uppercase tracking-[0.4em] text-tmMauve">Member Login</p>
+        <h1 className="mt-2 text-4xl">Welcome back</h1>
+        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
         <div className="flex flex-col gap-2">
           <label className="text-sm font-semibold">Email</label>
-          <input type="email" className="rounded-2xl border border-tmCharcoal/20 px-4 py-3" placeholder="you@email.com" />
+          <input
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            className="w-full"
+            placeholder="you@email.com"
+            required
+          />
         </div>
         <div className="flex flex-col gap-2">
           <label className="text-sm font-semibold">Password</label>
-          <input type="password" className="rounded-2xl border border-tmCharcoal/20 px-4 py-3" placeholder="••••••••" />
+          <input
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className="w-full"
+            placeholder="••••••••"
+            required
+          />
         </div>
-        <button type="submit" className="w-full rounded-full bg-tmMauve px-8 py-3 text-white">
-          Log In
+        {error && <p className="text-sm text-red-500">{error}</p>}
+        <button type="submit" className="btn-primary w-full text-center disabled:opacity-60" disabled={loading}>
+          {loading ? 'Logging in...' : 'Log In'}
         </button>
-      </form>
-      <div className="mt-6 text-sm text-tmCharcoal/80">
-        <p>
-          Need an invite? <Link href="/requestinvite" className="text-tmMauve underline">Request one here.</Link>
-        </p>
-        <p className="mt-2">
-          Ready to complete onboarding?{' '}
-          <Link href="/createprofile" className="text-tmMauve underline">
-            Create Profile
-          </Link>
-        </p>
+        </form>
+        <div className="mt-4 rounded-3xl border border-tmDust bg-white/60 p-4 text-sm text-tmCharcoal/80">
+          <p className="font-semibold text-tmCharcoal">Testing accounts</p>
+          <ul className="mt-2 space-y-1">
+            <li>
+              Admin → <span className="font-mono">admin@me.com / Karma</span>
+            </li>
+            <li>
+              Mentor → <span className="font-mono">mentor@me.com / Karma</span>
+            </li>
+            <li>
+              Member → <span className="font-mono">member@me.com / Karma</span>
+            </li>
+          </ul>
+        </div>
+        <div className="mt-6 text-sm text-tmCharcoal/80">
+          <p>
+            Need an invite?{' '}
+            <Link href="/requestinvite" className="text-tmMauve underline">
+              Request one here.
+            </Link>
+          </p>
+          <p className="mt-2">
+            Ready to complete onboarding?{' '}
+            <Link href="/createprofile" className="text-tmMauve underline">
+              Create Profile
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

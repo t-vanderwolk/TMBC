@@ -8,16 +8,16 @@ const MembershipPage = () => {
   ];
 
   return (
-    <div className="mx-auto max-w-4xl space-y-10">
+    <div className="section-wrap space-y-10">
       <header className="space-y-4 text-center">
         <p className="text-sm uppercase tracking-[0.4em] text-tmMauve">Membership</p>
-        <h1 className="font-serif text-4xl">Made for Modern, Intentional Parents</h1>
+        <h1 className="text-4xl">Made for Modern, Intentional Parents</h1>
         <p className="text-tmCharcoal/80">
           TMBC keeps capacity top of mind with white-glove support, curated resources, and a values-driven community.
         </p>
       </header>
-      <section className="rounded-3xl border border-tmMauve/30 bg-white/80 p-8 shadow-soft">
-        <h2 className="font-serif text-2xl">What&apos;s included</h2>
+      <div className="card-surface">
+        <h2 className="text-2xl">What&apos;s included</h2>
         <ul className="mt-6 space-y-4 text-sm text-tmCharcoal/80">
           {perks.map((perk) => (
             <li key={perk} className="flex items-start gap-3">
@@ -26,7 +26,7 @@ const MembershipPage = () => {
             </li>
           ))}
         </ul>
-      </section>
+      </div>
     </div>
   );
 };

@@ -29,8 +29,9 @@ const blogCards = [
 
 export default function HomePage() {
   return (
-    <div className="space-y-16">
-      <section className="rounded-3xl bg-gradient-to-br from-tmBlush via-white to-tmMauve px-6 py-16 text-center shadow-soft sm:px-10">
+    <div className="section-wrap space-y-16">
+      <section className="text-center">
+        <div className="card-surface">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -39,33 +40,28 @@ export default function HomePage() {
           className="mx-auto max-w-3xl space-y-6"
         >
           <p className="text-sm uppercase tracking-[0.4em] text-tmCharcoal/80">Taylor-Made Baby Co.</p>
-          <h1 className="font-serif text-4xl text-tmCharcoal sm:text-5xl">
+          <h1 className="text-4xl sm:text-5xl">
             Baby Prep, <span className="text-tmMauve">Taylor-Made.</span>
           </h1>
           <p className="text-lg text-tmCharcoal/80">
             Because parenting should start with confidence, not confusion.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link
-              href="/requestinvite"
-              className="rounded-full bg-tmMauve px-8 py-3 text-white shadow-soft transition hover:bg-tmCharcoal"
-            >
+            <Link href="/requestinvite" className="btn-primary">
               Request Invite
             </Link>
-            <Link
-              href="/how-it-works"
-              className="rounded-full border border-tmCharcoal/30 px-8 py-3 text-tmCharcoal/80 transition hover:border-tmCharcoal/60"
-            >
+            <Link href="/how-it-works" className="btn-secondary">
               How It Works
             </Link>
           </div>
         </motion.div>
+        </div>
       </section>
 
-      <section className="space-y-8">
-        <div>
+      <section>
+        <div className="space-y-2">
           <p className="text-sm uppercase tracking-[0.4em] text-tmMauve">Preview</p>
-          <h2 className="font-serif text-3xl">How It Works</h2>
+          <h2 className="text-3xl">How It Works</h2>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
           {howItWorks.map((step) => (
@@ -75,41 +71,43 @@ export default function HomePage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
               viewport={{ once: true }}
-              className="rounded-2xl border border-white/40 bg-white/80 p-6 shadow-soft"
+              className="card-surface"
             >
-              <h3 className="font-serif text-2xl text-tmCharcoal">{step.title}</h3>
+              <h3 className="text-2xl">{step.title}</h3>
               <p className="mt-2 text-sm text-tmCharcoal/80">{step.detail}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
-      <section className="rounded-3xl border border-tmMauve/20 bg-white/60 p-8 shadow-soft">
+      <section>
+        <div className="card-surface space-y-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.4em] text-tmGold">Membership</p>
-            <h2 className="font-serif text-3xl">Concierge support beyond the registry.</h2>
+            <p className="text-sm uppercase tracking-[0.4em] text-tmMauve">Membership</p>
+            <h2 className="text-3xl">Concierge support beyond the registry.</h2>
           </div>
-          <Link href="/membership" className="text-sm font-semibold text-tmMauve underline">
+          <Link href="/membership" className="btn-ghost">
             View membership
           </Link>
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {membershipHighlights.map((item) => (
-            <div key={item} className="rounded-2xl border border-tmMauve/30 bg-tmIvory/60 p-4">
+            <div key={item} className="card-surface">
               {item}
             </div>
           ))}
         </div>
+        </div>
       </section>
 
-      <section className="space-y-6">
+      <section>
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.4em] text-tmMauve">On the journal</p>
-            <h2 className="font-serif text-3xl">Latest Blog Highlights</h2>
+            <h2 className="text-3xl">Latest Blog Highlights</h2>
           </div>
-          <Link href="/blog" className="text-sm font-semibold text-tmMauve underline">
+          <Link href="/blog" className="btn-ghost">
             Read the blog
           </Link>
         </div>
@@ -121,9 +119,9 @@ export default function HomePage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
               viewport={{ once: true }}
-              className="rounded-2xl border border-white/60 bg-white/80 p-6"
+              className="card-surface"
             >
-              <h3 className="font-serif text-2xl">{card.title}</h3>
+              <h3 className="text-2xl">{card.title}</h3>
               <p className="mt-2 text-sm text-tmCharcoal/80">{card.description}</p>
               <span className="mt-4 inline-block text-sm font-semibold text-tmMauve">Coming soon</span>
             </motion.article>
@@ -131,30 +129,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="contact" className="rounded-3xl border border-tmGold/40 bg-white/80 p-8 shadow-soft">
-        <h2 className="font-serif text-3xl">Contact the Concierge Team</h2>
+      <section id="contact">
+        <div className="card-surface">
+        <h2 className="text-3xl">Contact the Concierge Team</h2>
         <p className="mt-2 text-sm text-tmCharcoal/80">
           Leave a note and we will be in touch within 48 hours.
         </p>
         <form className="mt-6 grid gap-4 md:grid-cols-2">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold">Name</label>
-            <input className="rounded-2xl border border-tmCharcoal/20 bg-white px-4 py-3" placeholder="Your name" />
+            <label className="text-sm font-semibold text-tmCharcoal">Name</label>
+            <input className="w-full" placeholder="Your name" />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold">Email</label>
-            <input className="rounded-2xl border border-tmCharcoal/20 bg-white px-4 py-3" placeholder="you@email.com" />
+            <label className="text-sm font-semibold text-tmCharcoal">Email</label>
+            <input className="w-full" placeholder="you@email.com" />
           </div>
           <div className="col-span-full flex flex-col gap-2">
-            <label className="text-sm font-semibold">Message</label>
-            <textarea className="min-h-[140px] rounded-2xl border border-tmCharcoal/20 bg-white px-4 py-3" placeholder="How can we support you?" />
+            <label className="text-sm font-semibold text-tmCharcoal">Message</label>
+            <textarea className="min-h-[140px] w-full rounded-3xl border-tmDust bg-white px-4 py-3 text-sm text-tmCharcoal placeholder:text-[#C1AEB6]" placeholder="How can we support you?" />
           </div>
           <div className="col-span-full">
-            <button type="button" className="rounded-full bg-tmMauve px-8 py-3 text-white">
+            <button type="button" className="btn-primary">
               Submit
             </button>
           </div>
         </form>
+        </div>
       </section>
     </div>
   );

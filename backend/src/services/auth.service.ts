@@ -25,7 +25,7 @@ const toSafeUser = (user: User): SafeUser => {
 };
 
 const createAuthPayload = (user: User) => ({
-  token: signToken({ userId: user.id, role: user.role }),
+  token: signToken({ userId: user.id, role: user.role.toLowerCase() }),
   user: toSafeUser(user),
 });
 

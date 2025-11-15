@@ -1,4 +1,3 @@
-import { Role } from '@prisma/client';
 import { Router } from 'express';
 
 import {
@@ -13,7 +12,7 @@ const router = Router();
 router.post(
   '/generate',
   requireAuth,
-  requireRole([Role.ADMIN, Role.MENTOR]),
+  requireRole('mentor'),
   generate,
 );
 router.post('/validate', validate);

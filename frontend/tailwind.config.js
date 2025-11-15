@@ -8,11 +8,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        tmMauve: '#C8A2C8',
-        tmBlush: '#F5DDE0',
-        tmIvory: '#FAF7F2',
+        tmIvory: '#FBF4F3',
+        tmMauve: '#B48A9B',
+        tmMauveDark: '#A1788C',
         tmCharcoal: '#3E2F35',
-        tmGold: '#E7D7B9',
+        tmBlush: '#F2E6EA',
+        tmDust: '#E7D9DF',
+        tmWhite: '#FFFFFF',
       },
       fontFamily: {
         script: ['var(--font-great-vibes)', 'cursive'],

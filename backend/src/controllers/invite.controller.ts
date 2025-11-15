@@ -1,15 +1,16 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import {
   consumeInvite,
   generateInvites,
   validateInvite,
 } from '../services/invite.service';
-import { AuthenticatedRequest } from '../middleware/authMiddleware';
 import { signToken } from '../utils/jwt';
 
+type AuthedRequest = Request & { user?: { id: string } };
+
 export const generate = async (
-  req: AuthenticatedRequest,
+  req: AuthedRequest,
   res: Response,
   next: NextFunction,
 ) => {
@@ -42,7 +43,7 @@ export const generate = async (
   }
 };
 
-export const validate = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const validate = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { code } = req.body;
 
@@ -57,7 +58,7 @@ export const validate = async (req: AuthenticatedRequest, res: Response, next: N
   }
 };
 
-export const consume = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const consume = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { code, email, password, name } = req.body;
 
@@ -65,7 +66,7 @@ export const consume = async (req: AuthenticatedRequest, res: Response, next: Ne
     const { password: _ignore, ...safeUser } = user;
 
     res.json({
-      token: signToken({ userId: user.id, role: user.role }),
+      token: signToken({ userId: user.id, role: user.role.toLowerCase() }),
       user: safeUser,
     });
   } catch (error) {

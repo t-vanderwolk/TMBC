@@ -1,6 +1,9 @@
 import 'dotenv/config';
 
 import { app } from './app';
+import healthRoutes from './routes/health.routes';
+
+app.use('/api', healthRoutes);
 const PORT = Number(process.env.PORT) || 4000;
 
 app.listen(PORT, () => {
