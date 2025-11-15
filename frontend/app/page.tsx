@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const heroVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -28,6 +30,20 @@ const blogCards = [
 ];
 
 export default function HomePage() {
+  const [inviteCode, setInviteCode] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
+
+  const handleSubmitInvite = () => {
+    if (!inviteCode) {
+      setError('Please enter a valid invite code.');
+      return;
+    }
+
+    setError('');
+    router.push(`/requestinvite?code=${inviteCode}`);
+  };
+
   return (
     <div className="section-wrap space-y-16">
       <section className="text-center">
@@ -53,6 +69,25 @@ export default function HomePage() {
             <Link href="/how-it-works" className="btn-secondary">
               How It Works
             </Link>
+          </div>
+
+          <div className="mt-10 flex w-full flex-col items-center gap-4">
+            <input
+              type="text"
+              placeholder="Enter your invite code"
+              value={inviteCode}
+              onChange={(e) => setInviteCode(e.target.value)}
+              className="w-full max-w-md rounded-full border border-tmDust bg-white px-4 py-3 text-sm text-tmCharcoal placeholder:text-[#C1AEB6]"
+            />
+
+            <button
+              onClick={handleSubmitInvite}
+              className="w-full max-w-md rounded-full bg-tmMauve px-7 py-3 text-sm tracking-wide text-white shadow-sm transition hover:bg-tmMauveDark"
+            >
+              Use Invite Code
+            </button>
+
+            {error && <p className="text-sm font-medium text-red-500">{error}</p>}
           </div>
         </motion.div>
         </div>

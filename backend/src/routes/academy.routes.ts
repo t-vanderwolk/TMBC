@@ -1,10 +1,18 @@
 import { Router } from 'express';
 
-import { getAcademyDashboard } from '../controllers/academy.controller';
+import {
+  getJourneysController,
+  getModulesController,
+  getRecommendedModuleController,
+  getTracksController,
+} from '../controllers/academy.controller';
 import { requireAuth } from '../middleware/authMiddleware';
 
 const router = Router();
 
-router.get('/', requireAuth, getAcademyDashboard);
+router.get('/journeys', requireAuth, getJourneysController);
+router.get('/tracks', requireAuth, getTracksController);
+router.get('/modules', requireAuth, getModulesController);
+router.get('/recommended', requireAuth, getRecommendedModuleController);
 
 export default router;

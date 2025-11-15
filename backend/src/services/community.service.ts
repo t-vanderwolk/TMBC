@@ -1,14 +1,15 @@
-export interface CommunityEvent {
+export type CommunityTopic = {
   id: string;
   title: string;
-  date: string;
-  host: string;
-}
+  replies: number;
+  mentor: string;
+};
 
-const events: CommunityEvent[] = [
-  { id: 'weekly-zoom', title: 'Weekly Community Zoom', date: 'Tuesdays 7pm CT', host: 'Concierge Team' },
-  { id: 'mentor-circle', title: 'Mentor Circle', date: 'Fridays 12pm CT', host: 'Mentor Cohort' },
-  { id: 'registry-qna', title: 'Registry Q&A', date: 'Sundays 4pm CT', host: 'Registry Lead' },
-];
-
-export const getCommunityEvents = async () => events;
+export const getCommunityFeed = async (): Promise<CommunityTopic[]> => {
+  // TODO: Replace with Prisma-backed community topics and realtime threads
+  return [
+    { id: 'topic-1', title: 'Week 28 Nursery Sprint', replies: 42, mentor: 'Kara' },
+    { id: 'topic-2', title: 'Feeding gear you actually used', replies: 30, mentor: 'Alex' },
+    { id: 'topic-3', title: 'Postpartum boundaries that helped', replies: 18, mentor: 'Maya' },
+  ];
+};

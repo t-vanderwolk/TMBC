@@ -1,10 +1,10 @@
 import { Router } from 'express';
 
-import { getCommunityDashboard } from '../controllers/community.controller';
+import { getCommunityFeedController } from '../controllers/community.controller';
 import { requireAuth } from '../middleware/authMiddleware';
 
 const router = Router();
 
-router.get('/', requireAuth, getCommunityDashboard);
+router.get('/feed', requireAuth, getCommunityFeedController);
 
 export default router;

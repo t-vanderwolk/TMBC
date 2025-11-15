@@ -27,3 +27,30 @@ export const Auth = {
     }
   },
 };
+
+export type SessionPayload = {
+  role?: string;
+  firstName?: string;
+  lastName?: string;
+  name?: string;
+  email?: string;
+  [key: string]: any;
+};
+
+export type Session = {
+  token: string;
+  payload: SessionPayload;
+};
+
+export const loadSession = (): Session | null => {
+  const token = Auth.get();
+  if (!token) return null;
+
+  const payload = Auth.decode();
+  if (!payload) {
+    Auth.clear();
+    return null;
+  }
+
+  return { token, payload };
+};

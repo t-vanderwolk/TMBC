@@ -28,13 +28,24 @@ model User {
 model Invite {
   id          String   @id @default(cuid())
   code        String   @unique
+  email       String?
   role        Role     @default(MEMBER)
   createdBy   User     @relation("CreatedInvites", fields: [createdById], references: [id])
   createdById String
+  createdByEmail String?
   used        Boolean  @default(false)
   usedAt      DateTime?
   usedBy      User?    @relation("ConsumedInvite", fields: [usedById], references: [id])
   usedById    String?  @unique
   expiresAt   DateTime?
+  maxUses     Int      @default(1)
   createdAt   DateTime @default(now())
+}
+
+model Waitlist {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
 }
