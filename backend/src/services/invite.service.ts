@@ -61,7 +61,8 @@ export const generateInvite = async ({
     throw new Error('Creator not found');
   }
 
-  if (![Role.ADMIN, Role.MENTOR].includes(creator.role)) {
+  const allowedCreatorRoles: Role[] = [Role.ADMIN, Role.MENTOR];
+  if (!allowedCreatorRoles.includes(creator.role)) {
     throw new Error('Not allowed to generate invites');
   }
 

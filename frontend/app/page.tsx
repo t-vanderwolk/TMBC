@@ -1,9 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+
+import { blogPosts } from '@/data/blogPosts';
 
 const heroVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -24,10 +27,9 @@ const membershipHighlights = [
   'Affiliate Perks of the Week drops',
 ];
 
-const blogCards = [
-  { title: 'Stroller Guide', description: 'Navigate the stroller aisle with zero overwhelm and total style.' },
-  { title: 'Car Seat Guide', description: 'Safety meets aesthetics in our top car seat picks for modern parents.' },
-];
+const latestBlogPosts = [...blogPosts]
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, 3);
 
 export default function HomePage() {
   const [inviteCode, setInviteCode] = useState('');
@@ -47,7 +49,7 @@ export default function HomePage() {
   return (
     <div className="section-wrap space-y-16">
       <section className="text-center">
-        <div className="card-surface">
+        <div className="rounded-[32px] border border-white/70 bg-gradient-to-br from-white via-tmIvory to-tmBlush/50 p-10 shadow-soft">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -55,9 +57,13 @@ export default function HomePage() {
           variants={heroVariants}
           className="mx-auto max-w-3xl space-y-6"
         >
-          <p className="text-sm uppercase tracking-[0.4em] text-tmCharcoal/80">Taylor-Made Baby Co.</p>
-          <h1 className="text-4xl sm:text-5xl">
-            Baby Prep, <span className="text-tmMauve">Taylor-Made.</span>
+          <p className="text-sm uppercase tracking-[0.4em] text-tmMauve">Taylor-Made Baby Co.</p>
+          <h1 className="text-4xl text-tmCharcoal sm:text-5xl">
+            Baby Prep,{' '}
+            <span className="font-script text-5xl text-tmMauve sm:text-6xl">
+              Taylor-Made
+            </span>
+            .
           </h1>
           <p className="text-lg text-tmCharcoal/80">
             Because parenting should start with confidence, not confusion.
@@ -139,26 +145,46 @@ export default function HomePage() {
       <section>
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.4em] text-tmMauve">On the journal</p>
-            <h2 className="text-3xl">Latest Blog Highlights</h2>
+            <p className="text-sm uppercase tracking-[0.4em] text-tmMauve">From the Blog</p>
+            <h2 className="text-3xl">Concierge insights & gear guides</h2>
           </div>
           <Link href="/blog" className="btn-ghost">
-            Read the blog
+            View all articles
           </Link>
         </div>
-        <div className="grid gap-6 md:grid-cols-2">
-          {blogCards.map((card) => (
+        <div className="grid gap-6 md:grid-cols-3">
+          {latestBlogPosts.map((post) => (
             <motion.article
-              key={card.title}
+              key={post.slug}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
               viewport={{ once: true }}
-              className="card-surface"
+              className="overflow-hidden rounded-3xl border border-tmBlush/50 bg-white/90 shadow-soft"
             >
-              <h3 className="text-2xl">{card.title}</h3>
-              <p className="mt-2 text-sm text-tmCharcoal/80">{card.description}</p>
-              <span className="mt-4 inline-block text-sm font-semibold text-tmMauve">Coming soon</span>
+              <div className="relative h-40 w-full">
+                <Image
+                  src={post.heroImage}
+                  alt={post.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex flex-col gap-3 p-5">
+                <p className="text-xs uppercase tracking-[0.4em] text-tmMauve">
+                  {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ·{' '}
+                  {post.readTime}
+                </p>
+                <h3 className="text-xl text-tmCharcoal">{post.title}</h3>
+                <p className="text-sm text-tmCharcoal/80">{post.description}</p>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-tmMauve"
+                >
+                  Read Article <span aria-hidden>→</span>
+                </Link>
+              </div>
             </motion.article>
           ))}
         </div>

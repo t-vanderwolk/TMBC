@@ -1,18 +1,24 @@
 import { Router } from 'express';
 
 import {
+  addCustomItemController,
   deleteRegistryItem,
+  getMentorNotesController,
   getRegistryList,
-  getRegistryRecommendations,
+  postMentorNoteController,
   postRegistryItem,
+  updateRegistryItemController,
 } from '../controllers/registry.controller';
-import { requireAuth } from '../middleware/authMiddleware';
+import { requireAuth, requireRole } from '../middleware/authMiddleware';
 
 const router = Router();
 
-router.get('/list', requireAuth, getRegistryList);
-router.get('/recommendations', requireAuth, getRegistryRecommendations);
+router.get('/', requireAuth, getRegistryList);
 router.post('/add', requireAuth, postRegistryItem);
-router.delete('/remove/:id', requireAuth, deleteRegistryItem);
+router.post('/custom/add', requireAuth, addCustomItemController);
+router.post('/update', requireAuth, updateRegistryItemController);
+router.post('/remove', requireAuth, deleteRegistryItem);
+router.post('/:productId/notes', requireAuth, requireRole('mentor'), postMentorNoteController);
+router.get('/:memberId/notes', requireAuth, requireRole('mentor'), getMentorNotesController);
 
 export default router;

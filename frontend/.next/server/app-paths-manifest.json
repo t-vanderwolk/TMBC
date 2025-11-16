@@ -1,6 +1,1 @@
-{
-  "/(marketing)/blog/page": "app/(marketing)/blog/page.js",
-  "/login/page": "app/login/page.js",
-  "/page": "app/page.js",
-  "/dashboard/learn/[moduleId]/page": "app/dashboard/learn/[moduleId]/page.js"
-}
+{}

@@ -11,12 +11,18 @@ export type AcademyTrack = {
   summary: string;
 };
 
+import { ProductResponse, getProductsByCategories, getProductsByIds, getProductsByModuleCode } from './product.service';
+
 export type AcademyModule = {
   id: string;
   trackId: string;
   title: string;
   estTime: string;
   status: 'not_started' | 'in_progress' | 'complete';
+  categories: string[];
+  recommendedProducts: string[];
+  stage: string;
+  mentorNotes?: string;
 };
 
 const journeys: AcademyJourney[] = [
@@ -33,25 +39,59 @@ const tracks: AcademyTrack[] = [
 
 const modules: AcademyModule[] = [
   {
-    id: 'vision-style',
-    trackId: 'nursery-foundations',
-    title: 'Vision & Style Foundations',
-    estTime: '25 min',
+    id: 'car-seat-masterclass',
+    trackId: 'gear-mobility',
+    title: 'Car Seat Masterclass',
+    estTime: '35 min',
     status: 'in_progress',
+    categories: ['infant-car-seat', 'convertible-car-seat', 'travel-car-seat'],
+    recommendedProducts: ['nuna-pipa-rx', 'uppababy-mesa-max', 'cybex-cloud-g'],
+    stage: '0-12 months',
+    mentorNotes: 'Focus on compatibility with your stroller chassis + base installation.',
   },
   {
-    id: 'strollers-101',
-    trackId: 'gear-mobility',
-    title: 'Strollers 101',
+    id: 'safe-sleep-nursery',
+    trackId: 'nursery-foundations',
+    title: 'Safe Sleep & Nursery Setup',
+    estTime: '28 min',
+    status: 'not_started',
+    categories: ['bedside-sleeper', 'sound-machine', 'swaddle', 'lounger'],
+    recommendedProducts: ['hatch-rest-plus', 'snuggle-me-organic'],
+    stage: '3rd trimester prep',
+    mentorNotes: 'Layer soothing cues + dimmable lighting for easy overnight feeds.',
+  },
+  {
+    id: 'feeding-essentials',
+    trackId: 'postpartum-healing',
+    title: 'Feeding Essentials Intensive',
     estTime: '30 min',
     status: 'not_started',
+    categories: ['pumping', 'bottle', 'feeding-accessory'],
+    recommendedProducts: ['elvie-stride'],
+    stage: '0-6 months',
+    mentorNotes: 'Keep a pumping cart near your nightstand for easier overnight sessions.',
   },
   {
-    id: 'rest-recovery',
-    trackId: 'postpartum-healing',
-    title: 'Rest & Recovery',
-    estTime: '20 min',
+    id: 'travel-system-lab',
+    trackId: 'gear-mobility',
+    title: 'Travel System Lab',
+    estTime: '32 min',
     status: 'complete',
+    categories: ['stroller', 'travel-car-seat'],
+    recommendedProducts: ['nuna-pipa-rx'],
+    stage: 'Weeks 20-32',
+    mentorNotes: 'Compare fold + trunk fit before making the final call.',
+  },
+  {
+    id: 'essentials-refresh',
+    trackId: 'postpartum-healing',
+    title: 'Fourth Trimester Essentials',
+    estTime: '22 min',
+    status: 'complete',
+    categories: ['essentials', 'lounger'],
+    recommendedProducts: ['snuggle-me-organic'],
+    stage: 'Weeks 30-40',
+    mentorNotes: 'Stock duplicate kits for primary + backup changing zones.',
   },
 ];
 
@@ -73,4 +113,58 @@ export const getAcademyModules = async () => {
 export const getRecommendedModule = async () => {
   // TODO: Build recommendation engine tied to user progress
   return modules[0];
+};
+
+const findModule = (moduleCode: string) => {
+  const normalizedCode = moduleCode.toLowerCase();
+  return modules.find((module) => module.id === normalizedCode);
+};
+
+export const getModuleProducts = async (moduleCode: string) => {
+  const module = findModule(moduleCode);
+  if (!module) {
+    throw new Error(`Module ${moduleCode} not found`);
+  }
+
+  const products = await getProductsByModuleCode(module.id);
+
+  return {
+    module,
+    products,
+  };
+};
+
+const dedupeProducts = (products: ProductResponse[]) => {
+  const seen = new Set<string>();
+  const ordered: ProductResponse[] = [];
+
+  for (const product of products) {
+    if (seen.has(product.id)) continue;
+    seen.add(product.id);
+    ordered.push(product);
+  }
+
+  return ordered;
+};
+
+export const getModuleRecommendations = async (moduleCode: string) => {
+  const module = findModule(moduleCode);
+  if (!module) {
+    throw new Error(`Module ${moduleCode} not found`);
+  }
+
+  const curated = await getProductsByIds(module.recommendedProducts);
+  const categoryProducts = await getProductsByCategories(module.categories);
+  const combined = dedupeProducts([...curated, ...categoryProducts]);
+
+  const categoryGroups = module.categories.map((category) => ({
+    category,
+    products: categoryProducts.filter((product) => product.category === category),
+  }));
+
+  return {
+    module,
+    products: combined,
+    categoryGroups,
+  };
 };

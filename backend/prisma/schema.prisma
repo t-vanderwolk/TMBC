@@ -21,6 +21,9 @@ model User {
   role         Role     @default(MEMBER)
   invites      Invite[] @relation("CreatedInvites")
   consumedInvite Invite? @relation("ConsumedInvite")
+  registryItems RegistryItem[]
+  mentorNotesAuthored MentorNote[] @relation("MentorNotesAuthored")
+  mentorNotesReceived MentorNote[] @relation("MemberMentorNotes")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -48,4 +51,66 @@ model Waitlist {
   name      String?
   status    String   @default("pending")
   createdAt DateTime @default(now())
+}
+
+enum RegistryStatus {
+  ACTIVE
+  NEEDED
+  RESERVED
+  PURCHASED
+  PURCHASED_ELSEWHERE
+}
+
+model Product {
+  id           String         @id @default(cuid())
+  name         String
+  brand        String
+  category     String
+  imageUrl     String
+  affiliateUrl String
+  merchant     String
+  moduleCodes  String[]
+  price        Float?
+  inStock      Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  registryItems RegistryItem[]
+  mentorNotes  MentorNote[]
+}
+
+model RegistryItem {
+  id             String         @id @default(cuid())
+  userId         String
+  productId      String?
+  isCustom       Boolean        @default(false)
+  title          String
+  url            String
+  merchant       String?
+  category       String?
+  moduleCode     String?
+  image          String?
+  price          Float?
+  myRegistryId   String?
+  notes          String?
+  quantity       Int            @default(1)
+  status         RegistryStatus @default(ACTIVE)
+  purchaseSource String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id])
+  product Product? @relation(fields: [productId], references: [id])
+}
+
+model MentorNote {
+  id        String   @id @default(cuid())
+  memberId  String
+  mentorId  String
+  productId String
+  note      String
+  createdAt DateTime @default(now())
+
+  member User    @relation("MemberMentorNotes", fields: [memberId], references: [id])
+  mentor User    @relation("MentorNotesAuthored", fields: [mentorId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
 }

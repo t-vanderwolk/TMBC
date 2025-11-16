@@ -13,6 +13,7 @@ import dashboardRoutes from './routes/dashboard.routes';
 import eventsRoutes from './routes/events.routes';
 import journalRoutes from './routes/journal.routes';
 import chatRoutes from './routes/chat.routes';
+import myRegistryRoutes from './routes/myregistry.routes';
 
 import { errorHandler } from './middleware/errorHandler';
 
@@ -36,6 +37,7 @@ appInstance.use('/api/community', communityRoutes);
 appInstance.use('/api/events', eventsRoutes);
 appInstance.use('/api/journal', journalRoutes);
 appInstance.use('/api/chat', chatRoutes);
+appInstance.use('/api/myregistry', myRegistryRoutes);
 appInstance.use('/api/mentor', mentorRoutes);
 appInstance.use('/api/admin', adminRoutes);
 appInstance.use('/api/waitlist', waitlistRoutes);

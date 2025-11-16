@@ -4,6 +4,8 @@ import {
   getAcademyJourneys,
   getAcademyModules,
   getAcademyTracks,
+  getModuleProducts,
+  getModuleRecommendations,
   getRecommendedModule,
 } from '../services/academy.service';
 
@@ -25,4 +27,24 @@ export const getModulesController = async (_req: Request, res: Response) => {
 export const getRecommendedModuleController = async (_req: Request, res: Response) => {
   const module = await getRecommendedModule();
   res.json(module);
+};
+
+export const getModuleProductsController = async (req: Request, res: Response) => {
+  try {
+    const { moduleCode } = req.params;
+    const data = await getModuleProducts(moduleCode);
+    res.json(data);
+  } catch (error: any) {
+    res.status(404).json({ error: error?.message || 'Module not found' });
+  }
+};
+
+export const getModuleRecommendationsController = async (req: Request, res: Response) => {
+  try {
+    const { moduleCode } = req.params;
+    const data = await getModuleRecommendations(moduleCode);
+    res.json(data);
+  } catch (error: any) {
+    res.status(404).json({ error: error?.message || 'Module not found' });
+  }
 };
