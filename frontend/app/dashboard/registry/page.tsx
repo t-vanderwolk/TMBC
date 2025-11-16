@@ -1,12 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link as LinkIcon, Loader2, Share2, Sparkles } from 'lucide-react';
+import Link from 'next/link';
+import { Loader2, Share2, Sparkles } from 'lucide-react';
 
 import AddCustomItemButton from '@/components/registry/AddCustomItemButton';
 import AddToRegistryButton from '@/components/registry/AddToRegistryButton';
 import ProductCard from '@/components/registry/ProductCard';
 import RegistryList from '@/components/registry/RegistryList';
+import SyncButton from '@/components/registry/SyncButton';
 import { api } from '@/lib/api';
-import type { AcademyModuleMeta, ModuleRecommendationsResponse, RegistryItem } from '@/types/registry';
+import type {
+  AcademyModuleMeta,
+  ModuleRecommendationsResponse,
+  RegistryConflict,
+  RegistryItem,
+  RegistrySyncState,
+} from '@/types/registry';
 
 export default function RegistryPage() {
   const [items, setItems] = useState<RegistryItem[]>([]);
@@ -17,6 +25,8 @@ export default function RegistryPage() {
   const [loadingRecommendations, setLoadingRecommendations] = useState(false);
   const [registryError, setRegistryError] = useState<string | null>(null);
   const [recommendationError, setRecommendationError] = useState<string | null>(null);
+  const [syncState, setSyncState] = useState<RegistrySyncState>({ lastSyncedAt: null, conflicts: [] });
+  const [syncBanner, setSyncBanner] = useState<string | null>(null);
 
   const fetchRegistry = useCallback(async () => {
     try {
@@ -33,6 +43,15 @@ export default function RegistryPage() {
   }, []);
 
   useEffect(() => {
+    const fetchSyncStatus = async () => {
+      try {
+        const response = await api.get('/api/myregistry/status');
+        setSyncState(response.data as RegistrySyncState);
+      } catch {
+        // silently ignore when not connected
+      }
+    };
+
     const fetchModules = async () => {
       try {
         const response = await api.get('/api/academy/modules');
@@ -48,6 +67,7 @@ export default function RegistryPage() {
 
     fetchRegistry();
     fetchModules();
+    fetchSyncStatus();
   }, [fetchRegistry, selectedModule]);
 
   useEffect(() => {
@@ -107,19 +127,47 @@ export default function RegistryPage() {
           <p className="mt-2 text-sm text-tmCharcoal/70">
             Track every curated find, see mentor notes, and push items to MyRegistry with affiliate tracking intact.
           </p>
+          {syncState.conflicts.length > 0 && (
+            <p className="mt-2 text-sm text-amber-700">
+              {syncState.conflicts.length} conflict{syncState.conflicts.length === 1 ? '' : 's'} pending —{' '}
+              <Link href="/dashboard/registry/conflicts" className="font-semibold underline">
+                review now
+              </Link>
+              .
+            </p>
+          )}
         </div>
         <div className="flex flex-wrap gap-3">
           <AddCustomItemButton modules={modules} defaultModuleCode={selectedModule} onSuccess={fetchRegistry} />
-          <button className="inline-flex items-center gap-2 rounded-full border border-tmMauve px-5 py-3 text-sm font-semibold text-tmMauve">
-            <LinkIcon className="h-4 w-4" />
-            Sync with MyRegistry
-          </button>
+          <SyncButton
+            initialState={syncState}
+            onItemsUpdated={(updated) => setItems(updated)}
+            onConflictsUpdate={(conflicts: RegistryConflict[]) =>
+              setSyncState((prev) => ({ ...prev, conflicts }))
+            }
+            onFallback={(fallbackItems, errorMessage) => {
+              if (fallbackItems.length) {
+                setItems(fallbackItems);
+              }
+              setRegistryError(errorMessage);
+              setSyncBanner('MyRegistry is temporarily unavailable — showing your saved items.');
+            }}
+            onSyncState={(state) => {
+              setSyncState(state);
+              setSyncBanner(null);
+            }}
+          />
           <button className="inline-flex items-center gap-2 rounded-full border border-tmBlush/60 px-5 py-3 text-sm font-semibold text-tmCharcoal">
             <Share2 className="h-4 w-4" />
             Share with Mentor
           </button>
         </div>
       </header>
+      {syncBanner && (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          {syncBanner}
+        </div>
+      )}
 
       <section className="space-y-4">
         <div className="flex items-center justify-between">

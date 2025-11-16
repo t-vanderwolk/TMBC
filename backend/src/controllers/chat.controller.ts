@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 
 import { createMessage, listMessages, listThreads } from '../services/chat.service';
 
-export const getThreadsController = async (_req: Request, res: Response) => {
-  const threads = await listThreads();
+export const getThreadsController = async (req: Request, res: Response) => {
+  const user = (req as any).user;
+  const threads = await listThreads({ userId: user?.userId, role: user?.role });
   res.json(threads);
 };
 

@@ -1,25 +1,29 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { BookHeart, PenSquare } from 'lucide-react';
+import { BookHeart, PenSquare, Share2 } from 'lucide-react';
 
 import { api } from '@/lib/api';
+import { loadSession } from '@/lib/auth';
 
 type Entry = {
   id: string;
   date: string;
   prompt: string;
   excerpt: string;
+  shared: boolean;
 };
 
 const sampleEntries: Entry[] = [
-  { id: '1', date: 'Mar 18', prompt: 'Daily Reflection', excerpt: 'Felt baby hiccups during morning tea...' },
-  { id: '2', date: 'Mar 17', prompt: 'Keepsake Timeline', excerpt: 'Ordered the heirloom quilt from Nana.' },
+  { id: '1', date: 'Mar 18', prompt: 'Daily Reflection', excerpt: 'Felt baby hiccups during morning tea...', shared: true },
+  { id: '2', date: 'Mar 17', prompt: 'Keepsake Timeline', excerpt: 'Ordered the heirloom quilt from Nana.', shared: false },
 ];
 
 export default function JournalPage() {
   const [entries, setEntries] = useState(sampleEntries);
   const [reflection, setReflection] = useState('');
+  const session = loadSession();
+  const defaultMentorId = session?.payload?.mentorId || 'mentor-demo';
 
   useEffect(() => {
     const fetchJournal = async () => {
@@ -37,10 +41,30 @@ export default function JournalPage() {
   const handleSave = () => {
     if (!reflection.trim()) return;
     setEntries((prev) => [
-      { id: Date.now().toString(), date: 'Today', prompt: 'Daily Reflection', excerpt: reflection.slice(0, 60) },
+      {
+        id: Date.now().toString(),
+        date: 'Today',
+        prompt: 'Daily Reflection',
+        excerpt: reflection.slice(0, 60),
+        shared: false,
+      },
       ...prev,
     ]);
     setReflection('');
+  };
+
+  const toggleShare = async (entryId: string, nextShare: boolean) => {
+    setEntries((prev) => prev.map((entry) => (entry.id === entryId ? { ...entry, shared: nextShare } : entry)));
+    try {
+      await api.post('/api/mentor/journal/share', {
+        journalId: entryId,
+        mentorId: defaultMentorId,
+        allowed: nextShare,
+      });
+      // TODO: connect to mentor selection + expose share status to mentor workspace
+    } catch (error) {
+      console.error('Journal share toggle placeholder error', error);
+    }
   };
 
   return (
@@ -88,10 +112,30 @@ export default function JournalPage() {
           </div>
           <div className="mt-4 space-y-4">
             {entries.map((entry) => (
-              <div key={entry.id} className="rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
-                <p className="text-xs uppercase tracking-[0.3em] text-tmMauve">{entry.date}</p>
-                <p className="text-base font-semibold text-tmCharcoal">{entry.prompt}</p>
-                <p className="mt-1 text-sm text-tmCharcoal/70">{entry.excerpt}</p>
+              <div key={entry.id} className="space-y-2 rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.3em] text-tmMauve">{entry.date}</p>
+                    <p className="text-base font-semibold text-tmCharcoal">{entry.prompt}</p>
+                  </div>
+                  <button
+                    onClick={() => toggleShare(entry.id, !entry.shared)}
+                    className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${
+                      entry.shared
+                        ? 'bg-tmMauve text-white'
+                        : 'border border-tmMauve/40 text-tmMauve'
+                    }`}
+                  >
+                    <Share2 className="h-3.5 w-3.5" />
+                    {entry.shared ? 'Shared' : 'Share'}
+                  </button>
+                </div>
+                <p className="text-sm text-tmCharcoal/70">{entry.excerpt}</p>
+                <p className="text-xs text-tmCharcoal/60">
+                  {entry.shared
+                    ? 'Mentor can see this reflection.'
+                    : '// TODO: confirm share once mentor assigned'}
+                </p>
               </div>
             ))}
           </div>

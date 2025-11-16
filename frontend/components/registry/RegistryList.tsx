@@ -19,6 +19,7 @@ const statusLabels: Record<RegistryItem['status'], string> = {
   RESERVED: 'Reserved',
   PURCHASED: 'Purchased',
   PURCHASED_ELSEWHERE: 'Purchased elsewhere',
+  REMOVED_REMOTE: 'Removed on MyRegistry',
 };
 
 const statusOptions = Object.entries(statusLabels).map(([value, label]) => ({ value, label }));
@@ -182,7 +183,7 @@ const RegistryListItem = ({
         </a>
       </div>
       {error && <p className="text-sm text-red-500">{error}</p>}
-      <MentorNotes notes={item.mentorNotes} />
+      <MentorNotes notes={item.mentorNotes} registryItemId={item.id} />
     </div>
   );
 };

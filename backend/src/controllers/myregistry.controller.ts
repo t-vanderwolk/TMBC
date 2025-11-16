@@ -5,8 +5,23 @@ import {
   createMyRegistryUser,
   listMyRegistryGifts,
   removeMyRegistryGift,
+  syncDown,
+  syncUp,
   updateMyRegistryGift,
 } from '../services/myRegistry.service';
+import { listRegistryItems } from '../services/registry.service';
+import { listActiveConflicts } from '../services/conflict.service';
+import { prisma } from '../utils/prisma';
+
+const getUserId = (req: Request) => (req as any).user?.userId as string | undefined;
+
+const safeFallback = async (userId: string) => {
+  try {
+    return await listRegistryItems(userId);
+  } catch {
+    return [];
+  }
+};
 
 const respond = async (res: Response, action: () => Promise<any>) => {
   try {
@@ -42,4 +57,73 @@ export const listMyRegistryGiftsController = (req: Request, res: Response) => {
   }
 
   return respond(res, () => listMyRegistryGifts({ memberExternalId }));
+};
+
+export const syncDownController = async (req: Request, res: Response) => {
+  const userId = getUserId(req);
+  if (!userId) {
+    return res.status(401).json({ ok: false, error: 'Unauthorized', fallbackItems: [] });
+  }
+
+  const result = await syncDown(userId);
+  if (!result.ok) {
+    const fallbackItems = await safeFallback(userId);
+    return res.status(200).json({
+      ok: false,
+      error: result.error,
+      fallbackItems,
+    });
+  }
+
+  const items = await listRegistryItems(userId);
+  res.json({
+    ok: true,
+    items,
+    conflicts: result.conflicts,
+    lastSyncedAt: result.lastSync.toISOString(),
+  });
+};
+
+export const syncUpController = async (req: Request, res: Response) => {
+  const userId = getUserId(req);
+  if (!userId) {
+    return res.status(401).json({ ok: false, error: 'Unauthorized', fallbackItems: [] });
+  }
+
+  const result = await syncUp(userId);
+  if (!result.ok) {
+    const fallbackItems = await safeFallback(userId);
+    return res.status(200).json({
+      ok: false,
+      error: result.error,
+      fallbackItems,
+    });
+  }
+
+  const items = await listRegistryItems(userId);
+  res.json({
+    ok: true,
+    items,
+    conflicts: result.conflicts,
+    lastSyncedAt: result.lastSync.toISOString(),
+  });
+};
+
+export const getSyncStatusController = async (req: Request, res: Response) => {
+  const userId = getUserId(req);
+  if (!userId) {
+    return res.status(401).json({ ok: false, error: 'Unauthorized' });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { myRegistryLastSyncedAt: true },
+  });
+  const conflicts = await listActiveConflicts(userId);
+
+  res.json({
+    ok: true,
+    lastSyncedAt: user?.myRegistryLastSyncedAt?.toISOString() ?? null,
+    conflicts,
+  });
 };

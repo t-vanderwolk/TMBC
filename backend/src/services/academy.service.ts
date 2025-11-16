@@ -13,7 +13,7 @@ export type AcademyTrack = {
 
 import { ProductResponse, getProductsByCategories, getProductsByIds, getProductsByModuleCode } from './product.service';
 
-export type AcademyModule = {
+type AcademyModuleDefinition = {
   id: string;
   trackId: string;
   title: string;
@@ -23,6 +23,10 @@ export type AcademyModule = {
   recommendedProducts: string[];
   stage: string;
   mentorNotes?: string;
+};
+
+export type AcademyModule = Omit<AcademyModuleDefinition, 'recommendedProducts'> & {
+  recommendedProducts: ProductResponse[];
 };
 
 const journeys: AcademyJourney[] = [
@@ -37,7 +41,7 @@ const tracks: AcademyTrack[] = [
   { id: 'postpartum-healing', journeyId: 'postpartum', title: 'Healing & Wellness', summary: 'Rest, nourishment, and mindset.' },
 ];
 
-const modules: AcademyModule[] = [
+const modules: AcademyModuleDefinition[] = [
   {
     id: 'car-seat-masterclass',
     trackId: 'gear-mobility',
@@ -106,13 +110,22 @@ export const getAcademyTracks = async () => {
 };
 
 export const getAcademyModules = async () => {
-  // TODO: Replace with Prisma module data
-  return modules;
+  const hydrated = await Promise.all(
+    modules.map(async (module) => {
+      const recommended = await getProductsByIds(module.recommendedProducts);
+      return {
+        ...module,
+        recommendedProducts: recommended,
+      };
+    }),
+  );
+
+  return hydrated;
 };
 
 export const getRecommendedModule = async () => {
-  // TODO: Build recommendation engine tied to user progress
-  return modules[0];
+  const [first] = await getAcademyModules();
+  return first;
 };
 
 const findModule = (moduleCode: string) => {
@@ -167,4 +180,13 @@ export const getModuleRecommendations = async (moduleCode: string) => {
     products: combined,
     categoryGroups,
   };
+};
+
+export const getModuleRecommendedProductsList = async (moduleCode: string) => {
+  const module = findModule(moduleCode);
+  if (!module) {
+    throw new Error(`Module ${moduleCode} not found`);
+  }
+
+  return getProductsByIds(module.recommendedProducts);
 };

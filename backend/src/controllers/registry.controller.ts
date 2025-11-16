@@ -11,6 +11,13 @@ import {
   removeRegistryItem,
   updateRegistryItem,
 } from '../services/registry.service';
+import {
+  applyRemoteValue,
+  getConflictById,
+  listActiveConflicts,
+  markConflictResolved,
+} from '../services/conflict.service';
+import { updateMyRegistryGift } from '../services/myRegistry.service';
 
 const getUserId = (req: Request) => (req as any).user?.userId as string | undefined;
 const parseStatus = (value?: string) => {
@@ -82,6 +89,37 @@ export const postRegistryItem = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(400).json({ error: error?.message || 'Unable to add registry item' });
   }
+};
+
+export const bulkAddRegistryItemsController = async (req: Request, res: Response) => {
+  const userId = getUserId(req);
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const productIds = Array.isArray(req.body?.productIds) ? req.body.productIds : [];
+  if (!productIds.length) {
+    return res.status(400).json({ error: 'productIds array is required' });
+  }
+
+  const items: any[] = [];
+  for (const productId of productIds) {
+    try {
+      const result = await addRegistryItem({
+        userId,
+        productId: String(productId),
+        status: RegistryStatus.NEEDED,
+      });
+      if (result.item) {
+        items.push(result.item);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Bulk add item failed', error);
+    }
+  }
+
+  res.status(201).json({ ok: true, items });
 };
 
 export const updateRegistryItemController = async (req: Request, res: Response) => {
@@ -197,4 +235,69 @@ export const getMentorNotesController = async (req: Request, res: Response) => {
 
   const notes = await listMentorNotes(memberId);
   res.json(notes);
+};
+
+export const getRegistryConflictsController = async (req: Request, res: Response) => {
+  const userId = getUserId(req);
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const conflicts = await listActiveConflicts(userId);
+  res.json({ ok: true, conflicts });
+};
+
+const buildRemotePayload = (field: string, value: string | null) => {
+  switch (field) {
+    case 'quantity':
+      return { quantity: value ? Number(value) : undefined };
+    case 'status':
+      return { status: value ?? undefined };
+    case 'customNote':
+      return { notes: value ?? null };
+    case 'affiliateUrl':
+      return { affiliateUrl: value ?? undefined };
+    default:
+      return {};
+  }
+};
+
+export const resolveRegistryConflictController = async (req: Request, res: Response) => {
+  const userId = getUserId(req);
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const { conflictId, resolution } = req.body ?? {};
+  if (!conflictId || !resolution) {
+    return res.status(400).json({ error: 'conflictId and resolution are required' });
+  }
+
+  const conflict = await getConflictById(conflictId, userId);
+  if (!conflict) {
+    return res.status(404).json({ error: 'Conflict not found' });
+  }
+
+  try {
+    if (resolution === 'remote') {
+      await applyRemoteValue(conflictId, userId);
+    } else if (resolution === 'local') {
+      if (!conflict.item.myRegistryId) {
+        throw new Error('Item is not connected to MyRegistry.');
+      }
+      const payload = buildRemotePayload(conflict.field, conflict.localValue);
+      await updateMyRegistryGift({
+        giftId: conflict.item.myRegistryId,
+        ...payload,
+      });
+      await markConflictResolved(conflictId);
+    } else {
+      return res.status(400).json({ error: 'Invalid resolution option' });
+    }
+
+    const conflicts = await listActiveConflicts(userId);
+    res.json({ ok: true, conflicts });
+  } catch (error: any) {
+    res.status(400).json({ error: error?.message || 'Unable to resolve conflict' });
+  }
 };

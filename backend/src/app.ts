@@ -7,6 +7,7 @@ import academyRoutes from './routes/academy.routes';
 import registryRoutes from './routes/registry.routes';
 import communityRoutes from './routes/community.routes';
 import mentorRoutes from './routes/mentor.routes';
+import mentorCollabRoutes from './routes/mentorCollab.routes';
 import adminRoutes from './routes/admin.routes';
 import waitlistRoutes from './routes/waitlist.routes';
 import dashboardRoutes from './routes/dashboard.routes';
@@ -39,6 +40,7 @@ appInstance.use('/api/journal', journalRoutes);
 appInstance.use('/api/chat', chatRoutes);
 appInstance.use('/api/myregistry', myRegistryRoutes);
 appInstance.use('/api/mentor', mentorRoutes);
+appInstance.use('/api/mentor', mentorCollabRoutes);
 appInstance.use('/api/admin', adminRoutes);
 appInstance.use('/api/waitlist', waitlistRoutes);
 

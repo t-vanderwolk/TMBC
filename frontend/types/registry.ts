@@ -24,7 +24,7 @@ export type RegistryItem = {
   id: string;
   productId: string | null;
   quantity: number;
-  status: 'ACTIVE' | 'NEEDED' | 'RESERVED' | 'PURCHASED' | 'PURCHASED_ELSEWHERE';
+  status: 'ACTIVE' | 'NEEDED' | 'RESERVED' | 'PURCHASED' | 'PURCHASED_ELSEWHERE' | 'REMOVED_REMOTE';
   notes: string | null;
   purchaseSource: string | null;
   myRegistryId: string | null;
@@ -47,7 +47,7 @@ export type AcademyModuleMeta = {
   estTime: string;
   status: 'not_started' | 'in_progress' | 'complete';
   categories: string[];
-  recommendedProducts: string[];
+  recommendedProducts: ProductSummary[];
   stage: string;
   mentorNotes?: string;
 };
@@ -59,4 +59,23 @@ export type ModuleRecommendationsResponse = {
     category: string;
     products: ProductSummary[];
   }[];
+};
+
+export type RegistryConflict = {
+  id: string;
+  field: 'quantity' | 'status' | 'customNote' | 'affiliateUrl';
+  localValue: string | null;
+  remoteValue: string | null;
+  item: {
+    id: string;
+    title: string;
+    myRegistryId: string | null;
+    status: RegistryItem['status'];
+    url: string;
+  };
+};
+
+export type RegistrySyncState = {
+  lastSyncedAt: string | null;
+  conflicts: RegistryConflict[];
 };

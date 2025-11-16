@@ -5,6 +5,7 @@ import {
   Sparkles,
   HeartHandshake,
   CheckCircle2,
+  ClipboardCheck,
 } from 'lucide-react';
 
 import ModuleLayout from '../components/ModuleLayout';
@@ -38,6 +39,36 @@ const ModulePage = ({ params }: ModulePageProps) => {
             the notes below for links, mentor quotes, and brand favorites that
             pair beautifully with this track.
           </p>
+        </div>
+      </section>
+
+      <section className="rounded-3xl border border-tmBlush/40 bg-white/90 p-6 shadow-soft">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Mentor Assignment</p>
+            <h2 className="text-2xl text-tmCharcoal">Request Module Review</h2>
+            <p className="text-sm text-tmCharcoal/70">
+              // TODO: Hook this CTA to mentorCollab.createTask with type MODULE_REVIEW
+            </p>
+          </div>
+          <button className="inline-flex items-center gap-2 rounded-full border border-tmMauve px-5 py-3 text-sm font-semibold text-tmMauve">
+            <ClipboardCheck className="h-4 w-4" />
+            Request Review
+          </button>
+        </div>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          <div className="rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
+            <p className="text-xs uppercase tracking-[0.4em] text-tmMauve">Assignments</p>
+            <p className="text-sm text-tmCharcoal/80">
+              // TODO: Surface curriculum-built assignments + upload links
+            </p>
+          </div>
+          <div className="rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
+            <p className="text-xs uppercase tracking-[0.4em] text-tmMauve">Mentor Feedback</p>
+            <p className="text-sm text-tmCharcoal/80">
+              // TODO: Render mentor feedback thread filtered by moduleId = {module.id}
+            </p>
+          </div>
         </div>
       </section>
 
