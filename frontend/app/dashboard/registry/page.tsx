@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Loader2, Share2, Sparkles } from 'lucide-react';
@@ -55,7 +57,7 @@ export default function RegistryPage() {
     const fetchModules = async () => {
       try {
         const response = await api.get('/api/academy/modules');
-        const serverModules = response.data as AcademyModuleMeta[];
+        const serverModules = (response.data?.data || []) as AcademyModuleMeta[];
         setModules(serverModules);
         if (!selectedModule && serverModules.length) {
           setSelectedModule(serverModules[0].id);

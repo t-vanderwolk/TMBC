@@ -18,7 +18,7 @@ const fallbackModules: ModuleProgress[] = academyModules.slice(0, 12).map((modul
   id: module.id,
   title: module.title,
   journey: module.journey,
-  estimatedTime: `${20 + index * 5} min`,
+  estimatedTime: `${module.estimatedMinutes} min`,
   status: index % 3 === 0 ? 'Complete' : index % 3 === 1 ? 'In progress' : 'Not started',
 }));
 

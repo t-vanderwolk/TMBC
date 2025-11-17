@@ -1,18 +1,32 @@
 export type JourneyId = 'nursery' | 'gear' | 'postpartum';
 
-export type AcademyModule = {
+export type ModuleContent = {
+  explore: string;
+  lecture: string;
+  journalPrompt: string;
+  apply: string[];
+};
+
+type RawAcademyModule = {
   id: string;
   journey: JourneyId;
-  track: string;
   title: string;
+  subtitle: string;
+  slug: string;
+  registryFocus: string;
+  estimatedMinutes: number;
+  accentColor: string;
+  heroImage: string;
+  content: ModuleContent;
+};
+
+export type AcademyModule = RawAcademyModule & {
+  track: string;
   description: string;
   order: number;
 };
 
-export const journeyMeta: Record<
-  JourneyId,
-  { label: string; description: string }
-> = {
+export const journeyMeta: Record<JourneyId, { label: string; description: string }> = {
   nursery: {
     label: 'Nursery Journey',
     description:
@@ -20,8 +34,7 @@ export const journeyMeta: Record<
   },
   gear: {
     label: 'Gear Journey',
-    description:
-      'Feel confident selecting every stroller, carrier, and travel essential with curated Taylor-Made picks.',
+    description: 'Feel confident selecting every stroller, carrier, and travel essential with curated Taylor-Made picks.',
   },
   postpartum: {
     label: 'Postpartum Journey',
@@ -30,671 +43,657 @@ export const journeyMeta: Record<
   },
 };
 
-const trackDescriptions: Record<string, string> = {
-  'nursery:Vision & Foundations':
-    'Set your aesthetic direction and functional zones before buying a single piece.',
-  'nursery:Core Furniture & Layout':
-    'Choose investment pieces, layouts, and seating that support around-the-clock care.',
-  'nursery:Atmosphere & Safety':
-    'Layer lighting, airflow, and safety checkpoints for a calm, secure space.',
-  'nursery:Details & Decor':
-    'Elevate textiles, art, and finishing touches for an heirloom-worthy nursery.',
-  'nursery:Ready for Baby':
-    'Move from plan to reality with final checklists, styling, and transition prep.',
-  'nursery:Sleep & Space Series':
-    'Dive deeper into sleep environments, routines, and adjustments as baby grows.',
-  'gear:Mobility & Bonding':
-    'Navigate carriers, strollers, and mobility gear that keep your family moving.',
-  'gear:Feeding & Seating':
-    'Confidently set up feeding gear with ergonomics, safety, and adaptability in mind.',
-  'gear:Travel & Protection':
-    'Master car seats, travel systems, and crash-tested peace of mind.',
-  'gear:Sleep & Comfort':
-    'Curate calming textiles and comfy gear that support naps anywhere.',
-  'gear:Bath & Hygiene Essentials':
-    'Build spa-level hygiene rituals with smart tools and stylish storage.',
-  'postpartum:Healing & Wellness':
-    'Prioritize rest, nourishment, and realistic body care through recovery.',
-  'postpartum:Feeding & Lactation Wellness':
-    'Align feeding goals with practical lactation, pumping, and formula support.',
-  'postpartum:Emotional & Relationship Wellness':
-    'Protect intimacy, mental clarity, and communication as roles evolve.',
-  'postpartum:Family Integration & Adjustment':
-    'Gently introduce siblings and pets while rediscovering balance.',
-  'postpartum:Support & Care Network':
-    'Curate your village with clarity on paid support and personal asks.',
-  'postpartum:Baby Health & Hygiene':
-    'Decode diapers, baths, and rhythms for calm daily care.',
-  'postpartum:Health & Nutrition':
-    'Stay nourished with allergy awareness, solid starts, and whole-family fueling.',
-};
-
-export const trackOrder: Record<JourneyId, string[]> = {
-  nursery: [
-    'Vision & Foundations',
-    'Core Furniture & Layout',
-    'Atmosphere & Safety',
-    'Details & Decor',
-    'Ready for Baby',
-    'Sleep & Space Series',
-  ],
-  gear: [
-    'Mobility & Bonding',
-    'Feeding & Seating',
-    'Travel & Protection',
-    'Sleep & Comfort',
-    'Bath & Hygiene Essentials',
-  ],
-  postpartum: [
-    'Healing & Wellness',
-    'Feeding & Lactation Wellness',
-    'Emotional & Relationship Wellness',
-    'Family Integration & Adjustment',
-    'Support & Care Network',
-    'Baby Health & Hygiene',
-    'Health & Nutrition',
-  ],
-};
-
-export const academyModules: AcademyModule[] = [
-  {
-    id: 'nursery-vision-style-foundations',
-    journey: 'nursery',
-    track: 'Vision & Foundations',
-    title: 'Vision & Style Foundations',
-    description:
-      'Define your aesthetic direction, lifestyle needs, and nursery functional zones.',
-    order: 1,
-  },
-  {
-    id: 'nursery-comfort-care-stations',
-    journey: 'nursery',
-    track: 'Vision & Foundations',
-    title: 'Comfort & Care Stations',
-    description:
-      'Plan soothing touchpoints for feeding, changing, and late-night snuggles.',
-    order: 2,
-  },
-  {
-    id: 'nursery-organization-storage',
-    journey: 'nursery',
-    track: 'Vision & Foundations',
-    title: 'Nursery Organization & Storage',
-    description:
-      'Design intuitive storage that keeps diapers, textiles, and keepsakes streamlined.',
-    order: 3,
-  },
-  {
-    id: 'nursery-cribs-sleep-spaces',
-    journey: 'nursery',
-    track: 'Core Furniture & Layout',
-    title: 'Cribs & Sleep Spaces',
-    description:
-      'Choose the right crib, bassinet alternatives, and sleep setups for every room.',
-    order: 4,
-  },
-  {
-    id: 'nursery-changing-stations',
-    journey: 'nursery',
-    track: 'Core Furniture & Layout',
-    title: 'Changing Stations',
-    description:
-      'Build ergonomic, safe stations with storage flows for day and night feeds.',
-    order: 5,
-  },
-  {
-    id: 'nursery-seating-gliders',
-    journey: 'nursery',
-    track: 'Core Furniture & Layout',
-    title: 'Seating & Gliders',
-    description:
-      'Compare gliders, recliners, and chairs that support posture and bonding.',
-    order: 6,
-  },
-  {
-    id: 'nursery-dressers-storage',
-    journey: 'nursery',
-    track: 'Core Furniture & Layout',
-    title: 'Dressers & Storage',
-    description:
-      'Select investment dressers, armoires, and shelving that grow with baby.',
-    order: 7,
-  },
-  {
-    id: 'nursery-lighting-sound',
-    journey: 'nursery',
-    track: 'Atmosphere & Safety',
-    title: 'Lighting & Sound',
-    description:
-      'Layer ambient, task, and night lighting with acoustics that cue rest.',
-    order: 8,
-  },
-  {
-    id: 'nursery-sound-machine',
-    journey: 'nursery',
-    track: 'Atmosphere & Safety',
-    title: 'Sound Machine Strategy',
-    description:
-      'Dial in frequencies, placement, and routines for white-noise harmony.',
-    order: 9,
-  },
-  {
-    id: 'nursery-temperature-airflow',
-    journey: 'nursery',
-    track: 'Atmosphere & Safety',
-    title: 'Temperature & Airflow',
-    description:
-      'Balance humidity, fans, and monitors for safe, cozy sleep environments.',
-    order: 10,
-  },
-  {
-    id: 'nursery-safety-zones-hazards',
-    journey: 'nursery',
-    track: 'Atmosphere & Safety',
-    title: 'Safety Zones & Hazards',
-    description:
-      'Map hazard-free zones and anchoring checklists for every square foot.',
-    order: 11,
-  },
-  {
-    id: 'nursery-textiles',
-    journey: 'nursery',
-    track: 'Details & Decor',
-    title: 'Textiles & Layers',
-    description:
-      'Curate textiles—from sheets to rugs—that elevate comfort and cleanability.',
-    order: 12,
-  },
-  {
-    id: 'nursery-wall-decor',
-    journey: 'nursery',
-    track: 'Details & Decor',
-    title: 'Wall Decor',
-    description:
-      'Blend art, mirrors, and shelving with heirloom quality and safety.',
-    order: 13,
-  },
-  {
-    id: 'nursery-theme-cohesion',
-    journey: 'nursery',
-    track: 'Details & Decor',
-    title: 'Theme Cohesion',
-    description:
-      'Create a cohesive story with palettes, motifs, and sensory elements.',
-    order: 14,
-  },
-  {
-    id: 'nursery-personalized-touches',
-    journey: 'nursery',
-    track: 'Details & Decor',
-    title: 'Personalized Touches',
-    description:
-      'Infuse meaningful customs, keepsakes, and signage that feel bespoke.',
-    order: 15,
-  },
-  {
-    id: 'nursery-setup-checklist',
-    journey: 'nursery',
-    track: 'Ready for Baby',
-    title: 'Setup Checklist',
-    description:
-      'Follow a concierge-approved checklist that keeps install day calm.',
-    order: 16,
-  },
-  {
-    id: 'nursery-final-safety-audit',
-    journey: 'nursery',
-    track: 'Ready for Baby',
-    title: 'Final Safety Audit',
-    description:
-      'Audit anchors, monitor placement, and cords before baby arrives.',
-    order: 17,
-  },
-  {
-    id: 'nursery-photo-ready-prep',
-    journey: 'nursery',
-    track: 'Ready for Baby',
-    title: 'Photo-Ready Prep',
-    description:
-      'Style vignettes, swaddles, and florals for keepsake-worthy shoots.',
-    order: 18,
-  },
-  {
-    id: 'nursery-transition-planning',
-    journey: 'nursery',
-    track: 'Ready for Baby',
-    title: 'Transition Planning',
-    description:
-      'Plan room shifts, shared spaces, and storage for future milestones.',
-    order: 19,
-  },
-  {
-    id: 'nursery-choosing-sleep-space',
-    journey: 'nursery',
-    track: 'Sleep & Space Series',
-    title: 'Choosing Sleep Space',
-    description:
-      'Compare bassinets, mini-cribs, and travel solutions for every room.',
-    order: 20,
-  },
-  {
-    id: 'nursery-furniture-toys',
-    journey: 'nursery',
-    track: 'Sleep & Space Series',
-    title: 'Nursery Furniture & Toys',
-    description:
-      'Select developmentally savvy furniture and curated toy rotations.',
-    order: 21,
-  },
-  {
-    id: 'nursery-sleep-training-routines',
-    journey: 'nursery',
-    track: 'Sleep & Space Series',
-    title: 'Sleep Training & Routines',
-    description:
-      'Learn gentle routines, cue readings, and mentor-approved scripts.',
-    order: 22,
-  },
-  {
-    id: 'nursery-adjustment-periods',
-    journey: 'nursery',
-    track: 'Sleep & Space Series',
-    title: 'Adjustment Periods',
-    description:
-      'Navigate regressions, room moves, and furniture transitions gracefully.',
-    order: 23,
-  },
-  {
-    id: 'gear-strollers-101',
-    journey: 'gear',
-    track: 'Mobility & Bonding',
-    title: 'Strollers 101',
-    description:
-      'Demystify frames, wheels, and city vs. travel builds for daily ease.',
-    order: 24,
-  },
-  {
-    id: 'gear-carriers',
-    journey: 'gear',
-    track: 'Mobility & Bonding',
-    title: 'Carriers & Wearable Bonding',
-    description:
-      'Compare wraps, slings, and structured carriers with fit hacks and safety cues.',
-    order: 25,
-  },
-  {
-    id: 'gear-balance-bikes-trikes',
-    journey: 'gear',
-    track: 'Mobility & Bonding',
-    title: 'Balance Bikes & Trikes',
-    description:
-      'Plan future mobility milestones with mentorship on sizing and storage.',
-    order: 26,
-  },
-  {
-    id: 'gear-travel-systems',
-    journey: 'gear',
-    track: 'Mobility & Bonding',
-    title: 'Travel Systems Basics',
-    description:
-      'Pair strollers, car seats, and accessories for seamless transfers.',
-    order: 27,
-  },
-  {
-    id: 'gear-highchair-essentials',
-    journey: 'gear',
-    track: 'Feeding & Seating',
-    title: 'Highchair Essentials',
-    description:
-      'Discover ergonomic seating, adjustability, and add-ons for every stage.',
-    order: 28,
-  },
-  {
-    id: 'gear-choking-awareness',
-    journey: 'gear',
-    track: 'Feeding & Seating',
-    title: 'Choking Awareness & Safe Feeding',
-    description:
-      'Learn safety frameworks, pacing, and readiness cues for solids.',
-    order: 29,
-  },
-  {
-    id: 'gear-bottles-sterilizers',
-    journey: 'gear',
-    track: 'Feeding & Seating',
-    title: 'Bottles & Sterilizers',
-    description:
-      'Compare bottle systems, sterilizing workflows, and storage solutions.',
-    order: 30,
-  },
-  {
-    id: 'gear-feeding-accessories',
-    journey: 'gear',
-    track: 'Feeding & Seating',
-    title: 'Feeding Accessories',
-    description:
-      'Stock bibs, mats, and prep tools that support BLW, purees, and beyond.',
-    order: 31,
-  },
-  {
-    id: 'gear-car-seats-101',
-    journey: 'gear',
-    track: 'Travel & Protection',
-    title: 'Car Seats 101',
-    description:
-      'Decode infant, convertible, and booster seats with expert-level clarity.',
-    order: 32,
-  },
-  {
-    id: 'gear-car-seat-masterclass',
-    journey: 'gear',
-    track: 'Travel & Protection',
-    title: 'The Car Seat Masterclass',
-    description:
-      'Deep dive into installation, travel hacks, and longevity decisions.',
-    order: 33,
-  },
-  {
-    id: 'gear-travel-bags-solutions',
-    journey: 'gear',
-    track: 'Travel & Protection',
-    title: 'Travel Bags & Solutions',
-    description:
-      'Protect gear with cases, gate-check plans, and concierge packing lists.',
-    order: 34,
-  },
-  {
-    id: 'gear-pack-and-play',
-    journey: 'gear',
-    track: 'Travel & Protection',
-    title: 'Pack & Play Essentials',
-    description:
-      'Choose portable sleep, play, and change setups for every trip.',
-    order: 35,
-  },
-  {
-    id: 'gear-wagon-module',
-    journey: 'gear',
-    track: 'Travel & Protection',
-    title: 'Wagon Module',
-    description:
-      'Compare wagons for adventures, storage hacks, and sibling logistics.',
-    order: 36,
-  },
-  {
-    id: 'gear-swaddle-blankets',
-    journey: 'gear',
-    track: 'Sleep & Comfort',
-    title: 'Swaddle Blankets',
-    description:
-      'Weigh fabrics, closures, and seasonal options for better sleep.',
-    order: 37,
-  },
-  {
-    id: 'gear-play-mats-changing-pads',
-    journey: 'gear',
-    track: 'Sleep & Comfort',
-    title: 'Play Mats & Changing Pads',
-    description:
-      'Style safe play zones with easy-clean materials and storage.',
-    order: 38,
-  },
-  {
-    id: 'gear-wearable-sleepers',
-    journey: 'gear',
-    track: 'Sleep & Comfort',
-    title: 'Wearable Sleepers',
-    description:
-      'Transition from swaddles to sleep sacks with togs and fit tips.',
-    order: 39,
-  },
-  {
-    id: 'gear-travel-sleepers',
-    journey: 'gear',
-    track: 'Sleep & Comfort',
-    title: 'Travel Sleepers',
-    description:
-      'Compare compact sleepers for hotels, grandparents, and road trips.',
-    order: 40,
-  },
-  {
-    id: 'gear-baby-tub',
-    journey: 'gear',
-    track: 'Bath & Hygiene Essentials',
-    title: 'Baby Tub Essentials',
-    description:
-      'Review tub types, supports, and rituals that feel spa-like.',
-    order: 41,
-  },
-  {
-    id: 'gear-grooming-tools',
-    journey: 'gear',
-    track: 'Bath & Hygiene Essentials',
-    title: 'Grooming Tools',
-    description:
-      'Curate gentle clippers, thermometers, and skincare staples.',
-    order: 42,
-  },
-  {
-    id: 'gear-diapering-bathroom-setup',
-    journey: 'gear',
-    track: 'Bath & Hygiene Essentials',
-    title: 'Diapering & Bathroom Setup',
-    description:
-      'Organize diapering carts, pails, and bathroom supports for any home.',
-    order: 43,
-  },
-  {
-    id: 'postpartum-rest-recovery',
-    journey: 'postpartum',
-    track: 'Healing & Wellness',
-    title: 'Rest & Recovery',
-    description:
-      'Create rest rituals, boundaries, and support requests for healing.',
-    order: 44,
-  },
-  {
-    id: 'postpartum-pre-baby-body-map',
-    journey: 'postpartum',
-    track: 'Healing & Wellness',
-    title: 'Realistic Pre-Baby Body Map',
-    description:
-      'Normalize body changes and map gentle re-entry goals with grace.',
-    order: 45,
-  },
-  {
-    id: 'postpartum-nutrition-foundations',
-    journey: 'postpartum',
-    track: 'Healing & Wellness',
-    title: 'Nutrition Foundations',
-    description:
-      'Fuel recovery with pantry staples, meal-train ideas, and hydration.',
-    order: 46,
-  },
-  {
-    id: 'postpartum-mood-support',
-    journey: 'postpartum',
-    track: 'Healing & Wellness',
-    title: 'Mood Support',
-    description:
-      'Spot emotional cues early and line up supportive care plans.',
-    order: 47,
-  },
-  {
-    id: 'postpartum-breastfeeding-module',
-    journey: 'postpartum',
-    track: 'Feeding & Lactation Wellness',
-    title: 'Breastfeeding Foundations',
-    description:
-      'Set up latch support, supplies, and mentor-backed troubleshooting.',
-    order: 48,
-  },
-  {
-    id: 'postpartum-pumping-basics',
-    journey: 'postpartum',
-    track: 'Feeding & Lactation Wellness',
-    title: 'Pumping Basics',
-    description:
-      'Build pumping stations, schedules, and storage game plans.',
-    order: 49,
-  },
-  {
-    id: 'postpartum-formula-education',
-    journey: 'postpartum',
-    track: 'Feeding & Lactation Wellness',
-    title: 'Formula Education',
-    description:
-      'Navigate formulas, prep safety, and combo-feeding confidence.',
-    order: 50,
-  },
-  {
-    id: 'postpartum-troubleshooting-issues',
-    journey: 'postpartum',
-    track: 'Feeding & Lactation Wellness',
-    title: 'Troubleshooting Feeding Issues',
-    description:
-      'Tackle supply dips, clogs, and bottle refusal with concierge tips.',
-    order: 51,
-  },
-  {
-    id: 'postpartum-intimacy-relationship',
-    journey: 'postpartum',
-    track: 'Emotional & Relationship Wellness',
-    title: 'Intimacy & Relationship',
-    description:
-      'Support emotional and physical closeness with scripts and rituals.',
-    order: 52,
-  },
-  {
-    id: 'postpartum-communication-tools',
-    journey: 'postpartum',
-    track: 'Emotional & Relationship Wellness',
-    title: 'Communication Tools',
-    description:
-      'Use TMBC frameworks for alignment, calendars, and expectation setting.',
-    order: 53,
-  },
-  {
-    id: 'postpartum-mental-load-management',
-    journey: 'postpartum',
-    track: 'Emotional & Relationship Wellness',
-    title: 'Mental Load Management',
-    description:
-      'Redistribute invisible labor with concierge-approved delegation plans.',
-    order: 54,
-  },
-  {
-    id: 'postpartum-animal-sibling-introduction',
-    journey: 'postpartum',
-    track: 'Family Integration & Adjustment',
-    title: 'Animal & Sibling Introduction',
-    description:
-      'Prepare pets and siblings for the new baby with gentle scripts.',
-    order: 55,
-  },
-  {
-    id: 'postpartum-identity-transitions',
-    journey: 'postpartum',
-    track: 'Family Integration & Adjustment',
-    title: 'Identity Transitions',
-    description:
-      'Honor shifting identities with journaling and mentor reflection.',
-    order: 56,
-  },
-  {
-    id: 'postpartum-rebalancing-roles',
-    journey: 'postpartum',
-    track: 'Family Integration & Adjustment',
-    title: 'Rebalancing Roles',
-    description:
-      'Co-create household roles, budgets, and routines with clarity.',
-    order: 57,
-  },
-  {
-    id: 'postpartum-doulas-nannies',
-    journey: 'postpartum',
-    track: 'Support & Care Network',
-    title: 'Doulas, Wet Nurses & Nannies',
-    description:
-      'Learn how to vet, hire, and support your professional care team.',
-    order: 58,
-  },
-  {
-    id: 'postpartum-how-to-ask-for-help',
-    journey: 'postpartum',
-    track: 'Support & Care Network',
-    title: 'How to Ask for Help',
-    description:
-      'Craft mentor-tested scripts for friends, family, and support circles.',
-    order: 59,
-  },
-  {
-    id: 'postpartum-when-to-call-professional',
-    journey: 'postpartum',
-    track: 'Support & Care Network',
-    title: 'When to Call a Professional',
-    description:
-      'Spot red flags and know when to loop in pros for medical or emotional care.',
-    order: 60,
-  },
-  {
-    id: 'postpartum-baby-poop-hygiene',
-    journey: 'postpartum',
-    track: 'Baby Health & Hygiene',
-    title: 'Baby Poop & Hygiene',
-    description:
-      'Decode diapers, rash prevention, and bath rituals without anxiety.',
-    order: 61,
-  },
-  {
-    id: 'postpartum-bathing-basics',
-    journey: 'postpartum',
-    track: 'Baby Health & Hygiene',
-    title: 'Bathing Basics',
-    description:
-      'Learn sink vs. tub setups, skincare support, and calming cues.',
-    order: 62,
-  },
-  {
-    id: 'postpartum-day-night-routines',
-    journey: 'postpartum',
-    track: 'Baby Health & Hygiene',
-    title: 'Day/Night Routines',
-    description:
-      'Craft rhythms that protect circadian cues for the whole family.',
-    order: 63,
-  },
-  {
-    id: 'postpartum-allergies-module',
-    journey: 'postpartum',
-    track: 'Health & Nutrition',
-    title: 'Allergies Module',
-    description:
-      'Introduce allergens with confidence and track reactions calmly.',
-    order: 64,
-  },
-  {
-    id: 'postpartum-introducing-solids',
-    journey: 'postpartum',
-    track: 'Health & Nutrition',
-    title: 'Introducing Solids',
-    description:
-      'Build a solids roadmap with portion ideas and sensory exploration.',
-    order: 65,
-  },
-  {
-    id: 'postpartum-nutrition-mom-baby',
-    journey: 'postpartum',
-    track: 'Health & Nutrition',
-    title: 'Nutrition for Mom & Baby',
-    description:
-      'Nourish the whole family with menu templates and supplement clarity.',
-    order: 66,
-  },
+const rawModules: RawAcademyModule[] = [
+  {
+    "id": "module-nursery-vision-foundations",
+    "journey": "nursery",
+    "title": "Nursery Vision & Foundations I: Dream to Design",
+    "subtitle": "Transform intentions into a serene space for baby and caregiver",
+    "slug": "nursery-vision-foundations",
+    "registryFocus": "Nursery Essentials",
+    "estimatedMinutes": 35,
+    "accentColor": "#EAC9D1",
+    "heroImage": "/images/academy/nursery-vision.jpg",
+    "content": {
+      "explore": "Every nursery begins with intention. This module helps parents translate emotions and lifestyle into a tangible nursery plan-balancing style, safety, and function.",
+      "lecture": "Designing a nursery isn't about perfection-it's about presence. The earliest moments with your baby happen in this space, and every texture, sound, and light level plays a subtle role in how both of you feel. From the rhythm of nighttime feeds to morning stretches, this room is a microcosm of calm, connection, and care.\n\nWe begin with your sensory goals: Do you want the nursery to feel bright and energizing, or cocoon-like and tranquil? Research in environmental psychology shows that visual simplicity and soft light help reduce overstimulation for infants while supporting parent restfulness. Even your choice of color temperature (warm 2700K light over cool daylight bulbs) can shift the tone of late-night caregiving.\n\nFinally, we connect aesthetics to function. Safety rails, furniture spacing, and easy-reach zones prevent fatigue and create flow. When intention guides layout, the result is a sanctuary that adapts with your growing family-less a Pinterest project, more a living story.",
+      "journalPrompt": "As you picture welcoming your baby home, what three feelings do you want their first environment to reflect?",
+      "apply": [
+        "Pin three inspiration rooms to your Pinterest Moodboard.",
+        "Add a sound machine, humidifier, and monitor to your registry via the Dynamic Registry.",
+        "Complete your Vision Board section and share with your mentor for review."
+      ]
+    }
+  },
+  {
+    "id": "module-nursery-core-pieces",
+    "journey": "nursery",
+    "title": "Core Pieces & Function Flow",
+    "subtitle": "Design with ergonomics and rhythm in mind",
+    "slug": "nursery-core-pieces",
+    "registryFocus": "Furniture & Setup",
+    "estimatedMinutes": 30,
+    "accentColor": "#C8A1B4",
+    "heroImage": "/images/academy/nursery-core.jpg",
+    "content": {
+      "explore": "Beyond aesthetics-understanding how furniture supports caregiving.",
+      "lecture": "Every piece of nursery furniture tells a story about your daily rhythm. The crib becomes the stage for rest, the dresser doubles as a changing station, and the chair anchors your feedings. Selecting these items through the lens of ergonomics and comfort prevents physical strain and emotional burnout. The more intuitive the flow, the more mental energy you preserve for connection.\n\nParent ergonomics are a design priority-your back, wrists, and posture matter as much as aesthetics. Opt for a changing setup where everything is within arm's reach. The average parent performs nearly 3,000 diaper changes in the first year; shaving seconds and steps from that routine adds up to real relief.\n\nFinally, think beyond the newborn stage. Modular furniture that converts as baby grows saves space and money. A dresser that transforms into a desk or a crib that becomes a toddler bed keeps your investment meaningful. Function is style when it grows with you.",
+      "journalPrompt": "Which nursery item do you imagine yourself using most in those first few weeks-and what moments do you picture happening there?",
+      "apply": [
+        "Sketch or upload a photo of your room layout.",
+        "Add crib and glider options from MacroBaby feed.",
+        "Check your mentor's ergonomics checklist."
+      ]
+    }
+  },
+  {
+    "id": "module-nursery-lighting-atmosphere",
+    "journey": "nursery",
+    "title": "Atmosphere & Lighting Cues",
+    "subtitle": "Shape mood and sleep through light",
+    "slug": "nursery-lighting-atmosphere",
+    "registryFocus": "Lighting & Ambience",
+    "estimatedMinutes": 28,
+    "accentColor": "#D9C48E",
+    "heroImage": "/images/academy/nursery-lighting.jpg",
+    "content": {
+      "explore": "Light shapes sleep cycles and mood.",
+      "lecture": "Newborns can't tell day from night, but your lighting can teach them. The human circadian rhythm depends on light intensity and warmth, and babies respond to these environmental cues long before they learn to crawl. Warm amber lighting during nighttime feeds signals rest, while soft daylight tones support wakeful play.\n\nBeyond function, lighting is emotional architecture. Dimmed sconces and blackout curtains don't just block brightness-they create an enveloping calm. Parents often underestimate how much soft light can soothe their own nervous systems after endless early-morning wakings.\n\nSmart lighting systems, timers, and simple plug-in dimmers all work wonders. The goal isn't tech-it's predictability. When light patterns remain consistent, the nursery becomes a cue for stability and peace.",
+      "journalPrompt": "How do you want the nursery to feel during nighttime feeds or early mornings-calming, energizing, cozy, or bright?",
+      "apply": [
+        "Test lamp temperatures (warm 2700K vs neutral 3000K).",
+        "Add a dimmable nightlight to registry.",
+        "Upload favorite lighting mood to your Pinterest Moodboard."
+      ]
+    }
+  },
+  {
+    "id": "module-nursery-safety-serenity",
+    "journey": "nursery",
+    "title": "Safety & Serenity Blueprint",
+    "subtitle": "Integrate safety and calm design principles",
+    "slug": "nursery-safety-serenity",
+    "registryFocus": "Safety & Monitoring",
+    "estimatedMinutes": 26,
+    "accentColor": "#FFFAF8",
+    "heroImage": "/images/academy/nursery-safety.jpg",
+    "content": {
+      "explore": "Serenity and safety coexist through intentional planning.",
+      "lecture": "A serene space is one that feels secure. Parents often associate safety with stress-outlet covers, anchors, and long checklists-but safety can actually free you to relax once the groundwork is done.\n\nThis module integrates function and peace. You'll learn to evaluate non-toxic materials, VOC-free paints, and safe spacing between crib slats while also curating textures and colors that evoke comfort. The same wall anchor that prevents tipping furniture also supports your confidence; peace of mind is an aesthetic.\n\nWe'll also explore sensory serenity-limiting clutter, hiding cords, and choosing sound machines with decibel limits. A safe environment is not a sterile one; it's a calm one where every detail says, 'You can exhale.'",
+      "journalPrompt": "Which safety feature or setup would help you feel most relaxed and confident before bringing your baby home?",
+      "apply": [
+        "Complete nursery safety checklist.",
+        "Add air purifier and monitor to registry.",
+        "Review mentor video 'Safe Sleep Zone Setup.'"
+      ]
+    }
+  },
+  {
+    "id": "module-nursery-memory-corners",
+    "journey": "nursery",
+    "title": "Finishing Touches & Memory Corners",
+    "subtitle": "Design moments that hold emotion and story",
+    "slug": "nursery-memory-corners",
+    "registryFocus": "Decor & Keepsakes",
+    "estimatedMinutes": 24,
+    "accentColor": "#C8A1B4",
+    "heroImage": "/images/academy/nursery-memory.jpg",
+    "content": {
+      "explore": "Every room tells a story-add touches that grow with baby.",
+      "lecture": "Finishing a nursery means more than hanging décor-it's about marking identity. Whether it's a framed ultrasound photo or a handmade quilt, memory pieces remind you that this space celebrates a real family, not just a theme.\n\nTextures bring warmth: a woven rug softens hard floors, a linen curtain diffuses sunlight, and a cozy throw invites skin-to-skin moments. Select items that photograph beautifully but feel even better in use. Function meets sentiment when you create tactile memories.\n\nLastly, plan for change. Leave blank space-physical and emotional-for growth. That empty shelf today becomes tomorrow's art gallery of milestones. A nursery that evolves gracefully mirrors the way you'll grow as a parent.",
+      "journalPrompt": "What personal object, color, or keepsake would make your baby's nursery feel uniquely yours from day one?",
+      "apply": [
+        "Add storage baskets or frames to registry.",
+        "Upload décor picks to your board.",
+        "Tag your mentor for feedback."
+      ]
+    }
+  },
+  {
+    "id": "module-nursery-organization-storage",
+    "journey": "nursery",
+    "title": "Organization & Storage Harmony",
+    "subtitle": "Create calm through functional design and hidden systems",
+    "slug": "nursery-organization-storage",
+    "registryFocus": "Storage & Organization",
+    "estimatedMinutes": 28,
+    "accentColor": "#D9C48E",
+    "heroImage": "/images/academy/nursery-organization.jpg",
+    "content": {
+      "explore": "Clutter-free space equals a clutter-free mind-for you and baby.",
+      "lecture": "The nursery is more than décor-it's a living system. When bottles, burp cloths, and diapers each have a place, your body relaxes before you even realize why. Organization is an act of self-care disguised as interior design. Open shelving keeps daily essentials visible; labeled baskets turn chaos into choreography.\n\nThink like a night-shift parent: what will your half-asleep future self thank you for? A stocked drawer near the glider? Extra swaddles in arm's reach? Smart design anticipates your needs before they arise. You're building not just a room-but a routine.\n\nWe'll cover vertical storage, under-crib drawers, and modular cube systems. The goal is not Pinterest perfection-it's a rhythm that whispers, 'You've got this,' every time you step inside.",
+      "journalPrompt": "Which part of your current home feels calmest-and how can you bring that same energy into your nursery setup?",
+      "apply": [
+        "Add baskets, drawer organizers, and shelving units to registry.",
+        "Upload your storage layout photo to Journal.",
+        "Share with mentor for optimization tips."
+      ]
+    }
+  },
+  {
+    "id": "module-nursery-color-texture",
+    "journey": "nursery",
+    "title": "Color Psychology & Texture Play",
+    "subtitle": "Use color and touch to nurture emotional comfort",
+    "slug": "nursery-color-texture",
+    "registryFocus": "Decor & Design",
+    "estimatedMinutes": 30,
+    "accentColor": "#EAC9D1",
+    "heroImage": "/images/academy/nursery-color.jpg",
+    "content": {
+      "explore": "Color and texture shape how your nursery feels more than any single product.",
+      "lecture": "Science meets sentiment here. Studies show that warm neutrals and soft hues calm both infant heart rates and adult stress levels. While trends come and go, timeless tones like sage, blush, ivory, and sand feel safe to our nervous systems. Your palette should comfort, not compete.\n\nTexture deepens emotion-plush rugs, knit blankets, and woven baskets add sensory grounding. Babies explore through touch before sight, so diverse materials make their world feel rich and engaging. For parents, these layers add warmth and depth, softening the harder lines of furniture.\n\nThis is your invitation to design with emotion first. Ask: what colors feel like peace to you? What textures remind you of home? That's your true aesthetic guide-not an influencer's feed.",
+      "journalPrompt": "When you imagine holding your baby in the finished nursery, what colors and materials do you see around you?",
+      "apply": [
+        "Save 3 color palette options to your Pinterest Moodboard.",
+        "Add swatches or paint samples to Journal.",
+        "Tag your mentor for tone matching feedback."
+      ]
+    }
+  },
+  {
+    "id": "module-nursery-multi-purpose",
+    "journey": "nursery",
+    "title": "Multi-Purpose Design for Small Spaces",
+    "subtitle": "Maximize every inch without losing elegance",
+    "slug": "nursery-multi-purpose",
+    "registryFocus": "Space Optimization",
+    "estimatedMinutes": 29,
+    "accentColor": "#C8A1B4",
+    "heroImage": "/images/academy/nursery-multipurpose.jpg",
+    "content": {
+      "explore": "Even the smallest nurseries can feel expansive when designed intentionally.",
+      "lecture": "Tiny rooms build big creativity. Think beyond traditional layouts-floating cribs, fold-away changers, and dual-purpose dressers can transform a single corner into a caregiving command center. Multi-use furniture is the unsung hero of modern parenting.\n\nMirrors and vertical shelving expand perceived space, while lightweight curtains replace bulky closet doors for added airflow. The magic lies in minimalism-own less but choose better. Fewer, higher-quality items give you visual breathing room and emotional clarity.\n\nYour nursery should reflect your life, not a catalog. Whether you're in an apartment or a shared room, this module helps you design a space that feels intentional, flexible, and deeply personal.",
+      "journalPrompt": "If you had to fit your entire nursery into one small room, what would stay-and what could go?",
+      "apply": [
+        "Add foldable storage or modular furniture to registry.",
+        "Sketch your room to-scale in Journal.",
+        "Share your layout with mentor for optimization."
+      ]
+    }
+  },
+  {
+    "id": "module-nursery-air-scent-sound",
+    "journey": "nursery",
+    "title": "Air, Scent & Sound Environment",
+    "subtitle": "Design invisible comfort for rest and health",
+    "slug": "nursery-air-scent-sound",
+    "registryFocus": "Atmosphere & Safety",
+    "estimatedMinutes": 27,
+    "accentColor": "#FFFAF8",
+    "heroImage": "/images/academy/nursery-airsound.jpg",
+    "content": {
+      "explore": "Invisible details-air, scent, and sound-have visible impact on baby wellness.",
+      "lecture": "Air quality, gentle fragrance, and sound control are the unsung heroes of serenity. Babies breathe twice as fast as adults, making purifiers and non-toxic diffusers more than luxuries-they're health tools. Subtle scents like lavender or chamomile can cue calm when used sparingly and safely.\n\nSoundscapes matter too. Consistent low-frequency hums from white-noise machines mask unpredictable household sounds, creating a protective bubble of calm. Think of it as the modern womb-a steady rhythm your baby already knows by heart.\n\nThis module helps you identify simple swaps: cotton curtains that absorb noise, air-cleaning plants that are non-toxic, and humidity monitors that prevent dryness. Invisible comfort creates visible peace.",
+      "journalPrompt": "Which sense-sight, smell, or sound-most influences your own sense of calm?",
+      "apply": [
+        "Add humidifier and purifier to registry.",
+        "Record favorite white-noise clip in Journal.",
+        "Upload scent notes or diffuser setup to your board."
+      ]
+    }
+  },
+  {
+    "id": "module-nursery-prep-checklist",
+    "journey": "nursery",
+    "title": "Final Prep & Welcome Home Checklist",
+    "subtitle": "Ready the space for baby's first day home",
+    "slug": "nursery-prep-checklist",
+    "registryFocus": "Readiness & Setup",
+    "estimatedMinutes": 35,
+    "accentColor": "#D9C48E",
+    "heroImage": "/images/academy/nursery-prep.jpg",
+    "content": {
+      "explore": "This final step ties your design, organization, and care systems together before baby's arrival.",
+      "lecture": "By now your nursery is more than a room-it's an ecosystem. This final module walks you through a gentle pre-baby inspection: safety anchors tightened, swaddles washed, monitor synced, nightlight tested. You'll also learn time-saving habits for those hazy first weeks, like creating a rotating laundry bin or designating a midnight feeding station.\n\nEmotional readiness matters just as much as the physical checklist. Stand in the doorway, take a deep breath, and let your senses guide you-is it peaceful, functional, nurturing? If not, adjust lighting, layout, or scent until your body says yes.\n\nYour nursery doesn't need perfection-it needs presence. Every detail you've planned leads to this moment: a space where both you and baby can exhale together for the first time.",
+      "journalPrompt": "When you imagine walking into your finished nursery with your baby for the first time, what emotion do you hope to feel most?",
+      "apply": [
+        "Download printable 'Welcome Home' checklist.",
+        "Share final photos with mentor for review.",
+        "Celebrate completion by marking this module as Certified Ready."
+      ]
+    }
+  },
+  {
+    "id": "module-gear-stroller-masterclass",
+    "journey": "gear",
+    "title": "Stroller Masterclass I - Mobility & Lifestyle Fit",
+    "subtitle": "Match the perfect stroller to your family's rhythm",
+    "slug": "gear-stroller-masterclass",
+    "registryFocus": "Gear Foundations",
+    "estimatedMinutes": 28,
+    "accentColor": "#C8A1B4",
+    "heroImage": "/images/academy/gear-stroller.jpg",
+    "content": {
+      "explore": "Mobility equals freedom. In this masterclass, we demystify stroller categories so families can shop with confidence.",
+      "lecture": "Covers travel systems, lightweight, jogging, and modular frames-highlighting fold mechanisms, terrain ratings, and car-seat compatibility. Parents learn how to evaluate size, storage, and ease of use, with a focus on real lifestyle alignment.\n\nWe'll unpack the differences between travel and everyday use, showing how small decisions-like wheel material or canopy length-can dramatically change daily convenience. Safety features like five-point harnesses, brake locks, and stability ratings are explained simply and visually.\n\nErgonomics, storage, and folding demos round out the experience, with mentor insights and MacroBaby affiliate products linked for immediate registry integration.",
+      "journalPrompt": "Where do you imagine strolling with your baby for the first time-around your neighborhood, a favorite park, or a family trip?",
+      "apply": [
+        "Complete the Lifestyle Fit Quiz inside the module.",
+        "Add your top stroller pick from MacroBaby Affiliate Feed (ID 4496818) to your registry.",
+        "Schedule a mentor review for car-seat compatibility."
+      ]
+    }
+  },
+  {
+    "id": "module-gear-car-seat-masterclass",
+    "journey": "gear",
+    "title": "Car Seat Masterclass II - Safety First",
+    "subtitle": "Confidence through certified guidance",
+    "slug": "gear-car-seat-masterclass",
+    "registryFocus": "On-the-Go Safety",
+    "estimatedMinutes": 30,
+    "accentColor": "#D9C48E",
+    "heroImage": "/images/academy/gear-car-seat.jpg",
+    "content": {
+      "explore": "Safety meets practicality. This session builds confidence in selecting and installing a car seat.",
+      "lecture": "We unpack NHTSA standards, seat types (infant, convertible, booster), expiration rules, and installation best practices. Demonstrations highlight common errors and easy prevention steps.\n\nParents learn about latch systems, recline indicators, and fit checks with certified technicians. The visual and written content blends practical training with emotional reassurance.\n\nBy the end, you'll know how to test a correct install, avoid counterfeit listings, and understand how to advocate confidently when carpooling or traveling.",
+      "journalPrompt": "When you picture the drive home from the hospital, what would help you feel calm and prepared for that first ride together?",
+      "apply": [
+        "Watch the installation demo.",
+        "Add your preferred seat and base to your registry.",
+        "Mark this module complete to unlock Car-Seat Safety Certification."
+      ]
+    }
+  },
+  {
+    "id": "module-gear-carrier-wrap",
+    "journey": "gear",
+    "title": "Carrier & Wrap Workshop",
+    "subtitle": "Freedom meets bonding through baby-wearing",
+    "slug": "gear-carrier-wrap",
+    "registryFocus": "Babywearing Essentials",
+    "estimatedMinutes": 25,
+    "accentColor": "#EAC9D1",
+    "heroImage": "/images/academy/gear-carrier.jpg",
+    "content": {
+      "explore": "Baby-wearing blends freedom with bonding.",
+      "lecture": "Carrying your baby close doesn't just keep your hands free-it nurtures oxytocin and confidence. Whether structured carriers, slings, or wraps, each choice shapes posture, comfort, and connection.\n\nWe break down the T.I.C.K.S. safety rule-Tight, In view, Close enough to kiss, Keep chin off chest, Supported back. Understanding these fundamentals ensures your baby's airway remains clear and your back remains strong.\n\nFinally, we explore lifestyle fit. Some parents prefer soft wraps for newborn snuggles, others structured carriers for errands. Think less about 'the best' and more about 'your best fit.' This isn't fashion; it's freedom.",
+      "journalPrompt": "What moments do you look forward to most while keeping your baby close-daily walks, quiet mornings, or soothing cuddles?",
+      "apply": [
+        "Try a baby-wearing fit check demo.",
+        "Add top carrier pick to registry.",
+        "Schedule mentor Q&A on fit."
+      ]
+    }
+  },
+  {
+    "id": "module-gear-feeding-tools",
+    "journey": "gear",
+    "title": "Feeding Gear Essentials - From Bottle to Booster",
+    "subtitle": "Simplify feeding through thoughtful systems",
+    "slug": "gear-feeding-tools",
+    "registryFocus": "Feeding Essentials",
+    "estimatedMinutes": 27,
+    "accentColor": "#FFFAF8",
+    "heroImage": "/images/academy/gear-feeding.jpg",
+    "content": {
+      "explore": "Feeding evolves quickly-prepare tools for each phase.",
+      "lecture": "Feeding gear is one of the most overwhelming product categories for new parents, but also the most rewarding once you understand your rhythm. This module covers bottle systems, sterilizers, pumps, and storage-all through the lens of convenience and emotional well-being.\n\nYou'll learn how design affects daily flow: angled bottles for gas prevention, pump flanges for comfort, and drying racks for hygiene. Efficiency creates peace; you deserve systems that save time for cuddles, not cleaning.\n\nFinally, we'll look ahead-how gear transitions from the newborn to toddler stage. Choosing convertible highchairs and dishwasher-safe gear supports longevity and reduces waste. Feeding tools should evolve just like your confidence does.",
+      "journalPrompt": "How do you imagine your feeding routine looking in those early weeks-what comforts or tools would make it smoother?",
+      "apply": [
+        "Add sterilizer and drying rack to registry.",
+        "Bookmark highchair recommendations.",
+        "Review mentor guide 'Feeding Flow Zone.'"
+      ]
+    }
+  },
+  {
+    "id": "module-gear-sleep-systems",
+    "journey": "gear",
+    "title": "Sleep & Soothing Systems",
+    "subtitle": "Create rhythms that comfort both baby and parent",
+    "slug": "gear-sleep-systems",
+    "registryFocus": "Sleep & Comfort Gear",
+    "estimatedMinutes": 26,
+    "accentColor": "#C8A1B4",
+    "heroImage": "/images/academy/gear-sleep.jpg",
+    "content": {
+      "explore": "Rest is an ecosystem of rhythm, not routine.",
+      "lecture": "Sleep success begins with setup. Bassinets, sound machines, and monitors create cues of consistency for baby-and relief for you. We'll explore safe-sleep standards and the psychology behind gentle conditioning, helping your baby learn comfort without rigid scheduling.\n\nThis module also explores sensory tools: the right swaddle fabric, ambient noise, and even scent cues can signal safety. Think of it as designing an environment that speaks 'rest' fluently.\n\nFinally, we normalize unpredictability. Good sleep isn't linear-it's relational. The best system is one that flexes with your baby's development while maintaining your sanity.",
+      "journalPrompt": "What does an ideal bedtime routine feel like to you right now as you prepare for baby's arrival?",
+      "apply": [
+        "Add swaddle and sound machine.",
+        "Set bedtime playlist in Journal.",
+        "Mark mentor review complete."
+      ]
+    }
+  },
+  {
+    "id": "module-gear-tech-monitor",
+    "journey": "gear",
+    "title": "Tech & Monitor Essentials",
+    "subtitle": "Simplify safety and peace of mind with smart tools",
+    "slug": "gear-tech-monitor",
+    "registryFocus": "Tech & Monitoring",
+    "estimatedMinutes": 27,
+    "accentColor": "#D9C48E",
+    "heroImage": "/images/academy/gear-tech.jpg",
+    "content": {
+      "explore": "Smart gear should make life easier, not busier.",
+      "lecture": "Today's nursery tech has evolved far beyond the old walkie-talkie monitors. From wearable breathing sensors to cameras with cry detection, technology offers parents new levels of reassurance-but also new levels of overwhelm. This module helps you filter the hype from the helpful.\n\nWe'll compare basic audio monitors, Wi-Fi cameras, and hybrid systems, discussing what's essential versus optional for your lifestyle. You'll learn how to interpret data responsibly-because analytics can support you, but they should never create anxiety.\n\nFinally, we explore digital minimalism for families: setting phone-free hours, using automation wisely, and establishing healthy boundaries around monitoring. Peace of mind should feel like calm, not constant alerts.",
+      "journalPrompt": "Which moments at home do you imagine wanting to check in on your baby most-and how could technology support that calmly rather than constantly?",
+      "apply": [
+        "Research monitor options and note pros/cons in Journal.",
+        "Add one smart but simple monitor to registry.",
+        "Set a 'tech boundary' goal with your mentor."
+      ]
+    }
+  },
+  {
+    "id": "module-gear-travel-solutions",
+    "journey": "gear",
+    "title": "Travel Solutions & Portable Gear",
+    "subtitle": "Adventure-ready setups for confident mobility",
+    "slug": "gear-travel-solutions",
+    "registryFocus": "Travel & On-the-Go",
+    "estimatedMinutes": 28,
+    "accentColor": "#EAC9D1",
+    "heroImage": "/images/academy/gear-travel.jpg",
+    "content": {
+      "explore": "Parenthood doesn't cancel adventure-it redefines it.",
+      "lecture": "Whether you're road-tripping to grandparents or jetting off for a baby-moon 2.0, portable gear is your new best friend. Travel systems, lightweight strollers, compact bassinets, and clip-on highchairs all keep life mobile without sacrificing comfort.\n\nThis module helps you curate your 'go-bag' system: what truly needs to travel, what can stay home, and what to rent when possible. We explore gear rental options like BabyQuip and teach you how to inspect hotel-supplied gear for safety before use.\n\nPacking light becomes an act of self-trust. You'll discover that simplicity-one stroller, one carrier, one well-organized bag-frees you to focus on moments, not logistics.",
+      "journalPrompt": "Picture your first trip with baby-what do you want to feel more of: prepared, spontaneous, or adventurous?",
+      "apply": [
+        "Add travel-ready stroller and portable crib to registry.",
+        "Bookmark BabyQuip rental guide.",
+        "Save your 'travel day checklist' in Journal."
+      ]
+    }
+  },
+  {
+    "id": "module-gear-safety-proofing",
+    "journey": "gear",
+    "title": "Safety & Baby-Proofing Basics",
+    "subtitle": "Prevent accidents through calm, proactive design",
+    "slug": "gear-safety-proofing",
+    "registryFocus": "Home Safety",
+    "estimatedMinutes": 29,
+    "accentColor": "#FFFAF8",
+    "heroImage": "/images/academy/gear-safety.jpg",
+    "content": {
+      "explore": "Safety doesn't mean stress-it means foresight.",
+      "lecture": "Every new parent eventually has that moment: your baby starts to roll, crawl, or reach for the dog bowl, and suddenly the living room looks like an obstacle course. This module breaks down baby-proofing into calm, practical steps.\n\nWe start with the big three: falls, burns, and choking hazards. You'll learn how to audit your home visually-getting down on baby's level to see potential dangers through their eyes. From outlet covers to cabinet locks, we'll simplify what's truly needed versus what's over-marketed.\n\nThe final piece is emotional safety-building routines that model awareness rather than fear. A child raised in a thoughtfully prepared home learns curiosity and confidence, not caution alone.",
+      "journalPrompt": "What space in your home makes you most nervous about mobility-and how could you redesign it to feel safe and stylish?",
+      "apply": [
+        "Download the safety-checklist PDF.",
+        "Add safety gates or locks to registry.",
+        "Take a photo of your baby-proofing setup for mentor feedback."
+      ]
+    }
+  },
+  {
+    "id": "module-gear-play-development",
+    "journey": "gear",
+    "title": "Play & Development Essentials",
+    "subtitle": "Choose toys that nurture imagination and growth",
+    "slug": "gear-play-development",
+    "registryFocus": "Development & Play",
+    "estimatedMinutes": 26,
+    "accentColor": "#C8A1B4",
+    "heroImage": "/images/academy/gear-play.jpg",
+    "content": {
+      "explore": "Play is a baby's first language-gear should support that conversation.",
+      "lecture": "This module explores developmental play gear for the first 12 months: play gyms, sensory toys, activity mats, and seats. You'll learn how variety-not quantity-drives engagement. Babies don't need a toy store; they need experiences.\n\nWe cover the science of sensory stimulation, explaining how textures, contrast, and gentle motion help wire the brain for curiosity. We also highlight how overstimulation (too many lights or sounds) can backfire, turning excitement into exhaustion.\n\nFinally, we connect play to parent well-being. Play isn't just for baby's growth-it's your reminder to slow down, laugh, and marvel again.",
+      "journalPrompt": "When you imagine playing with your baby, what kind of moments bring you the most joy-quiet connection, movement, or laughter?",
+      "apply": [
+        "Add play mat or gym to registry.",
+        "Create a small rotation system for toys.",
+        "Record one playful memory prompt in Journal."
+      ]
+    }
+  },
+  {
+    "id": "module-gear-maintenance-sustainability",
+    "journey": "gear",
+    "title": "Gear Maintenance & Sustainability",
+    "subtitle": "Keep your investment clean, safe, and circular",
+    "slug": "gear-maintenance-sustainability",
+    "registryFocus": "Gear Care",
+    "estimatedMinutes": 25,
+    "accentColor": "#D9C48E",
+    "heroImage": "/images/academy/gear-sustainability.jpg",
+    "content": {
+      "explore": "Good gear lasts longer-and helps future families too.",
+      "lecture": "From strollers to swings, baby gear takes a beating. This module teaches you how to extend lifespan through proper cleaning, storage, and resale. We'll walk through non-toxic cleaners for fabrics, safe lubrication for stroller wheels, and best practices for gear sharing.\n\nYou'll also explore the emerging world of sustainable parenting-buy-back programs, donation networks, and second-life refurbishing. The goal is less waste, more wisdom.\n\nWhen you care for your gear, you care for your peace of mind. Every wipe-down and tune-up becomes an act of mindfulness and stewardship.",
+      "journalPrompt": "What items do you plan to reuse, share, or pass along-and how does that idea make you feel?",
+      "apply": [
+        "Clean one item using a non-toxic recipe.",
+        "Add maintenance kit to registry.",
+        "Bookmark donation or resale resource list."
+      ]
+    }
+  },
+  {
+    "id": "module-postpartum-rest-recovery",
+    "journey": "postpartum",
+    "title": "Rest & Recovery I - Healing at Home",
+    "subtitle": "Honor your body's healing timeline with nurturing rituals",
+    "slug": "postpartum-rest-recovery",
+    "registryFocus": "Fourth Trimester Support",
+    "estimatedMinutes": 26,
+    "accentColor": "#FFFAF8",
+    "heroImage": "/images/academy/postpartum-placeholder.jpg",
+    "content": {
+      "explore": "Recovery is not a return to the old self-it's an evolution.",
+      "lecture": "This lecture guides parents through physical recovery, body image changes, sleep deprivation cycles, and gentle movement. It introduces the 'Realistic Pre-Baby Body Map' exercise to promote awareness and self-compassion.\n\nWe discuss nutrition, hydration, and emotional wellness during healing. Gentle rebuilding practices like pelvic floor awareness and breathwork restore confidence in your body's resilience.\n\nAbove all, recovery is permission to slow down. Healing is progress, not perfection.",
+      "journalPrompt": "What are three things you can set up now to make your first week home feel restful and supported?",
+      "apply": [
+        "Add postpartum recovery essentials (robe, peri-bottle, support pillow) to registry.",
+        "Save your Rest Routine checklist.",
+        "Review mentor video 'Healing at Home.'"
+      ]
+    }
+  },
+  {
+    "id": "module-postpartum-feeding-lactation",
+    "journey": "postpartum",
+    "title": "Feeding & Lactation Wellness II",
+    "subtitle": "Build confidence in your family's feeding rhythm-whatever it looks like",
+    "slug": "postpartum-feeding-lactation",
+    "registryFocus": "Feeding Essentials",
+    "estimatedMinutes": 32,
+    "accentColor": "#C8A1B4",
+    "heroImage": "/images/academy/postpartum-placeholder.jpg",
+    "content": {
+      "explore": "Feeding is a relationship, not a task.",
+      "lecture": "Covers breastfeeding positions, pump setup, formula preparation, storage safety, and emotional health during feeding transitions.\n\nWe explore latch troubleshooting, diet considerations for lactation, and compassionate support for mixed or exclusive formula feeding.\n\nThe tone emphasizes choice and confidence: a fed baby and a calm parent are equally vital measures of success.",
+      "journalPrompt": "How would you like feeding time to feel in your home-peaceful, supported, flexible, or routine?",
+      "apply": [
+        "Add nursing and pumping accessories to registry.",
+        "Save a lactation consultant contact.",
+        "Write a personal affirmation for feeding days."
+      ]
+    }
+  },
+  {
+    "id": "module-postpartum-self-care",
+    "journey": "postpartum",
+    "title": "Self-Care Continuum - Daily Rituals for Resilience",
+    "subtitle": "Sustain energy and calm through micro-habits",
+    "slug": "postpartum-self-care",
+    "registryFocus": "Wellness Tools",
+    "estimatedMinutes": 25,
+    "accentColor": "#EAC9D1",
+    "heroImage": "/images/academy/postpartum-placeholder.jpg",
+    "content": {
+      "explore": "Little rituals sustain new parents when big changes hit.",
+      "lecture": "Self-care isn't indulgence-it's maintenance. Postpartum life brings sleep deprivation, fluctuating hormones, and identity shifts. This module introduces micro-rituals that rebuild steadiness: a warm tea ritual, a five-minute stretch, or journaling before bed.\n\nWe discuss habit stacking-pairing new behaviors with existing ones to make wellness effortless. For example, hydrating after every feeding becomes a built-in mindfulness cue.\n\nLastly, self-care is relational. Inviting your partner or support system into these rituals transforms them from chores to shared care. The goal isn't productivity-it's preservation.",
+      "journalPrompt": "What small rituals or moments already help you recharge during pregnancy-and how might you carry them into life with baby?",
+      "apply": [
+        "Add robe and snack basket items to registry.",
+        "Record your top 3 rituals in Journal.",
+        "Share with mentor for accountability."
+      ]
+    }
+  },
+  {
+    "id": "module-postpartum-relationships",
+    "journey": "postpartum",
+    "title": "Relationship & Communication After Baby",
+    "subtitle": "Rediscover connection while adapting to parenthood",
+    "slug": "postpartum-relationships",
+    "registryFocus": "Emotional Wellness",
+    "estimatedMinutes": 27,
+    "accentColor": "#D9C48E",
+    "heroImage": "/images/academy/postpartum-placeholder.jpg",
+    "content": {
+      "explore": "Parenthood shifts partnerships and communication patterns.",
+      "lecture": "Every birth story changes a love story. Partners move from romance to teamwork, and it takes conscious effort to stay connected. We explore emotional check-ins, gratitude habits, and redefining intimacy in the fog of sleep deprivation.\n\nYou'll learn how stress alters tone, patience, and empathy, and how small phrases-'What do you need most right now?'-can restore connection in seconds. Emotional literacy is a parenting skill, too.\n\nFinally, you'll identify shared values and distribute tasks using communication frameworks. Harmony isn't about equality of effort but balance of energy.",
+      "journalPrompt": "What's one way you and your partner (or support person) can practice communication and teamwork before baby arrives?",
+      "apply": [
+        "Try weekly 'Connection Minute'.",
+        "Add couples therapy resource link.",
+        "Note reflection in Journal."
+      ]
+    }
+  },
+  {
+    "id": "module-postpartum-community",
+    "journey": "postpartum",
+    "title": "Community & Support Network",
+    "subtitle": "Curate your circle with intention and grace",
+    "slug": "postpartum-community",
+    "registryFocus": "Support Network",
+    "estimatedMinutes": 24,
+    "accentColor": "#C8A1B4",
+    "heroImage": "/images/academy/postpartum-placeholder.jpg",
+    "content": {
+      "explore": "It takes a village-but you get to curate yours.",
+      "lecture": "Support is medicine. This module helps you identify who energizes you versus who drains you. Building a postpartum network means assigning clear roles: who's the meal person, who's the listener, who's on standby for chores.\n\nWe'll explore professional layers of support-doulas, lactation consultants, peer mentors-and how to integrate them without overwhelm. Asking for help is a leadership skill, not a weakness.\n\nAnd finally, community is about reciprocity. Sharing your experience later keeps the circle alive for the next new parent. Today's support system becomes tomorrow's mentorship legacy.",
+      "journalPrompt": "Who in your circle can you lean on after baby's arrival, and how can you ask for their support now?",
+      "apply": [
+        "Build your support contact list.",
+        "Add doula gift card to registry.",
+        "RSVP to community Zoom via dashboard."
+      ]
+    }
+  },
+  {
+    "id": "module-postpartum-mental-health",
+    "journey": "postpartum",
+    "title": "Mental Health Awareness & Emotional Readiness",
+    "subtitle": "Normalize the full emotional range of new parenthood",
+    "slug": "postpartum-mental-health",
+    "registryFocus": "Wellness & Support",
+    "estimatedMinutes": 32,
+    "accentColor": "#EAC9D1",
+    "heroImage": "/images/academy/postpartum-mental.jpg",
+    "content": {
+      "explore": "Your mind deserves as much preparation as your nursery.",
+      "lecture": "Postpartum emotions exist on a spectrum-from tender awe to total meltdown. This module creates space for all of it. We talk honestly about 'baby blues' versus postpartum depression and anxiety, not to alarm you, but to empower you. Awareness is preparation, not pessimism.\n\nYou'll learn early indicators that your nervous system might be overwhelmed-racing thoughts, detachment, or excessive guilt-and how to voice these without shame. We unpack why intrusive thoughts can appear and how they often signal hypervigilance, not danger.\n\nMost importantly, you'll leave with real strategies for support: identifying your go-to person, setting up a postpartum plan before birth, and creating gentle daily grounding practices. Emotional wellness isn't something you chase after-it's something you build now.",
+      "journalPrompt": "What emotions do you imagine feeling in the first week home-and who could you share them with safely, without judgment?",
+      "apply": [
+        "Add a postpartum therapist or virtual support link to Journal.",
+        "Save mental health resource cards inside Dashboard.",
+        "Create a 'Mood SOS' plan with mentor guidance."
+      ]
+    }
+  },
+  {
+    "id": "module-postpartum-time-reintegration",
+    "journey": "postpartum",
+    "title": "Time Management & Reintegration at Work",
+    "subtitle": "Balance career, identity, and recovery without losing yourself",
+    "slug": "postpartum-time-reintegration",
+    "registryFocus": "Work & Routine",
+    "estimatedMinutes": 30,
+    "accentColor": "#D9C48E",
+    "heroImage": "/images/academy/postpartum-work.jpg",
+    "content": {
+      "explore": "Returning to work-or redefining it-can feel like learning a new language.",
+      "lecture": "There's no such thing as 'getting back to normal.' Instead, you're integrating a new version of yourself into your professional rhythm. This module walks you through logistical and emotional prep: maternity leave planning, communication with your team, and honest conversations about capacity.\n\nWe discuss the myth of 'doing it all' and how boundaries actually enhance performance. Productivity now means protecting your energy, not proving your endurance. You'll also explore creative reintegration-transition days, hybrid setups, or redefining what success looks like post-baby.\n\nWe end with humor and grace: some days, your biggest win will be showering before noon. That counts.",
+      "journalPrompt": "When you picture your ideal work-life rhythm after baby, what does a 'successful day' truly feel like-not just look like?",
+      "apply": [
+        "Create a post-baby weekly flow chart in Journal.",
+        "Add pumping supplies or laptop bag to registry.",
+        "Draft your back-to-work checklist."
+      ]
+    }
+  },
+  {
+    "id": "module-postpartum-parenting-identity",
+    "journey": "postpartum",
+    "title": "Parenting Identity & Confidence Building",
+    "subtitle": "Trust your instincts-you're becoming the expert",
+    "slug": "postpartum-parenting-identity",
+    "registryFocus": "Personal Growth",
+    "estimatedMinutes": 29,
+    "accentColor": "#FFFAF8",
+    "heroImage": "/images/academy/postpartum-identity.jpg",
+    "content": {
+      "explore": "There's no single 'right' way to parent-only your way.",
+      "lecture": "Every new parent is bombarded with opinions-family, internet, strangers at Target. This module helps you develop a confident internal compass. We'll explore how intuition builds through small daily choices: how you soothe, how you feed, how you show up.\n\nYou'll learn to separate data from doubt-understanding what evidence-based parenting looks like without feeling pressured to follow every new trend. We reframe mistakes as discoveries, and comparison as the thief of joy.\n\nConfidence doesn't appear overnight; it accumulates through consistency and connection. You'll end this module realizing that no influencer or book knows your baby better than you.",
+      "journalPrompt": "What kind of parent do you want to be remembered as-and what small habits could reflect that from the start?",
+      "apply": [
+        "Write an affirmation letter to future-you as a parent.",
+        "Share your parenting values with your mentor.",
+        "Add a keepsake notebook to registry for reflections."
+      ]
+    }
+  },
+  {
+    "id": "module-postpartum-sleep-coordination",
+    "journey": "postpartum",
+    "title": "Sleep & Partner Coordination Strategies",
+    "subtitle": "Navigate rest, rhythm, and teamwork through fatigue",
+    "slug": "postpartum-sleep-coordination",
+    "registryFocus": "Family Coordination",
+    "estimatedMinutes": 27,
+    "accentColor": "#C8A1B4",
+    "heroImage": "/images/academy/postpartum-sleep.jpg",
+    "content": {
+      "explore": "Sleep deprivation doesn't have to equal survival mode.",
+      "lecture": "This module reframes sleep from something you lose to something you manage as a team. We explore flexible nighttime schedules, tag-teaming feedings, and building realistic rest routines around your baby's cues rather than a strict clock.\n\nYou'll also learn how to communicate through exhaustion-avoiding the common trap of tallying who's more tired. Partners learn to shift from 'equal' to 'equitable' contribution: one handles dishes while the other naps, both win.\n\nWe wrap with science-backed rest hacks and humor (yes, the car-seat nap counts). The goal isn't perfection-it's preservation.",
+      "journalPrompt": "What does 'rest' realistically look like in your relationship, and how can you both protect it together?",
+      "apply": [
+        "Draft a 'night shift' plan in Journal.",
+        "Add blackout curtains or sleep tools to registry.",
+        "Discuss roles with partner during mentor session."
+      ]
+    }
+  },
+  {
+    "id": "module-postpartum-letters-legacy",
+    "journey": "postpartum",
+    "title": "Letters to Baby & Legacy Reflection",
+    "subtitle": "Capture memories and meaning for the future you're building",
+    "slug": "postpartum-letters-legacy",
+    "registryFocus": "Keepsakes & Reflection",
+    "estimatedMinutes": 26,
+    "accentColor": "#D9C48E",
+    "heroImage": "/images/academy/postpartum-letters.jpg",
+    "content": {
+      "explore": "Parenthood is a love story worth documenting.",
+      "lecture": "In the quiet moments-late-night feeds, first smiles, or tiny kicks-your baby's story is being written. This final module invites you to pause and record it. We'll explore different ways to preserve your memories: digital journals, printed keepsake books, or voice memos.\n\nLetter writing becomes an act of grounding. Whether you write to your newborn, your future toddler, or your past self, the process reminds you that growth is happening on both sides of the crib.\n\nLegacy isn't about perfection-it's about presence. What matters is that your child will one day read these words and see how deeply loved they were before they even arrived.",
+      "journalPrompt": "If you could write one sentence for your baby to read in 20 years, what would it say?",
+      "apply": [
+        "Upload first letter to Journal.",
+        "Add keepsake box or photo album to registry.",
+        "Mark this as your Reflection Milestone completion."
+      ]
+    }
+  }
 ];
 
-export const getTrackDescription = (journey: JourneyId, track: string) =>
-  trackDescriptions[`${journey}:${track}`] || '';
+export const academyModules: AcademyModule[] = rawModules.map((module, index) => ({
+  ...module,
+  track: module.registryFocus,
+  description: module.content.explore,
+  order: index + 1,
+}));
+
+export const modulesByJourney = academyModules.reduce<
+  Record<JourneyId, AcademyModule[]>
+>(
+  (acc, module) => {
+    acc[module.journey].push(module);
+    return acc;
+  },
+  { nursery: [], gear: [], postpartum: [] }
+);
+
+Object.values(modulesByJourney).forEach((list) => list.sort((a, b) => a.order - b.order));
 
 export const findModuleById = (moduleId: string) =>
   academyModules.find((module) => module.id === moduleId);

@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight,
+  CalendarClock,
   CheckCircle2,
   Circle,
   Gift,
@@ -31,6 +32,9 @@ export default function DashboardPage() {
   const [firstName, setFirstName] = useState('Friend');
   const [progress, setProgress] = useState(48);
   const [nextModule, setNextModule] = useState('Vision & Style Foundations');
+  const [myEvents, setMyEvents] = useState<
+    { id: string; title: string; startTime: string; type: string; location?: string | null }[]
+  >([]);
 
   useEffect(() => {
     const session = loadSession();
@@ -51,6 +55,29 @@ export default function DashboardPage() {
 
     fetchOverview();
   }, []);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await api.get('/api/events/my-events');
+        if (Array.isArray(response.data)) {
+          setMyEvents(response.data);
+        }
+      } catch (error) {
+        console.error('Dashboard event widget error', error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  const sortedEvents = useMemo(
+    () =>
+      [...myEvents].sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()),
+    [myEvents],
+  );
+  const nextEvent = sortedEvents[0];
+  const weekEvents = sortedEvents.slice(0, 3);
 
   return (
     <div className="space-y-8">
@@ -98,6 +125,48 @@ export default function DashboardPage() {
             <li>Registry sync requested by Friday</li>
             <li>Submit nursery inspo to Slack thread</li>
           </ul>
+        </div>
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-2">
+        <div className="rounded-2xl border border-tmBlush/30 bg-white/90 p-6 shadow-sm">
+          <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Your Next Event</p>
+          {nextEvent ? (
+            <>
+              <h3 className="mt-2 text-2xl text-tmCharcoal">{nextEvent.title}</h3>
+              <p className="mt-1 text-sm text-tmCharcoal/70">
+                {new Date(nextEvent.startTime).toLocaleString()} · {nextEvent.location || 'Virtual'}
+              </p>
+              <button className="mt-5 inline-flex items-center gap-2 rounded-full bg-tmMauve px-5 py-3 text-sm font-semibold text-white">
+                Join Live Session
+                <Sparkles className="h-4 w-4" />
+              </button>
+              <p className="mt-3 text-xs text-tmCharcoal/50">// TODO: connect this CTA to Zoom session</p>
+            </>
+          ) : (
+            <p className="mt-3 text-sm text-tmCharcoal/70">RSVP to an event to unlock the live session link.</p>
+          )}
+        </div>
+        <div className="rounded-2xl border border-tmBlush/30 bg-white/90 p-6 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Events this Week</p>
+              <h3 className="text-xl text-tmCharcoal">On your radar</h3>
+            </div>
+            <CalendarClock className="h-6 w-6 text-tmMauve" />
+          </div>
+          <div className="mt-4 space-y-3">
+            {weekEvents.length ? (
+              weekEvents.map((event) => (
+                <div key={event.id} className="rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
+                  <p className="text-sm font-semibold text-tmCharcoal">{event.title}</p>
+                  <p className="text-xs text-tmCharcoal/70">{new Date(event.startTime).toLocaleString()}</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-tmCharcoal/70">No RSVPs on the books yet.</p>
+            )}
+          </div>
         </div>
       </section>
 

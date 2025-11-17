@@ -7,37 +7,18 @@ import { ArrowRight, Baby, Book, Heart } from 'lucide-react';
 import { api } from '@/lib/api';
 
 import ModuleCard from './components/ModuleCard';
-import TrackHeader from './components/TrackHeader';
 import {
   academyModules,
-  getTrackDescription,
   journeyMeta,
   JourneyId,
-  trackOrder,
+  modulesByJourney,
   type AcademyModule,
 } from './modules';
 
 const journeys: JourneyId[] = ['nursery', 'gear', 'postpartum'];
 
-const modulesByJourney = academyModules.reduce<
-  Record<JourneyId, Record<string, AcademyModule[]>>
->(
-  (acc, module) => {
-    if (!acc[module.journey][module.track]) {
-      acc[module.journey][module.track] = [];
-    }
-    acc[module.journey][module.track].push(module);
-    return acc;
-  },
-  {
-    nursery: {},
-    gear: {},
-    postpartum: {},
-  }
-);
-
 const LearnOverviewPage = () => {
-  const [recommended, setRecommended] = useState('Vision & Style Foundations');
+  const [recommended, setRecommended] = useState(academyModules[0]?.title || 'Taylor-Made Academy Module');
 
   useEffect(() => {
     const fetchRecommended = async () => {
@@ -132,25 +113,11 @@ const LearnOverviewPage = () => {
               </p>
               <h2 className="text-3xl text-tmCharcoal">{meta.description}</h2>
             </div>
-            {trackOrder[journey].map((track) => {
-              const trackModules = modulesByJourney[journey][track] || [];
-              if (!trackModules.length) return null;
-              return (
-                <div key={`${journey}-${track}`} className="space-y-4">
-                  <TrackHeader
-                    journeyLabel={meta.label}
-                    trackName={track}
-                    description={getTrackDescription(journey, track)}
-                    moduleCount={trackModules.length}
-                  />
-                  <div className="grid gap-4 md:grid-cols-2">
-                    {trackModules.map((module) => (
-                      <ModuleCard key={module.id} module={module} />
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+            <div className="grid gap-4 md:grid-cols-2">
+              {modulesByJourney[journey].map((module) => (
+                <ModuleCard key={module.id} module={module} />
+              ))}
+            </div>
           </div>
         );
       })}

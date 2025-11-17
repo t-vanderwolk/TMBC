@@ -1,1 +1,7 @@
-{}
+{
+  "/not-found": "app/not-found.js",
+  "/dashboard/registry/page": "app/dashboard/registry/page.js",
+  "/dashboard/learn/page": "app/dashboard/learn/page.js",
+  "/dashboard/learn/[moduleId]/page": "app/dashboard/learn/[moduleId]/page.js",
+  "/dashboard/page": "app/dashboard/page.js"
+}

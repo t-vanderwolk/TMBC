@@ -26,14 +26,14 @@ const ModuleLayout = ({ module, children }: ModuleLayoutProps) => {
             </p>
             <h1 className="mt-2 text-4xl text-tmCharcoal">{module.title}</h1>
             <p className="mt-3 text-base text-tmCharcoal/80">
-              {module.description}
+              {module.subtitle}
             </p>
           </div>
           <div className="rounded-3xl border border-tmBlush/50 bg-white/70 px-6 py-4 text-sm text-tmCharcoal/80 shadow-inner">
-            <p className="font-semibold text-tmCharcoal">Track</p>
-            <p className="text-tmMauve">{module.track}</p>
+            <p className="font-semibold text-tmCharcoal">Focus</p>
+            <p className="text-tmMauve">{module.registryFocus}</p>
             <p className="mt-2 text-xs uppercase tracking-[0.4em] text-tmCharcoal/60">
-              Module {module.order.toString().padStart(2, '0')}
+              {module.estimatedMinutes} min studio
             </p>
           </div>
         </div>

@@ -44,10 +44,11 @@ const ModuleCard = ({ module }: ModuleCardProps) => {
     <div className="flex flex-col justify-between rounded-3xl border border-white/70 bg-gradient-to-br from-white via-tmIvory to-tmBlush/40 p-5 text-left shadow-soft">
       <div className="space-y-2">
         <p className="text-[0.65rem] uppercase tracking-[0.5em] text-tmMauve">
-          {module.track}
+          {module.registryFocus}
         </p>
         <h4 className="text-xl font-semibold text-tmCharcoal">{module.title}</h4>
-        <p className="text-sm text-tmCharcoal/80">{module.description}</p>
+        <p className="text-sm text-tmCharcoal/80">{module.subtitle}</p>
+        <p className="text-xs text-tmCharcoal/60">Estimated {module.estimatedMinutes} min</p>
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <Link
