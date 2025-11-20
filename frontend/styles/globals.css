@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --tm-ivory: #fbf4f3;
-  --tm-mauve: #b48a9b;
-  --tm-mauve-dark: #a1788c;
-  --tm-charcoal: #3e2f35;
-  --tm-blush: #f2e6ea;
-  --tm-dust: #e7d9df;
+  --tm-ivory: #FAF7F4;
+  --tm-blush: #F6E9E6;
+  --tm-mauve: #C7A7B7;
+  --tm-deep-mauve: #A57891;
+  --tm-gold: #D4B579;
+  --tm-charcoal: #3E2F35;
 }
 
 * {
@@ -28,7 +28,8 @@
   h2,
   h3 {
     font-family: var(--font-playfair), serif;
-    color: var(--tm-charcoal);
+    letter-spacing: 0.02em;
+    color: var(--tm-deep-mauve);
   }
 
   p,
@@ -53,28 +54,134 @@
   input,
   textarea,
   select {
-    @apply bg-white border border-tmDust rounded-full px-4 py-3 text-sm text-tmCharcoal placeholder:text-[#C1AEB6];
+    @apply bg-white border border-[var(--tm-blush)] rounded-full px-4 py-3 text-sm text-[var(--tm-charcoal)] placeholder:text-[var(--tm-mauve)];
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-tmMauve text-white rounded-full px-7 py-3 text-sm tracking-wide shadow-sm transition hover:bg-tmMauveDark;
+    @apply bg-[var(--tm-deep-mauve)] text-white rounded-full px-7 py-3 text-sm tracking-[0.15em] shadow-sm transition hover:bg-[var(--tm-mauve)];
   }
 
   .btn-secondary {
-    @apply border border-tmMauve text-tmMauve rounded-full px-7 py-3 text-sm tracking-wide transition hover:bg-tmBlush;
+    @apply border border-[var(--tm-deep-mauve)] text-[var(--tm-deep-mauve)] rounded-full px-7 py-3 text-sm tracking-[0.15em] transition hover:bg-[var(--tm-blush)];
   }
 
   .btn-ghost {
-    @apply text-tmCharcoal hover:text-tmMauve transition tracking-wide text-sm;
+    @apply text-[var(--tm-charcoal)] hover:text-[var(--tm-deep-mauve)] transition tracking-[0.15em] text-sm;
   }
 
   .card-surface {
-    @apply bg-gradient-to-b from-tmBlush to-tmIvory shadow-lg rounded-3xl border border-tmDust p-6;
+    @apply bg-gradient-to-b from-[var(--tm-blush)] to-[var(--tm-ivory)] shadow-lg rounded-3xl border border-[var(--tm-mauve)] p-6;
   }
 
   .section-wrap {
     @apply max-w-6xl mx-auto px-6;
+  }
+}
+
+@keyframes tmSoftFade {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tmRise {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tmGoldShimmer {
+  0% {
+    background-position: -150% 0;
+  }
+  100% {
+    background-position: 150% 0;
+  }
+}
+
+@layer utilities {
+  .tm-paper-texture {
+    background-image: radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.6), transparent 45%),
+      linear-gradient(155deg, rgba(213, 168, 174, 0.12), rgba(255, 255, 255, 0.38)),
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 35px);
+    background-size: cover;
+  }
+
+  .tm-editorial-shadow {
+    box-shadow: 0 35px 60px rgba(134, 75, 95, 0.22);
+  }
+
+  .tm-editorial-card {
+    @apply relative overflow-hidden rounded-[32px] border border-[var(--tm-blush)] bg-gradient-to-br from-[var(--tm-ivory)] via-[var(--tm-blush)] to-white/70 p-8;
+    animation: tmRise 0.9s ease;
+  }
+
+  .tm-gold-bracket {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .tm-gold-bracket::before,
+  .tm-gold-bracket::after {
+    content: '';
+    position: absolute;
+    background: var(--tm-gold);
+  }
+
+  .tm-gold-bracket::before {
+    width: 3px;
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
+
+  .tm-gold-bracket::after {
+    width: 1.4rem;
+    height: 3px;
+    left: 0;
+    top: 0;
+  }
+
+  .tm-soft-fade {
+    opacity: 0;
+    animation: tmSoftFade 1.1s ease forwards;
+  }
+
+  .tm-serif-title {
+    font-family: var(--font-playfair), serif;
+    color: var(--tm-deep-mauve);
+    letter-spacing: 0.04em;
+  }
+
+  .tm-pullquote {
+    font-family: var(--font-playfair), serif;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    font-style: italic;
+    border-left: 4px solid var(--tm-gold);
+    padding-left: 1rem;
+    color: var(--tm-deep-mauve);
+    background: rgba(212, 181, 121, 0.06);
+  }
+
+  .tm-section-divider {
+    width: 100%;
+    height: 1px;
+    border: none;
+    background: linear-gradient(90deg, transparent, rgba(212, 181, 121, 0.6) 40%, rgba(212, 181, 121, 0.6) 60%, transparent);
+    background-size: 200% 100%;
+    animation: tmGoldShimmer 3.5s linear infinite;
   }
 }

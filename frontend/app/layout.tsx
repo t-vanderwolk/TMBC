@@ -26,9 +26,12 @@ const nunito = localFont({
   display: 'swap',
 });
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+
 export const metadata: Metadata = {
   title: 'Taylor-Made Baby Co.',
   description: 'Concierge-style baby prep for intentional families.',
+  metadataBase: new URL(BASE_URL),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

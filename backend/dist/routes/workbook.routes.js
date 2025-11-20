@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const workbook_controller_1 = require("../controllers/workbook.controller");
+const router = (0, express_1.Router)();
+router.use(authMiddleware_1.requireAuth);
+router.post('/create', workbook_controller_1.createWorkbookEntryController);
+router.get('/list', workbook_controller_1.listWorkbookEntriesController);
+router.patch('/update/:id', workbook_controller_1.updateWorkbookEntryController);
+router.delete('/delete/:id', workbook_controller_1.deleteWorkbookEntryController);
+exports.default = router;

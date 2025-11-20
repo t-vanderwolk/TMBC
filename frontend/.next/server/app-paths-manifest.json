@@ -1,7 +1,9 @@
 {
   "/not-found": "app/not-found.js",
-  "/dashboard/registry/page": "app/dashboard/registry/page.js",
-  "/dashboard/learn/page": "app/dashboard/learn/page.js",
-  "/dashboard/learn/[moduleId]/page": "app/dashboard/learn/[moduleId]/page.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/login/page": "app/login/page.js",
+  "/blog/page": "app/blog/page.js",
+  "/blog/[slug]/page": "app/blog/[slug]/page.js",
+  "/dashboard/mentor/page": "app/dashboard/mentor/page.js",
+  "/dashboard/admin/page": "app/dashboard/admin/page.js",
+  "/dashboard/learn/[moduleId]/page": "app/dashboard/learn/[moduleId]/page.js"
 }

@@ -4,8 +4,31 @@ import { loginUser, registerUser } from '../services/auth.service';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password, name, inviteCode } = req.body;
-    const result = await registerUser({ email, password, name, inviteCode });
+    const {
+      email,
+      password,
+      name,
+      inviteCode,
+      firstName,
+      lastName,
+      city,
+      state,
+      country,
+      registryType,
+    } = req.body;
+
+    const result = await registerUser({
+      email,
+      password,
+      name,
+      inviteCode,
+      firstName,
+      lastName,
+      city,
+      state,
+      country,
+      registryType,
+    });
 
     res.json(result);
   } catch (error) {

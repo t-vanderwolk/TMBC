@@ -14,16 +14,25 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
-export const requireRole = (role: 'admin' | 'mentor') => {
+export type RoleName = 'admin' | 'mentor' | 'member';
+
+export const requireRole = (role: RoleName) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = (req as any).user;
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
-    if (role === 'mentor' && (user.role === 'mentor' || user.role === 'admin')) {
+    const normalized = role.toLowerCase();
+    const userRole = user.role?.toLowerCase();
+
+    if (normalized === 'admin' && userRole === 'admin') {
       return next();
     }
 
-    if (role === 'admin' && user.role === 'admin') {
+    if (normalized === 'mentor' && (userRole === 'mentor' || userRole === 'admin')) {
+      return next();
+    }
+
+    if (normalized === 'member' && userRole === 'member') {
       return next();
     }
 

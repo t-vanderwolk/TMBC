@@ -1,0 +1,50 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
+const invite_routes_1 = __importDefault(require("./routes/invite.routes"));
+const academy_routes_1 = __importDefault(require("./routes/academy.routes"));
+const registry_routes_1 = __importDefault(require("./routes/registry.routes"));
+const community_routes_1 = __importDefault(require("./routes/community.routes"));
+const mentor_routes_1 = __importDefault(require("./routes/mentor.routes"));
+const mentorCollab_routes_1 = __importDefault(require("./routes/mentorCollab.routes"));
+const admin_routes_1 = __importDefault(require("./routes/admin.routes"));
+const waitlist_routes_1 = __importDefault(require("./routes/waitlist.routes"));
+const dashboard_routes_1 = __importDefault(require("./routes/dashboard.routes"));
+const events_routes_1 = __importDefault(require("./routes/events.routes"));
+const journal_routes_1 = __importDefault(require("./routes/journal.routes"));
+const chat_routes_1 = __importDefault(require("./routes/chat.routes"));
+const myregistry_routes_1 = __importDefault(require("./routes/myregistry.routes"));
+const workbook_routes_1 = __importDefault(require("./routes/workbook.routes"));
+const pinterest_routes_1 = __importDefault(require("./routes/pinterest.routes"));
+const errorHandler_1 = require("./middleware/errorHandler");
+const appInstance = (0, express_1.default)();
+const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:3000';
+appInstance.use((0, cors_1.default)({
+    origin: allowedOrigin,
+    credentials: true,
+}));
+appInstance.use(express_1.default.json());
+appInstance.use('/api/auth', auth_routes_1.default);
+appInstance.use('/api/invite', invite_routes_1.default);
+appInstance.use('/api/dashboard', dashboard_routes_1.default);
+appInstance.use('/api/academy', academy_routes_1.default);
+appInstance.use('/api/registry', registry_routes_1.default);
+appInstance.use('/api/community', community_routes_1.default);
+appInstance.use('/api/events', events_routes_1.default);
+appInstance.use('/api/journal', journal_routes_1.default);
+appInstance.use('/api/chat', chat_routes_1.default);
+appInstance.use('/api/registry/myregistry', myregistry_routes_1.default);
+appInstance.use('/api/mentor', mentor_routes_1.default);
+appInstance.use('/api/mentor', mentorCollab_routes_1.default);
+appInstance.use('/api/admin', admin_routes_1.default);
+appInstance.use('/api/waitlist', waitlist_routes_1.default);
+appInstance.use('/api/workbook', workbook_routes_1.default);
+appInstance.use('/api/pinterest', pinterest_routes_1.default);
+appInstance.use(errorHandler_1.errorHandler);
+exports.app = appInstance;

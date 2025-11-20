@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const mentorCollab_controller_1 = require("../controllers/mentorCollab.controller");
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const router = (0, express_1.Router)();
+router.get('/overview', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('mentor'), mentorCollab_controller_1.getMentorOverviewController);
+router.get('/mentees', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('mentor'), mentorCollab_controller_1.getMenteeListController);
+router.get('/member/:id', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('mentor'), mentorCollab_controller_1.getMemberProfileController);
+router.post('/feedback', authMiddleware_1.requireAuth, mentorCollab_controller_1.postMentorFeedbackController);
+router.get('/feedback/:memberId', authMiddleware_1.requireAuth, mentorCollab_controller_1.getMemberFeedbackController);
+router.post('/tasks', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('mentor'), mentorCollab_controller_1.postMentorTaskController);
+router.post('/tasks/:taskId/complete', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('mentor'), mentorCollab_controller_1.completeMentorTaskController);
+router.get('/tasks', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('mentor'), mentorCollab_controller_1.getMentorTasksController);
+router.get('/member/tasks', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('member'), mentorCollab_controller_1.getMemberTasksController);
+router.post('/journal/share', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('member'), mentorCollab_controller_1.shareJournalEntryController);
+router.get('/journal/shared/:memberId', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('mentor'), mentorCollab_controller_1.getSharedJournalEntriesController);
+exports.default = router;

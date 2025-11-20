@@ -14,7 +14,9 @@ import dashboardRoutes from './routes/dashboard.routes';
 import eventsRoutes from './routes/events.routes';
 import journalRoutes from './routes/journal.routes';
 import chatRoutes from './routes/chat.routes';
-import myRegistryRoutes from './routes/myregistry.routes';
+import myRegistryRouter from './routes/myregistry.routes';
+import workbookRoutes from './routes/workbook.routes';
+import pinterestRoutes from './routes/pinterest.routes';
 
 import { errorHandler } from './middleware/errorHandler';
 
@@ -38,11 +40,13 @@ appInstance.use('/api/community', communityRoutes);
 appInstance.use('/api/events', eventsRoutes);
 appInstance.use('/api/journal', journalRoutes);
 appInstance.use('/api/chat', chatRoutes);
-appInstance.use('/api/myregistry', myRegistryRoutes);
+appInstance.use('/api/registry/myregistry', myRegistryRouter);
 appInstance.use('/api/mentor', mentorRoutes);
 appInstance.use('/api/mentor', mentorCollabRoutes);
 appInstance.use('/api/admin', adminRoutes);
 appInstance.use('/api/waitlist', waitlistRoutes);
+appInstance.use('/api/workbook', workbookRoutes);
+appInstance.use('/api/pinterest', pinterestRoutes);
 
 appInstance.use(errorHandler);
 

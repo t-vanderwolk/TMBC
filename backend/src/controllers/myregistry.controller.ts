@@ -1,129 +1,97 @@
-import { Request, Response } from 'express';
-
+import { Request, Response } from "express";
 import {
-  addGiftToMyRegistry,
-  createMyRegistryUser,
-  listMyRegistryGifts,
-  removeMyRegistryGift,
-  syncDown,
-  syncUp,
-  updateMyRegistryGift,
-} from '../services/myRegistry.service';
-import { listRegistryItems } from '../services/registry.service';
-import { listActiveConflicts } from '../services/conflict.service';
-import { prisma } from '../utils/prisma';
+  AddItemPayload,
+  GetRegistriesParams,
+  GetRegistryItemsParams,
+  MarkPurchasedPayload,
+  MyRegistryService,
+  RemoveItemPayload,
+  SearchRegistriesParams,
+  SignupUserPayload,
+  UpdateItemPayload,
+} from "../services/myregistry/myregistry.service";
 
-const getUserId = (req: Request) => (req as any).user?.userId as string | undefined;
+const respondWithError = (res: Response, error: unknown) => {
+  const normalized = error as { status?: number; message?: string };
+  res.status(normalized.status ?? 500).json(normalized);
+};
 
-const safeFallback = async (userId: string) => {
+export const signup = async (req: Request, res: Response) => {
   try {
-    return await listRegistryItems(userId);
-  } catch {
-    return [];
+    const payload = req.body as SignupUserPayload;
+    const data = await MyRegistryService.signupUser(payload);
+    res.json({ status: "ok", data });
+  } catch (error) {
+    respondWithError(res, error);
   }
 };
 
-const respond = async (res: Response, action: () => Promise<any>) => {
+export const search = async (req: Request, res: Response) => {
   try {
-    const data = await action();
-    res.json(data);
-  } catch (error: any) {
-    res.status(400).json({ error: error?.message || 'MyRegistry request failed' });
+    const params = req.query as SearchRegistriesParams;
+    const data = await MyRegistryService.searchRegistries(params);
+    res.json({ status: "ok", data });
+  } catch (error) {
+    respondWithError(res, error);
   }
 };
 
-export const createMyRegistryUserController = (req: Request, res: Response) => {
-  return respond(res, () => createMyRegistryUser(req.body));
-};
-
-export const addMyRegistryGiftController = (req: Request, res: Response) => {
-  return respond(res, () => addGiftToMyRegistry(req.body));
-};
-
-export const updateMyRegistryGiftController = (req: Request, res: Response) => {
-  return respond(res, () => updateMyRegistryGift(req.body));
-};
-
-export const removeMyRegistryGiftController = (req: Request, res: Response) => {
-  return respond(res, () => removeMyRegistryGift(req.body));
-};
-
-export const listMyRegistryGiftsController = (req: Request, res: Response) => {
-  const memberExternalId =
-    typeof req.query.memberExternalId === 'string' ? req.query.memberExternalId : req.body?.memberExternalId;
-
-  if (!memberExternalId) {
-    return res.status(400).json({ error: 'memberExternalId is required' });
+export const registries = async (req: Request, res: Response) => {
+  try {
+    const params = req.query as GetRegistriesParams;
+    const data = await MyRegistryService.getRegistries(params);
+    res.json({ status: "ok", data });
+  } catch (error) {
+    respondWithError(res, error);
   }
-
-  return respond(res, () => listMyRegistryGifts({ memberExternalId }));
 };
 
-export const syncDownController = async (req: Request, res: Response) => {
-  const userId = getUserId(req);
-  if (!userId) {
-    return res.status(401).json({ ok: false, error: 'Unauthorized', fallbackItems: [] });
+export const items = async (req: Request, res: Response) => {
+  try {
+    const params = req.query as GetRegistryItemsParams;
+    const data = await MyRegistryService.getRegistryItems(params);
+    res.json({ status: "ok", data });
+  } catch (error) {
+    respondWithError(res, error);
   }
-
-  const result = await syncDown(userId);
-  if (!result.ok) {
-    const fallbackItems = await safeFallback(userId);
-    return res.status(200).json({
-      ok: false,
-      error: result.error,
-      fallbackItems,
-    });
-  }
-
-  const items = await listRegistryItems(userId);
-  res.json({
-    ok: true,
-    items,
-    conflicts: result.conflicts,
-    lastSyncedAt: result.lastSync.toISOString(),
-  });
 };
 
-export const syncUpController = async (req: Request, res: Response) => {
-  const userId = getUserId(req);
-  if (!userId) {
-    return res.status(401).json({ ok: false, error: 'Unauthorized', fallbackItems: [] });
+export const addItem = async (req: Request, res: Response) => {
+  try {
+    const payload = req.body as AddItemPayload;
+    const data = await MyRegistryService.addItem(payload);
+    res.json({ status: "ok", data });
+  } catch (error) {
+    respondWithError(res, error);
   }
-
-  const result = await syncUp(userId);
-  if (!result.ok) {
-    const fallbackItems = await safeFallback(userId);
-    return res.status(200).json({
-      ok: false,
-      error: result.error,
-      fallbackItems,
-    });
-  }
-
-  const items = await listRegistryItems(userId);
-  res.json({
-    ok: true,
-    items,
-    conflicts: result.conflicts,
-    lastSyncedAt: result.lastSync.toISOString(),
-  });
 };
 
-export const getSyncStatusController = async (req: Request, res: Response) => {
-  const userId = getUserId(req);
-  if (!userId) {
-    return res.status(401).json({ ok: false, error: 'Unauthorized' });
+export const updateItem = async (req: Request, res: Response) => {
+  try {
+    const payload = req.body as UpdateItemPayload;
+    const data = await MyRegistryService.updateItem(payload);
+    res.json({ status: "ok", data });
+  } catch (error) {
+    respondWithError(res, error);
   }
+};
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { myRegistryLastSyncedAt: true },
-  });
-  const conflicts = await listActiveConflicts(userId);
+export const removeItem = async (req: Request, res: Response) => {
+  try {
+    const payload = req.body as RemoveItemPayload;
+    const data = await MyRegistryService.removeItem(payload);
+    res.json({ status: "ok", data });
+  } catch (error) {
+    respondWithError(res, error);
+  }
+};
 
-  res.json({
-    ok: true,
-    lastSyncedAt: user?.myRegistryLastSyncedAt?.toISOString() ?? null,
-    conflicts,
-  });
+export const purchased = async (req: Request, res: Response) => {
+  try {
+    const payload = req.body as MarkPurchasedPayload;
+    const data = await MyRegistryService.markPurchased(payload);
+    res.json({ status: "ok", data });
+  } catch (error) {
+    respondWithError(res, error);
+  }
 };

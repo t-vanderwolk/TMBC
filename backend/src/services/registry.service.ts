@@ -8,7 +8,7 @@ import {
   isConnected,
   removeMyRegistryGift,
   updateMyRegistryGift,
-} from './myRegistry.service';
+} from './myRegistryLegacy.service';
 import { ProductResponse, productToResponse } from './product.service';
 
 export type MentorNoteResponse = {

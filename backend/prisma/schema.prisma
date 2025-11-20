@@ -32,11 +32,18 @@ model User {
   myRegistryRefreshToken String?
   myRegistryTokenExpires DateTime?
   myRegistryLastSyncedAt DateTime?
+  myRegistryUserId        String?
+  myRegistryEmail         String?
+
+  pinterestAccessToken    String?
+  pinterestRefreshToken   String?
+  pinterestTokenExpires   DateTime?
 
   mentorFeedbackAuthored MentorFeedback[] @relation("MentorFeedbackMentor")
   mentorFeedbackReceived MentorFeedback[] @relation("MentorFeedbackMember")
   mentorTasksMentor MentorTask[] @relation("MentorTasksMentor")
   mentorTasksMember MentorTask[] @relation("MentorTasksMember")
+  workbookEntries WorkbookEntry[]
 }
 
 model Invite {
@@ -71,6 +78,13 @@ enum RegistryStatus {
   PURCHASED
   PURCHASED_ELSEWHERE
   REMOVED_REMOTE
+}
+
+enum WorkbookEntryType {
+  JOURNAL
+  MOODBOARD
+  CHECKLIST
+  REFLECTION
 }
 
 model Product {
@@ -138,6 +152,7 @@ model AcademyModule {
   updatedAt   DateTime @updatedAt
 
   mentorFeedback MentorFeedback[]
+  workbookEntries WorkbookEntry[]
 }
 
 model MentorFeedback {
@@ -196,4 +211,21 @@ model RegistryConflict {
   @@index([userId])
   @@index([itemId])
   @@index([userId, resolved])
+}
+
+model WorkbookEntry {
+  id        String            @id @default(cuid())
+  userId    String
+  moduleId  String
+  type      WorkbookEntryType
+  content   Json
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  user    User           @relation(fields: [userId], references: [id])
+  module  AcademyModule  @relation(fields: [moduleId], references: [id])
+
+  @@index([userId])
+  @@index([moduleId])
+  @@unique([userId, moduleId, type])
 }

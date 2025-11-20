@@ -17,7 +17,7 @@ import {
   listActiveConflicts,
   markConflictResolved,
 } from '../services/conflict.service';
-import { updateMyRegistryGift } from '../services/myRegistry.service';
+import { updateMyRegistryGift } from '../services/myRegistryLegacy.service';
 
 const getUserId = (req: Request) => (req as any).user?.userId as string | undefined;
 const parseStatus = (value?: string) => {

@@ -1,258 +1,341 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
-import { Loader2, Share2, Sparkles } from 'lucide-react';
+import { FormEvent, useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-import AddCustomItemButton from '@/components/registry/AddCustomItemButton';
-import AddToRegistryButton from '@/components/registry/AddToRegistryButton';
-import ProductCard from '@/components/registry/ProductCard';
-import RegistryList from '@/components/registry/RegistryList';
-import SyncButton from '@/components/registry/SyncButton';
-import { api } from '@/lib/api';
-import type {
-  AcademyModuleMeta,
-  ModuleRecommendationsResponse,
-  RegistryConflict,
-  RegistryItem,
-  RegistrySyncState,
-} from '@/types/registry';
+import { loadSession } from "@/lib/auth";
+import { useMyRegistry } from "@/lib/hooks/useMyRegistry";
+import RegistryItemCard, { MyRegistryItem } from "@/components/registry/RegistryItemCard";
 
-export default function RegistryPage() {
-  const [items, setItems] = useState<RegistryItem[]>([]);
-  const [modules, setModules] = useState<AcademyModuleMeta[]>([]);
-  const [selectedModule, setSelectedModule] = useState<string>('');
-  const [recommendations, setRecommendations] = useState<ModuleRecommendationsResponse | null>(null);
-  const [loadingRegistry, setLoadingRegistry] = useState(true);
-  const [loadingRecommendations, setLoadingRecommendations] = useState(false);
-  const [registryError, setRegistryError] = useState<string | null>(null);
-  const [recommendationError, setRecommendationError] = useState<string | null>(null);
-  const [syncState, setSyncState] = useState<RegistrySyncState>({ lastSyncedAt: null, conflicts: [] });
-  const [syncBanner, setSyncBanner] = useState<string | null>(null);
+const defaultConnectIntro = [
+  "MyRegistry is where your baby gear wishlist lives.",
+  "Once connected, TMBC keeps everything in sync and opens concierge support.",
+  "Need help with your registry? Our team can walk through setup.",
+];
 
-  const fetchRegistry = useCallback(async () => {
-    try {
-      setRegistryError(null);
-      setLoadingRegistry(true);
-      const response = await api.get('/api/registry');
-      setItems(response.data);
-    } catch (error) {
-      console.error('Registry load error', error);
-      setRegistryError('Unable to load your registry right now.');
-    } finally {
-      setLoadingRegistry(false);
+const extractRegistryId = (payload: unknown): string | null => {
+  if (!payload || typeof payload !== "object") return null;
+
+  const maybeRegistries = (payload as { Registries?: unknown }).Registries;
+  if (Array.isArray(maybeRegistries)) {
+    const first = maybeRegistries[0];
+    if (first && typeof first === "object") {
+      return (
+        (first as { RegistryId?: string }).RegistryId ||
+        (first as { registryId?: string }).registryId ||
+        null
+      );
     }
-  }, []);
+  }
+
+  if (Array.isArray(payload)) {
+    const first = payload[0];
+    if (first && typeof first === "object") {
+      return (
+        (first as { RegistryId?: string }).RegistryId ||
+        (first as { registryId?: string }).registryId ||
+        null
+      );
+    }
+  }
+
+  const asRecord = payload as Record<string, unknown>;
+  return (
+    (asRecord["RegistryId"] as string) ||
+    (asRecord["registryId"] as string) ||
+    (asRecord["Id"] as string) ||
+    null
+  );
+};
+
+const deriveErrorMessage = (value: unknown, fallback: string): string => {
+  if (!value) return fallback;
+  if (typeof value === "string") return value;
+  if (value instanceof Error) return value.message;
+  if (typeof value === "object" && value !== null && "message" in value) {
+    const maybe = (value as Record<string, unknown>)["message"];
+    if (typeof maybe === "string") {
+      return maybe;
+    }
+  }
+  return fallback;
+};
+
+const extractItems = (payload: unknown, registryId?: string): MyRegistryItem[] => {
+  if (!payload || typeof payload !== "object") return [];
+
+  const maybeItems = (payload as { Items?: unknown }).Items ?? (payload as { items?: unknown }).items;
+  const itemsArray = Array.isArray(maybeItems) ? maybeItems : Array.isArray(payload) ? payload : [];
+
+  return itemsArray
+    .filter((entry): entry is Record<string, unknown> => Boolean(entry && typeof entry === "object"))
+    .map((entry) => ({
+      ItemID: (entry["ItemID"] as string) ?? (entry["itemId"] as string) ?? "",
+      RegistryId: (entry["RegistryId"] as string | undefined) ?? registryId,
+      Title: (entry["Title"] as string) ?? (entry["title"] as string),
+      Description: (entry["Description"] as string) ?? (entry["description"] as string),
+      Price: typeof entry["Price"] === "number" ? (entry["Price"] as number) : undefined,
+      ImageUrl: (entry["ImageUrl"] as string) ?? (entry["imageUrl"] as string),
+      Purchased: (entry["Purchased"] as boolean) ?? (entry["purchased"] as boolean),
+    }))
+    .filter((item) => Boolean(item.ItemID));
+};
+
+const emptyNewItem = {
+  title: "",
+  description: "",
+  price: "",
+};
+
+export default function RegistryDashboardPage() {
+  const router = useRouter();
+  const session = loadSession();
+  const storedEmail = session?.payload?.myRegistryEmail || session?.payload?.email || "";
+
+  const { getRegistries, getRegistryItems, addItem, updateItem, removeItem, markPurchased } =
+    useMyRegistry();
+
+  const [registryId, setRegistryId] = useState<string | null>(null);
+  const [items, setItems] = useState<MyRegistryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [connected, setConnected] = useState(Boolean(session?.payload?.myRegistryUserId));
+  const [busyItemId, setBusyItemId] = useState<string | null>(null);
+  const [newItem, setNewItem] = useState(emptyNewItem);
 
   useEffect(() => {
-    const fetchSyncStatus = async () => {
-      try {
-        const response = await api.get('/api/myregistry/status');
-        setSyncState(response.data as RegistrySyncState);
-      } catch {
-        // silently ignore when not connected
+    const hydrate = async () => {
+      if (!storedEmail) {
+        setConnected(false);
+        setLoading(false);
+        return;
       }
-    };
 
-    const fetchModules = async () => {
       try {
-        const response = await api.get('/api/academy/modules');
-        const serverModules = (response.data?.data || []) as AcademyModuleMeta[];
-        setModules(serverModules);
-        if (!selectedModule && serverModules.length) {
-          setSelectedModule(serverModules[0].id);
+        setLoading(true);
+        const registries = await getRegistries({ Email: storedEmail });
+        const id = extractRegistryId(registries.data);
+
+        if (!id) {
+          setConnected(false);
+          setError("We could not find your MyRegistry account yet.");
+          return;
         }
-      } catch (error) {
-        console.error('Module load error', error);
-      }
-    };
 
-    fetchRegistry();
-    fetchModules();
-    fetchSyncStatus();
-  }, [fetchRegistry, selectedModule]);
-
-  useEffect(() => {
-    if (!selectedModule) return;
-
-    const fetchRecommendations = async () => {
-      try {
-        setRecommendationError(null);
-        setLoadingRecommendations(true);
-        const response = await api.get(`/api/academy/${selectedModule}/recommendations`);
-        setRecommendations(response.data as ModuleRecommendationsResponse);
-      } catch (error) {
-        console.error('Recommendation load error', error);
-        setRecommendationError('Unable to load recommendations right now.');
+        setRegistryId(id);
+        const itemsResponse = await getRegistryItems({ RegistryId: id });
+        const normalizedItems = extractItems(itemsResponse.data, id);
+        setItems(normalizedItems);
+        setConnected(true);
+      } catch (err: unknown) {
+        setError(deriveErrorMessage(err, "Unable to load registry items right now."));
+        setConnected(false);
+        setRegistryId(null);
+        setItems([]);
       } finally {
-        setLoadingRecommendations(false);
+        setLoading(false);
       }
     };
 
-    fetchRecommendations();
-  }, [selectedModule]);
+    void hydrate();
+  }, [storedEmail, getRegistries, getRegistryItems]);
 
-  const handleItemAdded = (item: RegistryItem) => {
-    setItems((prev) => {
-      if (prev.some((existing) => existing.id === item.id)) return prev;
-      return [...prev, item];
-    });
+  const refreshItems = async (id: string) => {
+    setError(null);
+    try {
+      const itemsResponse = await getRegistryItems({ RegistryId: id });
+      setItems(extractItems(itemsResponse.data, id));
+    } catch (err: unknown) {
+      setError(deriveErrorMessage(err, "Unable to refresh items."));
+    }
   };
 
-  const handleUpdateItem = async (
-    itemId: string,
-    payload: Partial<Pick<RegistryItem, 'quantity' | 'status' | 'notes' | 'purchaseSource'>>,
-  ) => {
-    const response = await api.post('/api/registry/update', {
-      itemId,
-      ...payload,
-    });
-    const updated = response.data as RegistryItem;
-    setItems((prev) => prev.map((item) => (item.id === itemId ? updated : item)));
+  const handleAddItem = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!registryId) return;
+
+    const trimmedTitle = newItem.title.trim();
+    if (!trimmedTitle) {
+      setError("Title is required.");
+      return;
+    }
+
+    try {
+      setError(null);
+      await addItem({
+        RegistryId: registryId,
+        ItemName: trimmedTitle,
+        Description: newItem.description.trim() || undefined,
+        Price: newItem.price ? Number(newItem.price) : undefined,
+      });
+      setNewItem(emptyNewItem);
+      await refreshItems(registryId);
+      } catch (err: unknown) {
+        setError(deriveErrorMessage(err, "Unable to add item."));
+      }
   };
 
-  const handleRemoveItem = async (itemId: string) => {
-    await api.post('/api/registry/remove', { itemId });
-    setItems((prev) => prev.filter((item) => item.id !== itemId));
+  const handleUpdateItem = async (item: MyRegistryItem) => {
+    if (!registryId || !item.ItemID) return;
+
+    const newTitle = window.prompt("Update title", item.Title ?? "");
+    if (!newTitle) return;
+
+    try {
+      setError(null);
+      setBusyItemId(item.ItemID);
+      await updateItem({
+        RegistryId: registryId,
+        ItemId: item.ItemID,
+        ItemName: newTitle,
+      });
+      await refreshItems(registryId);
+    } catch (err: unknown) {
+      setError(deriveErrorMessage(err, "Unable to update item."));
+    } finally {
+      setBusyItemId(null);
+    }
   };
 
-  const activeModule = useMemo(() => {
-    return modules.find((module) => module.id === selectedModule);
-  }, [modules, selectedModule]);
+  const handleRemoveItem = async (item: MyRegistryItem) => {
+    if (!registryId || !item.ItemID) return;
+
+    try {
+      setError(null);
+      setBusyItemId(item.ItemID);
+      await removeItem({ RegistryId: registryId, ItemId: item.ItemID });
+      await refreshItems(registryId);
+    } catch (err: unknown) {
+      setError(deriveErrorMessage(err, "Unable to remove item."));
+    } finally {
+      setBusyItemId(null);
+    }
+  };
+
+  const handleTogglePurchased = async (item: MyRegistryItem) => {
+    if (!registryId || !item.ItemID) return;
+
+    try {
+      setError(null);
+      setBusyItemId(item.ItemID);
+      await markPurchased({
+        RegistryId: registryId,
+        ItemId: item.ItemID,
+        Purchased: !Boolean(item.Purchased),
+      });
+      await refreshItems(registryId);
+    } catch (err: unknown) {
+      setError(deriveErrorMessage(err, "Unable to update purchased status."));
+    } finally {
+      setBusyItemId(null);
+    }
+  };
+
+  const connectForm = (
+    <div className="p-6 rounded-3xl border border-tmDust bg-white/80 shadow-soft">
+      <h1 className="text-2xl font-semibold text-tmCharcoal">Connect MyRegistry</h1>
+      <p className="mt-2 text-sm text-tmCharcoal/70">
+        Link your MyRegistry account to access concierge matching and add items from one place.
+      </p>
+      <ul className="mt-4 space-y-2 text-sm text-tmCharcoal/70">
+        {defaultConnectIntro.map((line) => (
+          <li key={line}>• {line}</li>
+        ))}
+      </ul>
+
+      <form
+        className="mt-6 grid gap-3"
+        onSubmit={(event) => {
+          event.preventDefault();
+          router.push("/signup");
+        }}
+      >
+        <div className="grid gap-3 sm:grid-cols-2">
+          <input placeholder="First name" className="w-full" />
+          <input placeholder="Last name" className="w-full" />
+        </div>
+        <button className="btn-primary" type="submit">
+          Go to signup
+        </button>
+        <p className="text-xs text-tmCharcoal/60">
+          Already have an invite? Paste the code in the signup URL (&nbsp;
+          <Link href="/requestinvite" className="text-tmMauve underline">
+            request invite
+          </Link>
+          &nbsp;).
+        </p>
+      </form>
+    </div>
+  );
+
+  if (loading) {
+    return (
+      <div className="p-6 text-sm text-tmCharcoal/70">
+        Loading registry… <span aria-hidden="true">⏳</span>
+      </div>
+    );
+  }
+
+  if (!connected) {
+    return connectForm;
+  }
 
   return (
-    <div className="space-y-8">
-      <header className="flex flex-col gap-4 rounded-3xl border border-white/70 bg-white/80 p-6 shadow-soft lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <p className="text-sm uppercase tracking-[0.5em] text-tmMauve">Registry Concierge</p>
-          <h1 className="text-4xl text-tmCharcoal">Your Taylor-Made Registry</h1>
-          <p className="mt-2 text-sm text-tmCharcoal/70">
-            Track every curated find, see mentor notes, and push items to MyRegistry with affiliate tracking intact.
-          </p>
-          {syncState.conflicts.length > 0 && (
-            <p className="mt-2 text-sm text-amber-700">
-              {syncState.conflicts.length} conflict{syncState.conflicts.length === 1 ? '' : 's'} pending —{' '}
-              <Link href="/dashboard/registry/conflicts" className="font-semibold underline">
-                review now
-              </Link>
-              .
-            </p>
-          )}
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <AddCustomItemButton modules={modules} defaultModuleCode={selectedModule} onSuccess={fetchRegistry} />
-          <SyncButton
-            initialState={syncState}
-            onItemsUpdated={(updated) => setItems(updated)}
-            onConflictsUpdate={(conflicts: RegistryConflict[]) =>
-              setSyncState((prev) => ({ ...prev, conflicts }))
-            }
-            onFallback={(fallbackItems, errorMessage) => {
-              if (fallbackItems.length) {
-                setItems(fallbackItems);
-              }
-              setRegistryError(errorMessage);
-              setSyncBanner('MyRegistry is temporarily unavailable — showing your saved items.');
-            }}
-            onSyncState={(state) => {
-              setSyncState(state);
-              setSyncBanner(null);
-            }}
-          />
-          <button className="inline-flex items-center gap-2 rounded-full border border-tmBlush/60 px-5 py-3 text-sm font-semibold text-tmCharcoal">
-            <Share2 className="h-4 w-4" />
-            Share with Mentor
+    <div className="space-y-6">
+      <div className="rounded-3xl border border-tmDust bg-white/80 p-6 shadow-soft">
+        <h1 className="text-2xl font-semibold text-tmCharcoal">MyRegistry Dashboard</h1>
+        <p className="mt-2 text-sm text-tmCharcoal/70">Manage your requested gifts with live updates.</p>
+
+        <form className="mt-6 grid gap-3" onSubmit={handleAddItem}>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <input
+              value={newItem.title}
+              onChange={(event) => setNewItem({ ...newItem, title: event.target.value })}
+              placeholder="Item title"
+              required
+              className="w-full"
+            />
+            <input
+              value={newItem.description}
+              onChange={(event) => setNewItem({ ...newItem, description: event.target.value })}
+              placeholder="Description"
+              className="w-full"
+            />
+            <input
+              value={newItem.price}
+              onChange={(event) => setNewItem({ ...newItem, price: event.target.value })}
+              placeholder="Price"
+              type="number"
+              className="w-full"
+            />
+          </div>
+          <button type="submit" className="btn-primary w-full text-center">
+            Add item
           </button>
-        </div>
-      </header>
-      {syncBanner && (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          {syncBanner}
+        </form>
+
+        {error && <p className="mt-3 text-sm text-red-500">{error}</p>}
+      </div>
+
+      {!items.length ? (
+        <p className="rounded-3xl border border-tmDust bg-white/70 p-6 text-center text-sm text-tmCharcoal/70">
+          No items found. Add your first gift to get started.
+        </p>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {items.map((item) => (
+            <RegistryItemCard
+              key={item.ItemID}
+              item={item}
+              busy={busyItemId === item.ItemID}
+              onUpdate={handleUpdateItem}
+              onRemove={handleRemoveItem}
+              onTogglePurchased={handleTogglePurchased}
+            />
+          ))}
         </div>
       )}
-
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-tmCharcoal">Registry Items</h2>
-          {loadingRegistry && (
-            <span className="inline-flex items-center gap-2 text-sm text-tmCharcoal/70">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Loading your items…
-            </span>
-          )}
-        </div>
-        {registryError && <p className="text-sm text-red-500">{registryError}</p>}
-        {!loadingRegistry && (
-          <RegistryList items={items} onUpdate={handleUpdateItem} onRemove={handleRemoveItem} />
-        )}
-      </section>
-
-      <section className="rounded-3xl border border-white/70 bg-white/90 p-6 shadow-soft">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Academy Integration</p>
-            <h2 className="text-2xl text-tmCharcoal">Add These to Your Registry</h2>
-            <p className="text-sm text-tmCharcoal/70">
-              Each module unlocks curated gear that matches your stage, mentor notes, and affiliate tracking.
-            </p>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold uppercase tracking-[0.4em] text-tmCharcoal/70">
-              Module
-            </label>
-            <select
-              value={selectedModule}
-              onChange={(event) => setSelectedModule(event.target.value)}
-              className="min-w-[240px]"
-            >
-              {modules.map((module) => (
-                <option key={module.id} value={module.id}>
-                  {module.title}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        {activeModule && (
-          <div className="mt-4 rounded-2xl border border-tmBlush/60 bg-tmIvory/80 p-4 text-sm text-tmCharcoal/80">
-            <p className="font-semibold text-tmCharcoal">{activeModule.title}</p>
-            <p>
-              Stage: <span className="font-semibold">{activeModule.stage}</span>
-            </p>
-            {activeModule.mentorNotes && <p className="mt-2 italic text-tmCharcoal/70">“{activeModule.mentorNotes}”</p>}
-          </div>
-        )}
-        {loadingRecommendations && (
-          <div className="mt-6 flex items-center gap-2 text-sm text-tmCharcoal/70">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Loading module recommendations…
-          </div>
-        )}
-        {recommendationError && <p className="mt-4 text-sm text-red-500">{recommendationError}</p>}
-        {!loadingRecommendations && recommendations && (
-          <div className="mt-6 space-y-6">
-            <div className="flex items-center gap-2 text-sm text-tmCharcoal/70">
-              <Sparkles className="h-4 w-4 text-tmMauve" />
-              {recommendations.products.length} match{recommendations.products.length === 1 ? '' : 'es'} curated for
-              this lesson
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {recommendations.products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  action={<AddToRegistryButton productId={product.id} onAdded={handleItemAdded} />}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-        {!loadingRecommendations && !recommendations && (
-          <div className="mt-6 rounded-2xl border border-dashed border-tmBlush/60 bg-white/80 p-4 text-sm text-tmCharcoal/70">
-            <p>No recommendations yet. Select a module to see curated picks.</p>
-          </div>
-        )}
-      </section>
     </div>
   );
 }

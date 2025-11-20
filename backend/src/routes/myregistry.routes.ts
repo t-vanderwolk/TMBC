@@ -1,26 +1,24 @@
-import { Router } from 'express';
-
+import { Router } from "express";
 import {
-  addMyRegistryGiftController,
-  createMyRegistryUserController,
-  getSyncStatusController,
-  listMyRegistryGiftsController,
-  removeMyRegistryGiftController,
-  syncDownController,
-  syncUpController,
-  updateMyRegistryGiftController,
-} from '../controllers/myregistry.controller';
-import { requireAuth } from '../middleware/authMiddleware';
+  signup,
+  search,
+  registries,
+  items,
+  addItem,
+  updateItem,
+  removeItem,
+  purchased,
+} from "../controllers/myregistry.controller";
 
 const router = Router();
 
-router.post('/create-user', requireAuth, createMyRegistryUserController);
-router.post('/add', requireAuth, addMyRegistryGiftController);
-router.post('/update', requireAuth, updateMyRegistryGiftController);
-router.post('/remove', requireAuth, removeMyRegistryGiftController);
-router.get('/list', requireAuth, listMyRegistryGiftsController);
-router.post('/sync/down', requireAuth, syncDownController);
-router.post('/sync/up', requireAuth, syncUpController);
-router.get('/status', requireAuth, getSyncStatusController);
+router.post("/signup", signup);
+router.get("/search", search);
+router.get("/registries", registries);
+router.get("/items", items);
+router.post("/items/add", addItem);
+router.post("/items/update", updateItem);
+router.post("/items/remove", removeItem);
+router.post("/items/purchased", purchased);
 
 export default router;

@@ -30,7 +30,7 @@ const fetchMenteesViaInvites = async (mentorId: string) => {
 
   const mentees = invites
     .map((invite) => invite.usedBy)
-    .filter((user): user is { id: string; name: string | null; email: string | null; createdAt: Date } => Boolean(user));
+    .filter((user): user is NonNullable<typeof user> => Boolean(user));
 
   return mentees.map((mentee) => ({
     id: mentee.id,

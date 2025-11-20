@@ -8,13 +8,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        tmIvory: '#FBF4F3',
-        tmMauve: '#B48A9B',
-        tmMauveDark: '#A1788C',
+        tmIvory: '#FAF7F4',
+        tmBlush: '#F6E9E6',
+        tmMauve: '#C7A7B7',
+        tmDeepMauve: '#A57891',
         tmCharcoal: '#3E2F35',
-        tmBlush: '#F2E6EA',
-        tmDust: '#E7D9DF',
-        tmWhite: '#FFFFFF',
+        tmGold: '#D4B579',
       },
       fontFamily: {
         script: ['var(--font-great-vibes)', 'cursive'],
@@ -23,6 +22,7 @@ module.exports = {
       },
       boxShadow: {
         soft: '0 25px 65px rgba(200, 162, 200, 0.15)',
+        editorial: '0 35px 70px rgba(134, 75, 95, 0.25)',
       },
     },
   },
