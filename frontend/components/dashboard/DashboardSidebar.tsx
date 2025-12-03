@@ -6,6 +6,7 @@ import {
   HeartHandshake,
   Home,
   NotebookPen,
+  Settings,
   Users,
 } from 'lucide-react';
 
@@ -19,6 +20,7 @@ const navItems = [
   { label: 'Registry', href: '/dashboard/registry', icon: Gift },
   { label: 'Community', href: '/dashboard/community', icon: Users },
   { label: 'Mentor', href: '/dashboard/mentor', icon: HeartHandshake },
+  { label: 'Settings', href: '/dashboard/settings', icon: Settings },
 ];
 
 const DashboardSidebar = ({ activePath }: DashboardSidebarProps) => {

@@ -1,6 +1,6 @@
 import { Role } from '@prisma/client';
 
-import { prisma } from '../utils/prisma';
+import { prisma } from '../../prisma/client';
 import { listRegistryItems } from './registry.service';
 import { listJournalEntries } from './journal.service';
 

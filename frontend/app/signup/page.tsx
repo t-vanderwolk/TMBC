@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { api } from "@/lib/api";
@@ -22,7 +22,7 @@ const resolveErrorMessage = (error: unknown, fallback: string) => {
   return fallback;
 };
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const inviteCode = searchParams.get("code")?.toUpperCase() || "";
@@ -95,7 +95,7 @@ export default function SignupPage() {
 
         {!inviteCode && (
           <p className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
-            No invite code detected. <Link className="underline" href="/requestinvite">Request an invite</Link> or
+            No invite code detected. <Link className="underline" href="/request-invite">Request an invite</Link> or
             return to the invite page with a code.
           </p>
         )}
@@ -186,5 +186,13 @@ export default function SignupPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignupForm />
+    </Suspense>
   );
 }

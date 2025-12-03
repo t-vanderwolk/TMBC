@@ -1,7 +1,7 @@
 import { Role, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
-import { prisma } from '../utils/prisma';
+import { prisma } from '../../prisma/client';
 import { signToken } from '../utils/jwt';
 import { consumeInvite } from './invite.service';
 import { MyRegistryService, SignupUserPayload, SignupUserResponse } from './myregistry/myregistry.service';

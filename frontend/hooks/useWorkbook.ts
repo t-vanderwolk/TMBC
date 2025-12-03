@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-
 import { api } from '@/lib/api';
 
 const workbookTypes = ['journal', 'moodboard', 'checklist', 'reflection'] as const;
@@ -15,6 +14,7 @@ export type MoodboardTile = {
   caption: string;
   size: 'small' | 'medium' | 'large';
   link?: string;
+  sourceBrand?: string;
 };
 
 export type ChecklistItem = {
@@ -38,12 +38,31 @@ type UseWorkbookOptions = {
   moodboardSeed?: Omit<MoodboardTile, 'id'>[];
 };
 
-const createId = () => {
-  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
-    return crypto.randomUUID();
-  }
-  return Math.random().toString(36).slice(2, 11);
+type MoodboardModuleSeed = {
+  heroImage?: string | null;
+  subtitle: string;
 };
+
+export const getDefaultMoodboardPack = (module: MoodboardModuleSeed): Omit<MoodboardTile, 'id'>[] => [
+  { imageUrl: '/academy/palette/mauve.jpg', caption: 'Soft mauve', size: 'small' },
+  { imageUrl: '/academy/palette/blush.jpg', caption: 'Blush warmth', size: 'small' },
+  { imageUrl: '/academy/palette/ivory.jpg', caption: 'Calm ivory', size: 'small' },
+  { imageUrl: '/academy/textures/linen.jpg', caption: 'Linen texture', size: 'medium' },
+  { imageUrl: '/academy/textures/boucle.jpg', caption: 'Bouclé softness', size: 'medium' },
+  {
+    imageUrl: module.heroImage ?? '/academy/palette/ivory.jpg',
+    caption: module.subtitle,
+    size: 'large',
+  },
+];
+
+//
+// Helpers
+//
+const createId = () =>
+  typeof crypto !== 'undefined' && crypto.randomUUID
+    ? crypto.randomUUID()
+    : Math.random().toString(36).slice(2, 12);
 
 const createEmptyRecord = () =>
   workbookTypes.reduce<Record<WorkbookEntrySectionType, WorkbookEntryRecord | null>>((acc, type) => {
@@ -63,62 +82,72 @@ const createChecklistFromSeed = (seed: string[]) =>
 const createMoodboardFromSeed = (seed: Omit<MoodboardTile, 'id'>[]) =>
   seed.map((tile) => ({ ...tile, id: createId() }));
 
-const stringifyContent = (payload: unknown) => JSON.stringify(payload ?? null);
+const stringifyContent = (x: unknown) => JSON.stringify(x ?? null);
 
+//
+// Hook
+//
 export const useWorkbook = ({ moduleId, checklistSeed = [], moodboardSeed = [] }: UseWorkbookOptions) => {
   const [entries, setEntries] = useState(createEmptyRecord);
   const entriesRef = useRef(entries);
-  useEffect(() => {
-    entriesRef.current = entries;
-  }, [entries]);
-
-  const statusRef = useRef<Record<WorkbookEntrySectionType, SaveStatus>>(createStatusRecord());
-  const [status, setStatus] = useState<Record<WorkbookEntrySectionType, SaveStatus>>(createStatusRecord);
-  const lastSavedRef = useRef<Record<WorkbookEntrySectionType, string>>(
-    workbookTypes.reduce((acc, type) => {
-      acc[type] = 'null';
-      return acc;
-    }, {} as Record<WorkbookEntrySectionType, string>),
-  );
-  const timersRef = useRef<Record<WorkbookEntrySectionType, ReturnType<typeof setTimeout> | null>>(
-    workbookTypes.reduce((acc, type) => {
-      acc[type] = null;
-      return acc;
-    }, {} as Record<WorkbookEntrySectionType, ReturnType<typeof setTimeout> | null>),
-  );
 
   const [journalText, setJournalText] = useState('');
   const [reflectionNotes, setReflectionNotes] = useState('');
   const [moodboardTiles, setMoodboardTiles] = useState<MoodboardTile[]>([]);
   const [checklistItems, setChecklistItems] = useState<ChecklistItem[]>([]);
+
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const resetTimers = useCallback(() => {
-    workbookTypes.forEach((type) => {
-      const timer = timersRef.current[type];
-      if (timer) {
-        clearTimeout(timer);
-      }
-      timersRef.current[type] = null;
-    });
-  }, []);
+  const statusRef = useRef(createStatusRecord());
+  const [status, setStatus] = useState(createStatusRecord);
 
+  const lastSavedRef = useRef<Record<WorkbookEntrySectionType, string>>(
+    workbookTypes.reduce((acc, t) => {
+      acc[t] = 'null';
+      return acc;
+    }, {} as Record<WorkbookEntrySectionType, string>),
+  );
+
+  const timersRef = useRef<Record<WorkbookEntrySectionType, NodeJS.Timeout | null>>(
+    workbookTypes.reduce((acc, t) => {
+      acc[t] = null;
+      return acc;
+    }, {} as Record<WorkbookEntrySectionType, NodeJS.Timeout | null>),
+  );
+
+  //
+  // Utility
+  //
   const updateStatus = (type: WorkbookEntrySectionType, value: SaveStatus) => {
     statusRef.current[type] = value;
     setStatus((prev) => ({ ...prev, [type]: value }));
   };
 
+  const resetTimers = useCallback(() => {
+    workbookTypes.forEach((type) => {
+      const t = timersRef.current[type];
+      if (t) clearTimeout(t);
+      timersRef.current[type] = null;
+    });
+  }, []);
+
+  //
+  // Save entry to backend
+  //
   const persistEntry = useCallback(
     async (type: WorkbookEntrySectionType, content: unknown) => {
       if (!moduleId) return;
+
       updateStatus(type, 'saving');
+
       try {
         const existing = entriesRef.current[type];
-        const response = existing
+        const res = existing
           ? await api.patch(`/api/workbook/update/${existing.id}`, { content })
           : await api.post('/api/workbook/create', { moduleId, type, content });
-        setEntries((prev) => ({ ...prev, [type]: response.data }));
+
+        setEntries((prev) => ({ ...prev, [type]: res.data }));
         lastSavedRef.current[type] = stringifyContent(content);
         updateStatus(type, 'saved');
       } catch (err: any) {
@@ -129,122 +158,135 @@ export const useWorkbook = ({ moduleId, checklistSeed = [], moodboardSeed = [] }
     [moduleId],
   );
 
+  //
+  // Debounced autosave
+  //
+  const scheduleSave = useCallback(
+    (type: WorkbookEntrySectionType, payload: unknown) => {
+      if (!ready) return;
+
+      const serialized = stringifyContent(payload);
+      if (lastSavedRef.current[type] === serialized) return;
+
+      const timer = timersRef.current[type];
+      if (timer) clearTimeout(timer);
+
+      timersRef.current[type] = setTimeout(() => {
+        persistEntry(type, payload);
+      }, 850);
+    },
+    [persistEntry, ready],
+  );
+
+  //
+  // Load entries (FIXED dependency array — no infinite loop)
+  //
   useEffect(() => {
-    let active = true;
-    if (!moduleId) return () => undefined;
+    let mounted = true;
+    if (!moduleId) return;
+
     resetTimers();
     setReady(false);
     setError(null);
-    const fetchEntries = async () => {
+
+    const load = async () => {
       try {
-        const response = await api.get(`/api/workbook/list?moduleId=${encodeURIComponent(moduleId)}`);
-        if (!active) return;
-        const rawEntries: WorkbookEntryRecord[] = response.data?.entries ?? [];
+        const res = await api.get(`/api/workbook/list?moduleId=${encodeURIComponent(moduleId)}`);
+        if (!mounted) return;
+
+        const raw: WorkbookEntryRecord[] = res.data?.entries ?? [];
         const map = createEmptyRecord();
-        rawEntries.forEach((entry) => {
+
+        raw.forEach((entry) => {
           map[entry.type] = entry;
         });
+
         setEntries(map);
-        workbookTypes.forEach((type) => {
-          lastSavedRef.current[type] = map[type] ? stringifyContent(map[type]!.content) : 'null';
+        entriesRef.current = map;
+
+        workbookTypes.forEach((t) => {
+          lastSavedRef.current[t] = map[t] ? stringifyContent(map[t]!.content) : 'null';
         });
-        const freshStatus = createStatusRecord();
-        setStatus(freshStatus);
-        statusRef.current = freshStatus;
 
-        if (map.journal) {
-          setJournalText((map.journal.content as { text?: string }).text ?? '');
-        } else {
-          setJournalText('');
-        }
+        // journal
+        const journalContent = map.journal?.content as { text?: string } | undefined;
+        setJournalText(journalContent?.text ?? '');
 
-        if (map.reflection) {
-          setReflectionNotes((map.reflection.content as { notes?: string }).notes ?? '');
-        } else {
-          setReflectionNotes('');
-        }
+        // reflection
+        const reflectionContent = map.reflection?.content as { notes?: string } | undefined;
+        setReflectionNotes(reflectionContent?.notes ?? '');
 
+        // moodboard
+        const moodboardContent = map.moodboard?.content as { tiles?: MoodboardTile[] } | undefined;
         if (map.moodboard) {
-          setMoodboardTiles((map.moodboard.content as { tiles?: MoodboardTile[] }).tiles ?? []);
-        } else if (moodboardSeed.length) {
-          setMoodboardTiles(createMoodboardFromSeed(moodboardSeed));
+          setMoodboardTiles(moodboardContent?.tiles ?? []);
         } else {
-          setMoodboardTiles([]);
+          setMoodboardTiles(moodboardSeed.length ? createMoodboardFromSeed(moodboardSeed) : []);
         }
 
+        // checklist
+        const checklistContent = map.checklist?.content as { items?: ChecklistItem[] } | undefined;
         if (map.checklist) {
-          setChecklistItems((map.checklist.content as { items?: ChecklistItem[] }).items ?? []);
-        } else if (checklistSeed.length) {
-          setChecklistItems(createChecklistFromSeed(checklistSeed));
+          setChecklistItems(checklistContent?.items ?? []);
         } else {
-          setChecklistItems([]);
+          setChecklistItems(checklistSeed.length ? createChecklistFromSeed(checklistSeed) : []);
         }
+
+        const fresh = createStatusRecord();
+        statusRef.current = fresh;
+        setStatus(fresh);
 
         setReady(true);
       } catch (err: any) {
-        if (active) {
+        if (mounted) {
           setError(err?.response?.data?.error || err?.message || 'Unable to load workbook');
         }
       }
     };
 
-    fetchEntries();
+    load();
 
     return () => {
-      active = false;
+      mounted = false;
       resetTimers();
     };
-  }, [moduleId, checklistSeed, moodboardSeed, persistEntry, resetTimers]);
+    // ONLY triggers when moduleId changes (fixes your infinite loop)
+  }, [moduleId, resetTimers]);
 
-  const scheduleSave = useCallback(
-    (type: WorkbookEntrySectionType, payload: unknown) => {
-      const serialized = stringifyContent(payload);
-      if (lastSavedRef.current[type] === serialized || !ready) {
-        return;
-      }
-      const timer = timersRef.current[type];
-      if (timer) {
-        clearTimeout(timer);
-      }
-      timersRef.current[type] = setTimeout(() => persistEntry(type, payload), 950);
-    },
-    [persistEntry, ready],
-  );
-
+  //
+  // Autosave watchers
+  //
   useEffect(() => {
     scheduleSave('journal', { text: journalText });
-  }, [journalText, ready, scheduleSave]);
+  }, [journalText, scheduleSave]);
 
   useEffect(() => {
     scheduleSave('reflection', { notes: reflectionNotes });
-  }, [reflectionNotes, ready, scheduleSave]);
+  }, [reflectionNotes, scheduleSave]);
 
   useEffect(() => {
     scheduleSave('moodboard', { tiles: moodboardTiles });
-  }, [moodboardTiles, ready, scheduleSave]);
+  }, [moodboardTiles, scheduleSave]);
 
   useEffect(() => {
     scheduleSave('checklist', { items: checklistItems });
-  }, [checklistItems, ready, scheduleSave]);
+  }, [checklistItems, scheduleSave]);
 
-  useEffect(() => {
-    return () => {
-      resetTimers();
-    };
-  }, [resetTimers]);
-
+  //
+  // Public API
+  //
   const addChecklistItem = (text: string) => {
     setChecklistItems((prev) => [...prev, { id: createId(), text, completed: false }]);
   };
 
   const toggleChecklistItem = (id: string) => {
     setChecklistItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item)),
+      prev.map((i) => (i.id === id ? { ...i, completed: !i.completed } : i)),
     );
   };
 
   const removeChecklistItem = (id: string) => {
-    setChecklistItems((prev) => prev.filter((item) => item.id !== id));
+    setChecklistItems((prev) => prev.filter((i) => i.id !== id));
   };
 
   const addMoodboardTile = (tile: Omit<MoodboardTile, 'id'>) => {
@@ -252,20 +294,19 @@ export const useWorkbook = ({ moduleId, checklistSeed = [], moodboardSeed = [] }
   };
 
   const updateMoodboardTile = (id: string, updates: Partial<MoodboardTile>) => {
-    setMoodboardTiles((prev) => prev.map((tile) => (tile.id === id ? { ...tile, ...updates } : tile)));
+    setMoodboardTiles((prev) => prev.map((t) => (t.id === id ? { ...t, ...updates } : t)));
   };
 
   const reorderMoodboardTiles = (sourceId: string, targetId: string) => {
     setMoodboardTiles((prev) => {
-      const sourceIndex = prev.findIndex((tile) => tile.id === sourceId);
-      const targetIndex = prev.findIndex((tile) => tile.id === targetId);
-      if (sourceIndex === -1 || targetIndex === -1) {
-        return prev;
-      }
-      const updated = [...prev];
-      const [moved] = updated.splice(sourceIndex, 1);
-      updated.splice(targetIndex, 0, moved);
-      return updated;
+      const s = prev.findIndex((t) => t.id === sourceId);
+      const t = prev.findIndex((t) => t.id === targetId);
+      if (s === -1 || t === -1) return prev;
+
+      const arr = [...prev];
+      const [moved] = arr.splice(s, 1);
+      arr.splice(t, 0, moved);
+      return arr;
     });
   };
 
@@ -273,17 +314,22 @@ export const useWorkbook = ({ moduleId, checklistSeed = [], moodboardSeed = [] }
     ready,
     error,
     status,
+
     journalText,
     setJournalText,
+
     reflectionNotes,
     setReflectionNotes,
+
     moodboardTiles,
     addMoodboardTile,
     updateMoodboardTile,
     reorderMoodboardTiles,
+
     checklistItems,
     addChecklistItem,
     toggleChecklistItem,
     removeChecklistItem,
+    setChecklistItems,
   };
 };

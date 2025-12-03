@@ -9,6 +9,7 @@ import communityRoutes from './routes/community.routes';
 import mentorRoutes from './routes/mentor.routes';
 import mentorCollabRoutes from './routes/mentorCollab.routes';
 import adminRoutes from './routes/admin.routes';
+import loginEventsRoutes from './routes/admin.loginEvents.routes';
 import waitlistRoutes from './routes/waitlist.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 import eventsRoutes from './routes/events.routes';
@@ -17,6 +18,7 @@ import chatRoutes from './routes/chat.routes';
 import myRegistryRouter from './routes/myregistry.routes';
 import workbookRoutes from './routes/workbook.routes';
 import pinterestRoutes from './routes/pinterest.routes';
+import { requireAdminAuth } from './middleware/authMiddleware';
 
 import { errorHandler } from './middleware/errorHandler';
 
@@ -43,7 +45,8 @@ appInstance.use('/api/chat', chatRoutes);
 appInstance.use('/api/registry/myregistry', myRegistryRouter);
 appInstance.use('/api/mentor', mentorRoutes);
 appInstance.use('/api/mentor', mentorCollabRoutes);
-appInstance.use('/api/admin', adminRoutes);
+appInstance.use('/api/admin/login-events', requireAdminAuth, loginEventsRoutes);
+appInstance.use('/api/admin', requireAdminAuth, adminRoutes);
 appInstance.use('/api/waitlist', waitlistRoutes);
 appInstance.use('/api/workbook', workbookRoutes);
 appInstance.use('/api/pinterest', pinterestRoutes);

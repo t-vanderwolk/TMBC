@@ -1,6 +1,6 @@
 import { Prisma, RegistryStatus } from '@prisma/client';
 
-import { prisma } from '../utils/prisma';
+import { prisma } from '../../prisma/client';
 import { buildAffiliateLink, buildAffiliateUrl } from './affiliate.service';
 import {
   MyRegistryResponse,

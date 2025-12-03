@@ -3,6 +3,8 @@
 import { ReactNode } from 'react';
 import { Store } from 'lucide-react';
 
+import CardPlaceholder from '@/components/ui/CardPlaceholder';
+
 import type { ProductSummary } from '@/types/registry';
 
 type ProductCardProps = {
@@ -24,11 +26,7 @@ export default function ProductCard({ product, action, footer }: ProductCardProp
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-tmBlush/40 bg-white/90 p-5 shadow-sm">
       <div className="flex items-center gap-4">
-        <img
-          src={product.imageUrl}
-          alt={product.name}
-          className="h-20 w-20 rounded-2xl border border-tmDust bg-white object-cover"
-        />
+        <CardPlaceholder className="h-20 w-20" style={{ minHeight: 0 }} />
         <div className="flex-1">
           <p className="text-xs uppercase tracking-[0.4em] text-tmMauve">{product.brand}</p>
           <h3 className="text-lg text-tmCharcoal">{product.name}</h3>

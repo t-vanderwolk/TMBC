@@ -1,10 +1,14 @@
+import type { AcademyModule as ApiAcademyModule } from '@/lib/academyClient';
+
 export type JourneyId = 'nursery' | 'gear' | 'postpartum';
 
 export type ModuleContent = {
-  explore: string;
-  lecture: string;
-  journalPrompt: string;
-  apply: string[];
+  explore: string | string[];
+  lecture?: string | string[];
+  lectureSlides?: string[];
+  journalPrompt?: string;
+  apply?: string[];
+  resources?: string[];
 };
 
 type RawAcademyModule = {
@@ -16,7 +20,8 @@ type RawAcademyModule = {
   registryFocus: string;
   estimatedMinutes: number;
   accentColor: string;
-  heroImage: string;
+  heroImage: string | null;
+  placeholder?: boolean;
   content: ModuleContent;
 };
 
@@ -25,6 +30,13 @@ export type AcademyModule = RawAcademyModule & {
   description: string;
   order: number;
 };
+
+const journeyOrder: JourneyId[] = ['nursery', 'gear', 'postpartum'];
+const defaultHeroImage = '/images/academy/placeholder.jpg';
+const defaultAccentColor = '#EAC9D1';
+
+const ensureJourney = (value?: string): JourneyId =>
+  journeyOrder.includes(value as JourneyId) ? (value as JourneyId) : 'nursery';
 
 export const journeyMeta: Record<JourneyId, { label: string; description: string }> = {
   nursery: {
@@ -53,7 +65,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Nursery Essentials",
     "estimatedMinutes": 35,
     "accentColor": "#EAC9D1",
-    "heroImage": "/images/academy/nursery-vision.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Every nursery begins with intention. This module helps parents translate emotions and lifestyle into a tangible nursery plan-balancing style, safety, and function.",
       "lecture": "Designing a nursery isn't about perfection-it's about presence. The earliest moments with your baby happen in this space, and every texture, sound, and light level plays a subtle role in how both of you feel. From the rhythm of nighttime feeds to morning stretches, this room is a microcosm of calm, connection, and care.\n\nWe begin with your sensory goals: Do you want the nursery to feel bright and energizing, or cocoon-like and tranquil? Research in environmental psychology shows that visual simplicity and soft light help reduce overstimulation for infants while supporting parent restfulness. Even your choice of color temperature (warm 2700K light over cool daylight bulbs) can shift the tone of late-night caregiving.\n\nFinally, we connect aesthetics to function. Safety rails, furniture spacing, and easy-reach zones prevent fatigue and create flow. When intention guides layout, the result is a sanctuary that adapts with your growing family-less a Pinterest project, more a living story.",
@@ -74,7 +87,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Furniture & Setup",
     "estimatedMinutes": 30,
     "accentColor": "#C8A1B4",
-    "heroImage": "/images/academy/nursery-core.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Beyond aesthetics-understanding how furniture supports caregiving.",
       "lecture": "Every piece of nursery furniture tells a story about your daily rhythm. The crib becomes the stage for rest, the dresser doubles as a changing station, and the chair anchors your feedings. Selecting these items through the lens of ergonomics and comfort prevents physical strain and emotional burnout. The more intuitive the flow, the more mental energy you preserve for connection.\n\nParent ergonomics are a design priority-your back, wrists, and posture matter as much as aesthetics. Opt for a changing setup where everything is within arm's reach. The average parent performs nearly 3,000 diaper changes in the first year; shaving seconds and steps from that routine adds up to real relief.\n\nFinally, think beyond the newborn stage. Modular furniture that converts as baby grows saves space and money. A dresser that transforms into a desk or a crib that becomes a toddler bed keeps your investment meaningful. Function is style when it grows with you.",
@@ -95,7 +109,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Lighting & Ambience",
     "estimatedMinutes": 28,
     "accentColor": "#D9C48E",
-    "heroImage": "/images/academy/nursery-lighting.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Light shapes sleep cycles and mood.",
       "lecture": "Newborns can't tell day from night, but your lighting can teach them. The human circadian rhythm depends on light intensity and warmth, and babies respond to these environmental cues long before they learn to crawl. Warm amber lighting during nighttime feeds signals rest, while soft daylight tones support wakeful play.\n\nBeyond function, lighting is emotional architecture. Dimmed sconces and blackout curtains don't just block brightness-they create an enveloping calm. Parents often underestimate how much soft light can soothe their own nervous systems after endless early-morning wakings.\n\nSmart lighting systems, timers, and simple plug-in dimmers all work wonders. The goal isn't tech-it's predictability. When light patterns remain consistent, the nursery becomes a cue for stability and peace.",
@@ -116,7 +131,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Safety & Monitoring",
     "estimatedMinutes": 26,
     "accentColor": "#FFFAF8",
-    "heroImage": "/images/academy/nursery-safety.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Serenity and safety coexist through intentional planning.",
       "lecture": "A serene space is one that feels secure. Parents often associate safety with stress-outlet covers, anchors, and long checklists-but safety can actually free you to relax once the groundwork is done.\n\nThis module integrates function and peace. You'll learn to evaluate non-toxic materials, VOC-free paints, and safe spacing between crib slats while also curating textures and colors that evoke comfort. The same wall anchor that prevents tipping furniture also supports your confidence; peace of mind is an aesthetic.\n\nWe'll also explore sensory serenity-limiting clutter, hiding cords, and choosing sound machines with decibel limits. A safe environment is not a sterile one; it's a calm one where every detail says, 'You can exhale.'",
@@ -137,7 +153,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Decor & Keepsakes",
     "estimatedMinutes": 24,
     "accentColor": "#C8A1B4",
-    "heroImage": "/images/academy/nursery-memory.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Every room tells a story-add touches that grow with baby.",
       "lecture": "Finishing a nursery means more than hanging décor-it's about marking identity. Whether it's a framed ultrasound photo or a handmade quilt, memory pieces remind you that this space celebrates a real family, not just a theme.\n\nTextures bring warmth: a woven rug softens hard floors, a linen curtain diffuses sunlight, and a cozy throw invites skin-to-skin moments. Select items that photograph beautifully but feel even better in use. Function meets sentiment when you create tactile memories.\n\nLastly, plan for change. Leave blank space-physical and emotional-for growth. That empty shelf today becomes tomorrow's art gallery of milestones. A nursery that evolves gracefully mirrors the way you'll grow as a parent.",
@@ -158,7 +175,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Storage & Organization",
     "estimatedMinutes": 28,
     "accentColor": "#D9C48E",
-    "heroImage": "/images/academy/nursery-organization.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Clutter-free space equals a clutter-free mind-for you and baby.",
       "lecture": "The nursery is more than décor-it's a living system. When bottles, burp cloths, and diapers each have a place, your body relaxes before you even realize why. Organization is an act of self-care disguised as interior design. Open shelving keeps daily essentials visible; labeled baskets turn chaos into choreography.\n\nThink like a night-shift parent: what will your half-asleep future self thank you for? A stocked drawer near the glider? Extra swaddles in arm's reach? Smart design anticipates your needs before they arise. You're building not just a room-but a routine.\n\nWe'll cover vertical storage, under-crib drawers, and modular cube systems. The goal is not Pinterest perfection-it's a rhythm that whispers, 'You've got this,' every time you step inside.",
@@ -179,7 +197,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Decor & Design",
     "estimatedMinutes": 30,
     "accentColor": "#EAC9D1",
-    "heroImage": "/images/academy/nursery-color.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Color and texture shape how your nursery feels more than any single product.",
       "lecture": "Science meets sentiment here. Studies show that warm neutrals and soft hues calm both infant heart rates and adult stress levels. While trends come and go, timeless tones like sage, blush, ivory, and sand feel safe to our nervous systems. Your palette should comfort, not compete.\n\nTexture deepens emotion-plush rugs, knit blankets, and woven baskets add sensory grounding. Babies explore through touch before sight, so diverse materials make their world feel rich and engaging. For parents, these layers add warmth and depth, softening the harder lines of furniture.\n\nThis is your invitation to design with emotion first. Ask: what colors feel like peace to you? What textures remind you of home? That's your true aesthetic guide-not an influencer's feed.",
@@ -200,7 +219,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Space Optimization",
     "estimatedMinutes": 29,
     "accentColor": "#C8A1B4",
-    "heroImage": "/images/academy/nursery-multipurpose.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Even the smallest nurseries can feel expansive when designed intentionally.",
       "lecture": "Tiny rooms build big creativity. Think beyond traditional layouts-floating cribs, fold-away changers, and dual-purpose dressers can transform a single corner into a caregiving command center. Multi-use furniture is the unsung hero of modern parenting.\n\nMirrors and vertical shelving expand perceived space, while lightweight curtains replace bulky closet doors for added airflow. The magic lies in minimalism-own less but choose better. Fewer, higher-quality items give you visual breathing room and emotional clarity.\n\nYour nursery should reflect your life, not a catalog. Whether you're in an apartment or a shared room, this module helps you design a space that feels intentional, flexible, and deeply personal.",
@@ -221,7 +241,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Atmosphere & Safety",
     "estimatedMinutes": 27,
     "accentColor": "#FFFAF8",
-    "heroImage": "/images/academy/nursery-airsound.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Invisible details-air, scent, and sound-have visible impact on baby wellness.",
       "lecture": "Air quality, gentle fragrance, and sound control are the unsung heroes of serenity. Babies breathe twice as fast as adults, making purifiers and non-toxic diffusers more than luxuries-they're health tools. Subtle scents like lavender or chamomile can cue calm when used sparingly and safely.\n\nSoundscapes matter too. Consistent low-frequency hums from white-noise machines mask unpredictable household sounds, creating a protective bubble of calm. Think of it as the modern womb-a steady rhythm your baby already knows by heart.\n\nThis module helps you identify simple swaps: cotton curtains that absorb noise, air-cleaning plants that are non-toxic, and humidity monitors that prevent dryness. Invisible comfort creates visible peace.",
@@ -242,7 +263,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Readiness & Setup",
     "estimatedMinutes": 35,
     "accentColor": "#D9C48E",
-    "heroImage": "/images/academy/nursery-prep.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "This final step ties your design, organization, and care systems together before baby's arrival.",
       "lecture": "By now your nursery is more than a room-it's an ecosystem. This final module walks you through a gentle pre-baby inspection: safety anchors tightened, swaddles washed, monitor synced, nightlight tested. You'll also learn time-saving habits for those hazy first weeks, like creating a rotating laundry bin or designating a midnight feeding station.\n\nEmotional readiness matters just as much as the physical checklist. Stand in the doorway, take a deep breath, and let your senses guide you-is it peaceful, functional, nurturing? If not, adjust lighting, layout, or scent until your body says yes.\n\nYour nursery doesn't need perfection-it needs presence. Every detail you've planned leads to this moment: a space where both you and baby can exhale together for the first time.",
@@ -263,7 +285,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Gear Foundations",
     "estimatedMinutes": 28,
     "accentColor": "#C8A1B4",
-    "heroImage": "/images/academy/gear-stroller.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Mobility equals freedom. In this masterclass, we demystify stroller categories so families can shop with confidence.",
       "lecture": "Covers travel systems, lightweight, jogging, and modular frames-highlighting fold mechanisms, terrain ratings, and car-seat compatibility. Parents learn how to evaluate size, storage, and ease of use, with a focus on real lifestyle alignment.\n\nWe'll unpack the differences between travel and everyday use, showing how small decisions-like wheel material or canopy length-can dramatically change daily convenience. Safety features like five-point harnesses, brake locks, and stability ratings are explained simply and visually.\n\nErgonomics, storage, and folding demos round out the experience, with mentor insights and MacroBaby affiliate products linked for immediate registry integration.",
@@ -284,7 +307,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "On-the-Go Safety",
     "estimatedMinutes": 30,
     "accentColor": "#D9C48E",
-    "heroImage": "/images/academy/gear-car-seat.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Safety meets practicality. This session builds confidence in selecting and installing a car seat.",
       "lecture": "We unpack NHTSA standards, seat types (infant, convertible, booster), expiration rules, and installation best practices. Demonstrations highlight common errors and easy prevention steps.\n\nParents learn about latch systems, recline indicators, and fit checks with certified technicians. The visual and written content blends practical training with emotional reassurance.\n\nBy the end, you'll know how to test a correct install, avoid counterfeit listings, and understand how to advocate confidently when carpooling or traveling.",
@@ -305,7 +329,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Babywearing Essentials",
     "estimatedMinutes": 25,
     "accentColor": "#EAC9D1",
-    "heroImage": "/images/academy/gear-carrier.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Baby-wearing blends freedom with bonding.",
       "lecture": "Carrying your baby close doesn't just keep your hands free-it nurtures oxytocin and confidence. Whether structured carriers, slings, or wraps, each choice shapes posture, comfort, and connection.\n\nWe break down the T.I.C.K.S. safety rule-Tight, In view, Close enough to kiss, Keep chin off chest, Supported back. Understanding these fundamentals ensures your baby's airway remains clear and your back remains strong.\n\nFinally, we explore lifestyle fit. Some parents prefer soft wraps for newborn snuggles, others structured carriers for errands. Think less about 'the best' and more about 'your best fit.' This isn't fashion; it's freedom.",
@@ -326,7 +351,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Feeding Essentials",
     "estimatedMinutes": 27,
     "accentColor": "#FFFAF8",
-    "heroImage": "/images/academy/gear-feeding.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Feeding evolves quickly-prepare tools for each phase.",
       "lecture": "Feeding gear is one of the most overwhelming product categories for new parents, but also the most rewarding once you understand your rhythm. This module covers bottle systems, sterilizers, pumps, and storage-all through the lens of convenience and emotional well-being.\n\nYou'll learn how design affects daily flow: angled bottles for gas prevention, pump flanges for comfort, and drying racks for hygiene. Efficiency creates peace; you deserve systems that save time for cuddles, not cleaning.\n\nFinally, we'll look ahead-how gear transitions from the newborn to toddler stage. Choosing convertible highchairs and dishwasher-safe gear supports longevity and reduces waste. Feeding tools should evolve just like your confidence does.",
@@ -347,7 +373,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Sleep & Comfort Gear",
     "estimatedMinutes": 26,
     "accentColor": "#C8A1B4",
-    "heroImage": "/images/academy/gear-sleep.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Rest is an ecosystem of rhythm, not routine.",
       "lecture": "Sleep success begins with setup. Bassinets, sound machines, and monitors create cues of consistency for baby-and relief for you. We'll explore safe-sleep standards and the psychology behind gentle conditioning, helping your baby learn comfort without rigid scheduling.\n\nThis module also explores sensory tools: the right swaddle fabric, ambient noise, and even scent cues can signal safety. Think of it as designing an environment that speaks 'rest' fluently.\n\nFinally, we normalize unpredictability. Good sleep isn't linear-it's relational. The best system is one that flexes with your baby's development while maintaining your sanity.",
@@ -368,7 +395,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Tech & Monitoring",
     "estimatedMinutes": 27,
     "accentColor": "#D9C48E",
-    "heroImage": "/images/academy/gear-tech.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Smart gear should make life easier, not busier.",
       "lecture": "Today's nursery tech has evolved far beyond the old walkie-talkie monitors. From wearable breathing sensors to cameras with cry detection, technology offers parents new levels of reassurance-but also new levels of overwhelm. This module helps you filter the hype from the helpful.\n\nWe'll compare basic audio monitors, Wi-Fi cameras, and hybrid systems, discussing what's essential versus optional for your lifestyle. You'll learn how to interpret data responsibly-because analytics can support you, but they should never create anxiety.\n\nFinally, we explore digital minimalism for families: setting phone-free hours, using automation wisely, and establishing healthy boundaries around monitoring. Peace of mind should feel like calm, not constant alerts.",
@@ -389,7 +417,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Travel & On-the-Go",
     "estimatedMinutes": 28,
     "accentColor": "#EAC9D1",
-    "heroImage": "/images/academy/gear-travel.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Parenthood doesn't cancel adventure-it redefines it.",
       "lecture": "Whether you're road-tripping to grandparents or jetting off for a baby-moon 2.0, portable gear is your new best friend. Travel systems, lightweight strollers, compact bassinets, and clip-on highchairs all keep life mobile without sacrificing comfort.\n\nThis module helps you curate your 'go-bag' system: what truly needs to travel, what can stay home, and what to rent when possible. We explore gear rental options like BabyQuip and teach you how to inspect hotel-supplied gear for safety before use.\n\nPacking light becomes an act of self-trust. You'll discover that simplicity-one stroller, one carrier, one well-organized bag-frees you to focus on moments, not logistics.",
@@ -410,7 +439,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Home Safety",
     "estimatedMinutes": 29,
     "accentColor": "#FFFAF8",
-    "heroImage": "/images/academy/gear-safety.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Safety doesn't mean stress-it means foresight.",
       "lecture": "Every new parent eventually has that moment: your baby starts to roll, crawl, or reach for the dog bowl, and suddenly the living room looks like an obstacle course. This module breaks down baby-proofing into calm, practical steps.\n\nWe start with the big three: falls, burns, and choking hazards. You'll learn how to audit your home visually-getting down on baby's level to see potential dangers through their eyes. From outlet covers to cabinet locks, we'll simplify what's truly needed versus what's over-marketed.\n\nThe final piece is emotional safety-building routines that model awareness rather than fear. A child raised in a thoughtfully prepared home learns curiosity and confidence, not caution alone.",
@@ -431,7 +461,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Development & Play",
     "estimatedMinutes": 26,
     "accentColor": "#C8A1B4",
-    "heroImage": "/images/academy/gear-play.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Play is a baby's first language-gear should support that conversation.",
       "lecture": "This module explores developmental play gear for the first 12 months: play gyms, sensory toys, activity mats, and seats. You'll learn how variety-not quantity-drives engagement. Babies don't need a toy store; they need experiences.\n\nWe cover the science of sensory stimulation, explaining how textures, contrast, and gentle motion help wire the brain for curiosity. We also highlight how overstimulation (too many lights or sounds) can backfire, turning excitement into exhaustion.\n\nFinally, we connect play to parent well-being. Play isn't just for baby's growth-it's your reminder to slow down, laugh, and marvel again.",
@@ -452,7 +483,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Gear Care",
     "estimatedMinutes": 25,
     "accentColor": "#D9C48E",
-    "heroImage": "/images/academy/gear-sustainability.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Good gear lasts longer-and helps future families too.",
       "lecture": "From strollers to swings, baby gear takes a beating. This module teaches you how to extend lifespan through proper cleaning, storage, and resale. We'll walk through non-toxic cleaners for fabrics, safe lubrication for stroller wheels, and best practices for gear sharing.\n\nYou'll also explore the emerging world of sustainable parenting-buy-back programs, donation networks, and second-life refurbishing. The goal is less waste, more wisdom.\n\nWhen you care for your gear, you care for your peace of mind. Every wipe-down and tune-up becomes an act of mindfulness and stewardship.",
@@ -473,7 +505,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Fourth Trimester Support",
     "estimatedMinutes": 26,
     "accentColor": "#FFFAF8",
-    "heroImage": "/images/academy/postpartum-placeholder.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Recovery is not a return to the old self-it's an evolution.",
       "lecture": "This lecture guides parents through physical recovery, body image changes, sleep deprivation cycles, and gentle movement. It introduces the 'Realistic Pre-Baby Body Map' exercise to promote awareness and self-compassion.\n\nWe discuss nutrition, hydration, and emotional wellness during healing. Gentle rebuilding practices like pelvic floor awareness and breathwork restore confidence in your body's resilience.\n\nAbove all, recovery is permission to slow down. Healing is progress, not perfection.",
@@ -494,7 +527,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Feeding Essentials",
     "estimatedMinutes": 32,
     "accentColor": "#C8A1B4",
-    "heroImage": "/images/academy/postpartum-placeholder.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Feeding is a relationship, not a task.",
       "lecture": "Covers breastfeeding positions, pump setup, formula preparation, storage safety, and emotional health during feeding transitions.\n\nWe explore latch troubleshooting, diet considerations for lactation, and compassionate support for mixed or exclusive formula feeding.\n\nThe tone emphasizes choice and confidence: a fed baby and a calm parent are equally vital measures of success.",
@@ -515,7 +549,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Wellness Tools",
     "estimatedMinutes": 25,
     "accentColor": "#EAC9D1",
-    "heroImage": "/images/academy/postpartum-placeholder.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Little rituals sustain new parents when big changes hit.",
       "lecture": "Self-care isn't indulgence-it's maintenance. Postpartum life brings sleep deprivation, fluctuating hormones, and identity shifts. This module introduces micro-rituals that rebuild steadiness: a warm tea ritual, a five-minute stretch, or journaling before bed.\n\nWe discuss habit stacking-pairing new behaviors with existing ones to make wellness effortless. For example, hydrating after every feeding becomes a built-in mindfulness cue.\n\nLastly, self-care is relational. Inviting your partner or support system into these rituals transforms them from chores to shared care. The goal isn't productivity-it's preservation.",
@@ -536,7 +571,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Emotional Wellness",
     "estimatedMinutes": 27,
     "accentColor": "#D9C48E",
-    "heroImage": "/images/academy/postpartum-placeholder.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Parenthood shifts partnerships and communication patterns.",
       "lecture": "Every birth story changes a love story. Partners move from romance to teamwork, and it takes conscious effort to stay connected. We explore emotional check-ins, gratitude habits, and redefining intimacy in the fog of sleep deprivation.\n\nYou'll learn how stress alters tone, patience, and empathy, and how small phrases-'What do you need most right now?'-can restore connection in seconds. Emotional literacy is a parenting skill, too.\n\nFinally, you'll identify shared values and distribute tasks using communication frameworks. Harmony isn't about equality of effort but balance of energy.",
@@ -557,7 +593,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Support Network",
     "estimatedMinutes": 24,
     "accentColor": "#C8A1B4",
-    "heroImage": "/images/academy/postpartum-placeholder.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "It takes a village-but you get to curate yours.",
       "lecture": "Support is medicine. This module helps you identify who energizes you versus who drains you. Building a postpartum network means assigning clear roles: who's the meal person, who's the listener, who's on standby for chores.\n\nWe'll explore professional layers of support-doulas, lactation consultants, peer mentors-and how to integrate them without overwhelm. Asking for help is a leadership skill, not a weakness.\n\nAnd finally, community is about reciprocity. Sharing your experience later keeps the circle alive for the next new parent. Today's support system becomes tomorrow's mentorship legacy.",
@@ -578,7 +615,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Wellness & Support",
     "estimatedMinutes": 32,
     "accentColor": "#EAC9D1",
-    "heroImage": "/images/academy/postpartum-mental.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Your mind deserves as much preparation as your nursery.",
       "lecture": "Postpartum emotions exist on a spectrum-from tender awe to total meltdown. This module creates space for all of it. We talk honestly about 'baby blues' versus postpartum depression and anxiety, not to alarm you, but to empower you. Awareness is preparation, not pessimism.\n\nYou'll learn early indicators that your nervous system might be overwhelmed-racing thoughts, detachment, or excessive guilt-and how to voice these without shame. We unpack why intrusive thoughts can appear and how they often signal hypervigilance, not danger.\n\nMost importantly, you'll leave with real strategies for support: identifying your go-to person, setting up a postpartum plan before birth, and creating gentle daily grounding practices. Emotional wellness isn't something you chase after-it's something you build now.",
@@ -599,7 +637,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Work & Routine",
     "estimatedMinutes": 30,
     "accentColor": "#D9C48E",
-    "heroImage": "/images/academy/postpartum-work.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Returning to work-or redefining it-can feel like learning a new language.",
       "lecture": "There's no such thing as 'getting back to normal.' Instead, you're integrating a new version of yourself into your professional rhythm. This module walks you through logistical and emotional prep: maternity leave planning, communication with your team, and honest conversations about capacity.\n\nWe discuss the myth of 'doing it all' and how boundaries actually enhance performance. Productivity now means protecting your energy, not proving your endurance. You'll also explore creative reintegration-transition days, hybrid setups, or redefining what success looks like post-baby.\n\nWe end with humor and grace: some days, your biggest win will be showering before noon. That counts.",
@@ -620,7 +659,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Personal Growth",
     "estimatedMinutes": 29,
     "accentColor": "#FFFAF8",
-    "heroImage": "/images/academy/postpartum-identity.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "There's no single 'right' way to parent-only your way.",
       "lecture": "Every new parent is bombarded with opinions-family, internet, strangers at Target. This module helps you develop a confident internal compass. We'll explore how intuition builds through small daily choices: how you soothe, how you feed, how you show up.\n\nYou'll learn to separate data from doubt-understanding what evidence-based parenting looks like without feeling pressured to follow every new trend. We reframe mistakes as discoveries, and comparison as the thief of joy.\n\nConfidence doesn't appear overnight; it accumulates through consistency and connection. You'll end this module realizing that no influencer or book knows your baby better than you.",
@@ -641,7 +681,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Family Coordination",
     "estimatedMinutes": 27,
     "accentColor": "#C8A1B4",
-    "heroImage": "/images/academy/postpartum-sleep.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Sleep deprivation doesn't have to equal survival mode.",
       "lecture": "This module reframes sleep from something you lose to something you manage as a team. We explore flexible nighttime schedules, tag-teaming feedings, and building realistic rest routines around your baby's cues rather than a strict clock.\n\nYou'll also learn how to communicate through exhaustion-avoiding the common trap of tallying who's more tired. Partners learn to shift from 'equal' to 'equitable' contribution: one handles dishes while the other naps, both win.\n\nWe wrap with science-backed rest hacks and humor (yes, the car-seat nap counts). The goal isn't perfection-it's preservation.",
@@ -662,7 +703,8 @@ const rawModules: RawAcademyModule[] = [
     "registryFocus": "Keepsakes & Reflection",
     "estimatedMinutes": 26,
     "accentColor": "#D9C48E",
-    "heroImage": "/images/academy/postpartum-letters.jpg",
+    "heroImage": null,
+    "placeholder": true,
     "content": {
       "explore": "Parenthood is a love story worth documenting.",
       "lecture": "In the quiet moments-late-night feeds, first smiles, or tiny kicks-your baby's story is being written. This final module invites you to pause and record it. We'll explore different ways to preserve your memories: digital journals, printed keepsake books, or voice memos.\n\nLetter writing becomes an act of grounding. Whether you write to your newborn, your future toddler, or your past self, the process reminds you that growth is happening on both sides of the crib.\n\nLegacy isn't about perfection-it's about presence. What matters is that your child will one day read these words and see how deeply loved they were before they even arrived.",
@@ -679,21 +721,70 @@ const rawModules: RawAcademyModule[] = [
 export const academyModules: AcademyModule[] = rawModules.map((module, index) => ({
   ...module,
   track: module.registryFocus,
-  description: module.content.explore,
+  description: Array.isArray(module.content.explore)
+    ? module.content.explore[0] ?? ''
+    : module.content.explore,
   order: index + 1,
 }));
 
-export const modulesByJourney = academyModules.reduce<
-  Record<JourneyId, AcademyModule[]>
->(
-  (acc, module) => {
-    acc[module.journey].push(module);
-    return acc;
-  },
-  { nursery: [], gear: [], postpartum: [] }
-);
+export const normalizeApiModule = (module: ApiAcademyModule): AcademyModule => {
+  const journey = ensureJourney(module.journey ?? module.trackId);
 
-Object.values(modulesByJourney).forEach((list) => list.sort((a, b) => a.order - b.order));
+  const explore =
+    typeof module.content.explore === 'string'
+      ? module.content.explore
+      : module.content.explore?.[0] ?? '';
+
+  const lecture =
+    module.content.lecture ??
+    module.content.lectureSlides ??
+    (Array.isArray(module.content.explore) ? module.content.explore : undefined);
+
+  return {
+    id: module.id,
+    journey,
+    title: module.title ?? 'Untitled Module',
+    subtitle: module.subtitle ?? module.description ?? '',
+    slug: module.slug ?? module.id,
+    registryFocus: module.registryFocus ?? module.track ?? 'Studio',
+    estimatedMinutes: module.estimatedMinutes ?? 20,
+    accentColor: module.accentColor ?? defaultAccentColor,
+    heroImage: module.heroImage ?? defaultHeroImage,
+    placeholder: module.placeholder,
+    content: {
+      explore: module.content.explore ?? explore,
+      lecture,
+      journalPrompt: module.content.journalPrompt ?? '',
+      apply: module.content.apply ?? [],
+      resources: module.content.resources ?? [],
+    },
+    track: module.track ?? module.trackId ?? journey,
+    description: module.description ?? explore,
+    order: module.order ?? 0,
+  };
+};
+
+export const fallbackModules: AcademyModule[] = academyModules;
+
+export const groupModulesByJourney = (modules: AcademyModule[]) => {
+  const map: Record<JourneyId, AcademyModule[]> = {
+    nursery: [],
+    gear: [],
+    postpartum: [],
+  };
+
+  modules.forEach((module) => {
+    const key = module.journey ?? 'nursery';
+    if (map[key]) {
+      map[key].push(module);
+    }
+  });
+
+  Object.values(map).forEach((list) => list.sort((a, b) => a.order - b.order));
+  return map;
+};
+
+export const modulesByJourney = groupModulesByJourney(fallbackModules);
 
 export const findModuleById = (moduleId: string) =>
   academyModules.find((module) => module.id === moduleId);

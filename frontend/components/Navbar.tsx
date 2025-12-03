@@ -31,7 +31,7 @@ const Navbar = () => {
             ))}
           </div>
           <div className="flex items-center gap-2 whitespace-nowrap">
-            <Link href="/requestinvite" className="btn-primary px-6 py-2 text-xs lg:text-sm">
+            <Link href="/request-invite" className="btn-primary px-6 py-2 text-xs lg:text-sm">
               Request Invite
             </Link>
             <Link href="/login" className="btn-secondary px-5 py-2 text-xs lg:text-sm">

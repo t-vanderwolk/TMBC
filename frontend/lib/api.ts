@@ -32,6 +32,25 @@ export const inviteApi = {
     api.post('/invite/consume', payload),
 };
 
+export const inviteFlowApi = {
+  requestInvite: (payload: {
+    name: string;
+    email: string;
+    city?: string;
+    dueDate?: string;
+    referral?: string;
+  }) => api.post('/invite/request', payload),
+  verifyInvite: (payload: { email: string; code: string }) => api.post('/invite/verify', payload),
+  createProfile: (payload: {
+    token: string;
+    password: string;
+    city?: string;
+    dueDate?: string;
+    partner?: string;
+    experience?: string;
+  }) => api.post('/invite/create-profile', payload),
+};
+
 export const waitlistApi = {
   join: (payload: { email: string; name?: string }) => api.post('/waitlist/join', payload),
 };

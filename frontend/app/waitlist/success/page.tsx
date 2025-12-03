@@ -16,7 +16,7 @@ const WaitlistSuccessPage = () => {
           <Link href="/" className="btn-primary">
             Return Home
           </Link>
-          <Link href="/requestinvite" className="btn-secondary text-center">
+          <Link href="/request-invite" className="btn-secondary text-center">
             Enter Invite Code
           </Link>
         </div>

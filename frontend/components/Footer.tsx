@@ -14,7 +14,7 @@ const Footer = () => {
         <div>
           <h3 className="font-serif text-lg text-tmCharcoal">Quick Links</h3>
           <ul className="mt-4 space-y-2 text-sm text-tmCharcoal/80">
-            {['/how-it-works', '/membership', '/blog', '/requestinvite'].map((link) => (
+            {['/how-it-works', '/membership', '/blog', '/request-invite'].map((link) => (
               <li key={link}>
                 <Link href={link} className="transition hover:text-tmMauve">
                   {link.replace('/', '').replace('-', ' ') || 'home'}

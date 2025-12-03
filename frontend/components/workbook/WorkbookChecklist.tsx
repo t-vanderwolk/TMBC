@@ -8,6 +8,7 @@ type WorkbookChecklistProps = {
   items: ChecklistItem[];
   onAdd: (text: string) => void;
   onToggle: (id: string) => void;
+  onComplete?: () => void;
   onRemove: (id: string) => void;
   status: SaveStatus;
 };
@@ -19,7 +20,7 @@ const statusCopy: Record<SaveStatus, string> = {
   error: 'Unable to save',
 };
 
-const WorkbookChecklist = ({ items, onAdd, onToggle, onRemove, status }: WorkbookChecklistProps) => {
+const WorkbookChecklist = ({ items, onAdd, onToggle, onComplete, onRemove, status }: WorkbookChecklistProps) => {
   const [draft, setDraft] = useState('');
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -27,6 +28,13 @@ const WorkbookChecklist = ({ items, onAdd, onToggle, onRemove, status }: Workboo
     if (!draft.trim()) return;
     onAdd(draft.trim());
     setDraft('');
+  };
+
+  const handleToggle = (item: ChecklistItem) => {
+    onToggle(item.id);
+    if (!item.completed) {
+      onComplete?.();
+    }
   };
 
   return (
@@ -40,17 +48,17 @@ const WorkbookChecklist = ({ items, onAdd, onToggle, onRemove, status }: Workboo
       </div>
       <div className="space-y-3">
         {items.map((item) => (
-          <label
-            key={item.id}
-            className="flex items-center justify-between rounded-[30px] border border-[var(--tm-blush)] bg-white/80 px-4 py-3 text-sm text-[var(--tm-charcoal)]"
-          >
-            <div className="flex items-center gap-3">
-              <input
-                type="checkbox"
-                checked={item.completed}
-                onChange={() => onToggle(item.id)}
-                className="h-4 w-4 rounded border-[var(--tm-deep-mauve)] text-[var(--tm-deep-mauve)] focus:ring-[var(--tm-deep-mauve)]"
-              />
+            <label
+              key={item.id}
+              className="flex items-center justify-between rounded-[30px] border border-[var(--tm-blush)] bg-white/80 px-4 py-3 text-sm text-[var(--tm-charcoal)]"
+            >
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={item.completed}
+                  onChange={() => handleToggle(item)}
+                  className="h-4 w-4 rounded border-[var(--tm-deep-mauve)] text-[var(--tm-deep-mauve)] focus:ring-[var(--tm-deep-mauve)]"
+                />
               <span className={item.completed ? 'line-through text-[var(--tm-charcoal)]/60' : ''}>{item.text}</span>
             </div>
             <button

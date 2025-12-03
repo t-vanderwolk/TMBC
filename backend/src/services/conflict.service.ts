@@ -1,6 +1,6 @@
 import { Prisma, RegistryStatus } from '@prisma/client';
 
-import { prisma } from '../utils/prisma';
+import { prisma } from '../../prisma/client';
 
 export type ConflictField = 'quantity' | 'status' | 'customNote' | 'affiliateUrl';
 

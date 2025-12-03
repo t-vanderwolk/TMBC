@@ -2,6 +2,8 @@
 
 import { DollarSign, CheckCircle2, Trash2, RefreshCcw } from "lucide-react";
 
+import CardPlaceholder from "@/components/ui/CardPlaceholder";
+
 export type MyRegistryItem = {
   ItemID: string;
   RegistryId?: string;
@@ -35,11 +37,7 @@ export default function RegistryItemCard({
   return (
     <article className="flex h-full flex-col rounded-3xl border border-tmDust bg-white/90 p-5 shadow-soft">
       <div className="rounded-2xl border border-tmDust/70 bg-tmAsh/10 p-2">
-        <img
-          src={item.ImageUrl || "https://via.placeholder.com/400x300?text=Registry+Item"}
-          alt={item.Title ?? "Registry item image"}
-          className="h-48 w-full object-cover rounded-2xl"
-        />
+        <CardPlaceholder className="h-48 w-full rounded-2xl" />
       </div>
       <div className="mt-4 flex flex-1 flex-col gap-3">
         <div>

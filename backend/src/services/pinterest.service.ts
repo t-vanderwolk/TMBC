@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { prisma } from '../utils/prisma';
+import { prisma } from '../../prisma/client';
 
 const ensurePinterestConfig = () => {
   const clientId = process.env.PINTEREST_CLIENT_ID;
@@ -39,6 +39,28 @@ export type PinterestPinPayload = {
   title?: string;
   link?: string;
   boardId?: string;
+};
+
+export type PinterestBoard = {
+  id: string;
+  name: string;
+  description?: string | null;
+  privacy?: string | null;
+  cover_image?: {
+    url?: string | null;
+  };
+};
+
+export type PinterestPin = {
+  id: string;
+  title?: string | null;
+  description?: string | null;
+  note?: string | null;
+  link?: string | null;
+  media?: {
+    images?: Record<string, { url: string }>;
+  };
+  domain?: string | null;
 };
 
 export const getPinterestAuthUrl = (userId: string) => {
@@ -115,6 +137,14 @@ export const getStoredPinterestToken = async (userId: string): Promise<Pinterest
   };
 };
 
+export const getPinterestAccessToken = async (userId: string): Promise<string> => {
+  const token = await getStoredPinterestToken(userId);
+  if (!token?.accessToken) {
+    throw new Error('Pinterest credentials missing or expired');
+  }
+  return token.accessToken;
+};
+
 export const createPinterestPin = async (userId: string, payload: PinterestPinPayload) => {
   const token = await getStoredPinterestToken(userId);
   if (!token) {
@@ -153,3 +183,17 @@ export const createPinterestPin = async (userId: string, payload: PinterestPinPa
 export const decodePinterestState = (state: string | undefined) => {
   return parseState(state);
 };
+
+export async function fetchUserBoards(token: string): Promise<PinterestBoard[]> {
+  const res = await axios.get('https://api.pinterest.com/v5/boards', {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data.items ?? [];
+}
+
+export async function fetchBoardPins(token: string, boardId: string): Promise<PinterestPin[]> {
+  const res = await axios.get(`https://api.pinterest.com/v5/boards/${boardId}/pins`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data.items ?? [];
+}

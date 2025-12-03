@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { BookOpen, Clock, Layers } from 'lucide-react';
 
 import { api } from '@/lib/api';
-import { academyModules } from '../learn/modules';
+import { fallbackModules } from '../learn/modules';
 
 type ModuleProgress = {
   id: string;
@@ -14,7 +14,7 @@ type ModuleProgress = {
   status: 'Not started' | 'In progress' | 'Complete';
 };
 
-const fallbackModules: ModuleProgress[] = academyModules.slice(0, 12).map((module, index) => ({
+const fallbackModulesProgress: ModuleProgress[] = fallbackModules.slice(0, 12).map((module, index) => ({
   id: module.id,
   title: module.title,
   journey: module.journey,
@@ -23,7 +23,7 @@ const fallbackModules: ModuleProgress[] = academyModules.slice(0, 12).map((modul
 }));
 
 export default function AcademyPage() {
-  const [modules, setModules] = useState<ModuleProgress[]>(fallbackModules);
+  const [modules, setModules] = useState<ModuleProgress[]>(fallbackModulesProgress);
 
   useEffect(() => {
     const fetchModules = async () => {

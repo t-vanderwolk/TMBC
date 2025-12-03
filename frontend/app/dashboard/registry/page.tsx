@@ -260,7 +260,7 @@ export default function RegistryDashboardPage() {
         </button>
         <p className="text-xs text-tmCharcoal/60">
           Already have an invite? Paste the code in the signup URL (&nbsp;
-          <Link href="/requestinvite" className="text-tmMauve underline">
+          <Link href="/request-invite" className="text-tmMauve underline">
             request invite
           </Link>
           &nbsp;).

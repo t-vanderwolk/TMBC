@@ -1,9 +1,8 @@
 {
-  "/not-found": "app/not-found.js",
-  "/login/page": "app/login/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/blog/[slug]/page": "app/blog/[slug]/page.js",
-  "/dashboard/mentor/page": "app/dashboard/mentor/page.js",
-  "/dashboard/admin/page": "app/dashboard/admin/page.js",
-  "/dashboard/learn/[moduleId]/page": "app/dashboard/learn/[moduleId]/page.js"
+  "/dashboard/learn/[moduleId]/page": "app/dashboard/learn/[moduleId]/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/learn/page": "app/dashboard/learn/page.js",
+  "/(marketing)/login/page": "app/(marketing)/login/page.js",
+  "/(marketing)/how-it-works/page": "app/(marketing)/how-it-works/page.js",
+  "/(marketing)/membership/page": "app/(marketing)/membership/page.js"
 }

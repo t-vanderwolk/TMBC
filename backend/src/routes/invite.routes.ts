@@ -1,25 +1,17 @@
 import { Router } from 'express';
 
 import {
-  consume,
-  generate,
-  listInvites,
-  sendInvite,
-  validate,
-} from '../controllers/invite.controller';
-import { requireAuth, requireRole } from '../middleware/authMiddleware';
+  submitInviteRequest,
+  adminApproveInvite,
+  verifyInviteCode,
+  createInvitedUser,
+} from '../controllers/inviteRequest.controller';
 
 const router = Router();
 
-router.post(
-  '/generate',
-  requireAuth,
-  requireRole('mentor'),
-  generate,
-);
-router.get('/list', requireAuth, requireRole('admin'), listInvites);
-router.post('/send', requireAuth, requireRole('admin'), sendInvite);
-router.post('/validate', validate);
-router.post('/consume', consume);
+router.post('/request', submitInviteRequest);
+router.post('/approve', adminApproveInvite);
+router.post('/verify', verifyInviteCode);
+router.post('/create-user', createInvitedUser);
 
 export default router;

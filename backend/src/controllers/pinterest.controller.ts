@@ -4,7 +4,11 @@ import {
   createPinterestPin,
   decodePinterestState,
   exchangePinterestCode,
+  fetchBoardPins,
+  fetchUserBoards,
+  getPinterestAccessToken,
   getPinterestAuthUrl,
+  getStoredPinterestToken,
   storePinterestToken,
   type PinterestPinPayload,
 } from '../services/pinterest.service';
@@ -63,5 +67,57 @@ export const savePinController = async (req: Request, res: Response) => {
     return res.json(pin);
   } catch (error: any) {
     return res.status(500).json({ error: error?.message || 'Unable to save pin' });
+  }
+};
+
+export const fetchPinterestBoardsController = async (req: Request, res: Response) => {
+  const userId = getUserIdFromRequest(req);
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    const accessToken = await getPinterestAccessToken(userId);
+    const boards = await fetchUserBoards(accessToken);
+    return res.json({ boards });
+  } catch (error: any) {
+    return res.status(500).json({ error: error?.message || 'Unable to fetch Pinterest boards' });
+  }
+};
+
+export const fetchPinterestBoardPinsController = async (req: Request, res: Response) => {
+  const userId = getUserIdFromRequest(req);
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const boardId = typeof req.params.boardId === 'string' ? req.params.boardId : undefined;
+  if (!boardId) {
+    return res.status(400).json({ error: 'Board id is required' });
+  }
+
+  try {
+    const accessToken = await getPinterestAccessToken(userId);
+    const pins = await fetchBoardPins(accessToken, boardId);
+    return res.json({ pins });
+  } catch (error: any) {
+    return res.status(500).json({ error: error?.message || 'Unable to fetch Pinterest pins' });
+  }
+};
+
+export const getPinterestStatusController = async (req: Request, res: Response) => {
+  const userId = getUserIdFromRequest(req);
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    const token = await getStoredPinterestToken(userId);
+    return res.json({
+      connected: Boolean(token?.accessToken),
+      expiresAt: token?.expiresAt ?? null,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ error: error?.message || 'Unable to determine Pinterest status' });
   }
 };

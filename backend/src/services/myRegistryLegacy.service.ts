@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import { Prisma, RegistryStatus } from '@prisma/client';
 
-import { prisma } from '../utils/prisma';
+import { prisma } from '../../prisma/client';
 import { buildAffiliateUrl } from './affiliate.service';
 import { ConflictRecordInput, recordConflicts, clearConflict, listActiveConflicts } from './conflict.service';
 

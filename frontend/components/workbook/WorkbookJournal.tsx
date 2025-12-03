@@ -1,5 +1,6 @@
 'use client';
 
+import { AnimatePresence, motion } from 'framer-motion';
 import type { SaveStatus } from '../../hooks/useWorkbook';
 
 type WorkbookJournalProps = {
@@ -17,7 +18,7 @@ const statusCopy: Record<SaveStatus, string> = {
 };
 
 const WorkbookJournal = ({ value, onChange, status, disabled }: WorkbookJournalProps) => (
-  <section className="tm-editorial-card tm-paper-texture space-y-4">
+  <section className="tm-editorial-card tm-paper-texture space-y-4 relative overflow-hidden">
     <div className="flex items-center justify-between">
       <div>
         <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Workbook journal</p>
@@ -25,6 +26,19 @@ const WorkbookJournal = ({ value, onChange, status, disabled }: WorkbookJournalP
       </div>
       <span className="text-[0.6rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Mentor visibility on</span>
     </div>
+    <AnimatePresence>
+      {status === 'saved' && (
+        <motion.div
+          className="absolute right-6 top-4 rounded-[20px] border border-[var(--tm-gold)] bg-[var(--tm-gold)]/20 px-4 py-1 text-[0.7rem] font-semibold text-[var(--tm-gold)] shadow-lg"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.35 }}
+        >
+          ✨ Saved with love
+        </motion.div>
+      )}
+    </AnimatePresence>
     <textarea
       value={value}
       onChange={(event) => onChange(event.target.value)}

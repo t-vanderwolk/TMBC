@@ -1,6 +1,6 @@
 import { Product } from '@prisma/client';
 
-import { prisma } from '../utils/prisma';
+import { prisma } from '../../prisma/client';
 
 export type ProductResponse = {
   id: string;

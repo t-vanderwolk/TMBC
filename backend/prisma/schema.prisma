@@ -19,8 +19,10 @@ model User {
   password       String
   name           String?
   role           Role     @default(MEMBER)
+  disabled       Boolean  @default(false)
   invites        Invite[] @relation("CreatedInvites")
   consumedInvite Invite?  @relation("ConsumedInvite")
+  approvedInvites InviteRequest[] @relation("InviteApprover")
   registryItems  RegistryItem[]
   registryConflicts RegistryConflict[]
   mentorNotesAuthored MentorNote[] @relation("MentorNotesAuthored")
@@ -44,8 +46,40 @@ model User {
   mentorTasksMentor MentorTask[] @relation("MentorTasksMentor")
   mentorTasksMember MentorTask[] @relation("MentorTasksMember")
   workbookEntries WorkbookEntry[]
+  hostedEvents     Event[] @relation("HostedEvents")
+  profile          Profile?
+  loginEvents      LoginEvent[]
 }
 
+model LoginEvent {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  email     String
+  role      Role?
+  success   Boolean
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}
+
+model Profile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  inviteRequestId String?  @unique
+
+  firstName       String?
+  lastName        String?
+  dueDate         DateTime?
+  city            String?
+  state           String?
+
+  user           User           @relation(fields: [userId], references: [id])
+  inviteRequest  InviteRequest? @relation(fields: [inviteRequestId], references: [id])
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
 model Invite {
   id          String   @id @default(cuid())
   code        String   @unique
@@ -69,6 +103,24 @@ model Waitlist {
   name      String?
   status    String   @default("pending")
   createdAt DateTime @default(now())
+}
+
+model InviteRequest {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  firstName     String?
+  lastName      String?
+  message       String?
+  status        String   @default("pending")
+  inviteCode    String?  @unique
+
+  approvedById  String?
+  approvedBy    User?    @relation("InviteApprover", fields: [approvedById], references: [id])
+
+  profile       Profile?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 enum RegistryStatus {
@@ -146,13 +198,57 @@ model MentorNote {
 model AcademyModule {
   id          String   @id
   title       String
-  trackId     String?
+  subtitle    String?
   description String?
+  heroImage   String?
+  content     Json     @default("{}")
+  trackId     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  mentorFeedback MentorFeedback[]
   workbookEntries WorkbookEntry[]
+  mentorFeedback  MentorFeedback[]
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  type        String?
+  format      String?
+  hostId      String?
+  hostName    String?
+  status      String      @default("scheduled")
+  location    String?
+  description String?
+  startTime   DateTime
+  endTime     DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  host   User?       @relation("HostedEvents", fields: [hostId], references: [id])
+  rsvps  EventRsvp[]
+}
+
+model EventRsvp {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String?
+  status    String   @default("confirmed")
+  createdAt DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id])
+}
+
+model AdminSettings {
+  id                  Int      @id @default(1)
+  inviteOnly          Boolean  @default(true)
+  defaultMentorId     String?
+  pinterestClientId   String?
+  pinterestSecret     String?
+  myRegistryMerchantId String?
+  affiliateNetwork    String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 model MentorFeedback {

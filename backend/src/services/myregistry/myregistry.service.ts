@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 
 const BASE_URL = "https://api.myregistry.com/RegistryApi/1/0/json/";
 
@@ -32,12 +32,14 @@ const handleError = (error: unknown): never => {
     throw {
       status: error.response?.status ?? 500,
       message: error.response?.data ?? error.message,
+      details: error.response?.data,
     };
   }
 
   throw {
     status: 500,
     message: error instanceof Error ? error.message : "Unknown MyRegistry error",
+    details: error,
   };
 };
 

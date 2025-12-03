@@ -1,6 +1,6 @@
 import { Waitlist } from '@prisma/client';
 
-import { prisma } from '../utils/prisma';
+import { prisma } from '../../prisma/client';
 
 interface JoinPayload {
   email: string;

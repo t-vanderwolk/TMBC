@@ -1,6 +1,6 @@
 import { Prisma, WorkbookEntry, WorkbookEntryType } from '@prisma/client';
 
-import { prisma } from '../utils/prisma';
+import { prisma } from '../../prisma/client';
 
 export type WorkbookEntrySectionType = 'journal' | 'moodboard' | 'checklist' | 'reflection';
 

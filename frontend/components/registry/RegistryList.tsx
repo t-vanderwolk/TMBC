@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Gift, Link2 } from 'lucide-react';
 
+import CardPlaceholder from '@/components/ui/CardPlaceholder';
+
 import type { RegistryItem } from '@/types/registry';
 
 import MentorNotes from './MentorNotes';
@@ -82,11 +84,7 @@ const RegistryListItem = ({
     <div className="space-y-5 rounded-3xl border border-tmBlush/40 bg-white/95 p-5 shadow-sm">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-1 items-center gap-4">
-          <img
-            src={item.product.imageUrl}
-            alt={item.product.name}
-            className="h-20 w-20 rounded-2xl border border-tmDust bg-white object-cover"
-          />
+          <CardPlaceholder className="h-20 w-20" style={{ minHeight: 0 }} />
           <div>
             <div className="flex items-center gap-2">
               <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">{item.product.brand}</p>

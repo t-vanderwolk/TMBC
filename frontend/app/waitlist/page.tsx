@@ -24,7 +24,7 @@ const WaitlistPage = () => {
           <div className="rounded-3xl border border-tmDust bg-white/70 p-6 text-left">
             <h2 className="text-2xl">Need a code?</h2>
             <p className="mt-2">Already have a code? Validate it instantly.</p>
-            <Link href="/requestinvite" className="btn-primary mt-4 inline-block">
+            <Link href="/request-invite" className="btn-primary mt-4 inline-block">
               Return to Invite Page
             </Link>
           </div>

@@ -2,7 +2,7 @@ export type BlogPost = {
   slug: string;
   title: string;
   description: string;
-  heroImage: string;
+  heroImage: string | null;
   date: string;
   tags: string[];
   readTime: string;
@@ -16,7 +16,7 @@ export const blogPosts: BlogPost[] = [
     title: 'Best Strollers of 2025: Taylor-Made Baby Co. Expert Breakdown',
     description:
       'Choosing a stroller in 2025? Our CPST-guided breakdown covers the best models for lifestyle, safety, travel, terrains, twins, and budgets.',
-    heroImage: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+    heroImage: null,
     date: '2024-03-05',
     tags: ['Gear', 'Strollers', 'Registry'],
     readTime: '8 min read',
@@ -107,14 +107,14 @@ Mid-range price, high-end feel.
 
 You don’t need the fanciest model—you need the one tailored to your terrain, car trunk, doorway, and daily rhythm. Inside the Taylor-Made Baby Academy we map gear to lifestyle, budget, and upcoming milestones.
 
-> ✨ Want personalized stroller guidance? **[Request an Invite](https://www.taylormadebaby.co/requestinvite)** and meet your mentor.`,
+    > ✨ Want personalized stroller guidance? **[Request an Invite](https://www.taylormadebaby.co/request-invite)** and meet your mentor.`,
   },
   {
     slug: 'car-seat-safety-101',
     title: 'Car Seat Safety 101: CPST-Guided Tips Every Parent Should Know',
     description:
       'A CPST-guided crash course covering installation, harnessing, rear-facing timelines, travel rules, and the most common mistakes parents make.',
-    heroImage: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=80',
+    heroImage: null,
     date: '2024-02-26',
     tags: ['Safety', 'Car Seats', 'CPST'],
     readTime: '7 min read',
@@ -165,14 +165,14 @@ Practice in a rental-style vehicle before the actual trip.
 
 Virtual or in-person, our Taylor-Made mentors double-check harness height, tether routing, recline indicators, and chest clip placement.
 
-> ✨ Want a CPST to check your install? **[Request an Invite](https://www.taylormadebaby.co/requestinvite)** and we’ll walk you through it.`,
+    > ✨ Want a CPST to check your install? **[Request an Invite](https://www.taylormadebaby.co/request-invite)** and we’ll walk you through it.`,
   },
   {
     slug: 'newborn-essentials-checklist',
     title: 'Newborn Essentials Checklist — What You Actually Need',
     description:
       'Lean into curated basics so your first weeks at home feel calm, cozy, and clutter-free.',
-    heroImage: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80',
+    heroImage: null,
     date: '2024-02-10',
     tags: ['Newborn', 'Checklist', 'Postpartum'],
     readTime: '6 min read',
@@ -195,7 +195,7 @@ Create a small tray with postpartum care items (peri bottles, herbal sprays, com
     title: 'How to Build a Stress-Free Baby Registry',
     description:
       'Our concierge team shows you how to align your registry with your rituals, not trends.',
-    heroImage: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1200&q=80',
+    heroImage: null,
     date: '2024-02-01',
     tags: ['Registry', 'Planning', 'Concierge'],
     readTime: '9 min read',
@@ -213,7 +213,7 @@ Book a mentor call before publishing your registry publicly. We’ll trim duplic
     title: 'Nursery Trends 2025 — What’s In, What’s Out',
     description:
       'From statement lighting to wellness tech, here’s how mentors are styling nurseries for 2025.',
-    heroImage: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=1200&q=80',
+    heroImage: null,
     date: '2024-01-20',
     tags: ['Nursery', 'Design', 'Trends'],
     readTime: '5 min read',
@@ -234,7 +234,7 @@ Smart humidifiers and air quality monitors integrate with concierge dashboards f
     title: 'Traveling With Baby — Gear Recommendations from the Pros',
     description:
       'Make flights, road trips, and hotel stays feel like a curated retreat with these TMBC-tested picks.',
-    heroImage: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80',
+    heroImage: null,
     date: '2024-01-10',
     tags: ['Travel', 'Gear', 'Family'],
     readTime: '7 min read',
@@ -257,7 +257,7 @@ Upload your itinerary and we’ll annotate with vendor contacts, nanny services,
     title: 'Baby Gear Mistakes We See Every Day (And How to Avoid Them)',
     description:
       'Skip the overwhelm with this curated list of avoidable gear mishaps straight from our mentor inbox.',
-    heroImage: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=1200&q=80',
+    heroImage: null,
     date: '2023-12-28',
     tags: ['Gear', 'Mentor Tips'],
     readTime: '6 min read',
@@ -278,7 +278,7 @@ Schedule onboarding sessions for pumps, carriers, or monitors so you’re not tr
     title: 'Choosing the Right Stroller: Lifestyle-Based Guide',
     description:
       'Match your stroller to your day-to-day—city, suburb, or global jet-setter.',
-    heroImage: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=80',
+    heroImage: null,
     date: '2023-12-10',
     tags: ['Strollers', 'Lifestyle'],
     readTime: '5 min read',
@@ -300,7 +300,7 @@ Prioritize quick folds, padded travel bags, and airline-friendly weight limits.`
   description:
     'Your warm, witty, mentor-guided comparison of the Nuna SENA, PAAL, and COVE—helping you choose the right sleep + play setup for your home and travel life.',
   heroImage:
-    'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80',
+    null,
   date: '2024-03-10',
   tags: ['Gear', 'Sleep', 'Travel', 'Nuna'],
   readTime: '8 min read',
@@ -418,7 +418,7 @@ Whatever Nuna you choose, know this: you’re choosing a product line that gets 
   description:
     'A warm, mentor-guided breakdown of all the major newborn and infant sleep solutions—bedside bassinets, pack & plays, cribs, mini cribs, and the category of automatic bassinets.',
   heroImage:
-    'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80',
+    null,
   date: '2024-03-12',
   tags: ['Sleep', 'Newborn', 'Gear', 'Nursery'],
   readTime: '9 min read',
@@ -618,7 +618,7 @@ If you want help mapping your bedroom, comparing products, or building a sleep p
   description:
     'A warm, mentor-guided breakdown of bottle materials, anti-colic systems, nipple shapes, sizes, materials, and how to choose the right setup for your baby.',
   heroImage:
-    'https://images.unsplash.com/photo-1572947650440-e8a97ef053b0?auto=format&fit=crop&w=1200&q=80',
+    null,
   date: '2024-03-14',
   tags: ['Feeding', 'Newborn', 'Gear', 'Bottles'],
   readTime: '10 min read',
@@ -875,4 +875,243 @@ If you want help choosing bottles based on your feeding plan, latch goals, pumpi
 
 ✨ **Learn · Plan · Connect — the Taylor-Made way.** ✨`,
 },
+{
+  slug: 'bringing-baby-home-with-animals',
+  title: 'Bringing Baby Home to a House With Animals — A Taylor-Made Guide to Safety, Harmony & Happy Tails',
+  description:
+    'Your mentor-guided roadmap for introducing your baby to pets safely, calmly, and confidently — featuring prep steps, first-introduction guidance, and long-term household harmony.',
+  heroImage:
+    null,
+  date: '2024-03-16',
+  tags: ['Family', 'Postpartum', 'Pets', 'Safety'],
+  readTime: '8 min read',
+  author: 'Taylor-Made Baby Co. Mentors',
+  content: `# Bringing Baby Home to a House With Animals  
+### A Taylor-Made Guide to Safety, Harmony & Happy Tails
+
+If you’re a pet parent *and* about to become a baby parent, you’re essentially running a blended family… with members who bark, shed, steal socks, and assume every package is for them.
+
+The beautiful truth?  
+Pets and babies can thrive together — safely, calmly, and with a lot of sweetness — when the transition is done intentionally.
+
+This is your mentor-crafted, real-world guide to preparing your pets, introducing them to your baby, and building a peaceful long-term bond.
+
+---
+
+# 1. Before Baby Arrives: Set the Stage
+
+Your pets don’t need a lecture on child development.  
+They *do* need gradual, predictable changes.
+
+## ✓ Start scent + sound exposure early  
+Play baby sounds softly: coos, cries, white noise.  
+Let pets hear it without making it dramatic.
+
+Bring home baby-scented items — lotions, diapers, blankets — and let pets sniff calmly.
+
+## ✓ Prep new “no-go” zones  
+Before baby arrives, establish boundaries around:  
+- the bassinet  
+- nursery  
+- play mats  
+- tummy time areas  
+- changing stations  
+- swings/bouncers  
+
+Use baby gates or closed doors early so the change isn’t sudden.
+
+## ✓ Adjust routines slowly  
+If walks, meals, or cuddle time will shift once baby arrives, adjust them now over several weeks.
+
+## ✓ Practice gentle desensitization  
+Babies *grab*.  
+Introduce gentle paw, ear, and tail handling with lots of treats so your pet associates touch with positivity.
+
+---
+
+# 2. The First Introduction: Calm, Controlled & Not a Photoshoot
+
+The introduction should be **safe, structured, and short**.
+
+## ✓ Let adults settle in first  
+Let your pets sniff you, your bags, and baby gear before they meet baby.
+
+## ✓ Choose a neutral, calm space  
+Avoid tight corners or highly territorial areas.
+
+## ✓ One adult handles baby, one handles the pet  
+Everyone gets reassurance and structure.
+
+## ✓ Start with scent only  
+Offer a baby hat, blanket, or burp cloth for a calm sniff.
+
+## ✓ Then allow a slow, supervised approach  
+Hold baby securely.  
+Keep pets leashed or behind a gate at first if needed.
+
+> *Pets should never initiate face-to-face contact — you invite them.*
+
+## ✓ Keep it short  
+10–20 seconds is plenty on day one.
+
+## ✓ Reward calm behavior generously  
+Praise + treats = positive associations.
+
+---
+
+# 3. Long-Term Safety: Where Daily Habits Matter
+
+Your pet’s comfort is just as important as your baby’s safety.
+
+## ✓ Strict supervision  
+Even the gentlest pet should never be left alone with a baby — not for 10 seconds.
+
+## ✓ Protect pet “safe zones”  
+Give your pet dedicated, baby-free spaces:
+- a bed or crate  
+- a corner of a room  
+- high perches or shelves for cats  
+
+Respect flows both ways.
+
+## ✓ Let pets observe new baby stages safely  
+Babies become rolling potatoes → crawling tornadoes.  
+Expose pets gradually with supervision and treats.
+
+## ✓ Teach “gentle hands” early  
+Hand-over-hand petting  
+Redirection  
+Praise for softness  
+
+## ✓ Train key cues  
+- “Leave it”  
+- “Back up”  
+- “Go to your bed”  
+- “Wait”  
+
+These prevent 90% of issues.
+
+## ✓ Keep feeding and toy time separate  
+Food guarding and choking hazards are real.  
+Use gates or separate feeding spaces.
+
+---
+
+# 4. Tips by Pet Type
+
+## Dogs  
+- Reinforce calm greetings  
+- Protect tails from curious tiny hands  
+- Be mindful with herding or guarding breeds  
+- Keep routines consistent
+
+## Cats  
+- Offer high, quiet perches  
+- Use Feliway for tough transitions  
+- Keep crib off-limits  
+- Supervise interactions closely
+
+## Small animals (rabbits, rodents, reptiles)  
+- Keep enclosures secure  
+- Maintain quiet spaces  
+- Teach “look, don’t touch” for years
+
+---
+
+# 5. What *Not* to Do
+
+🚫 Do NOT force the pet to “kiss the baby”  
+🚫 Do NOT let baby grab fur, ears, tails  
+🚫 Do NOT punish growling — it’s healthy communication  
+🚫 Do NOT introduce during peak excitement  
+🚫 Do NOT assume past gentleness = guaranteed safety  
+
+A growl is a gift.  
+It prevents bites.
+
+---
+
+# 6. Building a Lifelong Bond
+
+With patience and structure, pets and babies grow into:  
+- snuggle buddies  
+- snack-sharing partners  
+- backyard explorers  
+- protectors  
+- future best friends  
+
+It’s a beautiful relationship worth nurturing.
+
+---
+
+# Final Taylor-Made Thoughts
+
+Bringing a baby into a home with animals isn’t scary — it’s an opportunity to build trust and harmony.  
+Your pet isn’t being “replaced.” They’re gaining a new family member.
+
+With preparation, predictable routines, supervised interactions, and a little humor, you’re creating a home where everyone feels safe and loved.
+
+If you want help creating a **custom animal-introduction plan** tailored to your pet’s breed, age, or temperament, your mentor can walk you through every step.
+
+✨ **Learn · Plan · Connect — the Taylor-Made way.** ✨`,
+},
+{
+  slug: 'baby-boy-checklist',
+  title: 'Baby Boy Checklist — Taylor-Made Essentials',
+  description:
+    'A curated, clutter-free baby boy checklist covering clothing, sleep, feeding, diapering, bath, nursery, and travel essentials.',
+  heroImage:
+    'https://images.unsplash.com/photo-1522770179533-24471fcdba45?auto=format&fit=crop&w=1200&q=80',
+  date: '2024-03-18',
+  tags: ['Checklist', 'Newborn', 'Boy', 'Planning'],
+  readTime: '4 min read',
+  author: 'Taylor-Made Baby Co. Mentors',
+  content: `# Baby Boy Checklist — Taylor-Made Essentials
+
+### Clothing
+- 6–8 short + long sleeve bodysuits  
+- 4–6 footed sleepers  
+- 2–3 rompers  
+- Sweaters or hoodies  
+- Socks, hats, going-home outfit  
+
+### Sleep
+- 1–2 swaddles  
+- 1 sleep sack  
+- 2–3 crib/bassinet sheets  
+- Waterproof mattress protectors  
+
+### Feeding
+- 4–6 bottles  
+- Burp cloths (8–10)  
+- Pump or formula add-ons  
+- Bibs  
+
+### Bath & Grooming
+- Baby shampoo and lotion  
+- Hooded towel  
+- Grooming kit  
+- Baby bath tub  
+
+### Diapering
+- Diapers (NB + size 1)  
+- Wipes  
+- Rash cream  
+- Changing pad + 2 covers  
+
+### Travel
+- Car seat  
+- Stroller  
+- Diaper bag  
+- Stroller blanket  
+
+### Nursery & Gear
+- Bassinet or crib  
+- Monitor  
+- Noise machine  
+- Playmat  
+- Soft toys and books  
+
+Download the printable checklist PDF above!`,
+}
 ];

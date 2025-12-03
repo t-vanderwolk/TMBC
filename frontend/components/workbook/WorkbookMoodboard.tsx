@@ -4,19 +4,9 @@ import { DragEvent, FormEvent, useState } from 'react';
 
 import type { SaveStatus, MoodboardTile as MoodboardTileData } from '../../hooks/useWorkbook';
 import MoodboardTile from './MoodboardTile';
-
-const sizeSpanMap: Record<MoodboardTileData['size'], number> = {
-  small: 6,
-  medium: 8,
-  large: 12,
-};
-
-type PinterestState = {
-  status: string;
-  message: string | null;
-  summary: string;
-  initiateAuth: () => Promise<void>;
-};
+import PinPickerModal from '@/components/pinterest/PinPickerModal';
+import { detectBrandFromText } from '@/utils/pinSuggestions';
+import type { PinterestPin, UsePinterestReturn } from '@/hooks/usePinterest';
 
 type WorkbookMoodboardProps = {
   tiles: MoodboardTileData[];
@@ -25,7 +15,7 @@ type WorkbookMoodboardProps = {
   onResizeTile: (id: string, size: MoodboardTileData['size']) => void;
   onReorderTiles: (sourceId: string, targetId: string) => void;
   onSavePin: (tile: MoodboardTileData) => Promise<void>;
-  pinterest: PinterestState;
+  pinterest: UsePinterestReturn;
 };
 
 const WorkbookMoodboard = ({
@@ -44,6 +34,7 @@ const WorkbookMoodboard = ({
     size: 'medium' as MoodboardTileData['size'],
   });
   const [savingTileId, setSavingTileId] = useState<string | null>(null);
+  const [draggingTileId, setDraggingTileId] = useState<string | null>(null);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -58,6 +49,7 @@ const WorkbookMoodboard = ({
   };
 
   const handleDragStart = (event: DragEvent<HTMLDivElement>, id: string) => {
+    setDraggingTileId(id);
     event.dataTransfer?.setData('text/plain', id);
   };
 
@@ -67,6 +59,11 @@ const WorkbookMoodboard = ({
     if (sourceId && sourceId !== targetId) {
       onReorderTiles(sourceId, targetId);
     }
+    setDraggingTileId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggingTileId(null);
   };
 
   const handleResize = (tile: MoodboardTileData) => {
@@ -84,6 +81,25 @@ const WorkbookMoodboard = ({
     }
   };
 
+  const handlePinSelection = (pin: PinterestPin) => {
+    const imageUrl = resolvePinImage(pin);
+    if (!imageUrl) return;
+
+    const caption = pin.title || pin.description || 'Pinterest inspiration ✨';
+    const brandHint = detectBrandFromText(
+      [pin.title, pin.description, pin.note].filter(Boolean).join(' '),
+    );
+
+    onAddTile({
+      imageUrl,
+      caption,
+      link: pin.link ?? undefined,
+      size: 'medium',
+      sourceBrand: brandHint ?? undefined,
+    });
+    pinterest.closePicker();
+  };
+
   const statusCopy: Record<SaveStatus, string> = {
     idle: 'Moodboard auto-saved',
     saving: 'Saving moodboard…',
@@ -98,43 +114,58 @@ const WorkbookMoodboard = ({
           <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Moodboard studio</p>
           <p className="text-[0.75rem] text-[var(--tm-deep-mauve)]">{statusCopy[status]}</p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="text-[0.6rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">
             Pinterest · {pinterest.summary}
           </span>
           <button
             type="button"
-            onClick={() => pinterest.initiateAuth()}
-            className="rounded-full border border-[var(--tm-deep-mauve)] px-4 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-[var(--tm-deep-mauve)]"
+            onClick={() => void pinterest.openPicker()}
+            className="rounded-full border border-[var(--tm-deep-mauve)] bg-[var(--tm-mauve)]/10 px-4 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-[var(--tm-deep-mauve)] transition hover:border-[var(--tm-deep-mauve)]/80 hover:bg-[var(--tm-mauve)]/20"
           >
-            Connect
+            Import from Pinterest
+          </button>
+          <button
+            type="button"
+            onClick={() => void pinterest.initiateAuth()}
+            disabled={pinterest.connected}
+            className="rounded-full border border-[var(--tm-deep-mauve)] px-4 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-[var(--tm-deep-mauve)] transition disabled:cursor-not-allowed disabled:text-[var(--tm-deep-mauve)]/60 disabled:border-[var(--tm-deep-mauve)]/40"
+          >
+            {pinterest.connected ? 'Connected' : 'Connect'}
           </button>
         </div>
       </div>
       {pinterest.message && (
         <p className="text-xs text-[var(--tm-deep-mauve)]/80">{pinterest.message}</p>
       )}
-      <div className="grid auto-rows-[5rem] gap-4 rounded-[28px] border border-[var(--tm-blush)] bg-white/80 p-4 shadow-[0_25px_55px_rgba(134,75,95,0.12)] sm:auto-rows-[6rem] lg:auto-rows-[8rem]">
-        <div
-          className="grid h-full gap-3 sm:grid-cols-2 lg:grid-cols-3"
-          style={{ gridAutoRows: '150px', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}
-        >
+      <div className="rounded-[28px] border border-[var(--tm-blush)] bg-white/80 p-4 shadow-[0_25px_55px_rgba(134,75,95,0.12)]">
+        <div className="columns-2 md:columns-3 gap-3 [column-fill:_balance]">
           {tiles.map((tile) => (
-            <MoodboardTile
-              key={tile.id}
-              tile={tile}
-              style={{ gridRowEnd: `span ${sizeSpanMap[tile.size]}` }}
-              onDragStart={(event) => handleDragStart(event, tile.id)}
-              onDragOver={(event) => event.preventDefault()}
-              onDrop={(event) => handleDrop(event, tile.id)}
-              onResize={() => handleResize(tile)}
-              onSavePin={() => handlePin(tile)}
-              saving={savingTileId === tile.id}
-            />
+            <div key={tile.id} className="mb-3 break-inside-avoid overflow-hidden rounded-[26px] border border-white/60 bg-gradient-to-b from-white to-white/70">
+              <MoodboardTile
+                tile={tile}
+                onDragStart={(event) => handleDragStart(event, tile.id)}
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={(event) => handleDrop(event, tile.id)}
+                onDragEnd={handleDragEnd}
+                onResize={() => handleResize(tile)}
+                onSavePin={() => handlePin(tile)}
+                saving={savingTileId === tile.id}
+                isDragging={draggingTileId === tile.id}
+                isSaving={savingTileId === tile.id}
+              />
+            </div>
           ))}
           {!tiles.length && (
-            <div className="col-span-full rounded-[26px] border border-dashed border-[var(--tm-blush)]/70 bg-[var(--tm-ivory)]/70 p-4 text-sm text-[var(--tm-charcoal)]/70">
-              Drag, drop, and resize tiles to craft a textured moodboard.
+            <div className="mb-3 break-inside-avoid rounded-[26px] border border-dashed border-[var(--tm-blush)]/70 bg-[var(--tm-ivory)]/70 p-4 text-sm text-[var(--tm-charcoal)]/70">
+              <p>Drag, drop, or import from Pinterest to craft a tactile moodboard.</p>
+              <button
+                type="button"
+                onClick={() => void pinterest.openPicker()}
+                className="mt-3 inline-flex items-center justify-center rounded-full border border-[var(--tm-deep-mauve)] px-4 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.4em] text-[var(--tm-deep-mauve)]"
+              >
+                Import pins
+              </button>
             </div>
           )}
         </div>
@@ -193,8 +224,34 @@ const WorkbookMoodboard = ({
           Add tile
         </button>
       </form>
+      {pinterest.isPickerOpen && (
+        <PinPickerModal
+          boards={pinterest.boards}
+          pins={pinterest.pins}
+          selectedBoard={pinterest.selectedBoard}
+          loadingBoards={pinterest.loadingBoards}
+          loadingPins={pinterest.loadingPins}
+          error={pinterest.pickerError}
+          onSelectBoard={pinterest.selectBoard}
+          onSelectPin={handlePinSelection}
+          onClose={pinterest.closePicker}
+        />
+      )}
     </section>
   );
+};
+
+const resolvePinImage = (pin: PinterestPin): string | undefined => {
+  const preferredSizes = ['736x', '564x', '400x400', 'original'];
+  for (const size of preferredSizes) {
+    const image = pin.media?.images?.[size];
+    if (image?.url) {
+      return image.url;
+    }
+  }
+
+  const firstImage = pin.media?.images ? Object.values(pin.media.images)[0] : undefined;
+  return firstImage?.url;
 };
 
 export default WorkbookMoodboard;

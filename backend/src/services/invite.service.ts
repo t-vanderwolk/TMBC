@@ -2,7 +2,7 @@ import { Invite, Role, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
-import { prisma } from '../utils/prisma';
+import { prisma } from '../../prisma/client';
 
 const INVITE_LIMITS: Record<Role, number | null> = {
   [Role.MEMBER]: 0,

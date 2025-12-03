@@ -80,7 +80,7 @@ const CreateProfileContent = () => {
         <div className="card-surface mx-auto max-w-xl space-y-4 text-center">
           <h1 className="text-3xl">Invite not found</h1>
           <p className="text-sm text-tmCharcoal/80">{error}</p>
-          <Link href="/requestinvite" className="btn-primary">
+          <Link href="/request-invite" className="btn-primary">
             Return to Invite Page
           </Link>
         </div>
