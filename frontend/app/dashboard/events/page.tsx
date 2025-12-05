@@ -1,185 +1,203 @@
-'use client';
+"use client";
 
-// TODO: hook to live Prisma data
-// TODO: add loading + error states
-// TODO: refine design to match TMBC brand
-// TODO: connect this CTA to Zoom session
-// TODO: add empty-state UX
+import { useState } from "react";
+// If you already have an EventCard component, keep this import
+// and ignore the inline card below.
+// import EventCard from "@/components/events/EventCard";
 
-import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
-import { CalendarClock, Play, Sparkles } from 'lucide-react';
-
-import { EventCard } from '@/components/events/EventCard';
-import { CalendarGrid, type CalendarGridEvent } from '@/components/events/CalendarGrid';
-import { api } from '@/lib/api';
-
-type EventItem = {
-  id: string;
-  title: string;
-  type: string;
-  startTime: string;
-  endTime: string;
-  location?: string | null;
-  description?: string | null;
-};
-
-const placeholderEvents: EventItem[] = [
+const MOCK_EVENTS = [
   {
-    id: 'event-1',
-    title: 'Nursery Styling Session',
-    type: 'WORKSHOP',
-    startTime: '2025-12-03T15:43:07.000Z',
-    endTime: '2025-12-03T16:43:07.000Z',
-    location: 'Zoom',
+    id: "1",
+    title: "Car Seat Confidence Lab",
+    type: "Bespoke · Virtual",
+    date: "Thursday · 6:00 PM",
+    timezone: "PST",
+    host: "Ellie (CPST) + Marisol",
+    description:
+      "Live demo on buckling, base installs, and what’s actually normal when you leave the hospital.",
+    status: "Upcoming",
   },
   {
-    id: 'event-2',
-    title: 'Austin Member Brunch',
-    type: 'COMMUNITY_EVENT',
-    startTime: '2025-12-05T16:00:00.000Z',
-    endTime: '2025-12-05T17:30:00.000Z',
-    location: 'June’s Cafe',
+    id: "2",
+    title: "Nursery Flow & Night Feeds",
+    type: "Group Circle · Virtual",
+    date: "Sunday · 10:30 AM",
+    timezone: "PST",
+    host: "Taylor-Made Mentor Circle",
+    description:
+      "Walk through your nursery layout, night-feed stations, and how to keep the room calm at 3 a.m.",
+    status: "Waitlist",
+  },
+  {
+    id: "3",
+    title: "Fourth Trimester Soft Landing",
+    type: "Salon · In Person",
+    date: "Next Month · TBA",
+    timezone: "Local",
+    host: "Lactation + Doula Panel",
+    description:
+      "A cozy salon on rest, recovery, and how to ask for the help you actually need.",
+    status: "Replay available",
   },
 ];
 
-const weeklySessions = [
-  { title: 'Academy Live: Sleep Lab', date: 'Mondays · 7pm CST', mentor: 'Jade' },
-  { title: 'Fourth Trimester Circle', date: 'Wednesdays · 12pm CST', mentor: 'Liz' },
-  { title: 'Registry Power Hour', date: 'Fridays · 10am CST', mentor: 'Kara' },
-];
+type EventStatus = "All" | "Upcoming" | "Replay" | "Waitlist";
 
 export default function EventsPage() {
-  const [upcomingEvents, setUpcomingEvents] = useState<EventItem[]>(placeholderEvents);
-  const [myEvents, setMyEvents] = useState<EventItem[]>([]);
+  const [filter, setFilter] = useState<EventStatus>("All");
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const [upcomingResponse, myResponse] = await Promise.all([
-          api.get('/api/events/upcoming'),
-          api.get('/api/events/my-events'),
-        ]);
-        if (Array.isArray(upcomingResponse.data)) {
-          setUpcomingEvents(upcomingResponse.data);
-        }
-        if (Array.isArray(myResponse.data)) {
-          setMyEvents(myResponse.data);
-        }
-      } catch (error) {
-        console.error('Events data error', error);
-      }
-    };
-
-    fetchEvents();
-  }, []);
-
-  const calendarEvents = useMemo<CalendarGridEvent[]>(() => {
-    return upcomingEvents.map((event) => ({
-      date: event.startTime,
-      title: event.title,
-      type: event.type,
-    }));
-  }, [upcomingEvents]);
-
-  const nextEvent = useMemo(() => {
-    if (!upcomingEvents.length) return null;
-    return [...upcomingEvents].sort(
-      (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
-    )[0];
-  }, [upcomingEvents]);
+  const filteredEvents = MOCK_EVENTS.filter((event) => {
+    if (filter === "All") return true;
+    if (filter === "Upcoming") return event.status === "Upcoming";
+    if (filter === "Replay") return event.status.toLowerCase().includes("replay");
+    if (filter === "Waitlist") return event.status === "Waitlist";
+    return true;
+  });
 
   return (
     <div className="space-y-8">
-      <header className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-soft">
-        <p className="text-sm uppercase tracking-[0.5em] text-tmMauve">Events & Cohorts</p>
-        <h1 className="text-4xl text-tmCharcoal">RSVP to workshops, studio circles, and cohort huddles.</h1>
-        <p className="mt-2 text-sm text-tmCharcoal/70">
-          A single view for live sessions, RSVP tracking, and mentor-led cohort meetings.
+      {/* Header */}
+      <header className="rounded-[2.5rem] border border-[var(--tmbc-mauve)]/35 bg-white/95 p-8 shadow-[0_24px_55px_rgba(199,166,199,0.18)]">
+        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)]/55">
+          Events & circles
+        </p>
+        <h1 className="mt-3 font-serif text-2xl text-[var(--tmbc-charcoal)] sm:text-3xl">
+          Your Taylor-Made calendar
+        </h1>
+        <p className="mt-2 text-sm text-[var(--tmbc-charcoal)]/75">
+          A mix of gentle classes, mentor salons, and Q&A circles curated for your
+          trimester and registry rhythm.
         </p>
       </header>
 
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Upcoming Events</p>
-            <h2 className="text-2xl text-tmCharcoal">Claim your seat before spots fill</h2>
-          </div>
-          <Link href="/dashboard/mentor/events" className="text-sm font-semibold text-tmMauve">
-            Mentor tools
-          </Link>
+      {/* Filters */}
+      <section className="flex flex-wrap items-center justify-between gap-4 rounded-[2rem] border border-[var(--tmbc-mauve)]/30 bg-[var(--tmbc-ivory)]/80 px-5 py-4">
+        <div>
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">
+            Filter
+          </p>
+          <p className="text-xs text-[var(--tmbc-charcoal)]/70">
+            Peek at what’s coming up or revisit a replay with your tea.
+          </p>
         </div>
-        <div className="grid gap-4 lg:grid-cols-3">
-          {upcomingEvents.map((event) => (
-            <EventCard key={event.id} title={event.title} type={event.type} startTime={event.startTime} endTime={event.endTime} location={event.location} description={event.description} />
-          ))}
-          {!upcomingEvents.length && (
-            <div className="rounded-2xl border border-dashed border-tmBlush/40 bg-white/80 p-5 text-sm text-tmCharcoal/60">
-              No events scheduled yet. Check back after mentors publish the next sprint.
+        <div className="flex flex-wrap gap-2">
+          {(["All", "Upcoming", "Replay", "Waitlist"] as EventStatus[]).map((option) => {
+            const active = filter === option;
+            return (
+              <button
+                key={option}
+                type="button"
+                onClick={() => setFilter(option)}
+                className={[
+                  "rounded-full px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.32em] transition",
+                  active
+                    ? "bg-[var(--tmbc-mauve)] text-[var(--tmbc-charcoal)] shadow-[0_10px_35px_rgba(199,166,199,0.45)]"
+                    : "border border-[var(--tmbc-mauve)]/40 text-[var(--tmbc-charcoal)]/75 hover:border-[var(--tmbc-gold)]/70 hover:text-[var(--tmbc-charcoal)]",
+                ].join(" ")}
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Content */}
+      <section className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)]">
+        {/* Event list */}
+        <div className="space-y-4">
+          {filteredEvents.length === 0 ? (
+            <div className="flex flex-col items-center justify-center rounded-[2rem] border border-dashed border-[var(--tmbc-mauve)]/40 bg-white/70 p-10 text-center">
+              <p className="text-sm text-[var(--tmbc-charcoal)]/75">
+                No events in this category yet.
+              </p>
+              <p className="mt-1 text-xs text-[var(--tmbc-charcoal)]/55">
+                Your mentor will add events as your journey unfolds.
+              </p>
             </div>
+          ) : (
+            filteredEvents.map((event) => (
+              <div
+                key={event.id}
+                className="group rounded-[2rem] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-5 shadow-[0_18px_45px_rgba(199,166,199,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_26px_60px_rgba(199,166,199,0.25)]"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/55">
+                      {event.type}
+                    </p>
+                    <h2 className="mt-1 text-lg font-semibold text-[var(--tmbc-charcoal)]">
+                      {event.title}
+                    </h2>
+                    <p className="mt-1 text-xs text-[var(--tmbc-charcoal)]/65">
+                      {event.date} · {event.timezone}
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--tmbc-charcoal)]/65">
+                      Host: {event.host}
+                    </p>
+                  </div>
+                  <span
+                    className={[
+                      "rounded-full px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.3em]",
+                      event.status === "Upcoming" &&
+                        "bg-[var(--tmbc-mauve)]/15 text-[var(--tmbc-charcoal)]",
+                      event.status === "Waitlist" &&
+                        "bg-amber-100 text-[var(--tmbc-charcoal)]",
+                      event.status.toLowerCase().includes("replay") &&
+                        "bg-[var(--tmbc-blush)]/50 text-[var(--tmbc-charcoal)]",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                  >
+                    {event.status}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm text-[var(--tmbc-charcoal)]/75">
+                  {event.description}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2 text-[0.7rem]">
+                  <button
+                    type="button"
+                    className="rounded-full bg-[var(--tmbc-mauve)] px-4 py-2 font-semibold uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] shadow-[0_10px_35px_rgba(199,166,199,0.4)] transition hover:translate-y-0.5 hover:bg-gradient-to-r hover:from-[var(--tmbc-gold)] hover:to-[var(--tmbc-blush)]"
+                  >
+                    Save my spot
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded-full border border-[var(--tmbc-mauve)]/60 px-4 py-2 font-semibold uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/75 transition hover:border-[var(--tmbc-gold)] hover:text-[var(--tmbc-charcoal)]"
+                  >
+                    Add to calendar
+                  </button>
+                </div>
+              </div>
+            ))
           )}
         </div>
-        <p className="text-xs text-tmCharcoal/60">// TODO: double-booking guard + calendar invites</p>
-      </section>
 
-      <section className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-tmBlush/30 bg-white/95 p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">My RSVPs</p>
-              <h3 className="text-xl text-tmCharcoal">You’re confirmed for</h3>
-            </div>
-            <Sparkles className="h-5 w-5 text-tmMauve" />
-          </div>
-          <div className="mt-4 space-y-3">
-            {myEvents.length === 0 && (
-              <p className="text-sm text-tmCharcoal/60">No RSVPs yet—save your spot to unlock the prep checklist.</p>
-            )}
-            {myEvents.slice(0, 4).map((event) => (
-              <div key={event.id} className="rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
-                <p className="text-sm font-semibold text-tmCharcoal">{event.title}</p>
-                <p className="text-xs text-tmCharcoal/70">{new Date(event.startTime).toLocaleString()}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="rounded-2xl border border-tmBlush/30 bg-white/95 p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Weekly Academy Sessions</p>
-              <h3 className="text-xl text-tmCharcoal">Live touchpoints</h3>
-            </div>
-            <CalendarClock className="h-5 w-5 text-tmMauve" />
-          </div>
-          <ul className="mt-4 space-y-3">
-            {weeklySessions.map((session) => (
-              <li key={session.title} className="rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
-                <p className="text-sm font-semibold text-tmCharcoal">{session.title}</p>
-                <p className="text-xs text-tmCharcoal/70">{session.date} · Mentor {session.mentor}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <CalendarGrid events={calendarEvents} />
-        </div>
-        <div className="flex flex-col rounded-2xl border border-tmBlush/40 bg-gradient-to-br from-tmMauve to-tmBlush p-6 text-white shadow-soft">
-          <p className="text-xs uppercase tracking-[0.5em]">Join Live</p>
-          <h3 className="mt-2 text-2xl font-semibold">{nextEvent ? nextEvent.title : 'Live Session Standby'}</h3>
-          <p className="mt-3 text-sm text-white/80">
-            {nextEvent
-              ? `Next begins ${new Date(nextEvent.startTime).toLocaleString()}`
-              : 'We’ll notify you when a live session opens.'}
+        {/* Side summary */}
+        <aside className="space-y-4 rounded-[2.2rem] border border-[var(--tmbc-mauve)]/35 bg-gradient-to-br from-white via-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/45 p-6 shadow-[0_24px_60px_rgba(199,166,199,0.22)]">
+          <h2 className="font-serif text-xl text-[var(--tmbc-charcoal)]">
+            Your event rhythm
+          </h2>
+          <p className="text-sm text-[var(--tmbc-charcoal)]/75">
+            We keep your calendar light: usually **1–2 live events per week**, plus
+            replays you can watch in sweats at your own pace.
           </p>
-          <button type="button" className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-white/15 px-5 py-3 text-sm font-semibold transition hover:bg-white/25">
-            <Play className="h-4 w-4" />
-            Join Live Session
-          </button>
-          <p className="mt-3 text-xs text-white/70">// TODO: connect this CTA to Zoom session</p>
-        </div>
+          <ul className="space-y-2 text-sm text-[var(--tmbc-charcoal)]/75">
+            <li>• Trimester-focused Q&A with mentors.</li>
+            <li>• Skill labs for car seats, strollers, and nursery setup.</li>
+            <li>• Gentle circles on sleep, feeding, and in-law diplomacy.</li>
+          </ul>
+          <div className="mt-3 rounded-2xl bg-white/85 p-4 text-xs text-[var(--tmbc-charcoal)]/75">
+            <p className="font-semibold uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/60">
+              Coming soon
+            </p>
+            <p className="mt-2">
+              Your mentor will soon be able to **add events directly to this view**
+              and sync them with your **registry milestones** and **academy progress.**
+            </p>
+          </div>
+        </aside>
       </section>
     </div>
   );

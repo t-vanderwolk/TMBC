@@ -155,12 +155,15 @@ model MentorNote {
   id        String   @id @default(cuid())
   memberId  String
   mentorId  String
-  productId String
+  productId String?
+  moduleId  String?
   note      String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   member    User     @relation("MemberMentorNotes", fields: [memberId], references: [id])
   mentor    User     @relation("MentorNotesAuthored", fields: [mentorId], references: [id])
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product? @relation(fields: [productId], references: [id])
+  module    AcademyModule? @relation("ModuleMentorNotes", fields: [moduleId], references: [id])
 }
 
 model AcademyModule {
@@ -175,6 +178,7 @@ model AcademyModule {
   description     String?
   mentorFeedback  MentorFeedback[]
   workbookEntries WorkbookEntry[]
+  mentorNotes     MentorNote[]     @relation("ModuleMentorNotes")
 }
 
 model Event {

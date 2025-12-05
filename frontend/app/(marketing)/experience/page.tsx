@@ -1,87 +1,123 @@
 import Link from "next/link";
-import type { Route } from "next";
-import PageSection from "@/components/PageSection";
 
-const PRIMARY_BUTTON_CLASSES =
-  "inline-flex items-center justify-center gap-2 rounded-full bg-[#C8A1B4] px-7 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#3E2F35] shadow-[0_8px_30px_rgba(200,161,180,0.15)] hover:scale-105 transition-all";
-const SECONDARY_BUTTON_CLASSES =
-  "inline-flex items-center justify-center gap-2 rounded-full border border-[#C8A1B4] px-7 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#3E2F35] hover:scale-105 transition-all";
-
-const experiences = [
+const feelings = [
   {
-    title: "Concierge Onboarding",
-    description: "A calm call to map your story, rituals, and needs with a thoughtful curator.",
+    title: "Held",
+    copy: "A mentor note that says, 'You're allowed to not have the nursery done yet.'",
   },
   {
-    title: "Mentor Salons",
-    description: "Small evening salons with founders, artists, and clinicians who share honest wisdom.",
+    title: "Informed",
+    copy: "Registry cards and academy lessons arrive with context, tone, and a soft wink.",
   },
   {
-    title: "Registry Retreats",
-    description: "Guided shop sessions that feel like tea with a stylist rather than a shopping list.",
+    title: "Ahead of the calendar",
+    copy: "We nudge you before a due date panic—then let you breathe again.",
+  },
+  {
+    title: "Less alone",
+    copy: "Mini salons and chat threads that feel like late-night texts from a trusted friend.",
   },
 ];
 
 export default function ExperiencePage() {
   return (
-    <div className="bg-[#FFFAF8]">
-      <PageSection className="border-b border-[#D9C48E]/25">
-        <div className="mx-auto max-w-screen-xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#C8A1B4]">Experience</p>
-          <h1 className="font-serif text-4xl text-[#3E2F35] md:text-5xl">Curated experiences, always calm</h1>
-          <p className="mt-4 text-sm text-[#3E2F35]/80">
-            We design rituals, salons, and concierge hand-holding so every moment feels intentional and restful.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link href={"/request-invite" as Route} className={PRIMARY_BUTTON_CLASSES}>
-              Request Invite
-            </Link>
-            <Link href={"/learn" as Route} className={SECONDARY_BUTTON_CLASSES}>
-              Learn More
-            </Link>
-          </div>
-        </div>
-      </PageSection>
-
-      <PageSection>
-        <div className="mx-auto max-w-screen-xl space-y-8">
-          <header className="text-center">
-            <p className="text-xs uppercase tracking-[0.3em] text-[#C8A1B4]">Rituals & council</p>
-            <h2 className="font-serif text-3xl text-[#3E2F35]">Experiences that slow the scroll</h2>
-          </header>
-          <div className="grid gap-6 md:grid-cols-3">
-            {experiences.map((experience) => (
-              <article
-                key={experience.title}
-                className="rounded-[2.25rem] border border-[#D9C48E]/30 bg-white p-6 shadow-[0_12px_35px_rgba(62,47,53,0.12)]"
-              >
-                <h3 className="font-serif text-xl text-[#3E2F35]">{experience.title}</h3>
-                <p className="mt-3 text-sm text-[#3E2F35]/80">{experience.description}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </PageSection>
-
-      <PageSection className="border-t border-[#D9C48E]/25">
-        <div className="mx-auto max-w-screen-xl">
-          <div className="space-y-4 rounded-[2.5rem] border border-[#D9C48E]/40 bg-white p-8 shadow-[0_15px_40px_rgba(62,47,53,0.16)]">
-            <p className="text-xs uppercase tracking-[0.3em] text-[#C8A1B4]">Stay close</p>
-            <h3 className="font-serif text-3xl text-[#3E2F35]">The TMBC experience is layered, soft, and purposeful</h3>
-            <p className="text-sm text-[#3E2F35]/80">
-              Mini-salons, bespoke mentor access, and concierge check-ins keep your journey curated and calm.
+    <div className="space-y-16">
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_25px_90px_rgba(199,166,199,0.3)]">
+        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">Meet Alex & Jordan</p>
+        <div className="mt-4 grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
+          <div className="space-y-4">
+            <h1 className="font-serif text-4xl text-[var(--tmbc-charcoal)]">A minimalist duo who wanted calm, not chaos.</h1>
+            <p className="text-sm text-[var(--tmbc-charcoal)]/70">
+              Alex & Jordan entered TMBC with a cluttered browser, three spreadsheets, and a craving for a baby prep soundtrack
+              that felt like their playlist. We leaned in, learned their style, and guided them through nursery, gear, and
+              postpartum with cinematic pacing.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href={"/membership" as Route} className={SECONDARY_BUTTON_CLASSES}>
-                Join Membership
-              </Link>
-              <Link href={"/request-invite" as Route} className={PRIMARY_BUTTON_CLASSES}>
-                Request Invite
-              </Link>
-            </div>
+            <p className="text-sm text-[var(--tmbc-charcoal)]/70">
+              Narrative: nursery → gear → postpartum. We layered mentors, stylists, and community check-ins so each chapter
+              felt intentional and gentle.
+            </p>
+          </div>
+          <div className="space-y-4 rounded-[32px] border border-[var(--tmbc-blush)] bg-gradient-to-br from-[var(--tmbc-blush)]/40 to-white p-6 shadow-[0_20px_60px_rgba(199,166,199,0.25)]">
+            <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Journey highlights</p>
+            <ul className="space-y-3 text-sm text-[var(--tmbc-charcoal)]/70">
+              <li>Nursery moodboard curated with mulberry, ivory, and soft gold accents.</li>
+              <li>Gear edits delivered via concierge calls + registry cards.</li>
+              <li>Postpartum timeline mapped with mentor check-ins and salon invites.</li>
+            </ul>
+            <p className="text-[0.8rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/50">Every step: warm, witty, wise.</p>
           </div>
         </div>
-      </PageSection>
+      </section>
+
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_70px_rgba(199,166,199,0.25)]">
+        <h2 className="font-serif text-3xl text-[var(--tmbc-charcoal)]">Before / After strip</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-4 rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-mauve)]/5 p-6">
+            <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">Before</p>
+            <div className="space-y-2 rounded-[24px] border border-[var(--tmbc-charcoal)]/10 bg-black/5 p-4 text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/50">
+              <p>47 tabs</p>
+              <p>Giant multi-column list</p>
+              <p>Doom-scrolling reviews</p>
+            </div>
+            <p className="text-sm text-[var(--tmbc-charcoal)]/70">Overwhelm in gradient form, no one to pause and translate.</p>
+          </div>
+          <div className="space-y-4 rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/50 p-6">
+            <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">After</p>
+            <div className="space-y-4 rounded-[24px] bg-white/80 p-4 shadow-[0_15px_40px_rgba(199,166,199,0.2)]">
+              <div className="flex items-center justify-between text-[0.7rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">
+                <span>Registry</span>
+                <span>Mentor note</span>
+              </div>
+              <p className="text-sm font-semibold text-[var(--tmbc-charcoal)]">Calm capsule edit · 12 pieces · neutral palette</p>
+              <p className="text-xs text-[var(--tmbc-charcoal)]/60">Mentor: "Let's skip 4 wipe warmers unless you love glow."</p>
+            </div>
+            <p className="text-sm text-[var(--tmbc-charcoal)]/70">Curated registry grid with mentor notes and confident clarity.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/40 p-8 shadow-[0_25px_70px_rgba(199,166,199,0.25)]">
+        <div className="flex flex-col gap-2">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">What you'll actually feel</p>
+          <h2 className="font-serif text-3xl text-[var(--tmbc-charcoal)]">Emotions with receipts</h2>
+        </div>
+        <div className="grid gap-4 md:grid-cols-4">
+          {feelings.map((feeling) => (
+            <div
+              key={feeling.title}
+              className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-4 text-sm text-[var(--tmbc-charcoal)] shadow-[0_12px_35px_rgba(199,166,199,0.15)]"
+            >
+              <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/50">{feeling.title}</p>
+              <p className="mt-2">{feeling.copy}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">
+          You'll still have questions. The difference is you'll know where to ask them.
+        </p>
+      </section>
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 text-center shadow-[0_20px_80px_rgba(199,166,199,0.25)]">
+        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">Next chapter</p>
+        <h2 className="font-serif text-3xl text-[var(--tmbc-charcoal)]">Join a concierge experience that feels editorial.</h2>
+        <p className="text-sm text-[var(--tmbc-charcoal)]/70">
+          Membership is invite-only, with mentors who read your moodboards, registry, and chats in one calm feed.
+        </p>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-[0.7rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]">
+          <Link
+            href="/membership"
+            className="rounded-[32px] border border-[var(--tmbc-mauve)] px-6 py-3 text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-gold)]"
+          >
+            View Membership
+          </Link>
+          <Link
+            href="/request-invite"
+            className="rounded-[32px] border border-[var(--tmbc-charcoal)] bg-gradient-to-r from-[var(--tmbc-blush)] to-[var(--tmbc-mauve)] px-6 py-3 text-[var(--tmbc-charcoal)] font-semibold"
+          >
+            Request Invite
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

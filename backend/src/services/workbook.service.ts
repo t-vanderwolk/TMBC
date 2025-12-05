@@ -42,6 +42,14 @@ export const createWorkbookEntry = async (payload: {
   type: WorkbookEntrySectionType;
   content: Prisma.InputJsonValue;
 }) => {
+  const moduleExists = await prisma.academyModule.count({
+    where: { id: payload.moduleId },
+  });
+
+  if (!moduleExists) {
+    throw new Error("Module not found");
+  }
+
   const entry = await prisma.workbookEntry.create({
     data: {
       userId: payload.userId,

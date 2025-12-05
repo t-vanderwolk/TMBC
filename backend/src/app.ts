@@ -19,6 +19,7 @@ import chatRoutes from './routes/chat.routes';
 import myRegistryRouter from './routes/myregistry.routes';
 import workbookRoutes from './routes/workbook.routes';
 import pinterestRoutes from './routes/pinterest.routes';
+import mentorNotesRoutes from './routes/mentorNotes.routes';
 import { requireAdminAuth } from './middleware/authMiddleware';
 
 import { errorHandler } from './middleware/errorHandler';
@@ -46,6 +47,7 @@ appInstance.use('/api/chat', chatRoutes);
 appInstance.use('/api/registry/myregistry', myRegistryRouter);
 appInstance.use('/api/mentor', mentorRoutes);
 appInstance.use('/api/mentor', mentorCollabRoutes);
+appInstance.use('/api/mentor-notes', mentorNotesRoutes);
 appInstance.use('/api/admin/login-events', requireAdminAuth, loginEventsRoutes);
 appInstance.use('/api/admin/overview', requireAdminAuth, adminOverviewRoutes);
 appInstance.use('/api/admin', requireAdminAuth, adminRoutes);

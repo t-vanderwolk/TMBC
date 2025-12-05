@@ -2,15 +2,22 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { Auth } from '@/lib/auth.client';
 import { academyClient } from '@/lib/academyClient';
 import { AcademyModule, fallbackModules, journeyMeta } from '../modules';
 import BreadcrumbEditorial from '@/components/academy/BreadcrumbEditorial';
 import EncouragementBubble from '@/components/academy/EncouragementBubble';
+import MentorNotesPanel from '@/components/academy/MentorNotesPanel';
 import ModuleHeroEditorial from '@/components/academy/ModuleHeroEditorial';
 import ModuleSection from '@/components/academy/ModuleSection';
 import MiniMap from '@/components/academy/MiniMap';
 import SlideDeckEditorial from '@/components/academy/SlideDeckEditorial';
 import WorkbookEditorial from '@/components/workbook/WorkbookEditorial';
+import FlowBar, { FlowBarStep } from '@/components/academy-flow/FlowBar';
+import FlowCelebration from '@/components/academy-flow/FlowCelebration';
+import FlowHeader from '@/components/academy-flow/FlowHeader';
+import FlowNav from '@/components/academy-flow/FlowNav';
+import FlowStageWrap from '@/components/academy-flow/FlowStageWrap';
 
 const MODULE_MAP_SECTIONS = [
   { id: 'overview', label: 'Overview' },
@@ -44,6 +51,7 @@ export default function ModulePage({ params }: { params: { moduleId: string } })
   const [module, setModule] = useState<AcademyModule | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState(MODULE_MAP_SECTIONS[0].id);
+  const [user, setUser] = useState<Record<string, any> | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -73,6 +81,17 @@ export default function ModulePage({ params }: { params: { moduleId: string } })
       mounted = false;
     };
   }, [moduleId]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const stored = localStorage.getItem('tm_user');
+    if (!stored) return;
+    try {
+      setUser(JSON.parse(stored));
+    } catch {
+      // ignore malformed payload
+    }
+  }, []);
 
   useEffect(() => {
     if (!module) return;
@@ -160,6 +179,11 @@ export default function ModulePage({ params }: { params: { moduleId: string } })
     [sectionMap],
   );
 
+  const memberId = user?.id ?? user?.userId;
+  const token = (user?.token as string | undefined) ?? Auth.get() ?? undefined;
+  const roleLabel = String(user?.role ?? '').toLowerCase();
+  const canWrite = roleLabel === 'mentor' || roleLabel === 'admin';
+
   if (loading) {
     return <div className="text-center py-20 text-[var(--tm-charcoal)]/60">Loading module...</div>;
   }
@@ -175,6 +199,13 @@ export default function ModulePage({ params }: { params: { moduleId: string } })
   const activeLabel =
     MODULE_MAP_SECTIONS.find((section) => section.id === activeSection)?.label ?? 'Overview';
 
+  const currentStepIndex = MODULE_MAP_SECTIONS.findIndex((entry) => entry.id === activeSection);
+  const flowSteps: FlowBarStep[] = MODULE_MAP_SECTIONS.map((section, index) => ({
+    label: section.label,
+    description: index === 0 ? 'Welcome notes' : 'Continue the journey',
+    completed: currentStepIndex >= 0 && index <= currentStepIndex,
+  }));
+
   return (
     <div className="space-y-10">
       <BreadcrumbEditorial
@@ -184,6 +215,18 @@ export default function ModulePage({ params }: { params: { moduleId: string } })
       />
 
       <ModuleHeroEditorial module={module} />
+
+      <FlowHeader
+        stageLabel={`${journeyMeta[module.journey].label} · Module ${module.order}`}
+        title="Academy Flow System"
+        description="Soft choreography for your learning—each section feels like a hush of expertise."
+        status="Invite-only · Guided by mentors"
+      />
+
+      <div className="space-y-6">
+        <FlowBar steps={flowSteps} />
+        <FlowNav sections={MODULE_MAP_SECTIONS} activeId={activeSection} onSectionChange={setActiveSection} />
+      </div>
 
       <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
         <div className="w-full lg:sticky lg:top-24">
@@ -195,7 +238,7 @@ export default function ModulePage({ params }: { params: { moduleId: string } })
             onSectionChange={handleSectionChange}
           />
         </div>
-        <div className="space-y-8">
+        <FlowStageWrap>
           <ModuleSection
             id="overview"
             title="Overview"
@@ -215,41 +258,54 @@ export default function ModulePage({ params }: { params: { moduleId: string } })
             </div>
           </ModuleSection>
 
-          <section
-            id="lecture"
-            className="space-y-6 rounded-[32px] border border-[var(--tm-blush)] bg-white/80 p-6 shadow-editorial shadow-[0_30px_60px_rgba(134,75,95,0.18)]"
-          >
-            <div className="space-y-2">
-              <p className="text-[0.65rem] uppercase tracking-[0.45em] text-[var(--tm-mauve)]">
-                Lecture atelier
-              </p>
-              <h3 className="tm-serif-title text-3xl leading-tight text-[var(--tm-deep-mauve)]">
-                Slide-based journal
-              </h3>
-              <p className="text-sm text-[var(--tm-charcoal)]/70">
-                Glide through the curated narrative, pause on each frame, and let the story gently unfold.
-              </p>
-            </div>
-            <div className="pt-4">
-              <SlideDeckEditorial
-                slides={lectureSlides}
-                slideIndex={currentSlide}
-                onSlideChange={handleSlideChange}
-              />
-            </div>
-          </section>
+          <div className="grid gap-6 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+            <div className="space-y-6">
+              <section
+                id="lecture"
+                className="space-y-6 rounded-[32px] border border-[var(--tm-blush)] bg-white/80 p-6 shadow-editorial shadow-[0_30px_60px_rgba(134,75,95,0.18)]"
+              >
+                <div className="space-y-2">
+                  <p className="text-[0.65rem] uppercase tracking-[0.45em] text-[var(--tm-mauve)]">
+                    Lecture atelier
+                  </p>
+                  <h3 className="tm-serif-title text-3xl leading-tight text-[var(--tm-deep-mauve)]">
+                    Slide-based journal
+                  </h3>
+                  <p className="text-sm text-[var(--tm-charcoal)]/70">
+                    Glide through the curated narrative, pause on each frame, and let the story gently unfold.
+                  </p>
+                </div>
+                <div className="pt-4">
+                  <SlideDeckEditorial
+                    slides={lectureSlides}
+                    slideIndex={currentSlide}
+                    onSlideChange={handleSlideChange}
+                  />
+                </div>
+              </section>
 
-          <section id="workbook" className="space-y-6">
-            <div aria-hidden className="pointer-events-none">
-              <div id="journal" className="h-px" />
-              <div id="moodboard" className="h-px" />
-              <div id="checklist" className="h-px" />
-              <div id="reflection" className="h-px" />
+              <section id="workbook" className="space-y-6">
+                <div aria-hidden className="pointer-events-none">
+                  <div id="journal" className="h-px" />
+                  <div id="moodboard" className="h-px" />
+                  <div id="checklist" className="h-px" />
+                  <div id="reflection" className="h-px" />
+                </div>
+                <EncouragementBubble>
+                  <WorkbookEditorial module={module} />
+                </EncouragementBubble>
+              </section>
             </div>
-            <EncouragementBubble>
-              <WorkbookEditorial module={module} />
-            </EncouragementBubble>
-          </section>
+
+            {memberId && token && (
+              <MentorNotesPanel
+                memberId={memberId}
+                moduleId={module.id}
+                token={token}
+                canWrite={canWrite}
+              />
+            )}
+          </div>
 
           <ModuleSection id="apply" title="Apply" description="Bring the atelier to life">
             <ul className="space-y-3 text-[var(--tm-charcoal)]/80">
@@ -283,8 +339,12 @@ export default function ModulePage({ params }: { params: { moduleId: string } })
               )}
             </div>
           </ModuleSection>
-        </div>
+        </FlowStageWrap>
       </div>
+      <FlowCelebration
+        highlight="Milestone unlocked"
+        message="One completed studio, many soft steps ahead."
+      />
     </div>
   );
 }

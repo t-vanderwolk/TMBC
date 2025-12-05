@@ -6,31 +6,16 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/page.js"
-    ],
     "/dashboard/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/dashboard/layout.css",
       "static/chunks/app/dashboard/layout.js"
     ],
-    "/(marketing)/layout": [
+    "/dashboard/learn/[moduleId]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(marketing)/layout.js"
-    ],
-    "/(marketing)/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(marketing)/login/page.js"
-    ],
-    "/dashboard/academy/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/academy/page.js"
+      "static/chunks/app/dashboard/learn/[moduleId]/page.js"
     ],
     "/dashboard/registry/page": [
       "static/chunks/webpack.js",
@@ -42,35 +27,52 @@
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/events/page.js"
     ],
-    "/dashboard/mentor/page": [
+    "/(marketing)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/mentor/page.js"
+      "static/css/app/(marketing)/layout.css",
+      "static/chunks/app/(marketing)/layout.js"
+    ],
+    "/(marketing)/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(marketing)/login/page.js"
     ],
     "/(marketing)/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
+      "static/css/app/(marketing)/page.css",
       "static/chunks/app/(marketing)/page.js"
     ],
-    "/dashboard/admin/page": [
+    "/(marketing)/blog/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/admin/page.js"
+      "static/chunks/app/(marketing)/blog/page.js"
     ],
-    "/dashboard/mentor/members/page": [
+    "/dashboard/community/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/mentor/members/page.js"
+      "static/chunks/app/dashboard/community/page.js"
     ],
-    "/dashboard/admin/login-events/page": [
+    "/dashboard/messages/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/admin/login-events/page.js"
+      "static/chunks/app/dashboard/messages/page.js"
     ],
-    "/dashboard/admin/settings/page": [
+    "/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/admin/settings/page.js"
+      "static/chunks/app/dashboard/page.js"
+    ],
+    "/dashboard/learn/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/learn/page.js"
+    ],
+    "/not-found": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/not-found.js"
     ]
   }
 }

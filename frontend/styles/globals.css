@@ -200,6 +200,27 @@
   }
 }
 
+@keyframes tmFloat {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes tmShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 @keyframes tmGoldSparkle {
   0% {
     transform: scale(0.85);
@@ -450,6 +471,37 @@
     border-radius: 999px;
     background: linear-gradient(135deg, var(--tmbc-mauve), var(--tmbc-gold));
     animation: tmbcConfettiFall 2.8s ease-in-out infinite;
+  }
+
+  .floating-script {
+    font-family: var(--font-great-vibes), "Great Vibes", cursive;
+    letter-spacing: 0.08em;
+    animation: tmFloat 7s ease-in-out infinite;
+  }
+
+  .shimmer {
+    color: transparent;
+    background-image: linear-gradient(110deg, rgba(255, 255, 255, 0.95), rgba(212, 181, 121, 0.9), rgba(255, 255, 255, 0.65));
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: tmShimmer 4.5s linear infinite;
+  }
+
+  .section-ritual {
+    @apply px-6 py-[90px] md:px-10 md:py-[110px];
+  }
+
+  .section-ritual-xl {
+    @apply px-6 py-[110px] md:px-10 md:py-[130px];
+  }
+
+  .hero-gradient-ring {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.45), transparent 55%);
+  }
+
+  .glow-outline {
+    border: 1px solid var(--tmbc-gold);
+    box-shadow: 0 15px 40px rgba(212, 181, 121, 0.25);
   }
 }
 

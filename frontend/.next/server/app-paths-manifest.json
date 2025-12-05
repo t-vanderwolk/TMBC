@@ -1,10 +1,8 @@
 {
+  "/dashboard/events/page": "app/dashboard/events/page.js",
+  "/dashboard/community/page": "app/dashboard/community/page.js",
+  "/dashboard/messages/page": "app/dashboard/messages/page.js",
+  "/dashboard/learn/page": "app/dashboard/learn/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/(marketing)/login/page": "app/(marketing)/login/page.js",
-  "/dashboard/academy/page": "app/dashboard/academy/page.js",
-  "/dashboard/mentor/page": "app/dashboard/mentor/page.js",
-  "/dashboard/mentor/members/page": "app/dashboard/mentor/members/page.js",
-  "/dashboard/admin/login-events/page": "app/dashboard/admin/login-events/page.js",
-  "/dashboard/admin/page": "app/dashboard/admin/page.js",
-  "/dashboard/admin/settings/page": "app/dashboard/admin/settings/page.js"
+  "/dashboard/registry/page": "app/dashboard/registry/page.js"
 }
