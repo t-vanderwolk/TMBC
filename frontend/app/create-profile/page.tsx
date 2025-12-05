@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { Auth } from "@/lib/auth";
+import { Auth } from "@/lib/auth.client";
 import { inviteFlowApi } from "@/lib/api";
 
 const CreateProfilePage = () => {

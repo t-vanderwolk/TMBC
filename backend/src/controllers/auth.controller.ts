@@ -75,3 +75,14 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     next(error);
   }
 };
+
+export const getCurrentUser = (req: Request, res: Response) => {
+  const payload = (req as any).user;
+  const tokenHeader = typeof req.headers.authorization === 'string' ? req.headers.authorization : '';
+  const token = tokenHeader.replace('Bearer ', '') || null;
+
+  res.json({
+    token,
+    ...payload,
+  });
+};

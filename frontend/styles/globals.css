@@ -140,6 +140,33 @@
     text-align: center;
     box-shadow: 0 25px 60px rgba(199, 166, 199, 0.25);
   }
+
+  .admin-section {
+    margin: 0 auto;
+    max-width: 1100px;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  .admin-card {
+    border-radius: 2rem;
+    border: 1px solid rgba(199, 167, 187, 0.85);
+    box-shadow: 0 18px 40px rgba(200, 161, 180, 0.22);
+  }
+}
+
+@layer utilities {
+  .hover-elevate {
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+  }
+
+  .hover-elevate:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 70px rgba(200, 161, 180, 0.25);
+  }
+
+  .shadow-pastel {
+    box-shadow: 0 18px 40px rgba(200, 161, 180, 0.22);
+  }
 }
 
 @keyframes tmSoftFade {
@@ -424,4 +451,178 @@
     background: linear-gradient(135deg, var(--tmbc-mauve), var(--tmbc-gold));
     animation: tmbcConfettiFall 2.8s ease-in-out infinite;
   }
+}
+
+/* Soft hover micro-interactions */
+button:hover {
+  cursor: pointer;
+}
+
+/* Pastel dashboard glow */
+.dashboard-card {
+  transition: all 0.25s ease;
+}
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 45px rgba(200, 161, 180, 0.18);
+}
+
+.mentor-hero-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem;
+  border-radius: 2.5rem;
+  background: linear-gradient(135deg, #fff8f6, rgba(242, 216, 223, 0.7));
+  border: 1px solid #ead4d8;
+  box-shadow: 0 25px 55px rgba(62, 47, 53, 0.08);
+}
+
+.mentor-hero-card__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(80px, 1fr));
+  gap: 1rem;
+}
+
+.mentor-hero-card__stat {
+  padding: 1rem;
+  border-radius: 1.5rem;
+  background: white;
+  border: 1px solid rgba(200, 161, 180, 0.4);
+  text-align: center;
+}
+
+.mentor-roster {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.mentor-card {
+  border-radius: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid #eadfe3;
+  box-shadow: 0 20px 40px rgba(200, 161, 180, 0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.mentor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 60px rgba(200, 161, 180, 0.18);
+}
+
+.mentor-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mentor-card__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+}
+
+.mentor-card__actions {
+  margin-top: 1.25rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mentor-card__action {
+  flex: 1;
+  min-width: 86px;
+  border-radius: 999px;
+  border: 1px solid #eadfe3;
+  background: #fff;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #3e2f35;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.mentor-card__action:hover {
+  background: #f8eef1;
+  transform: translateY(-1px);
+}
+
+.mentor-task-board {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mentor-task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  border-radius: 2rem;
+  padding: 1.75rem;
+  background: white;
+  border: 1px solid #eedfe3;
+  box-shadow: 0 15px 35px rgba(200, 161, 180, 0.12);
+}
+
+.mentor-task-item__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mentor-task-item__action {
+  border-radius: 999px;
+  border: 1px solid #d4b579;
+  background: #fff;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #3e2f35;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mentor-task-item__action:hover {
+  background: #d4b579;
+  color: white;
+}
+
+.journal-needs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.journal-entry {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-radius: 2rem;
+  padding: 1.3rem 1.5rem;
+  border: 1px solid #ead4d8;
+  background: linear-gradient(135deg, #fff8f6, rgba(242, 216, 223, 0.4));
+  box-shadow: 0 12px 30px rgba(200, 161, 180, 0.1);
+}
+
+.journal-preview {
+  max-width: 340px;
+}
+
+.circle-card {
+  border-radius: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #d4b579;
+  background: linear-gradient(180deg, rgba(212, 181, 121, 0.2), #fffaf2);
+  box-shadow: 0 18px 30px rgba(212, 181, 121, 0.15);
+}
+
+.upcoming-circles {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }

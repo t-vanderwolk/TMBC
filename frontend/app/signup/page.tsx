@@ -5,7 +5,7 @@ import { FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { api } from "@/lib/api";
-import { Auth } from "@/lib/auth";
+import { Auth } from "@/lib/auth.client";
 
 const RegistryTypes = ["Baby", "Nursery", "Family", "Concierge"];
 

@@ -7,6 +7,11 @@ export const getEventsController = async (_req: Request, res: Response) => {
   res.json(items);
 };
 
+export const getUpcomingEventsController = async (_req: Request, res: Response) => {
+  const items = await getEvents();
+  res.json(items);
+};
+
 export const rsvpEventController = async (req: Request, res: Response) => {
   const user = (req as any).user;
   const { eventId } = req.body;

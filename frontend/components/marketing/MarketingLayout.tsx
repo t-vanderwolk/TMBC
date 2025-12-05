@@ -12,6 +12,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
     { href: "/community", label: "Community" },
     { href: "/membership", label: "Membership" },
     { href: "/blog", label: "Blog" },
+    { href: "/login", label: "Login" },
   ];
 
   return (
@@ -39,12 +40,20 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             ))}
           </div>
 
-          <Link
-            href="/request-invite"
-            className="rounded-full bg-[#C8A1B4] px-5 py-2 text-xs font-semibold text-white tracking-[0.25em]"
-          >
-            Request Invite
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/login"
+              className="rounded-full border border-[#C8A1B4] px-5 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#3E2F35] transition hover:bg-[#F8EEF1]"
+            >
+              Login
+            </Link>
+            <Link
+              href="/request-invite"
+              className="rounded-full bg-[#C8A1B4] px-5 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-white transition hover:bg-[#b88ca3]"
+            >
+              Request Invite
+            </Link>
+          </div>
         </nav>
       </header>
 

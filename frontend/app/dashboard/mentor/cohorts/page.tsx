@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { MessageCircle, PlusCircle, UsersRound } from 'lucide-react';
 
 import { api } from '@/lib/api';
-import { loadSession } from '@/lib/auth';
+import { loadSession } from '@/lib/auth.client';
 
 type CohortMember = {
   member: {

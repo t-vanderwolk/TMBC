@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import axios from "axios";
 
-import { Auth } from "@/lib/auth";
+import { Auth } from "@/lib/auth.client";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,

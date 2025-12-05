@@ -13,9 +13,14 @@ const Navbar = () => {
     <header className="fixed left-0 right-0 top-6 z-50">
       <div className="mx-auto flex max-w-5xl flex-col gap-3 rounded-3xl border border-tmDust bg-white/85 px-5 py-3 shadow-sm backdrop-blur-md lg:flex-row lg:items-center lg:justify-between lg:rounded-full lg:px-6">
         <Link href="/" className="leading-tight">
-          <div className="font-script text-3xl text-tmMauve">Taylor-Made</div>
-          <div className="font-serif text-xs uppercase tracking-[0.2em] text-tmCharcoal">
-            Baby Co.
+          <div className="flex flex-col gap-1">
+            <span className="font-script text-3xl text-tmMauve leading-none">Taylor-Made</span>
+            <span className="font-serif text-[0.55rem] uppercase tracking-[0.4em] text-tmCharcoal/70">
+              BABY CO
+            </span>
+            <span className="text-[0.55rem] uppercase tracking-[0.25em] text-tmCharcoal/50">
+              Concierge birth & baby planning
+            </span>
           </div>
         </Link>
         <nav className="flex flex-1 items-center justify-between gap-4 text-sm tracking-wide text-tmCharcoal">

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { BookHeart, PenSquare, Share2 } from 'lucide-react';
 
 import { api } from '@/lib/api';
-import { loadSession } from '@/lib/auth';
+import { loadSession } from '@/lib/auth.client';
 
 type Entry = {
   id: string;

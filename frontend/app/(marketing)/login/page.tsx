@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import Link from "next/link";
-import { Auth } from "@/lib/auth";
+import { Auth } from "@/lib/auth.client";
 
 const INPUT =
   "w-full rounded-full border border-[#C8A1B4]/40 bg-white px-5 py-3 text-sm text-[#3E2F35] placeholder-[#3E2F35]/40 focus:border-[#C8A1B4] focus:outline-none focus:ring-2 focus:ring-[#EAC9D1] transition";
@@ -31,18 +31,23 @@ export default function LoginPage() {
         return;
       }
 
-      localStorage.setItem("tm_user", JSON.stringify(res.data.user));
       Auth.save(res.data.token);
+      const user = res.data.user;
+      const role = (user.role || "").toUpperCase();
 
-      switch (res.data.user.role) {
-        case "admin":
-          router.push("/dashboard/admin");
-          break;
-        case "mentor":
-          router.push("/dashboard/mentor-panel");
-          break;
-        default:
-          router.push("/dashboard");
+      if (!role) {
+        setError("Unable to determine role. Please try again.");
+        return;
+      }
+
+      localStorage.setItem("tm_user", JSON.stringify({ ...user, role }));
+
+      if (role === "ADMIN") {
+        router.push("/dashboard/admin");
+      } else if (role === "MENTOR") {
+        router.push("/dashboard/mentor");
+      } else {
+        router.push("/dashboard");
       }
     } catch (err) {
       setError("Invalid email or password");

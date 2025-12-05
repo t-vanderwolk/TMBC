@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import { loadSession } from '@/lib/auth';
+import { loadSession } from '@/lib/auth.client';
 import type { WorkbookEntrySectionType } from '@/hooks/useWorkbook';
 
 export type ModuleStep = WorkbookEntrySectionType;

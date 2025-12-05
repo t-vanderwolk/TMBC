@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { FormEvent, Suspense, useEffect, useState } from 'react';
 
 import { inviteApi } from '@/lib/api';
-import { Auth } from '@/lib/auth';
+import { Auth } from '@/lib/auth.client';
 
 const CreateProfileContent = () => {
   const router = useRouter();

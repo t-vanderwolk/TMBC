@@ -1,8 +1,10 @@
 {
-  "/dashboard/learn/[moduleId]/page": "app/dashboard/learn/[moduleId]/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/dashboard/learn/page": "app/dashboard/learn/page.js",
   "/(marketing)/login/page": "app/(marketing)/login/page.js",
-  "/(marketing)/how-it-works/page": "app/(marketing)/how-it-works/page.js",
-  "/(marketing)/membership/page": "app/(marketing)/membership/page.js"
+  "/dashboard/academy/page": "app/dashboard/academy/page.js",
+  "/dashboard/mentor/page": "app/dashboard/mentor/page.js",
+  "/dashboard/mentor/members/page": "app/dashboard/mentor/members/page.js",
+  "/dashboard/admin/login-events/page": "app/dashboard/admin/login-events/page.js",
+  "/dashboard/admin/page": "app/dashboard/admin/page.js",
+  "/dashboard/admin/settings/page": "app/dashboard/admin/settings/page.js"
 }

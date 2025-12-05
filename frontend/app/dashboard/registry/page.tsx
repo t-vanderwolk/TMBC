@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { loadSession } from "@/lib/auth";
+import { loadSession } from "@/lib/auth.client";
 import { useMyRegistry } from "@/lib/hooks/useMyRegistry";
 import RegistryItemCard, { MyRegistryItem } from "@/components/registry/RegistryItemCard";
 

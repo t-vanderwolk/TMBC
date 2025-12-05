@@ -1,100 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-enum Role {
-  MEMBER
-  MENTOR
-  ADMIN
-}
-
 model User {
-  id             String   @id @default(cuid())
-  email          String   @unique
-  password       String
-  name           String?
-  role           Role     @default(MEMBER)
-  disabled       Boolean  @default(false)
-  invites        Invite[] @relation("CreatedInvites")
-  consumedInvite Invite?  @relation("ConsumedInvite")
-  approvedInvites InviteRequest[] @relation("InviteApprover")
-  registryItems  RegistryItem[]
-  registryConflicts RegistryConflict[]
-  mentorNotesAuthored MentorNote[] @relation("MentorNotesAuthored")
-  mentorNotesReceived MentorNote[] @relation("MemberMentorNotes")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
+  id                     String             @id @default(cuid())
+  email                  String             @unique
+  password               String
+  name                   String?
+  role                   Role               @default(MEMBER)
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
   myRegistryAccessToken  String?
   myRegistryRefreshToken String?
   myRegistryTokenExpires DateTime?
   myRegistryLastSyncedAt DateTime?
-  myRegistryUserId        String?
-  myRegistryEmail         String?
-
-  pinterestAccessToken    String?
-  pinterestRefreshToken   String?
-  pinterestTokenExpires   DateTime?
-
-  mentorFeedbackAuthored MentorFeedback[] @relation("MentorFeedbackMentor")
-  mentorFeedbackReceived MentorFeedback[] @relation("MentorFeedbackMember")
-  mentorTasksMentor MentorTask[] @relation("MentorTasksMentor")
-  mentorTasksMember MentorTask[] @relation("MentorTasksMember")
-  workbookEntries WorkbookEntry[]
-  hostedEvents     Event[] @relation("HostedEvents")
-  profile          Profile?
-  loginEvents      LoginEvent[]
+  pinterestAccessToken   String?
+  pinterestRefreshToken  String?
+  pinterestTokenExpires  DateTime?
+  myRegistryEmail        String?
+  myRegistryUserId       String?
+  disabled               Boolean            @default(false)
+  hostedEvents           Event[]            @relation("HostedEvents")
+  invites                Invite[]           @relation("CreatedInvites")
+  consumedInvite         Invite?            @relation("ConsumedInvite")
+  approvedInvites        InviteRequest[]    @relation("InviteApprover")
+  loginEvents            LoginEvent[]
+  mentorFeedbackReceived MentorFeedback[]   @relation("MentorFeedbackMember")
+  mentorFeedbackAuthored MentorFeedback[]   @relation("MentorFeedbackMentor")
+  mentorNotesReceived    MentorNote[]       @relation("MemberMentorNotes")
+  mentorNotesAuthored    MentorNote[]       @relation("MentorNotesAuthored")
+  mentorTasksMember      MentorTask[]       @relation("MentorTasksMember")
+  mentorTasksMentor      MentorTask[]       @relation("MentorTasksMentor")
+  profile                Profile?
+  registryConflicts      RegistryConflict[]
+  registryItems          RegistryItem[]
+  workbookEntries        WorkbookEntry[]
 }
 
 model LoginEvent {
   id        String   @id @default(cuid())
   userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
   email     String
   role      Role?
   success   Boolean
   ip        String?
   userAgent String?
   createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
 }
 
 model Profile {
-  id              String   @id @default(cuid())
-  userId          String   @unique
-  inviteRequestId String?  @unique
-
-  firstName       String?
-  lastName        String?
-  dueDate         DateTime?
+  id              String         @id @default(cuid())
+  userId          String         @unique
   city            String?
+  dueDate         DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  firstName       String?
+  inviteRequestId String?        @unique
+  lastName        String?
   state           String?
-
-  user           User           @relation(fields: [userId], references: [id])
-  inviteRequest  InviteRequest? @relation(fields: [inviteRequestId], references: [id])
-
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  inviteRequest   InviteRequest? @relation(fields: [inviteRequestId], references: [id])
+  user            User           @relation(fields: [userId], references: [id])
 }
+
 model Invite {
-  id          String   @id @default(cuid())
-  code        String   @unique
-  email       String?
-  role        Role     @default(MEMBER)
-  createdBy   User     @relation("CreatedInvites", fields: [createdById], references: [id])
-  createdById String
+  id             String    @id @default(cuid())
+  code           String    @unique
+  role           Role      @default(MEMBER)
+  createdById    String
+  used           Boolean   @default(false)
+  usedAt         DateTime?
+  usedById       String?   @unique
+  expiresAt      DateTime?
+  createdAt      DateTime  @default(now())
   createdByEmail String?
-  used        Boolean  @default(false)
-  usedAt      DateTime?
-  usedBy      User?    @relation("ConsumedInvite", fields: [usedById], references: [id])
-  usedById    String?  @unique
-  expiresAt   DateTime?
-  maxUses     Int      @default(1)
-  createdAt   DateTime @default(now())
+  email          String?
+  maxUses        Int       @default(1)
+  createdBy      User      @relation("CreatedInvites", fields: [createdById], references: [id])
+  usedBy         User?     @relation("ConsumedInvite", fields: [usedById], references: [id])
 }
 
 model Waitlist {
@@ -106,61 +95,42 @@ model Waitlist {
 }
 
 model InviteRequest {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  firstName     String?
-  lastName      String?
-  message       String?
-  status        String   @default("pending")
-  inviteCode    String?  @unique
-
-  approvedById  String?
-  approvedBy    User?    @relation("InviteApprover", fields: [approvedById], references: [id])
-
-  profile       Profile?
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-enum RegistryStatus {
-  ACTIVE
-  NEEDED
-  RESERVED
-  PURCHASED
-  PURCHASED_ELSEWHERE
-  REMOVED_REMOTE
-}
-
-enum WorkbookEntryType {
-  JOURNAL
-  MOODBOARD
-  CHECKLIST
-  REFLECTION
+  id           String   @id @default(cuid())
+  email        String   @unique
+  status       String   @default("pending")
+  inviteCode   String?  @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  approvedById String?
+  firstName    String?
+  lastName     String?
+  message      String?
+  approvedBy   User?    @relation("InviteApprover", fields: [approvedById], references: [id])
+  profile      Profile?
 }
 
 model Product {
-  id           String         @id @default(cuid())
-  name         String
-  brand        String
-  category     String
-  imageUrl     String
-  affiliateUrl String
-  merchant     String
-  moduleCodes  String[]
-  price        Float?
-  inStock      Boolean        @default(true)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id            String         @id @default(cuid())
+  name          String
+  brand         String
+  category      String
+  imageUrl      String
+  affiliateUrl  String
+  merchant      String
+  moduleCodes   String[]
+  price         Float?
+  inStock       Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  mentorNotes   MentorNote[]
   registryItems RegistryItem[]
-  mentorNotes  MentorNote[]
 }
 
 model RegistryItem {
-  id             String         @id @default(cuid())
+  id             String             @id @default(cuid())
   userId         String
   productId      String?
-  isCustom       Boolean        @default(false)
+  isCustom       Boolean            @default(false)
   title          String
   url            String
   merchant       String?
@@ -170,16 +140,15 @@ model RegistryItem {
   price          Float?
   myRegistryId   String?
   notes          String?
-  quantity       Int            @default(1)
-  status         RegistryStatus @default(ACTIVE)
+  quantity       Int                @default(1)
+  status         RegistryStatus     @default(ACTIVE)
   purchaseSource String?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-
-  user      User               @relation(fields: [userId], references: [id])
-  product   Product?           @relation(fields: [productId], references: [id])
-  conflicts RegistryConflict[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
   mentorFeedback MentorFeedback[]
+  conflicts      RegistryConflict[]
+  product        Product?           @relation(fields: [productId], references: [id])
+  user           User               @relation(fields: [userId], references: [id])
 }
 
 model MentorNote {
@@ -189,25 +158,23 @@ model MentorNote {
   productId String
   note      String
   createdAt DateTime @default(now())
-
-  member User    @relation("MemberMentorNotes", fields: [memberId], references: [id])
-  mentor User    @relation("MentorNotesAuthored", fields: [mentorId], references: [id])
-  product Product @relation(fields: [productId], references: [id])
+  member    User     @relation("MemberMentorNotes", fields: [memberId], references: [id])
+  mentor    User     @relation("MentorNotesAuthored", fields: [mentorId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 }
 
 model AcademyModule {
-  id          String   @id
-  title       String
-  subtitle    String?
-  description String?
-  heroImage   String?
-  content     Json     @default("{}")
-  trackId     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  workbookEntries WorkbookEntry[]
+  id              String           @id
+  title           String
+  trackId         String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  content         Json             @default("{}")
+  heroImage       String?
+  subtitle        String?
+  description     String?
   mentorFeedback  MentorFeedback[]
+  workbookEntries WorkbookEntry[]
 }
 
 model Event {
@@ -224,9 +191,8 @@ model Event {
   endTime     DateTime?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-
-  host   User?       @relation("HostedEvents", fields: [hostId], references: [id])
-  rsvps  EventRsvp[]
+  host        User?       @relation("HostedEvents", fields: [hostId], references: [id])
+  rsvps       EventRsvp[]
 }
 
 model EventRsvp {
@@ -235,20 +201,19 @@ model EventRsvp {
   userId    String?
   status    String   @default("confirmed")
   createdAt DateTime @default(now())
-
-  event Event @relation(fields: [eventId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id])
 }
 
 model AdminSettings {
-  id                  Int      @id @default(1)
-  inviteOnly          Boolean  @default(true)
-  defaultMentorId     String?
-  pinterestClientId   String?
-  pinterestSecret     String?
+  id                   Int      @id @default(1)
+  inviteOnly           Boolean  @default(true)
+  defaultMentorId      String?
+  pinterestClientId    String?
+  pinterestSecret      String?
   myRegistryMerchantId String?
-  affiliateNetwork    String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  affiliateNetwork     String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 }
 
 model MentorFeedback {
@@ -260,11 +225,10 @@ model MentorFeedback {
   message        String
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
-
-  mentor       User           @relation("MentorFeedbackMentor", fields: [mentorId], references: [id])
-  member       User           @relation("MentorFeedbackMember", fields: [memberId], references: [id])
-  module       AcademyModule? @relation(fields: [moduleId], references: [id])
-  registryItem RegistryItem?  @relation(fields: [registryItemId], references: [id])
+  member         User           @relation("MentorFeedbackMember", fields: [memberId], references: [id])
+  mentor         User           @relation("MentorFeedbackMentor", fields: [mentorId], references: [id])
+  module         AcademyModule? @relation(fields: [moduleId], references: [id])
+  registryItem   RegistryItem?  @relation(fields: [registryItemId], references: [id])
 }
 
 model MentorTask {
@@ -277,9 +241,8 @@ model MentorTask {
   description String?
   completed   Boolean  @default(false)
   createdAt   DateTime @default(now())
-
-  mentor User @relation("MentorTasksMentor", fields: [mentorId], references: [id])
-  member User @relation("MentorTasksMember", fields: [memberId], references: [id])
+  member      User     @relation("MentorTasksMember", fields: [memberId], references: [id])
+  mentor      User     @relation("MentorTasksMentor", fields: [mentorId], references: [id])
 }
 
 model JournalShare {
@@ -292,17 +255,16 @@ model JournalShare {
 }
 
 model RegistryConflict {
-  id          String   @id @default(cuid())
+  id          String       @id @default(cuid())
   userId      String
   itemId      String
   field       String
   localValue  String?
   remoteValue String?
-  resolved    Boolean  @default(false)
-  createdAt   DateTime @default(now())
-
-  user  User         @relation(fields: [userId], references: [id])
-  item  RegistryItem @relation(fields: [itemId], references: [id])
+  resolved    Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  item        RegistryItem @relation(fields: [itemId], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([itemId])
@@ -317,11 +279,32 @@ model WorkbookEntry {
   content   Json
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
+  module    AcademyModule     @relation(fields: [moduleId], references: [id])
+  user      User              @relation(fields: [userId], references: [id])
 
-  user    User           @relation(fields: [userId], references: [id])
-  module  AcademyModule  @relation(fields: [moduleId], references: [id])
-
+  @@unique([userId, moduleId, type])
   @@index([userId])
   @@index([moduleId])
-  @@unique([userId, moduleId, type])
+}
+
+enum Role {
+  MEMBER
+  MENTOR
+  ADMIN
+}
+
+enum RegistryStatus {
+  ACTIVE
+  NEEDED
+  RESERVED
+  PURCHASED
+  PURCHASED_ELSEWHERE
+  REMOVED_REMOTE
+}
+
+enum WorkbookEntryType {
+  JOURNAL
+  MOODBOARD
+  CHECKLIST
+  REFLECTION
 }

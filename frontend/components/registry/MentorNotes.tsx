@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Loader2, MessageSquarePlus, PlusCircle, ChevronDown } from 'lucide-react';
 
 import { api } from '@/lib/api';
-import { loadSession } from '@/lib/auth';
+import { loadSession } from '@/lib/auth.client';
 import type { MentorNote } from '@/types/registry';
 import type { MentorFeedback } from '@/types/mentor';
 

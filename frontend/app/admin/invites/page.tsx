@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { adminInviteApi, inviteApi } from '@/lib/api';
-import { Auth } from '@/lib/auth';
+import { Auth } from '@/lib/auth.client';
 
 interface InviteEntry {
   id: string;

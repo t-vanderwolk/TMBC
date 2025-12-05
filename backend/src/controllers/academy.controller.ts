@@ -62,3 +62,7 @@ export const getModuleRecommendedListController = async (req: Request, res: Resp
     res.status(404).json({ error: error?.message || 'Module not found' });
   }
 };
+
+export const getProgressController = async (_req: Request, res: Response) => {
+  return res.json({ completed: 3, total: 12 });
+};

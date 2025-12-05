@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-import { Auth } from './auth';
+import { Auth } from './auth.client';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: API_BASE_URL,
   withCredentials: true,
 });
 

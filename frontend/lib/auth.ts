@@ -1,56 +1,42 @@
-export const Auth = {
-  save(token: string) {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('tmbc_token', token);
-    }
-  },
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-  get(): string | null {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('tmbc_token');
-  },
+import { api } from '@/lib/api';
 
-  clear() {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('tmbc_token');
-    }
-  },
-
-  decode(): any | null {
-    const token = this.get();
-    if (!token) return null;
-
-    try {
-      return JSON.parse(atob(token.split('.')[1]));
-    } catch {
-      return null;
-    }
-  },
-};
-
-export type SessionPayload = {
-  role?: string;
-  firstName?: string;
-  lastName?: string;
-  name?: string;
-  email?: string;
-  [key: string]: any;
-};
-
-export type Session = {
-  token: string;
-  payload: SessionPayload;
-};
-
-export const loadSession = (): Session | null => {
-  const token = Auth.get();
-  if (!token) return null;
-
-  const payload = Auth.decode();
-  if (!payload) {
-    Auth.clear();
-    return null;
+export async function requireUser() {
+  const token = cookies().get('tm_token')?.value;
+  if (!token) {
+    redirect('/login');
   }
 
-  return { token, payload };
-};
+  try {
+    const response = await api.get('/api/auth/me', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return {
+      ...response.data,
+      token,
+    };
+  } catch {
+    redirect('/login');
+  }
+}
+
+export async function requireAdmin() {
+  const user = await requireUser();
+  if (String(user.role ?? '').toLowerCase() !== 'admin') {
+    redirect('/dashboard');
+  }
+  return user;
+}
+
+export async function requireMentor() {
+  const user = await requireUser();
+  if (String(user.role ?? '').toLowerCase() !== 'mentor') {
+    redirect('/dashboard');
+  }
+  return user;
+}

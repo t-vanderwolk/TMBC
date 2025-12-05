@@ -1,0 +1,140 @@
+.dashboard-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-layout {
+  flex: 1;
+  display: flex;
+}
+
+.dashboard-navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #eadfe3;
+  background: #ffffff;
+  box-shadow: 0 15px 40px rgba(62, 47, 53, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.dashboard-navbar__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.dashboard-navbar__brand-link {
+  line-height: 1;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  color: inherit;
+}
+
+.dashboard-navbar__nav {
+  display: flex;
+  gap: 0.75rem;
+  flex: 1;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.dashboard-navbar__link {
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  color: #3e2f35;
+  transition: 0.2s;
+}
+
+.dashboard-navbar__link:hover {
+  border-color: #eadfe3;
+  color: #b37985;
+}
+
+.dashboard-navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dashboard-navbar__logout {
+  border: 1px solid #b37985;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  background: white;
+  color: #b37985;
+  transition: 0.2s;
+}
+
+.dashboard-navbar__logout:hover {
+  background: #b37985;
+  color: white;
+}
+
+.sidebar {
+  width: 240px;
+  background: #fff9fb;
+  border-right: 1px solid #eadfe3;
+  padding: 2rem 1.5rem;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 1rem;
+  color: #3e2f35;
+  transition: 0.2s;
+}
+
+.sidebar-link.active,
+.sidebar-link:hover {
+  background: #f4e2ea;
+  color: #a9798c;
+}
+
+.dashboard-main {
+  flex: 1;
+}
+
+.dashboard-cards {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.dashboard-card {
+  background: white;
+  border: 1px solid #eadfe3;
+  padding: 1.75rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 20px rgba(200, 161, 180, 0.12);
+}
+
+.card-title {
+  color: #c8a1b4;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.card-value {
+  margin-top: 0.5rem;
+  font-size: 2rem;
+  color: #3e2f35;
+  font-weight: 600;
+}

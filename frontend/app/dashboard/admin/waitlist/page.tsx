@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Check, X } from 'lucide-react';
 
 import { api } from '@/lib/api';
-import { loadSession } from '@/lib/auth';
+import { loadSession } from '@/lib/auth.client';
 
 type WaitlistEntry = {
   id: string;
