@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import Link from "next/link";
-import { Auth } from "@/lib/auth.client";
+import { saveSession } from "@/lib/auth";
 
 const INPUT =
   "w-full rounded-full border border-[#C8A1B4]/40 bg-white px-5 py-3 text-sm text-[#3E2F35] placeholder-[#3E2F35]/40 focus:border-[#C8A1B4] focus:outline-none focus:ring-2 focus:ring-[#EAC9D1] transition";
@@ -31,21 +31,22 @@ export default function LoginPage() {
         return;
       }
 
-      Auth.save(res.data.token);
-      const user = res.data.user;
-      const role = (user.role || "").toUpperCase();
+      const user = {
+        ...res.data.user,
+        role: (res.data.user.role || "MEMBER").toUpperCase(),
+      };
 
-      if (!role) {
-        setError("Unable to determine role. Please try again.");
-        return;
-      }
+      saveSession({
+        token: res.data.token,
+        user,
+      });
 
-      localStorage.setItem("tm_user", JSON.stringify({ ...user, role }));
+      const role = user.role;
 
       if (role === "ADMIN") {
         router.push("/dashboard/admin");
       } else if (role === "MENTOR") {
-        router.push("/dashboard/mentor");
+        router.push("/mentor/dashboard");
       } else {
         router.push("/dashboard");
       }

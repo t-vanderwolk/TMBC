@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const invite_controller_1 = require("../controllers/invite.controller");
+const inviteRequest_controller_1 = require("../controllers/inviteRequest.controller");
 const authMiddleware_1 = require("../middleware/authMiddleware");
 const router = (0, express_1.Router)();
-router.post('/generate', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('mentor'), invite_controller_1.generate);
-router.get('/list', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('admin'), invite_controller_1.listInvites);
-router.post('/send', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('admin'), invite_controller_1.sendInvite);
-router.post('/validate', invite_controller_1.validate);
-router.post('/consume', invite_controller_1.consume);
+router.post('/request', inviteRequest_controller_1.submitInviteRequest);
+router.post('/approve', inviteRequest_controller_1.adminApproveInvite);
+router.get('/requests', authMiddleware_1.requireAdminAuth, inviteRequest_controller_1.listInviteRequests);
+router.post('/verify', inviteRequest_controller_1.verifyInviteCode);
+router.post('/create-user', inviteRequest_controller_1.createInvitedUser);
 exports.default = router;

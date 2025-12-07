@@ -8,6 +8,8 @@ router.get('/journeys', authMiddleware_1.requireAuth, academy_controller_1.getJo
 router.get('/tracks', authMiddleware_1.requireAuth, academy_controller_1.getTracksController);
 router.get('/modules', authMiddleware_1.requireAuth, academy_controller_1.getModulesController);
 router.get('/recommended', authMiddleware_1.requireAuth, academy_controller_1.getRecommendedModuleController);
+router.get('/progress', authMiddleware_1.requireAuth, academy_controller_1.getProgressController);
+router.post('/progress/complete', authMiddleware_1.requireAuth, academy_controller_1.completeModuleController);
 router.get('/:moduleCode/products', authMiddleware_1.requireAuth, academy_controller_1.getModuleProductsController);
 router.get('/:moduleCode/recommendations', authMiddleware_1.requireAuth, academy_controller_1.getModuleRecommendationsController);
 router.get('/module/:moduleCode/recommended', authMiddleware_1.requireAuth, academy_controller_1.getModuleRecommendedListController);

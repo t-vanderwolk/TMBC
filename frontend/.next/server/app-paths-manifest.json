@@ -1,8 +1,8 @@
 {
-  "/dashboard/events/page": "app/dashboard/events/page.js",
-  "/dashboard/community/page": "app/dashboard/community/page.js",
-  "/dashboard/messages/page": "app/dashboard/messages/page.js",
-  "/dashboard/learn/page": "app/dashboard/learn/page.js",
+  "/not-found": "app/not-found.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/dashboard/registry/page": "app/dashboard/registry/page.js"
+  "/dashboard/registry/page": "app/dashboard/registry/page.js",
+  "/dashboard/community/page": "app/dashboard/community/page.js",
+  "/(marketing)/login/page": "app/(marketing)/login/page.js",
+  "/(marketing)/how-it-works/page": "app/(marketing)/how-it-works/page.js"
 }

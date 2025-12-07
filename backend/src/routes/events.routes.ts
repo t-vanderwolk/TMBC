@@ -9,8 +9,8 @@ import { requireAuth } from '../middleware/authMiddleware';
 
 const router = Router();
 
-router.get('/upcoming', requireAuth, getUpcomingEventsController);
 router.get('/', requireAuth, getEventsController);
-router.post('/rsvp', requireAuth, rsvpEventController);
+router.get('/upcoming', requireAuth, getUpcomingEventsController);
+router.post('/:id/rsvp', requireAuth, rsvpEventController);
 
 export default router;

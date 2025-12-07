@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { Auth } from './auth.client';
+import { clearSession, getSessionToken } from './auth';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -10,7 +10,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = Auth.get();
+  const token = getSessionToken();
   if (token) {
     config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${token}`;
@@ -22,7 +22,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error?.response?.status === 401) {
-      Auth.clear();
+      clearSession();
     }
     return Promise.reject(error);
   },
@@ -70,6 +70,12 @@ export const adminInviteApi = {
   send: (code: string, email: string) => api.post('/invite/send', { code, email }),
 };
 
+export const inviteRequestApi = {
+  list: () => api.get('/invite/requests'),
+  approve: (payload: { requestId: string; adminId: string }) =>
+    api.post('/invite/approve', payload),
+};
+
 export const addCustomItem = (payload: {
   title: string;
   url: string;
@@ -79,3 +85,11 @@ export const addCustomItem = (payload: {
   category?: string;
   moduleCode?: string;
 }) => api.post('/api/registry/custom/add', payload);
+
+export const onboardingApi = {
+  requestInvite: (payload: { name?: string; email: string; city?: string; dueDate?: string }) =>
+    api.post('/api/onboarding/request-invite', payload),
+  verifyCode: (payload: { email: string; code: string }) => api.post('/api/onboarding/verify-code', payload),
+  createProfile: (payload: { email: string; name: string }) =>
+    api.post('/api/onboarding/create-profile', payload),
+};

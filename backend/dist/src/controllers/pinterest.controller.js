@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.savePinController = exports.getPinterestCallbackController = exports.getPinterestAuthController = void 0;
+exports.getPinterestStatusController = exports.fetchPinterestBoardPinsController = exports.fetchPinterestBoardsController = exports.savePinController = exports.getPinterestCallbackController = exports.getPinterestAuthController = void 0;
 const pinterest_service_1 = require("../services/pinterest.service");
 const getUserIdFromRequest = (req) => req.user?.userId;
 const getPinterestAuthController = (req, res) => {
@@ -56,3 +56,54 @@ const savePinController = async (req, res) => {
     }
 };
 exports.savePinController = savePinController;
+const fetchPinterestBoardsController = async (req, res) => {
+    const userId = getUserIdFromRequest(req);
+    if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    try {
+        const accessToken = await (0, pinterest_service_1.getPinterestAccessToken)(userId);
+        const boards = await (0, pinterest_service_1.fetchUserBoards)(accessToken);
+        return res.json({ boards });
+    }
+    catch (error) {
+        return res.status(500).json({ error: error?.message || 'Unable to fetch Pinterest boards' });
+    }
+};
+exports.fetchPinterestBoardsController = fetchPinterestBoardsController;
+const fetchPinterestBoardPinsController = async (req, res) => {
+    const userId = getUserIdFromRequest(req);
+    if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const boardId = typeof req.params.boardId === 'string' ? req.params.boardId : undefined;
+    if (!boardId) {
+        return res.status(400).json({ error: 'Board id is required' });
+    }
+    try {
+        const accessToken = await (0, pinterest_service_1.getPinterestAccessToken)(userId);
+        const pins = await (0, pinterest_service_1.fetchBoardPins)(accessToken, boardId);
+        return res.json({ pins });
+    }
+    catch (error) {
+        return res.status(500).json({ error: error?.message || 'Unable to fetch Pinterest pins' });
+    }
+};
+exports.fetchPinterestBoardPinsController = fetchPinterestBoardPinsController;
+const getPinterestStatusController = async (req, res) => {
+    const userId = getUserIdFromRequest(req);
+    if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    try {
+        const token = await (0, pinterest_service_1.getStoredPinterestToken)(userId);
+        return res.json({
+            connected: Boolean(token?.accessToken),
+            expiresAt: token?.expiresAt ?? null,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({ error: error?.message || 'Unable to determine Pinterest status' });
+    }
+};
+exports.getPinterestStatusController = getPinterestStatusController;

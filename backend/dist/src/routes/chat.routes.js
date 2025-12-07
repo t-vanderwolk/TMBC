@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const chat_controller_1 = require("../controllers/chat.controller");
 const authMiddleware_1 = require("../middleware/authMiddleware");
+const requireMentor_1 = require("../middleware/requireMentor");
+const chat_controller_1 = require("../controllers/chat.controller");
 const router = (0, express_1.Router)();
-router.get('/threads', authMiddleware_1.requireAuth, chat_controller_1.getThreadsController);
-router.get('/messages/:threadId', authMiddleware_1.requireAuth, chat_controller_1.getMessagesController);
-router.post('/messages', authMiddleware_1.requireAuth, chat_controller_1.postMessageController);
+router.get('/current', authMiddleware_1.requireAuth, chat_controller_1.getCurrentConversationController);
+router.get('/conversations', requireMentor_1.requireMentor, chat_controller_1.getMentorConversationsController);
+router.get('/:mentorId/:memberId', authMiddleware_1.requireAuth, chat_controller_1.getConversationController);
+router.post('/message', authMiddleware_1.requireAuth, chat_controller_1.postMessageController);
 exports.default = router;

@@ -7,9 +7,11 @@ import {
   getMentorNotesController,
   getRegistryConflictsController,
   getRegistryList,
+  getRegistrySummaryController,
   postMentorNoteController,
   postRegistryItem,
   resolveRegistryConflictController,
+  seedRegistryFromOnboardingController,
   updateRegistryItemController,
 } from '../controllers/registry.controller';
 import { requireAuth, requireRole } from '../middleware/authMiddleware';
@@ -26,5 +28,7 @@ router.post('/:productId/notes', requireAuth, requireRole('mentor'), postMentorN
 router.get('/:memberId/notes', requireAuth, requireRole('mentor'), getMentorNotesController);
 router.get('/conflicts', requireAuth, getRegistryConflictsController);
 router.post('/conflicts/resolve', requireAuth, resolveRegistryConflictController);
+router.get('/summary', requireAuth, getRegistrySummaryController);
+router.post('/seedFromOnboarding', requireAuth, seedRegistryFromOnboardingController);
 
 export default router;

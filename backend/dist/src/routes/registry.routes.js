@@ -14,4 +14,6 @@ router.post('/:productId/notes', authMiddleware_1.requireAuth, (0, authMiddlewar
 router.get('/:memberId/notes', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('mentor'), registry_controller_1.getMentorNotesController);
 router.get('/conflicts', authMiddleware_1.requireAuth, registry_controller_1.getRegistryConflictsController);
 router.post('/conflicts/resolve', authMiddleware_1.requireAuth, registry_controller_1.resolveRegistryConflictController);
+router.get('/summary', authMiddleware_1.requireAuth, registry_controller_1.getRegistrySummaryController);
+router.post('/seedFromOnboarding', authMiddleware_1.requireAuth, registry_controller_1.seedRegistryFromOnboardingController);
 exports.default = router;

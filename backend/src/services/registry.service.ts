@@ -10,13 +10,14 @@ import {
   updateMyRegistryGift,
 } from './myRegistryLegacy.service';
 import { ProductResponse, productToResponse } from './product.service';
+import { RecommendationsResult } from '../utils/recommendations';
 
 export type MentorNoteResponse = {
   id: string;
   note: string;
   mentorId: string;
   mentorName: string | null;
-  productId: string;
+  productId: string | null;
   createdAt: string;
 };
 
@@ -105,12 +106,16 @@ const hydrateMentorNotes = async (userId: string, productIds: (string | null)[])
 
   const grouped = new Map<string, MentorNoteResponse[]>();
   for (const note of notes) {
-    if (!grouped.has(note.productId)) {
-      grouped.set(note.productId, []);
+    const noteKey = note.productId;
+    if (!noteKey) {
+      continue;
     }
-    grouped.get(note.productId)!.push({
+    if (!grouped.has(noteKey)) {
+      grouped.set(noteKey, []);
+    }
+    grouped.get(noteKey)!.push({
       id: note.id,
-      note: note.note,
+      note: note.content,
       mentorId: note.mentorId,
       mentorName: note.mentor.name || null,
       productId: note.productId,
@@ -365,7 +370,7 @@ export const removeRegistryItem = async (itemId: string, userId: string) => {
 type MentorNoteInput = {
   memberId: string;
   mentorId: string;
-  productId: string;
+  productId?: string | null;
   note: string;
 };
 
@@ -374,8 +379,8 @@ export const createMentorNote = async ({ memberId, mentorId, productId, note }: 
     data: {
       memberId,
       mentorId,
-      productId,
-      note,
+      productId: productId ?? undefined,
+      content: note,
     },
     include: {
       mentor: { select: { id: true, name: true } },
@@ -387,7 +392,7 @@ export const createMentorNote = async ({ memberId, mentorId, productId, note }: 
     memberId,
     mentorId,
     productId,
-    note: mentorNote.note,
+    note: mentorNote.content,
     mentorName: mentorNote.mentor.name || null,
     createdAt: mentorNote.createdAt.toISOString(),
   };
@@ -402,11 +407,89 @@ export const listMentorNotes = async (memberId: string) => {
 
   return notes.map((note) => ({
     id: note.id,
-    note: note.note,
+    note: note.content,
     mentorId: note.mentorId,
     mentorName: note.mentor.name || null,
     productId: note.productId,
     product: productToResponse(note.product!),
     createdAt: note.createdAt.toISOString(),
   }));
+};
+
+type SuggestedRegistryItem = {
+  id: string;
+  title: string;
+  category: string | null;
+  notes: string | null;
+  status: RegistryStatus;
+};
+
+export const seedRegistryFromOnboarding = async (
+  userId: string,
+  recommendations: RecommendationsResult,
+): Promise<SuggestedRegistryItem[]> => {
+  const buckets: { items: string[]; category: string }[] = [
+    { items: recommendations.strollers, category: 'Strollers' },
+    { items: recommendations.carSeats, category: 'Car Seats' },
+    { items: recommendations.nursery, category: 'Nursery' },
+    { items: recommendations.travel, category: 'Travel' },
+  ];
+
+  const created: SuggestedRegistryItem[] = [];
+  const seen = new Set<string>();
+
+  for (const bucket of buckets) {
+    for (const label of bucket.items) {
+      if (!label || seen.has(label)) {
+        continue;
+      }
+      seen.add(label);
+
+      const item = await prisma.registryItem.create({
+        data: {
+          userId,
+          isCustom: true,
+          title: label,
+          url: 'https://taylormadebabyco.com/registry',
+          merchant: 'Taylor-Made Baby Co.',
+          category: bucket.category,
+          moduleCode: 'onboarding',
+          status: RegistryStatus.NEEDED,
+          notes: 'Suggested from onboarding recommendations',
+          purchaseSource: 'recommendation',
+        },
+      });
+
+      created.push({
+        id: item.id,
+        title: item.title,
+        category: item.category,
+        notes: item.notes,
+        status: item.status,
+      });
+    }
+  }
+
+  return created;
+};
+
+export const getRegistrySummary = async (userId: string) => {
+  const suggestedCount = await prisma.registryItem.count({
+    where: {
+      userId,
+      purchaseSource: 'recommendation',
+    },
+  });
+
+  const confirmedCount = await prisma.registryItem.count({
+    where: {
+      userId,
+      status: RegistryStatus.PURCHASED,
+    },
+  });
+
+  return {
+    suggestedCount,
+    confirmedCount,
+  };
 };

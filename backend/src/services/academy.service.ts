@@ -12,6 +12,7 @@ export type AcademyTrack = {
 };
 
 import { ProductResponse, getProductsByCategories, getProductsByIds, getProductsByModuleCode } from './product.service';
+import { prisma } from '../../prisma/client';
 
 type AcademyModuleDefinition = {
   id: string;
@@ -27,6 +28,15 @@ type AcademyModuleDefinition = {
 
 export type AcademyModule = Omit<AcademyModuleDefinition, 'recommendedProducts'> & {
   recommendedProducts: ProductResponse[];
+};
+
+export type AcademyModuleWithProgress = AcademyModule & {
+  completed?: boolean;
+};
+
+export type AcademyProgressSummary = {
+  completed: number;
+  total: number;
 };
 
 const journeys: AcademyJourney[] = [
@@ -128,8 +138,10 @@ export const getRecommendedModule = async () => {
   return first;
 };
 
+const normalizeModuleId = (input: string) => input.trim().toLowerCase();
+
 const findModule = (moduleCode: string) => {
-  const normalizedCode = moduleCode.toLowerCase();
+  const normalizedCode = normalizeModuleId(moduleCode);
   return modules.find((module) => module.id === normalizedCode);
 };
 
@@ -189,4 +201,63 @@ export const getModuleRecommendedProductsList = async (moduleCode: string) => {
   }
 
   return getProductsByIds(module.recommendedProducts);
+};
+
+export const getModulesWithProgress = async (userId?: string): Promise<AcademyModuleWithProgress[]> => {
+  const baseModules = await getAcademyModules();
+  if (!userId) return baseModules;
+
+  const progressRecords = await prisma.academyProgress.findMany({
+    where: { userId },
+    select: {
+      moduleId: true,
+      completed: true,
+    },
+  });
+
+  const completedSet = new Set(
+    progressRecords.filter((record) => record.completed).map((record) => record.moduleId),
+  );
+
+  return baseModules.map((module) => ({
+    ...module,
+    completed: completedSet.has(module.id),
+  }));
+};
+
+export const getUserProgressSummary = async (userId?: string): Promise<AcademyProgressSummary> => {
+  const total = modules.length;
+  if (!userId) {
+    return { completed: 0, total };
+  }
+
+  const completed = await prisma.academyProgress.count({
+    where: {
+      userId,
+      completed: true,
+    },
+  });
+
+  return { completed, total };
+};
+
+export const completeModuleForUser = async (userId: string, moduleId: string) => {
+  const normalized = normalizeModuleId(moduleId);
+  const moduleExists = modules.some((module) => module.id === normalized);
+  if (!moduleExists) {
+    throw new Error(`Module ${moduleId} not found`);
+  }
+
+  await prisma.academyProgress.upsert({
+    where: {
+      userId_moduleId: {
+        userId,
+        moduleId: normalized,
+      },
+    },
+    update: { completed: true },
+    create: { userId, moduleId: normalized, completed: true },
+  });
+
+  return normalized;
 };

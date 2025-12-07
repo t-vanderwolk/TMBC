@@ -1,211 +1,130 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-type Post = {
-  id: number;
-  author: string;
-  timestamp: string;
-  text: string;
-  tags: string[];
-};
+import { getCommunityRooms } from "@/lib/api/community";
 
-type Poll = {
-  question: string;
-  options: { label: string; votes: number }[];
-};
-
-const posts: Post[] = [
-  {
-    id: 1,
-    author: "Lena · Third Trimester",
-    timestamp: "2h ago",
-    text: "Sustainable crib bedding with washable layers, plus a mentor note that says it can stay curated even after the baby sleeps in the fam bed.",
-    tags: ["nursery", "mentor note"],
-  },
-  {
-    id: 2,
-    author: "Marisol · Early Mom",
-    timestamp: "4h ago",
-    text: "Do we really need a wipe warmer? I’m leaning no but would love a quick poll from folks who use theirs daily.",
-    tags: ["poll", "gear"],
-  },
-  {
-    id: 3,
-    author: "Avery · MMBC Mentor",
-    timestamp: "Yesterday",
-    text: "Remember: the registry is a living document. Swap in your calm items and archive the noise—I'll drop moodboard pins later today.",
-    tags: ["mentor highlight", "registry"],
-  },
-];
-
-const polls: Poll[] = [
-  {
-    question: "Which evening ritual helps you breathe before bed?",
-    options: [
-      { label: "Slow tea + gratitude list", votes: 84 },
-      { label: "Gentle stretching + breathwork", votes: 62 },
-      { label: "Voice note recap with mentor", votes: 49 },
-    ],
-  },
-];
-
-const upcomingCircles = [
-  { title: "Mentor Circle · Postpartum Glow", time: "Friday · 6p PT" },
-  { title: "Registry Styling Salon", time: "Tuesday · 10a PT" },
-  { title: "Partner Planning Pop-up", time: "Monthly · 3p PT" },
-];
-
-const trendingTopics = ["Moodboard magic", "Postpartum playlist", "Minimalist registry", "Mentor Q&A"];
-
-const mentorSpotlight = {
-  name: "Ellie Ramos",
-  bio: "Taylor-Made mentor + birth educator with a soft spot for heirloom registries.",
-  hero: "Ellie answers late-night questions with warmth, honesty, and a sprinkle of gold.",
+type CommunityRoom = {
+  id: string;
+  name: string;
+  description?: string | null;
+  recentPostSnippet?: string | null;
+  recentPostAuthor?: string | null;
+  recentPostAt?: string | null;
 };
 
 export default function CommunityPage() {
-  const [likes, setLikes] = useState<Record<number, boolean>>({});
-  const [bookmarks, setBookmarks] = useState<Record<number, boolean>>({});
-  const [votes, setVotes] = useState<Record<string, string>>({});
+  const router = useRouter();
+  const [rooms, setRooms] = useState<CommunityRoom[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [token, setToken] = useState<string | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
 
-  const toggleLike = (postId: number) => {
-    setLikes((prev) => ({ ...prev, [postId]: !prev[postId] }));
-  };
+  useEffect(() => {
+    const stored = localStorage.getItem("tm_user");
+    if (!stored) {
+      router.replace("/login");
+      setAuthChecked(true);
+      return;
+    }
+    try {
+      const parsed = JSON.parse(stored);
+      setToken(parsed?.token ?? null);
+    } catch {
+      localStorage.removeItem("tm_user");
+      router.replace("/login");
+    } finally {
+      setAuthChecked(true);
+    }
+  }, [router]);
 
-  const toggleBookmark = (postId: number) => {
-    setBookmarks((prev) => ({ ...prev, [postId]: !prev[postId] }));
-  };
+  useEffect(() => {
+    if (!token) return;
+    setLoading(true);
+    setError("");
+    getCommunityRooms(token)
+      .then((response) => {
+        setRooms(response.data);
+      })
+      .catch(() => {
+        setError("Unable to load rooms at the moment.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [token]);
 
-  const vote = (question: string, option: string) => {
-    setVotes((prev) => ({ ...prev, [question]: option }));
-  };
+  if (!authChecked) {
+    return (
+      <div className="flex flex-1 items-center justify-center px-4 py-20 text-sm uppercase tracking-[0.5em] text-[#C8A1B4]">
+        Gathering circles…
+      </div>
+    );
+  }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr,0.38fr]">
-      <section className="space-y-6 rounded-[36px] border border-[var(--tmbc-mauve)]/40 bg-[var(--tmbc-ivory)]/80 p-6 shadow-[0_30px_80px_rgba(199,166,199,0.2)]">
-        <div className="flex items-center justify-between">
-          <h1 className="font-serif text-3xl text-[var(--tmbc-charcoal)]">Community Feed</h1>
-          <span className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Invite-only</span>
-        </div>
-        <div className="space-y-4">
-          {posts.map((post) => (
-            <article
-              key={post.id}
-              className="space-y-3 rounded-[28px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-5 shadow-[0_18px_50px_rgba(199,166,199,0.2)]"
-            >
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-[var(--tmbc-charcoal)]">{post.author}</p>
-                <p className="text-[0.65rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/60">
-                  {post.timestamp}
-                </p>
-              </div>
-              <p className="text-sm leading-relaxed text-[var(--tmbc-charcoal)]">{post.text}</p>
-              <div className="flex flex-wrap gap-2 text-[0.65rem] uppercase tracking-[0.25em] text-[var(--tmbc-charcoal)]/70">
-                {post.tags.map((tag) => (
-                  <span
-                    key={`${post.id}-${tag}`}
-                    className="rounded-full border border-[var(--tmbc-mauve)]/40 px-3 py-1"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div className="flex items-center gap-4 text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
-                <button
-                  onClick={() => toggleLike(post.id)}
-                  className={`rounded-full border px-3 py-2 transition ${
-                    likes[post.id] ? "border-[var(--tmbc-mauve)] bg-[var(--tmbc-mauve)]/10" : "border-[var(--tmbc-charcoal)]/20"
-                  }`}
-                >
-                  {likes[post.id] ? "Liked" : "Like"}
-                </button>
-                <button
-                  onClick={() => toggleBookmark(post.id)}
-                  className={`rounded-full border px-3 py-2 transition ${
-                    bookmarks[post.id]
-                      ? "border-[var(--tmbc-gold)] bg-[var(--tmbc-gold)]/10"
-                      : "border-[var(--tmbc-charcoal)]/20"
-                  }`}
-                >
-                  {bookmarks[post.id] ? "Saved" : "Bookmark"}
-                </button>
-                <button className="rounded-full border border-[var(--tmbc-charcoal)]/20 px-3 py-2">
-                  Reply
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <div className="space-y-4">
-          <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Polls</p>
-          {polls.map((poll) => (
-            <div
-              key={poll.question}
-              className="space-y-3 rounded-[28px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-5 shadow-[0_12px_40px_rgba(199,166,199,0.15)]"
-            >
-              <p className="text-sm font-semibold text-[var(--tmbc-charcoal)]">{poll.question}</p>
-              <div className="space-y-2">
-                {poll.options.map((option) => (
-                  <button
-                    key={option.label}
-                    onClick={() => vote(poll.question, option.label)}
-                    className={`flex w-full items-center justify-between rounded-[24px] border px-4 py-2 text-sm text-[var(--tmbc-charcoal)] transition ${
-                      votes[poll.question] === option.label
-                        ? "border-[var(--tmbc-mauve)] bg-[var(--tmbc-mauve)]/10"
-                        : "border-[var(--tmbc-charcoal)]/20 hover:border-[var(--tmbc-mauve)]"
-                    }`}
-                  >
-                    <span>{option.label}</span>
-                    <span className="text-[0.65rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/60">
-                      {option.votes + (votes[poll.question] === option.label ? 1 : 0)} votes
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+    <main className="space-y-8 px-4 py-8 text-[#3E2F35] sm:px-6">
+      <section className="rounded-[2.5rem] border border-[#EAD4D8] bg-gradient-to-br from-[#FFF8F6] via-[#FBE9EE] to-[#F0D4D9]/70 p-6 shadow-[0_25px_70px_rgba(192,153,170,0.3)]">
+        <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[#3E2F35]/70">Community · Gather</p>
+        <h1 className="mt-2 font-serif text-3xl text-[#3E2F35]">Your invite-only rooms</h1>
+        <p className="mt-2 text-sm text-[#3E2F35]/70">
+          Each room is curated for stories, mentor support, and the hush of a calm community.
+        </p>
       </section>
 
-      <aside className="space-y-6 rounded-[36px] border border-[var(--tmbc-mauve)]/40 bg-white/90 p-5 shadow-[0_25px_70px_rgba(199,166,199,0.2)]">
-        <div className="space-y-3">
-          <h2 className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/50">Upcoming Circles</h2>
-          <div className="space-y-3">
-            {upcomingCircles.map((circle) => (
-              <div key={circle.title} className="rounded-[24px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/90 px-4 py-3">
-                <p className="text-sm font-semibold text-[var(--tmbc-charcoal)]">{circle.title}</p>
-                <p className="text-[0.65rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/60">{circle.time}</p>
-              </div>
-            ))}
-          </div>
+      {loading && (
+        <div className="flex flex-1 items-center justify-center rounded-[2rem] border border-[#E3C6D4] bg-white/90 p-6 text-sm uppercase tracking-[0.5em] text-[#C8A1B4] shadow-[0_20px_60px_rgba(180,143,164,0.25)]">
+          Loading your rooms…
         </div>
+      )}
 
-        <div className="space-y-3">
-          <h2 className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/50">Trending Topics</h2>
-          <div className="flex flex-wrap gap-2">
-            {trendingTopics.map((topic) => (
-              <span
-                key={topic}
-                className="rounded-full border border-[var(--tmbc-mauve)]/40 px-3 py-1 text-[0.65rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/70"
-              >
-                {topic}
-              </span>
-            ))}
-          </div>
+      {error && (
+        <div className="rounded-[1.75rem] border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
+          {error}
         </div>
+      )}
 
-        <div className="space-y-3 rounded-[30px] border border-[var(--tmbc-mauve)]/30 bg-[var(--tmbc-blush)]/60 p-4">
-          <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Mentor Spotlight</p>
-          <h3 className="text-lg font-semibold text-[var(--tmbc-charcoal)]">{mentorSpotlight.name}</h3>
-          <p className="text-sm text-[var(--tmbc-charcoal)]/80">{mentorSpotlight.bio}</p>
-          <p className="text-[0.75rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/60">{mentorSpotlight.hero}</p>
-          <button className="mt-2 w-full rounded-full border border-[var(--tmbc-charcoal)]/20 px-4 py-2 text-[0.7rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-mauve)]">
-            View Mentor Notes
-          </button>
-        </div>
-      </aside>
-    </div>
+      <section className="grid gap-6 sm:grid-cols-2">
+        {rooms.map((room) => (
+          <article
+            key={room.id}
+            className="flex h-full flex-col justify-between rounded-[2.25rem] border border-[#E3C6D4] bg-white/90 p-6 shadow-[0_20px_60px_rgba(180,143,164,0.25)] transition hover:-translate-y-1 hover:shadow-[0_25px_80px_rgba(180,143,164,0.35)]"
+          >
+            <div className="space-y-3">
+              <h2 className="text-2xl font-semibold text-[#3E2F35]">{room.name}</h2>
+              <p className="text-sm text-[#3E2F35]/70">{room.description ?? "This circle is a calm sanctuary."}</p>
+              {room.recentPostSnippet && (
+                <div className="rounded-2xl bg-[#FFFAF8] p-4 text-sm text-[#3E2F35]/80">
+                  <p className="text-[0.65rem] uppercase tracking-[0.3em] text-[#C8A1B4]">
+                    Latest whisper
+                  </p>
+                  <p className="mt-1 leading-snug">
+                    {room.recentPostSnippet}
+                  </p>
+                  <p className="mt-2 text-[0.65rem] uppercase tracking-[0.3em] text-[#3E2F35]/50">
+                    {room.recentPostAuthor ?? "Member"} ·{" "}
+                    {room.recentPostAt
+                      ? new Date(room.recentPostAt).toLocaleDateString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                        })
+                      : "recently"}
+                  </p>
+                </div>
+              )}
+            </div>
+            <Link
+              href={`/dashboard/community/${room.id}`}
+              className="mt-4 inline-flex items-center justify-center rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-[#3E2F35] transition hover:border-[#B98AA5] hover:text-[#B98AA5]"
+            >
+              Enter room →
+            </Link>
+          </article>
+        ))}
+      </section>
+    </main>
   );
 }

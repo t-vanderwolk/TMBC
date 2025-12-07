@@ -4,10 +4,13 @@ import {
   getAcademyJourneys,
   getAcademyModules,
   getAcademyTracks,
+  getModulesWithProgress,
   getModuleProducts,
   getModuleRecommendations,
   getModuleRecommendedProductsList,
   getRecommendedModule,
+  getUserProgressSummary,
+  completeModuleForUser,
 } from '../services/academy.service';
 
 export const getJourneysController = async (_req: Request, res: Response) => {
@@ -20,8 +23,9 @@ export const getTracksController = async (_req: Request, res: Response) => {
   res.json(tracks);
 };
 
-export const getModulesController = async (_req: Request, res: Response) => {
-  const modules = await getAcademyModules();
+export const getModulesController = async (req: Request, res: Response) => {
+  const user = (req as any).user;
+  const modules = await getModulesWithProgress(user?.id);
   res.json(modules);
 };
 
@@ -63,6 +67,30 @@ export const getModuleRecommendedListController = async (req: Request, res: Resp
   }
 };
 
-export const getProgressController = async (_req: Request, res: Response) => {
-  return res.json({ completed: 3, total: 12 });
+export const completeModuleController = async (req: Request, res: Response) => {
+  const user = (req as any).user;
+  const userId = user?.id;
+  const { moduleId } = req.body || {};
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  if (!moduleId) {
+    return res.status(400).json({ error: 'moduleId is required' });
+  }
+
+  try {
+    const completedModuleId = await completeModuleForUser(userId, moduleId);
+    const summary = await getUserProgressSummary(userId);
+    return res.json({ moduleId: completedModuleId, summary });
+  } catch (error: any) {
+    return res.status(400).json({ error: error?.message || 'Unable to complete module' });
+  }
+};
+
+export const getProgressController = async (req: Request, res: Response) => {
+  const user = (req as any).user;
+  const progress = await getUserProgressSummary(user?.id);
+  return res.json(progress);
 };

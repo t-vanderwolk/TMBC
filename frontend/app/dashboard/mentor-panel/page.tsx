@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Sparkles } from 'lucide-react';
 
 import { api } from '@/lib/api';
-import { loadSession } from '@/lib/auth.client';
+import { loadSession } from '@/lib/auth';
 import MentorFeedbackCard from '@/components/mentor/MentorFeedbackCard';
 import MentorTaskList from '@/components/mentor/MentorTaskList';
 import MentorJournalShareBanner from '@/components/mentor/MentorJournalShareBanner';

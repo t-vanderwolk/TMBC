@@ -93,3 +93,29 @@ export async function createInvitedUser(req: Request, res: Response, next: NextF
     next(err);
   }
 }
+
+export async function listInviteRequests(_req: Request, res: Response, next: NextFunction) {
+  try {
+    const requests = await prisma.inviteRequest.findMany({
+      where: { status: 'pending' },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        profile: true,
+      },
+    });
+
+    const payload = requests.map((request) => ({
+      id: request.id,
+      email: request.email,
+      dueDate: request.profile?.dueDate?.toISOString() ?? null,
+      vibe: request.message ?? null,
+      supportNeeds: request.message ?? null,
+      createdAt: request.createdAt.toISOString(),
+      status: request.status,
+    }));
+
+    res.json({ data: payload });
+  } catch (err) {
+    next(err);
+  }
+}

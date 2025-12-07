@@ -6,5 +6,8 @@ const pinterest_controller_1 = require("../controllers/pinterest.controller");
 const router = (0, express_1.Router)();
 router.get('/auth', authMiddleware_1.requireAuth, pinterest_controller_1.getPinterestAuthController);
 router.get('/callback', pinterest_controller_1.getPinterestCallbackController);
+router.get('/boards', authMiddleware_1.requireAuth, pinterest_controller_1.fetchPinterestBoardsController);
+router.get('/boards/:boardId/pins', authMiddleware_1.requireAuth, pinterest_controller_1.fetchPinterestBoardPinsController);
+router.get('/status', authMiddleware_1.requireAuth, pinterest_controller_1.getPinterestStatusController);
 router.post('/save-pin', authMiddleware_1.requireAuth, pinterest_controller_1.savePinController);
 exports.default = router;

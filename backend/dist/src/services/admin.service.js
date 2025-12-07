@@ -19,6 +19,14 @@ const formatRelativeTime = (date) => {
     return 'just now';
 };
 const PURCHASED_STATUSES = ['PURCHASED', 'PURCHASED_ELSEWHERE'];
+const splitLectureIntoSlides = (raw) => {
+    if (!raw)
+        return [];
+    return raw
+        .split(/\n\s*\n/)
+        .map((paragraph) => paragraph.trim())
+        .filter(Boolean);
+};
 const normalizeModuleContent = (value) => {
     if (!value || typeof value !== 'object') {
         return {};
@@ -371,6 +379,7 @@ const getAdminModules = async () => {
             explore: content.explore ?? '',
             apply: content.apply ?? '',
             journalPrompt: content.journalPrompt ?? '',
+            slides: splitLectureIntoSlides(content.lecture ?? ''),
             updatedAt: module.updatedAt.toISOString(),
         };
     });
@@ -396,10 +405,12 @@ const updateAdminModule = async (id, payload) => {
     if (payload.journalPrompt !== undefined)
         contentUpdates.journalPrompt = payload.journalPrompt;
     if (Object.keys(contentUpdates).length > 0) {
-        data.content = {
+        const mergedContent = {
             ...existingContent,
             ...contentUpdates,
         };
+        mergedContent.slides = splitLectureIntoSlides(mergedContent.lecture ?? '');
+        data.content = mergedContent;
     }
     const module = await client_2.prisma.academyModule.update({
         where: { id },
@@ -416,6 +427,7 @@ const updateAdminModule = async (id, payload) => {
         explore: updatedContent.explore ?? '',
         apply: updatedContent.apply ?? '',
         journalPrompt: updatedContent.journalPrompt ?? '',
+        slides: updatedContent.slides ?? [],
         updatedAt: module.updatedAt.toISOString(),
     };
 };

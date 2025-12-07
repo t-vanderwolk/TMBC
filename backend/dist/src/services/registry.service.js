@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listMentorNotes = exports.createMentorNote = exports.removeRegistryItem = exports.updateRegistryItem = exports.addCustomItem = exports.addRegistryItem = exports.listRegistryItems = void 0;
+exports.getRegistrySummary = exports.seedRegistryFromOnboarding = exports.listMentorNotes = exports.createMentorNote = exports.removeRegistryItem = exports.updateRegistryItem = exports.addCustomItem = exports.addRegistryItem = exports.listRegistryItems = void 0;
 const client_1 = require("@prisma/client");
 const client_2 = require("../../prisma/client");
 const affiliate_service_1 = require("./affiliate.service");
@@ -62,12 +62,16 @@ const hydrateMentorNotes = async (userId, productIds) => {
     });
     const grouped = new Map();
     for (const note of notes) {
-        if (!grouped.has(note.productId)) {
-            grouped.set(note.productId, []);
+        const noteKey = note.productId;
+        if (!noteKey) {
+            continue;
         }
-        grouped.get(note.productId).push({
+        if (!grouped.has(noteKey)) {
+            grouped.set(noteKey, []);
+        }
+        grouped.get(noteKey).push({
             id: note.id,
-            note: note.note,
+            note: note.content,
             mentorId: note.mentorId,
             mentorName: note.mentor.name || null,
             productId: note.productId,
@@ -247,8 +251,8 @@ const createMentorNote = async ({ memberId, mentorId, productId, note }) => {
         data: {
             memberId,
             mentorId,
-            productId,
-            note,
+            productId: productId ?? undefined,
+            content: note,
         },
         include: {
             mentor: { select: { id: true, name: true } },
@@ -259,7 +263,7 @@ const createMentorNote = async ({ memberId, mentorId, productId, note }) => {
         memberId,
         mentorId,
         productId,
-        note: mentorNote.note,
+        note: mentorNote.content,
         mentorName: mentorNote.mentor.name || null,
         createdAt: mentorNote.createdAt.toISOString(),
     };
@@ -273,7 +277,7 @@ const listMentorNotes = async (memberId) => {
     });
     return notes.map((note) => ({
         id: note.id,
-        note: note.note,
+        note: note.content,
         mentorId: note.mentorId,
         mentorName: note.mentor.name || null,
         productId: note.productId,
@@ -282,3 +286,63 @@ const listMentorNotes = async (memberId) => {
     }));
 };
 exports.listMentorNotes = listMentorNotes;
+const seedRegistryFromOnboarding = async (userId, recommendations) => {
+    const buckets = [
+        { items: recommendations.strollers, category: 'Strollers' },
+        { items: recommendations.carSeats, category: 'Car Seats' },
+        { items: recommendations.nursery, category: 'Nursery' },
+        { items: recommendations.travel, category: 'Travel' },
+    ];
+    const created = [];
+    const seen = new Set();
+    for (const bucket of buckets) {
+        for (const label of bucket.items) {
+            if (!label || seen.has(label)) {
+                continue;
+            }
+            seen.add(label);
+            const item = await client_2.prisma.registryItem.create({
+                data: {
+                    userId,
+                    isCustom: true,
+                    title: label,
+                    url: 'https://taylormadebabyco.com/registry',
+                    merchant: 'Taylor-Made Baby Co.',
+                    category: bucket.category,
+                    moduleCode: 'onboarding',
+                    status: client_1.RegistryStatus.NEEDED,
+                    notes: 'Suggested from onboarding recommendations',
+                    purchaseSource: 'recommendation',
+                },
+            });
+            created.push({
+                id: item.id,
+                title: item.title,
+                category: item.category,
+                notes: item.notes,
+                status: item.status,
+            });
+        }
+    }
+    return created;
+};
+exports.seedRegistryFromOnboarding = seedRegistryFromOnboarding;
+const getRegistrySummary = async (userId) => {
+    const suggestedCount = await client_2.prisma.registryItem.count({
+        where: {
+            userId,
+            purchaseSource: 'recommendation',
+        },
+    });
+    const confirmedCount = await client_2.prisma.registryItem.count({
+        where: {
+            userId,
+            status: client_1.RegistryStatus.PURCHASED,
+        },
+    });
+    return {
+        suggestedCount,
+        confirmedCount,
+    };
+};
+exports.getRegistrySummary = getRegistrySummary;

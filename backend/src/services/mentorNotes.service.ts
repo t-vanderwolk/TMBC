@@ -5,6 +5,7 @@ import { prisma } from '../../prisma/client';
 export type MentorNoteForModule = {
   id: string;
   moduleId: string | null;
+  memberId: string;
   mentorId: string;
   mentorName: string | null;
   content: string;
@@ -22,15 +23,19 @@ interface AddMentorNoteInput extends GetMentorNotesForModuleInput {
 }
 
 type MentorNoteWithMentor = Prisma.MentorNoteGetPayload<{
-  include: { mentor: { select: { id: true; name: true } } };
+  include: {
+    mentor: { select: { id: true; name: true } };
+    member: { select: { id: true; name: true } };
+  };
 }>;
 
 const mapMentorNote = (note: MentorNoteWithMentor): MentorNoteForModule => ({
   id: note.id,
   moduleId: note.moduleId,
+  memberId: note.memberId,
   mentorId: note.mentorId,
   mentorName: note.mentor?.name || null,
-  content: note.note,
+  content: note.content,
   createdAt: note.createdAt.toISOString(),
 });
 
@@ -50,6 +55,12 @@ export const getMentorNotesForModule = async ({ memberId, moduleId }: GetMentorN
           name: true,
         },
       },
+      member: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
 
@@ -62,10 +73,16 @@ export const addMentorNote = async ({ memberId, moduleId, mentorId, content }: A
       memberId,
       moduleId,
       mentorId,
-      note: content,
+      content,
     },
     include: {
       mentor: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      member: {
         select: {
           id: true,
           name: true,

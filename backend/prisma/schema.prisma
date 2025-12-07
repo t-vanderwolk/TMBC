@@ -33,12 +33,18 @@ model User {
   mentorFeedbackReceived MentorFeedback[]   @relation("MentorFeedbackMember")
   mentorFeedbackAuthored MentorFeedback[]   @relation("MentorFeedbackMentor")
   mentorNotesReceived    MentorNote[]       @relation("MemberMentorNotes")
-  mentorNotesAuthored    MentorNote[]       @relation("MentorNotesAuthored")
+  mentorNotes            MentorNote[]       @relation("MentorNotesMentor")
   mentorTasksMember      MentorTask[]       @relation("MentorTasksMember")
   mentorTasksMentor      MentorTask[]       @relation("MentorTasksMentor")
+  mentorChatMessages     ChatMessage[]      @relation("MentorChatMessages")
+  memberChatMessages     ChatMessage[]      @relation("MemberChatMessages")
+  sentChatMessages       ChatMessage[]      @relation("ChatMessageSender")
   profile                Profile?
+  onboardingProfile      OnboardingProfile?
   registryConflicts      RegistryConflict[]
   registryItems          RegistryItem[]
+  academyProgress        AcademyProgress[]
+  communityPosts         CommunityPost[]
   workbookEntries        WorkbookEntry[]
 }
 
@@ -67,6 +73,17 @@ model Profile {
   state           String?
   inviteRequest   InviteRequest? @relation(fields: [inviteRequestId], references: [id])
   user            User           @relation(fields: [userId], references: [id])
+}
+
+model OnboardingProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  answers         Json
+  recommendations Json
+  status          String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id])
 }
 
 model Invite {
@@ -148,7 +165,9 @@ model RegistryItem {
   mentorFeedback MentorFeedback[]
   conflicts      RegistryConflict[]
   product        Product?           @relation(fields: [productId], references: [id])
-  user           User               @relation(fields: [userId], references: [id])
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model MentorNote {
@@ -157,19 +176,24 @@ model MentorNote {
   mentorId  String
   productId String?
   moduleId  String?
-  note      String
+  content   String   @map("note")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  member    User     @relation("MemberMentorNotes", fields: [memberId], references: [id])
-  mentor    User     @relation("MentorNotesAuthored", fields: [mentorId], references: [id])
-  product   Product? @relation(fields: [productId], references: [id])
-  module    AcademyModule? @relation("ModuleMentorNotes", fields: [moduleId], references: [id])
+  member    User     @relation("MemberMentorNotes", fields: [memberId], references: [id], onDelete: Cascade)
+  mentor    User     @relation("MentorNotesMentor", fields: [mentorId], references: [id], onDelete: Cascade)
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  module    AcademyModule? @relation("ModuleMentorNotes", fields: [moduleId], references: [id], onDelete: SetNull)
+
+  @@index([memberId])
+  @@index([mentorId])
 }
 
 model AcademyModule {
   id              String           @id
   title           String
   trackId         String?
+  slug            String?          @unique
+  journey         String?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   content         Json             @default("{}")
@@ -179,6 +203,39 @@ model AcademyModule {
   mentorFeedback  MentorFeedback[]
   workbookEntries WorkbookEntry[]
   mentorNotes     MentorNote[]     @relation("ModuleMentorNotes")
+  progress        AcademyProgress[]
+}
+
+model AcademyProgress {
+  id        String          @id @default(cuid())
+  userId    String
+  moduleId  String
+  completed Boolean         @default(false)
+  updatedAt DateTime        @updatedAt
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  module    AcademyModule   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, moduleId])
+  @@index([userId])
+  @@index([moduleId])
+}
+
+model CommunityRoom {
+  id          String          @id @default(cuid())
+  name        String
+  description String?
+  posts       CommunityPost[]
+}
+
+model CommunityPost {
+  id        String        @id @default(cuid())
+  roomId    String
+  userId    String
+  content   String
+  createdAt DateTime      @default(now())
+
+  room      CommunityRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Event {
@@ -233,6 +290,20 @@ model MentorFeedback {
   mentor         User           @relation("MentorFeedbackMentor", fields: [mentorId], references: [id])
   module         AcademyModule? @relation(fields: [moduleId], references: [id])
   registryItem   RegistryItem?  @relation(fields: [registryItemId], references: [id])
+}
+
+model ChatMessage {
+  id         String   @id @default(cuid())
+  mentorId   String
+  memberId   String
+  senderId   String
+  senderRole Role
+  content    String
+  createdAt  DateTime @default(now())
+
+  mentor User @relation("MentorChatMessages", fields: [mentorId], references: [id])
+  member User @relation("MemberChatMessages", fields: [memberId], references: [id])
+  sender User @relation("ChatMessageSender", fields: [senderId], references: [id])
 }
 
 model MentorTask {

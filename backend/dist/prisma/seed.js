@@ -3,113 +3,109 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// backend/prisma/seed.ts
 const client_1 = require("@prisma/client");
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const academyModulesSeed_1 = require("./data/academyModulesSeed");
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const prisma = new client_1.PrismaClient();
 async function main() {
-    console.log('🌱 Seeding TMBC Academy...');
-    const passwordHash = await bcrypt_1.default.hash('Karma', 10);
-    // Users
+    const password = "Karma";
+    const passwordHash = await bcryptjs_1.default.hash(password, 12);
+    console.log("🌸 Seeding TMBC core users with synced password 'Karma'…");
     const users = [
-        { email: 'Admin@me.com', name: 'Admin User', role: client_1.Role.ADMIN },
-        { email: 'Mentor@me.com', name: 'Mentor User', role: client_1.Role.MENTOR },
-        { email: 'User@me.com', name: 'Member User', role: client_1.Role.MEMBER },
-    ];
-    for (const user of users) {
-        await prisma.user.upsert({
-            where: { email: user.email },
-            update: {},
-            create: {
-                email: user.email,
-                name: user.name,
-                password: passwordHash,
-                role: user.role,
-            },
-        });
-    }
-    // Academy modules
-    for (const module of academyModulesSeed_1.academyModulesSeed) {
-        await prisma.academyModule.upsert({
-            where: { id: module.id },
-            update: {
-                title: module.title,
-                subtitle: module.subtitle,
-                description: module.description,
-                heroImage: module.heroImage,
-                trackId: module.trackId,
-                content: module.content,
-            },
-            create: {
-                id: module.id,
-                title: module.title,
-                subtitle: module.subtitle,
-                description: module.description,
-                heroImage: module.heroImage,
-                trackId: module.trackId,
-                content: module.content,
-            },
-        });
-    }
-    console.log('📘 Academy modules seeded with lecture slides!');
-    await prisma.adminSettings.upsert({
-        where: { id: 1 },
-        update: {},
-        create: { inviteOnly: true },
-    });
-    const adminUser = await prisma.user.findUnique({ where: { email: 'Admin@me.com' } });
-    if (!adminUser) {
-        throw new Error('Admin user should exist after seeding.');
-    }
-    await prisma.invite.upsert({
-        where: { code: 'DEFAULT-ADMIN-INVITE' },
-        update: {},
-        create: {
-            code: 'DEFAULT-ADMIN-INVITE',
+        {
+            email: "member@me.com",
+            name: "Taylor Member",
             role: client_1.Role.MEMBER,
-            createdById: adminUser.id,
-            maxUses: 50,
-            createdAt: new Date(),
         },
-    });
-    console.log('💌 Default invites seeded');
-    await prisma.waitlist.upsert({
-        where: { email: 'waitlist@example.com' },
-        update: {},
-        create: {
-            email: 'waitlist@example.com',
-            name: 'Waitlist Person',
+        {
+            email: "mentor@me.com",
+            name: "Taylor Mentor",
+            role: client_1.Role.MENTOR,
         },
-    });
-    console.log('📝 Waitlist seeded');
-    const member = await prisma.user.findFirst({ where: { role: client_1.Role.MEMBER } });
-    const firstModule = academyModulesSeed_1.academyModulesSeed[0];
-    if (member && firstModule) {
-        await prisma.workbookEntry.upsert({
-            where: {
-                userId_moduleId_type: {
-                    userId: member.id,
-                    moduleId: firstModule.id,
-                    type: client_1.WorkbookEntryType.JOURNAL,
-                },
-            },
+        {
+            email: "admin@me.com",
+            name: "Taylor Admin",
+            role: client_1.Role.ADMIN,
+        },
+    ];
+    for (const u of users) {
+        const user = await prisma.user.upsert({
+            where: { email: u.email },
             update: {
-                content: { text: "I'm ready to plan my nursery!" },
+                name: u.name,
+                role: u.role,
+                password: passwordHash, // always resync password to bcrypt("Karma")
+                disabled: false,
             },
             create: {
-                userId: member.id,
-                moduleId: firstModule.id,
-                type: client_1.WorkbookEntryType.JOURNAL,
-                content: { text: "I'm ready to plan my nursery!" },
+                email: u.email,
+                name: u.name,
+                role: u.role,
+                password: passwordHash,
+                disabled: false,
             },
         });
+        console.log(`  ✔ Upserted ${u.role} user: ${user.email}`);
     }
-    console.log('🧠 Workbook seed complete');
-    console.log('🌿 TMBC seed finished successfully!');
+    const memberUser = await prisma.user.findUnique({ where: { email: "member@me.com" } });
+    const mentorUser = await prisma.user.findUnique({ where: { email: "mentor@me.com" } });
+    if (memberUser && mentorUser) {
+        const rooms = [
+            {
+                id: "community-room-nursery",
+                name: "Nursery Atelier",
+                description: "Share styling wins, palettes, and bedtime rituals for your dream nursery.",
+            },
+            {
+                id: "community-room-feeding",
+                name: "Feeding Circle",
+                description: "Discuss pumping rhythms, feeding cues, and postpartum nourishment.",
+            },
+        ];
+        for (const room of rooms) {
+            await prisma.communityRoom.upsert({
+                where: { id: room.id },
+                update: {
+                    name: room.name,
+                    description: room.description,
+                },
+                create: room,
+            });
+        }
+        const posts = [
+            {
+                id: "community-post-nursery-1",
+                roomId: "community-room-nursery",
+                userId: memberUser.id,
+                content: "Just layered a mauve rug with ivory rattan—passing by in the community to ask how you balance soft light during feedings.",
+            },
+            {
+                id: "community-post-feeding-1",
+                roomId: "community-room-feeding",
+                userId: mentorUser.id,
+                content: "Sharing a mini ritual for anxious evenings: dim the lights, sip chamomile, and lean into the lullaby playlist.",
+            },
+        ];
+        for (const post of posts) {
+            await prisma.communityPost.upsert({
+                where: { id: post.id },
+                update: {
+                    content: post.content,
+                    roomId: post.roomId,
+                    userId: post.userId,
+                },
+                create: post,
+            });
+        }
+    }
+    console.log("✅ Seed complete. You can now log in with:");
+    console.log("   member@me.com / Karma");
+    console.log("   mentor@me.com / Karma");
+    console.log("   admin@me.com  / Karma");
 }
 main()
     .catch((e) => {
-    console.error('❌ TMBC seed failed', e);
+    console.error("❌ Seed error:", e);
     process.exit(1);
 })
     .finally(async () => {

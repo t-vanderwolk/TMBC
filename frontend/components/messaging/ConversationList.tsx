@@ -1,18 +1,20 @@
 "use client";
 
 type Conversation = {
-  id: number;
+  id: string;
+  mentorId: string;
+  memberId: string;
   name: string;
   detail: string;
   lastMessage: string;
   time: string;
-  unread: boolean;
+  unread?: boolean;
 };
 
 type ConversationListProps = {
   conversations: Conversation[];
-  activeId: number;
-  onSelect: (id: number) => void;
+  activeId: string;
+  onSelect: (conversation: Conversation) => void;
 };
 
 const ConversationList = ({ conversations, activeId, onSelect }: ConversationListProps) => {
@@ -21,7 +23,7 @@ const ConversationList = ({ conversations, activeId, onSelect }: ConversationLis
       {conversations.map((conversation) => (
         <button
           key={conversation.id}
-          onClick={() => onSelect(conversation.id)}
+          onClick={() => onSelect(conversation)}
           className={`w-full rounded-[24px] border px-4 py-3 text-left transition hover:border-[var(--tmbc-mauve)] ${
             activeId === conversation.id
               ? "border-[var(--tmbc-mauve)] bg-[var(--tmbc-blush)]"

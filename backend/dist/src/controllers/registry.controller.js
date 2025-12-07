@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resolveRegistryConflictController = exports.getRegistryConflictsController = exports.getMentorNotesController = exports.postMentorNoteController = exports.addCustomItemController = exports.deleteRegistryItem = exports.updateRegistryItemController = exports.bulkAddRegistryItemsController = exports.postRegistryItem = exports.getRegistryList = void 0;
+exports.resolveRegistryConflictController = exports.seedRegistryFromOnboardingController = exports.getRegistrySummaryController = exports.getRegistryConflictsController = exports.getMentorNotesController = exports.postMentorNoteController = exports.addCustomItemController = exports.deleteRegistryItem = exports.updateRegistryItemController = exports.bulkAddRegistryItemsController = exports.postRegistryItem = exports.getRegistryList = void 0;
 const client_1 = require("@prisma/client");
 const registry_service_1 = require("../services/registry.service");
 const conflict_service_1 = require("../services/conflict.service");
 const myRegistryLegacy_service_1 = require("../services/myRegistryLegacy.service");
+const onboarding_service_1 = require("../services/onboarding.service");
 const getUserId = (req) => req.user?.userId;
 const parseStatus = (value) => {
     if (!value || typeof value !== 'string')
@@ -216,6 +217,29 @@ const getRegistryConflictsController = async (req, res) => {
     res.json({ ok: true, conflicts });
 };
 exports.getRegistryConflictsController = getRegistryConflictsController;
+const getRegistrySummaryController = async (req, res) => {
+    const userId = getUserId(req);
+    if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const summary = await (0, registry_service_1.getRegistrySummary)(userId);
+    res.json(summary);
+};
+exports.getRegistrySummaryController = getRegistrySummaryController;
+const seedRegistryFromOnboardingController = async (req, res) => {
+    const userId = getUserId(req);
+    if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const onboardingProfile = await (0, onboarding_service_1.getOnboardingProfile)(userId);
+    const recommendations = onboardingProfile?.recommendations;
+    if (!recommendations) {
+        return res.status(400).json({ error: 'Complete onboarding before seeding your registry' });
+    }
+    const suggestedItems = await (0, registry_service_1.seedRegistryFromOnboarding)(userId, recommendations);
+    res.json({ suggestedItems });
+};
+exports.seedRegistryFromOnboardingController = seedRegistryFromOnboardingController;
 const buildRemotePayload = (field, value) => {
     switch (field) {
         case 'quantity':

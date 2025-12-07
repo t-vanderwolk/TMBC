@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getModuleRecommendedProductsList = exports.getModuleRecommendations = exports.getModuleProducts = exports.getRecommendedModule = exports.getAcademyModules = exports.getAcademyTracks = exports.getAcademyJourneys = void 0;
+exports.completeModuleForUser = exports.getUserProgressSummary = exports.getModulesWithProgress = exports.getModuleRecommendedProductsList = exports.getModuleRecommendations = exports.getModuleProducts = exports.getRecommendedModule = exports.getAcademyModules = exports.getAcademyTracks = exports.getAcademyJourneys = void 0;
 const product_service_1 = require("./product.service");
+const client_1 = require("../../prisma/client");
 const journeys = [
     { id: 'nursery', title: 'Nursery Journey', description: 'Design serene spaces with concierge-level detail.' },
     { id: 'gear', title: 'Gear Journey', description: 'Master mobility, feeding, and travel essentials.' },
@@ -95,8 +96,9 @@ const getRecommendedModule = async () => {
     return first;
 };
 exports.getRecommendedModule = getRecommendedModule;
+const normalizeModuleId = (input) => input.trim().toLowerCase();
 const findModule = (moduleCode) => {
-    const normalizedCode = moduleCode.toLowerCase();
+    const normalizedCode = normalizeModuleId(moduleCode);
     return modules.find((module) => module.id === normalizedCode);
 };
 const getModuleProducts = async (moduleCode) => {
@@ -149,3 +151,54 @@ const getModuleRecommendedProductsList = async (moduleCode) => {
     return (0, product_service_1.getProductsByIds)(module.recommendedProducts);
 };
 exports.getModuleRecommendedProductsList = getModuleRecommendedProductsList;
+const getModulesWithProgress = async (userId) => {
+    const baseModules = await (0, exports.getAcademyModules)();
+    if (!userId)
+        return baseModules;
+    const progressRecords = await client_1.prisma.academyProgress.findMany({
+        where: { userId },
+        select: {
+            moduleId: true,
+            completed: true,
+        },
+    });
+    const completedSet = new Set(progressRecords.filter((record) => record.completed).map((record) => record.moduleId));
+    return baseModules.map((module) => ({
+        ...module,
+        completed: completedSet.has(module.id),
+    }));
+};
+exports.getModulesWithProgress = getModulesWithProgress;
+const getUserProgressSummary = async (userId) => {
+    const total = modules.length;
+    if (!userId) {
+        return { completed: 0, total };
+    }
+    const completed = await client_1.prisma.academyProgress.count({
+        where: {
+            userId,
+            completed: true,
+        },
+    });
+    return { completed, total };
+};
+exports.getUserProgressSummary = getUserProgressSummary;
+const completeModuleForUser = async (userId, moduleId) => {
+    const normalized = normalizeModuleId(moduleId);
+    const moduleExists = modules.some((module) => module.id === normalized);
+    if (!moduleExists) {
+        throw new Error(`Module ${moduleId} not found`);
+    }
+    await client_1.prisma.academyProgress.upsert({
+        where: {
+            userId_moduleId: {
+                userId,
+                moduleId: normalized,
+            },
+        },
+        update: { completed: true },
+        create: { userId, moduleId: normalized, completed: true },
+    });
+    return normalized;
+};
+exports.completeModuleForUser = completeModuleForUser;

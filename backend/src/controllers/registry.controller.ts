@@ -6,9 +6,11 @@ import {
   addCustomItem,
   addRegistryItem,
   createMentorNote,
+  getRegistrySummary,
   listMentorNotes,
   listRegistryItems,
   removeRegistryItem,
+  seedRegistryFromOnboarding,
   updateRegistryItem,
 } from '../services/registry.service';
 import {
@@ -18,6 +20,8 @@ import {
   markConflictResolved,
 } from '../services/conflict.service';
 import { updateMyRegistryGift } from '../services/myRegistryLegacy.service';
+import { getOnboardingProfile } from '../services/onboarding.service';
+import { RecommendationsResult } from '../utils/recommendations';
 
 const getUserId = (req: Request) => (req as any).user?.userId as string | undefined;
 const parseStatus = (value?: string) => {
@@ -245,6 +249,33 @@ export const getRegistryConflictsController = async (req: Request, res: Response
 
   const conflicts = await listActiveConflicts(userId);
   res.json({ ok: true, conflicts });
+};
+
+export const getRegistrySummaryController = async (req: Request, res: Response) => {
+  const userId = getUserId(req);
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const summary = await getRegistrySummary(userId);
+  res.json(summary);
+};
+
+export const seedRegistryFromOnboardingController = async (req: Request, res: Response) => {
+  const userId = getUserId(req);
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const onboardingProfile = await getOnboardingProfile(userId);
+  const recommendations = onboardingProfile?.recommendations as RecommendationsResult | undefined;
+
+  if (!recommendations) {
+    return res.status(400).json({ error: 'Complete onboarding before seeding your registry' });
+  }
+
+  const suggestedItems = await seedRegistryFromOnboarding(userId, recommendations);
+  res.json({ suggestedItems });
 };
 
 const buildRemotePayload = (field: string, value: string | null) => {

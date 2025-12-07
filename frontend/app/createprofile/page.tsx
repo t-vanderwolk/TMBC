@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { FormEvent, Suspense, useEffect, useState } from 'react';
 
 import { inviteApi } from '@/lib/api';
-import { Auth } from '@/lib/auth.client';
+import { Auth } from '@/lib/auth';
 
 const CreateProfileContent = () => {
   const router = useRouter();
@@ -62,7 +62,7 @@ const CreateProfileContent = () => {
       if (role === 'admin') {
         router.push('/dashboard/admin');
       } else if (role === 'mentor') {
-        router.push('/dashboard/mentor');
+        router.push('/mentor/dashboard');
       } else {
         router.push('/dashboard');
       }

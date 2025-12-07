@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { Auth } from "@/lib/auth.client";
+import { Auth } from "@/lib/auth";
 
 type DashboardNavbarProps = {
   user: {

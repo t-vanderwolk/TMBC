@@ -3,7 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.decodePinterestState = exports.createPinterestPin = exports.getStoredPinterestToken = exports.storePinterestToken = exports.exchangePinterestCode = exports.getPinterestAuthUrl = void 0;
+exports.decodePinterestState = exports.createPinterestPin = exports.getPinterestAccessToken = exports.getStoredPinterestToken = exports.storePinterestToken = exports.exchangePinterestCode = exports.getPinterestAuthUrl = void 0;
+exports.fetchUserBoards = fetchUserBoards;
+exports.fetchBoardPins = fetchBoardPins;
 const axios_1 = __importDefault(require("axios"));
 const client_1 = require("../../prisma/client");
 const ensurePinterestConfig = () => {
@@ -88,6 +90,14 @@ const getStoredPinterestToken = async (userId) => {
     };
 };
 exports.getStoredPinterestToken = getStoredPinterestToken;
+const getPinterestAccessToken = async (userId) => {
+    const token = await (0, exports.getStoredPinterestToken)(userId);
+    if (!token?.accessToken) {
+        throw new Error('Pinterest credentials missing or expired');
+    }
+    return token.accessToken;
+};
+exports.getPinterestAccessToken = getPinterestAccessToken;
 const createPinterestPin = async (userId, payload) => {
     const token = await (0, exports.getStoredPinterestToken)(userId);
     if (!token) {
@@ -121,3 +131,15 @@ const decodePinterestState = (state) => {
     return parseState(state);
 };
 exports.decodePinterestState = decodePinterestState;
+async function fetchUserBoards(token) {
+    const res = await axios_1.default.get('https://api.pinterest.com/v5/boards', {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data.items ?? [];
+}
+async function fetchBoardPins(token, boardId) {
+    const res = await axios_1.default.get(`https://api.pinterest.com/v5/boards/${boardId}/pins`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data.items ?? [];
+}

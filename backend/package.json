@@ -12,6 +12,8 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "db:seed": "ts-node prisma/seed.ts",
+    "db:reset": "prisma migrate reset --force",
+    "db:rebuild": "ts-node --transpile-only scripts/forceRebuildDb.ts",
     "start": "node dist/src/server.js",
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate",
@@ -28,7 +30,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

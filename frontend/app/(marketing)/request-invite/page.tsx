@@ -3,7 +3,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { inviteFlowApi } from "@/lib/api";
+import { onboardingApi } from "@/lib/api";
 
 const RequestInvitePage = () => {
   const router = useRouter();
@@ -27,7 +27,7 @@ const RequestInvitePage = () => {
     setError("");
     try {
       setLoading(true);
-      await inviteFlowApi.requestInvite({
+      await onboardingApi.requestInvite({
         ...form,
         dueDate: form.dueDate || undefined,
       });

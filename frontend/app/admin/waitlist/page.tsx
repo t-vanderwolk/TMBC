@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { adminInviteApi, adminWaitlistApi } from '@/lib/api';
-import { Auth } from '@/lib/auth.client';
+import { Auth } from '@/lib/auth';
 
 interface WaitlistEntry {
   id: string;

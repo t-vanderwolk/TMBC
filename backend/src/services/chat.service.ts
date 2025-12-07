@@ -1,118 +1,107 @@
-type ChatThread = {
+import { Prisma, Role } from '@prisma/client';
+
+import { prisma } from '../../prisma/client';
+
+export type ChatMessagePayload = {
   id: string;
-  title: string;
-  type: 'GENERAL' | 'MODULE_REVIEW' | 'REGISTRY_REVIEW';
-  lastMessageAt: string;
-  unreadCount: number;
   mentorId: string;
   memberId: string;
-  linkedTaskId?: string;
+  senderId: string;
+  senderRole: string;
+  senderName: string | null;
+  content: string;
+  createdAt: string;
 };
 
-type ChatMessage = {
-  id: string;
+export type ConversationSummary = {
   threadId: string;
-  author: 'member' | 'mentor';
-  text: string;
-  timestamp: string;
-  read: boolean;
+  mentorId: string;
+  memberId: string;
+  lastMessage: string;
+  updatedAt: string;
 };
 
-const threads: ChatThread[] = [
-  {
-    id: 'thread-1',
-    title: 'Registry Review · Nursery Staples',
-    type: 'REGISTRY_REVIEW',
-    lastMessageAt: '2024-03-18T14:22:00Z',
-    unreadCount: 2,
-    mentorId: 'mentor-1',
-    memberId: 'member-1',
-    linkedTaskId: 'task-1',
-  },
-  {
-    id: 'thread-2',
-    title: 'Module Review · Car Seat Masterclass',
-    type: 'MODULE_REVIEW',
-    lastMessageAt: '2024-03-17T11:02:00Z',
-    unreadCount: 0,
-    mentorId: 'mentor-1',
-    memberId: 'member-1',
-  },
-  {
-    id: 'thread-3',
-    title: 'General Concierge',
-    type: 'GENERAL',
-    lastMessageAt: '2024-03-16T16:10:00Z',
-    unreadCount: 0,
-    mentorId: 'mentor-1',
-    memberId: 'member-1',
-  },
-];
+interface CreateChatMessageInput {
+  mentorId: string;
+  memberId: string;
+  senderId: string;
+  senderRole: Role;
+  content: string;
+}
 
-const messages: ChatMessage[] = [
-  {
-    id: 'msg-1',
-    threadId: 'thread-1',
-    author: 'mentor',
-    text: 'How did the nursery install go?',
-    timestamp: '2024-03-18T14:20:00Z',
-    read: false,
-  },
-  {
-    id: 'msg-2',
-    threadId: 'thread-1',
-    author: 'member',
-    text: 'Wallpaper finally up! Need eyes on rocker placement.',
-    timestamp: '2024-03-18T14:21:00Z',
-    read: true,
-  },
-  {
-    id: 'msg-3',
-    threadId: 'thread-2',
-    author: 'member',
-    text: 'Requesting review on the module worksheet.',
-    timestamp: '2024-03-17T11:00:00Z',
-    read: true,
-  },
-];
+const mapMessage = (
+  message: Prisma.ChatMessageGetPayload<{
+    include: { sender: { select: { id: true; name: true } } };
+  }>,
+): ChatMessagePayload => ({
+  id: message.id,
+  mentorId: message.mentorId,
+  memberId: message.memberId,
+  senderId: message.senderId,
+  senderRole: message.senderRole.toLowerCase(),
+  senderName: message.sender?.name ?? null,
+  content: message.content,
+  createdAt: message.createdAt.toISOString(),
+});
 
-type ThreadOptions = {
-  userId?: string;
-  role?: 'member' | 'mentor' | 'admin';
+const buildThreadId = (mentorId: string, memberId: string) => `${mentorId}:${memberId}`;
+
+export const getConversation = async (mentorId: string, memberId: string) => {
+  const messages = await prisma.chatMessage.findMany({
+    where: { mentorId, memberId },
+    orderBy: { createdAt: 'asc' },
+    include: {
+      sender: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
+
+  return messages.map(mapMessage);
 };
 
-export const listThreads = async (options: ThreadOptions = {}) => {
-  const { userId, role } = options;
-  if (!userId) {
-    return threads;
+export const getMentorConversations = async (mentorId: string): Promise<ConversationSummary[]> => {
+  const messages = await prisma.chatMessage.findMany({
+    where: { mentorId },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const seen = new Map<string, ConversationSummary>();
+  for (const message of messages) {
+    if (seen.has(message.memberId)) continue;
+    seen.set(message.memberId, {
+      threadId: buildThreadId(message.mentorId, message.memberId),
+      mentorId: message.mentorId,
+      memberId: message.memberId,
+      lastMessage: message.content,
+      updatedAt: message.createdAt.toISOString(),
+    });
   }
 
-  return threads.filter((thread) =>
-    role === 'mentor' ? thread.mentorId === userId : thread.memberId === userId,
-  );
+  return Array.from(seen.values());
 };
 
-export const listMessages = async (threadId: string) => {
-  return messages.filter((message) => message.threadId === threadId);
-};
+export const createChatMessage = async ({ mentorId, memberId, senderId, senderRole, content }: CreateChatMessageInput) => {
+  const message = await prisma.chatMessage.create({
+    data: {
+      mentorId,
+      memberId,
+      senderId,
+      senderRole,
+      content,
+    },
+    include: {
+      sender: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
 
-export const createMessage = async (threadId: string, author: 'member' | 'mentor', text: string) => {
-  const message: ChatMessage = {
-    id: `msg-${Date.now()}`,
-    threadId,
-    author,
-    text,
-    timestamp: new Date().toISOString(),
-    read: author === 'mentor',
-  };
-  messages.push(message);
-
-  const thread = threads.find((item) => item.id === threadId);
-  if (thread) {
-    thread.lastMessageAt = message.timestamp;
-    thread.unreadCount = author === 'mentor' ? thread.unreadCount + 1 : Math.max(0, thread.unreadCount - 1);
-  }
-
-  // TODO: Emit typing indicators + realtime updates via Pusher/Supabase
-  return message;
+  return mapMessage(message);
 };

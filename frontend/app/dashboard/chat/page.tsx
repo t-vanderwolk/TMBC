@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Send, MessageCircle, SquarePen, User2 } from 'lucide-react';
 
 import { api } from '@/lib/api';
-import { loadSession } from '@/lib/auth.client';
+import { loadSession } from '@/lib/auth';
 
 type ChatThread = {
   id: string;

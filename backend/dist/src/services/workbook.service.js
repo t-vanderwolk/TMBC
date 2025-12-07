@@ -23,6 +23,12 @@ const mapEntry = (entry) => ({
     updatedAt: entry.updatedAt,
 });
 const createWorkbookEntry = async (payload) => {
+    const moduleExists = await client_1.prisma.academyModule.count({
+        where: { id: payload.moduleId },
+    });
+    if (!moduleExists) {
+        throw new Error("Module not found");
+    }
     const entry = await client_1.prisma.workbookEntry.create({
         data: {
             userId: payload.userId,

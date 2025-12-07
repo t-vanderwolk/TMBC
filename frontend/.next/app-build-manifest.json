@@ -9,23 +9,17 @@
     "/dashboard/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/dashboard/layout.css",
       "static/chunks/app/dashboard/layout.js"
     ],
-    "/dashboard/learn/[moduleId]/page": [
+    "/dashboard/learn/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/learn/[moduleId]/page.js"
+      "static/chunks/app/dashboard/learn/page.js"
     ],
-    "/dashboard/registry/page": [
+    "/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/registry/page.js"
-    ],
-    "/dashboard/events/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/events/page.js"
+      "static/chunks/app/dashboard/page.js"
     ],
     "/(marketing)/layout": [
       "static/chunks/webpack.js",
@@ -38,36 +32,46 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(marketing)/login/page.js"
     ],
+    "/dashboard/admin/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/admin/page.js"
+    ],
+    "/dashboard/learn/[moduleId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/learn/[moduleId]/page.js"
+    ],
+    "/dashboard/registry/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/registry/page.js"
+    ],
     "/(marketing)/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/(marketing)/page.css",
       "static/chunks/app/(marketing)/page.js"
     ],
-    "/(marketing)/blog/page": [
+    "/dashboard/settings/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(marketing)/blog/page.js"
+      "static/chunks/app/dashboard/settings/page.js"
+    ],
+    "/dashboard/journal/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/journal/page.js"
     ],
     "/dashboard/community/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/community/page.js"
     ],
-    "/dashboard/messages/page": [
+    "/(marketing)/how-it-works/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/messages/page.js"
-    ],
-    "/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/page.js"
-    ],
-    "/dashboard/learn/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/learn/page.js"
+      "static/chunks/app/(marketing)/how-it-works/page.js"
     ],
     "/not-found": [
       "static/chunks/webpack.js",
