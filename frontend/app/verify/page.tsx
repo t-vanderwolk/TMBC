@@ -1,11 +1,11 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { inviteFlowApi } from "@/lib/api";
 
-const VerifyPage = () => {
+const VerifyContent = () => {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -62,4 +62,10 @@ const VerifyPage = () => {
   );
 };
 
-export default VerifyPage;
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={null}>
+      <VerifyContent />
+    </Suspense>
+  );
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRequireRole } from "@/lib/auth/useRequireRole";
 
 type MentorInfo = {
   name: string;
@@ -9,16 +10,10 @@ type MentorInfo = {
 };
 
 export default function AdminMentors() {
+  useRequireRole("ADMIN");
   const [mentors, setMentors] = useState<MentorInfo[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem("tm_user");
-    if (!stored) return (window.location.href = "/login");
-
-    const parsed = JSON.parse(stored);
-    const role = String(parsed.role ?? "").toLowerCase();
-    if (role !== "admin") return (window.location.href = "/dashboard");
-
     setMentors([
       { name: "Mia Collins", members: 18, status: "Active" },
       { name: "Jordan Price", members: 16, status: "Active" },

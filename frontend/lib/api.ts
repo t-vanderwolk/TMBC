@@ -93,3 +93,5 @@ export const onboardingApi = {
   createProfile: (payload: { email: string; name: string }) =>
     api.post('/api/onboarding/create-profile', payload),
 };
+
+export { getInviteRequests } from './api/admin';

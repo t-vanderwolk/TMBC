@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRequireRole } from "@/lib/auth/useRequireRole";
 
 type RegistryStat = {
   label: string;
@@ -8,16 +9,10 @@ type RegistryStat = {
 };
 
 export default function AdminRegistry() {
+  useRequireRole("ADMIN");
   const [stats, setStats] = useState<RegistryStat[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem("tm_user");
-    if (!stored) return (window.location.href = "/login");
-
-    const parsed = JSON.parse(stored);
-    const role = String(parsed.role ?? "").toLowerCase();
-    if (role !== "admin") return (window.location.href = "/dashboard");
-
     setStats([
       { label: "Items Tracked", value: "1,248" },
       { label: "MacroBaby Conversions", value: "68%" },

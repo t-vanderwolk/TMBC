@@ -1,8 +1,10 @@
 import { Router } from 'express';
 
 import { prisma } from '../../prisma/client';
+import { requireAdmin } from '../middleware/requireAdmin';
 
 const router = Router();
+router.use(requireAdmin);
 
 router.get('/', async (_req, res, next) => {
   try {

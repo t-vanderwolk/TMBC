@@ -1,13 +1,14 @@
-"use client";
+ "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { Auth } from "@/lib/auth";
+import { saveSession } from "@/lib/auth";
 import { inviteFlowApi } from "@/lib/api";
+import { getRoleRedirectPath } from "@/lib/auth/userStore";
 
-const CreateProfilePage = () => {
+function CreateProfileContent() {
   const router = useRouter();
   const params = useSearchParams();
   const token = params.get("token") || "";
@@ -44,16 +45,19 @@ const CreateProfilePage = () => {
 
       const jwt = response.data?.token;
       const user = response.data?.user;
-
-      if (jwt) {
-        Auth.save(jwt);
-      }
-
-      if (user && typeof window !== "undefined") {
-        localStorage.setItem("tm_user", JSON.stringify(user));
-      }
-
-      router.push("/dashboard");
+        if (jwt) {
+          const normalizedRole = (user?.role || "MEMBER").toUpperCase();
+          saveSession({
+            token: jwt,
+            user: {
+              ...user,
+              role: normalizedRole,
+              onboardingComplete: Boolean(user?.onboardingComplete),
+              profileCompleted: Boolean(user?.profileCompleted),
+            },
+          });
+          router.push(getRoleRedirectPath(normalizedRole));
+        }
     } catch (err: any) {
       const message = err?.response?.data?.error || "Unable to complete your profile";
       setError(message);
@@ -104,6 +108,12 @@ const CreateProfilePage = () => {
       </div>
     </div>
   );
-};
+}
 
-export default CreateProfilePage;
+export default function CreateProfilePage() {
+  return (
+    <Suspense fallback={null}>
+      <CreateProfileContent />
+    </Suspense>
+  );
+}

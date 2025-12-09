@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import PlaceholderImageCard from '@/components/marketing/PlaceholderImageCard';
+import PlaceholderImageCard from '@/app/marketing/PlaceholderImageCard';
 import { blogPosts } from '@/data/blogPosts';
 
 const sortedPosts = [...blogPosts].sort(

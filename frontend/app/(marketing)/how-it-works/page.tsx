@@ -74,8 +74,8 @@ const monthlyExpectations = [
 
 export default function HowItWorksPage() {
   const [activePhase, setActivePhase] = useState(0);
-  const [openMonth, setOpenMonth] = useState(0);
-  const phaseRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [openMonth, setOpenMonth] = useState<number | null>(0);
+  const phaseRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -155,7 +155,10 @@ export default function HowItWorksPage() {
           {phases.map((phase, index) => (
             <article
               key={phase.title}
-              ref={(node) => (phaseRefs.current[index] = node)}
+              ref={(node) => {
+                if (!node || !(node instanceof HTMLDivElement)) return;
+                phaseRefs.current[index] = node;
+              }}
               data-index={index}
               className={`group relative overflow-hidden rounded-[36px] border border-[var(--tmbc-charcoal)]/10 bg-white/90 p-6 shadow-[0_15px_45px_rgba(199,166,199,0.15)] transition duration-300 ${
                 activePhase === index ? "shadow-[0_25px_80px_rgba(199,166,199,0.35)]" : ""

@@ -25,10 +25,19 @@ model User {
   myRegistryEmail        String?
   myRegistryUserId       String?
   disabled               Boolean            @default(false)
+  onboardingComplete     Boolean            @default(false)
+  profileCompleted       Boolean            @default(false)
+  inviteCodeUsed         Boolean            @default(false)
+  dueDate                DateTime?
+  location               String?
+  mentorId               String?
+  mentor                 User?              @relation("Mentorship", fields: [mentorId], references: [id])
+  mentees                User[]             @relation("Mentorship")
   hostedEvents           Event[]            @relation("HostedEvents")
   invites                Invite[]           @relation("CreatedInvites")
   consumedInvite         Invite?            @relation("ConsumedInvite")
   approvedInvites        InviteRequest[]    @relation("InviteApprover")
+  redeemedInvite         InviteCode?        @relation("RedeemedInvite")
   loginEvents            LoginEvent[]
   mentorFeedbackReceived MentorFeedback[]   @relation("MentorFeedbackMember")
   mentorFeedbackAuthored MentorFeedback[]   @relation("MentorFeedbackMentor")
@@ -101,6 +110,17 @@ model Invite {
   maxUses        Int       @default(1)
   createdBy      User      @relation("CreatedInvites", fields: [createdById], references: [id])
   usedBy         User?     @relation("ConsumedInvite", fields: [usedById], references: [id])
+}
+
+model InviteCode {
+  id           String   @id @default(cuid())
+  code         String   @unique
+  email        String?
+  used         Boolean  @default(false)
+  redeemedById String?  @unique
+  redeemedBy   User?    @relation("RedeemedInvite", fields: [redeemedById], references: [id])
+  createdAt    DateTime @default(now())
+  usedAt       DateTime?
 }
 
 model Waitlist {

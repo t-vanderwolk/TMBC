@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=18.0.0",
     "npm": ">=9.0.0"
   },
   "scripts": {
+    "preinstall": "node scripts/validateNode.js",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "node scripts/fixTailwindMissingFiles.js"
   },
   "dependencies": {
     "axios": "^1.6.7",
@@ -31,6 +33,7 @@
     "eslint-config-next": "16.0.3",
     "postcss": "8.4.35",
     "tailwindcss": "3.4.1",
-    "typescript": "5.4.2"
+    "typescript": "5.4.2",
+    "semver": "^7.3.8"
   }
 }

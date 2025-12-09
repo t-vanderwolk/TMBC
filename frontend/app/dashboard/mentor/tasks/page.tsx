@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRequireRole } from "@/lib/auth/useRequireRole";
 
 type Task = {
   title: string;
@@ -8,15 +9,10 @@ type Task = {
 };
 
 export default function MentorTasks() {
+  useRequireRole("MENTOR");
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem("tm_user");
-    if (!stored) return (window.location.href = "/login");
-    const parsed = JSON.parse(stored);
-    const role = String(parsed.role ?? "").toLowerCase();
-    if (role !== "mentor") return (window.location.href = "/dashboard");
-
     setTasks([
       { title: "Review Ava's Journal", due: "Tonight" },
       { title: "Send nursery palette follow-up", due: "Tomorrow" },

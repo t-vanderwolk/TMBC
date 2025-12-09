@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRequireRole } from "@/lib/auth/useRequireRole";
 
 type LoginEvent = {
   email: string;
@@ -12,14 +13,9 @@ type LoginEvent = {
 export default function LoginEvents() {
   const [events, setEvents] = useState<LoginEvent[]>([]);
 
+  useRequireRole("ADMIN");
+
   useEffect(() => {
-    const stored = localStorage.getItem("tm_user");
-    if (!stored) return (window.location.href = "/login");
-
-    const parsed = JSON.parse(stored);
-    const role = String(parsed.role ?? "").toLowerCase();
-    if (role !== "admin") return (window.location.href = "/dashboard");
-
     setEvents([
       {
         email: "member@me.com",

@@ -2,20 +2,28 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import ChatPanel from "@/components/chat/ChatPanel";
 import DashboardHero from "@/components/dashboard/DashboardHero";
 import ProgressFlower from "@/components/dashboard/ProgressFlower";
 import { getDashboard } from "@/lib/api/dashboard";
-import { useUpcomingEvents } from "@/hooks/useUpcomingEvents";
-import OnboardingRibbon from "@/app/dashboard/components/OnboardingRibbon";
+import { EventItem } from "@/lib/api/events";
+import { requireMember } from "@/lib/auth/requireMember";
+import { useRequireRole } from "@/lib/auth/useRequireRole";
 
 type CommunityUpdate = {
   id: string;
   roomName: string;
   content: string;
   createdAt: string;
+};
+
+type ChatPreview = {
+  mentorId: string;
+  memberId: string;
+  lastMessage: string;
+  updatedAt: string;
+  senderName: string | null;
 };
 
 type DashboardOverview = {
@@ -40,6 +48,8 @@ type DashboardOverview = {
     code: string;
     notes: string;
   }>;
+  events: EventItem[];
+  chatPreview?: ChatPreview | null;
 };
 
 const TASKS = [
@@ -90,41 +100,23 @@ type StoredUser = {
 };
 
 export default function DashboardPage() {
-  const router = useRouter();
+  useRequireRole("MEMBER");
+
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [token, setToken] = useState<string | null>(null);
   const [userName, setUserName] = useState("Friend");
   const [currentUser, setCurrentUser] = useState<StoredUser | null>(null);
-  const [authChecked, setAuthChecked] = useState(false);
-  const {
-    events: upcomingEvents,
-    isLoading: eventsLoading,
-    error: eventsError,
-  } = useUpcomingEvents();
+  const upcomingEvents = overview?.events ?? [];
+  const { user: guardUser, loading: guardLoading } = requireMember();
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = localStorage.getItem("tm_user");
-    if (!stored) {
-      router.replace("/login");
-      setAuthChecked(true);
-      return;
-    }
-
-    try {
-      const parsed = JSON.parse(stored);
-      setToken(parsed?.token ?? null);
-      setCurrentUser(parsed);
-      setUserName(parsed?.name ?? parsed?.firstName ?? "Friend");
-    } catch {
-      localStorage.removeItem("tm_user");
-      router.replace("/login");
-    } finally {
-      setAuthChecked(true);
-    }
-  }, [router]);
+    if (!guardUser) return;
+    setToken(guardUser.token ?? null);
+    setCurrentUser(guardUser);
+    setUserName(guardUser.name ?? "Friend");
+  }, [guardUser]);
 
   useEffect(() => {
     if (!token) return;
@@ -176,10 +168,18 @@ export default function DashboardPage() {
 
   const petalTotal = Math.max(overview?.totalModules ?? 6, 1);
   const isMentor = (currentUser?.role ?? "member").toLowerCase() === "mentor";
-  const chatMentorId = isMentor ? currentUser?.id ?? DEFAULT_MENTOR_ID : DEFAULT_MENTOR_ID;
-  const chatMemberId = isMentor ? currentUser?.id ?? DEFAULT_MENTOR_ID : currentUser?.id ?? "";
+  const previewMentorId = overview?.chatPreview?.mentorId;
+  const previewMemberId = overview?.chatPreview?.memberId;
+  const chatPreviewSnippet = overview?.chatPreview?.lastMessage ?? null;
+  const chatPreviewSenderName = overview?.chatPreview?.senderName ?? (isMentor ? "Member" : "Mentor");
+  const chatMentorId = isMentor
+    ? currentUser?.id ?? DEFAULT_MENTOR_ID
+    : previewMentorId ?? DEFAULT_MENTOR_ID;
+  const chatMemberId = isMentor
+    ? previewMemberId ?? currentUser?.id ?? ""
+    : currentUser?.id ?? "";
 
-  if (!authChecked || (!token && !overview)) {
+  if (guardLoading || (!token && !overview)) {
     return (
       <div className="flex flex-1 items-center justify-center px-4 py-20 text-sm uppercase tracking-[0.6em] text-[#C8A1B4]">
         Loading your calm space…
@@ -190,8 +190,6 @@ export default function DashboardPage() {
   return (
     <main className="space-y-8 px-4 py-8 sm:px-6 text-[#3E2F35]">
       <DashboardHero name={userName} />
-      <OnboardingRibbon />
-
       {loading && (
         <div className="rounded-[2.5rem] border border-[#EAD4D8] bg-gradient-to-br from-[#FFF8F6] via-[#FBE9EE] to-[#F0D4D9]/70 p-8 text-sm text-[#3E2F35]/70 shadow-[0_25px_70px_rgba(192,153,170,0.3)]">
           Fetching the latest from the studio...
@@ -269,10 +267,8 @@ export default function DashboardPage() {
               See all events →
             </Link>
           </div>
-          {eventsLoading ? (
+          {loading ? (
             <p className="text-sm uppercase tracking-[0.45em] text-[#C8A1B4]">Loading events…</p>
-          ) : eventsError ? (
-            <p className="text-sm text-[#C8A1B4]">{eventsError}</p>
           ) : !upcomingEvents.length ? (
             <p className="text-sm text-[#3E2F35]/60">We’re crafting something special soon.</p>
           ) : (
@@ -309,6 +305,11 @@ export default function DashboardPage() {
             <p className="text-sm text-[#3E2F35]/70">
               Whisper updates, get quick approvals, or share wins through a private thread.
             </p>
+            {chatPreviewSnippet && (
+              <p className="text-sm text-[#3E2F35]/65">
+                Last from {chatPreviewSenderName}: “{chatPreviewSnippet}”
+              </p>
+            )}
           </div>
           {token && currentUser?.id ? (
             <ChatPanel

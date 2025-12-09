@@ -4,8 +4,9 @@ import {
   consumeInvite,
   generateInvite,
   getAllInvites,
-  validateInvite,
+  validateInvite as validateInviteService,
 } from '../services/invite.service';
+import { prisma } from '../../prisma/client';
 import { signToken } from '../utils/jwt';
 import { sendInviteEmail } from '../services/email.service';
 
@@ -52,7 +53,7 @@ export const sendInvite = async (req: Request, res: Response, next: NextFunction
       return res.status(400).json({ message: 'Code and email are required' });
     }
 
-    const invite = await validateInvite(code);
+    const invite = await validateInviteService(code);
 
     await sendInviteEmail({
       to: email,
@@ -78,7 +79,7 @@ export const validate = async (req: Request, res: Response, next: NextFunction) 
   try {
     const { code } = req.body;
 
-    const invite = await validateInvite(code);
+    const invite = await validateInviteService(code);
 
     res.json({
       valid: true,
@@ -102,5 +103,65 @@ export const consume = async (req: Request, res: Response, next: NextFunction) =
     });
   } catch (error) {
     next(error);
+  }
+};
+
+export const validateInvite = async (req: Request, res: Response) => {
+  try {
+    const { code } = req.body;
+
+    if (!code) {
+      return res.status(400).json({ error: 'Invite code is required' });
+    }
+
+    const invite = await prisma.inviteCode.findUnique({ where: { code } });
+    if (!invite) {
+      return res.status(400).json({ error: 'Invalid invite code' });
+    }
+
+    if (invite.used) {
+      return res.status(410).json({ error: 'Invite already used' });
+    }
+
+    return res.json({
+      valid: true,
+      inviteId: invite.id,
+      email: invite.email,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+};
+
+export const redeemInvite = async (req: Request, res: Response) => {
+  try {
+    const { inviteId, userId } = req.body;
+
+    if (!inviteId || !userId) {
+      return res.status(400).json({ error: 'Invite and user IDs are required' });
+    }
+
+    const invite = await prisma.inviteCode.update({
+      where: { id: inviteId },
+      data: {
+        used: true,
+        usedAt: new Date(),
+        redeemedById: userId,
+      },
+    });
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        profileCompleted: true,
+        inviteCodeUsed: true,
+      },
+    });
+
+    return res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
   }
 };

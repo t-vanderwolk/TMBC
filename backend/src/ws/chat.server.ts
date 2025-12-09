@@ -1,4 +1,5 @@
 import http, { IncomingMessage } from 'http';
+import { Socket } from 'net';
 import { WebSocket, WebSocketServer, Data } from 'ws';
 
 import { verifyToken } from '../utils/jwt';
@@ -7,6 +8,16 @@ import { createChatMessage, ChatMessagePayload } from '../services/chat.service'
 
 const channelClients = new Map<string, Set<WebSocket>>();
 const metaStore = new WeakMap<WebSocket, { channelKey: string; userId: string; role: string }>();
+
+type ExtendedWebSocketServer = WebSocketServer & {
+  handleUpgrade(
+    request: IncomingMessage,
+    socket: Socket,
+    head: Buffer,
+    callback: (ws: WebSocket) => void,
+  ): void;
+  emit(event: 'connection', ws: WebSocket, request: IncomingMessage): boolean;
+};
 
 const getChannelKey = (mentorId: string, memberId: string) => `${mentorId}:${memberId}`;
 
@@ -93,7 +104,7 @@ const handleIncomingMessage = async (raw: string, ws: WebSocket) => {
 };
 
 export const initChatWebSocket = (server: http.Server) => {
-  const wss = new WebSocketServer({ noServer: true });
+  const wss = new WebSocketServer({ noServer: true } as any) as ExtendedWebSocketServer;
 
   server.on('upgrade', (request, socket, head) => {
     const pathname = request.url ? new URL(request.url, 'http://localhost').pathname : '';
@@ -102,7 +113,7 @@ export const initChatWebSocket = (server: http.Server) => {
       return;
     }
 
-    wss.handleUpgrade(request, socket, head, (ws) => {
+    wss.handleUpgrade(request, socket as Socket, head as Buffer, (ws) => {
       wss.emit('connection', ws, request);
     });
   });

@@ -1,8 +1,13 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import CTARibbon from "@/app/marketing/CTARibbon";
 import Reveal from "@/components/marketing/Reveal";
 import TestimonialsCarousel from "@/components/marketing/TestimonialsCarousel";
+import { api } from "@/lib/api";
 
 const pillars = [
   {
@@ -78,11 +83,33 @@ const dashboardHighlights = [
   },
 ];
 
-export const metadata = {
-  title: "Taylor-Made Baby Co. - Concierge birth & baby planning",
-};
-
 export default function HomePage() {
+  const router = useRouter();
+  const [inviteCode, setInviteCode] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleInviteSubmit = async (event?: FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
+    const trimmed = inviteCode.trim();
+    if (!trimmed) {
+      setError("Please enter your invite code.");
+      return;
+    }
+
+    setError("");
+    setSubmitting(true);
+
+    try {
+      await api.post("/api/invites/validate", { code: trimmed });
+      router.push(`/onboarding?code=${encodeURIComponent(trimmed)}`);
+    } catch (err) {
+      setError("Invalid or already used invite code.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="space-y-20 text-[var(--tmbc-charcoal)]">
       <section className="relative grid gap-10 rounded-[56px] border border-[var(--tmbc-gold)] bg-white/80 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.35)] md:grid-cols-[1.1fr_0.9fr]">
@@ -122,6 +149,33 @@ export default function HomePage() {
               >
                 Already invited? Log in
               </Link>
+            </div>
+          </Reveal>
+          <Reveal>
+            <div className="space-y-3 rounded-[32px] border border-[var(--tmbc-blush)] bg-gradient-to-br from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/40 p-5 shadow-[0_20px_70px_rgba(212,181,121,0.25)]">
+              <p className="text-[0.6rem] uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)]/60">
+                Invite code ready?
+              </p>
+              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]">
+                Enter and begin onboarding
+              </p>
+              <form onSubmit={handleInviteSubmit} className="mt-6 flex flex-col sm:flex-row gap-3">
+                <input
+                  type="text"
+                  value={inviteCode}
+                  onChange={(event) => setInviteCode(event.target.value)}
+                  placeholder="Enter invite code"
+                  className="flex-1 rounded-xl border border-[var(--tmbc-blush)] bg-white/80 px-4 py-3 text-xs font-semibold tracking-[0.35em] text-[var(--tmbc-charcoal)] placeholder:text-[var(--tmbc-charcoal)] focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[var(--tmbc-blush)]"
+                />
+                <button
+                  type="submit"
+                  disabled={!inviteCode.trim() || submitting}
+                  className="rounded-xl border border-transparent bg-gradient-to-r from-[var(--tmbc-blush)] to-[var(--tmbc-mauve)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] shadow-[0_15px_45px_rgba(212,181,121,0.35)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_25px_70px_rgba(212,181,121,0.45)] disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  Begin Onboarding
+                </button>
+              </form>
+              {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
             </div>
           </Reveal>
           <Reveal>

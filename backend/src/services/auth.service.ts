@@ -4,9 +4,23 @@ import bcrypt from 'bcryptjs';
 import { prisma } from '../../prisma/client';
 import { signToken } from '../utils/jwt';
 import { consumeInvite } from './invite.service';
-import { MyRegistryService, SignupUserPayload, SignupUserResponse } from './myregistry/myregistry.service';
+import { roleRedirect } from '../utils/roleRedirect';
+import {
+  MyRegistryService,
+  SignupUserPayload,
+  SignupUserResponse,
+} from './myregistry/myregistry.service';
 
-export type SafeUser = Omit<User, 'password'>;
+type AuthUserPayload = {
+  id: string;
+  userId: string;
+  email: string;
+  name?: string | null;
+  role: string;
+  onboardingComplete: boolean;
+  profileCompleted: boolean;
+  inviteCodeUsed: boolean;
+};
 
 interface RegisterInput {
   email: string;
@@ -26,27 +40,59 @@ interface LoginInput {
   password: string;
 }
 
-const toSafeUser = (user: User): SafeUser => {
-  const { password, ...rest } = user;
-  return rest;
+const hasProfile = async (userId: string) => {
+  const count = await prisma.profile.count({
+    where: { userId },
+  });
+  return count > 0;
 };
 
-const createAuthPayload = (user: User) => {
-  const payload = {
+const buildAuthUser = (user: User, profileCompleted: boolean): AuthUserPayload => {
+  const normalizedRole = user.role.toUpperCase();
+  const finalProfileCompleted = user.profileCompleted || profileCompleted;
+  const inviteFlag = Boolean(user.inviteCodeUsed);
+  return {
+    id: user.id,
     userId: user.id,
-    role: user.role.toLowerCase(),
     email: user.email,
-    name: user.name ?? undefined,
-    myRegistryUserId: user.myRegistryUserId ?? undefined,
-    myRegistryEmail: user.myRegistryEmail ?? undefined,
+    name: user.name ?? null,
+    role: normalizedRole,
+    onboardingComplete: user.onboardingComplete,
+    profileCompleted: finalProfileCompleted,
+    inviteCodeUsed: inviteFlag,
   };
+};
+
+const createAuthPayload = (user: User, profileCompleted: boolean) => {
+  const authUser = buildAuthUser(user, profileCompleted);
 
   return {
-    token: signToken(payload),
-    user: toSafeUser(user),
+    token: signToken(authUser),
+    user: {
+      id: authUser.id,
+      email: authUser.email,
+      name: authUser.name ?? undefined,
+      role: authUser.role,
+      onboardingComplete: authUser.onboardingComplete,
+      profileCompleted: authUser.profileCompleted,
+      inviteCodeUsed: authUser.inviteCodeUsed,
+    },
   };
 };
 
+type LoginFailureResult = {
+  ok: false;
+  onboardingRequired: true;
+  redirect: '/onboarding';
+  error: string;
+};
+
+type LoginSuccessResult = ReturnType<typeof createAuthPayload> & {
+  ok: true;
+  redirect: string;
+};
+
+export type LoginResult = LoginFailureResult | LoginSuccessResult;
 export const registerUser = async (input: RegisterInput) => {
   const {
     email,
@@ -114,7 +160,9 @@ export const registerUser = async (input: RegisterInput) => {
     },
   });
 
-  const authPayload = createAuthPayload(updatedUser);
+  const profileExists = await hasProfile(updatedUser.id);
+  const profileComplete = updatedUser.profileCompleted || profileExists;
+  const authPayload = createAuthPayload(updatedUser, profileComplete);
 
   return {
     ...authPayload,
@@ -122,7 +170,7 @@ export const registerUser = async (input: RegisterInput) => {
   };
 };
 
-export const loginUser = async ({ email, password }: LoginInput) => {
+export const loginUser = async ({ email, password }: LoginInput): Promise<LoginResult> => {
   const user = await prisma.user.findUnique({ where: { email } });
 
   if (!user) {
@@ -135,5 +183,14 @@ export const loginUser = async ({ email, password }: LoginInput) => {
     throw new Error('Invalid credentials');
   }
 
-  return createAuthPayload(user);
+  const profileExists = await hasProfile(user.id);
+  const profileComplete = user.profileCompleted || profileExists;
+
+  const authPayload = createAuthPayload(user, profileComplete);
+
+  return {
+    ok: true,
+    ...authPayload,
+    redirect: roleRedirect(user.role),
+  };
 };

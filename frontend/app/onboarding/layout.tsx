@@ -1,18 +1,35 @@
-import { ReactNode } from 'react';
+'use client';
 
-export default function OnboardingLayout({ children }: { children: ReactNode }) {
+import { ReactNode, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { getRoleRedirectPath, loadStoredUser } from '@/lib/auth/userStore';
+
+type OnboardingLayoutProps = {
+  children: ReactNode;
+};
+
+export default function OnboardingLayout({ children }: OnboardingLayoutProps) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const stored = loadStoredUser();
+    if (stored?.onboardingComplete) {
+      router.replace(getRoleRedirectPath(stored.role ?? 'MEMBER'));
+    }
+  }, [router]);
+
   return (
-    <div className="min-h-screen bg-[#FFF8F4] text-[#3E2F35]">
-      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-10 px-4 py-8 lg:px-10">
-        <header className="rounded-[32px] border border-[#C8A1B4]/40 bg-white/80 p-6 shadow-[0_35px_90px_rgba(189,147,189,0.18)]">
-          <p className="text-[0.6rem] uppercase tracking-[0.6em] text-[#C8A1B4]/70">Taylor-Made Baby Co.</p>
-          <h1 className="mt-3 font-serif text-3xl text-[#3E2F35]">Lifestyle Onboarding</h1>
-          <p className="mt-1 max-w-3xl font-nunito text-base text-[#3E2F35]/80">
-            Tell us about your home, routine, and travel style so we can curate gear that truly feels tailored to your
-            growing family.
+    <div className="min-h-screen bg-gradient-to-b from-white via-[#FFF8F4] to-[#FBE9EE] text-[#3E2F35]">
+      <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-8 px-4 py-10 lg:px-12">
+        <header className="space-y-2 rounded-[32px] border border-[#E3C6D4] bg-white/80 p-6 shadow-[0_30px_90px_rgba(189,147,189,0.18)]">
+          <p className="text-[0.65rem] uppercase tracking-[0.6em] text-[#C8A1B4]">Taylor-Made Baby Co.</p>
+          <h1 className="font-serif text-3xl text-[#3E2F35]">Bespoke onboarding</h1>
+          <p className="max-w-3xl text-sm text-[#3E2F35]/70">
+            Finish the three-step concierge flow to secure your profile, pair with a mentor, and unlock your dashboard.
           </p>
         </header>
-        <div className="flex-1">{children}</div>
+        <main className="flex-1">{children}</main>
       </div>
     </div>
   );

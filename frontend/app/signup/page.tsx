@@ -5,7 +5,8 @@ import { FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { api } from "@/lib/api";
-import { Auth } from "@/lib/auth";
+import { saveSession } from "@/lib/auth";
+import { redirectByRole } from "@/lib/auth/userStore";
 
 const RegistryTypes = ["Baby", "Nursery", "Family", "Concierge"];
 
@@ -65,18 +66,19 @@ function SignupForm() {
       });
 
       const { token, user } = response.data;
-      Auth.save(token);
-
-      const payload = Auth.decode();
-      const role = (payload?.role || user?.role || "member").toString().toLowerCase();
-
-      if (role === "admin") {
-        router.push("/dashboard/admin");
-      } else if (role === "mentor") {
-        router.push("/mentor/dashboard");
-      } else {
-        router.push("/dashboard");
-      }
+      const normalizedRole = (user?.role || "MEMBER").toString().toUpperCase();
+      const sessionUser = {
+        ...user,
+        role: normalizedRole,
+        onboardingComplete: Boolean(user?.onboardingComplete),
+        profileCompleted: Boolean(user?.profileCompleted),
+        inviteCodeUsed: Boolean(user?.inviteCodeUsed),
+      };
+      saveSession({
+        token,
+        user: sessionUser,
+      });
+      router.push(redirectByRole(sessionUser));
     } catch (err: unknown) {
       setError(resolveErrorMessage(err, "Unable to signup right now."));
     } finally {

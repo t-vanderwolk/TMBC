@@ -2,7 +2,6 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import {
   createAdminEvent,
@@ -11,6 +10,8 @@ import {
   getInviteRequests,
 } from "@/lib/api/admin";
 import { useEvents } from "@/hooks/useEvents";
+import { requireAdmin } from "@/lib/auth/requireAdmin";
+import { useRequireRole } from "@/lib/auth/useRequireRole";
 
 type AdminDashboardPayload = {
   totalMembers?: number;
@@ -25,41 +26,23 @@ type AdminDashboardPayload = {
 };
 
 export default function AdminDashboardPage() {
-  const router = useRouter();
+  useRequireRole("ADMIN");
+
   const [dashboard, setDashboard] = useState<AdminDashboardPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [token, setToken] = useState<string | null>(null);
-  const [authChecked, setAuthChecked] = useState(false);
   const { data: adminEvents, loading: adminEventsLoading, error: adminEventsError, refresh: refreshAdminEvents } =
     useEvents();
   const [eventForm, setEventForm] = useState({ name: "", date: "", location: "" });
   const [savingEvent, setSavingEvent] = useState(false);
   const [pendingInvites, setPendingInvites] = useState(0);
+  const { user: guardUser, loading: guardLoading } = requireAdmin();
 
   useEffect(() => {
-    const stored = localStorage.getItem("tm_user");
-    if (!stored) {
-      router.replace("/login");
-      setAuthChecked(true);
-      return;
-    }
-
-    try {
-      const parsed = JSON.parse(stored);
-      if (parsed?.role !== "ADMIN") {
-        router.replace("/dashboard");
-        setAuthChecked(true);
-        return;
-      }
-      setToken(parsed?.token ?? null);
-    } catch {
-      localStorage.removeItem("tm_user");
-      router.replace("/login");
-    } finally {
-      setAuthChecked(true);
-    }
-  }, [router]);
+    if (!guardUser) return;
+    setToken(guardUser.token ?? null);
+  }, [guardUser]);
 
   useEffect(() => {
     if (!token) return;
@@ -139,7 +122,7 @@ export default function AdminDashboardPage() {
     }
   };
 
-  if (!authChecked || loading) {
+  if (guardLoading || loading) {
     return (
       <div className="flex flex-1 items-center justify-center px-4 py-20 text-sm uppercase tracking-[0.5em] text-[#C8A1B4]">
         Aligning the admin signal…

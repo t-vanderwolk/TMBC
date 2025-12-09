@@ -5,7 +5,7 @@ import { requireAuth } from './authMiddleware';
 export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
   requireAuth(req, res, () => {
     const user = (req as any).user;
-    if (user?.role === 'ADMIN') {
+    if (String(user?.role ?? '').toUpperCase() === 'ADMIN') {
       return next();
     }
 

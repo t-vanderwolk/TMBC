@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRequireRole } from "@/lib/auth/useRequireRole";
 
 type Member = {
   name: string;
@@ -9,15 +10,10 @@ type Member = {
 };
 
 export default function MentorMembers() {
+  useRequireRole("MENTOR");
   const [members, setMembers] = useState<Member[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem("tm_user");
-    if (!stored) return (window.location.href = "/login");
-    const parsed = JSON.parse(stored);
-    const role = String(parsed.role ?? "").toLowerCase();
-    if (role !== "mentor") return (window.location.href = "/dashboard");
-
     setMembers([
       { name: "Ava Hart", trimester: "2nd", progress: "43%" },
       { name: "Lily Chen", trimester: "3rd", progress: "71%" },

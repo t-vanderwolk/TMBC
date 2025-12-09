@@ -36,6 +36,9 @@ async function main() {
         role: u.role,
         password: passwordHash, // always resync password to bcrypt("Karma")
         disabled: false,
+        profileCompleted: true,
+        inviteCodeUsed: true,
+        onboardingComplete: true,
       },
       create: {
         email: u.email,
@@ -43,6 +46,9 @@ async function main() {
         role: u.role,
         password: passwordHash,
         disabled: false,
+        profileCompleted: true,
+        inviteCodeUsed: true,
+        onboardingComplete: true,
       },
     });
 

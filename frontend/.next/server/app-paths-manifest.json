@@ -1,8 +1,8 @@
 {
-  "/not-found": "app/not-found.js",
+  "/(marketing)/page": "app/(marketing)/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/dashboard/registry/page": "app/dashboard/registry/page.js",
-  "/dashboard/community/page": "app/dashboard/community/page.js",
+  "/dashboard/learn/[moduleId]/page": "app/dashboard/learn/[moduleId]/page.js",
   "/(marketing)/login/page": "app/(marketing)/login/page.js",
-  "/(marketing)/how-it-works/page": "app/(marketing)/how-it-works/page.js"
+  "/dashboard/learn/page": "app/dashboard/learn/page.js",
+  "/dashboard/admin/page": "app/dashboard/admin/page.js"
 }

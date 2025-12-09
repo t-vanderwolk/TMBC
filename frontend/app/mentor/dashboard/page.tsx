@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
+import { requireMentor } from "@/lib/auth/requireMentor";
+import { useRequireRole } from "@/lib/auth/useRequireRole";
 
 import ChatPanel from "@/components/chat/ChatPanel";
 import ConversationList from "@/components/messaging/ConversationList";
@@ -13,6 +15,8 @@ import { useUpcomingEvents } from "@/hooks/useUpcomingEvents";
 type MentorOverview = {
   menteesCount: number;
   cohortsCount: number;
+  cohorts?: number;
+  mentees?: number;
   averageProgress?: number;
   avgProgress?: number;
   mentorNotes?: string[];
@@ -53,7 +57,8 @@ const summaryTiles = (overview: MentorOverview | null) => {
 };
 
 export default function MentorDashboardPage() {
-  const router = useRouter();
+  useRequireRole("MENTOR");
+
   const [overview, setOverview] = useState<MentorOverview | null>(null);
   const [mentees, setMentees] = useState<MentorMentee[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string>("");
@@ -62,9 +67,15 @@ export default function MentorDashboardPage() {
   const [error, setError] = useState("");
   const [token, setToken] = useState<string | null>(null);
   const [currentMentor, setCurrentMentor] = useState<{ id: string; name?: string } | null>(null);
-  const [authChecked, setAuthChecked] = useState(false);
-  const { events, loading: eventsLoading, error: eventsError, rsvped, rsvp } =
+  const { user: guardUser, loading: guardLoading } = requireMentor();
+  const { events, isLoading: eventsLoading, error: eventsError, refresh: refreshEvents } =
     useUpcomingEvents();
+
+  useEffect(() => {
+    if (!guardUser) return;
+    setToken(guardUser.token ?? null);
+    setCurrentMentor({ id: guardUser.id, name: guardUser.name });
+  }, [guardUser]);
   const [conversations, setConversations] = useState<{
     threadId: string;
     mentorId: string;
@@ -74,25 +85,6 @@ export default function MentorDashboardPage() {
   }[]>([]);
   const [threadsLoading, setThreadsLoading] = useState(false);
   const [threadsError, setThreadsError] = useState("");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("tm_user");
-    if (!stored) {
-      router.replace("/login");
-      setAuthChecked(true);
-      return;
-    }
-    try {
-      const parsed = JSON.parse(stored);
-      setToken(parsed?.token ?? null);
-      setCurrentMentor({ id: parsed?.id ?? "", name: parsed?.name });
-    } catch {
-      localStorage.removeItem("tm_user");
-      router.replace("/login");
-    } finally {
-      setAuthChecked(true);
-    }
-  }, [router]);
 
   useEffect(() => {
     if (!token) return;
@@ -158,7 +150,7 @@ export default function MentorDashboardPage() {
     [conversations, activeConversationId],
   );
 
-  if (!authChecked || loading) {
+  if (guardLoading || loading) {
     return (
       <div className="flex flex-1 items-center justify-center px-4 py-20 text-sm uppercase tracking-[0.5em] text-[#C8A1B4]">
         Curating your mentor concierge…
@@ -307,17 +299,10 @@ export default function MentorDashboardPage() {
                     <div className="mt-3 flex flex-wrap items-center gap-2">
                       <button
                         type="button"
-                        onClick={() => rsvp(event.id)}
-                        disabled={rsvped.has(event.id)}
-                        className="rounded-full bg-[#C8A1B4] px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-white transition hover:bg-[#b88aa5] disabled:opacity-60"
-                      >
-                        {rsvped.has(event.id) ? "RSVP’d" : "RSVP"}
-                      </button>
-                      <button
-                        type="button"
+                        onClick={() => refreshEvents()}
                         className="rounded-full border border-[#C8A1B4]/60 px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-[#3E2F35]/70 transition hover:border-[#B98AA5]"
                       >
-                        Share with mentees
+                        Refresh events
                       </button>
                     </div>
                   </li>

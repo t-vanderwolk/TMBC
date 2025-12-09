@@ -7,6 +7,7 @@ import ChatPanel from "@/components/chat/ChatPanel";
 import ConversationList from "@/components/messaging/ConversationList";
 import { getCurrentConversation } from "@/lib/api/chat";
 import { getClientUser } from "@/lib/auth";
+import { getRoleRedirectPath } from "@/lib/auth/userStore";
 
 type ConversationSummary = {
   id: string;
@@ -36,9 +37,9 @@ export default function MessagesPage() {
       return;
     }
 
-    const role = (storedUser.role ?? "member").toLowerCase();
-    if (role === "mentor" || role === "admin") {
-      router.replace("/mentor/dashboard");
+    const normalizedRole = (storedUser.role ?? "member").toUpperCase();
+    if (normalizedRole !== "MEMBER") {
+      router.replace(getRoleRedirectPath(normalizedRole));
       return;
     }
 

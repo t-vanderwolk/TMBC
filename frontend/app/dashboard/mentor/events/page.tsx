@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRequireRole } from "@/lib/auth/useRequireRole";
 
 type MentorEvent = {
   title: string;
@@ -8,15 +9,10 @@ type MentorEvent = {
 };
 
 export default function MentorEvents() {
+  useRequireRole("MENTOR");
   const [events, setEvents] = useState<MentorEvent[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem("tm_user");
-    if (!stored) return (window.location.href = "/login");
-    const parsed = JSON.parse(stored);
-    const role = String(parsed.role ?? "").toLowerCase();
-    if (role !== "mentor") return (window.location.href = "/dashboard");
-
     setEvents([
       { title: "Trimester Circle", date: "Thursday 7pm" },
       { title: "Registry Workshop", date: "Saturday 12pm" },

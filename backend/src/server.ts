@@ -5,10 +5,12 @@ import http from 'http';
 import { app } from './app';
 import healthRoutes from './routes/health.routes';
 import mvpHealthRoutes from './routes/mvp/health.routes';
+import onboardingRoutes from './routes/onboarding.routes';
 import { initChatWebSocket } from './ws/chat.server';
 
 app.use('/api', healthRoutes);
 app.use('/api/health', mvpHealthRoutes);
+app.use('/api/onboarding', onboardingRoutes);
 const PORT = Number(process.env.PORT) || 4000;
 const server = http.createServer(app);
 

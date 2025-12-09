@@ -1,11 +1,19 @@
 import { Router } from 'express';
 
-import { requireAuth } from '../middleware/authMiddleware';
-import { getOnboardingProfileController, saveOnboardingProfileController } from '../controllers/onboarding.controller';
+import {
+  validateInviteCodeController,
+  startOnboardingController,
+  saveProfileController,
+  assignMentorController,
+  completeOnboardingController,
+} from '../controllers/onboarding.controller';
 
 const router = Router();
 
-router.post('/', requireAuth, saveOnboardingProfileController);
-router.get('/me', requireAuth, getOnboardingProfileController);
+router.post('/validate', validateInviteCodeController);
+router.post('/start', startOnboardingController);
+router.post('/profile', saveProfileController);
+router.post('/assign-mentor', assignMentorController);
+router.post('/complete', completeOnboardingController);
 
 export default router;

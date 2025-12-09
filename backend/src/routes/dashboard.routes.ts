@@ -4,11 +4,13 @@ import {
   getDashboardController,
   getDashboardOverviewController,
 } from '../controllers/dashboard.controller';
-import { requireAuth } from '../middleware/authMiddleware';
+import { requireMember } from '../middleware/requireMember';
 
 const router = Router();
 
-router.get('/', requireAuth, getDashboardController);
-router.get('/overview', requireAuth, getDashboardOverviewController);
+router.use(requireMember);
+
+router.get('/', getDashboardController);
+router.get('/overview', getDashboardOverviewController);
 
 export default router;

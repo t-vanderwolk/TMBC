@@ -20,8 +20,10 @@ import {
   updateAdminUserController,
   deleteAdminUserController,
 } from '../controllers/admin.controller';
+import { requireAdmin } from '../middleware/requireAdmin';
 
 const router = Router();
+router.use(requireAdmin);
 
 router.get('/stats', getAdminStatsController);
 

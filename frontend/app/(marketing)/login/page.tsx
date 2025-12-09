@@ -26,30 +26,31 @@ export default function LoginPage() {
     try {
       const res = await api.post("/api/auth/login", { email, password });
 
-      if (!res?.data?.user || !res?.data?.token) {
+      if (!res?.data?.token || !res?.data?.user) {
         setError("Invalid credentials");
         return;
       }
 
-      const user = {
+      if (res.data.ok === false) {
+        setError(res.data.error ?? "Please complete onboarding to continue.");
+        return;
+      }
+
+      const normalizedRole = (res.data.user.role || "MEMBER").toUpperCase();
+      const sessionUser = {
         ...res.data.user,
-        role: (res.data.user.role || "MEMBER").toUpperCase(),
+        role: normalizedRole,
+        onboardingComplete: Boolean(res.data.user.onboardingComplete),
+        profileCompleted: Boolean(res.data.user.profileCompleted),
+        inviteCodeUsed: Boolean(res.data.user.inviteCodeUsed),
       };
 
       saveSession({
         token: res.data.token,
-        user,
+        user: sessionUser,
       });
 
-      const role = user.role;
-
-      if (role === "ADMIN") {
-        router.push("/dashboard/admin");
-      } else if (role === "MENTOR") {
-        router.push("/mentor/dashboard");
-      } else {
-        router.push("/dashboard");
-      }
+      router.push(res.data.redirect ?? "/dashboard");
     } catch (err) {
       setError("Invalid email or password");
     }

@@ -1,12 +1,15 @@
 "use client";
 
-type ClientUser = {
+export type StoredUser = {
   id: string;
   email: string;
   name?: string;
-  role?: string;
+  role: string;
   title?: string;
   token?: string;
+  onboardingComplete?: boolean;
+  profileCompleted?: boolean;
+  inviteCodeUsed?: boolean;
 };
 
 const SESSION_TOKEN_KEY = 'tm_token';
@@ -29,7 +32,7 @@ const decodeTokenPayload = (token: string | null) => {
   }
 };
 
-const buildClientUser = (payload: any): ClientUser | null => {
+const buildStoredUser = (payload: any, token?: string): StoredUser | null => {
   if (!payload) return null;
   if (!payload.id || !payload.email) return null;
   return {
@@ -38,36 +41,51 @@ const buildClientUser = (payload: any): ClientUser | null => {
     name: payload.name ?? payload.firstName ?? payload.displayName ?? '',
     role: normalizeRole(payload.role),
     title: payload.title,
+    onboardingComplete: Boolean(payload.onboardingComplete),
+    profileCompleted: Boolean(payload.profileCompleted),
+    inviteCodeUsed: Boolean(payload.inviteCodeUsed),
+    token,
   };
 };
 
-const syncUserFromToken = (token: string) => {
+const persistStoredUser = (user: StoredUser) => {
+  localStorage.setItem(SESSION_USER_KEY, JSON.stringify(user));
+};
+
+const syncUserFromToken = (token: string): StoredUser | null => {
   const payload = decodeTokenPayload(token);
-  const user = buildClientUser(payload);
+  const user = buildStoredUser(payload, token);
   if (!user) return null;
-  localStorage.setItem(
-    SESSION_USER_KEY,
-    JSON.stringify({
-      ...user,
-      token,
-    }),
-  );
+  persistStoredUser(user);
   return user;
 };
 
-export const saveSession = ({ token, user }: { token: string; user: ClientUser }) => {
-  if (!ensureClient()) return;
+export const saveSession = ({
+  token,
+  user,
+}: {
+  token: string;
+  user?: StoredUser;
+}) => {
+  if (!ensureClient()) return null;
   localStorage.setItem(SESSION_TOKEN_KEY, token);
-  localStorage.setItem(
-    SESSION_USER_KEY,
-    JSON.stringify({
-      ...user,
-      role: normalizeRole(user.role),
-      token,
-    }),
-  );
   localStorage.setItem(LEGACY_TOKEN_KEY, token);
   document.cookie = `tm_token=${token}; path=/`;
+
+  if (user) {
+    const normalizedUser: StoredUser = {
+      ...user,
+      role: normalizeRole(user.role),
+      onboardingComplete: Boolean(user.onboardingComplete),
+      profileCompleted: Boolean(user.profileCompleted),
+      inviteCodeUsed: Boolean(user.inviteCodeUsed),
+      token,
+    };
+    persistStoredUser(normalizedUser);
+    return normalizedUser;
+  }
+
+  return syncUserFromToken(token);
 };
 
 export const getSessionToken = () => {
@@ -79,16 +97,24 @@ export const getSessionToken = () => {
   );
 };
 
+export const getStoredUser = (): StoredUser | null => {
+  if (!ensureClient()) return null;
+  const stored = localStorage.getItem(SESSION_USER_KEY);
+  if (!stored) return null;
+  try {
+    return JSON.parse(stored);
+  } catch {
+    localStorage.removeItem(SESSION_USER_KEY);
+    return null;
+  }
+};
+
 export const getClientUser = () => {
   if (!ensureClient()) return null;
 
-  const stored = localStorage.getItem(SESSION_USER_KEY);
+  const stored = getStoredUser();
   if (stored) {
-    try {
-      return JSON.parse(stored);
-    } catch {
-      localStorage.removeItem(SESSION_USER_KEY);
-    }
+    return stored;
   }
 
   const token = getSessionToken();
@@ -104,17 +130,9 @@ export const clearSession = () => {
   document.cookie = 'tm_token=; path=/; max-age=0';
 };
 
-const saveTokenOnly = (token: string) => {
-  if (!ensureClient()) return;
-  localStorage.setItem(SESSION_TOKEN_KEY, token);
-  localStorage.setItem(LEGACY_TOKEN_KEY, token);
-  document.cookie = `tm_token=${token}; path=/`;
-  syncUserFromToken(token);
-};
-
 export const Auth = {
   save(token: string) {
-    saveTokenOnly(token);
+    saveSession({ token });
   },
 
   get(): string | null {

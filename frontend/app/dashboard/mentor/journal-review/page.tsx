@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRequireRole } from "@/lib/auth/useRequireRole";
 
 type Entry = {
   member: string;
@@ -8,15 +9,10 @@ type Entry = {
 };
 
 export default function JournalReview() {
+  useRequireRole("MENTOR");
   const [entries, setEntries] = useState<Entry[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem("tm_user");
-    if (!stored) return (window.location.href = "/login");
-    const parsed = JSON.parse(stored);
-    const role = String(parsed.role ?? "").toLowerCase();
-    if (role !== "mentor") return (window.location.href = "/dashboard");
-
     setEntries([
       { member: "Ava Hart", preview: "Feeling a bit anxious about..." },
       { member: "Lily Chen", preview: "Baby was so active today..." },

@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { FormEvent, Suspense, useEffect, useState } from 'react';
 
 import { inviteApi } from '@/lib/api';
-import { Auth } from '@/lib/auth';
+import { saveSession } from '@/lib/auth';
+import { getRoleRedirectPath } from '@/lib/auth/userStore';
 
 const CreateProfileContent = () => {
   const router = useRouter();
@@ -54,18 +55,19 @@ const CreateProfileContent = () => {
       setError('');
       const response = await inviteApi.consume({ code, email, password, name });
       const { token, user } = response.data;
+      const normalizedRole = (user?.role || 'MEMBER').toString().toUpperCase();
 
-      Auth.save(token);
-      const payload = Auth.decode();
-      const role = (payload?.role || user?.role || 'member').toLowerCase();
+      saveSession({
+        token,
+        user: {
+          ...user,
+          role: normalizedRole,
+          onboardingComplete: Boolean(user?.onboardingComplete),
+          profileCompleted: Boolean(user?.profileCompleted),
+        },
+      });
 
-      if (role === 'admin') {
-        router.push('/dashboard/admin');
-      } else if (role === 'mentor') {
-        router.push('/mentor/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+      router.push(getRoleRedirectPath(normalizedRole));
     } catch (err: any) {
       const message = err?.response?.data?.message || 'Unable to create profile with this invite.';
       setError(message);
