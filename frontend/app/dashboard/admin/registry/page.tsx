@@ -9,7 +9,7 @@ type RegistryStat = {
 };
 
 export default function AdminRegistry() {
-  useRequireRole("ADMIN");
+  useRequireRole(["ADMIN"]);
   const [stats, setStats] = useState<RegistryStat[]>([]);
 
   useEffect(() => {

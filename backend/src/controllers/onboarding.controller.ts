@@ -6,6 +6,7 @@ import {
   saveProfile,
   assignMentor,
   completeOnboarding,
+  finishInviteOnboarding,
 } from '../services/onboarding.service';
 
 const sendError = (res: Response, error: unknown) => {
@@ -73,6 +74,19 @@ export const completeOnboardingController = async (req: Request, res: Response) 
     }
     const user = await completeOnboarding(userId);
     return res.json({ user });
+  } catch (error) {
+    return sendError(res, error);
+  }
+};
+
+export const finishInviteOnboardingController = async (req: Request, res: Response) => {
+  try {
+    const { code, name, password } = req.body;
+    if (!code || !name || !password) {
+      return res.status(400).json({ error: 'Invite code, name, and password are required' });
+    }
+    const payload = await finishInviteOnboarding({ code, name, password });
+    return res.json(payload);
   } catch (error) {
     return sendError(res, error);
   }

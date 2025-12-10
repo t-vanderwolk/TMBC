@@ -1,17 +1,8 @@
 "use client";
 
-import { ReactNode } from "react";
-
 import ProtectedRoute from "@/components/ProtectedRoute";
+import type { ReactNode } from "react";
 
-type DashboardAdminLayoutProps = {
-  children: ReactNode;
-};
-
-export default function DashboardAdminLayout({ children }: DashboardAdminLayoutProps) {
-  return (
-    <ProtectedRoute allowedRoles={["ADMIN"]}>
-      {children}
-    </ProtectedRoute>
-  );
+export default function Layout({ children }: { children: ReactNode }) {
+  return <ProtectedRoute allow={["ADMIN"]}>{children}</ProtectedRoute>;
 }

@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDashboardOverview = void 0;
+exports.getDashboardData = exports.getDashboardOverview = void 0;
 const client_1 = require("../../prisma/client");
+const events_service_1 = require("./events.service");
 const academy_service_1 = require("./academy.service");
 const WEEKLY_CHECKLIST = [
     'Upload nursery photos for mentor review',
@@ -77,3 +78,40 @@ const getDashboardOverview = async (user) => {
     };
 };
 exports.getDashboardOverview = getDashboardOverview;
+const getLatestChatPreview = async (memberId) => {
+    if (!memberId)
+        return null;
+    const message = await client_1.prisma.chatMessage.findFirst({
+        where: { memberId },
+        orderBy: { createdAt: 'desc' },
+        include: {
+            sender: {
+                select: {
+                    name: true,
+                },
+            },
+        },
+    });
+    if (!message)
+        return null;
+    return {
+        mentorId: message.mentorId,
+        memberId: message.memberId,
+        lastMessage: message.content,
+        updatedAt: message.createdAt.toISOString(),
+        senderName: message.sender?.name ?? null,
+    };
+};
+const getDashboardData = async (user) => {
+    const [overview, events, chatPreview] = await Promise.all([
+        (0, exports.getDashboardOverview)(user),
+        (0, events_service_1.getEvents)('upcoming', user?.id),
+        getLatestChatPreview(user?.id),
+    ]);
+    return {
+        ...overview,
+        events,
+        chatPreview,
+    };
+};
+exports.getDashboardData = getDashboardData;

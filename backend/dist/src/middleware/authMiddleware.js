@@ -10,6 +10,7 @@ const extractToken = (req) => {
         return null;
     return header.replace('Bearer ', '');
 };
+const normalizeRole = (value) => value?.toUpperCase() ?? 'MEMBER';
 const requireAuth = (req, res, next) => {
     const token = extractToken(req);
     if (!token)
@@ -18,7 +19,12 @@ const requireAuth = (req, res, next) => {
     if (!payload) {
         return res.status(401).json({ error: 'Invalid token' });
     }
-    req.user = payload;
+    const role = normalizeRole(payload.role);
+    req.user = {
+        ...payload,
+        role,
+        userId: payload.id,
+    };
     next();
 };
 exports.requireAuth = requireAuth;

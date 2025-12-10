@@ -10,7 +10,7 @@ type Member = {
 };
 
 export default function MentorMembers() {
-  useRequireRole("MENTOR");
+  useRequireRole(["MENTOR"]);
   const [members, setMembers] = useState<Member[]>([]);
 
   useEffect(() => {

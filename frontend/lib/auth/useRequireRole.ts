@@ -1,29 +1,35 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { getStoredUser } from "@/lib/auth";
+import { redirectByRole } from "@/lib/auth/redirectByRole";
 
-import { getRoleRedirectPath } from "@/lib/auth/userStore";
+type RoleName = "ADMIN" | "MENTOR" | "MEMBER";
 
-type UserRole = "MEMBER" | "MENTOR" | "ADMIN";
+export const useRequireRole = (allowed: RoleName[]) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const normalizedAllowed = useMemo(
+    () => allowed.map((value) => value.toUpperCase() as RoleName),
+    [allowed],
+  );
 
-export function useRequireRole(requiredRole: UserRole) {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const stored = localStorage.getItem("tm_user");
-
-    // User not logged in → login
+    const stored = getStoredUser();
     if (!stored) {
-      window.location.href = "/login";
+      router.replace("/login");
       return;
     }
 
-    const parsed = JSON.parse(stored);
-    const role = (parsed.role ?? "MEMBER").toUpperCase();
-
-    // Wrong dashboard → route to the correct one
-    if (role !== requiredRole) {
-      window.location.href = getRoleRedirectPath(role);
+    const role = (stored.role ?? "MEMBER").toUpperCase() as RoleName;
+    if (!normalizedAllowed.includes(role)) {
+      const target = redirectByRole(role);
+      if (target !== pathname) {
+        router.replace(target);
+      }
     }
-  }, [requiredRole]);
-}
+  }, [normalizedAllowed, pathname, router]);
+};

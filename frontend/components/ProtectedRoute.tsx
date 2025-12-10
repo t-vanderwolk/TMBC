@@ -1,47 +1,49 @@
 "use client";
 
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import { getStoredUser } from "@/lib/auth";
-import { getRoleRedirectPath } from "@/lib/auth/userStore";
+import { redirectByRole } from "@/lib/auth/redirectByRole";
 
-type RoleName = "MEMBER" | "MENTOR" | "ADMIN";
+type RoleName = "ADMIN" | "MENTOR" | "MEMBER";
 
-type ProtectedRouteProps = {
-  allowedRoles?: RoleName[];
+export default function ProtectedRoute({
+  allow = ["MEMBER"],
+  children,
+}: {
+  allow?: RoleName[];
   children: ReactNode;
-};
-
-export default function ProtectedRoute({ children, allowedRoles = ["MEMBER"] }: ProtectedRouteProps) {
+}) {
   const router = useRouter();
-  const [isAuthorized, setIsAuthorized] = useState(false);
-
-  const normalizedRoles = useMemo(
-    () => allowedRoles.map((value) => value.toUpperCase() as RoleName),
-    [allowedRoles],
-  );
+  const [loading, setLoading] = useState(true);
+  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
     const stored = getStoredUser();
-
     if (!stored) {
-      router.replace("/login");
+      setLoading(false);
+      Promise.resolve().then(() => router.replace("/login"));
       return;
     }
 
-    const role = (stored.role ?? "MEMBER").toUpperCase() as RoleName;
-
-    if (!normalizedRoles.includes(role)) {
-      router.replace(getRoleRedirectPath(role));
+    const normalizedAllow = (allow || ["MEMBER"]).map((value) =>
+      value.toUpperCase(),
+    );
+    const role = ((stored.role || "MEMBER").toUpperCase() as RoleName);
+    if (!normalizedAllow.includes(role)) {
+      setLoading(false);
+      const redirectPath = redirectByRole(role);
+      Promise.resolve().then(() => router.replace(redirectPath));
       return;
     }
 
-    setIsAuthorized(true);
-  }, [normalizedRoles, router]);
+    setAuthorized(true);
+    setLoading(false);
+  }, [allow, router]);
 
-  if (!isAuthorized) return null;
-
+  if (loading || !authorized) return null;
   return <>{children}</>;
 }

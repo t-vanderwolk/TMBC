@@ -10,7 +10,7 @@ type MentorInfo = {
 };
 
 export default function AdminMentors() {
-  useRequireRole("ADMIN");
+  useRequireRole(["ADMIN"]);
   const [mentors, setMentors] = useState<MentorInfo[]>([]);
 
   useEffect(() => {

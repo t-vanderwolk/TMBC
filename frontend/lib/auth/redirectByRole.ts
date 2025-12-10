@@ -1,16 +1,11 @@
-import type { StoredUser } from "@/lib/auth";
-
-type RedirectInput = Pick<StoredUser, "role">;
-
-export const redirectByRole = (user: RedirectInput) => {
-  const normalizedRole = (user.role ?? "MEMBER").toUpperCase();
-
-  switch (normalizedRole) {
+export const redirectByRole = (role?: string) => {
+  const normalized = (role ?? "MEMBER").toUpperCase();
+  switch (normalized) {
     case "ADMIN":
       return "/dashboard/admin";
     case "MENTOR":
-      return "/mentor/dashboard";
+      return "/dashboard/mentor";
     default:
-      return "/dashboard";
+      return "/dashboard/member";
   }
 };

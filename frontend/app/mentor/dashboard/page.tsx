@@ -57,7 +57,7 @@ const summaryTiles = (overview: MentorOverview | null) => {
 };
 
 export default function MentorDashboardPage() {
-  useRequireRole("MENTOR");
+  useRequireRole(["MENTOR"]);
 
   const [overview, setOverview] = useState<MentorOverview | null>(null);
   const [mentees, setMentees] = useState<MentorMentee[]>([]);

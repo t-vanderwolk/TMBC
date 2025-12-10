@@ -57,7 +57,7 @@ const CreateProfileContent = () => {
       const { token, user } = response.data;
       const normalizedRole = (user?.role || 'MEMBER').toString().toUpperCase();
 
-      saveSession({
+      await saveSession({
         token,
         user: {
           ...user,

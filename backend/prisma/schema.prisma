@@ -25,19 +25,22 @@ model User {
   myRegistryEmail        String?
   myRegistryUserId       String?
   disabled               Boolean            @default(false)
-  onboardingComplete     Boolean            @default(false)
-  profileCompleted       Boolean            @default(false)
-  inviteCodeUsed         Boolean            @default(false)
   dueDate                DateTime?
+  inviteCodeUsed         Boolean            @default(false)
   location               String?
   mentorId               String?
-  mentor                 User?              @relation("Mentorship", fields: [mentorId], references: [id])
-  mentees                User[]             @relation("Mentorship")
+  onboardingComplete     Boolean            @default(false)
+  profileCompleted       Boolean            @default(false)
+  academyProgress        AcademyProgress[]
+  memberChatMessages     ChatMessage[]      @relation("MemberChatMessages")
+  mentorChatMessages     ChatMessage[]      @relation("MentorChatMessages")
+  sentChatMessages       ChatMessage[]      @relation("ChatMessageSender")
+  communityPosts         CommunityPost[]
   hostedEvents           Event[]            @relation("HostedEvents")
   invites                Invite[]           @relation("CreatedInvites")
   consumedInvite         Invite?            @relation("ConsumedInvite")
-  approvedInvites        InviteRequest[]    @relation("InviteApprover")
   redeemedInvite         InviteCode?        @relation("RedeemedInvite")
+  approvedInvites        InviteRequest[]    @relation("InviteApprover")
   loginEvents            LoginEvent[]
   mentorFeedbackReceived MentorFeedback[]   @relation("MentorFeedbackMember")
   mentorFeedbackAuthored MentorFeedback[]   @relation("MentorFeedbackMentor")
@@ -45,15 +48,12 @@ model User {
   mentorNotes            MentorNote[]       @relation("MentorNotesMentor")
   mentorTasksMember      MentorTask[]       @relation("MentorTasksMember")
   mentorTasksMentor      MentorTask[]       @relation("MentorTasksMentor")
-  mentorChatMessages     ChatMessage[]      @relation("MentorChatMessages")
-  memberChatMessages     ChatMessage[]      @relation("MemberChatMessages")
-  sentChatMessages       ChatMessage[]      @relation("ChatMessageSender")
-  profile                Profile?
   onboardingProfile      OnboardingProfile?
+  profile                Profile?
   registryConflicts      RegistryConflict[]
   registryItems          RegistryItem[]
-  academyProgress        AcademyProgress[]
-  communityPosts         CommunityPost[]
+  mentor                 User?              @relation("Mentorship", fields: [mentorId], references: [id])
+  mentees                User[]             @relation("Mentorship")
   workbookEntries        WorkbookEntry[]
 }
 
@@ -113,14 +113,14 @@ model Invite {
 }
 
 model InviteCode {
-  id           String   @id @default(cuid())
-  code         String   @unique
+  id           String    @id @default(cuid())
+  code         String    @unique
   email        String?
-  used         Boolean  @default(false)
-  redeemedById String?  @unique
-  redeemedBy   User?    @relation("RedeemedInvite", fields: [redeemedById], references: [id])
-  createdAt    DateTime @default(now())
+  used         Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  redeemedById String?   @unique
   usedAt       DateTime?
+  redeemedBy   User?     @relation("RedeemedInvite", fields: [redeemedById], references: [id])
 }
 
 model Waitlist {
@@ -191,49 +191,49 @@ model RegistryItem {
 }
 
 model MentorNote {
-  id        String   @id @default(cuid())
+  id        String         @id @default(cuid())
   memberId  String
   mentorId  String
   productId String?
+  content   String         @map("note")
+  createdAt DateTime       @default(now())
   moduleId  String?
-  content   String   @map("note")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  member    User     @relation("MemberMentorNotes", fields: [memberId], references: [id], onDelete: Cascade)
-  mentor    User     @relation("MentorNotesMentor", fields: [mentorId], references: [id], onDelete: Cascade)
-  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
-  module    AcademyModule? @relation("ModuleMentorNotes", fields: [moduleId], references: [id], onDelete: SetNull)
+  updatedAt DateTime       @updatedAt
+  member    User           @relation("MemberMentorNotes", fields: [memberId], references: [id], onDelete: Cascade)
+  mentor    User           @relation("MentorNotesMentor", fields: [mentorId], references: [id], onDelete: Cascade)
+  module    AcademyModule? @relation("ModuleMentorNotes", fields: [moduleId], references: [id])
+  product   Product?       @relation(fields: [productId], references: [id])
 
   @@index([memberId])
   @@index([mentorId])
 }
 
 model AcademyModule {
-  id              String           @id
+  id              String            @id
   title           String
   trackId         String?
-  slug            String?          @unique
-  journey         String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  content         Json             @default("{}")
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  content         Json              @default("{}")
   heroImage       String?
   subtitle        String?
   description     String?
-  mentorFeedback  MentorFeedback[]
-  workbookEntries WorkbookEntry[]
-  mentorNotes     MentorNote[]     @relation("ModuleMentorNotes")
+  journey         String?
+  slug            String?           @unique
   progress        AcademyProgress[]
+  mentorFeedback  MentorFeedback[]
+  mentorNotes     MentorNote[]      @relation("ModuleMentorNotes")
+  workbookEntries WorkbookEntry[]
 }
 
 model AcademyProgress {
-  id        String          @id @default(cuid())
+  id        String        @id @default(cuid())
   userId    String
   moduleId  String
-  completed Boolean         @default(false)
-  updatedAt DateTime        @updatedAt
-  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  module    AcademyModule   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  completed Boolean       @default(false)
+  updatedAt DateTime      @updatedAt
+  module    AcademyModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, moduleId])
   @@index([userId])
@@ -253,7 +253,6 @@ model CommunityPost {
   userId    String
   content   String
   createdAt DateTime      @default(now())
-
   room      CommunityRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -320,10 +319,9 @@ model ChatMessage {
   senderRole Role
   content    String
   createdAt  DateTime @default(now())
-
-  mentor User @relation("MentorChatMessages", fields: [mentorId], references: [id])
-  member User @relation("MemberChatMessages", fields: [memberId], references: [id])
-  sender User @relation("ChatMessageSender", fields: [senderId], references: [id])
+  member     User     @relation("MemberChatMessages", fields: [memberId], references: [id])
+  mentor     User     @relation("MentorChatMessages", fields: [mentorId], references: [id])
+  sender     User     @relation("ChatMessageSender", fields: [senderId], references: [id])
 }
 
 model MentorTask {

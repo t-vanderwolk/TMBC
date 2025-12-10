@@ -2,6 +2,7 @@ import { Prisma, Role } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
+import { AuthService } from './auth.service';
 import { prisma } from '../../prisma/client';
 
 type SaveProfilePayload = {
@@ -112,6 +113,52 @@ export const completeOnboarding = async (userId: string) => {
       onboardingComplete: true,
     },
   });
+};
+
+export const finishInviteOnboarding = async ({
+  code,
+  name,
+  password,
+}: {
+  code: string;
+  name: string;
+  password: string;
+}) => {
+  const invite = await validateInviteCode(code);
+  if (!invite.email) {
+    throw new Error('Invite is missing an associated email address');
+  }
+
+  const existingUser = await prisma.user.findUnique({
+    where: { email: invite.email },
+  });
+  if (existingUser) {
+    throw new Error('User already exists for this invite');
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await prisma.user.create({
+    data: {
+      email: invite.email,
+      name,
+      password: hashedPassword,
+      role: Role.MEMBER,
+      inviteCodeUsed: true,
+      profileCompleted: true,
+      onboardingComplete: true,
+    },
+  });
+
+  await prisma.inviteCode.update({
+    where: { id: invite.id },
+    data: {
+      used: true,
+      usedAt: new Date(),
+      redeemedById: user.id,
+    },
+  });
+
+  return AuthService.loginUser(invite.email, password);
 };
 
 type OnboardingProfilePayload = {

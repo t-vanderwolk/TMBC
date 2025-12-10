@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
 
@@ -9,9 +9,5 @@ type MentorLayoutProps = {
 };
 
 export default function MentorLayout({ children }: MentorLayoutProps) {
-  return (
-    <ProtectedRoute allowedRoles={["MENTOR", "ADMIN"]}>
-      {children}
-    </ProtectedRoute>
-  );
+  return <ProtectedRoute allowed={["MENTOR"]}>{children}</ProtectedRoute>;
 }

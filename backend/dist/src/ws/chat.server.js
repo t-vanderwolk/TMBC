@@ -89,7 +89,17 @@ const handleIncomingMessage = async (raw, ws) => {
     (0, exports.broadcastChatMessage)(message);
 };
 const initChatWebSocket = (server) => {
-    const wss = new ws_1.WebSocketServer({ server, path: '/ws/chat' });
+    const wss = new ws_1.WebSocketServer({ noServer: true });
+    server.on('upgrade', (request, socket, head) => {
+        const pathname = request.url ? new URL(request.url, 'http://localhost').pathname : '';
+        if (pathname !== '/ws/chat') {
+            socket.destroy();
+            return;
+        }
+        wss.handleUpgrade(request, socket, head, (ws) => {
+            wss.emit('connection', ws, request);
+        });
+    });
     wss.on('connection', (ws, request) => {
         const url = new URL(request.url ?? '', 'http://localhost');
         const mentorId = url.searchParams.get('mentorId');

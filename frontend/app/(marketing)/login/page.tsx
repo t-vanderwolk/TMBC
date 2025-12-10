@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { api } from "@/lib/api";
 import Link from "next/link";
 import { saveSession } from "@/lib/auth";
+import { login } from "@/lib/auth";
+import { saveUser } from "@/lib/auth/userStore";
+import { redirectByRole } from "@/lib/auth/redirectByRole";
 
 const INPUT =
   "w-full rounded-full border border-[#C8A1B4]/40 bg-white px-5 py-3 text-sm text-[#3E2F35] placeholder-[#3E2F35]/40 focus:border-[#C8A1B4] focus:outline-none focus:ring-2 focus:ring-[#EAC9D1] transition";
@@ -18,41 +20,49 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
+    if (loading) return;
     setError("");
+    setLoading(true);
 
     try {
-      const res = await api.post("/api/auth/login", { email, password });
-
-      if (!res?.data?.token || !res?.data?.user) {
+      const res = await login(email, password);
+      if (!res?.token || !res?.user) {
         setError("Invalid credentials");
         return;
       }
 
-      if (res.data.ok === false) {
-        setError(res.data.error ?? "Please complete onboarding to continue.");
-        return;
-      }
-
-      const normalizedRole = (res.data.user.role || "MEMBER").toUpperCase();
+      const normalizedRole = (res.user.role || "MEMBER").toUpperCase();
       const sessionUser = {
-        ...res.data.user,
+        ...res.user,
         role: normalizedRole,
-        onboardingComplete: Boolean(res.data.user.onboardingComplete),
-        profileCompleted: Boolean(res.data.user.profileCompleted),
-        inviteCodeUsed: Boolean(res.data.user.inviteCodeUsed),
+        onboardingComplete: Boolean(res.user.onboardingComplete),
+        profileCompleted: Boolean(res.user.profileCompleted),
+        inviteCodeUsed: Boolean(res.user.inviteCodeUsed),
       };
 
-      saveSession({
-        token: res.data.token,
+      await saveSession({
+        token: res.token,
         user: sessionUser,
       });
+      saveUser(sessionUser);
 
-      router.push(res.data.redirect ?? "/dashboard");
+      console.log("CLIENT LOGIN RESULT:", res);
+
+      const dashboard =
+        res?.dashboard ||
+        redirectByRole(res?.user?.role) ||
+        "/dashboard/member";
+
+      await new Promise((resolve) => setTimeout(resolve, 15));
+      router.replace(dashboard);
     } catch (err) {
       setError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -98,8 +108,8 @@ export default function LoginPage() {
             required
           />
 
-          <button type="submit" className={BUTTON}>
-            Login
+          <button type="submit" className={BUTTON} disabled={loading}>
+            {loading ? "Logging in…" : "Login"}
           </button>
 
           <div className="flex items-center justify-between text-xs mt-1 text-[#3E2F35]/60">

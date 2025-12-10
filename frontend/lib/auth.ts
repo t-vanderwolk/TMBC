@@ -1,5 +1,8 @@
 "use client";
 
+import { api } from "@/lib/api";
+import { redirectByRole } from "@/lib/auth/redirectByRole";
+
 export type StoredUser = {
   id: string;
   email: string;
@@ -60,7 +63,7 @@ const syncUserFromToken = (token: string): StoredUser | null => {
   return user;
 };
 
-export const saveSession = ({
+export const saveSession = async ({
   token,
   user,
 }: {
@@ -82,6 +85,7 @@ export const saveSession = ({
       token,
     };
     persistStoredUser(normalizedUser);
+    await new Promise((resolve) => requestAnimationFrame(resolve));
     return normalizedUser;
   }
 
@@ -176,3 +180,18 @@ export const loadSession = (): Session | null => {
 
   return { token, payload };
 };
+
+export async function login(email: string, password: string) {
+  const res = await api.post("/api/auth/login", { email, password });
+  const data = res.data || {};
+  console.log("FRONTEND RAW LOGIN RESPONSE:", data);
+
+  const dashboard =
+    data.dashboard || data.redirect || redirectByRole(data.user?.role);
+
+  return {
+    ...data,
+    dashboard,
+    redirect: dashboard,
+  };
+}

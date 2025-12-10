@@ -14,15 +14,26 @@ module.exports = {
         tmDeepMauve: '#A57891',
         tmCharcoal: '#3E2F35',
         tmGold: '#D4B579',
+        tmbc: {
+          mauve: '#BFA6C9',
+          blush: '#F5E3E6',
+          ivory: '#FAF7F2',
+          gold: '#C9A86A',
+          charcoal: '#3B3738',
+        },
       },
       fontFamily: {
         script: ['var(--font-great-vibes)', 'cursive'],
         serif: ['var(--font-playfair)', 'serif'],
         sans: ['var(--font-nunito)', 'sans-serif'],
+        playfair: ['var(--font-playfair)', 'Playfair Display', 'serif'],
       },
       boxShadow: {
-        soft: '0 25px 65px rgba(200, 162, 200, 0.15)',
+        soft: '0 4px 14px rgba(0,0,0,0.07)',
         editorial: '0 35px 70px rgba(134, 75, 95, 0.25)',
+      },
+      borderRadius: {
+        xl2: '1rem',
       },
     },
   },

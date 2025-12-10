@@ -9,7 +9,7 @@ type Task = {
 };
 
 export default function MentorTasks() {
-  useRequireRole("MENTOR");
+  useRequireRole(["MENTOR"]);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {

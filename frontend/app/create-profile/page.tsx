@@ -47,7 +47,7 @@ function CreateProfileContent() {
       const user = response.data?.user;
         if (jwt) {
           const normalizedRole = (user?.role || "MEMBER").toUpperCase();
-          saveSession({
+          await saveSession({
             token: jwt,
             user: {
               ...user,

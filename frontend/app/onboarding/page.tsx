@@ -4,6 +4,7 @@ import { Suspense, FormEvent, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "@/lib/api";
 import { saveSession } from "@/lib/auth";
+import { redirectByRole } from "@/lib/auth/redirectByRole";
 
 function OnboardingPageContent() {
   const params = useSearchParams();
@@ -69,7 +70,7 @@ function OnboardingPageContent() {
     setSubmitting(true);
 
     try {
-      const response = await api.post("/api/auth/complete-onboarding", {
+      const response = await api.post("/api/onboarding/complete-invite", {
         code,
         name: name.trim(),
         password,
@@ -81,12 +82,14 @@ function OnboardingPageContent() {
         throw new Error("Incomplete response");
       }
 
-      saveSession({
+      await saveSession({
         token: payload.token,
         user: payload.user,
       });
 
-      router.push(payload.redirect ?? "/dashboard");
+      const destination =
+        payload.redirect ?? redirectByRole(payload?.user?.role) ?? "/dashboard/member";
+      router.push(destination);
     } catch (err) {
       setError("Unable to complete onboarding.");
     } finally {

@@ -1,22 +1,41 @@
-import 'dotenv/config';
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 
-import http from 'http';
+import { runSelfHealingSeed } from "./utils/selfHealingSeed";
+import authRoutes from "./routes/auth.routes";
 
-import { app } from './app';
-import healthRoutes from './routes/health.routes';
-import mvpHealthRoutes from './routes/mvp/health.routes';
-import onboardingRoutes from './routes/onboarding.routes';
-import { initChatWebSocket } from './ws/chat.server';
+dotenv.config();
 
-app.use('/api', healthRoutes);
-app.use('/api/health', mvpHealthRoutes);
-app.use('/api/onboarding', onboardingRoutes);
-const PORT = Number(process.env.PORT) || 4000;
-const server = http.createServer(app);
+const app = express();
+const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+const corsOptions = {
+  origin: frontendUrl,
+  credentials: true,
+};
 
-initChatWebSocket(server);
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+app.use(express.json());
 
-server.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`TMBC backend running at http://localhost:${PORT}`);
-});
+// Routes
+app.use("/api/auth", authRoutes);
+
+app.get("/", (_req, res) => res.send("TMBC backend running"));
+
+const PORT = process.env.PORT || 4000;
+
+async function startServer() {
+  try {
+    await runSelfHealingSeed();
+    app.listen(PORT, () => {
+      console.log(`TMBC backend running at http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error("❌ Fatal backend startup error:");
+    console.error(err);
+    process.exit(1);
+  }
+}
+
+startServer();

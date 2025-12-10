@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authMiddleware_1 = require("../middleware/authMiddleware");
 const onboarding_controller_1 = require("../controllers/onboarding.controller");
 const router = (0, express_1.Router)();
-router.post('/', authMiddleware_1.requireAuth, onboarding_controller_1.saveOnboardingProfileController);
-router.get('/me', authMiddleware_1.requireAuth, onboarding_controller_1.getOnboardingProfileController);
+router.post('/validate', onboarding_controller_1.validateInviteCodeController);
+router.post('/start', onboarding_controller_1.startOnboardingController);
+router.post('/profile', onboarding_controller_1.saveProfileController);
+router.post('/assign-mentor', onboarding_controller_1.assignMentorController);
+router.post('/complete', onboarding_controller_1.completeOnboardingController);
 exports.default = router;

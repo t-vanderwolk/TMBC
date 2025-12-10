@@ -9,7 +9,7 @@ type Entry = {
 };
 
 export default function JournalReview() {
-  useRequireRole("MENTOR");
+  useRequireRole(["MENTOR"]);
   const [entries, setEntries] = useState<Entry[]>([]);
 
   useEffect(() => {

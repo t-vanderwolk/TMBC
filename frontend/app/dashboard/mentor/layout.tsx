@@ -1,17 +1,8 @@
 "use client";
 
-import { ReactNode } from "react";
-
 import ProtectedRoute from "@/components/ProtectedRoute";
+import type { ReactNode } from "react";
 
-type DashboardMentorLayoutProps = {
-  children: ReactNode;
-};
-
-export default function DashboardMentorLayout({ children }: DashboardMentorLayoutProps) {
-  return (
-    <ProtectedRoute allowedRoles={["MENTOR", "ADMIN"]}>
-      {children}
-    </ProtectedRoute>
-  );
+export default function Layout({ children }: { children: ReactNode }) {
+  return <ProtectedRoute allow={["MENTOR"]}>{children}</ProtectedRoute>;
 }

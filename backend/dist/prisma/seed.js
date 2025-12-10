@@ -10,7 +10,7 @@ const prisma = new client_1.PrismaClient();
 async function main() {
     const password = "Karma";
     const passwordHash = await bcryptjs_1.default.hash(password, 12);
-    console.log("🌸 Seeding TMBC core users with synced password 'Karma'…");
+    console.log("🌱 Seeding TMBC database with correct roles…");
     const users = [
         {
             email: "member@me.com",
@@ -36,6 +36,9 @@ async function main() {
                 role: u.role,
                 password: passwordHash, // always resync password to bcrypt("Karma")
                 disabled: false,
+                profileCompleted: true,
+                inviteCodeUsed: true,
+                onboardingComplete: true,
             },
             create: {
                 email: u.email,
@@ -43,6 +46,9 @@ async function main() {
                 role: u.role,
                 password: passwordHash,
                 disabled: false,
+                profileCompleted: true,
+                inviteCodeUsed: true,
+                onboardingComplete: true,
             },
         });
         console.log(`  ✔ Upserted ${u.role} user: ${user.email}`);

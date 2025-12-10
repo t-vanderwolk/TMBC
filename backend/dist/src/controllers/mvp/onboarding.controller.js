@@ -29,6 +29,7 @@ const createProfile = (req, res) => {
             email,
             name: firstName ? `${firstName} Doe` : 'Taylor Member',
             role: 'MEMBER',
+            onboardingComplete: true,
         },
     });
 };

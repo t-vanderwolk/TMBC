@@ -10,22 +10,41 @@ const client_2 = require("../../prisma/client");
 const jwt_1 = require("../utils/jwt");
 const invite_service_1 = require("./invite.service");
 const myregistry_service_1 = require("./myregistry/myregistry.service");
-const toSafeUser = (user) => {
-    const { password, ...rest } = user;
-    return rest;
+const roleRedirect_1 = require("../utils/roleRedirect");
+const hasProfile = async (userId) => {
+    const count = await client_2.prisma.profile.count({
+        where: { userId },
+    });
+    return count > 0;
 };
-const createAuthPayload = (user) => {
-    const payload = {
-        userId: user.id,
-        role: user.role.toLowerCase(),
-        email: user.email,
-        name: user.name ?? undefined,
-        myRegistryUserId: user.myRegistryUserId ?? undefined,
-        myRegistryEmail: user.myRegistryEmail ?? undefined,
-    };
+const buildAuthUser = (user, profileCompleted) => {
+    const normalizedRole = user.role.toUpperCase();
+    const finalProfileCompleted = user.profileCompleted || profileCompleted;
+    const inviteFlag = Boolean(user.inviteCodeUsed);
     return {
-        token: (0, jwt_1.signToken)(payload),
-        user: toSafeUser(user),
+        id: user.id,
+        userId: user.id,
+        email: user.email,
+        name: user.name ?? null,
+        role: normalizedRole,
+        onboardingComplete: user.onboardingComplete,
+        profileCompleted: finalProfileCompleted,
+        inviteCodeUsed: inviteFlag,
+    };
+};
+const createAuthPayload = (user, profileCompleted) => {
+    const authUser = buildAuthUser(user, profileCompleted);
+    return {
+        token: (0, jwt_1.signToken)(authUser),
+        user: {
+            id: authUser.id,
+            email: authUser.email,
+            name: authUser.name ?? undefined,
+            role: authUser.role,
+            onboardingComplete: authUser.onboardingComplete,
+            profileCompleted: authUser.profileCompleted,
+            inviteCodeUsed: authUser.inviteCodeUsed,
+        },
     };
 };
 const registerUser = async (input) => {
@@ -79,7 +98,9 @@ const registerUser = async (input) => {
             myRegistryEmail: myRegistryResult.email || email,
         },
     });
-    const authPayload = createAuthPayload(updatedUser);
+    const profileExists = await hasProfile(updatedUser.id);
+    const profileComplete = updatedUser.profileCompleted || profileExists;
+    const authPayload = createAuthPayload(updatedUser, profileComplete);
     return {
         ...authPayload,
         myRegistry: myRegistryResult,
@@ -95,6 +116,17 @@ const loginUser = async ({ email, password }) => {
     if (!matches) {
         throw new Error('Invalid credentials');
     }
-    return createAuthPayload(user);
+    const profileExists = await hasProfile(user.id);
+    const profileComplete = user.profileCompleted || profileExists;
+    const authPayload = createAuthPayload(user, profileComplete);
+    const normalizedRole = (user.role || "MEMBER").toUpperCase().trim();
+    // Compute proper dashboard URL using normalized role
+    const retarget = (0, roleRedirect_1.dashboardForRole)(normalizedRole);
+    return {
+        ok: true,
+        ...authPayload,
+        redirect: retarget,
+        dashboard: retarget,
+    };
 };
 exports.loginUser = loginUser;

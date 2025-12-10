@@ -13,7 +13,7 @@ type LoginEvent = {
 export default function LoginEvents() {
   const [events, setEvents] = useState<LoginEvent[]>([]);
 
-  useRequireRole("ADMIN");
+  useRequireRole(["ADMIN"]);
 
   useEffect(() => {
     setEvents([

@@ -1,18 +1,8 @@
-import { Router } from 'express';
-
-import {
-  getCurrentUser,
-  login,
-  register,
-  completeOnboarding,
-} from '../controllers/auth.controller';
-import { requireAuth } from '../middleware/authMiddleware';
+import { Router } from "express";
+import { login } from "../controllers/auth.controller";
 
 const router = Router();
 
-router.post('/register', register);
-router.post('/login', login);
-router.post('/complete-onboarding', completeOnboarding);
-router.get('/me', requireAuth, getCurrentUser);
+router.post("/login", login);
 
 export default router;

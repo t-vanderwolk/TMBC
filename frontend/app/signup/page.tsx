@@ -74,11 +74,11 @@ function SignupForm() {
         profileCompleted: Boolean(user?.profileCompleted),
         inviteCodeUsed: Boolean(user?.inviteCodeUsed),
       };
-      saveSession({
+      await saveSession({
         token,
         user: sessionUser,
       });
-      router.push(redirectByRole(sessionUser));
+      router.push(redirectByRole(sessionUser.role));
     } catch (err: unknown) {
       setError(resolveErrorMessage(err, "Unable to signup right now."));
     } finally {

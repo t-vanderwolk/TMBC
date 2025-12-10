@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const dashboard_controller_1 = require("../controllers/dashboard.controller");
-const authMiddleware_1 = require("../middleware/authMiddleware");
+const requireMember_1 = require("../middleware/requireMember");
 const router = (0, express_1.Router)();
-router.get('/overview', authMiddleware_1.requireAuth, dashboard_controller_1.getDashboardOverviewController);
+router.use(requireMember_1.requireMember);
+router.get('/', dashboard_controller_1.getDashboardController);
+router.get('/overview', dashboard_controller_1.getDashboardOverviewController);
 exports.default = router;

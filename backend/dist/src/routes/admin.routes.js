@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const admin_controller_1 = require("../controllers/admin.controller");
+const requireAdmin_1 = require("../middleware/requireAdmin");
 const router = (0, express_1.Router)();
+router.use(requireAdmin_1.requireAdmin);
 router.get('/stats', admin_controller_1.getAdminStatsController);
 router.get('/users', admin_controller_1.getAdminUsersController);
 router.patch('/users/:id', admin_controller_1.updateAdminUserController);

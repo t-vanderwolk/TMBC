@@ -9,7 +9,7 @@ type MentorEvent = {
 };
 
 export default function MentorEvents() {
-  useRequireRole("MENTOR");
+  useRequireRole(["MENTOR"]);
   const [events, setEvents] = useState<MentorEvent[]>([]);
 
   useEffect(() => {

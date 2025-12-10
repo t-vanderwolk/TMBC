@@ -5,8 +5,8 @@ const authMiddleware_1 = require("./authMiddleware");
 const requireMentor = (req, res, next) => {
     (0, authMiddleware_1.requireAuth)(req, res, () => {
         const user = req.user;
-        const role = String(user?.role ?? '').toLowerCase();
-        if (role === 'mentor' || role === 'admin') {
+        const role = String(user?.role ?? '').toUpperCase();
+        if (role === 'MENTOR' || role === 'ADMIN') {
             return next();
         }
         res.status(403).json({ error: 'Forbidden' });

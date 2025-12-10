@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const inviteRequest_controller_1 = require("../controllers/inviteRequest.controller");
+const invite_controller_1 = require("../controllers/invite.controller");
 const authMiddleware_1 = require("../middleware/authMiddleware");
 const router = (0, express_1.Router)();
 router.post('/request', inviteRequest_controller_1.submitInviteRequest);
@@ -9,4 +10,6 @@ router.post('/approve', inviteRequest_controller_1.adminApproveInvite);
 router.get('/requests', authMiddleware_1.requireAdminAuth, inviteRequest_controller_1.listInviteRequests);
 router.post('/verify', inviteRequest_controller_1.verifyInviteCode);
 router.post('/create-user', inviteRequest_controller_1.createInvitedUser);
+router.post('/validate', invite_controller_1.validateInvite);
+router.post('/redeem', invite_controller_1.redeemInvite);
 exports.default = router;
