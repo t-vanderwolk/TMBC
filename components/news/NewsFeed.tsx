@@ -6,7 +6,7 @@ const FEED = [
     title: "Studio Rhythm · Weekly Check-in",
     date: "Today · 10:00 AM",
     summary: "Your mentor dropped a quick ritual to ground your weekend. Tap in, breathe, and respond when you’re ready.",
-    link: "/dashboard/community",
+    link: "/dashboard/member/community",
   },
   {
     id: "registry-pulse",

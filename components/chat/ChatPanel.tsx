@@ -12,6 +12,7 @@ type ChatPanelProps = {
   currentUserRole: "mentor" | "member";
   currentUserName?: string | null;
   label?: string;
+  token?: string | null;
 };
 
 const formatLabel = (message: ChatMessage, currentUserId: string) => {
@@ -42,6 +43,7 @@ export default function ChatPanel({
   currentUserRole,
   currentUserName,
   label,
+  token,
 }: ChatPanelProps) {
   const [conversationId, setConversationId] = useState("");
   const [initialMessages, setInitialMessages] = useState<ChatMessage[]>([]);
@@ -54,6 +56,7 @@ export default function ChatPanel({
   const { messages, status, error: socketError, sendMessage } = useChat({
     conversationId,
     initialMessages,
+    token,
   });
 
   useEffect(() => {

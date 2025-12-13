@@ -9,7 +9,13 @@
   "scripts": {
     "preinstall": "node scripts/validateNode.js",
     "dev": "next dev",
-    "build": "next build",
+    "prisma:validate": "prisma validate",
+    "prisma:generate": "prisma generate",
+    "typecheck": "tsc --noEmit",
+    "prebuild": "ts-node --project tsconfig.json scripts/prebuild.ts",
+    "build:preflight": "npm run prebuild && npm run typecheck",
+    "build": "npm run build:preflight && next build",
+    "build:ci": "npm run build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "node scripts/fixTailwindMissingFiles.js"
@@ -32,6 +38,7 @@
     "react-swipeable": "^7.0.2"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/node": "20.11.30",
     "@types/react": "18.2.64",
     "@types/react-dom": "18.2.21",
@@ -42,8 +49,7 @@
     "prisma": "^5.17.0",
     "semver": "^7.3.8",
     "tailwindcss": "3.4.1",
-    "typescript": "5.4.2",
     "ts-node": "^10.9.1",
-    "@types/bcryptjs": "^2.4.2"
+    "typescript": "5.4.2"
   }
 }

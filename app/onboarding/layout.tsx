@@ -1,25 +1,12 @@
-'use client';
+import type { ReactNode } from "react";
 
-import { ReactNode, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-
-import { loadStoredUser } from '@/lib/auth/userStore';
-import { routeForRole } from '@/lib/auth/routeForRole';
+import OnboardingRedirectGuard from "@/components/onboarding/OnboardingRedirectGuard";
 
 type OnboardingLayoutProps = {
   children: ReactNode;
 };
 
 export default function OnboardingLayout({ children }: OnboardingLayoutProps) {
-  const router = useRouter();
-
-  useEffect(() => {
-    const stored = loadStoredUser();
-    if (stored?.onboardingComplete) {
-      router.replace(routeForRole(stored.role));
-    }
-  }, [router]);
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-[#FFF8F4] to-[#FBE9EE] text-[#3E2F35]">
       <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-8 px-4 py-10 lg:px-12">
@@ -30,7 +17,10 @@ export default function OnboardingLayout({ children }: OnboardingLayoutProps) {
             Finish the three-step concierge flow to secure your profile, pair with a mentor, and unlock your dashboard.
           </p>
         </header>
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <OnboardingRedirectGuard />
+          {children}
+        </main>
       </div>
     </div>
   );

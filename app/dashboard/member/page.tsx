@@ -5,6 +5,7 @@ import RegistrySnapshotCard from "@/components/dashboard/member/RegistrySnapshot
 import MentorSupportCard from "@/components/dashboard/member/MentorSupportCard";
 import UpcomingEventsCard from "@/components/dashboard/member/UpcomingEventsCard";
 import QuickLinksRow from "@/components/dashboard/member/QuickLinksRow";
+import CommunityHighlightsPanel from "./components/CommunityHighlightsPanel";
 
 const JOURNEY_DATA = {
   currentModule: "Nesting & Rhythm",
@@ -42,7 +43,7 @@ const QUICK_LINKS = [
   { label: "Continue Academy", href: "/dashboard/member/learn" },
   { label: "Registry Rhythm", href: "/dashboard/member/registry" },
   { label: "Add a ritual", href: "/dashboard/member?focus=ritual" },
-  { label: "Community studio", href: "/dashboard/community" },
+  { label: "Community studio", href: "/dashboard/member/community" },
 ];
 
 export default async function MemberDashboard() {
@@ -85,6 +86,8 @@ export default async function MemberDashboard() {
       </div>
 
       <UpcomingEventsCard events={UPCOMING_EVENTS} />
+
+      <CommunityHighlightsPanel />
 
       <QuickLinksRow links={QUICK_LINKS} />
     </div>

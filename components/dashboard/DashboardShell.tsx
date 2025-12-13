@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import GlobalHeader from "./GlobalHeader";
 import LogoutButton from "@/components/auth/LogoutButton";
-import { BarChart2, BookOpen, Home, MessageCircle, Sparkles, Users } from "lucide-react";
+import { BarChart2, BookOpen, Home, MessageCircle, Sparkles, Users, type LucideProps } from "lucide-react";
 
 export type DashboardRole = "MEMBER" | "MENTOR" | "ADMIN";
 
@@ -15,7 +15,7 @@ type NavItem = {
   icon: ReactNode;
 };
 
-const iconForLucide = (Icon: React.ComponentType<{ size?: number; className?: string }>) => (
+const iconForLucide = (Icon: React.ComponentType<LucideProps>) => (
   <Icon size={18} className="text-[#C8A1B4]" />
 );
 
@@ -34,18 +34,18 @@ const NAV_ITEMS: Record<DashboardRole, NavItem[]> = {
     { href: "/dashboard/member/messages", label: "Messages", icon: iconForLucide(MessageCircle) },
     { href: "/dashboard/member/journal", label: "Journal", icon: emojiIcon("✍️") },
     { href: "/dashboard/member/support", label: "Support", icon: emojiIcon("🛟") },
-    { href: "/dashboard/community", label: "Community", icon: iconForLucide(Users) },
+    { href: "/dashboard/member/community", label: "Community", icon: iconForLucide(Users) },
   ],
   MENTOR: [
-    { href: "/dashboard/mentor", label: "Studio", icon: Home },
-    { href: "/dashboard/mentor/messages", label: "Messages", icon: MessageCircle },
-    { href: "/dashboard/events", label: "Events", icon: Sparkles },
+    { href: "/dashboard/mentor", label: "Studio", icon: iconForLucide(Home) },
+    { href: "/dashboard/mentor/messages", label: "Messages", icon: iconForLucide(MessageCircle) },
+    { href: "/dashboard/events", label: "Events", icon: iconForLucide(Sparkles) },
   ],
   ADMIN: [
-    { href: "/dashboard/admin", label: "Overview", icon: Home },
-    { href: "/dashboard/users", label: "Users", icon: Users },
-    { href: "/dashboard/events", label: "Events", icon: Sparkles },
-    { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
+    { href: "/dashboard/admin", label: "Overview", icon: iconForLucide(Home) },
+    { href: "/dashboard/users", label: "Users", icon: iconForLucide(Users) },
+    { href: "/dashboard/events", label: "Events", icon: iconForLucide(Sparkles) },
+    { href: "/dashboard/analytics", label: "Analytics", icon: iconForLucide(BarChart2) },
   ],
 };
 

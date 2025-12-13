@@ -8,6 +8,10 @@ export default async function CapsuleDetail({ params }: { params: { capsuleId: s
   const capsules = await fetchUserTimeCapsules();
   const capsule = capsules.find((item) => item.id === params.capsuleId) ?? capsules[0];
 
+  if (!capsule) {
+    return null;
+  }
+
   return (
     <div className="space-y-6">
       <TimeCapsuleCard

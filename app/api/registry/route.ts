@@ -1,18 +1,19 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getUserRegistry } from '@/lib/services/registry.service';
+import { NextResponse } from 'next/server';
+
+import { getMemberRegistryState } from '@/lib/services/server/registry.service';
 import { getUserOrThrow } from '@/lib/auth/getUser';
 
-export async function GET(request: NextRequest) {
-  const user = await getUserOrThrow(request);
-  const registry = await getUserRegistry(user.id);
-  return NextResponse.json({ registry });
-}
+const handleError = (error: unknown) => {
+  const message = error instanceof Error ? error.message : 'Unable to fetch registry';
+  return NextResponse.json({ error: message }, { status: 400 });
+};
 
-export async function POST(request: NextRequest) {
-  const body = await request.json();
-  if (body.sync) {
-    const user = await getUserOrThrow(request);
-    return NextResponse.json({ sync: true, summary: { syncedAt: new Date().toISOString() } });
+export async function GET() {
+  try {
+    const user = await getUserOrThrow();
+    const registry = await getMemberRegistryState(user.id);
+    return NextResponse.json({ registry });
+  } catch (error) {
+    return handleError(error);
   }
-  return NextResponse.json({});
 }

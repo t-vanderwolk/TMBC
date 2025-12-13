@@ -38,6 +38,7 @@ model User {
   conversations          Conversation[]     @relation("ConversationParticipants")
   conversationMessages   ConversationMessage[] @relation("ConversationMessageSender")
   communityPosts         CommunityPost[]
+  communityReplies       CommunityReply[]
   hostedEvents           Event[]            @relation("HostedEvents")
   invites                Invite[]           @relation("CreatedInvites")
   consumedInvite         Invite?            @relation("ConsumedInvite")
@@ -59,6 +60,20 @@ model User {
   intakeResponses        IntakeResponse[]
   timeCapsules           TimeCapsule[]
   workbookEntries        WorkbookEntry[]
+  registry               Registry?          @relation("UserRegistry")
+}
+
+model Registry {
+  id           String         @id @default(cuid())
+  userId       String         @unique
+  myRegistryId String         @unique
+  title        String?
+  source       String         @default("MYREGISTRY")
+  createdAt    DateTime       @default(now())
+  lastSyncedAt DateTime?
+  shippingAddress Json?
+  user         User           @relation("UserRegistry", fields: [userId], references: [id], onDelete: Cascade)
+  items        RegistryItem[] @relation("RegistryItems")
 }
 
 model LoginEvent {
@@ -181,19 +196,28 @@ model Product {
 
 model RegistryItem {
   id             String             @id @default(cuid())
+  registryId     String?
+  registry       Registry?          @relation("RegistryItems", fields: [registryId], references: [id], onDelete: Cascade)
+  externalGiftId String?
   userId         String
   productId      String?
   isCustom       Boolean            @default(false)
+  name           String?
   title          String
   url            String
+  brand          String?
   merchant       String?
   category       String?
   moduleCode     String?
   image          String?
+  imageUrl       String?
   price          Float?
+  quantity       Int                @default(1)
+  affiliateId    String?
+  affiliateLink  String?
+  source         String             @default("MYREGISTRY")
   myRegistryId   String?
   notes          String?
-  quantity       Int                @default(1)
   status         RegistryStatus     @default(ACTIVE)
   purchaseSource String?
   createdAt      DateTime           @default(now())
@@ -202,8 +226,11 @@ model RegistryItem {
   conflicts      RegistryConflict[]
   product        Product?           @relation(fields: [productId], references: [id])
   user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  affiliate      AffiliatePartner?  @relation(fields: [affiliateId], references: [id])
 
   @@index([userId])
+  @@index([registryId])
+  @@unique([registryId, externalGiftId])
 }
 
 model MentorNote {
@@ -240,6 +267,7 @@ model AcademyModule {
   mentorFeedback  MentorFeedback[]
   mentorNotes     MentorNote[]      @relation("ModuleMentorNotes")
   workbookEntries WorkbookEntry[]
+  communityRoom   CommunityRoom?    @relation("ModuleRoom")
 }
 
 model AcademyProgress {
@@ -258,19 +286,53 @@ model AcademyProgress {
 
 model CommunityRoom {
   id          String          @id @default(cuid())
-  name        String
+  name        String          @unique
   description String?
+  moduleId    String?
+  minRole     Role            @default(MEMBER)
+  createdAt   DateTime        @default(now())
+  module      AcademyModule?  @relation("ModuleRoom", fields: [moduleId], references: [id], onDelete: Cascade)
   posts       CommunityPost[]
+
+  @@index([moduleId])
+  @@unique([moduleId])
 }
 
 model CommunityPost {
+  id             String        @id @default(cuid())
+  roomId         String
+  userId         String
+  content        String
+  sourcePrompt   String?
+  createdAt      DateTime      @default(now())
+  isAnnouncement Boolean       @default(false)
+  isPinned       Boolean       @default(false)
+  pinnedAt       DateTime?
+  room           CommunityRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  replies        CommunityReply[]
+  workbookEntryId String? 
+  sourceType     CommunityPostSourceType @default(COMMUNITY)
+  sourceSection  WorkbookSection?
+  isAnonymous    Boolean                 @default(false)
+  isMentorPrompt Boolean                 @default(false)
+
+  @@index([roomId])
+  @@index([userId])
+  @@index([isAnnouncement])
+}
+
+model CommunityReply {
   id        String        @id @default(cuid())
-  roomId    String
+  postId    String
   userId    String
   content   String
   createdAt DateTime      @default(now())
-  room      CommunityRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@index([userId])
 }
 
 model Event {
@@ -414,6 +476,18 @@ model RegistryConflict {
   @@index([userId, resolved])
 }
 
+model AffiliatePartner {
+  id          String           @id
+  name        String
+  network     AffiliateNetwork
+  awinmid     Int?
+  cookieDays  Int?
+  regions     String[]         @default([])
+  defaultLink String?
+  createdAt   DateTime         @default(now())
+  items       RegistryItem[]
+}
+
 model MessageThread {
   id        Int      @id @default(autoincrement())
   title     String?
@@ -460,9 +534,26 @@ enum RegistryStatus {
   REMOVED_REMOTE
 }
 
+enum AffiliateNetwork {
+  AWIN
+  DIRECT
+}
+
 enum WorkbookEntryType {
   JOURNAL
   MOODBOARD
   CHECKLIST
   REFLECTION
+}
+
+enum CommunityPostSourceType {
+  COMMUNITY
+  WORKBOOK
+  MENTOR_PROMPT
+}
+
+enum WorkbookSection {
+  REFLECT
+  APPLY
+  INTEGRATE
 }

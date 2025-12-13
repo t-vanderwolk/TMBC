@@ -47,11 +47,15 @@ export default async function OnboardingResults() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <form action={generateCuratedRegistry} className="flex">
+        <form action={generateCuratedRegistry} className="flex flex-1 min-w-[220px]">
           <input type="hidden" name="tags" value={JSON.stringify(defaultTags)} />
-          <StyledButton title="You’re about to feel productive." fullWidth>
+          <button
+            type="submit"
+            title="You’re about to feel productive."
+            className="w-full rounded-full px-5 py-3 text-xs font-semibold uppercase tracking-[0.4em] transition bg-tmMauve text-white border-transparent hover:bg-[#B28FB3]"
+          >
             Add all
-          </StyledButton>
+          </button>
         </form>
         <StyledButton variant="secondary">Customize</StyledButton>
         <StyledButton variant="ghost">View reasoning</StyledButton>

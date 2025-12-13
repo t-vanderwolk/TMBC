@@ -20,11 +20,11 @@ const PATH_HEADERS = [
   "x-nextjs-pathname",
 ];
 
-const extractPath = () => {
+const extractPath = (): string => {
   const requestHeaders = headers();
   for (const headerName of PATH_HEADERS) {
     const value = requestHeaders.get(headerName);
-    if (value) {
+    if (typeof value === "string" && value.length) {
       return value;
     }
   }
@@ -49,7 +49,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   const role = normalizeRoleValue(user.role);
   const targetPath = routeForRole(role);
   const rawPathValue = extractPath();
-  let pathname = rawPathValue;
+  let pathname: string = rawPathValue ?? "/";
   if (pathname.includes("://")) {
     try {
       pathname = new URL(pathname).pathname;
@@ -57,7 +57,8 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       // ignore invalid URL
     }
   }
-  pathname = pathname.split("?")[0];
+  const [primaryPath] = pathname.split("?");
+  pathname = primaryPath ?? pathname;
   const segments = pathname.split("/").filter(Boolean);
 
   if (segments.length === 1 && segments[0] === "dashboard") {

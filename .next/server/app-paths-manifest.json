@@ -1,15 +1,8 @@
 {
-  "/api/registry/summary/route": "app/api/registry/summary/route.js",
-  "/api/events/route": "app/api/events/route.js",
-  "/api/chat/current/route": "app/api/chat/current/route.js",
-  "/api/auth/logout/route": "app/api/auth/logout/route.js",
-  "/dashboard/member/events/page": "app/dashboard/member/events/page.js",
-  "/dashboard/member/support/page": "app/dashboard/member/support/page.js",
-  "/dashboard/community/page": "app/dashboard/community/page.js",
-  "/dashboard/member/page": "app/dashboard/member/page.js",
-  "/dashboard/member/learn/page": "app/dashboard/member/learn/page.js",
-  "/dashboard/member/registry/page": "app/dashboard/member/registry/page.js",
-  "/dashboard/member/messages/page": "app/dashboard/member/messages/page.js",
+  "/not-found": "app/not-found.js",
+  "/api/registry/route": "app/api/registry/route.js",
+  "/(marketing)/page": "app/(marketing)/page.js",
   "/(marketing)/login/page": "app/(marketing)/login/page.js",
-  "/(marketing)/page": "app/(marketing)/page.js"
+  "/dashboard/member/page": "app/dashboard/member/page.js",
+  "/dashboard/member/registry/page": "app/dashboard/member/registry/page.js"
 }

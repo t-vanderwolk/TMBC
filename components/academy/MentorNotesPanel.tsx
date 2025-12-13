@@ -43,7 +43,9 @@ export default function MentorNotesPanel({ memberId, moduleId, token, canWrite }
     if (loading) return 'Gathering the latest reflections...';
     if (error) return 'Mentor notes paused';
     if (!notes.length) return 'No notes here yet';
-    return `Shared by ${notes[notes.length - 1].mentorName || 'your mentor'}`;
+    const lastNote = notes[notes.length - 1];
+    const author = lastNote?.mentorName ?? 'your mentor';
+    return `Shared by ${author}`;
   }, [error, loading, notes]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {

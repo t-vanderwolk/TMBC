@@ -17,27 +17,19 @@ export async function getCommunityFeed() {
 }
 
 export async function createPost(userId: string, content: string) {
-  const room = await prisma.communityRoom.findFirst();
-  if (!room) {
-    throw new Error('No community rooms are configured.');
-  }
   return prisma.communityPost.create({
-    data: { roomId: room.id, userId, content },
+    data: { userId, content },
   });
 }
 
 export async function getPoll() {
-  return {
-    id: 0,
-    question: 'How do you feel today?',
-    options: ['Calm', 'Overwhelmed'],
-    createdAt: new Date(),
-  };
+  return (
+    await prisma.poll.findFirst({ orderBy: { createdAt: 'desc' } })
+  ) ?? { id: 0, question: 'How do you feel today?', options: ['Calm', 'Overwhelmed'], createdAt: new Date() };
 }
 
 export async function voteInPoll(userId: string, pollId: number, option: string) {
-  console.warn(
-    "voteInPoll is not implemented on the client bundle; returning a mock result.",
-  );
-  return { pollId, userId, option, id: `${userId}-${pollId}-${option}` };
+  return prisma.pollVote.create({
+    data: { pollId, userId, option },
+  });
 }

@@ -162,7 +162,7 @@ export default function EventsPage() {
                       );
                     })}
                     <Link
-                      href="/dashboard/community"
+                      href="/dashboard/member/community"
                       className="rounded-full border border-[#E3C6D4] px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-[#3E2F35]/70 hover:border-[#B98AA5]"
                     >
                       Explore community

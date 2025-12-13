@@ -9,7 +9,10 @@ type CalendarGridEvent = {
   type?: string;
 };
 
-const formatKey = (value: Date) => value.toISOString().split('T')[0];
+const formatKey = (value: Date) => {
+  const [dateKey] = value.toISOString().split('T');
+  return dateKey ?? value.toISOString();
+};
 
 const buildCalendarDays = (reference: Date) => {
   const start = new Date(reference.getFullYear(), reference.getMonth(), 1);
@@ -35,12 +38,13 @@ type CalendarGridProps = {
 
 export function CalendarGrid({ month = new Date(), events = [] }: CalendarGridProps) {
   const days = buildCalendarDays(month);
-  const lookup = events.reduce<Record<string, CalendarGridEvent[]>>((acc, event) => {
-    const key = event.date.split('T')[0];
-    acc[key] = acc[key] || [];
-    acc[key].push(event);
-    return acc;
-  }, {});
+  const lookup = new Map<string, CalendarGridEvent[]>();
+  events.forEach((event: CalendarGridEvent) => {
+    const key = event.date.split('T')[0] ?? event.date;
+    const bucket = lookup.get(key) ?? [];
+    bucket.push(event);
+    lookup.set(key, bucket);
+  });
 
   return (
     <div className="space-y-3 rounded-2xl border border-tmBlush/40 bg-white/95 p-5 shadow-sm">
@@ -64,13 +68,13 @@ export function CalendarGrid({ month = new Date(), events = [] }: CalendarGridPr
           }
 
           const key = formatKey(day);
-          const dayEvents = lookup[key] || [];
+          const dayEvents = lookup.get(key) ?? [];
 
           return (
             <div key={key} className="flex h-20 flex-col rounded-xl border border-tmBlush/30 bg-tmIvory/60 p-2">
               <p className="text-xs font-semibold text-tmCharcoal">{day.getDate()}</p>
               <div className="mt-1 space-y-1">
-                {dayEvents.slice(0, 2).map((event) => (
+                {dayEvents.slice(0, 2).map((event: CalendarGridEvent) => (
                   <span key={`${key}-${event.title}`} className="block truncate rounded-full bg-white/80 px-2 py-0.5 text-[10px] font-semibold text-tmMauve">
                     {event.title}
                   </span>

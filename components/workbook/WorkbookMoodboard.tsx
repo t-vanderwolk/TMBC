@@ -67,8 +67,14 @@ const WorkbookMoodboard = ({
   };
 
   const handleResize = (tile: MoodboardTileData) => {
-    const order: MoodboardTileData['size'][] = ['small', 'medium', 'large'];
-    const next = order[(order.indexOf(tile.size) + 1) % order.length];
+    type MoodboardTileSize = NonNullable<MoodboardTileData['size']>;
+    const order: MoodboardTileSize[] = ['small', 'medium', 'large'];
+    const normalizedSize: MoodboardTileSize = (tile.size ?? 'medium') as MoodboardTileSize;
+    const currentIndex = order.indexOf(normalizedSize);
+    const next = order[(currentIndex + 1) % order.length];
+    if (!next) {
+      return;
+    }
     onResizeTile(tile.id, next);
   };
 

@@ -34,7 +34,9 @@ const EncouragementBubble = ({ children }: EncouragementBubbleProps) => {
   const [message, setMessage] = useState('');
 
   const trigger = useCallback(() => {
-    const next = messages[Math.floor(Math.random() * messages.length)];
+    const index = Math.floor(Math.random() * messages.length);
+    const next = messages[index] ?? messages[0];
+    if (!next) return;
     setMessage(next);
     setVisible(true);
   }, []);

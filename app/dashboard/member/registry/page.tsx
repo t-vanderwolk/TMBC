@@ -1,120 +1,131 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { api } from "@/lib/api";
-import SectionNav from "@/components/dashboard/SectionNav";
+import RegistryHero from './components/RegistryHero';
+import RegistryItemCard from './components/RegistryItemCard';
+import RegistryEmptyState from './components/RegistryEmptyState';
+import type { RegistryDto } from '@/lib/services/server/registry.service';
 
-type RegistryRow = {
-  id: string;
-  title: string;
-  status: string;
-  essentials: number;
-  niceToHave: number;
+const API_BASE = '/api/registry';
+
+type RegistryResponse = {
+  registry: RegistryDto | null;
 };
 
-type RegistrySummary = {
-  totalItems: number;
-  essentials: number;
-  niceToHave: number;
-  rows: RegistryRow[];
+const fetchRegistry = async (): Promise<RegistryResponse> => {
+  const response = await fetch(API_BASE, { cache: 'no-store' });
+  if (!response.ok) {
+    const body = await response.json().catch(() => null);
+    throw new Error(body?.error ?? 'Unable to load registry');
+  }
+  return response.json();
 };
 
-const FALLBACK_SUMMARY: RegistrySummary = {
-  totalItems: 18,
-  essentials: 12,
-  niceToHave: 6,
-  rows: [
-    { id: "sleep", title: "Sleep Sanctuary", status: "Ready", essentials: 5, niceToHave: 2 },
-    { id: "care", title: "Care & Changing", status: "Review", essentials: 4, niceToHave: 1 },
-    { id: "nourish", title: "Feeding Rituals", status: "Planning", essentials: 3, niceToHave: 3 },
-  ],
+const postAction = async (path: string) => {
+  const response = await fetch(path, { method: 'POST', cache: 'no-store' });
+  if (!response.ok) {
+    const body = await response.json().catch(() => null);
+    throw new Error(body?.error ?? 'Request failed');
+  }
+  return response.json();
 };
 
 export default function RegistryPage() {
-  const [summary, setSummary] = useState<RegistrySummary | null>(null);
+  const [registry, setRegistry] = useState<RegistryDto | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [syncing, setSyncing] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string>('');
 
-  useEffect(() => {
-    api
-      .get("/registry/summary")
-      .then((response) => {
-        setSummary(response.data);
-      })
-      .catch((err) => {
-        console.warn("Registry summary error:", err);
-        setSummary(FALLBACK_SUMMARY);
-        setError("Registry service unavailable. Showing a curated fallback.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const loadRegistry = useCallback(async () => {
+    setLoading(true);
+    setStatusMessage('');
+    try {
+      const { registry: payload } = await fetchRegistry();
+      setRegistry(payload);
+    } catch (error) {
+      setStatusMessage(error instanceof Error ? error.message : 'Unable to reach the registry service.');
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center px-4 py-16">
-        <p className="text-sm uppercase tracking-[0.4em] text-[#C8A1B4]">Checking your registry…</p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    void loadRegistry();
+  }, [loadRegistry]);
 
-  if (error || !summary) {
-    return (
-      <div className="px-4 py-10 text-sm text-[#C8A1B4]">
-        <p>{error || "No registry summary available."}</p>
-      </div>
-    );
-  }
+  const handleCreate = useCallback(async () => {
+    setCreating(true);
+    setStatusMessage('');
+    try {
+      const { registry: payload } = await postAction(`${API_BASE}/create`);
+      setRegistry(payload);
+    } catch (error) {
+      setStatusMessage(error instanceof Error ? error.message : 'Unable to create registry.');
+    } finally {
+      setCreating(false);
+    }
+  }, []);
+
+  const handleSync = useCallback(async () => {
+    setSyncing(true);
+    setStatusMessage('');
+    try {
+      const { registry: payload } = await postAction(`${API_BASE}/sync`);
+      setRegistry(payload);
+    } catch (error) {
+      setStatusMessage(error instanceof Error ? error.message : 'Unable to sync registry.');
+    } finally {
+      setSyncing(false);
+    }
+  }, []);
+
+  const totalItems = registry?.items.length ?? 0;
+  const purchasedCount = registry?.items.filter((item) => item.status === 'PURCHASED').length ?? 0;
 
   return (
     <main className="space-y-6 px-4 py-8 text-[#3E2F35] sm:px-6">
-      <section className="rounded-[36px] border border-[#C8A1B4]/40 bg-white/80 p-6 shadow-[0_30px_90px_rgba(199,166,199,0.25)]">
-        <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[#3E2F35]/70">Registry · Snapshot</p>
-        <h1 className="mt-2 font-serif text-3xl text-[#3E2F35]">Curated favorites</h1>
-        <p className="mt-2 text-sm text-[#3E2F35]/70">
-          Essentials are cozy and ready, while a few nice-to-haves are still waiting for your touch.
-        </p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-[30px] border border-[#3E2F35]/10 bg-[#FFFAF8] p-4 text-sm">
-            <p className="text-[0.6rem] uppercase tracking-[0.4em] text-[#3E2F35]/60">Total items</p>
-            <p className="mt-2 text-3xl font-semibold text-[#3E2F35]">{summary.totalItems}</p>
-          </div>
-          <div className="rounded-[30px] border border-[#3E2F35]/10 bg-white p-4 text-sm">
-            <p className="text-[0.6rem] uppercase tracking-[0.4em] text-[#3E2F35]/60">Essentials</p>
-            <p className="mt-2 text-3xl font-semibold text-[#3E2F35]">{summary.essentials}</p>
-          </div>
-          <div className="rounded-[30px] border border-[#3E2F35]/10 bg-white p-4 text-sm">
-            <p className="text-[0.6rem] uppercase tracking-[0.4em] text-[#3E2F35]/60">Nice-to-haves</p>
-            <p className="mt-2 text-3xl font-semibold text-[#3E2F35]">{summary.niceToHave}</p>
-          </div>
-        </div>
-      </section>
-      <SectionNav />
+      <RegistryHero
+        registry={registry}
+        loading={loading}
+        creating={creating}
+        syncing={syncing}
+        totalItems={totalItems}
+        purchasedCount={purchasedCount}
+        lastSyncedAt={registry?.lastSyncedAt ?? null}
+        shippingAddress={registry?.shippingAddress ?? null}
+        onCreate={handleCreate}
+        onSync={handleSync}
+      />
 
-      <section className="space-y-4">
-        {summary.rows.map((row) => (
-          <article
-            key={row.id}
-            className="flex flex-col gap-3 rounded-[28px] border border-[#3E2F35]/10 bg-white/90 p-5 shadow-[0_20px_60px_rgba(199,166,199,0.15)]"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[0.55rem] uppercase tracking-[0.5em] text-[#3E2F35]/60">Focus</p>
-                <h2 className="text-lg font-semibold text-[#3E2F35]">{row.title}</h2>
-              </div>
-              <span className="rounded-full bg-[#F7E3E8] px-3 py-1 text-[0.65rem] uppercase tracking-[0.3em] text-[#3E2F35]/70">
-                {row.status}
-              </span>
-            </div>
-            <div className="flex justify-between text-[0.8rem] uppercase tracking-[0.3em] text-[#3E2F35]/60">
-              <span>Essentials: {row.essentials}</span>
-              <span>Nice: {row.niceToHave}</span>
-            </div>
-          </article>
-        ))}
-      </section>
+      {statusMessage && (
+        <div className="rounded-[28px] border border-[#F0CCD7] bg-[#FFF4FA] px-5 py-3 text-sm text-[#8B4A61]">
+          {statusMessage}
+        </div>
+      )}
+
+      {loading ? (
+        <div className="flex items-center justify-center rounded-[28px] border border-[#C8A1B4]/40 bg-white/80 p-12 text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">
+          Checking MyRegistry…
+        </div>
+      ) : registry ? (
+        registry.items.length ? (
+          <section className="grid gap-4 md:grid-cols-2">
+            {registry.items.map((item) => (
+              <RegistryItemCard key={item.id} item={item} />
+            ))}
+          </section>
+        ) : (
+          <RegistryEmptyState onSync={handleSync} syncing={syncing} />
+        )
+      ) : (
+        <div className="rounded-[28px] border border-[#C8A1B4]/40 bg-white/80 p-8 text-center text-sm text-[#3E2F35]">
+          <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[#3E2F35]/60">Ready when you are</p>
+          <p className="mt-2 text-lg font-semibold">Create a MyRegistry account to pull in your gifts.</p>
+          <p className="mt-1 text-[#3E2F35]/70">Use the button above to start the sync and bring everything into TMBC.</p>
+        </div>
+      )}
     </main>
   );
 }

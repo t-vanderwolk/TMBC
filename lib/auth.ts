@@ -29,7 +29,9 @@ const decodeTokenPayload = (token: string | null) => {
   if (!token || !ensureClient()) return null;
 
   try {
-    const payloadSegment = token.includes('.') ? token.split('.')[1] : token;
+    const segments = token.split('.');
+    const payloadSegment = segments.length > 1 ? segments[1] : segments[0];
+    if (!payloadSegment) return null;
     const decoded = window.atob(payloadSegment);
     return JSON.parse(decoded);
   } catch {

@@ -17,7 +17,7 @@ export default function MentorToolkit() {
         <Link href="/dashboard/events" className="text-[#C8A1B4] hover:text-[#A77991]">
           → Host a session
         </Link>
-        <Link href="/dashboard/community" className="text-[#C8A1B4] hover:text-[#A77991]">
+        <Link href="/dashboard/member/community" className="text-[#C8A1B4] hover:text-[#A77991]">
           → Moderate community rooms
         </Link>
       </div>

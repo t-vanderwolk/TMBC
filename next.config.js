@@ -1,6 +1,14 @@
 const path = require("path");
 
-module.exports = {
+/** @type {import("next").NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
   webpack: (config) => {
     const shims = [
       ["es-errors/ref", "es-errors-ref.js"],
@@ -20,3 +28,5 @@ module.exports = {
     return config;
   },
 };
+
+module.exports = nextConfig;

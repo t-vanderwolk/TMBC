@@ -172,15 +172,14 @@ export const getMentorMentees = async (mentorId: string): Promise<MentorMentee[]
   const safeMembers = members.filter((member) => member.role === Role.MEMBER);
 
   return safeMembers.map((member) => {
-    const dueDate = member.profile?.dueDate
-      ? member.profile.dueDate.toISOString().split('T')[0]
-      : 'TBD';
+    const safeDueDate: string =
+      member.profile?.dueDate?.toISOString().split('T')[0] ?? 'TBD';
     const needsRegistry = (member.registryItems?.length ?? 0) < 3;
 
     return {
       id: member.id,
       name: member.name ?? 'Friend',
-      dueDate,
+      dueDate: safeDueDate,
       focus: needsRegistry ? 'Finish registry checklist' : 'Keep iterating on progress',
       registryStatus: needsRegistry ? 'Needs essentials' : 'On track',
       mentorId,

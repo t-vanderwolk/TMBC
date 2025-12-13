@@ -103,7 +103,7 @@ export default function GlobalNavbar() {
                       )}
                     </Link>
                     <Link
-                      href="/dashboard/community"
+                      href="/dashboard/member/community"
                       className="block rounded-lg p-2 hover:bg-[#F8EFF2] text-sm text-[#3E2F35]"
                     >
                       Community Updates{" "}

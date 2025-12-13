@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const waitlist_controller_1 = require("../controllers/waitlist.controller");
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const router = (0, express_1.Router)();
+router.post('/join', waitlist_controller_1.join);
+router.get('/pending', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('admin'), waitlist_controller_1.listPending);
+router.post('/approve/:id', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('admin'), waitlist_controller_1.approve);
+router.post('/reject/:id', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('admin'), waitlist_controller_1.reject);
+exports.default = router;

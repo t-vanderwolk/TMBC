@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const myregistry_controller_1 = require("../controllers/myregistry.controller");
+const router = (0, express_1.Router)();
+router.post("/signup", myregistry_controller_1.signup);
+router.get("/search", myregistry_controller_1.search);
+router.get("/registries", myregistry_controller_1.registries);
+router.get("/items", myregistry_controller_1.items);
+router.post("/items/add", myregistry_controller_1.addItem);
+router.post("/items/update", myregistry_controller_1.updateItem);
+router.post("/items/remove", myregistry_controller_1.removeItem);
+router.post("/items/purchased", myregistry_controller_1.purchased);
+exports.default = router;

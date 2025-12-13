@@ -1,15 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 import type { AcademyModuleDetail } from "@/lib/academyClient";
 import WorkbookClient from "./WorkbookClient";
-
-const WORKBOOK_PROMPTS = [
-  "What stood out to you in this module?",
-  "What feels exciting or uncertain right now?",
-  "Is there anything you want to revisit or ask your mentor?",
-];
 
 type ModuleClientProps = {
   module: AcademyModuleDetail;
@@ -19,6 +14,7 @@ export default function ModuleClient({ module }: ModuleClientProps) {
   const [isCompleted, setIsCompleted] = useState(module.completed ?? false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const workbookPrompts = module.workbookPrompts ?? [];
 
   const journeyLabel = (() => {
     const journey = module.journey?.toLowerCase();
@@ -114,7 +110,24 @@ export default function ModuleClient({ module }: ModuleClientProps) {
         </section>
       ) : null}
 
-      <WorkbookClient moduleId={module.id} prompts={WORKBOOK_PROMPTS} />
+      {workbookPrompts.length ? (
+        <WorkbookClient moduleId={module.id} prompts={workbookPrompts} />
+      ) : null}
+
+      <section className="space-y-3 rounded-2xl border border-[#E3C6D4] bg-white/90 p-5">
+        <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[#C8A1B4]">
+          Discuss this module
+        </p>
+        <p className="text-sm text-[#3E2F35]/70">
+          Keep your reflections alive by sharing how this work resonates with your journey. Mentors read along in every room.
+        </p>
+        <Link
+          href={`/dashboard/member/community/module/${module.id}`}
+          className="inline-flex items-center justify-center rounded-full border border-[#E3C6D4] bg-[#FFF8F6] px-5 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-[#3E2F35] transition hover:border-[#C8A1B4] hover:bg-[#FDF3EF]"
+        >
+          Open module discussion
+        </Link>
+      </section>
 
       <section className="space-y-3 rounded-2xl border border-[#E3C6D4] bg-white/90 p-5">
         <button

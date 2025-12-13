@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { Prisma, RegistryStatus } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';

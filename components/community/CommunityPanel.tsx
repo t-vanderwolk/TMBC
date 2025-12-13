@@ -12,7 +12,7 @@ interface CommunityPanelProps {
 export default function CommunityPanel({
   title = "Community Circles",
   copy = "Stay in rhythm with the studio — mentors, members, and TMBC hosts share stories daily.",
-  href = "/dashboard/community",
+  href = "/dashboard/member/community",
   cta = "Visit community",
 }: CommunityPanelProps) {
   return (

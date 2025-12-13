@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const academy_controller_1 = require("../controllers/academy.controller");
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const router = (0, express_1.Router)();
+router.get('/journeys', authMiddleware_1.requireAuth, academy_controller_1.getJourneysController);
+router.get('/tracks', authMiddleware_1.requireAuth, academy_controller_1.getTracksController);
+router.get('/modules', authMiddleware_1.requireAuth, academy_controller_1.getModulesController);
+router.get('/recommended', authMiddleware_1.requireAuth, academy_controller_1.getRecommendedModuleController);
+router.get('/:moduleCode/products', authMiddleware_1.requireAuth, academy_controller_1.getModuleProductsController);
+router.get('/:moduleCode/recommendations', authMiddleware_1.requireAuth, academy_controller_1.getModuleRecommendationsController);
+router.get('/module/:moduleCode/recommended', authMiddleware_1.requireAuth, academy_controller_1.getModuleRecommendedListController);
+exports.default = router;

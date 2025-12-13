@@ -17,10 +17,16 @@ const journeyTooltips: Record<JourneyId, string> = {
   postpartum: 'Healing, holding, and learning your new rhythm.',
 };
 
+const fallbackJourneys = Object.keys(journeyTooltips) as JourneyId[];
+
 const JourneyTabsEditorial = ({ journeys, modulesByJourney }: JourneyTabsEditorialProps) => {
-  const [activeJourney, setActiveJourney] = useState<JourneyId>(journeys[0]);
+  const initialJourney: JourneyId = journeys[0] ?? fallbackJourneys[0] ?? 'nursery';
+  const [activeJourney, setActiveJourney] = useState<JourneyId>(initialJourney);
+  const availableJourneys = journeys.length ? journeys : fallbackJourneys;
 
   const activeModules = modulesByJourney[activeJourney] ?? [];
+
+  const activeTooltip = journeyTooltips[activeJourney] ?? journeyTooltips.nursery;
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const buttonRefs = useRef<Record<JourneyId, HTMLButtonElement | null>>({
@@ -61,7 +67,7 @@ const JourneyTabsEditorial = ({ journeys, modulesByJourney }: JourneyTabsEditori
           </p>
           <div className="relative" ref={containerRef}>
             <div className="flex flex-wrap gap-3">
-              {journeys.map((journey) => {
+              {availableJourneys.map((journey) => {
                 const isActive = journey === activeJourney;
                 return (
                 <button
@@ -96,7 +102,7 @@ const JourneyTabsEditorial = ({ journeys, modulesByJourney }: JourneyTabsEditori
               transition={{ type: 'spring', stiffness: 220, damping: 30 }}
             />
           </div>
-          <p className="text-sm text-[var(--tm-charcoal)]/70">{journeyTooltips[activeJourney]}</p>
+          <p className="text-sm text-[var(--tm-charcoal)]/70">{activeTooltip}</p>
         </div>
         <div className="space-y-4">
           <p className="text-[0.65rem] uppercase tracking-[0.45em] text-[var(--tm-mauve)]">Journey note</p>

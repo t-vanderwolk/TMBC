@@ -2,30 +2,40 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 
 const BASE_URL = "https://api.myregistry.com/RegistryApi/1/0/json/";
 
-const apiToken = process.env.MYREGISTRY_API_TOKEN;
-if (!apiToken) {
-  throw new Error("Missing MYREGISTRY_API_TOKEN in environment variables.");
-}
+const createClient = () => {
+  const apiToken = process.env.MYREGISTRY_API_TOKEN;
+  if (!apiToken) {
+    throw new Error("Missing MYREGISTRY_API_TOKEN in environment variables.");
+  }
 
-const axiosConfig: AxiosRequestConfig = {
-  baseURL: BASE_URL,
-  headers: {
-    accept: "application/json",
-    "Content-Type": "application/json",
-    ApiToken: apiToken,
-  },
+  const axiosConfig: AxiosRequestConfig = {
+    baseURL: BASE_URL,
+    headers: {
+      accept: "application/json",
+      "Content-Type": "application/json",
+      ApiToken: apiToken,
+    },
+  };
+
+  const basicAuthUser = process.env.MYREGISTRY_BASIC_AUTH_USERNAME;
+  const basicAuthPassword = process.env.MYREGISTRY_BASIC_AUTH_PASSWORD;
+  if (basicAuthUser && basicAuthPassword) {
+    axiosConfig.auth = {
+      username: basicAuthUser,
+      password: basicAuthPassword,
+    };
+  }
+
+  return axios.create(axiosConfig);
 };
 
-const basicAuthUser = process.env.MYREGISTRY_BASIC_AUTH_USERNAME;
-const basicAuthPassword = process.env.MYREGISTRY_BASIC_AUTH_PASSWORD;
-if (basicAuthUser && basicAuthPassword) {
-  axiosConfig.auth = {
-    username: basicAuthUser,
-    password: basicAuthPassword,
-  };
-}
-
-const client: AxiosInstance = axios.create(axiosConfig);
+let client: AxiosInstance | null = null;
+const getClient = () => {
+  if (!client) {
+    client = createClient();
+  }
+  return client;
+};
 
 const handleError = (error: unknown): never => {
   if (axios.isAxiosError(error)) {
@@ -100,6 +110,10 @@ export type GetRegistryItemsParams = {
   RegistryId: string;
 };
 
+export type GetShippingAddressParams = {
+  RegistryId: string;
+};
+
 export type AddItemPayload = {
   RegistryId: string;
   ItemName: string;
@@ -133,7 +147,7 @@ export type MarkPurchasedPayload = {
 export const MyRegistryService = {
   async signupUser(payload: SignupUserPayload): Promise<SignupUserResponse> {
     try {
-      const response = await client.post("SignupUser", payload);
+      const response = await getClient().post("SignupUser", payload);
       return normalizeSignupResponse(response.data ?? {});
     } catch (error) {
       return handleError(error);
@@ -142,7 +156,7 @@ export const MyRegistryService = {
 
   async searchRegistries(params: SearchRegistriesParams): Promise<unknown> {
     try {
-      const response = await client.get("GetRegistries2", { params });
+      const response = await getClient().get("GetRegistries2", { params });
       return response.data;
     } catch (error) {
       handleError(error);
@@ -151,7 +165,7 @@ export const MyRegistryService = {
 
   async getRegistries(params: GetRegistriesParams): Promise<unknown> {
     try {
-      const response = await client.get("GetRegistries", { params });
+      const response = await getClient().get("GetRegistries", { params });
       return response.data;
     } catch (error) {
       handleError(error);
@@ -160,7 +174,7 @@ export const MyRegistryService = {
 
   async getRegistryItems(params: GetRegistryItemsParams): Promise<unknown> {
     try {
-      const response = await client.get("GetRegistryItems", { params });
+      const response = await getClient().get("GetRegistryItems", { params });
       return response.data;
     } catch (error) {
       handleError(error);
@@ -169,7 +183,7 @@ export const MyRegistryService = {
 
   async addItem(payload: AddItemPayload): Promise<unknown> {
     try {
-      const response = await client.post("AddItemToRegistry", payload);
+      const response = await getClient().post("AddItemToRegistry", payload);
       return response.data;
     } catch (error) {
       handleError(error);
@@ -178,7 +192,7 @@ export const MyRegistryService = {
 
   async updateItem(payload: UpdateItemPayload): Promise<unknown> {
     try {
-      const response = await client.post("UpdateItem", payload);
+      const response = await getClient().post("UpdateItem", payload);
       return response.data;
     } catch (error) {
       handleError(error);
@@ -187,7 +201,7 @@ export const MyRegistryService = {
 
   async removeItem(payload: RemoveItemPayload): Promise<unknown> {
     try {
-      const response = await client.post("RemoveItemFromRegistry", payload);
+      const response = await getClient().post("RemoveItemFromRegistry", payload);
       return response.data;
     } catch (error) {
       handleError(error);
@@ -196,7 +210,16 @@ export const MyRegistryService = {
 
   async markPurchased(payload: MarkPurchasedPayload): Promise<unknown> {
     try {
-      const response = await client.post("SetGiftAsPurchased", payload);
+      const response = await getClient().post("SetGiftAsPurchased", payload);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  async getShippingAddress(params: GetShippingAddressParams): Promise<unknown> {
+    try {
+      const response = await getClient().get("GetShippingAddress", { params });
       return response.data;
     } catch (error) {
       handleError(error);

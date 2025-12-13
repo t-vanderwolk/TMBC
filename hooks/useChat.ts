@@ -20,6 +20,7 @@ export type ChatStatus = "idle" | "connecting" | "connected" | "disconnected" | 
 type UseChatOptions = {
   conversationId: string;
   initialMessages?: ChatMessage[];
+  token?: string | null;
 };
 
 const buildWebSocketUrl = (conversationId: string, token: string) => {
@@ -35,6 +36,7 @@ const buildWebSocketUrl = (conversationId: string, token: string) => {
 export const useChat = ({
   conversationId,
   initialMessages = [],
+  token,
 }: UseChatOptions) => {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [status, setStatus] = useState<ChatStatus>("idle");
@@ -80,14 +82,14 @@ export const useChat = ({
       return;
     }
 
-    const token = getSessionToken();
-    if (!token) {
+    const effectiveToken = token ?? getSessionToken();
+    if (!effectiveToken) {
       setError(() => "Authentication required for chat.");
       setStatus(() => "errored");
       return;
     }
 
-    const wsUrl = buildWebSocketUrl(conversationId, token);
+    const wsUrl = buildWebSocketUrl(conversationId, effectiveToken);
     if (!wsUrl) {
       setError(() => "Unable to prepare chat connection.");
       setStatus(() => "errored");
@@ -143,7 +145,7 @@ export const useChat = ({
       socket.close();
       wsRef.current = null;
     };
-  }, [conversationId]);
+  }, [conversationId, token]);
 
   const sendMessage = useCallback(
     async (content: string) => {
@@ -162,8 +164,8 @@ export const useChat = ({
         return;
       }
 
-      const token = getSessionToken();
-      if (!token) {
+      const resolvedToken = token ?? getSessionToken();
+      if (!resolvedToken) {
         throw new Error("Session expired.");
       }
 
@@ -171,7 +173,7 @@ export const useChat = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${resolvedToken}`,
         },
         body: JSON.stringify({ conversationId, content: content.trim() }),
       });
@@ -181,7 +183,7 @@ export const useChat = ({
         throw new Error(json?.error ?? "Unable to send message");
       }
     },
-    [conversationId],
+    [conversationId, token],
   );
 
   return {

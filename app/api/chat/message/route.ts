@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
-import { createAndBroadcastMessage } from "@/lib/chat/wsServer";
+import { sendMessage } from "@/lib/services/server/chat.service";
 import { getOrCreateConversation } from "@/lib/services/server/chat.service";
 
 export const runtime = "nodejs";
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
   const conversation = await getOrCreateConversation(user.id, [partnerId]);
 
   try {
-    const message = await createAndBroadcastMessage({
+    const message = await sendMessage({
       conversationId: conversation.id,
       senderId: user.id,
       content,

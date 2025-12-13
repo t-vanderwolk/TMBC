@@ -1,4 +1,5 @@
 import { api } from '@/lib/api';
+import type { WorkbookPrompt } from '@/lib/academy/workbookPrompts';
 
 export interface AcademyContent {
   lectureSlides?: string[];
@@ -81,6 +82,7 @@ export async function fetchModulesServerSide(options?: {
 export type AcademyModuleDetail = {
   id: string;
   title: string;
+  subtitle?: string;
   journey?: string;
   description?: string;
   objectives?: string[];
@@ -91,6 +93,7 @@ export type AcademyModuleDetail = {
   stage?: string;
   completed?: boolean;
   progress?: number;
+  workbookPrompts?: WorkbookPrompt[];
 };
 
 export async function fetchModuleServerSide(options: {

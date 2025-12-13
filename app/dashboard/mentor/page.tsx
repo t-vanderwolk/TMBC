@@ -42,7 +42,7 @@ export default function MentorDashboard() {
         <CommunityPanel
           title="Mentor Lounge"
           copy="Share wins with peers and exchange mentorship prompts."
-          href="/dashboard/community"
+          href="/dashboard/member/community"
           cta="Browse rooms"
         />
       </section>

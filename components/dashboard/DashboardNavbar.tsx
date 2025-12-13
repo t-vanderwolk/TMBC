@@ -19,7 +19,7 @@ const NAV_LINKS = [
   { label: "Academy", href: "/dashboard/member/learn" },
   { label: "Registry", href: "/dashboard/member/registry" },
   { label: "Events", href: "/dashboard/member/events" },
-  { label: "Community", href: "/dashboard/community" },
+  { label: "Community", href: "/dashboard/member/community" },
 ];
 
 export default function DashboardNavbar({ user }: DashboardNavbarProps) {

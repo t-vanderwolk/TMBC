@@ -305,6 +305,9 @@ export const useWorkbook = ({ moduleId, checklistSeed = [], moodboardSeed = [] }
 
       const arr = [...prev];
       const [moved] = arr.splice(s, 1);
+      if (!moved) {
+        return prev;
+      }
       arr.splice(t, 0, moved);
       return arr;
     });

@@ -103,7 +103,10 @@ export default function CommunityRoomPage({ params }: RoomPageProps) {
     setComposerValue("");
 
     try {
-      const res = await createCommunityPost(params.roomId, optimistic.content, token);
+      const res = await createCommunityPost(
+        { roomId: params.roomId, content: optimistic.content },
+        token,
+      );
       setPosts((prev) => [res.data, ...prev.filter((post) => post.id !== tempId)]);
     } catch {
       setComposerError("Unable to post right now. Try again soon.");

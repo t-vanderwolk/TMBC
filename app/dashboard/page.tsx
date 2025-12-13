@@ -7,7 +7,7 @@ export default function DashboardHome() {
     { title: "Registry rhythms", description: "Keep your favorites synchronized.", href: "/dashboard/member/registry" },
     { title: "Time capsule", description: "Lock away love notes and dreams.", href: "/dashboard/timecapsule" },
     { title: "Support", description: "Concierge, styling, and gear lab.", href: "/dashboard/support" },
-    { title: "Community", description: "Announcements, polls, and memories.", href: "/dashboard/community" },
+    { title: "Community", description: "Announcements, polls, and memories.", href: "/dashboard/member/community" },
   ];
 
   return (

@@ -17,7 +17,7 @@ export default function AdminDashboard() {
       <CommunityPanel
         title="Admin Community"
         copy="Coordinate with mentors and host studio updates."
-        href="/dashboard/community"
+        href="/dashboard/member/community"
         cta="Visit community"
       />
     </div>

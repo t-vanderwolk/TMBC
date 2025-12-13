@@ -1,12 +1,17 @@
 "use server";
 
 import { cookies, headers } from "next/headers";
+import type { NextRequest } from "next/server";
 
 import { prisma } from "@/lib/prisma";
 import { type User } from "@prisma/client";
 import { verifyToken } from "@/lib/utils/server/jwt";
 
-type RequestLike = Request | undefined;
+type RequestLike = NextRequest | Request | undefined;
+
+const hasCookies = (value: RequestLike): value is NextRequest => {
+  return typeof value === "object" && value !== null && "cookies" in value;
+};
 
 const COOKIE_NAMES = ["tm_token", "tmbc_token"];
 
@@ -19,7 +24,7 @@ const extractToken = (request?: RequestLike) => {
     return headerToken;
   }
 
-  const cookieSource = request?.cookies ?? cookies();
+  const cookieSource = hasCookies(request) ? request.cookies : cookies();
   for (const name of COOKIE_NAMES) {
     const value = cookieSource.get(name)?.value;
     if (value) {

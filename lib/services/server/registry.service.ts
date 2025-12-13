@@ -1,4 +1,6 @@
-import { Prisma, RegistryStatus } from '@prisma/client';
+import { Prisma, RegistryStatus, AffiliateNetwork, AffiliatePartner } from '@prisma/client';
+
+import crypto from 'crypto';
 
 import { prisma } from '@/lib/prisma';
 import { buildAffiliateLink, buildAffiliateUrl } from './affiliate.service';
@@ -10,7 +12,9 @@ import {
   updateMyRegistryGift,
 } from './myRegistryLegacy.service';
 import { ProductResponse, productToResponse } from './product.service';
-import { RecommendationsResult } from '../utils/recommendations';
+import { RecommendationsResult } from '@/lib/utils/server/recommendations';
+import { MyRegistryService } from './myregistry/myregistry.service';
+import { emitRegistryAnalytics } from './analytics.service';
 
 export type MentorNoteResponse = {
   id: string;
@@ -492,4 +496,489 @@ export const getRegistrySummary = async (userId: string) => {
     suggestedCount,
     confirmedCount,
   };
+};
+
+const REGISTRY_SOURCE = 'MYREGISTRY';
+const MY_REGISTRY_PARTNER_ID = '88335';
+
+type RemoteRegistryItem = {
+  id: string;
+  name: string;
+  brand?: string;
+  merchant?: string;
+  category?: string | null;
+  quantity?: number | null;
+  price?: number | null;
+  imageUrl?: string | null;
+  affiliateUrl?: string | null;
+  affiliateId?: string | null;
+  notes?: string | null;
+  status?: string | null;
+  raw?: Record<string, unknown>;
+};
+
+type RemoteRegistryEntry = {
+  id: string;
+  title: string | null;
+  items: RemoteRegistryItem[];
+  shippingAddress?: Record<string, unknown>;
+  raw?: Record<string, unknown>;
+};
+
+export type RegistryShippingAddress = {
+  line1?: string;
+  line2?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
+  raw?: Record<string, unknown>;
+};
+
+export type MentorFeedbackDto = {
+  id: string;
+  mentorId: string;
+  mentorName: string | null;
+  note: string;
+  createdAt: string;
+};
+
+export type RegistryItemDto = {
+  id: string;
+  registryId: string | null;
+  externalGiftId: string | null;
+  name: string;
+  brand: string | null;
+  category: string | null;
+  price: number | null;
+  quantity: number | null;
+  imageUrl: string | null;
+  affiliateLink: string | null;
+  affiliatePartner: {
+    id: string;
+    name: string;
+    network: AffiliateNetwork;
+  } | null;
+  mentorNotes: MentorFeedbackDto[];
+  status: RegistryStatus;
+  notes: string | null;
+  source: string;
+  myRegistryId: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type RegistryDto = {
+  id: string;
+  myRegistryId: string;
+  title: string | null;
+  source: string;
+  lastSyncedAt: string | null;
+  shippingAddress: RegistryShippingAddress | null;
+  items: RegistryItemDto[];
+};
+
+const normalizeText = (value?: string | null) =>
+  (value ?? '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
+    .trim();
+
+const toRegistryStatus = (value?: string | null): RegistryStatus => {
+  if (!value) return RegistryStatus.ACTIVE;
+  const normalized = value.toUpperCase();
+  if (Object.values(RegistryStatus).includes(normalized as RegistryStatus)) {
+    return normalized as RegistryStatus;
+  }
+  if (normalized.includes('PURCHASED')) return RegistryStatus.PURCHASED;
+  if (normalized.includes('RESERVE')) return RegistryStatus.RESERVED;
+  if (normalized.includes('NEED')) return RegistryStatus.NEEDED;
+  return RegistryStatus.ACTIVE;
+};
+
+const findAffiliateId = (item: Record<string, unknown>) => {
+  for (const key of Object.keys(item)) {
+    const normalized = key.toLowerCase();
+    if (!normalized.includes('id') || normalized.includes('url')) continue;
+    if (normalized.includes('partner') || normalized.includes('affiliate')) {
+      const value = item[key];
+      if (typeof value === 'string' && value.trim()) return value.trim();
+      if (typeof value === 'number') return String(value);
+    }
+  }
+  return null;
+};
+
+const normalizeRemoteItem = (item: Record<string, unknown>): RemoteRegistryItem | null => {
+  const idValue = item.giftId ?? item.GiftId ?? item.itemId ?? item.ItemId ?? item.id ?? item.externalGiftId;
+  const id = idValue ? String(idValue).trim() : '';
+  if (!id) return null;
+
+  const quantityCandidate = typeof item.quantity === 'number' ? item.quantity : Number(item.quantity ?? 0);
+  const priceCandidate = typeof item.price === 'number' ? item.price : Number(item.price ?? 0);
+  const imageCandidate = item.imageUrl ?? item.ImageUrl ?? item.image ?? item.Image;
+  const affiliateCandidate = item.affiliateUrl ?? item.AffiliateUrl ?? item.url ?? item.Url;
+  const categoryValue = item.category ?? item.Category ?? item.productCategory;
+
+  return {
+    id,
+    name: String(item.productName || item.ProductName || item.ItemName || item.title || 'Registry item'),
+    brand: item.brand ? String(item.brand) : item.merchant ? String(item.merchant) : undefined,
+    merchant: item.merchant ? String(item.merchant) : undefined,
+    category: categoryValue ? String(categoryValue) : null,
+    quantity: Number.isFinite(quantityCandidate) ? Number(quantityCandidate) : null,
+    price: Number.isFinite(priceCandidate) ? Number(priceCandidate) : null,
+    imageUrl: imageCandidate ? String(imageCandidate) : null,
+    affiliateUrl: affiliateCandidate ? String(affiliateCandidate) : null,
+    affiliateId: findAffiliateId(item),
+    notes: (item.notes || item.Notes) as string | null,
+    status: (item.status || item.Status) as string | null,
+    raw: item,
+  };
+};
+
+const extractRegistryItems = (entry: Record<string, unknown>): RemoteRegistryItem[] => {
+  const candidates = entry.Items || entry.items || entry.Gifts || entry.gifts || entry.data || [];
+  if (!Array.isArray(candidates)) return [];
+  return candidates
+    .map((item) => normalizeRemoteItem(item as Record<string, unknown>))
+    .filter((item): item is RemoteRegistryItem => Boolean(item));
+};
+
+const extractRegistryEntries = (payload: any): RemoteRegistryEntry[] => {
+  if (!payload) return [];
+  const normalized = [] as Record<string, unknown>[];
+  if (Array.isArray(payload)) normalized.push(...payload);
+  if (payload.Registries) normalized.push(...(Array.isArray(payload.Registries) ? payload.Registries : [payload.Registries]));
+  if (payload.registries) normalized.push(...(Array.isArray(payload.registries) ? payload.registries : [payload.registries]));
+  if (payload.Registry) normalized.push(payload.Registry);
+  if (payload.registry) normalized.push(payload.registry);
+  if (payload.data) {
+    const data = payload.data as Record<string, unknown>;
+    if (Array.isArray(data.Registries)) normalized.push(...data.Registries);
+    if (Array.isArray(data.registries)) normalized.push(...data.registries);
+    if (data.Registry) normalized.push(data.Registry);
+    if (data.registry) normalized.push(data.registry);
+  }
+  if (!normalized.length && typeof payload === 'object') normalized.push(payload);
+
+  return normalized
+    .map((entry) => {
+      const idValue = entry.RegistryId ?? entry.registryId ?? entry.id ?? entry.RegistryUserId;
+      const id = idValue ? String(idValue).trim() : '';
+      if (!id) return null;
+      return {
+        id,
+        title: entry.RegistryName || entry.name || entry.Title || null,
+        items: extractRegistryItems(entry),
+        shippingAddress: entry.ShippingAddress || entry.Address || entry.address || undefined,
+        raw: entry,
+      };
+    })
+    .filter((entry): entry is RemoteRegistryEntry => Boolean(entry));
+};
+
+const parseShippingAddressPayload = (payload: Record<string, unknown> | null | undefined): RegistryShippingAddress | null => {
+  if (!payload) return null;
+  const address: RegistryShippingAddress = {
+    line1: (payload.Address1 || payload.Line1 || payload.Street || payload.Street1) as string | undefined,
+    line2: (payload.Address2 || payload.Line2 || payload.Street2) as string | undefined,
+    city: (payload.City || payload.Town) as string | undefined,
+    state: (payload.State || payload.Region) as string | undefined,
+    postalCode: (payload.PostalCode || payload.Zip || payload.ZipCode) as string | undefined,
+    country: (payload.Country || payload.CountryCode) as string | undefined,
+    raw: payload,
+  };
+  if (!address.line1 && !address.city && !address.state && !address.postalCode && !address.country) {
+    return null;
+  }
+  return address;
+};
+
+const buildAffiliateMaps = (partners: AffiliatePartner[]) => {
+  const byId = new Map<string, AffiliatePartner>();
+  const byName = new Map<string, AffiliatePartner>();
+  partners.forEach((partner) => {
+    byId.set(partner.id, partner);
+    const normalized = normalizeText(partner.name);
+    if (normalized) {
+      byName.set(normalized, partner);
+    }
+  });
+  return { byId, byName };
+};
+
+const resolveAffiliatePartner = (
+  remote: RemoteRegistryItem,
+  byId: Map<string, AffiliatePartner>,
+  byName: Map<string, AffiliatePartner>,
+) => {
+  if (remote.affiliateId && byId.has(remote.affiliateId)) {
+    return byId.get(remote.affiliateId)!;
+  }
+
+  const brand = remote.brand ?? remote.merchant;
+  if (brand) {
+    const normalizedBrand = normalizeText(brand);
+    if (normalizedBrand && byName.has(normalizedBrand)) {
+      return byName.get(normalizedBrand)!;
+    }
+  }
+
+  if (byId.has(MY_REGISTRY_PARTNER_ID)) {
+    return byId.get(MY_REGISTRY_PARTNER_ID)!;
+  }
+
+  return null;
+};
+
+const formatRegistryItemDto = (
+  item: Prisma.RegistryItemGetPayload<{
+    include: {
+      affiliate: true;
+      mentorFeedback: { include: { mentor: { select: { id: true; name: true } } } };
+    };
+  }>,
+): RegistryItemDto => {
+  const mentorNotes =
+    item.mentorFeedback?.map((feedback) => ({
+      id: feedback.id,
+      mentorId: feedback.mentorId,
+      mentorName: feedback.mentor?.name || null,
+      note: feedback.message,
+      createdAt: feedback.createdAt.toISOString(),
+    })) ?? [];
+
+  return {
+    id: item.id,
+    registryId: item.registryId ?? null,
+    externalGiftId: item.externalGiftId ?? null,
+    name: item.name ?? item.title,
+    brand: item.brand ?? item.merchant ?? null,
+    category: item.category ?? null,
+    price: item.price ?? null,
+    quantity: item.quantity ?? null,
+    imageUrl: item.imageUrl ?? item.image ?? null,
+    affiliateLink: item.affiliateLink ?? null,
+    affiliatePartner: item.affiliate
+      ? { id: item.affiliate.id, name: item.affiliate.name, network: item.affiliate.network }
+      : null,
+    mentorNotes,
+    status: item.status,
+    notes: item.notes ?? null,
+    source: item.source,
+    myRegistryId: item.myRegistryId ?? null,
+    createdAt: item.createdAt.toISOString(),
+    updatedAt: item.updatedAt.toISOString(),
+  };
+};
+
+export const getMemberRegistryState = async (userId: string): Promise<RegistryDto | null> => {
+  const registry = await prisma.registry.findUnique({
+    where: { userId },
+    include: {
+      items: {
+        orderBy: { createdAt: 'desc' },
+        include: {
+          affiliate: true,
+          mentorFeedback: { include: { mentor: { select: { id: true, name: true } } } },
+        },
+      },
+    },
+  });
+
+  if (!registry) return null;
+
+  const items = registry.items.map((item) => formatRegistryItemDto(item));
+
+  return {
+    id: registry.id,
+    myRegistryId: registry.myRegistryId,
+    title: registry.title,
+    source: registry.source,
+    lastSyncedAt: registry.lastSyncedAt?.toISOString() ?? null,
+    shippingAddress: parseShippingAddressPayload(registry.shippingAddress as Record<string, unknown> | null),
+    items,
+  };
+};
+
+export const createMemberRegistry = async (userId: string): Promise<RegistryDto> => {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new Error('User not found');
+
+  const [firstName, ...rest] = (user.name ?? '').split(' ');
+  const lastName = rest.join(' ') || 'Parent';
+  const payload = {
+    Email: user.email,
+    Password: crypto.randomBytes(12).toString('hex'),
+    FirstName: firstName || 'Member',
+    LastName: lastName,
+    City: user.location || undefined,
+  };
+
+  const response = await MyRegistryService.signupUser(payload);
+  if (!response?.myRegistryUserId) {
+    throw new Error('Unable to create MyRegistry account');
+  }
+
+  const registry = await prisma.registry.upsert({
+    where: { userId },
+    update: {
+      myRegistryId: response.myRegistryUserId,
+      title: user.name,
+      source: REGISTRY_SOURCE,
+    },
+    create: {
+      userId,
+      myRegistryId: response.myRegistryUserId,
+      title: user.name,
+      source: REGISTRY_SOURCE,
+    },
+  });
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      myRegistryUserId: response.myRegistryUserId,
+      myRegistryEmail: response.email || user.email,
+    },
+  });
+
+  emitRegistryAnalytics(userId, 'registry_created', {
+    registryId: registry.id,
+    myRegistryId: registry.myRegistryId,
+  });
+
+  const state = await getMemberRegistryState(userId);
+  if (!state) throw new Error('Unable to load registry after creation');
+  return state;
+};
+
+export const syncMemberRegistry = async (userId: string): Promise<RegistryDto> => {
+  const [user, registry] = await Promise.all([
+    prisma.user.findUnique({ where: { id: userId } }),
+    prisma.registry.findUnique({ where: { userId } }),
+  ]);
+  if (!user) throw new Error('User not found');
+  if (!registry) throw new Error('Registry not created yet');
+
+  const email = user.myRegistryEmail || user.email;
+  const payload = await MyRegistryService.searchRegistries({ Email: email });
+  const entries = extractRegistryEntries(payload);
+  const target = entries.find((entry) => entry.id === registry.myRegistryId) ?? entries[0];
+  if (!target) throw new Error('Unable to locate registry in MyRegistry');
+
+  let shippingAddress: Record<string, unknown> | undefined;
+  try {
+    shippingAddress = (await MyRegistryService.getShippingAddress({ RegistryId: target.id })) as Record<string, unknown>;
+  } catch {
+    // ignore shipping address failures
+  }
+
+  const partners = await prisma.affiliatePartner.findMany();
+  const { byId, byName } = buildAffiliateMaps(partners);
+  const existingItems = await prisma.registryItem.findMany({
+    where: { registryId: registry.id },
+    select: { id: true, status: true, externalGiftId: true },
+  });
+  const existingMap = new Map(existingItems.map((item) => [item.externalGiftId, item]));
+
+  const seenIds = new Set<string>();
+  for (const remoteItem of target.items) {
+    seenIds.add(remoteItem.id);
+    const partner = resolveAffiliatePartner(remoteItem, byId, byName);
+    const upsertData = {
+      userId,
+      registryId: registry.id,
+      externalGiftId: remoteItem.id,
+      name: remoteItem.name,
+      title: remoteItem.name,
+      url: remoteItem.affiliateUrl ?? (remoteItem.raw?.Url as string) ?? '',
+      brand: remoteItem.brand ?? remoteItem.merchant ?? null,
+      merchant: remoteItem.merchant ?? remoteItem.brand ?? null,
+      category: remoteItem.category ?? null,
+      price: remoteItem.price ?? null,
+      quantity: remoteItem.quantity ?? 1,
+      image: remoteItem.imageUrl ?? null,
+      imageUrl: remoteItem.imageUrl ?? null,
+      affiliateId: partner?.id ?? null,
+      affiliateLink: remoteItem.affiliateUrl ?? partner?.defaultLink ?? null,
+      source: REGISTRY_SOURCE,
+      myRegistryId: remoteItem.id,
+      notes: remoteItem.notes ?? null,
+      status: toRegistryStatus(remoteItem.status),
+      purchaseSource: REGISTRY_SOURCE,
+    };
+
+    const saved = await prisma.registryItem.upsert({
+      where: {
+        registryId_externalGiftId: {
+          registryId: registry.id,
+          externalGiftId: remoteItem.id,
+        },
+      },
+      create: upsertData,
+      update: upsertData,
+    });
+
+    const previous = existingMap.get(remoteItem.id);
+    if (!previous) {
+      emitRegistryAnalytics(userId, 'gift_added', {
+        registryId: registry.id,
+        registryItemId: saved.id,
+        externalGiftId: remoteItem.id,
+      });
+    } else if (previous.status !== RegistryStatus.PURCHASED && upsertData.status === RegistryStatus.PURCHASED) {
+      emitRegistryAnalytics(userId, 'gift_purchased', {
+        registryId: registry.id,
+        registryItemId: saved.id,
+        externalGiftId: remoteItem.id,
+      });
+    }
+
+    if (partner) {
+      emitRegistryAnalytics(userId, 'partner_attribution', {
+        registryId: registry.id,
+        registryItemId: saved.id,
+        affiliatePartnerId: partner.id,
+      });
+    }
+  }
+
+  const removedIds = existingItems
+    .filter((item) => item.externalGiftId && !seenIds.has(item.externalGiftId))
+    .map((item) => item.id);
+  if (removedIds.length) {
+    await prisma.registryItem.updateMany({
+      where: { id: { in: removedIds } },
+      data: { status: RegistryStatus.REMOVED_REMOTE },
+    });
+  }
+
+  await prisma.registry.update({
+    where: { id: registry.id },
+    data: {
+      lastSyncedAt: new Date(),
+      title: target.title ?? registry.title,
+      shippingAddress: shippingAddress ?? registry.shippingAddress,
+    },
+  });
+
+  const state = await getMemberRegistryState(userId);
+  if (!state) throw new Error('Unable to load registry after sync');
+  return state;
+};
+
+export const resolveRegistryOutboundLink = async (userId: string, itemId: string): Promise<string> => {
+  const item = await prisma.registryItem.findFirst({
+    where: { id: itemId, userId },
+    select: { affiliateLink: true },
+  });
+
+  if (!item?.affiliateLink) {
+    throw new Error('Affiliate link is unavailable for this item.');
+  }
+
+  emitRegistryAnalytics(userId, 'affiliate_click', { itemId, affiliateLink: item.affiliateLink });
+  return item.affiliateLink;
 };

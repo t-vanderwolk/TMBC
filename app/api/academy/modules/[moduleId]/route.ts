@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { normalizeModuleContent } from "@/lib/academy/normalizeModuleContent";
+import { deriveWorkbookPrompts } from "@/lib/academy/workbookPrompts";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest, { params }: { params: { moduleId: string } }) {
@@ -26,6 +27,8 @@ export async function GET(request: NextRequest, { params }: { params: { moduleId
   const normalized = normalizeModuleContent(module.content);
   const metadata = normalized.metadata ?? {};
 
+  const workbookPrompts = deriveWorkbookPrompts(normalized.sections);
+
   return NextResponse.json({
     module: {
       id: module.id,
@@ -42,6 +45,7 @@ export async function GET(request: NextRequest, { params }: { params: { moduleId
       stage: metadata.stage ?? module.subtitle ?? "Studio ritual",
       completed: progress?.completed ?? false,
       progress: progress?.completed ? 100 : 0,
+      workbookPrompts,
     },
   });
 }

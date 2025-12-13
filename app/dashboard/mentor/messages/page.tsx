@@ -30,8 +30,9 @@ const MentorMessagesPage = () => {
       .then((response) => {
         const list = response.data ?? [];
         setConversations(list);
-        if (list.length) {
-          setActiveConversationId(list[0].threadId);
+        const firstThread = list[0];
+        if (firstThread) {
+          setActiveConversationId(firstThread.threadId);
         }
       })
       .catch(() => {

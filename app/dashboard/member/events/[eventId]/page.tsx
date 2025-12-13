@@ -15,6 +15,10 @@ export default async function EventDetailPage({ params }: { params: { eventId: s
   const events = await fetchEvents();
   const event = events.find((item) => item.id === params.eventId) ?? events[0];
 
+  if (!event) {
+    return null;
+  }
+
   return (
     <div className="space-y-6">
       <EventCard

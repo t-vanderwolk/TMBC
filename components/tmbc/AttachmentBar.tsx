@@ -18,7 +18,8 @@ export default function AttachmentBar({ onUpload }: AttachmentBarProps) {
           className="hidden"
           onChange={(event) => {
             const files = event.target.files;
-            setFileName(files && files.length ? files[0].name : "No attachment");
+            const firstFileName = files?.[0]?.name ?? "No attachment";
+            setFileName(firstFileName);
             onUpload?.(files);
           }}
         />

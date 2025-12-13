@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const registry_controller_1 = require("../controllers/registry.controller");
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const router = (0, express_1.Router)();
+router.get('/', authMiddleware_1.requireAuth, registry_controller_1.getRegistryList);
+router.post('/add', authMiddleware_1.requireAuth, registry_controller_1.postRegistryItem);
+router.post('/bulk/add', authMiddleware_1.requireAuth, registry_controller_1.bulkAddRegistryItemsController);
+router.post('/custom/add', authMiddleware_1.requireAuth, registry_controller_1.addCustomItemController);
+router.post('/update', authMiddleware_1.requireAuth, registry_controller_1.updateRegistryItemController);
+router.post('/remove', authMiddleware_1.requireAuth, registry_controller_1.deleteRegistryItem);
+router.post('/:productId/notes', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('mentor'), registry_controller_1.postMentorNoteController);
+router.get('/:memberId/notes', authMiddleware_1.requireAuth, (0, authMiddleware_1.requireRole)('mentor'), registry_controller_1.getMentorNotesController);
+router.get('/conflicts', authMiddleware_1.requireAuth, registry_controller_1.getRegistryConflictsController);
+router.post('/conflicts/resolve', authMiddleware_1.requireAuth, registry_controller_1.resolveRegistryConflictController);
+exports.default = router;

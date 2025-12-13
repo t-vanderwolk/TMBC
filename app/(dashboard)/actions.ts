@@ -18,7 +18,6 @@ import {
 } from '@/lib/services/timecapsule.service';
 import { rsvpEvent as confirmRsvp } from '@/lib/services/events.service';
 import { sendMessage as sendThreadMessage } from '@/lib/services/messages.service';
-import { createPost as publishCommunityPost, voteInPoll as submitPollVote } from '@/lib/services/community.service';
 
 const toRecord = (formData: FormData) => {
   const payload: Record<string, string> = {};
@@ -114,19 +113,6 @@ export async function sendMessage(formData: FormData) {
   const threadId = Number(formData.get('threadId'));
   const content = formData.get('content')?.toString() ?? '';
   return sendThreadMessage(user.id, threadId, content);
-}
-
-export async function createCommunityPost(formData: FormData) {
-  const user = await getUserOrThrow();
-  const content = formData.get('content')?.toString() ?? '';
-  return publishCommunityPost(user.id, content);
-}
-
-export async function voteInPoll(formData: FormData) {
-  const user = await getUserOrThrow();
-  const pollId = Number(formData.get('pollId'));
-  const option = formData.get('option')?.toString() ?? '';
-  return submitPollVote(user.id, pollId, option);
 }
 
 export async function syncWithRegistry() {

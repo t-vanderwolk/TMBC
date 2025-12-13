@@ -52,7 +52,10 @@ const TestimonialsCarousel = () => {
     [index]
   );
 
-  const current = testimonials[index];
+  const current = testimonials[index] ?? testimonials[0];
+  if (!current) {
+    return null;
+  }
 
   return (
     <Reveal variant="parallax">

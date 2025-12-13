@@ -59,8 +59,9 @@ export default function AdminWaitlistPage() {
     const bucket: Record<string, InviteRequest[]> = {};
     requests.forEach((request) => {
       const window = determineWindow(request.dueDate);
-      bucket[window] = bucket[window] ?? [];
-      bucket[window].push(request);
+      const windowBucket = bucket[window] ?? [];
+      windowBucket.push(request);
+      bucket[window] = windowBucket;
     });
     return bucket;
   }, [requests]);
@@ -99,49 +100,52 @@ export default function AdminWaitlistPage() {
           Loading waitlist entries…
         </div>
       ) : (
-        windows.map((window) => (
-          <section
-            key={window}
-            className="space-y-4 rounded-[2rem] border border-[#E3C6D4] bg-white/90 p-6 shadow-[0_20px_60px_rgba(180,143,164,0.15)]"
-          >
-            <h2 className="text-xl font-semibold text-[#3E2F35]">{window}</h2>
-            <div className="space-y-4">
-              {groups[window].map((request) => (
-                <article
-                  key={request.id}
-                  className="flex flex-col gap-4 rounded-[1.75rem] border border-[#E3C6D4]/60 bg-[#FFFAF8]/80 p-4 lg:flex-row lg:items-center lg:justify-between"
-                >
-                  <div className="space-y-1">
-                    <p className="text-lg font-semibold text-[#3E2F35]">{request.email}</p>
-                    <p className="text-sm text-[#3E2F35]/70">
-                      Due date: {request.dueDate ? new Date(request.dueDate).toLocaleDateString() : "TBD"}
-                    </p>
-                    <p className="text-xs uppercase tracking-[0.4em] text-[#3E2F35]/60">
-                      Vibe: {request.vibe ?? "Calm + curious"}
-                    </p>
-                    <p className="text-xs text-[#3E2F35]/70">
-                      Support: {request.supportNeeds ?? "Mentor notes pending"}
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em]">
-                    <button
-                      onClick={() => handleApprove(request.id)}
-                      className="rounded-full bg-[#C8A1B4] px-4 py-2 text-white transition hover:bg-[#b98aa5]"
-                    >
-                      Approve
-                    </button>
-                    <button
-                      onClick={() => handleDecline(request.id)}
-                      className="rounded-full border border-[#E3C6D4] px-4 py-2 text-[#3E2F35] transition hover:border-[#B98AA5]"
-                    >
-                      Decline
-                    </button>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        ))
+        windows.map((window) => {
+          const windowRequests = groups[window] ?? [];
+          return (
+            <section
+              key={window}
+              className="space-y-4 rounded-[2rem] border border-[#E3C6D4] bg-white/90 p-6 shadow-[0_20px_60px_rgba(180,143,164,0.15)]"
+            >
+              <h2 className="text-xl font-semibold text-[#3E2F35]">{window}</h2>
+              <div className="space-y-4">
+                {windowRequests.map((request) => (
+                  <article
+                    key={request.id}
+                    className="flex flex-col gap-4 rounded-[1.75rem] border border-[#E3C6D4]/60 bg-[#FFFAF8]/80 p-4 lg:flex-row lg:items-center lg:justify-between"
+                  >
+                    <div className="space-y-1">
+                      <p className="text-lg font-semibold text-[#3E2F35]">{request.email}</p>
+                      <p className="text-sm text-[#3E2F35]/70">
+                        Due date: {request.dueDate ? new Date(request.dueDate).toLocaleDateString() : "TBD"}
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.4em] text-[#3E2F35]/60">
+                        Vibe: {request.vibe ?? "Calm + curious"}
+                      </p>
+                      <p className="text-xs text-[#3E2F35]/70">
+                        Support: {request.supportNeeds ?? "Mentor notes pending"}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em]">
+                      <button
+                        onClick={() => handleApprove(request.id)}
+                        className="rounded-full bg-[#C8A1B4] px-4 py-2 text-white transition hover:bg-[#b98aa5]"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => handleDecline(request.id)}
+                        className="rounded-full border border-[#E3C6D4] px-4 py-2 text-[#3E2F35] transition hover:border-[#B98AA5]"
+                      >
+                        Decline
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          );
+        })
       )}
     </div>
   );
