@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { ClipboardCheck, Users2, NotepadText } from 'lucide-react';
 
 import { api } from '@/lib/api';
-import MentorFeedbackCard from '@/components/mentor/MentorFeedbackCard';
-import MentorTaskList from '@/components/mentor/MentorTaskList';
-import MentorJournalShareBanner from '@/components/mentor/MentorJournalShareBanner';
+import MentorFeedbackCard from '@/components/dashboard/mentor/MentorFeedbackCard';
+import MentorTaskList from '@/components/dashboard/mentor/MentorTaskList';
+import MentorJournalShareBanner from '@/components/dashboard/mentor/MentorJournalShareBanner';
 import type { MentorFeedback, MentorJournalShare, MentorTask } from '@/types/mentor';
 
 type Mentee = {

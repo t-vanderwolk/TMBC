@@ -13,14 +13,14 @@ const FEED = [
     title: "Registry Pulse · Curated Edit",
     date: "Yesterday",
     summary: "New carbon-neutral swaddles just landed in the registry. Mark essentials and share the set with your concierge.",
-    link: "/dashboard/registry",
+    link: "/dashboard/member/registry",
   },
   {
     id: "events-update",
     title: "Events · Fireside Circle",
     date: "This Week",
     summary: "Join the mentor-hosted fireside to hear three TMBC families share their birth stories and keepsakes.",
-    link: "/dashboard/events",
+    link: "/dashboard/member/events",
   },
 ];
 
@@ -29,7 +29,7 @@ export default function NewsFeed() {
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <p className="text-[0.6rem] uppercase tracking-[0.45em] text-[#C8A1B4]">Studio News</p>
-        <a className="text-xs uppercase tracking-[0.35em] text-[#B98AA5] hover:text-[#C8A1B4]" href="/dashboard/events">
+        <a className="text-xs uppercase tracking-[0.35em] text-[#B98AA5] hover:text-[#C8A1B4]" href="/dashboard/member/events">
           View all
         </a>
       </div>

@@ -11,7 +11,7 @@ export default function MentorToolkit() {
       </p>
 
       <div className="mt-6 grid gap-4">
-        <Link href="/dashboard/messages" className="text-[#C8A1B4] hover:text-[#A77991]">
+        <Link href="/dashboard/mentor/messages" className="text-[#C8A1B4] hover:text-[#A77991]">
           → Respond to messages
         </Link>
         <Link href="/dashboard/events" className="text-[#C8A1B4] hover:text-[#A77991]">

@@ -15,8 +15,8 @@ export default function QuickLinksRow({ links }: QuickLinksRowProps) {
   const safeLinks = links?.length
     ? links.filter((link) => link?.href)
     : [
-        { label: "Return to Academy", href: "/dashboard/learn" },
-        { label: "Registry rhythm", href: "/dashboard/registry" },
+        { label: "Return to Academy", href: "/dashboard/member/learn" },
+        { label: "Registry rhythm", href: "/dashboard/member/registry" },
         { label: "Community studio", href: "/dashboard/community" },
       ];
 

@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import CTARibbon from "@/app/marketing/CTARibbon";
+import CTARibbon from "@/components/marketing/CTARibbon";
 import Reveal from "@/components/marketing/Reveal";
 import TestimonialsCarousel from "@/components/marketing/TestimonialsCarousel";
 import { api } from "@/lib/api";

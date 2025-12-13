@@ -1,6 +1,6 @@
 import { HeartHandshake } from "lucide-react";
 
-import type { AcademyModule } from "../../app/dashboard/learn/modules";
+import type { AcademyModule } from "../../app/dashboard/member/learn/modules";
 
 type MentorNotesEditorialProps = {
   module: AcademyModule;

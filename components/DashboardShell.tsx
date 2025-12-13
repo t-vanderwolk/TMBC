@@ -29,8 +29,8 @@ export default function DashboardShell({ title, children, role }: DashboardShell
         ]
       : [
           { label: "Home", href: "/dashboard/member" },
-          { label: "Learn", href: "/dashboard/learn" },
-          { label: "Registry", href: "/dashboard/registry" },
+          { label: "Learn", href: "/dashboard/member/learn" },
+          { label: "Registry", href: "/dashboard/member/registry" },
           { label: "Community", href: "/dashboard/community" },
         ];
 

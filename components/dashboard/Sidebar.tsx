@@ -12,10 +12,10 @@ type SidebarProps = {
 const NAV = {
   member: [
     { href: "/dashboard", label: "Overview" },
-    { href: "/dashboard/academy", label: "Academy" },
-    { href: "/dashboard/registry", label: "Registry" },
-    { href: "/dashboard/events", label: "Events" },
-    { href: "/dashboard/messages", label: "Messages" },
+    { href: "/dashboard/member/academy", label: "Academy" },
+    { href: "/dashboard/member/registry", label: "Registry" },
+    { href: "/dashboard/member/events", label: "Events" },
+    { href: "/dashboard/member/messages", label: "Messages" },
   ],
   mentor: [
     { href: "/dashboard", label: "Overview" },

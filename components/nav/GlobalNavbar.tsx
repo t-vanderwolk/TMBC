@@ -92,7 +92,7 @@ export default function GlobalNavbar() {
                       </Link>
                     )}
                     <Link
-                      href="/dashboard/messages"
+                      href="/dashboard/member/messages"
                       className="block rounded-lg p-2 hover:bg-[#F8EFF2] text-sm text-[#3E2F35]"
                     >
                       Messages{" "}

@@ -15,7 +15,7 @@ export default async function DashboardOnboardingResults() {
         title="Dashboard registry results"
         subtitle="Your registry is guided by your onboarding answers."
         actions={
-          <Link href="/dashboard/registry">
+          <Link href="/dashboard/member/registry">
             <StyledButton variant="ghost">Go to registry</StyledButton>
           </Link>
         }

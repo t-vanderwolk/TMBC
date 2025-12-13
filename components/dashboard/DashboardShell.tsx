@@ -5,34 +5,40 @@ import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import GlobalHeader from "./GlobalHeader";
 import LogoutButton from "@/components/auth/LogoutButton";
-import {
-  Home,
-  BookOpen,
-  Users,
-  BarChart2,
-  Sparkles,
-  MessageCircle,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { BarChart2, BookOpen, Home, MessageCircle, Sparkles, Users } from "lucide-react";
 
-type Role = "MEMBER" | "MENTOR" | "ADMIN";
+export type DashboardRole = "MEMBER" | "MENTOR" | "ADMIN";
 
 type NavItem = {
   href: string;
   label: string;
-  icon: LucideIcon;
+  icon: ReactNode;
 };
 
-const NAV_ITEMS: Record<Role, NavItem[]> = {
+const iconForLucide = (Icon: React.ComponentType<{ size?: number; className?: string }>) => (
+  <Icon size={18} className="text-[#C8A1B4]" />
+);
+
+const emojiIcon = (symbol: string) => (
+  <span className="text-xl text-[#C8A1B4]" aria-hidden="true">
+    {symbol}
+  </span>
+);
+
+const NAV_ITEMS: Record<DashboardRole, NavItem[]> = {
   MEMBER: [
-    { href: "/dashboard/member", label: "Home", icon: Home },
-    { href: "/dashboard/learn", label: "Academy", icon: BookOpen },
-    { href: "/dashboard/registry", label: "Registry", icon: Sparkles },
-    { href: "/dashboard/community", label: "Community", icon: Users },
+    { href: "/dashboard/member", label: "Home", icon: iconForLucide(Home) },
+    { href: "/dashboard/member/learn", label: "Academy", icon: iconForLucide(BookOpen) },
+    { href: "/dashboard/member/registry", label: "Registry", icon: iconForLucide(Sparkles) },
+    { href: "/dashboard/member/events", label: "Events", icon: emojiIcon("📅") },
+    { href: "/dashboard/member/messages", label: "Messages", icon: iconForLucide(MessageCircle) },
+    { href: "/dashboard/member/journal", label: "Journal", icon: emojiIcon("✍️") },
+    { href: "/dashboard/member/support", label: "Support", icon: emojiIcon("🛟") },
+    { href: "/dashboard/community", label: "Community", icon: iconForLucide(Users) },
   ],
   MENTOR: [
     { href: "/dashboard/mentor", label: "Studio", icon: Home },
-    { href: "/dashboard/messages", label: "Messages", icon: MessageCircle },
+    { href: "/dashboard/mentor/messages", label: "Messages", icon: MessageCircle },
     { href: "/dashboard/events", label: "Events", icon: Sparkles },
   ],
   ADMIN: [
@@ -48,7 +54,7 @@ export default function DashboardShell({
   role,
 }: {
   children: ReactNode;
-  role: Role;
+  role: DashboardRole;
 }) {
   const pathname = usePathname();
   const nav = NAV_ITEMS[role] || NAV_ITEMS.MEMBER;
@@ -60,9 +66,7 @@ export default function DashboardShell({
       <aside className="hidden md:flex flex-col w-64 pt-24 pb-12 border-r border-[#EAD4D8]/60 bg-white/70 backdrop-blur-xl shadow-[4px_0_30px_rgba(200,161,180,0.08)]">
         <nav className="mt-10 flex flex-col gap-2 px-6">
           {nav.map((item) => {
-            const Icon = item.icon;
             const active = pathname === item.href;
-
             return (
               <Link key={item.href} href={item.href} className="group">
                 <div
@@ -74,7 +78,7 @@ export default function DashboardShell({
                     }
                   `}
                 >
-                  <Icon size={18} className="text-[#C8A1B4]" />
+                  {item.icon}
                   <span className="text-sm tracking-wide text-[#3E2F35]">
                     {item.label}
                   </span>

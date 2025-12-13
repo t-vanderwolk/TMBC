@@ -1,6 +1,9 @@
 {
-  "/not-found": "app/not-found.js",
-  "/api/auth/login/route": "app/api/auth/login/route.js",
-  "/dashboard/messages/page": "app/dashboard/messages/page.js",
-  "/dashboard/member/page": "app/dashboard/member/page.js"
+  "/api/auth/logout/route": "app/api/auth/logout/route.js",
+  "/dashboard/member/messages/page": "app/dashboard/member/messages/page.js",
+  "/dashboard/member/journal/page": "app/dashboard/member/journal/page.js",
+  "/dashboard/member/support/page": "app/dashboard/member/support/page.js",
+  "/dashboard/community/page": "app/dashboard/community/page.js",
+  "/dashboard/member/page": "app/dashboard/member/page.js",
+  "/(marketing)/login/page": "app/(marketing)/login/page.js"
 }

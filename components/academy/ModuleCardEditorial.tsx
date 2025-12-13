@@ -6,7 +6,7 @@ import { ArrowRight, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { api } from '@/lib/api';
-import type { AcademyModule } from '../../app/dashboard/learn/modules';
+import type { AcademyModule } from '../../app/dashboard/member/learn/modules';
 import ProgressStars from '@/components/academy/ProgressStars';
 import { moduleProgressSteps, useModuleProgress } from '@/hooks/useModuleProgress';
 import ModuleProgressRing from '@/components/academy/ModuleProgressRing';
@@ -116,7 +116,7 @@ const ModuleCardEditorial = ({ module }: ModuleCardEditorialProps) => {
       </div>
       <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">
         <Link
-          href={`/dashboard/learn/${module.id}`}
+          href={`/dashboard/member/learn/${module.id}`}
           className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-[var(--tm-deep-mauve)] transition group-hover:text-[var(--tm-gold)]"
         >
           Enter module

@@ -4,7 +4,7 @@ import StyledButton from "@/components/tmbc/StyledButton";
 
 export default function DashboardHome() {
   const tiles = [
-    { title: "Registry rhythms", description: "Keep your favorites synchronized.", href: "/dashboard/registry" },
+    { title: "Registry rhythms", description: "Keep your favorites synchronized.", href: "/dashboard/member/registry" },
     { title: "Time capsule", description: "Lock away love notes and dreams.", href: "/dashboard/timecapsule" },
     { title: "Support", description: "Concierge, styling, and gear lab.", href: "/dashboard/support" },
     { title: "Community", description: "Announcements, polls, and memories.", href: "/dashboard/community" },

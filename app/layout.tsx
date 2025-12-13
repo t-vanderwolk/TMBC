@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 
-import { greatVibes, nunito, playfair } from './fonts';
+import { greatVibes, nunito, playfair } from '@/lib/fonts';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 

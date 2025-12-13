@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { greatVibes } from "@/app/fonts";
+import { greatVibes } from "@/lib/fonts";
 import { PUBLIC_LOGIN_ROUTE } from "@/lib/auth/routeForRole";
 
 const navLinks = [

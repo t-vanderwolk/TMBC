@@ -10,8 +10,8 @@ import CardPlaceholder from '@/components/ui/CardPlaceholder';
 import EncouragementBubble from '@/components/academy/EncouragementBubble';
 import ProgressStars from '@/components/academy/ProgressStars';
 import { useSoftConfetti } from '@/components/academy/Interactions';
-import type { AcademyModule } from '../../app/dashboard/learn/modules';
-import { journeyMeta } from '../../app/dashboard/learn/modules';
+import type { AcademyModule } from '../../app/dashboard/member/learn/modules';
+import { journeyMeta } from '../../app/dashboard/member/learn/modules';
 import { moduleProgressSteps, useModuleProgress } from '@/hooks/useModuleProgress';
 
 type ModuleLayoutEditorialProps = {
@@ -63,7 +63,7 @@ const ModuleLayoutEditorial = ({ module, children }: ModuleLayoutEditorialProps)
                 Dashboard
               </Link>
               <span>/</span>
-              <Link href="/dashboard/learn" className="hover:text-[var(--tm-deep-mauve)]">
+              <Link href="/dashboard/member/learn" className="hover:text-[var(--tm-deep-mauve)]">
                 Academy
               </Link>
               <span>/</span>

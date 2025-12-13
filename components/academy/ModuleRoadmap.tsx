@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { academyModules } from '@/app/dashboard/learn/modules';
+import { academyModules } from '@/app/dashboard/member/learn/modules';
 
 type ModuleRoadmapProps = {
   currentId?: string;
@@ -14,7 +14,7 @@ export default function ModuleRoadmap({ currentId }: ModuleRoadmapProps) {
         .map((mod) => (
         <Link
           key={mod.id}
-          href={`/dashboard/learn/${mod.id}`}
+            href={`/dashboard/member/learn/${mod.id}`}
           className={`block text-sm p-3 rounded-lg ${
             currentId === mod.id
               ? 'bg-rose-100 text-rose-700 font-semibold'

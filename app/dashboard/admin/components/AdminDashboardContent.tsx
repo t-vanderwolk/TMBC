@@ -3,10 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { api } from "@/lib/api";
-import AdminHero from "@/components/admin/AdminHero";
-import AdminQuickActions from "@/components/admin/AdminQuickActions";
-import AdminRecentLogins from "@/components/admin/AdminRecentLogins";
-import AdminStatCard from "@/components/admin/AdminStatCard";
+import AdminHero from "@/components/dashboard/admin/AdminHero";
+import AdminQuickActions from "@/components/dashboard/admin/AdminQuickActions";
+import AdminRecentLogins from "@/components/dashboard/admin/AdminRecentLogins";
+import AdminStatCard from "@/components/dashboard/admin/AdminStatCard";
 
 type OverviewPayload = {
   totalUsers: number;

@@ -1,26 +1,35 @@
-import apiClient from "./apiClient";
+import apiClient from "@/lib/api/apiClient";
 import { getSessionToken } from "@/lib/auth";
 
 const CHAT_BASE = "/chat";
 
-type HeadersConfig = {
-  headers?: Record<string, string>;
-};
-
-const configWithToken = (token?: string): HeadersConfig => {
+const configWithToken = (token?: string) => {
   const activeToken = token ?? getSessionToken();
   return activeToken ? { headers: { Authorization: `Bearer ${activeToken}` } } : {};
 };
 
+export type ChatParticipant = {
+  id: string;
+  name: string | null;
+  role: string;
+};
+
 export type ChatMessagePayload = {
   id: string;
-  mentorId: string;
-  memberId: string;
-  senderId: string;
-  senderRole: string;
-  senderName: string | null;
+  conversationId: string;
   content: string;
+  senderId: string;
+  senderName: string | null;
+  senderRole: string | null;
   createdAt: string;
+};
+
+export type ChatConversation = {
+  id: string;
+  participants: ChatParticipant[];
+  mentor: ChatParticipant | null;
+  member: ChatParticipant | null;
+  messages: ChatMessagePayload[];
 };
 
 export type ConversationSummary = {
@@ -31,32 +40,31 @@ export type ConversationSummary = {
   updatedAt: string;
 };
 
-const parseThreadId = (threadId: string) => {
-  const [mentorId, memberId] = threadId.split(":");
-  if (!mentorId || !memberId) {
-    throw new Error("Invalid thread id");
-  }
-  return { mentorId, memberId };
-};
-
-export const getConversation = (mentorId: string, memberId: string, token?: string) =>
-  apiClient.get<ChatMessagePayload[]>(`${CHAT_BASE}/${mentorId}/${memberId}`, configWithToken(token));
-
 export const getCurrentConversation = (token?: string) =>
-  apiClient.get<{
-    mentorId: string;
-    memberId: string;
-    messages: ChatMessagePayload[];
-  }>(`${CHAT_BASE}/current`, configWithToken(token));
-
-export const getConversations = (token?: string) =>
-  apiClient.get<ConversationSummary[]>(`${CHAT_BASE}/conversations`, configWithToken(token));
-
-export const sendMessage = (threadId: string, content: string, token?: string) => {
-  const { mentorId, memberId } = parseThreadId(threadId);
-  return apiClient.post<ChatMessagePayload>(
-    `${CHAT_BASE}/message`,
-    { mentorId, memberId, content },
+  apiClient.get<{ conversation: ChatConversation }>(
+    `${CHAT_BASE}/current`,
     configWithToken(token),
   );
-};
+
+export const getConversation = (mentorId: string, memberId: string, token?: string) =>
+  apiClient.get<{ conversation: ChatConversation }>(
+    `${CHAT_BASE}/${mentorId}/${memberId}`,
+    configWithToken(token),
+  );
+
+export const getConversations = (token?: string) =>
+  apiClient.get<ConversationSummary[]>(
+    `${CHAT_BASE}/conversations`,
+    configWithToken(token),
+  );
+
+export const sendMessage = (
+  conversationId: string,
+  content: string,
+  token?: string,
+) =>
+  apiClient.post<{ message: ChatMessagePayload }>(
+    `${CHAT_BASE}/send`,
+    { conversationId, content },
+    configWithToken(token),
+  );

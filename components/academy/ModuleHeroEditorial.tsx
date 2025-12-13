@@ -1,6 +1,6 @@
 'use client';
 
-import type { AcademyModule } from '../../app/dashboard/learn/modules';
+import type { AcademyModule } from '../../app/dashboard/member/learn/modules';
 
 type ModuleHeroEditorialProps = {
   module: AcademyModule;

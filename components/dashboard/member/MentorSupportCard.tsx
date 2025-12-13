@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type MentorSupportCardProps = {
   mentorName?: string | null;
@@ -13,15 +13,10 @@ export default function MentorSupportCard({
   status,
   availability,
 }: MentorSupportCardProps) {
-  const router = useRouter();
   const safeMentor = mentorName?.trim() || "Your mentor";
   const safeStatus =
     status ?? "Jordan is nearby; messages sync when her studio is online.";
   const safeAvailability = availability ?? "See you in messages soon.";
-
-  const handleMessageClick = () => {
-    router.push("/dashboard/messages");
-  };
 
   return (
     <section className="rounded-[2.5rem] border border-[#E6D3DA] bg-gradient-to-br from-[#FDF7F4] to-[#F9E0E5] p-6 shadow-[0_20px_60px_rgba(200,161,180,0.18)]">
@@ -33,13 +28,12 @@ export default function MentorSupportCard({
       <p className="mt-2 text-xs uppercase tracking-[0.4em] text-[#3E2F35]/60">
         {safeAvailability}
       </p>
-      <button
-        type="button"
-        onClick={handleMessageClick}
-        className="mt-6 w-full rounded-[999px] border border-[#C8A1B4] bg-white px-5 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-[#3E2F35] transition hover:border-[#3E2F35] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C8A1B4]"
+      <Link
+        href="/dashboard/member/messages"
+        className="mt-6 inline-flex w-full items-center justify-center rounded-[999px] border border-[#C8A1B4] bg-white px-5 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-[#3E2F35] transition hover:border-[#3E2F35] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C8A1B4]"
       >
         Message My Mentor
-      </button>
+      </Link>
     </section>
   );
 }

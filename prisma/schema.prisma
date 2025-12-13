@@ -35,6 +35,8 @@ model User {
   memberChatMessages     ChatMessage[]      @relation("MemberChatMessages")
   mentorChatMessages     ChatMessage[]      @relation("MentorChatMessages")
   sentChatMessages       ChatMessage[]      @relation("ChatMessageSender")
+  conversations          Conversation[]     @relation("ConversationParticipants")
+  conversationMessages   ConversationMessage[] @relation("ConversationMessageSender")
   communityPosts         CommunityPost[]
   hostedEvents           Event[]            @relation("HostedEvents")
   invites                Invite[]           @relation("CreatedInvites")
@@ -336,6 +338,27 @@ model ChatMessage {
   member     User     @relation("MemberChatMessages", fields: [memberId], references: [id])
   mentor     User     @relation("MentorChatMessages", fields: [mentorId], references: [id])
   sender     User     @relation("ChatMessageSender", fields: [senderId], references: [id])
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  participants User[] @relation("ConversationParticipants")
+  messages     ConversationMessage[]
+}
+
+model ConversationMessage {
+  id             String       @id @default(cuid())
+  content        String
+  createdAt      DateTime     @default(now())
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+
+  senderId String
+  sender   User   @relation("ConversationMessageSender", fields: [senderId], references: [id])
 }
 
 model MentorTask {

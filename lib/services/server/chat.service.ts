@@ -1,107 +1,143 @@
-import { Prisma, Role } from '@prisma/client';
+import { ConversationMessage, User } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
-import { prisma } from '@/lib/prisma';
-
-export type ChatMessagePayload = {
+export type ChatParticipant = {
   id: string;
-  mentorId: string;
-  memberId: string;
+  name?: string | null;
+  role?: string | null;
+};
+
+export type ChatMessageDTO = {
+  id: string;
+  content: string;
   senderId: string;
-  senderRole: string;
   senderName: string | null;
-  content: string;
-  createdAt: string;
+  senderRole: string | null;
+  conversationId: string;
+  createdAt: Date;
 };
 
-export type ConversationSummary = {
-  threadId: string;
-  mentorId: string;
-  memberId: string;
-  lastMessage: string;
-  updatedAt: string;
-};
+export async function getOrCreateConversation(
+  userId: string,
+  participantIds: string[]
+) {
+  const allParticipantIds = Array.from(new Set([userId, ...participantIds]));
 
-interface CreateChatMessageInput {
-  mentorId: string;
-  memberId: string;
-  senderId: string;
-  senderRole: Role;
-  content: string;
+  if (allParticipantIds.length !== 2) {
+    throw new Error("Conversations must include exactly two participants");
+  }
+
+  const existing = await prisma.conversation.findFirst({
+    where: {
+      participants: {
+        every: {
+          id: { in: allParticipantIds },
+        },
+      },
+    },
+    include: {
+      participants: true,
+    },
+  });
+
+  if (existing) return existing;
+
+  return prisma.conversation.create({
+    data: {
+      participants: {
+        connect: allParticipantIds.map((id) => ({ id })),
+      },
+    },
+    include: {
+      participants: true,
+    },
+  });
 }
 
-const mapMessage = (
-  message: Prisma.ChatMessageGetPayload<{
-    include: { sender: { select: { id: true; name: true } } };
-  }>,
-): ChatMessagePayload => ({
-  id: message.id,
-  mentorId: message.mentorId,
-  memberId: message.memberId,
-  senderId: message.senderId,
-  senderRole: message.senderRole.toLowerCase(),
-  senderName: message.sender?.name ?? null,
-  content: message.content,
-  createdAt: message.createdAt.toISOString(),
-});
-
-const buildThreadId = (mentorId: string, memberId: string) => `${mentorId}:${memberId}`;
-
-export const getConversation = async (mentorId: string, memberId: string) => {
-  const messages = await prisma.chatMessage.findMany({
-    where: { mentorId, memberId },
-    orderBy: { createdAt: 'asc' },
+export async function getConversationForUser(
+  conversationId: string,
+  userId: string
+) {
+  const convo = await prisma.conversation.findFirst({
+    where: {
+      id: conversationId,
+      participants: {
+        some: { id: userId },
+      },
+    },
     include: {
-      sender: {
-        select: {
-          id: true,
-          name: true,
+      participants: true,
+      messages: {
+        orderBy: { createdAt: "asc" },
+        include: {
+          sender: true,
         },
       },
     },
   });
 
-  return messages.map(mapMessage);
-};
-
-export const getMentorConversations = async (mentorId: string): Promise<ConversationSummary[]> => {
-  const messages = await prisma.chatMessage.findMany({
-    where: { mentorId },
-    orderBy: { createdAt: 'desc' },
-  });
-
-  const seen = new Map<string, ConversationSummary>();
-  for (const message of messages) {
-    if (seen.has(message.memberId)) continue;
-    seen.set(message.memberId, {
-      threadId: buildThreadId(message.mentorId, message.memberId),
-      mentorId: message.mentorId,
-      memberId: message.memberId,
-      lastMessage: message.content,
-      updatedAt: message.createdAt.toISOString(),
-    });
+  if (!convo) {
+    throw new Error("Conversation not found or access denied");
   }
 
-  return Array.from(seen.values());
-};
+  return convo;
+}
 
-export const createChatMessage = async ({ mentorId, memberId, senderId, senderRole, content }: CreateChatMessageInput) => {
-  const message = await prisma.chatMessage.create({
+export async function sendMessage({
+  conversationId,
+  senderId,
+  content,
+}: {
+  conversationId: string;
+  senderId: string;
+  content: string;
+}) {
+  if (!content.trim()) {
+    throw new Error("Message content cannot be empty");
+  }
+
+  const isParticipant = await prisma.conversation.findFirst({
+    where: {
+      id: conversationId,
+      participants: {
+        some: { id: senderId },
+      },
+    },
+  });
+
+  if (!isParticipant) {
+    throw new Error("Sender is not a participant in this conversation");
+  }
+
+  return prisma.conversationMessage.create({
     data: {
-      mentorId,
-      memberId,
+      conversationId,
       senderId,
-      senderRole,
       content,
     },
     include: {
-      sender: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
+      sender: true,
     },
   });
+}
 
-  return mapMessage(message);
-};
+export async function getMessages(
+  conversationId: string,
+  userId: string
+): Promise<ChatMessageDTO[]> {
+  const convo = await getConversationForUser(conversationId, userId);
+
+  return convo.messages.map((m) => toChatMessageDTO(m));
+}
+
+export const toChatMessageDTO = (
+  message: ConversationMessage & { sender: User | null },
+): ChatMessageDTO => ({
+  id: message.id,
+  content: message.content,
+  senderId: message.senderId,
+  senderName: message.sender?.name ?? null,
+  senderRole: message.sender?.role ?? null,
+  conversationId: message.conversationId,
+  createdAt: message.createdAt,
+});

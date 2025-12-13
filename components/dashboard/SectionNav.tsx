@@ -4,10 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const ITEMS = [
-  { label: "Learn", href: "/dashboard/learn" },
-  { label: "Registry", href: "/dashboard/registry" },
+  { label: "Learn", href: "/dashboard/member/learn" },
+  { label: "Registry", href: "/dashboard/member/registry" },
   { label: "Community", href: "/dashboard/community" },
-  { label: "Events", href: "/dashboard/events" },
+  { label: "Events", href: "/dashboard/member/events" },
 ];
 
 export default function SectionNav() {

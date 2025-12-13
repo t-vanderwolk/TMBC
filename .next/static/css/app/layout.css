@@ -1136,6 +1136,9 @@ video {
 .min-h-\[160px\] {
   min-height: 160px;
 }
+.min-h-\[20rem\] {
+  min-height: 20rem;
+}
 .min-h-\[220px\] {
   min-height: 220px;
 }
@@ -1497,9 +1500,6 @@ video {
 .self-end {
   align-self: flex-end;
 }
-.overflow-auto {
-  overflow: auto;
-}
 .overflow-hidden {
   overflow: hidden;
 }
@@ -1537,6 +1537,9 @@ video {
 }
 .rounded-3xl {
   border-radius: 1.5rem;
+}
+.rounded-\[1\.25rem\] {
+  border-radius: 1.25rem;
 }
 .rounded-\[1\.5rem\] {
   border-radius: 1.5rem;
@@ -1921,10 +1924,6 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(238 217 232 / var(--tw-bg-opacity));
 }
-.bg-\[\#F6E9E6\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(246 233 230 / var(--tw-bg-opacity));
-}
 .bg-\[\#F6EDF7\]\/80 {
   background-color: rgb(246 237 247 / 0.8);
 }
@@ -2004,10 +2003,6 @@ video {
 .bg-\[\#eee\] {
   --tw-bg-opacity: 1;
   background-color: rgb(238 238 238 / var(--tw-bg-opacity));
-}
-.bg-\[\#fff8f6\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 248 246 / var(--tw-bg-opacity));
 }
 .bg-\[\#fffaf7\]\/80 {
   background-color: rgb(255 250 247 / 0.8);
@@ -2211,6 +2206,11 @@ video {
   --tw-gradient-to: rgb(250 213 224 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
+.from-\[\#FBE9EE\] {
+  --tw-gradient-from: #FBE9EE var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(251 233 238 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
 .from-\[\#FDF7F4\] {
   --tw-gradient-from: #FDF7F4 var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(253 247 244 / 0) var(--tw-gradient-to-position);
@@ -2391,6 +2391,9 @@ video {
 }
 .to-\[\#F6E0E6\] {
   --tw-gradient-to: #F6E0E6 var(--tw-gradient-to-position);
+}
+.to-\[\#F6E9E6\] {
+  --tw-gradient-to: #F6E9E6 var(--tw-gradient-to-position);
 }
 .to-\[\#F9E0E5\] {
   --tw-gradient-to: #F9E0E5 var(--tw-gradient-to-position);
@@ -2851,10 +2854,6 @@ video {
   --tw-text-opacity: 1;
   color: rgb(255 248 244 / var(--tw-text-opacity));
 }
-.text-\[\#c7a6c9\] {
-  --tw-text-opacity: 1;
-  color: rgb(199 166 201 / var(--tw-text-opacity));
-}
 .text-\[var\(--tm-charcoal\)\] {
   color: var(--tm-charcoal);
 }
@@ -3285,11 +3284,6 @@ video {
 .shadow-\[0_20px_60px_rgba\(213\2c 193\2c 158\2c 0\.15\)\] {
   --tw-shadow: 0 20px 60px rgba(213,193,158,0.15);
   --tw-shadow-colored: 0 20px 60px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-.shadow-\[0_20px_65px_rgba\(199\2c 166\2c 199\2c 0\.3\)\] {
-  --tw-shadow: 0 20px 65px rgba(199,166,199,0.3);
-  --tw-shadow-colored: 0 20px 65px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 .shadow-\[0_20px_70px_rgba\(180\2c 143\2c 164\2c 0\.25\)\] {
@@ -4285,11 +4279,6 @@ button:hover {
   background-color: rgb(245 237 242 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-\[\#F6E9E6\]:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(246 233 230 / var(--tw-bg-opacity));
-}
-
 .hover\:bg-\[\#F8EFF2\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(248 239 242 / var(--tw-bg-opacity));
@@ -4867,10 +4856,6 @@ button:hover {
     display: block;
   }
 
-  .lg\:flex {
-    display: flex;
-  }
-
   .lg\:hidden {
     display: none;
   }
@@ -4982,9 +4967,9 @@ button:hover {
   }
 }
 
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[11].oneOf[3].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[11].oneOf[3].use[2]!./node_modules/next/font/local/target.css?{"path":"app/fonts.ts","import":"","arguments":[{"src":"./fonts/GreatVibes-Regular.ttf","variable":"--font-great-vibes","display":"swap"}],"variableName":"greatVibes"} ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[11].oneOf[3].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[11].oneOf[3].use[2]!./node_modules/next/font/local/target.css?{"path":"lib/fonts.ts","import":"","arguments":[{"src":"../public/fonts/GreatVibes-Regular.ttf","variable":"--font-great-vibes","display":"swap"}],"variableName":"greatVibes"} ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 @font-face {
 font-family: '__greatVibes_08e16f';
 src: url(/_next/static/media/df060dc08819ffb9-s.p.ttf) format('truetype');
@@ -4994,9 +4979,9 @@ font-display: swap;
 }.__variable_08e16f {--font-great-vibes: '__greatVibes_08e16f', '__greatVibes_Fallback_08e16f'
 }
 
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[11].oneOf[3].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[11].oneOf[3].use[2]!./node_modules/next/font/local/target.css?{"path":"app/fonts.ts","import":"","arguments":[{"src":"./fonts/Nunito-Regular.ttf","variable":"--font-nunito","display":"swap"}],"variableName":"nunito"} ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[11].oneOf[3].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[11].oneOf[3].use[2]!./node_modules/next/font/local/target.css?{"path":"lib/fonts.ts","import":"","arguments":[{"src":"../public/fonts/Nunito-Regular.ttf","variable":"--font-nunito","display":"swap"}],"variableName":"nunito"} ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 @font-face {
 font-family: '__nunito_4e82a0';
 src: url(/_next/static/media/1f3fe7895d717e33-s.p.ttf) format('truetype');
@@ -5006,9 +4991,9 @@ font-display: swap;
 }.__variable_4e82a0 {--font-nunito: '__nunito_4e82a0', '__nunito_Fallback_4e82a0'
 }
 
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[11].oneOf[3].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[11].oneOf[3].use[2]!./node_modules/next/font/local/target.css?{"path":"app/fonts.ts","import":"","arguments":[{"src":"./fonts/PlayfairDisplay-Regular.ttf","variable":"--font-playfair","display":"swap"}],"variableName":"playfair"} ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[11].oneOf[3].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[11].oneOf[3].use[2]!./node_modules/next/font/local/target.css?{"path":"lib/fonts.ts","import":"","arguments":[{"src":"../public/fonts/PlayfairDisplay-Regular.ttf","variable":"--font-playfair","display":"swap"}],"variableName":"playfair"} ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 @font-face {
 font-family: '__playfair_dfc9b3';
 src: url(/_next/static/media/5642aa5732152057-s.p.ttf) format('truetype');
