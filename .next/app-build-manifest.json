@@ -6,37 +6,15 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/(marketing)/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(marketing)/login/page.js"
-    ],
-    "/(marketing)/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(marketing)/layout.css",
-      "static/chunks/app/(marketing)/layout.js"
-    ],
     "/dashboard/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/layout.js"
     ],
-    "/dashboard/member/page": [
+    "/dashboard/member/learn/[moduleId]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/member/page.js"
-    ],
-    "/dashboard/member/journal/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/member/journal/page.js"
-    ],
-    "/(marketing)/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(marketing)/page.css",
-      "static/chunks/app/(marketing)/page.js"
+      "static/chunks/app/dashboard/member/learn/[moduleId]/page.js"
     ],
     "/dashboard/member/learn/page": [
       "static/chunks/webpack.js",
@@ -58,6 +36,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/member/messages/page.js"
     ],
+    "/dashboard/member/journal/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/member/journal/page.js"
+    ],
     "/dashboard/member/support/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -68,10 +51,27 @@
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/community/page.js"
     ],
-    "/not-found": [
+    "/dashboard/member/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
+      "static/chunks/app/dashboard/member/page.js"
+    ],
+    "/(marketing)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(marketing)/layout.css",
+      "static/chunks/app/(marketing)/layout.js"
+    ],
+    "/(marketing)/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(marketing)/login/page.js"
+    ],
+    "/(marketing)/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(marketing)/page.css",
+      "static/chunks/app/(marketing)/page.js"
     ]
   }
 }

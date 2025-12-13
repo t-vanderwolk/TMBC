@@ -200,6 +200,93 @@
   }
 }
 
+.tm-print-hide {
+  display: block;
+}
+
+.tm-print-only {
+  display: none;
+}
+
+@page {
+  margin: 48px;
+}
+
+@media print {
+  :root {
+    color: #3b3738;
+    background-color: #fff;
+  }
+
+  body {
+    background-color: #fff !important;
+    color: #3b3738;
+    font-family: var(--font-nunito), 'Nunito', sans-serif;
+  }
+
+  .tm-print-hide {
+    display: none !important;
+  }
+
+  .tm-print-only {
+    display: block !important;
+  }
+
+  .tm-print-wrapper {
+    background: #fff;
+    border: none !important;
+    box-shadow: none !important;
+    display: block !important;
+    margin: 0 auto;
+    max-width: 720px;
+    padding: 0 !important;
+  }
+
+  .tm-print-wrapper h1,
+  .tm-print-wrapper h2,
+  .tm-print-wrapper h3 {
+    font-family: var(--font-playfair), 'Playfair Display', serif;
+    letter-spacing: 0.03em;
+  }
+
+  .tm-print-wrapper p,
+  .tm-print-wrapper li {
+    font-family: var(--font-nunito), 'Nunito', sans-serif;
+    line-height: 1.7;
+  }
+
+  .tm-print-brand-mark {
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .tm-print-divider {
+    border-bottom: 1px solid rgba(196, 170, 181, 0.5);
+    margin: 8px auto 0;
+    width: 60px;
+  }
+
+  .tm-print-footer {
+    padding-top: 24px;
+    text-align: center;
+  }
+
+  .tm-print-footer::before {
+    content: '';
+    display: block;
+    margin: 0 auto 8px;
+    height: 1px;
+    width: 55px;
+    background: rgba(196, 170, 181, 0.4);
+  }
+}
+
+@media screen {
+  .tm-print-only {
+    display: none;
+  }
+}
+
 @keyframes tmFloat {
   0% {
     transform: translateY(0);

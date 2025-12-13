@@ -34,6 +34,97 @@ export interface JourneyGroup {
   modules: AcademyModule[];
 }
 
+export type AcademyModuleCard = {
+  id: string;
+  title: string;
+  description?: string;
+  summary?: string;
+  journey?: string;
+  stage?: string;
+  slug?: string;
+  completed?: boolean;
+  progress?: number;
+};
+
+export interface AcademyModulesResponse {
+  modules: AcademyModuleCard[];
+}
+
+export async function fetchModulesServerSide(options?: {
+  cookie?: string;
+  baseUrl?: string;
+}): Promise<AcademyModulesResponse> {
+  const baseUrl =
+    options?.baseUrl ??
+    process.env.NEXTAUTH_URL ??
+    process.env.NEXT_PUBLIC_APP_URL ??
+    "http://localhost:3000";
+  const url = new URL("/api/academy/modules", baseUrl);
+  const headers: Record<string, string> = {};
+
+  if (options?.cookie) {
+    headers.cookie = options.cookie;
+  }
+
+  const response = await fetch(url, {
+    headers,
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to fetch academy modules");
+  }
+
+  return response.json();
+}
+
+export type AcademyModuleDetail = {
+  id: string;
+  title: string;
+  journey?: string;
+  description?: string;
+  objectives?: string[];
+  sections?: { title: string; content: string }[];
+  lecture?: string;
+  estimatedMinutes?: number;
+  slug?: string;
+  stage?: string;
+  completed?: boolean;
+  progress?: number;
+};
+
+export async function fetchModuleServerSide(options: {
+  moduleId: string;
+  cookie?: string;
+  baseUrl?: string;
+}): Promise<{ module: AcademyModuleDetail | null }> {
+  const baseUrl =
+    options.baseUrl ??
+    process.env.NEXTAUTH_URL ??
+    process.env.NEXT_PUBLIC_APP_URL ??
+    "http://localhost:3000";
+  const url = new URL(`/api/academy/modules/${options.moduleId}`, baseUrl);
+  const headers: Record<string, string> = {};
+
+  if (options.cookie) {
+    headers.cookie = options.cookie;
+  }
+
+  const response = await fetch(url, {
+    headers,
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      return { module: null };
+    }
+    throw new Error("Unable to fetch module");
+  }
+
+  return response.json();
+}
+
 export const academyClient = {
   async listModules(): Promise<AcademyModule[]> {
     const res = await api.get('/academy/modules');

@@ -16,7 +16,7 @@ type DashboardNavbarProps = {
 
 const NAV_LINKS = [
   { label: "Overview", href: "/dashboard" },
-  { label: "Academy", href: "/dashboard/member/academy" },
+  { label: "Academy", href: "/dashboard/member/learn" },
   { label: "Registry", href: "/dashboard/member/registry" },
   { label: "Events", href: "/dashboard/member/events" },
   { label: "Community", href: "/dashboard/community" },

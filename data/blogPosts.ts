@@ -1,3 +1,11 @@
+export type AffiliateProduct = {
+  title: string;
+  description: string;
+  affiliateUrl: string;
+  brand?: string;
+  placement: 'inline' | 'callout' | 'end';
+};
+
 export type BlogPost = {
   slug: string;
   title: string;
@@ -8,6 +16,7 @@ export type BlogPost = {
   readTime: string;
   content: string;
   author: string;
+  affiliateProducts?: AffiliateProduct[];
 };
 
 export const blogPosts: BlogPost[] = [
@@ -62,6 +71,7 @@ Light, luxe, and silky. The shoulder strap makes airport sprints totally doable.
 - Durable enough for daily use
 
 Parents describe it as *“buttery.”* Same.
+[[affiliate-inline:0]]
 
 ## 🛒 Best Everyday Workhorse — Nuna Mixx Next
 
@@ -107,7 +117,31 @@ Mid-range price, high-end feel.
 
 You don’t need the fanciest model—you need the one tailored to your terrain, car trunk, doorway, and daily rhythm. Inside the Taylor-Made Baby Academy we map gear to lifestyle, budget, and upcoming milestones.
 
+[[affiliate-callout:0]]
+
     > ✨ Want personalized stroller guidance? **[Request an Invite](https://www.taylormadebaby.co/request-invite)** and meet your mentor.`,
+    affiliateProducts: [
+      {
+        title: 'WAYB Pico Travel Car Seat',
+        description: 'Ultra-compact and convertible so jet-set families sail through security lines with ease.',
+        affiliateUrl: 'https://www.wayb.com/products/pico',
+        brand: 'WAYB',
+        placement: 'inline',
+      },
+      {
+        title: 'Nuna PIPA RX + RELX Base',
+        description: 'Our go-to travel system for smooth installs, every day and on the road.',
+        affiliateUrl: 'https://www.nuna.eu/pipa-rx',
+        placement: 'callout',
+      },
+      {
+        title: 'Baby Jogger City Tour 2',
+        description: 'Featherweight fold, premium suspension, and a thoughtful concierge-supported setup every time you travel.',
+        affiliateUrl: 'https://www.babyjogger.com/city-tour-2',
+        brand: 'Baby Jogger',
+        placement: 'end',
+      },
+    ],
   },
   {
     slug: 'car-seat-safety-101',
