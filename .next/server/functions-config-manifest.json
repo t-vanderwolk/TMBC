@@ -1,1 +1,0 @@
-{"version":1,"functions":{"/api/chat/[mentorId]/[memberId]":{},"/api/chat/current":{},"/api/chat/conversations":{},"/api/chat/send":{},"/api/chat/message":{},"/blog/[slug]/print":{},"/blog/[slug]":{}}}

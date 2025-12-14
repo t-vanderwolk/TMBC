@@ -10,11 +10,11 @@ const FeatureCard = ({ title, description, meta }: FeatureCardProps) => {
       <div className="flex items-center gap-4">
         <span className="h-10 w-10 rounded-xl border border-[var(--tmbc-mauve)] bg-[var(--tmbc-mauve)]/20" aria-hidden />
         <div>
-          <h3 className="text-2xl font-semibold">{title}</h3>
-          {meta && <p className="text-xs uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/60">{meta}</p>}
+          <h3 className="text-xl sm:text-2xl font-semibold">{title}</h3>
+          {meta && <p className="text-xs uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-60">{meta}</p>}
         </div>
       </div>
-      <p className="text-sm text-[var(--tmbc-charcoal)]/80">{description}</p>
+      <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-80">{description}</p>
     </article>
   );
 };

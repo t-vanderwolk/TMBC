@@ -142,10 +142,10 @@ export default function MessagesPage() {
               <h2 className="font-serif text-xl text-[var(--tmbc-charcoal)]">
                 Your mentor conversation will live here
               </h2>
-              <p className="mt-3 text-sm text-[var(--tmbc-charcoal)]/70">
+              <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Ask a question or send a note to begin.
               </p>
-              <div className="mt-6 space-y-3 rounded-[1.5rem] border border-[#E3C6D4] bg-white/70 p-4 text-sm text-[var(--tmbc-charcoal)]/70">
+              <div className="mt-6 space-y-3 rounded-[1.5rem] border border-[#E3C6D4] bg-white/70 p-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 <p>We’ll keep this space calm until you share the first message.</p>
                 <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Calm · Safe · Ready</p>
               </div>

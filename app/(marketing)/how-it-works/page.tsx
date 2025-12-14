@@ -100,35 +100,29 @@ export default function HowItWorksPage() {
   const timelineProgress = phases.map((_, index) => index <= activePhase);
 
   return (
-    <div className="space-y-16">
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_30px_80px_rgba(199,166,199,0.25)]">
+    <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_30px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div>
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">Process</p>
-          <h1 className="font-serif text-4xl text-[var(--tmbc-charcoal)]">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Process</p>
+          <h1 className="font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
             This is how we take you from 'Where do I even start?' to 'I've got this.'
           </h1>
         </div>
-        <p className="text-sm text-[var(--tmbc-charcoal)]/70">
+        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           Every phase keeps your story slow and luminous. Learn · Plan · Connect with mentors who keep the vibe
           calm, witty, and real.
         </p>
-        <div className="flex flex-wrap items-center gap-3">
-          <Link
-            href="/request-invite"
-            className="rounded-[32px] border border-[var(--tmbc-gold)] bg-gradient-to-r from-[var(--tmbc-blush)] to-[var(--tmbc-mauve)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] shadow-[0_15px_45px_rgba(212,181,121,0.35)] transition hover:-translate-y-0.5"
-          >
+        <div className="flex flex-col gap-3 text-[0.7rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
+          <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
             Request Invite
           </Link>
-          <Link
-            href="/experience"
-            className="rounded-[32px] border border-[var(--tmbc-charcoal)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-mauve)]"
-          >
+          <Link href="/experience" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
             Experience Taylor-Made
           </Link>
         </div>
       </section>
 
-      <section className="space-y-8 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/60 p-8 shadow-[0_20px_90px_rgba(199,166,199,0.25)]">
+      <section className="space-y-8 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/60 p-8 shadow-[0_20px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-3">
           <div className="rounded-full border border-[var(--tmbc-charcoal)]/10">
             <div className="flex h-2 overflow-hidden rounded-full">
@@ -142,7 +136,7 @@ export default function HowItWorksPage() {
               ))}
             </div>
           </div>
-          <div className="grid gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60 md:grid-cols-3">
+          <div className="grid gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60 md:grid-cols-3">
             {phases.map((phase) => (
               <span key={phase.title} className="text-center">
                 {phase.title.split(' · ').pop()}
@@ -165,41 +159,39 @@ export default function HowItWorksPage() {
               }`}
             >
               <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-[0.7rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/50">Phase {index + 1}</p>
-                  <h3 className="mt-2 text-2xl font-semibold text-[var(--tmbc-charcoal)]">{phase.title}</h3>
-                </div>
+                  <div>
+                    <p className="text-[0.7rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">Phase {index + 1}</p>
+                    <h3 className="mt-2 text-2xl sm:text-3xl font-semibold text-[var(--tmbc-charcoal)]">{phase.title}</h3>
+                  </div>
                 <span className="text-[0.7rem] uppercase tracking-[0.35em] text-[var(--tmbc-mauve)]">
                   {phase.summary}
                 </span>
               </div>
-              <p className="mt-4 text-sm text-[var(--tmbc-charcoal)]/70">{phase.description}</p>
+              <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{phase.description}</p>
               <div className="mt-4 flex flex-wrap items-center gap-3 text-[0.75rem]">
                 {phase.bullets.map((bullet) => (
                   <span
                     key={bullet}
-                    className="rounded-full border border-[var(--tmbc-mauve)]/40 bg-[var(--tmbc-ivory)]/80 px-3 py-1 text-[var(--tmbc-charcoal)]/70"
+                    className="rounded-full border border-[var(--tmbc-mauve)]/40 bg-[var(--tmbc-ivory)]/80 px-3 py-1 text-[var(--tmbc-charcoal)] text-opacity-70"
                   >
                     {bullet}
                   </span>
                 ))}
               </div>
               <div className="mt-6 grid gap-2 rounded-[28px] border border-[var(--tmbc-mauve)]/30 bg-[var(--tmbc-ivory)]/80 p-4">
-                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/40">Peek</p>
-                <p className="text-sm text-[var(--tmbc-charcoal)]/70">{phase.peek}</p>
+                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-40">Peek</p>
+                <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">{phase.peek}</p>
               </div>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_90px_rgba(199,166,199,0.25)]">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">Monthly cadence</p>
-            <h2 className="font-serif text-3xl text-[var(--tmbc-charcoal)]">What to expect each month</h2>
-          </div>
-          <p className="text-sm text-[var(--tmbc-charcoal)]/70">Lean into the cadence, and we'll keep the village warm.</p>
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_90px_rgba(199,166,199,0.25)] marketing-section">
+        <div className="flex flex-col gap-2">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Monthly cadence</p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">What to expect each month</h2>
+          <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">Lean into the cadence, and we'll keep the village warm.</p>
         </div>
         <div className="space-y-3">
           {monthlyExpectations.map((month, index) => (
@@ -213,19 +205,19 @@ export default function HowItWorksPage() {
                 className="flex w-full items-center justify-between text-left"
               >
                 <div>
-                  <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
+                  <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
                     {month.title}
                   </p>
-                  <p className="text-sm text-[var(--tmbc-charcoal)]/70">{month.summary}</p>
+                  <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">{month.summary}</p>
                 </div>
                 <span className="text-xl text-[var(--tmbc-mauve)]">{openMonth === index ? "-" : "+"}</span>
               </button>
-              <div
-                className={`mt-3 overflow-hidden transition-all duration-300 ${
-                  openMonth === index ? "max-h-60" : "max-h-0"
-                }`}
-              >
-                <ul className="space-y-2 text-[0.85rem] text-[var(--tmbc-charcoal)]/70">
+                <div
+                  className={`mt-3 overflow-hidden transition-all duration-300 ${
+                    openMonth === index ? "max-h-60" : "max-h-0"
+                  }`}
+                >
+                  <ul className="space-y-2 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
                   {month.points.map((point) => (
                     <li key={point} className="flex items-start gap-2">
                       <span className="mt-1 h-2 w-2 rounded-full bg-[var(--tmbc-mauve)]" />
@@ -239,23 +231,17 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-b from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/60 p-8 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)]">
-        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">Next step</p>
-        <h2 className="font-serif text-3xl text-[var(--tmbc-charcoal)]">Ready for the invite-only cadence?</h2>
-        <p className="text-sm text-[var(--tmbc-charcoal)]/70">
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-b from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/60 p-8 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Next step</p>
+        <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">Ready for the invite-only cadence?</h2>
+        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           Every season is curated so you can stay intentional. Apply now and we'll tell you when the next mentor circle opens.
         </p>
-        <div className="mx-auto mt-4 flex max-w-sm flex-wrap items-center justify-center gap-3 text-[0.7rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]">
-          <Link
-            href="/request-invite"
-            className="rounded-[32px] border border-[var(--tmbc-gold)] bg-gradient-to-r from-[var(--tmbc-blush)] to-[var(--tmbc-mauve)] px-6 py-3 text-[var(--tmbc-charcoal)] font-semibold"
-          >
+        <div className="mx-auto mt-4 flex w-full max-w-sm flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] sm:flex-row sm:justify-center sm:gap-4">
+          <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
             Request Invite
           </Link>
-          <Link
-            href="/membership#faqs"
-            className="rounded-[32px] border border-[var(--tmbc-charcoal)] px-6 py-3 text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-mauve)]"
-          >
+          <Link href="/membership#faqs" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
             Membership FAQ
           </Link>
         </div>

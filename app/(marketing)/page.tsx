@@ -112,11 +112,11 @@ export default function HomePage() {
   };
 
   return (
-    <div className="space-y-20 text-[var(--tmbc-charcoal)]">
-      <section className="relative grid gap-10 rounded-[56px] border border-[var(--tmbc-gold)] bg-white/80 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.35)] md:grid-cols-[1.1fr_0.9fr]">
+    <div className="space-y-12 sm:space-y-16 lg:space-y-20 text-[var(--tmbc-charcoal)]">
+      <section className="relative grid grid-cols-1 gap-10 rounded-[56px] border border-[var(--tmbc-gold)] bg-white/80 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.35)] marketing-section md:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-6">
           <Reveal>
-            <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">
+            <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
               Invite-only concierge
             </p>
           </Reveal>
@@ -126,27 +126,27 @@ export default function HomePage() {
             </h1>
           </Reveal>
           <Reveal>
-            <p className="max-w-2xl text-lg text-[var(--tmbc-charcoal)]/80">
+            <p className="max-w-2xl text-lg text-[var(--tmbc-charcoal)] text-opacity-80">
               An invite-only concierge community where you learn, build your registry, and get real support from
               people who&apos;ve been there before you even ask.
             </p>
           </Reveal>
           <Reveal>
-            <p className="text-sm text-[var(--tmbc-charcoal)]/70">
+            <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
               Warm · Witty · Wise · Real — just like your mentor circle.
             </p>
           </Reveal>
           <Reveal>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href="/request-invite"
-                className="rounded-[32px] border border-transparent bg-gradient-to-r from-[var(--tmbc-blush)] to-[var(--tmbc-mauve)] px-8 py-3 text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] shadow-[0_15px_45px_rgba(212,181,121,0.35)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_25px_70px_rgba(212,181,121,0.45)]"
+                className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em] shadow-[0_15px_45px_rgba(212,181,121,0.35)]"
               >
                 Request Invite
               </Link>
               <Link
                 href={PUBLIC_LOGIN_ROUTE}
-                className="flex items-center justify-center rounded-[32px] border border-[var(--tmbc-charcoal)] px-8 py-3 text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] transition duration-300 hover:-translate-y-0.5 hover:border-[var(--tmbc-mauve)]"
+                className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
               >
                 Already invited? Log in
               </Link>
@@ -154,33 +154,35 @@ export default function HomePage() {
           </Reveal>
           <Reveal>
             <div className="space-y-3 rounded-[32px] border border-[var(--tmbc-blush)] bg-gradient-to-br from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/40 p-5 shadow-[0_20px_70px_rgba(212,181,121,0.25)]">
-              <p className="text-[0.6rem] uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)]/60">
+              <p className="text-[0.6rem] uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 Invite code ready?
               </p>
               <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]">
                 Enter and begin onboarding
               </p>
-              <form onSubmit={handleInviteSubmit} className="mt-6 flex flex-col sm:flex-row gap-3">
-                <input
-                  type="text"
-                  value={inviteCode}
-                  onChange={(event) => setInviteCode(event.target.value)}
-                  placeholder="Enter invite code"
-                  className="flex-1 rounded-xl border border-[var(--tmbc-blush)] bg-white/80 px-4 py-3 text-xs font-semibold tracking-[0.35em] text-[var(--tmbc-charcoal)] placeholder:text-[var(--tmbc-charcoal)] focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[var(--tmbc-blush)]"
-                />
+              <form onSubmit={handleInviteSubmit} className="marketing-form mt-6">
+                <label>
+                  <span>Invite code</span>
+                  <input
+                    type="text"
+                    value={inviteCode}
+                    onChange={(event) => setInviteCode(event.target.value)}
+                    placeholder="Enter invite code"
+                  />
+                </label>
                 <button
                   type="submit"
                   disabled={!inviteCode.trim() || submitting}
-                  className="rounded-xl border border-transparent bg-gradient-to-r from-[var(--tmbc-blush)] to-[var(--tmbc-mauve)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] shadow-[0_15px_45px_rgba(212,181,121,0.35)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_25px_70px_rgba(212,181,121,0.45)] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]"
                 >
-                  Begin Onboarding
+                  {submitting ? "Submitting..." : "Begin onboarding"}
                 </button>
               </form>
               {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
             </div>
           </Reveal>
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/50">
+            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
               Member-to-mentor community with receipts.
             </p>
           </Reveal>
@@ -195,31 +197,31 @@ export default function HomePage() {
             </div>
             <div className="relative flex flex-col gap-4">
               <div className="space-y-3 rounded-[32px] bg-white/80 p-4 shadow-[0_20px_60px_rgba(199,166,199,0.25)] transition duration-300 group-hover:-translate-y-1">
-                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/50">Academy</p>
+                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-50">Academy</p>
                 <h3 className="font-semibold text-lg text-[var(--tmbc-charcoal)]">Car Seat Masterclass</h3>
                 <div className="h-1.5 rounded-full bg-[var(--tmbc-blush)]">
                   <div className="h-full w-2/5 rounded-full bg-[var(--tmbc-mauve)]" />
                 </div>
-                <p className="text-xs text-[var(--tmbc-charcoal)]/60">Mentor circle: Ellie + Marisol</p>
+                <p className="text-xs text-[var(--tmbc-charcoal)] text-opacity-60">Mentor circle: Ellie + Marisol</p>
               </div>
               <div className="grid gap-3 rounded-[32px] bg-[var(--tmbc-ivory)] p-4 shadow-[0_18px_40px_rgba(199,166,199,0.22)]">
-                <div className="flex items-center justify-between text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">
+                <div className="flex items-center justify-between text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                   <span>Registry</span>
                   <span>Quiet edit</span>
                 </div>
                 <p className="text-sm font-semibold text-[var(--tmbc-charcoal)]">
                   Modern crib · mixed sorter · 1 note
                 </p>
-                <p className="text-[0.7rem] text-[var(--tmbc-charcoal)]/60">
+                <p className="text-[0.7rem] text-[var(--tmbc-charcoal)] text-opacity-60">
                   Mentor: “Skip the wipe warmer unless you love glow.”
                 </p>
               </div>
               <div className="rounded-[32px] bg-white/90 p-4 text-sm text-[var(--tmbc-charcoal)] shadow-[0_15px_45px_rgba(199,166,199,0.25)]">
-                <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/50">
+                <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-50">
                   Mentor chat
                 </p>
                 <p className="mt-1 text-base font-semibold">Upcoming salons</p>
-                <p className="text-xs text-[var(--tmbc-charcoal)]/70">
+                <p className="text-xs text-[var(--tmbc-charcoal)] text-opacity-70">
                   Mindful third trimester Q&amp;A · Friday · 6p PST
                 </p>
               </div>
@@ -234,13 +236,13 @@ export default function HomePage() {
         </Reveal>
       </section>
 
-      <section className="space-y-8 rounded-[48px] border border-[var(--tmbc-mauve)]/40 bg-white/70 p-8 shadow-[0_25px_70px_rgba(199,166,199,0.25)]">
+      <section className="space-y-8 rounded-[48px] border border-[var(--tmbc-mauve)]/40 bg-white/70 p-8 shadow-[0_25px_70px_rgba(199,166,199,0.25)] marketing-section">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">Pillars</p>
-            <h2 className="font-serif text-3xl text-[var(--tmbc-charcoal)]">Learn · Plan · Connect</h2>
+            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Pillars</p>
+            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">Learn · Plan · Connect</h2>
           </div>
-          <p className="text-sm text-[var(--tmbc-charcoal)]/70">
+          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
             A concierge rhythm that feels cinematic, not chaotic.
           </p>
         </div>
@@ -251,9 +253,9 @@ export default function HomePage() {
               className="group relative overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-[var(--tmbc-ivory)]/80 p-6 shadow-[0_18px_60px_rgba(199,166,199,0.15)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_25px_60px_rgba(199,166,199,0.3)]"
             >
               <div className="text-2xl">{pillar.icon}</div>
-              <h3 className="mt-3 text-2xl font-semibold text-[var(--tmbc-charcoal)]">{pillar.title}</h3>
-              <p className="mt-2 text-sm text-[var(--tmbc-charcoal)]/70">{pillar.description}</p>
-              <div className="mt-4 max-h-0 overflow-hidden text-[0.7rem] text-[var(--tmbc-charcoal)]/60 transition-all duration-500 group-hover:max-h-40">
+              <h3 className="mt-3 text-xl sm:text-2xl font-semibold text-[var(--tmbc-charcoal)]">{pillar.title}</h3>
+              <p className="mt-2 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{pillar.description}</p>
+              <div className="mt-4 max-h-0 overflow-hidden text-[0.7rem] text-[var(--tmbc-charcoal)] text-opacity-60 transition-all duration-500 group-hover:max-h-40">
                 <ul className="space-y-1">
                   {pillar.bullets.map((bullet) => (
                     <li key={bullet} className="flex items-start gap-2">
@@ -268,10 +270,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_20px_90px_rgba(199,166,199,0.25)]">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_20px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div>
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">Timeline</p>
-          <h2 className="font-serif text-3xl text-[var(--tmbc-charcoal)]">How it works in 4 steps</h2>
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Timeline</p>
+          <h2 className="font-serif text-2xl text-[var(--tmbc-charcoal)] sm:text-3xl">How it works in 4 steps</h2>
         </div>
         <div className="relative">
           <div className="pointer-events-none absolute left-1/2 top-10 h-full w-px -translate-x-1/2 bg-gradient-to-b from-[var(--tmbc-gold)]/40 to-[var(--tmbc-mauve)]/40 md:hidden" />
@@ -281,14 +283,14 @@ export default function HomePage() {
                 key={step.title}
                 className="group relative overflow-hidden rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6 text-sm text-[var(--tmbc-charcoal)] shadow-[0_15px_45px_rgba(199,166,199,0.15)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_25px_65px_rgba(199,166,199,0.3)]"
               >
-                <span className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">
+                <span className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
                   Step {index + 1}
                 </span>
-                <h3 className="mt-2 text-xl font-semibold">{step.title}</h3>
-                <p className="mt-2 text-[0.85rem] text-[var(--tmbc-charcoal)]/70">{step.detail}</p>
+                <h3 className="mt-2 text-xl font-semibold sm:text-2xl">{step.title}</h3>
+                <p className="mt-2 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{step.detail}</p>
                 <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-[var(--tmbc-blush)]/70 bg-[var(--tmbc-ivory)]/80 px-4 py-2 text-[0.75rem] font-semibold text-[var(--tmbc-mauve)] transition duration-300 group-hover:border-[var(--tmbc-gold)] group-hover:bg-[var(--tmbc-mauve)]/10">
                   <p>{step.snippet}</p>
-                  <span className="text-xs text-[var(--tmbc-charcoal)]/60">›</span>
+                  <span className="text-xs text-[var(--tmbc-charcoal)] text-opacity-60">›</span>
                 </div>
                 <div className="absolute -right-6 top-6 hidden h-24 w-24 -translate-x-1/2 rounded-full bg-gradient-to-br from-[var(--tmbc-gold)]/40 to-transparent opacity-0 transition duration-300 group-hover:opacity-80 md:block" />
               </div>
@@ -297,11 +299,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="space-y-8 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)]">
+      <section className="space-y-8 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="flex flex-col gap-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">Inside the dashboard</p>
-          <h2 className="font-serif text-3xl text-[var(--tmbc-charcoal)]">Inside your Taylor-Made dashboard</h2>
-          <p className="text-sm text-[var(--tmbc-charcoal)]/70">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Inside the dashboard</p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">Inside your Taylor-Made dashboard</h2>
+          <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
             Academy, registry, and mentor notes live together in one calm, curated screen.
           </p>
         </div>
@@ -311,17 +313,17 @@ export default function HomePage() {
               key={highlight.title}
               className="rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/60 p-5 text-[var(--tmbc-charcoal)] shadow-[0_15px_45px_rgba(199,166,199,0.2)]"
             >
-              <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/50">
+              <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 {highlight.title}
               </p>
-              <h3 className="mt-3 text-xl font-semibold text-[var(--tmbc-charcoal)]">
+              <h3 className="mt-3 text-xl font-semibold sm:text-2xl text-[var(--tmbc-charcoal)]">
                 {highlight.caption}
               </h3>
-              <p className="mt-2 text-sm text-[var(--tmbc-charcoal)]/70">{highlight.note}</p>
+              <p className="mt-2 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{highlight.note}</p>
             </div>
           ))}
         </div>
-        <div className="grid gap-4 text-sm text-[var(--tmbc-charcoal)] md:grid-cols-3">
+        <div className="grid gap-4 text-base text-[var(--tmbc-charcoal)] md:grid-cols-3">
           <p className="rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/70 p-4">
             See learning, registry, and events in one calm view.
           </p>
@@ -334,32 +336,35 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section>
+      <section className="marketing-section">
         <TestimonialsCarousel />
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/40 bg-[var(--tmbc-ivory)]/80 p-10 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)]">
-        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">Final invite</p>
-        <h2 className="font-serif text-3xl text-[var(--tmbc-charcoal)]">
+
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/40 bg-[var(--tmbc-ivory)]/80 p-10 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Final invite</p>
+        <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
           Let&apos;s build your baby village before the baby arrives.
         </h2>
-        <p className="text-sm text-[var(--tmbc-charcoal)]/70">
+        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           TMBC is currently invite-only, with limited beta spots open each month.
         </p>
-        <div className="flex flex-col gap-3 rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-6 shadow-[0_20px_80px_rgba(199,166,199,0.25)] sm:flex-row sm:items-center sm:justify-center">
-          <input
-            type="email"
-            placeholder="Email address"
-            className="flex-1 rounded-full border border-[var(--tmbc-blush)]/70 bg-[var(--tmbc-ivory)] px-5 py-3 text-sm text-[var(--tmbc-charcoal)] focus:border-[var(--tmbc-mauve)] focus:outline-none"
-          />
+        <div className="marketing-form mx-auto w-full max-w-xl rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-6 shadow-[0_20px_80px_rgba(199,166,199,0.25)]">
+          <label>
+            <span>Email address</span>
+            <input
+              type="email"
+              placeholder="hello@taylormadebaby.co"
+            />
+          </label>
           <Link
             href="/request-invite"
-            className="rounded-full bg-[var(--tmbc-mauve)] px-6 py-3 text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] transition hover:translate-y-0.5 hover:bg-gradient-to-r hover:from-[var(--tmbc-gold)] hover:to-[var(--tmbc-blush)]"
+            className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]"
           >
             Request Invite
           </Link>
         </div>
-        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">
+        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
           Takes 2 minutes · No spam · We&apos;ll tell you if we&apos;re not the right fit. Invite-only and curated.
         </p>
       </section>

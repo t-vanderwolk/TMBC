@@ -78,8 +78,8 @@ const BlogArticlePage = ({ params }: { params: Params }) => {
 
   return (
     <>
-      <article className="bg-tmIvory/80 py-16">
-        <div className="section-wrap space-y-12">
+      <article className="marketing-section bg-tmIvory/80">
+        <div className="mx-auto space-y-12 px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="relative overflow-hidden rounded-[40px] border border-tmMauve/40 bg-white/90 p-10 shadow-editorial">
             <CardPlaceholder className="absolute inset-0 h-full w-full opacity-60" />
             <div className="absolute inset-0 bg-gradient-to-b from-tmIvory via-white/90 to-white/70" />
@@ -88,7 +88,7 @@ const BlogArticlePage = ({ params }: { params: Params }) => {
             </div>
             <div className="relative space-y-4 max-w-3xl">
               <p className="text-xs uppercase tracking-[0.6em] text-tmCharcoal/60">Taylor-Made Journal</p>
-              <h1 className="font-playfair text-4xl text-tmCharcoal sm:text-5xl">{post.title}</h1>
+              <h1 className="font-playfair text-3xl sm:text-4xl md:text-5xl text-tmCharcoal">{post.title}</h1>
               <p className="text-base italic text-tmCharcoal/70">{post.description}</p>
               <BlogPrintButton slug={post.slug} />
               <div className="flex flex-wrap gap-3 text-[0.65rem] uppercase tracking-[0.4em] text-tmCharcoal/65">
@@ -106,8 +106,8 @@ const BlogArticlePage = ({ params }: { params: Params }) => {
             </div>
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,240px)_1fr]">
-            <aside className="tm-print-hide space-y-6 rounded-3xl border border-tmMauve/40 bg-white/90 p-6 shadow-soft">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,240px)_1fr]">
+          <aside className="tm-print-hide space-y-6 rounded-3xl border border-tmMauve/40 bg-white/90 p-6 shadow-soft">
               <div>
                 <p className="text-xs uppercase tracking-[0.5em] text-tmCharcoal/70">Table of Contents</p>
                 <ul className="mt-4 space-y-3 text-sm text-tmCharcoal/80">
@@ -174,7 +174,7 @@ const BlogArticlePage = ({ params }: { params: Params }) => {
               </p>
               <Link
                 href="/request-invite"
-                className="mt-5 inline-flex items-center justify-center rounded-full bg-white/90 px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-tmDeepMauve"
+                className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]"
               >
                 Request Invite
               </Link>
@@ -187,11 +187,11 @@ const BlogArticlePage = ({ params }: { params: Params }) => {
           </div>
         </div>
 
-        <div className="tm-print-hide border-t border-tmMauve/30 pt-6 text-sm text-tmCharcoal/70">
+        <div className="tm-print-hide border-t border-tmMauve/30 pt-6 text-base text-tmCharcoal/70">
           <Link href="/blog" className="inline-flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.5em] text-tmCharcoal">
             ← Back to Journal
           </Link>
-          <p className="mt-2 max-w-3xl leading-relaxed">
+          <p className="mt-2 max-w-3xl leading-relaxed text-base">
             Want a more guided conversation? Drop us a note and a mentor will help map every detail—registry, gear, safety checks, and the rituals that keep you steady.
           </p>
         </div>

@@ -8,12 +8,6 @@ import { login } from "@/lib/auth";
 import { saveUser } from "@/lib/auth/userStore";
 import { routeForRole } from "@/lib/auth/routeForRole";
 
-const INPUT =
-  "w-full rounded-full border border-[#C8A1B4]/40 bg-white px-5 py-3 text-sm text-[#3E2F35] placeholder-[#3E2F35]/40 focus:border-[#C8A1B4] focus:outline-none focus:ring-2 focus:ring-[#EAC9D1] transition";
-const BUTTON =
-  "w-full rounded-full bg-[#C8A1B4] py-3 text-sm font-semibold tracking-[0.25em] text-white hover:bg-[#b88ca3] transition";
-const LINK =
-  "text-[#C8A1B4] font-medium hover:text-[#b88ca3] transition";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -66,57 +60,65 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="bg-[#FFFAF8] px-6 py-20">
-      <div className="mx-auto max-w-md rounded-[2rem] border border-[#EAC9D1]/50 bg-white/80 backdrop-blur p-10 shadow-[0_20px_48px_rgba(200,161,180,0.15)]">
+    <div className="bg-[#FFFAF8] px-4 py-12 text-[var(--tmbc-charcoal)] sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-md rounded-[2rem] border border-[#EAC9D1]/50 bg-white/80 backdrop-blur p-8 sm:p-10 shadow-[0_20px_48px_rgba(200,161,180,0.15)]">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.3em] text-[#C8A1B4]">
           Taylor-Made Baby Co.
         </p>
 
-        <h1 className="mt-3 text-center font-serif text-3xl text-[#3E2F35]">
+        <h1 className="mt-3 text-center font-serif text-3xl sm:text-4xl text-[#3E2F35]">
           Welcome back
         </h1>
 
-        <p className="mt-2 text-center text-sm text-[#3E2F35]/70">
+        <p className="mt-2 text-center text-base text-[#3E2F35]/80">
           Log in to your dashboard, academy, and concierge experience.
         </p>
 
-        <form onSubmit={handleLogin} className="mt-10 grid gap-6">
+        <form onSubmit={handleLogin} className="marketing-form mt-10 w-full">
           {error && (
             <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-2 text-sm text-red-700 text-center">
               {error}
             </div>
           )}
 
-          <input
-            type="email"
-            className={INPUT}
-            placeholder="Email address"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <label>
+            <span>Email address</span>
+            <input
+              type="email"
+              placeholder="Email address"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
 
-          <input
-            type="password"
-            className={INPUT}
-            placeholder="Password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <label>
+            <span>Password</span>
+            <input
+              type="password"
+              placeholder="Password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
 
-          <button type="submit" className={BUTTON} disabled={loading}>
-            {loading ? "Logging in…" : "Login"}
+          <button
+            type="submit"
+            className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
           </button>
 
-          <div className="flex items-center justify-between text-xs mt-1 text-[#3E2F35]/60">
-            <Link href="/request-invite" className={LINK}>
+          <div className="flex flex-col gap-2 text-[0.75rem] uppercase tracking-[0.4em] text-[#3E2F35]/80 sm:flex-row sm:items-center sm:justify-between">
+            <Link href="/request-invite" className="hover:text-[var(--tmbc-mauve)]">
               Request Invite
             </Link>
 
-            <Link href="/" className={LINK}>
+            <Link href="/" className="hover:text-[var(--tmbc-mauve)]">
               Return Home
             </Link>
           </div>

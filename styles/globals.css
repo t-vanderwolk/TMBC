@@ -54,10 +54,6 @@
     text-decoration: none;
   }
 
-  section {
-    @apply py-20;
-  }
-
   input,
   textarea,
   select {
@@ -151,6 +147,102 @@
     border-radius: 2rem;
     border: 1px solid rgba(199, 167, 187, 0.85);
     box-shadow: 0 18px 40px rgba(200, 161, 180, 0.22);
+  }
+
+  .marketing-content {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-[var(--tmbc-charcoal)];
+  }
+
+  .marketing-content p,
+  .marketing-content li,
+  .marketing-content span {
+    @apply text-base leading-relaxed sm:text-lg;
+  }
+
+  .marketing-content h1 {
+    @apply text-3xl leading-tight;
+  }
+
+  @screen sm {
+    .marketing-content h1 {
+      @apply text-4xl;
+    }
+  }
+
+  @screen lg {
+    .marketing-content h1 {
+      @apply text-5xl;
+    }
+  }
+
+  .marketing-content h2 {
+    @apply text-2xl font-semibold leading-tight;
+  }
+
+  @screen sm {
+    .marketing-content h2 {
+      @apply text-3xl;
+    }
+  }
+
+  @screen lg {
+    .marketing-content h2 {
+      @apply text-4xl;
+    }
+  }
+
+  .marketing-content h3 {
+    @apply text-xl font-semibold leading-tight;
+  }
+
+  @screen sm {
+    .marketing-content h3 {
+      @apply text-2xl;
+    }
+  }
+
+  .marketing-section {
+    @apply py-12 sm:py-16 lg:py-24;
+  }
+
+  .marketing-section-inner {
+    @apply rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_25px_70px_rgba(199,166,199,0.25)];
+  }
+
+  .marketing-btn {
+    @apply inline-flex items-center justify-center w-full sm:w-auto min-h-[44px] px-6 py-3 text-base font-semibold tracking-wide rounded-2xl transition duration-300 ease-out;
+  }
+
+  .marketing-btn-primary {
+    @apply bg-gradient-to-r from-[var(--tmbc-blush)] to-[var(--tmbc-mauve)] text-[var(--tmbc-charcoal)] shadow-[0_15px_45px_rgba(212,181,121,0.35)];
+  }
+
+  .marketing-btn-secondary {
+    @apply bg-white border border-[var(--tmbc-charcoal)] text-[var(--tmbc-charcoal)];
+  }
+
+  .marketing-btn-ghost {
+    @apply text-[var(--tmbc-charcoal)] hover:text-[var(--tmbc-mauve)];
+  }
+
+  .marketing-form {
+    @apply flex w-full flex-col gap-4;
+  }
+
+  .marketing-form label {
+    @apply text-xs font-semibold uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-80;
+  }
+
+  .marketing-input,
+  .marketing-form input,
+  .marketing-form select,
+  .marketing-form textarea {
+    @apply w-full rounded-2xl border border-[var(--tmbc-blush)] bg-white/80 px-4 py-3 text-base leading-relaxed text-[var(--tmbc-charcoal)] shadow-sm transition focus:border-[var(--tmbc-charcoal)] focus:outline-none;
+  }
+
+  .marketing-media img,
+  .marketing-media video {
+    @apply w-full h-auto;
   }
 }
 

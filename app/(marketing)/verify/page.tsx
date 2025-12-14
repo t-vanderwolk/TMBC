@@ -32,32 +32,44 @@ const VerifyContent = () => {
   };
 
   return (
-    <div className="onboarding">
-      <div className="max-w-md mx-auto p-10 space-y-6">
-        <h1 className="font-serif text-3xl text-[#3E2F35]">Verify Your Invitation</h1>
-
-        <form onSubmit={submit} className="space-y-4">
-          <input
-            className="input"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
-          <input
-            className="input"
-            placeholder="Invite code"
-            value={code}
-            onChange={(event) => setCode(event.target.value)}
-            required
-          />
-          {error && <p className="text-sm text-red-500">{error}</p>}
-          <button className="btn-primary w-full text-center" type="submit" disabled={loading}>
-            {loading ? "Verifying..." : "Continue"}
-          </button>
-        </form>
-      </div>
+    <div className="space-y-10 text-[var(--tmbc-charcoal)]">
+      <section className="marketing-section">
+        <div className="mx-auto max-w-md rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-8 shadow-[0_25px_60px_rgba(199,166,199,0.25)]">
+          <h1 className="font-serif text-3xl sm:text-4xl">Verify Your Invitation</h1>
+          <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+            Enter your email and invite code to continue to the curated onboarding journey.
+          </p>
+          <form onSubmit={submit} className="marketing-form mt-6">
+            <label>
+              <span>Email</span>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+              />
+            </label>
+            <label>
+              <span>Invite code</span>
+              <input
+                placeholder="Invite code"
+                value={code}
+                onChange={(event) => setCode(event.target.value)}
+                required
+              />
+            </label>
+            {error && <p className="text-sm text-red-600">{error}</p>}
+            <button
+              className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Verifying..." : "Continue"}
+            </button>
+          </form>
+        </div>
+      </section>
     </div>
   );
 };

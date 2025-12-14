@@ -35,7 +35,9 @@ const EditorialSection = ({
   const sectionClass = `${backgroundMap[background]} rounded-[40px] border border-[var(--tmbc-blush)]`;
 
   return (
-    <section className={`${sectionClass} px-6 py-12 shadow-[0_25px_60px_rgba(199,166,199,0.25)]`}>
+    <section
+      className={`${sectionClass} px-6 py-12 shadow-[0_25px_60px_rgba(199,166,199,0.25)] marketing-section`}
+    >
       <div
         className={`grid gap-10 lg:grid-cols-[0.55fr,0.45fr] ${
           reverse ? "lg:grid-flow-col-dense" : ""
@@ -54,15 +56,15 @@ const EditorialSection = ({
         <Reveal variant="slide-up" className="space-y-6">
           <div>
             {tagline && (
-              <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">{tagline}</p>
+              <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">{tagline}</p>
             )}
             <h2 className="font-serif text-3xl leading-tight text-[var(--tmbc-charcoal)]">{title}</h2>
           </div>
-          <p className="text-lg leading-relaxed text-[var(--tmbc-charcoal)]/80 md:text-xl">{copy}</p>
+          <p className="text-lg leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-80 md:text-xl">{copy}</p>
           {ctaLabel && ctaHref && (
             <Link
               href={ctaHref}
-              className="inline-flex items-center gap-2 rounded-[32px] border border-[var(--tmbc-gold)] bg-white/70 px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] shadow-[0_20px_50px_rgba(199,166,199,0.25)] transition hover:-translate-y-0.5 hover:bg-white"
+              className="marketing-btn marketing-btn-secondary uppercase tracking-[0.3em] shadow-[0_20px_50px_rgba(199,166,199,0.25)]"
             >
               {ctaLabel}
             </Link>

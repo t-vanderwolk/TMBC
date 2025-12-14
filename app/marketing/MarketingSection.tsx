@@ -25,7 +25,7 @@ const MarketingSection = ({ title, subtitle, children }: MarketingSectionProps) 
       transition={{ duration: 0.7 }}
     >
       <div className="space-y-2">
-        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/70">{title}</p>
+        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">{title}</p>
         {subtitle && <h2 className="font-serif text-3xl text-[var(--tmbc-charcoal)]">{subtitle}</h2>}
       </div>
       <div className="mt-6 space-y-6">{children}</div>

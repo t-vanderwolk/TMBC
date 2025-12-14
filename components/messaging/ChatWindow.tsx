@@ -27,9 +27,9 @@ const ChatWindow = ({ conversation }: ChatWindowProps) => {
     <div className="flex h-full flex-col rounded-[36px] border border-[var(--tmbc-mauve)]/40 bg-[var(--tmbc-ivory)]/80 p-5 shadow-[0_35px_90px_rgba(199,166,199,0.2)]">
       <header className="mb-4 flex items-center justify-between border-b border-[var(--tmbc-mauve)]/20 pb-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)]/60">Mentor chat</p>
+          <p className="text-xs uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)] text-opacity-60">Mentor chat</p>
           <h2 className="text-2xl font-serif text-[var(--tmbc-charcoal)]">{conversation.name}</h2>
-          <p className="text-sm text-[var(--tmbc-charcoal)]/70">{conversation.topic}</p>
+          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">{conversation.topic}</p>
         </div>
         <button className="rounded-full border border-[var(--tmbc-charcoal)]/30 px-4 py-2 text-[0.7rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-mauve)]">
           Settings
@@ -48,7 +48,7 @@ const ChatWindow = ({ conversation }: ChatWindowProps) => {
       </div>
 
       <footer className="mt-auto space-y-3">
-        <label className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">
+        <label className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
           Leave a note
         </label>
         <div className="flex flex-col gap-3 sm:flex-row">
@@ -65,7 +65,7 @@ const ChatWindow = ({ conversation }: ChatWindowProps) => {
             Send
           </button>
         </div>
-        <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
+        <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
           No backend yet · placeholder send clears draft only.
         </p>
       </footer>

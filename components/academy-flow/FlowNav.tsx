@@ -16,7 +16,7 @@ const FlowNav = ({ sections, activeId, onSectionChange }: FlowNavProps) => {
           className={`rounded-full px-4 py-2 text-[0.6rem] uppercase tracking-[0.35em] transition ${
             activeId === section.id
               ? "border border-[var(--tmbc-mauve)] bg-[var(--tmbc-mauve)]/10 text-[var(--tmbc-mauve)]"
-              : "border border-[var(--tmbc-charcoal)]/15 text-[var(--tmbc-charcoal)]/70"
+              : "border border-[var(--tmbc-charcoal)]/15 text-[var(--tmbc-charcoal)] text-opacity-70"
           }`}
         >
           {section.label}

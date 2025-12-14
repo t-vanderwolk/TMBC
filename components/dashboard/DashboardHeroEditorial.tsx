@@ -20,16 +20,16 @@ export default function DashboardHeroEditorial({
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.65),_transparent_40%)]" />
       <div className="pointer-events-none absolute right-4 top-6 h-24 w-24 rounded-full bg-white/40 blur-3xl" />
       <div className="relative z-10 space-y-3">
-        <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/70">Command center</p>
+        <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">Command center</p>
         <h1 className="font-serif text-4xl text-[var(--tmbc-charcoal)]">Hello, {memberName}.</h1>
-        <p className="text-sm text-[var(--tmbc-charcoal)]/70">{stageLabel}</p>
-        {status && <p className="text-sm text-[var(--tmbc-charcoal)]/80">{status}</p>}
-        {tagLine && <p className="max-w-2xl text-sm text-[var(--tmbc-charcoal)]/70">{tagLine}</p>}
+        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">{stageLabel}</p>
+        {status && <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{status}</p>}
+        {tagLine && <p className="max-w-2xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">{tagLine}</p>}
         <div className="flex flex-wrap gap-3 pt-2">
           {highlightBadges.map((badge) => (
             <span
               key={badge}
-              className="rounded-full border border-[var(--tmbc-charcoal)]/15 bg-white/70 px-4 py-1 text-[0.6rem] uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)]/70"
+              className="rounded-full border border-[var(--tmbc-charcoal)]/15 bg-white/70 px-4 py-1 text-[0.6rem] uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)] text-opacity-70"
             >
               {badge}
             </span>

@@ -19,11 +19,11 @@ const FeatureBlock = ({ icon, title, description, accent }: FeatureBlockProps) =
           <span className="grid h-14 w-14 place-items-center rounded-full border border-[var(--tmbc-gold)] bg-[var(--tmbc-blush)]/90 shadow-[0_20px_45px_rgba(214,183,154,0.35)]">
             {icon}
           </span>
-          {accent && <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">{accent}</p>}
+          {accent && <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">{accent}</p>}
         </div>
         <div className="space-y-3">
-          <h3 className="font-serif text-2xl text-[var(--tmbc-charcoal)]">{title}</h3>
-          <p className="text-sm leading-relaxed text-[var(--tmbc-charcoal)]/75">{description}</p>
+          <h3 className="font-serif text-xl sm:text-2xl text-[var(--tmbc-charcoal)]">{title}</h3>
+          <p className="text-base leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-75">{description}</p>
         </div>
       </article>
     </Reveal>

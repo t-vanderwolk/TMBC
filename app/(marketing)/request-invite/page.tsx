@@ -41,22 +41,58 @@ const RequestInvitePage = () => {
   };
 
   return (
-    <div className="onboarding">
-      <div className="max-w-lg mx-auto p-10 space-y-6">
-        <h1 className="font-serif text-4xl text-[#3E2F35]">Request an Invitation</h1>
-
-        <form onSubmit={submit} className="space-y-4">
-          <input className="input" placeholder="Full name" value={form.name} onChange={updateField("name")} required />
-          <input className="input" type="email" placeholder="Email" value={form.email} onChange={updateField("email")} required />
-          <input className="input" type="date" placeholder="Due date" value={form.dueDate} onChange={updateField("dueDate")} />
-          <input className="input" placeholder="City" value={form.city} onChange={updateField("city")} />
-          <input className="input" placeholder="Referral source" value={form.referral} onChange={updateField("referral")} />
-          {error && <p className="text-sm text-red-500">{error}</p>}
-          <button className="btn-primary w-full text-center" type="submit" disabled={loading}>
-            {loading ? "Sending..." : "Request Invite"}
-          </button>
-        </form>
-      </div>
+    <div className="space-y-10 text-[var(--tmbc-charcoal)]">
+      <section className="marketing-section">
+        <div className="mx-auto max-w-lg rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-8 shadow-[0_25px_60px_rgba(199,166,199,0.25)]">
+          <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">Invite request</p>
+          <h1 className="mt-2 font-serif text-3xl sm:text-4xl">Request an Invitation</h1>
+          <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+            Share a few details and our concierge will reply with a personalized onboarding note and invite timeline.
+          </p>
+          <form onSubmit={submit} className="marketing-form mt-6">
+            <label>
+              <span>Full name</span>
+              <input
+                placeholder="Full name"
+                value={form.name}
+                onChange={updateField("name")}
+                required
+              />
+            </label>
+            <label>
+              <span>Email</span>
+              <input
+                type="email"
+                placeholder="Email"
+                value={form.email}
+                onChange={updateField("email")}
+                required
+              />
+            </label>
+            <label>
+              <span>Due date</span>
+              <input
+                type="date"
+                placeholder="Due date"
+                value={form.dueDate}
+                onChange={updateField("dueDate")}
+              />
+            </label>
+            <label>
+              <span>City</span>
+              <input placeholder="City" value={form.city} onChange={updateField("city")} />
+            </label>
+            <label>
+              <span>Referral source</span>
+              <input placeholder="Referral source" value={form.referral} onChange={updateField("referral")} />
+            </label>
+            {error && <p className="text-sm text-red-600">{error}</p>}
+            <button type="submit" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]" disabled={loading}>
+              {loading ? "Sending..." : "Request Invite"}
+            </button>
+          </form>
+        </div>
+      </section>
     </div>
   );
 };

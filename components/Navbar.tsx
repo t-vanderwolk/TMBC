@@ -16,6 +16,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -24,6 +25,17 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [menuOpen]);
+
   return (
     <header
       className={`sticky top-0 z-50 bg-[var(--tmbc-ivory)]/80 backdrop-blur-xl transition-all duration-300 ${
@@ -31,7 +43,7 @@ const Navbar = () => {
       }`}
     >
       <div
-        className={`mx-auto flex max-w-screen-xl items-center justify-between gap-6 px-6 ${
+        className={`relative mx-auto flex max-w-screen-xl items-center justify-between gap-6 px-6 ${
           scrolled ? "py-3" : "py-5"
         }`}
       >
@@ -43,12 +55,12 @@ const Navbar = () => {
           >
             Taylor-Made
           </p>
-          <p className="text-[0.55rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/70">
+          <p className="text-[0.55rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">
             Baby Co.
           </p>
         </Link>
 
-        <nav className="hidden items-center gap-6 text-[0.65rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/80 md:flex">
+        <nav className="hidden items-center gap-6 text-[0.65rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-80 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -60,7 +72,7 @@ const Navbar = () => {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3 text-[0.55rem] uppercase tracking-[0.35em]">
+        <div className="hidden items-center gap-3 text-[0.55rem] uppercase tracking-[0.35em] md:flex">
           <Link
             href={PUBLIC_LOGIN_ROUTE}
             className="rounded-[999px] border border-[var(--tmbc-mauve)] px-4 py-2 text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-gold)] hover:text-[var(--tmbc-mauve)]"
@@ -74,7 +86,54 @@ const Navbar = () => {
             Request Invite
           </Link>
         </div>
+
+        <button
+          type="button"
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((prev) => !prev)}
+          className="flex h-10 w-12 flex-col items-center justify-center gap-1.5 md:hidden"
+        >
+          <span className="block h-[2px] w-full bg-[var(--tmbc-charcoal)]" />
+          <span className="block h-[2px] w-full bg-[var(--tmbc-charcoal)]" />
+          <span className="block h-[2px] w-full bg-[var(--tmbc-charcoal)]" />
+        </button>
       </div>
+
+      {menuOpen && (
+        <div className="md:hidden">
+          <div className="mx-auto flex max-w-screen-xl flex-col gap-4 border-t border-[var(--tmbc-mauve)]/30 px-6 py-6 text-[0.75rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-80">
+            <nav className="flex flex-col gap-3">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="block py-2 transition hover:text-[var(--tmbc-mauve)]"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+            <div className="flex flex-col gap-3 pt-2 text-[0.65rem] tracking-[0.4em]">
+              <Link
+                href={PUBLIC_LOGIN_ROUTE}
+                className="marketing-btn marketing-btn-secondary uppercase"
+                onClick={() => setMenuOpen(false)}
+              >
+                Log in
+              </Link>
+              <Link
+                href="/request-invite"
+                className="marketing-btn marketing-btn-primary uppercase"
+                onClick={() => setMenuOpen(false)}
+              >
+                Request Invite
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

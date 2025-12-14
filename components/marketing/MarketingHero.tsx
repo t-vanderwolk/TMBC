@@ -58,7 +58,7 @@ const MarketingHero = ({
   return (
     <section
       ref={heroRef}
-      className="relative overflow-hidden rounded-[48px] border border-[var(--tmbc-gold)/60] bg-[var(--tmbc-ivory)] p-6 shadow-[0_40px_120px_rgba(199,165,196,0.35)]"
+      className="relative overflow-hidden rounded-[48px] border border-[var(--tmbc-gold)/60] bg-[var(--tmbc-ivory)] p-6 shadow-[0_40px_120px_rgba(199,165,196,0.35)] marketing-section"
     >
       <div
         className="absolute inset-0 -z-10 transition-transform duration-700"
@@ -75,7 +75,7 @@ const MarketingHero = ({
       <div className="absolute inset-y-12 left-6 w-px rounded-full bg-gradient-to-b from-transparent via-[var(--tmbc-gold)] to-transparent" />
 
       <div className="mx-auto flex max-w-screen-xl flex-col gap-8 px-6 py-12 text-[var(--tmbc-charcoal)]">
-        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/70">{eyebrow}</p>
+        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">{eyebrow}</p>
 
         <Reveal className={`${greatVibes.className} floating-script text-3xl sm:text-4xl`}>
           {scriptLine}
@@ -95,11 +95,11 @@ const MarketingHero = ({
             </h1>
           </Reveal>
           <Reveal variant="slide-up">
-            <p className="max-w-3xl text-lg text-[var(--tmbc-charcoal)]/80">{subtitle}</p>
+            <p className="max-w-3xl text-lg text-[var(--tmbc-charcoal)] text-opacity-80">{subtitle}</p>
           </Reveal>
           {description && (
             <Reveal variant="fade-up">
-              <p className="text-sm text-[var(--tmbc-charcoal)]/70">{description}</p>
+              <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">{description}</p>
             </Reveal>
           )}
         </motion.div>
@@ -115,14 +115,14 @@ const MarketingHero = ({
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 href={primaryCTA.href}
-                className="rounded-[32px] border border-[var(--tmbc-gold)] bg-gradient-to-r from-[var(--tmbc-blush)] to-[var(--tmbc-mauve)] px-8 py-3 text-sm font-semibold uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] transition hover:shadow-[0_25px_60px_rgba(211,183,149,0.5)]"
+                className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em] shadow-[0_25px_60px_rgba(211,183,149,0.5)]"
               >
                 {primaryCTA.label}
               </Link>
               {secondaryCTA && (
                 <Link
                   href={secondaryCTA.href}
-                  className="rounded-[32px] border border-[var(--tmbc-mauve)/70] px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-gold)] hover:text-[var(--tmbc-mauve)]"
+                  className="marketing-btn marketing-btn-secondary uppercase tracking-[0.3em]"
                 >
                   {secondaryCTA.label}
                 </Link>
@@ -132,7 +132,7 @@ const MarketingHero = ({
         </motion.div>
 
         {supportingCopy && (
-          <Reveal className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/70">
+          <Reveal className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             {supportingCopy}
           </Reveal>
         )}

@@ -75,7 +75,7 @@ const MarketingHero = ({
       <div className="absolute inset-y-12 left-6 w-px rounded-full bg-gradient-to-b from-transparent via-[var(--tmbc-gold)] to-transparent" />
 
       <div className="mx-auto flex max-w-screen-xl flex-col gap-8 px-6 py-12 text-[var(--tmbc-charcoal)]">
-        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/70">{eyebrow}</p>
+        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">{eyebrow}</p>
 
         <Reveal className={`${greatVibes.className} floating-script text-3xl sm:text-4xl`}>
           {scriptLine}
@@ -95,11 +95,11 @@ const MarketingHero = ({
             </h1>
           </Reveal>
           <Reveal variant="slide-up">
-            <p className="max-w-3xl text-lg text-[var(--tmbc-charcoal)]/80">{subtitle}</p>
+            <p className="max-w-3xl text-lg text-[var(--tmbc-charcoal)] text-opacity-80">{subtitle}</p>
           </Reveal>
           {description && (
             <Reveal variant="fade-up">
-              <p className="text-sm text-[var(--tmbc-charcoal)]/70">{description}</p>
+              <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">{description}</p>
             </Reveal>
           )}
         </motion.div>
@@ -132,7 +132,7 @@ const MarketingHero = ({
         </motion.div>
 
         {supportingCopy && (
-          <Reveal className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/70">
+          <Reveal className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             {supportingCopy}
           </Reveal>
         )}

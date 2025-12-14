@@ -54,11 +54,11 @@ const EditorialSection = ({
         <Reveal variant="slide-up" className="space-y-6">
           <div>
             {tagline && (
-              <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">{tagline}</p>
+              <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">{tagline}</p>
             )}
             <h2 className="font-serif text-3xl leading-tight text-[var(--tmbc-charcoal)]">{title}</h2>
           </div>
-          <p className="text-lg leading-relaxed text-[var(--tmbc-charcoal)]/80 md:text-xl">{copy}</p>
+          <p className="text-lg leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-80 md:text-xl">{copy}</p>
           {ctaLabel && ctaHref && (
             <Link
               href={ctaHref}

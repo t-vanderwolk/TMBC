@@ -1,10 +1,8 @@
 import Link from "next/link";
 import type { Route } from "next";
 
-const PRIMARY_BUTTON_CLASSES =
-  "inline-flex items-center justify-center gap-2 rounded-full bg-[#C8A1B4] px-7 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#3E2F35] shadow-[0_8px_30px_rgba(200,161,180,0.15)] transition-all hover:scale-105";
-const SECONDARY_BUTTON_CLASSES =
-  "inline-flex items-center justify-center gap-2 rounded-full border border-[#C8A1B4] px-7 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#3E2F35] hover:scale-105 transition-all";
+const PRIMARY_BUTTON_CLASSES = "marketing-btn marketing-btn-primary uppercase tracking-[0.35em]";
+const SECONDARY_BUTTON_CLASSES = "marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]";
 
 export default function HeroInviteForm() {
   return (
@@ -12,8 +10,8 @@ export default function HeroInviteForm() {
       <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#C8A1B4]">
         Concierge intake
       </p>
-      <h3 className="font-serif text-3xl text-[#3E2F35]">Your invite begins here</h3>
-      <p className="text-sm text-[#3E2F35]/80">
+      <h3 className="font-serif text-2xl sm:text-3xl text-[#3E2F35]">Your invite begins here</h3>
+      <p className="text-base text-[#3E2F35]/80">
         Share a few details and our intake curator will reply with bespoke next steps.
       </p>
       <div className="flex flex-col gap-3">

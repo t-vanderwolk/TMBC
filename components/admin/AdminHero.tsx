@@ -13,7 +13,7 @@ export default function AdminHero({ subtext, email }: AdminHeroProps) {
           Admin control center
         </p>
         <h1 className="text-4xl font-serif text-[var(--tmbc-charcoal)]">Welcome back, Admin</h1>
-        <p className="text-sm tracking-[0.1em] text-[var(--tmbc-charcoal)]/75">{subtext}</p>
+        <p className="text-sm tracking-[0.1em] text-[var(--tmbc-charcoal)] text-opacity-75">{subtext}</p>
         {email && (
           <p className="text-xs uppercase tracking-[0.3em] text-[var(--tmbc-gold)]/80">
             Signed in as {email}

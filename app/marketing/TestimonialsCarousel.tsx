@@ -63,7 +63,7 @@ const TestimonialsCarousel = () => {
       <section className="relative overflow-hidden rounded-[48px] border border-[var(--tmbc-blush)] bg-gradient-to-br from-[var(--tmbc-blush)]/80 via-white/80 to-[var(--tmbc-mauve)]/60 p-8 shadow-[0_40px_100px_rgba(199,166,199,0.25)] transition duration-500 hover:scale-[1.005]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.7),_transparent_60%)] opacity-80" />
         <div className="relative space-y-4 text-[var(--tmbc-charcoal)]">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/60">Testimonials</p>
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Testimonials</p>
           <p
             key={current.quote}
             className="text-lg leading-relaxed tracking-tight transition-all duration-700 ease-out"

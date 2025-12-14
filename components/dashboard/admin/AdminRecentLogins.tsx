@@ -37,7 +37,7 @@ export default function AdminRecentLogins({ events, loading }: AdminRecentLogins
     return (
       <div className="admin-card rounded-[2rem] bg-white/90">
         <p className="text-sm uppercase tracking-[0.4em] text-[var(--tmbc-mauve)]">No login activity</p>
-        <p className="mt-2 text-xs text-[var(--tmbc-charcoal)]/70">Invite admins will appear here once they sign in.</p>
+        <p className="mt-2 text-xs text-[var(--tmbc-charcoal)] text-opacity-70">Invite admins will appear here once they sign in.</p>
       </div>
     );
   }
@@ -59,7 +59,7 @@ export default function AdminRecentLogins({ events, loading }: AdminRecentLogins
                 {event.success ? 'Success' : 'Failed'}
               </span>
             </div>
-            <div className="flex flex-wrap items-center gap-3 text-[var(--tmbc-charcoal)]/70 text-xs">
+            <div className="flex flex-wrap items-center gap-3 text-[var(--tmbc-charcoal)] text-opacity-70 text-xs">
               <span className="uppercase tracking-[0.3em]">{event.role ?? 'Member'}</span>
               <span className="text-[var(--tmbc-gold)]">{formatTimestamp(event.createdAt)}</span>
             </div>

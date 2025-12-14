@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { api } from "@/lib/api";
 import { saveSession } from "@/lib/auth";
-import { routeForRole } from "@/lib/auth/routeForRole";
+import { redirectByRole } from "@/lib/auth/userStore";
 
 const RegistryTypes = ["Baby", "Nursery", "Family", "Concierge"];
 
@@ -52,7 +52,7 @@ function SignupForm() {
 
       const name = `${firstName} ${lastName}`.trim();
 
-      const response = await api.post("/auth/register", {
+      const response = await api.post("/api/auth/register", {
         email,
         password,
         name,
@@ -74,11 +74,11 @@ function SignupForm() {
         profileCompleted: Boolean(user?.profileCompleted),
         inviteCodeUsed: Boolean(user?.inviteCodeUsed),
       };
-      await saveSession({
+      saveSession({
         token,
         user: sessionUser,
       });
-      router.push(routeForRole(sessionUser.role));
+      router.push(redirectByRole(sessionUser));
     } catch (err: unknown) {
       setError(resolveErrorMessage(err, "Unable to signup right now."));
     } finally {
@@ -87,11 +87,11 @@ function SignupForm() {
   };
 
   return (
-    <section className="marketing-section">
-      <div className="mx-auto max-w-xl rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-8 shadow-[0_25px_60px_rgba(199,166,199,0.25)] text-[var(--tmbc-charcoal)]">
-        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">Sign up</p>
-        <h1 className="mt-2 font-serif text-3xl sm:text-4xl">Create your TMBC + MyRegistry account</h1>
-        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+    <div className="section-wrap">
+      <div className="card-surface mx-auto max-w-xl">
+        <p className="text-xs uppercase tracking-[0.4em] text-tmMauve">Sign up</p>
+        <h1 className="mt-2 text-4xl">Create your TMBC + MyRegistry account</h1>
+        <p className="mt-2 text-sm text-tmCharcoal/80">
           Make sure you have your invite code handy. We&apos;ll create your TMBC user and sync with MyRegistry at once.
         </p>
 
@@ -103,74 +103,74 @@ function SignupForm() {
         )}
 
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2">
-              <span className="text-xs uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-70">First name</span>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="flex w-full flex-col gap-2">
+              <label className="text-sm font-semibold text-tmCharcoal">First name</label>
               <input
                 value={firstName}
                 onChange={(event) => setFirstName(event.target.value)}
                 placeholder="First name"
                 required
-                className="marketing-input"
+                className="w-full"
               />
-            </label>
-            <label className="flex flex-col gap-2">
-              <span className="text-xs uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-70">Last name</span>
+            </div>
+            <div className="flex w-full flex-col gap-2">
+              <label className="text-sm font-semibold text-tmCharcoal">Last name</label>
               <input
                 value={lastName}
                 onChange={(event) => setLastName(event.target.value)}
                 placeholder="Last name"
                 required
-                className="marketing-input"
+                className="w-full"
               />
-            </label>
+            </div>
           </div>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-xs uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-70">Email</span>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-tmCharcoal">Email</label>
             <input
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="you@email.com"
               required
-              className="marketing-input"
+              className="w-full"
             />
-          </label>
+          </div>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-xs uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-70">Password</span>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-tmCharcoal">Password</label>
             <input
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="••••••••"
               required
-              className="marketing-input"
+              className="w-full"
             />
-          </label>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <label className="flex flex-col gap-2">
-              <span className="text-xs uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-70">City</span>
-              <input value={city} onChange={(event) => setCity(event.target.value)} placeholder="City" className="marketing-input" />
-            </label>
-            <label className="flex flex-col gap-2">
-              <span className="text-xs uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-70">State</span>
-              <input value={state} onChange={(event) => setState(event.target.value)} placeholder="State" className="marketing-input" />
-            </label>
-            <label className="flex flex-col gap-2">
-              <span className="text-xs uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-70">Country</span>
-              <input value={country} onChange={(event) => setCountry(event.target.value)} placeholder="Country" className="marketing-input" />
-            </label>
           </div>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-xs uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-70">Registry type</span>
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-semibold text-tmCharcoal">City</label>
+              <input value={city} onChange={(event) => setCity(event.target.value)} placeholder="City" className="w-full" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-semibold text-tmCharcoal">State</label>
+              <input value={state} onChange={(event) => setState(event.target.value)} placeholder="State" className="w-full" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-semibold text-tmCharcoal">Country</label>
+              <input value={country} onChange={(event) => setCountry(event.target.value)} placeholder="Country" className="w-full" />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-tmCharcoal">Registry type</label>
             <select
               value={registryType}
               onChange={(event) => setRegistryType(event.target.value)}
-              className="marketing-input"
+              className="w-full"
             >
               {RegistryTypes.map((type) => (
                 <option key={type} value={type}>
@@ -178,16 +178,16 @@ function SignupForm() {
                 </option>
               ))}
             </select>
-          </label>
+          </div>
 
           {error && <p className="text-sm font-medium text-red-500">{error}</p>}
 
-          <button type="submit" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em] disabled:opacity-60" disabled={loading}>
+          <button type="submit" className="btn-primary w-full text-center disabled:opacity-60" disabled={loading}>
             {loading ? "Creating your account..." : "Create account"}
           </button>
         </form>
       </div>
-    </section>
+    </div>
   );
 }
 

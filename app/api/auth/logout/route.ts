@@ -2,9 +2,13 @@
 
 import { NextResponse } from "next/server";
 
+import {
+  AUTH_COOKIE_NAMES,
+  buildAuthCookieOptions,
+} from "@/lib/utils/server/authCookies";
+
 const COOKIE_NAMES_TO_CLEAR = [
-  "tm_token",
-  "tmbc_token",
+  ...AUTH_COOKIE_NAMES,
   "sb-access-token",
   "sb-refresh-token",
   "supabase-access-token",
@@ -13,11 +17,9 @@ const COOKIE_NAMES_TO_CLEAR = [
 ];
 
 const clearAuthCookies = (response: NextResponse) => {
+  const expired = buildAuthCookieOptions({ maxAge: 0 });
   for (const cookieName of COOKIE_NAMES_TO_CLEAR) {
-    response.cookies.set(cookieName, "", {
-      path: "/",
-      maxAge: 0,
-    });
+    response.cookies.set(cookieName, "", expired);
   }
 };
 

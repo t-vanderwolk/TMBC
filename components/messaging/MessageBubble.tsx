@@ -21,7 +21,7 @@ const MessageBubble = ({ sender, text, time }: MessageBubbleProps) => {
       >
         {text}
       </div>
-      <span className="text-[0.6rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/50">
+      <span className="text-[0.6rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-50">
         {time}
       </span>
     </div>
