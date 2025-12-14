@@ -20,8 +20,9 @@
     "lint": "next lint",
     "postinstall": "node scripts/fixTailwindMissingFiles.js"
   },
+
   "prisma": {
-    "seed": "ts-node -P tsconfig.ts-node.json prisma/seed.ts"
+    "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0",
