@@ -94,6 +94,7 @@ export type SignupUserResponse = {
 };
 
 export type SearchRegistriesParams = {
+  Email?: string;
   FirstName?: string;
   LastName?: string;
   City?: string;

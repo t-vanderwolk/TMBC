@@ -645,36 +645,60 @@ const extractRegistryItems = (entry: Record<string, unknown>): RemoteRegistryIte
     .filter((item): item is RemoteRegistryItem => Boolean(item));
 };
 
-const extractRegistryEntries = (payload: any): RemoteRegistryEntry[] => {
-  if (!payload) return [];
-  const normalized = [] as Record<string, unknown>[];
-  if (Array.isArray(payload)) normalized.push(...payload);
-  if (payload.Registries) normalized.push(...(Array.isArray(payload.Registries) ? payload.Registries : [payload.Registries]));
-  if (payload.registries) normalized.push(...(Array.isArray(payload.registries) ? payload.registries : [payload.registries]));
-  if (payload.Registry) normalized.push(payload.Registry);
-  if (payload.registry) normalized.push(payload.registry);
-  if (payload.data) {
-    const data = payload.data as Record<string, unknown>;
-    if (Array.isArray(data.Registries)) normalized.push(...data.Registries);
-    if (Array.isArray(data.registries)) normalized.push(...data.registries);
-    if (data.Registry) normalized.push(data.Registry);
-    if (data.registry) normalized.push(data.registry);
-  }
-  if (!normalized.length && typeof payload === 'object') normalized.push(payload);
+const asRecord = (value: unknown): Record<string, unknown> | null =>
+  typeof value === 'object' && value !== null ? (value as Record<string, unknown>) : null;
 
-  return normalized
-    .map((entry) => {
-      const idValue = entry.RegistryId ?? entry.registryId ?? entry.id ?? entry.RegistryUserId;
-      const id = idValue ? String(idValue).trim() : '';
-      if (!id) return null;
-      return {
-        id,
-        title: entry.RegistryName || entry.name || entry.Title || null,
-        items: extractRegistryItems(entry),
-        shippingAddress: entry.ShippingAddress || entry.Address || entry.address || undefined,
-        raw: entry,
-      };
-    })
+const recordsFrom = (value: unknown): Record<string, unknown>[] => {
+  if (!value) return [];
+  if (Array.isArray(value)) {
+    return value
+      .map((record) => asRecord(record))
+      .filter((entry): entry is Record<string, unknown> => Boolean(entry));
+  }
+  const record = asRecord(value);
+  return record ? [record] : [];
+};
+
+const normalizeRegistryEntry = (entry: Record<string, unknown>): RemoteRegistryEntry | null => {
+  const idValue = entry.RegistryId ?? entry.registryId ?? entry.id ?? entry.RegistryUserId;
+  const id = idValue ? String(idValue).trim() : '';
+  if (!id) return null;
+
+  const shippingAddressRaw = entry.ShippingAddress ?? entry.Address ?? entry.address;
+  const shippingAddressRecord = asRecord(shippingAddressRaw);
+
+  const titleValue = entry.RegistryName ?? entry.name ?? entry.Title;
+  const normalizedTitle = titleValue ? String(titleValue) : null;
+
+  return {
+    id,
+    title: normalizedTitle,
+    items: extractRegistryItems(entry),
+    shippingAddress: shippingAddressRecord ?? undefined,
+    raw: entry,
+  };
+};
+
+const extractRegistryEntries = (payload: unknown): RemoteRegistryEntry[] => {
+  if (!payload) return [];
+  const candidates: Record<string, unknown>[] = [];
+  candidates.push(...recordsFrom(payload));
+
+  const root = asRecord(payload);
+  if (root) {
+    for (const key of ['Registries', 'registries', 'Registry', 'registry']) {
+      candidates.push(...recordsFrom(root[key]));
+    }
+    const nestedData = asRecord(root.data);
+    if (nestedData) {
+      for (const key of ['Registries', 'registries', 'Registry', 'registry']) {
+        candidates.push(...recordsFrom(nestedData[key]));
+      }
+    }
+  }
+
+  return candidates
+    .map((entry) => normalizeRegistryEntry(entry))
     .filter((entry): entry is RemoteRegistryEntry => Boolean(entry));
 };
 
@@ -844,7 +868,8 @@ export const createMemberRegistry = async (userId: string): Promise<RegistryDto>
     },
   });
 
-  emitRegistryAnalytics(userId, 'registry_created', {
+  emitRegistryAnalytics('registry_created', {
+    userId,
     registryId: registry.id,
     myRegistryId: registry.myRegistryId,
   });
@@ -923,13 +948,15 @@ export const syncMemberRegistry = async (userId: string): Promise<RegistryDto> =
 
     const previous = existingMap.get(remoteItem.id);
     if (!previous) {
-      emitRegistryAnalytics(userId, 'gift_added', {
+      emitRegistryAnalytics('gift_added', {
+        userId,
         registryId: registry.id,
         registryItemId: saved.id,
         externalGiftId: remoteItem.id,
       });
     } else if (previous.status !== RegistryStatus.PURCHASED && upsertData.status === RegistryStatus.PURCHASED) {
-      emitRegistryAnalytics(userId, 'gift_purchased', {
+      emitRegistryAnalytics('gift_purchased', {
+        userId,
         registryId: registry.id,
         registryItemId: saved.id,
         externalGiftId: remoteItem.id,
@@ -937,7 +964,8 @@ export const syncMemberRegistry = async (userId: string): Promise<RegistryDto> =
     }
 
     if (partner) {
-      emitRegistryAnalytics(userId, 'partner_attribution', {
+      emitRegistryAnalytics('partner_attribution', {
+        userId,
         registryId: registry.id,
         registryItemId: saved.id,
         affiliatePartnerId: partner.id,
@@ -955,12 +983,18 @@ export const syncMemberRegistry = async (userId: string): Promise<RegistryDto> =
     });
   }
 
+  const mergedShippingAddress =
+    (shippingAddress ?? registry.shippingAddress ?? undefined) as
+      | Prisma.InputJsonValue
+      | Prisma.NullableJsonNullValueInput
+      | undefined;
+
   await prisma.registry.update({
     where: { id: registry.id },
     data: {
       lastSyncedAt: new Date(),
       title: target.title ?? registry.title,
-      shippingAddress: shippingAddress ?? registry.shippingAddress,
+      shippingAddress: mergedShippingAddress,
     },
   });
 
@@ -979,6 +1013,10 @@ export const resolveRegistryOutboundLink = async (userId: string, itemId: string
     throw new Error('Affiliate link is unavailable for this item.');
   }
 
-  emitRegistryAnalytics(userId, 'affiliate_click', { itemId, affiliateLink: item.affiliateLink });
+  emitRegistryAnalytics('affiliate_click', {
+    userId,
+    itemId,
+    affiliateLink: item.affiliateLink,
+  });
   return item.affiliateLink;
 };

@@ -1,17 +1,15 @@
-import { saveIntakeStep } from "@/app/onboarding/actions";
+"use client";
+
+import OnboardingIntakeForm from "@/components/onboarding/IntakeForm";
 
 export default function Style() {
   return (
-    <form
-      action={saveIntakeStep}
-      className="space-y-6 rounded-[2.5rem] border border-[#E3C6D4] bg-white/90 p-8 shadow-[0_35px_60px_rgba(180,143,164,0.2)]"
+    <OnboardingIntakeForm
+      step="style"
+      nextStep="/onboarding/philosophy"
+      title="Style"
+      description="Which textures, patterns, and finishes feel like you?"
     >
-      <input type="hidden" name="step" value="style" />
-      <input type="hidden" name="nextStep" value="/onboarding/philosophy" />
-      <h2 className="font-serif text-3xl text-[#3E2F35]">Style</h2>
-      <p className="text-sm text-[#3E2F35]/70">
-        Which textures, patterns, and finishes feel like you?
-      </p>
       <label className="flex flex-col gap-2 text-sm text-[#3E2F35]">
         Pick three words that describe your nursery moodboard.
         <input
@@ -20,12 +18,6 @@ export default function Style() {
           placeholder="Blush, organic, luminous"
         />
       </label>
-      <button
-        type="submit"
-        className="w-full rounded-full bg-tmMauve px-4 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-white"
-      >
-        Save & continue
-      </button>
-    </form>
+    </OnboardingIntakeForm>
   );
 }

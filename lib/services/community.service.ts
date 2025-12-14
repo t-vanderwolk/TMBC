@@ -1,5 +1,12 @@
 import { prisma } from '@/lib/prisma';
 
+const FALLBACK_POLL = {
+  id: 0,
+  question: 'How do you feel today?',
+  options: ['Calm', 'Overwhelmed'],
+  createdAt: new Date(),
+};
+
 export async function getCommunityFeed() {
   const announcements = [
     { id: 'announce-1', message: 'Weekly salon added for birthing partners.' },
@@ -16,20 +23,25 @@ export async function getCommunityFeed() {
   };
 }
 
-export async function createPost(userId: string, content: string) {
+export async function createPost(userId: string, content: string, roomId?: string) {
+  let targetRoomId = roomId;
+  if (!targetRoomId) {
+    const defaultRoom = await prisma.communityRoom.findFirst({ orderBy: { createdAt: 'asc' } });
+    if (!defaultRoom) {
+      throw new Error('Unable to find a community room');
+    }
+    targetRoomId = defaultRoom.id;
+  }
+
   return prisma.communityPost.create({
-    data: { userId, content },
+    data: { roomId: targetRoomId, userId, content },
   });
 }
 
 export async function getPoll() {
-  return (
-    await prisma.poll.findFirst({ orderBy: { createdAt: 'desc' } })
-  ) ?? { id: 0, question: 'How do you feel today?', options: ['Calm', 'Overwhelmed'], createdAt: new Date() };
+  return FALLBACK_POLL;
 }
 
-export async function voteInPoll(userId: string, pollId: number, option: string) {
-  return prisma.pollVote.create({
-    data: { pollId, userId, option },
-  });
+export async function voteInPoll() {
+  return { message: 'Polls are not supported in this environment.' };
 }

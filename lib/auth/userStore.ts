@@ -2,6 +2,7 @@
 
 import { getStoredUser } from "@/lib/auth";
 import type { StoredUser } from "@/lib/auth";
+import { routeForRole } from "@/lib/auth/routeForRole";
 
 const SESSION_USER_KEY = "tm_user";
 
@@ -13,3 +14,11 @@ export const saveUser = (user: StoredUser) => {
 };
 
 export const loadStoredUser = (): StoredUser | null => getStoredUser();
+
+export function getRoleRedirectPath(role?: string) {
+  return routeForRole(role);
+}
+
+export function redirectByRole(user?: { role?: string }) {
+  return routeForRole(user?.role);
+}

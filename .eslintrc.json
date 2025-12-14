@@ -1,0 +1,25 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "overrides": [
+    {
+      "files": ["app/onboarding/**/*.{ts,tsx,jsx}"],
+      "rules": {
+        "no-restricted-syntax": [
+          "error",
+          {
+            "selector": "JSXAttribute[name.name=/^(action|onSubmit|onComplete|handler|callback)$/] > JSXExpressionContainer > Identifier",
+            "message": "Avoid passing functions from server components into onboarding client props."
+          },
+          {
+            "selector": "JSXAttribute[name.name=/^(action|onSubmit|onComplete|handler|callback)$/] > JSXExpressionContainer > MemberExpression",
+            "message": "Avoid passing functions from server components into onboarding client props."
+          },
+          {
+            "selector": "JSXAttribute[name.name=/^(action|onSubmit|onComplete|handler|callback)$/] > JSXExpressionContainer > CallExpression",
+            "message": "Avoid passing functions from server components into onboarding client props."
+          }
+        ]
+      }
+    }
+  ]
+}
