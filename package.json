@@ -21,9 +21,11 @@
     "postinstall": "node scripts/fixTailwindMissingFiles.js"
   },
 
+
   "prisma": {
-    "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts"
+    "seed": "npx ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts"
   },
+
   "dependencies": {
     "@prisma/client": "^5.17.0",
     "axios": "^1.6.7",
