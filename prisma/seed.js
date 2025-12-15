@@ -1,30 +1,29 @@
-const { PrismaClient, Role } = require("@prisma/client");
+const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
 
-async function upsertUser({ email, password, role, name }) {
-  if (!email || !password) {
-    console.log(`⚠️ Missing env vars for ${role}, skipping`);
-    return;
-  }
+const PASSWORD = "Karma";
+const DUMMY_PASSWORD = "hashed"; // required by Prisma schema
 
+async function upsertUser({ email, name, role }) {
   const existing = await prisma.user.findUnique({
     where: { email },
   });
 
   if (existing) {
-    console.log(`ℹ️ ${role} already exists: ${email}`);
+    console.log(`⏭️  ${role} already exists: ${email}`);
     return;
   }
 
-  const passwordHash = await bcrypt.hash(password, 12);
+  const passwordHash = await bcrypt.hash(PASSWORD, 12);
 
   await prisma.user.create({
     data: {
       email,
       name,
       role,
+      password: DUMMY_PASSWORD, // 🔴 REQUIRED FIELD
       passwordHash,
       emailVerified: true,
       status: "ACTIVE",
@@ -36,24 +35,21 @@ async function upsertUser({ email, password, role, name }) {
 
 async function main() {
   await upsertUser({
-    role: Role.ADMIN,
-    email: process.env.ADMIN_EMAIL,
-    password: process.env.ADMIN_PASSWORD,
+    email: "admin@me.com",
     name: "Admin",
+    role: "ADMIN",
   });
 
   await upsertUser({
-    role: Role.MENTOR,
-    email: process.env.MENTOR_EMAIL,
-    password: process.env.MENTOR_PASSWORD,
+    email: "mentor@me.com",
     name: "Mentor",
+    role: "MENTOR",
   });
 
   await upsertUser({
-    role: Role.MEMBER,
-    email: process.env.MEMBER_EMAIL,
-    password: process.env.MEMBER_PASSWORD,
+    email: "member@me.com",
     name: "Member",
+    role: "MEMBER",
   });
 }
 
