@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 const prisma = new PrismaClient();
 
 const PASSWORD = "Karma";
-const DUMMY_PASSWORD = "hashed"; // required by Prisma schema
 
 async function upsertUser({ email, name, role }) {
   const existing = await prisma.user.findUnique({
@@ -16,15 +15,14 @@ async function upsertUser({ email, name, role }) {
     return;
   }
 
-  const passwordHash = await bcrypt.hash(PASSWORD, 12);
+  const hashedPassword = await bcrypt.hash(PASSWORD, 12);
 
   await prisma.user.create({
     data: {
       email,
       name,
       role,
-      password: DUMMY_PASSWORD, // 🔴 REQUIRED FIELD
-      passwordHash,
+      password: hashedPassword,
       emailVerified: true,
       status: "ACTIVE",
     },
