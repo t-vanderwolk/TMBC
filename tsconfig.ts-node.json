@@ -3,5 +3,5 @@
   "compilerOptions": {
     "module": "commonjs"
   },
-  "include": ["prisma/seed.ts", "prisma/seedAcademyModules.ts"]
+  "include": ["prisma/seed.ts"]
 }

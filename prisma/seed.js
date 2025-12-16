@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
-const { seedAcademyModules } = require("./seedAcademyModules");
+const seedAcademyModules = require("./seedAcademyModules");
 
 const prisma = new PrismaClient();
 const PASSWORD = "Karma";

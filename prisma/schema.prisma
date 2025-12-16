@@ -261,8 +261,10 @@ model AcademyModule {
   heroImage       String?
   subtitle        String?
   description     String?
-  journey         String?
-  slug            String?           @unique
+  journey         AcademyJourney    @default(nursery)
+  slug            String            @unique
+  order           Int
+  published       Boolean           @default(false)
   progress        AcademyProgress[]
   mentorFeedback  MentorFeedback[]
   mentorNotes     MentorNote[]      @relation("ModuleMentorNotes")
@@ -517,6 +519,12 @@ model WorkbookEntry {
   @@unique([userId, moduleId, type])
   @@index([userId])
   @@index([moduleId])
+}
+
+enum AcademyJourney {
+  gear
+  nursery
+  postpartum
 }
 
 enum Role {

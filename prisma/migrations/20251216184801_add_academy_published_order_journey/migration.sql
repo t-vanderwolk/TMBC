@@ -1,0 +1,5 @@
+ALTER TABLE "AcademyModule"
+ADD COLUMN "order" INTEGER NOT NULL DEFAULT 0;
+
+ALTER TABLE "AcademyModule"
+ADD COLUMN "published" BOOLEAN NOT NULL DEFAULT false;
