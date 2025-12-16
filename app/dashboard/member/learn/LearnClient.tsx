@@ -52,8 +52,7 @@ export default function LearnClient({ modules, error }: LearnClientProps) {
 
   const journeyGroups = JOURNEY_ORDER.map((journeyId) => {
     const journeyModules = modules.filter((module) => {
-      const journey = (module.journey ?? module.stage ?? "").toLowerCase();
-      return journey === journeyId || module.id.toLowerCase().includes(journeyId);
+      return module.journey?.toLowerCase() === journeyId;
     });
 
     const completed = journeyModules.filter(
