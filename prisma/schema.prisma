@@ -24,6 +24,8 @@ model User {
   pinterestTokenExpires  DateTime?
   myRegistryEmail        String?
   myRegistryUserId       String?
+  myRegistryRegistryId   String?
+  myRegistryCreatedAt    DateTime?
   disabled               Boolean            @default(false)
   dueDate                DateTime?
   inviteCodeUsed         Boolean            @default(false)
@@ -180,58 +182,80 @@ model InviteRequest {
 model Product {
   id            String         @id @default(cuid())
   name          String
-  brand         String
+  brand         String?
   category      String
-  imageUrl      String
-  affiliateUrl  String
-  merchant      String
-  moduleCodes   String[]
-  price         Float?
-  inStock       Boolean        @default(true)
+  subcategory   String?
+  description   String?
+  imageUrl      String?
+  notes         String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
-  mentorNotes   MentorNote[]
-  registryItems RegistryItem[]
+
+  affiliateLinks AffiliateLink[]
+  registryItems  RegistryItem[]
+  mentorNotes    MentorNote[]
 }
 
 model RegistryItem {
-  id             String             @id @default(cuid())
-  registryId     String?
-  registry       Registry?          @relation("RegistryItems", fields: [registryId], references: [id], onDelete: Cascade)
-  externalGiftId String?
-  userId         String
-  productId      String?
-  isCustom       Boolean            @default(false)
-  name           String?
-  title          String
-  url            String
-  brand          String?
-  merchant       String?
-  category       String?
-  moduleCode     String?
-  image          String?
-  imageUrl       String?
-  price          Float?
-  quantity       Int                @default(1)
-  affiliateId    String?
-  affiliateLink  String?
-  source         String             @default("MYREGISTRY")
-  myRegistryId   String?
-  notes          String?
-  status         RegistryStatus     @default(ACTIVE)
-  purchaseSource String?
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
-  mentorFeedback MentorFeedback[]
-  conflicts      RegistryConflict[]
-  product        Product?           @relation(fields: [productId], references: [id])
-  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  affiliate      AffiliatePartner?  @relation(fields: [affiliateId], references: [id])
+  id               String              @id @default(cuid())
+  userId           String
+  productId        String
+  registryId       String?
+  externalGiftId   String?
+  myRegistryId     String?
+  myRegistryItemId String?
+  name             String?
+  title            String?
+  url              String?
+  brand            String?
+  merchant         String?
+  category         String?
+  price            Float?
+  quantity         Int?
+  image            String?
+  imageUrl         String?
+  affiliateId      String?
+  affiliateLink    String?
+  source           String?
+  purchaseSource   String?
+  section          RegistrySection
+  status           RegistryItemStatus @default(CONSIDERING)
+  mentorNote       String?
+  userNote         String?
+  notes            String?
+  addedByMentor    Boolean             @default(false)
+  purchasedAt      DateTime?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
 
-  @@index([userId])
-  @@index([registryId])
-  @@unique([registryId, externalGiftId])
+  user    User             @relation(fields: [userId], references: [id])
+  product Product          @relation(fields: [productId], references: [id])
+  registry Registry?       @relation("RegistryItems", fields: [registryId], references: [id])
+  affiliate AffiliatePartner? @relation(fields: [affiliateId], references: [id])
+
+  mentorFeedback    MentorFeedback[]   @relation("RegistryFeedback")
+  registryConflicts RegistryConflict[]
+
+  @@index([affiliateId])
 }
+
+/// TODO: Affiliate click tracking
+model AffiliateLink {
+  id           String           @id @default(cuid())
+  productId    String
+  retailerName String
+  network      AffiliateNetwork
+  outboundUrl  String
+  affiliateId  String?
+  region       String?
+  isPrimary    Boolean          @default(false)
+  createdAt    DateTime         @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+/// TODO: Conversion webhooks
+/// TODO: International storefront routing
 
 model MentorNote {
   id        String         @id @default(cuid())
@@ -388,7 +412,7 @@ model MentorFeedback {
   member         User           @relation("MentorFeedbackMember", fields: [memberId], references: [id])
   mentor         User           @relation("MentorFeedbackMentor", fields: [mentorId], references: [id])
   module         AcademyModule? @relation(fields: [moduleId], references: [id])
-  registryItem   RegistryItem?  @relation(fields: [registryItemId], references: [id])
+  registryItem   RegistryItem?  @relation("RegistryFeedback", fields: [registryItemId], references: [id])
 }
 
 model ChatMessage {
@@ -417,6 +441,8 @@ model ConversationMessage {
   id             String       @id @default(cuid())
   content        String
   createdAt      DateTime     @default(now())
+  readAt         DateTime?    /// TODO: honor read receipts in future UX.
+  isSystem       Boolean      @default(false) /// TODO: flag concierge/system notes for later workflows.
 
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id])
@@ -543,8 +569,27 @@ enum RegistryStatus {
 }
 
 enum AffiliateNetwork {
+  CJ
+  IMPACT
   AWIN
+  SHAREASALE
+  MYREGISTRY
   DIRECT
+}
+
+enum RegistrySection {
+  NURSERY
+  GEAR
+  FEEDING
+  POSTPARTUM
+  LATER
+}
+
+enum RegistryItemStatus {
+  CONSIDERING
+  ADDED
+  PURCHASED
+  REMOVED
 }
 
 enum WorkbookEntryType {

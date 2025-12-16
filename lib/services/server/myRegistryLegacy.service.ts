@@ -1,4 +1,4 @@
-import { Prisma, RegistryStatus } from '@prisma/client';
+import { Prisma, RegistryItemStatus, RegistrySection } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 import { buildAffiliateUrl } from './affiliate.service';
@@ -106,6 +106,20 @@ const sendRequest = async <T>(
     operation,
     data,
   };
+};
+
+const resolveLegacySection = (category?: string | null): RegistrySection => {
+  if (!category) {
+    return RegistrySection.GEAR;
+  }
+  const normalized = category.toLowerCase();
+  if (normalized.includes('nursery')) return RegistrySection.NURSERY;
+  if (normalized.includes('feed') || normalized.includes('bottle') || normalized.includes('nurse')) {
+    return RegistrySection.FEEDING;
+  }
+  if (normalized.includes('postpartum') || normalized.includes('wellness')) return RegistrySection.POSTPARTUM;
+  if (normalized.includes('later')) return RegistrySection.LATER;
+  return RegistrySection.GEAR;
 };
 
 export const isMyRegistryConfigured = () => Boolean(getConfig());
@@ -326,6 +340,7 @@ const callSyncApi = async <T>(
 type RemoteRegistryItem = {
   id: string;
   title: string;
+  category?: string | null;
   quantity?: number | null;
   status?: string | null;
   notes?: string | null;
@@ -335,6 +350,36 @@ type RemoteRegistryItem = {
   price?: number | null;
   lastUpdated?: Date | null;
   removed?: boolean;
+};
+
+const LEGACY_REMOTE_PRODUCT_PREFIX = 'legacy-myregistry';
+
+const buildLegacyRemoteProductId = (remoteItem: RemoteRegistryItem) =>
+  `${LEGACY_REMOTE_PRODUCT_PREFIX}-${remoteItem.id}`;
+
+const ensureLegacyRemoteProduct = async (remoteItem: RemoteRegistryItem) => {
+  const productId = buildLegacyRemoteProductId(remoteItem);
+  await prisma.product.upsert({
+    where: { id: productId },
+    create: {
+      id: productId,
+      name: remoteItem.title,
+      category: remoteItem.category ?? 'legacy',
+      brand: remoteItem.merchant ?? remoteItem.title ?? 'MyRegistry',
+      description: remoteItem.notes ?? undefined,
+      notes: remoteItem.notes ?? undefined,
+      imageUrl: remoteItem.image ?? undefined,
+    },
+    update: {
+      name: remoteItem.title,
+      category: remoteItem.category ?? 'legacy',
+      brand: remoteItem.merchant ?? remoteItem.title ?? 'MyRegistry',
+      description: remoteItem.notes ?? undefined,
+      notes: remoteItem.notes ?? undefined,
+      imageUrl: remoteItem.image ?? undefined,
+    },
+  });
+  return productId;
 };
 
 const parseRemoteTimestamp = (item: Record<string, any>) => {
@@ -373,6 +418,7 @@ const normalizeRemoteItem = (item: Record<string, any>): RemoteRegistryItem | nu
     quantity,
     status: item.status || item.Status || null,
     notes: item.customNote ?? item.CustomNote ?? item.notes ?? null,
+    category: item.category || item.Category || item.productCategory || null,
     affiliateUrl: item.affiliateUrl || item.AffiliateUrl || item.url || null,
     merchant: item.merchant || item.Merchant || null,
     image: item.imageUrl || item.ImageUrl || null,
@@ -393,19 +439,18 @@ const normalizeRemoteItems = (payload: any): RemoteRegistryItem[] => {
     .filter((item): item is RemoteRegistryItem => Boolean(item?.id));
 };
 
-const toRegistryStatus = (value?: string | null) => {
-  if (!value) return RegistryStatus.ACTIVE;
-  const normalized = value.toUpperCase();
-  const statuses = Object.values(RegistryStatus);
-  if (statuses.includes(normalized as RegistryStatus)) {
-    return normalized as RegistryStatus;
+const toRegistryStatus = (value?: string | null): RegistryItemStatus => {
+  if (!value) {
+    return RegistryItemStatus.ADDED;
   }
-
-  if (normalized.includes('PURCHASED')) return RegistryStatus.PURCHASED;
-  if (normalized.includes('RESERVE')) return RegistryStatus.RESERVED;
-  if (normalized.includes('NEED')) return RegistryStatus.NEEDED;
-
-  return RegistryStatus.ACTIVE;
+  const normalized = value.toUpperCase();
+  if (normalized.includes('PURCHASED')) {
+    return RegistryItemStatus.PURCHASED;
+  }
+  if (normalized.includes('REMOVED')) {
+    return RegistryItemStatus.REMOVED;
+  }
+  return RegistryItemStatus.ADDED;
 };
 
 const valueToString = (value: unknown) => {
@@ -497,23 +542,21 @@ type AddGiftInput = {
 };
 
 const pullAffiliateUrl = (item: RegistryItemWithProduct) => {
-  if (item.product) {
-    return buildAffiliateUrl({ url: item.product.affiliateUrl, merchant: item.product.merchant });
-  }
-
-  return buildAffiliateUrl({ url: item.url, merchant: item.merchant });
+  const fallbackUrl = item.url ?? 'https://taylormadebabyco.com/registry';
+  const merchant = item.product?.brand ?? item.product?.name ?? undefined;
+  return buildAffiliateUrl({ url: fallbackUrl, merchant });
 };
 
 const buildRemotePayload = (item: RegistryItemWithProduct, userId: string) => ({
   memberExternalId: userId,
   giftId: item.myRegistryId,
-  productName: item.title,
+  productName: item.product?.name ?? item.title ?? 'MyRegistry item',
   affiliateUrl: pullAffiliateUrl(item),
-  merchant: item.product?.merchant || item.merchant || 'MyRegistry',
+  merchant: item.product?.brand ?? item.product?.name ?? 'MyRegistry',
   quantity: item.quantity,
   notes: item.notes,
   status: item.status,
-  price: item.product?.price ?? item.price ?? null,
+  price: item.price ?? null,
 });
 
 const shouldNumbersDiffer = (a?: number | null, b?: number | null) => {
@@ -672,19 +715,22 @@ export const syncDown = async (userId: string): Promise<SyncResult> => {
           });
         }
       } else {
+        const productId = await ensureLegacyRemoteProduct(remote);
         await prisma.registryItem.create({
           data: {
             userId,
+            productId,
             myRegistryId: remote.id,
-            isCustom: true,
             title: remote.title,
             url: remote.affiliateUrl || `https://www.myregistry.com/gift/${remote.id}`,
             merchant: remote.merchant ?? 'MyRegistry',
+            category: remote.category ?? null,
             image: remote.image,
             price: remote.price,
             quantity: remote.quantity ?? 1,
             notes: remote.notes ?? null,
             status: toRegistryStatus(remote.status),
+            section: resolveLegacySection(remote.category ?? null),
           },
         });
       }
@@ -695,10 +741,10 @@ export const syncDown = async (userId: string): Promise<SyncResult> => {
       .map((item) => item.id);
 
     if (orphaned.length) {
-      await prisma.registryItem.updateMany({
-        where: { id: { in: orphaned } },
-        data: { status: RegistryStatus.REMOVED_REMOTE },
-      });
+    await prisma.registryItem.updateMany({
+      where: { id: { in: orphaned } },
+      data: { status: RegistryItemStatus.REMOVED },
+    });
     }
 
     if (conflicts.length) {
@@ -739,8 +785,8 @@ export const syncUp = async (userId: string): Promise<SyncResult> => {
     });
 
     const creations = items.filter((item) => !item.myRegistryId);
-    const updates = items.filter((item) => item.myRegistryId && item.status !== RegistryStatus.REMOVED_REMOTE);
-    const removals = items.filter((item) => item.myRegistryId && item.status === RegistryStatus.REMOVED_REMOTE);
+  const updates = items.filter((item) => item.myRegistryId && item.status !== RegistryItemStatus.REMOVED);
+  const removals = items.filter((item) => item.myRegistryId && item.status === RegistryItemStatus.REMOVED);
 
     for (const item of creations) {
       const payload = {

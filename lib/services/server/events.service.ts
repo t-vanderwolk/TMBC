@@ -1,6 +1,7 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
+import { ensureConversationBetweenUsers } from './chat.service';
 
 export type EventPayload = {
   id: string;
@@ -76,6 +77,18 @@ export const rsvpToEvent = async (
   status: string = 'interested',
 ) => {
   const normalizedStatus = status.toLowerCase();
+  const event = await prisma.event.findUnique({
+    where: { id: eventId },
+    select: {
+      host: {
+        select: { id: true, role: true },
+      },
+      title: true,
+    },
+  });
+  if (!event) {
+    throw new Error('Event not found');
+  }
   const existing = await prisma.eventRsvp.findFirst({
     where: {
       eventId,
@@ -88,6 +101,25 @@ export const rsvpToEvent = async (
       where: { id: existing.id },
       data: { status: normalizedStatus },
     });
+
+    const mentorHostId = event?.host?.role === Role.MENTOR ? event.host.id : undefined;
+    if (mentorHostId) {
+      try {
+        await ensureConversationBetweenUsers({
+          memberId: userId,
+          mentorId: mentorHostId,
+          reason: 'event',
+          context: { eventId, eventTitle: event.title ?? undefined },
+        });
+      } catch (error) {
+        console.warn('[ChatAutomation] Event RSVP conversation failed', {
+          memberId: userId,
+          mentorId: mentorHostId,
+          eventId,
+          error,
+        });
+      }
+    }
 
     return {
       eventId: updated.eventId,
@@ -103,6 +135,25 @@ export const rsvpToEvent = async (
       status: normalizedStatus,
     },
   });
+
+  const mentorHostId = event?.host?.role === Role.MENTOR ? event.host.id : undefined;
+  if (mentorHostId) {
+    try {
+      await ensureConversationBetweenUsers({
+        memberId: userId,
+        mentorId: mentorHostId,
+        reason: 'event',
+        context: { eventId, eventTitle: event.title ?? undefined },
+      });
+      } catch (error) {
+        console.warn('[ChatAutomation] Event RSVP conversation failed', {
+          memberId: userId,
+          mentorId: mentorHostId,
+          eventId,
+          error,
+        });
+      }
+  }
 
   return {
     eventId: created.eventId,

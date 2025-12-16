@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
+import type { Actor } from "@/lib/services/server/chat.service";
 import {
   getConversationForUser,
   getOrCreateConversation,
@@ -27,7 +28,8 @@ export async function GET(
   }
 
   const conversation = await getOrCreateConversation(user.id, [mentorId, memberId]);
-  const resolved = await getConversationForUser(conversation.id, user.id);
+  const actor: Actor = { id: user.id, role: user.role };
+  const resolved = await getConversationForUser(conversation.id, actor);
 
   return NextResponse.json({
     conversation: formatConversationResponse(resolved),

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
-import { sendMessage } from "@/lib/services/server/chat.service";
-import { getOrCreateConversation } from "@/lib/services/server/chat.service";
+import type { ChatActor } from "@/lib/services/server/chat.service";
+import {
+  ChatPermissionError,
+  sendMessage,
+  getOrCreateConversation,
+} from "@/lib/services/server/chat.service";
 
 export const runtime = "nodejs";
 
@@ -44,10 +48,12 @@ export async function POST(request: NextRequest) {
   const partnerId = isMentor ? memberId : mentorId;
   const conversation = await getOrCreateConversation(user.id, [partnerId]);
 
+  const sender: ChatActor = { id: user.id, name: user.name ?? null, role: user.role };
+
   try {
     const message = await sendMessage({
       conversationId: conversation.id,
-      senderId: user.id,
+      sender,
       content,
     });
 
@@ -58,8 +64,21 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
+    if (error instanceof ChatPermissionError) {
+      console.warn("Chat send blocked", {
+        userId: user.id,
+        conversationId: conversation.id,
+        message: error.message,
+      });
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
     const message =
       error instanceof Error ? error.message : "Unable to send the message.";
+    console.error("Chat send failed", {
+      userId: user.id,
+      conversationId: conversation.id,
+      error,
+    });
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }

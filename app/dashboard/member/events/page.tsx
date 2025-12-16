@@ -5,6 +5,9 @@ import Link from "next/link";
 import SectionNav from "@/components/dashboard/SectionNav";
 
 import { EventItem, getEvents, rsvpToEvent } from "@/lib/api/events";
+import PageHeader from "@/components/dashboard/member/ui/PageHeader";
+import CTAButton from "@/components/dashboard/member/ui/CTAButton";
+import EmptyState from "@/components/dashboard/member/ui/EmptyState";
 
 type RSVPOption = {
   label: string;
@@ -28,11 +31,6 @@ const formatDate = (value: string) => {
     minute: "2-digit",
   });
 };
-
-const statusClass = (isActive: boolean) =>
-  isActive
-    ? "bg-[rgba(200,161,180,0.3)] text-[#3E2F35] border-transparent"
-    : "border border-[#E3C6D4] text-[#3E2F35]/80 hover:border-[#B98AA5]";
 
 export default function EventsPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
@@ -85,110 +83,88 @@ export default function EventsPage() {
   );
 
   return (
-    <div className="space-y-8">
-      <header className="rounded-[2.5rem] border border-[#EAC9D1]/60 bg-white/95 p-8 shadow-[0_24px_55px_rgba(199,166,199,0.18)]">
-        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.45em] text-[#3E2F35]/60">
-          Events & circles
-        </p>
-        <h1 className="mt-3 font-serif text-3xl text-[#3E2F35]">
-          Your Taylor-Made calendar
-        </h1>
-        <p className="mt-2 text-sm text-[#3E2F35]/75">
-          Gentle classes, mentor salons, and Q&As curated for your trimester and registry rhythm.
-        </p>
-        <Link
-          href="/dashboard"
-          className="mt-3 inline-flex items-center gap-2 text-xs uppercase tracking-[0.35em] text-[#C8A1B4] hover:text-[#B98AA5]"
-        >
-          ← Back to dashboard
-        </Link>
-      </header>
+    <div className="space-y-6 px-4 py-8 sm:px-6">
+      <PageHeader
+        title="Events & circles"
+        subtitle="Soft calendar"
+        description="Gentle gatherings, mentor salons, and restorative Q&As—lightly curated for your rhythm."
+        cta={{ label: "Back to dashboard", href: "/dashboard/member" }}
+      />
+
       <SectionNav />
 
       {loading ? (
-        <div className="rounded-[2rem] border border-[#E3C6D4] bg-white/90 p-6 text-center text-sm uppercase tracking-[0.4em] text-[#C8A1B4] shadow-[0_20px_60px_rgba(180,143,164,0.25)]">
-          Loading events…
-        </div>
+        <EmptyState title="Hold tight" message="We are gathering the calm calendar for you." />
       ) : error ? (
         <div className="rounded-[2rem] border border-red-200 bg-red-50 px-6 py-4 text-sm text-red-700">
           {error}
         </div>
+      ) : upcomingEvents.length ? (
+        <div className="space-y-4">
+          {upcomingEvents.map((event) => {
+            const userStatus = statusMap[event.id] ?? event.userStatus ?? "";
+            return (
+              <article
+                key={event.id}
+                className="space-y-3 rounded-[28px] border border-[#E3C6D4] bg-white/90 p-5 shadow-sm"
+              >
+                <div className="flex flex-col gap-1 text-[0.65rem] uppercase tracking-[0.4em] text-[#3E2F35]/60">
+                  <span>{formatDate(event.date)}</span>
+                  <span>{event.format ?? event.type ?? "Studio session"}</span>
+                </div>
+                <h2 className="text-lg font-semibold text-[#3E2F35]">{event.title}</h2>
+                <p className="text-sm text-[#3E2F35]/75">{event.description}</p>
+                {event.hostName && (
+                  <p className="text-xs uppercase tracking-[0.35em] text-[#3E2F35]/60">
+                    Hosted by {event.hostName}
+                  </p>
+                )}
+                <div className="space-y-2">
+                  {RSVP_OPTIONS.map((option) => {
+                    const isActive = userStatus === option.status;
+                    return (
+                      <CTAButton
+                        key={option.status}
+                        label={option.label}
+                        variant={isActive ? "primary" : "ghost"}
+                        fullWidth
+                        onClick={() => handleRsvp(event.id, option.status)}
+                      />
+                    );
+                  })}
+                  <Link
+                    href="/dashboard/member/community"
+                    className="text-xs font-semibold uppercase tracking-[0.35em] text-[#B98AA5]"
+                  >
+                    Explore community
+                  </Link>
+                </div>
+              </article>
+            );
+          })}
+        </div>
       ) : (
-        <section className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)]">
-          <div className="space-y-5">
-            {upcomingEvents.map((event) => {
-              const userStatus = statusMap[event.id] ?? event.userStatus ?? "";
-              return (
-                <article
-                  key={event.id}
-                  className="group rounded-[2rem] border border-[#E3C6D4] bg-white/90 p-5 shadow-[0_18px_45px_rgba(199,166,199,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_26px_60px_rgba(199,166,199,0.25)]"
-                >
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div>
-                      <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[#3E2F35]/55">
-                        {event.format ?? event.type ?? "Studio session"}
-                      </p>
-                      <h2 className="mt-1 text-lg font-semibold text-[#3E2F35]">
-                        {event.title}
-                      </h2>
-                      <p className="mt-1 text-xs text-[#3E2F35]/65">
-                        {formatDate(event.date)}
-                      </p>
-                      {event.hostName && (
-                        <p className="text-[0.65rem] uppercase tracking-[0.3em] text-[#3E2F35]/60">
-                          Hosted by {event.hostName}
-                        </p>
-                      )}
-                    </div>
-                    <span
-                      className="rounded-full border border-[#E3C6D4] px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-[#3E2F35]"
-                    >
-                      {event.status ?? "Scheduled"}
-                    </span>
-                  </div>
-                  <p className="mt-3 text-sm text-[#3E2F35]/75">{event.description}</p>
-                  <div className="mt-4 flex flex-wrap gap-2 text-[0.7rem]">
-                    {RSVP_OPTIONS.map((option) => {
-                      const isActive = userStatus === option.status;
-                      return (
-                        <button
-                          key={option.status}
-                          type="button"
-                          onClick={() => handleRsvp(event.id, option.status)}
-                          className={`rounded-full px-4 py-2 font-semibold uppercase tracking-[0.3em] ${statusClass(isActive)}`}
-                        >
-                          {option.label}
-                        </button>
-                      );
-                    })}
-                    <Link
-                      href="/dashboard/member/community"
-                      className="rounded-full border border-[#E3C6D4] px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-[#3E2F35]/70 hover:border-[#B98AA5]"
-                    >
-                      Explore community
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-
-          <aside className="space-y-4 rounded-[2.2rem] border border-[#E3C6D4] bg-gradient-to-br from-white via-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/45 p-6 shadow-[0_24px_60px_rgba(199,166,199,0.22)]">
-            <h2 className="font-serif text-xl text-[#3E2F35]">Event rhythm</h2>
-            <p className="text-sm text-[#3E2F35]/70">
-              We keep your calendar light: 1–2 live gatherings per week plus replays you can watch on your schedule.
-            </p>
-            <ul className="space-y-2 text-sm text-[#3E2F35]/75">
-              <li>• Trimester-focused Q&A with mentors.</li>
-              <li>• Skill labs for car seats, strollers, and nursery setup.</li>
-              <li>• Gentle circles on sleep, feeding, and in-law diplomacy.</li>
-            </ul>
-            <small className="text-xs uppercase tracking-[0.3em] text-[#3E2F35]/60">
-              RSVP updates sync with your mentor + registry rhythms.
-            </small>
-          </aside>
-        </section>
+        <EmptyState
+          title="Calendar is calm"
+          message="No events scheduled just yet. Breathe, rest, and check back for mentor-led invitations."
+        />
       )}
+
+      <section className="rounded-[28px] border border-[#E3C6D4] bg-[#FFF8F6] p-5 shadow-sm">
+        <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Event rhythm</p>
+        <h2 className="mt-1 text-lg font-serif text-[#3E2F35]">We keep the invitations gentle</h2>
+        <p className="mt-2 text-sm text-[#3E2F35]/70">
+          Prioritize one live moment per week, with replays you can watch when the mood strikes.
+        </p>
+        <ul className="mt-3 space-y-1 text-sm text-[#3E2F35]/75">
+          <li>• Trimester-focused Q&As with mentors.</li>
+          <li>• Soft labs about gear, sleep, and relationships.</li>
+          <li>• Gentle circles for sharing reflections.</li>
+        </ul>
+        <small className="text-[0.65rem] uppercase tracking-[0.35em] text-[#3E2F35]/60">
+          RSVP updates sync quietly with your mentor + registry rhythms.
+        </small>
+      </section>
     </div>
   );
 }

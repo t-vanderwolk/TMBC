@@ -8,15 +8,13 @@ export default async function CommunityHighlightsPanel() {
   const highlights = await getCommunityHighlights(user.id);
 
   return (
-    <section className="space-y-4 rounded-[2.5rem] border border-[#E3C6D4] bg-white/90 p-6 shadow-[0_25px_70px_rgba(192,153,170,0.2)]">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[#C8A1B4]">Community highlights</p>
-          <h3 className="text-2xl font-semibold text-[#3E2F35]">Reflections in your studio</h3>
-        </div>
+    <section className="space-y-4 rounded-2xl border border-[#E3C6D4] bg-white/90 p-6 shadow-sm">
+      <div>
+        <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[#C8A1B4]">Community highlights</p>
+        <h3 className="text-2xl font-semibold text-[#3E2F35]">Reflections in your studio</h3>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <div className="space-y-3 rounded-2xl border border-[#F1D5DA] bg-[#FFF8F6] p-4">
           <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#A4556A]">Recent reflections</p>
           {highlights.reflections.length ? (

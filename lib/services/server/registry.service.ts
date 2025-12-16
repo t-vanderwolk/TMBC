@@ -1,6 +1,10 @@
-import { Prisma, RegistryStatus, AffiliateNetwork, AffiliatePartner } from '@prisma/client';
-
-import crypto from 'crypto';
+import {
+  AffiliateNetwork,
+  AffiliatePartner,
+  Prisma,
+  RegistryItemStatus,
+  RegistrySection,
+} from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 import { buildAffiliateLink, buildAffiliateUrl } from './affiliate.service';
@@ -15,6 +19,7 @@ import { ProductResponse, productToResponse } from './product.service';
 import { RecommendationsResult } from '@/lib/utils/server/recommendations';
 import { MyRegistryService } from './myregistry/myregistry.service';
 import { emitRegistryAnalytics } from './analytics.service';
+import { ensureMyRegistryAccount, REGISTRY_SOURCE } from './myregistry/provision.service';
 
 export type MentorNoteResponse = {
   id: string;
@@ -29,18 +34,33 @@ export type RegistryItemResponse = {
   id: string;
   productId: string | null;
   quantity: number;
-  status: RegistryStatus;
+  status: RegistryItemStatus;
+  section: RegistrySection;
   notes: string | null;
   purchaseSource: string | null;
   myRegistryId: string | null;
   affiliateUrl: string;
   product: ProductResponse;
   mentorNotes: MentorNoteResponse[];
-  isCustom: boolean;
+  affiliatePartner: {
+    id: string;
+    name: string;
+    network: AffiliateNetwork;
+  } | null;
+  title?: string;
+  merchant?: string | null;
+  category?: string | null;
+  image?: string | null;
+  price?: number | null;
 };
 
 type RegistryItemWithProduct = Prisma.RegistryItemGetPayload<{
-  include: { product: true };
+  include: {
+    product: {
+      include: { affiliateLinks: true };
+    };
+    affiliate: true;
+  };
 }>;
 
 const createProductPayload = (item: RegistryItemWithProduct): ProductResponse => {
@@ -50,17 +70,69 @@ const createProductPayload = (item: RegistryItemWithProduct): ProductResponse =>
 
   return {
     id: `custom-${item.id}`,
-    name: item.title,
-    brand: item.merchant || 'Custom Item',
+    name: item.title ?? 'Custom item',
+    brand: item.brand ?? 'Custom Item',
     category: item.category || 'custom',
-    imageUrl: item.image || '',
-    affiliateUrl: item.url,
-    merchant: item.merchant || 'Custom',
-    moduleCodes: item.moduleCode ? [item.moduleCode] : [],
+    imageUrl: item.imageUrl ?? item.image ?? '',
+    affiliateUrl: item.url ?? 'https://taylor-madebaby.com',
+    merchant: item.merchant ?? 'Custom',
     price: item.price ?? null,
-    inStock: true,
   };
 };
+
+const CUSTOM_PRODUCT_ID = 'custom-item';
+
+const ensureCustomProduct = async () => {
+  await prisma.product.upsert({
+    where: { id: CUSTOM_PRODUCT_ID },
+    create: {
+      id: CUSTOM_PRODUCT_ID,
+      name: 'Custom registry item',
+      category: 'custom',
+      brand: 'Taylor-Made Baby Co.',
+      description: 'Placeholder product for custom registry items.',
+      notes: 'Custom items created through the registry.',
+    },
+    update: {
+      name: 'Custom registry item',
+      category: 'custom',
+      brand: 'Taylor-Made Baby Co.',
+      description: 'Placeholder product for custom registry items.',
+      notes: 'Custom items created through the registry.',
+    },
+  });
+  return CUSTOM_PRODUCT_ID;
+};
+
+const DEFAULT_SECTION = RegistrySection.GEAR;
+
+const inferSectionFromCategory = (category?: string | null): RegistrySection => {
+  if (!category) {
+    return DEFAULT_SECTION;
+  }
+  const normalized = category.toLowerCase();
+  if (normalized.includes('nursery')) {
+    return RegistrySection.NURSERY;
+  }
+  if (
+    normalized.includes('feed') ||
+    normalized.includes('bottle') ||
+    normalized.includes('breast') ||
+    normalized.includes('feeding')
+  ) {
+    return RegistrySection.FEEDING;
+  }
+  if (normalized.includes('postpartum') || normalized.includes('healing') || normalized.includes('wellness')) {
+    return RegistrySection.POSTPARTUM;
+  }
+  if (normalized.includes('later')) {
+    return RegistrySection.LATER;
+  }
+  return RegistrySection.GEAR;
+};
+
+const resolveSection = (category?: string | null, explicit?: RegistrySection | null) =>
+  explicit ?? inferSectionFromCategory(category);
 
 const formatItem = (
   item: RegistryItemWithProduct,
@@ -68,24 +140,34 @@ const formatItem = (
   mentorRef?: string,
 ): RegistryItemResponse => {
   const mentorNotes = item.productId ? mentorNotesLookup.get(item.productId) ?? [] : [];
-  const merchant = item.merchant || item.product?.merchant;
-
+  const productPayload = createProductPayload(item);
+  const baseUrl = item.url ?? productPayload.affiliateUrl;
   const affiliateUrl = mentorRef
-    ? buildAffiliateUrl({ url: item.url, merchant, mentorRef })
-    : item.url;
+    ? buildAffiliateUrl({ url: baseUrl, merchant: productPayload.merchant, mentorRef })
+    : baseUrl;
+
+  const affiliatePartner = item.affiliate
+    ? { id: item.affiliate.id, name: item.affiliate.name, network: item.affiliate.network }
+    : null;
 
   return {
     id: item.id,
     productId: item.productId ?? null,
-    quantity: item.quantity,
+    quantity: item.quantity ?? 1,
     status: item.status,
+    section: item.section,
     notes: item.notes,
     purchaseSource: item.purchaseSource,
     myRegistryId: item.myRegistryId,
     affiliateUrl,
-    product: createProductPayload(item),
+    product: productPayload,
     mentorNotes,
-    isCustom: item.isCustom,
+    title: item.title ?? productPayload.name,
+    merchant: item.merchant ?? productPayload.merchant,
+    category: item.category ?? productPayload.category,
+    image: item.imageUrl ?? item.image ?? productPayload.imageUrl,
+    price: item.price ?? productPayload.price ?? null,
+    affiliatePartner,
   };
 };
 
@@ -133,7 +215,12 @@ const hydrateMentorNotes = async (userId: string, productIds: (string | null)[])
 export const listRegistryItems = async (userId: string, mentorRef?: string) => {
   const items = await prisma.registryItem.findMany({
     where: { userId },
-    include: { product: true },
+    include: {
+      product: {
+        include: { affiliateLinks: true },
+      },
+      affiliate: true,
+    },
     orderBy: { createdAt: 'asc' },
   });
 
@@ -145,12 +232,13 @@ export const listRegistryItems = async (userId: string, mentorRef?: string) => {
   return items.map((item) => formatItem(item, mentorNotesLookup, mentorRef));
 };
 
-type AddRegistryItemInput = {
+type RegistryItemCreateInput = {
   userId: string;
   productId: string;
   quantity?: number;
   notes?: string;
-  status?: RegistryStatus;
+  status?: RegistryItemStatus;
+  section: RegistrySection;
   mentorRef?: string;
 };
 
@@ -160,9 +248,9 @@ const syncMyRegistryAdd = async (userId: string, item: RegistryItemWithProduct) 
   try {
     const giftId = await addGift({
       userId,
-      title: item.title,
-      url: item.url,
-      price: item.price ?? item.product?.price ?? null,
+      title: item.title ?? 'Registry item',
+      url: item.url ?? 'https://taylor-madebaby.com/registry',
+      price: item.price ?? null,
       image: item.image ?? item.product?.imageUrl ?? null,
     });
 
@@ -188,33 +276,45 @@ export const addRegistryItem = async ({
   productId,
   quantity = 1,
   notes,
-  status = RegistryStatus.NEEDED,
+  status = RegistryItemStatus.ADDED,
+  section,
   mentorRef,
-}: AddRegistryItemInput) => {
-  const product = await prisma.product.findUnique({ where: { id: productId } });
+}: RegistryItemCreateInput) => {
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+    include: { affiliateLinks: true },
+  });
   if (!product) {
     throw new Error('Product not found');
   }
 
-  const affiliateUrl = buildAffiliateUrl({ url: product.affiliateUrl, merchant: product.merchant });
+  const productPayload = productToResponse(product);
+  const resolvedSection = resolveSection(product.category, section);
+  const baseAffiliateUrl = productPayload.affiliateUrl;
 
   const item = await prisma.registryItem.create({
     data: {
       userId,
       productId,
-      isCustom: false,
       title: product.name,
-      url: affiliateUrl,
-      merchant: product.merchant,
+      brand: product.brand,
       category: product.category,
-      moduleCode: product.moduleCodes[0] ?? null,
+      imageUrl: product.imageUrl,
       image: product.imageUrl,
-      price: product.price,
+      url: baseAffiliateUrl,
+      affiliateLink: baseAffiliateUrl,
+      merchant: productPayload.merchant,
       quantity,
       notes,
       status,
+      section: resolvedSection,
     },
-    include: { product: true },
+    include: {
+      product: {
+        include: { affiliateLinks: true },
+      },
+      affiliate: true,
+    },
   });
 
   const myRegistryResponse = await syncMyRegistryAdd(userId, item);
@@ -234,7 +334,7 @@ type AddCustomItemInput = {
   price?: number | null;
   image?: string | null;
   category?: string | null;
-  moduleCode?: string | null;
+  section?: RegistrySection;
 };
 
 export const addCustomItem = async ({
@@ -245,9 +345,12 @@ export const addCustomItem = async ({
   price,
   image,
   category,
-  moduleCode,
+  section,
 }: AddCustomItemInput) => {
   const affiliateUrl = buildAffiliateUrl({ url, merchant });
+  const resolvedSection = resolveSection(category, section);
+
+  const customProductId = await ensureCustomProduct();
 
   let myRegistryId: string | null = null;
   if (await isConnected(userId)) {
@@ -269,18 +372,25 @@ export const addCustomItem = async ({
   const created = await prisma.registryItem.create({
     data: {
       userId,
-      isCustom: true,
+      productId: customProductId,
       title,
       url: affiliateUrl,
+      affiliateLink: affiliateUrl,
       merchant,
       category,
-      moduleCode,
       image,
+      imageUrl: image,
       price,
-      status: RegistryStatus.ACTIVE,
+      status: RegistryItemStatus.ADDED,
+      section: resolvedSection,
       myRegistryId,
     },
-    include: { product: true },
+    include: {
+      product: {
+        include: { affiliateLinks: true },
+      },
+      affiliate: true,
+    },
   });
 
   return formatItem(created, new Map(), undefined);
@@ -291,7 +401,7 @@ type UpdateRegistryItemInput = {
   userId: string;
   quantity?: number;
   notes?: string | null;
-  status?: RegistryStatus;
+  status?: RegistryItemStatus;
   purchaseSource?: string | null;
   mentorRef?: string;
 };
@@ -307,7 +417,11 @@ export const updateRegistryItem = async ({
 }: UpdateRegistryItemInput) => {
   const item = await prisma.registryItem.findFirst({
     where: { id: itemId, userId },
-    include: { product: true },
+    include: {
+      product: {
+        include: { affiliateLinks: true },
+      },
+    },
   });
 
   if (!item) {
@@ -322,18 +436,31 @@ export const updateRegistryItem = async ({
       status,
       purchaseSource,
     },
-    include: { product: true },
+    include: {
+      product: {
+        include: { affiliateLinks: true },
+      },
+      affiliate: true,
+    },
   });
 
   if (updated.myRegistryId && (await isConnected(userId))) {
     try {
-      const affiliateUrl = updated.product
-        ? buildAffiliateLink(updated.product, mentorRef)
-        : buildAffiliateUrl({ url: updated.url, merchant: updated.merchant, mentorRef });
+      const productPayload = updated.product ? productToResponse(updated.product) : null;
+      const affiliateUrl = productPayload
+        ? buildAffiliateLink(
+            { url: productPayload.affiliateUrl, merchant: productPayload.merchant },
+            mentorRef,
+          )
+        : buildAffiliateUrl({
+            url: updated.url ?? 'https://taylor-madebaby.com/registry',
+            merchant: updated.merchant ?? undefined,
+            mentorRef,
+          });
 
       await updateMyRegistryGift({
         giftId: updated.myRegistryId,
-        quantity: updated.quantity,
+        quantity: updated.quantity ?? 1,
         notes: updated.notes,
         affiliateUrl,
         status: updated.status,
@@ -406,7 +533,10 @@ export const listMentorNotes = async (memberId: string) => {
   const notes = await prisma.mentorNote.findMany({
     where: { memberId },
     orderBy: { createdAt: 'desc' },
-    include: { mentor: { select: { id: true, name: true } }, product: true },
+    include: {
+      mentor: { select: { id: true, name: true } },
+      product: { include: { affiliateLinks: true } },
+    },
   });
 
   return notes.map((note) => ({
@@ -425,13 +555,14 @@ type SuggestedRegistryItem = {
   title: string;
   category: string | null;
   notes: string | null;
-  status: RegistryStatus;
+  status: RegistryItemStatus;
 };
 
 export const seedRegistryFromOnboarding = async (
   userId: string,
   recommendations: RecommendationsResult,
 ): Promise<SuggestedRegistryItem[]> => {
+  const customProductId = await ensureCustomProduct();
   const buckets: { items: string[]; category: string }[] = [
     { items: recommendations.strollers, category: 'Strollers' },
     { items: recommendations.carSeats, category: 'Car Seats' },
@@ -452,13 +583,14 @@ export const seedRegistryFromOnboarding = async (
       const item = await prisma.registryItem.create({
         data: {
           userId,
-          isCustom: true,
+          productId: customProductId,
           title: label,
           url: 'https://taylormadebabyco.com/registry',
+          affiliateLink: 'https://taylormadebabyco.com/registry',
           merchant: 'Taylor-Made Baby Co.',
           category: bucket.category,
-          moduleCode: 'onboarding',
-          status: RegistryStatus.NEEDED,
+          section: resolveSection(bucket.category),
+          status: RegistryItemStatus.CONSIDERING,
           notes: 'Suggested from onboarding recommendations',
           purchaseSource: 'recommendation',
         },
@@ -466,7 +598,7 @@ export const seedRegistryFromOnboarding = async (
 
       created.push({
         id: item.id,
-        title: item.title,
+        title: item.title ?? 'Suggested item',
         category: item.category,
         notes: item.notes,
         status: item.status,
@@ -488,7 +620,7 @@ export const getRegistrySummary = async (userId: string) => {
   const confirmedCount = await prisma.registryItem.count({
     where: {
       userId,
-      status: RegistryStatus.PURCHASED,
+      status: RegistryItemStatus.PURCHASED,
     },
   });
 
@@ -498,7 +630,6 @@ export const getRegistrySummary = async (userId: string) => {
   };
 };
 
-const REGISTRY_SOURCE = 'MYREGISTRY';
 const MY_REGISTRY_PARTNER_ID = '88335';
 
 type RemoteRegistryItem = {
@@ -525,6 +656,35 @@ type RemoteRegistryEntry = {
   raw?: Record<string, unknown>;
 };
 
+const REMOTE_PRODUCT_PREFIX = 'myregistry';
+
+const buildRemoteProductId = (remoteItem: RemoteRegistryItem) => `${REMOTE_PRODUCT_PREFIX}-${remoteItem.id}`;
+
+const ensureRemoteProduct = async (remoteItem: RemoteRegistryItem) => {
+  const productId = buildRemoteProductId(remoteItem);
+  await prisma.product.upsert({
+    where: { id: productId },
+    create: {
+      id: productId,
+      name: remoteItem.name,
+      category: remoteItem.category ?? 'legacy',
+      brand: remoteItem.brand ?? remoteItem.merchant ?? undefined,
+      description: remoteItem.notes ?? undefined,
+      notes: remoteItem.notes ?? undefined,
+      imageUrl: remoteItem.imageUrl ?? undefined,
+    },
+    update: {
+      name: remoteItem.name,
+      category: remoteItem.category ?? 'legacy',
+      brand: remoteItem.brand ?? remoteItem.merchant ?? undefined,
+      description: remoteItem.notes ?? undefined,
+      notes: remoteItem.notes ?? undefined,
+      imageUrl: remoteItem.imageUrl ?? undefined,
+    },
+  });
+  return productId;
+};
+
 export type RegistryShippingAddress = {
   line1?: string;
   line2?: string;
@@ -543,31 +703,6 @@ export type MentorFeedbackDto = {
   createdAt: string;
 };
 
-export type RegistryItemDto = {
-  id: string;
-  registryId: string | null;
-  externalGiftId: string | null;
-  name: string;
-  brand: string | null;
-  category: string | null;
-  price: number | null;
-  quantity: number | null;
-  imageUrl: string | null;
-  affiliateLink: string | null;
-  affiliatePartner: {
-    id: string;
-    name: string;
-    network: AffiliateNetwork;
-  } | null;
-  mentorNotes: MentorFeedbackDto[];
-  status: RegistryStatus;
-  notes: string | null;
-  source: string;
-  myRegistryId: string | null;
-  createdAt: string;
-  updatedAt: string;
-};
-
 export type RegistryDto = {
   id: string;
   myRegistryId: string;
@@ -575,7 +710,7 @@ export type RegistryDto = {
   source: string;
   lastSyncedAt: string | null;
   shippingAddress: RegistryShippingAddress | null;
-  items: RegistryItemDto[];
+  items: RegistryItemResponse[];
 };
 
 const normalizeText = (value?: string | null) =>
@@ -584,16 +719,18 @@ const normalizeText = (value?: string | null) =>
     .replace(/[^a-z0-9]/g, '')
     .trim();
 
-const toRegistryStatus = (value?: string | null): RegistryStatus => {
-  if (!value) return RegistryStatus.ACTIVE;
-  const normalized = value.toUpperCase();
-  if (Object.values(RegistryStatus).includes(normalized as RegistryStatus)) {
-    return normalized as RegistryStatus;
+const toRegistryStatus = (value?: string | null): RegistryItemStatus => {
+  if (!value) {
+    return RegistryItemStatus.ADDED;
   }
-  if (normalized.includes('PURCHASED')) return RegistryStatus.PURCHASED;
-  if (normalized.includes('RESERVE')) return RegistryStatus.RESERVED;
-  if (normalized.includes('NEED')) return RegistryStatus.NEEDED;
-  return RegistryStatus.ACTIVE;
+  const normalized = value.toUpperCase();
+  if (normalized.includes('PURCHASED')) {
+    return RegistryItemStatus.PURCHASED;
+  }
+  if (normalized.includes('REMOVED')) {
+    return RegistryItemStatus.REMOVED;
+  }
+  return RegistryItemStatus.ADDED;
 };
 
 const findAffiliateId = (item: Record<string, unknown>) => {
@@ -756,64 +893,14 @@ const resolveAffiliatePartner = (
   return null;
 };
 
-const formatRegistryItemDto = (
-  item: Prisma.RegistryItemGetPayload<{
-    include: {
-      affiliate: true;
-      mentorFeedback: { include: { mentor: { select: { id: true; name: true } } } };
-    };
-  }>,
-): RegistryItemDto => {
-  const mentorNotes =
-    item.mentorFeedback?.map((feedback) => ({
-      id: feedback.id,
-      mentorId: feedback.mentorId,
-      mentorName: feedback.mentor?.name || null,
-      note: feedback.message,
-      createdAt: feedback.createdAt.toISOString(),
-    })) ?? [];
-
-  return {
-    id: item.id,
-    registryId: item.registryId ?? null,
-    externalGiftId: item.externalGiftId ?? null,
-    name: item.name ?? item.title,
-    brand: item.brand ?? item.merchant ?? null,
-    category: item.category ?? null,
-    price: item.price ?? null,
-    quantity: item.quantity ?? null,
-    imageUrl: item.imageUrl ?? item.image ?? null,
-    affiliateLink: item.affiliateLink ?? null,
-    affiliatePartner: item.affiliate
-      ? { id: item.affiliate.id, name: item.affiliate.name, network: item.affiliate.network }
-      : null,
-    mentorNotes,
-    status: item.status,
-    notes: item.notes ?? null,
-    source: item.source,
-    myRegistryId: item.myRegistryId ?? null,
-    createdAt: item.createdAt.toISOString(),
-    updatedAt: item.updatedAt.toISOString(),
-  };
-};
-
 export const getMemberRegistryState = async (userId: string): Promise<RegistryDto | null> => {
   const registry = await prisma.registry.findUnique({
     where: { userId },
-    include: {
-      items: {
-        orderBy: { createdAt: 'desc' },
-        include: {
-          affiliate: true,
-          mentorFeedback: { include: { mentor: { select: { id: true, name: true } } } },
-        },
-      },
-    },
   });
 
   if (!registry) return null;
 
-  const items = registry.items.map((item) => formatRegistryItemDto(item));
+  const items = await listRegistryItems(userId);
 
   return {
     id: registry.id,
@@ -830,49 +917,7 @@ export const createMemberRegistry = async (userId: string): Promise<RegistryDto>
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) throw new Error('User not found');
 
-  const [firstName, ...rest] = (user.name ?? '').split(' ');
-  const lastName = rest.join(' ') || 'Parent';
-  const payload = {
-    Email: user.email,
-    Password: crypto.randomBytes(12).toString('hex'),
-    FirstName: firstName || 'Member',
-    LastName: lastName,
-    City: user.location || undefined,
-  };
-
-  const response = await MyRegistryService.signupUser(payload);
-  if (!response?.myRegistryUserId) {
-    throw new Error('Unable to create MyRegistry account');
-  }
-
-  const registry = await prisma.registry.upsert({
-    where: { userId },
-    update: {
-      myRegistryId: response.myRegistryUserId,
-      title: user.name,
-      source: REGISTRY_SOURCE,
-    },
-    create: {
-      userId,
-      myRegistryId: response.myRegistryUserId,
-      title: user.name,
-      source: REGISTRY_SOURCE,
-    },
-  });
-
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      myRegistryUserId: response.myRegistryUserId,
-      myRegistryEmail: response.email || user.email,
-    },
-  });
-
-  emitRegistryAnalytics('registry_created', {
-    userId,
-    registryId: registry.id,
-    myRegistryId: registry.myRegistryId,
-  });
+  await ensureMyRegistryAccount(user);
 
   const state = await getMemberRegistryState(userId);
   if (!state) throw new Error('Unable to load registry after creation');
@@ -886,12 +931,12 @@ export const syncMemberRegistry = async (userId: string): Promise<RegistryDto> =
   ]);
   if (!user) throw new Error('User not found');
   if (!registry) throw new Error('Registry not created yet');
+  if (!registry.myRegistryId) throw new Error('Registry has not been linked to MyRegistry');
 
-  const email = user.myRegistryEmail || user.email;
-  const payload = await MyRegistryService.searchRegistries({ Email: email });
+  const payload = await MyRegistryService.getRegistryItems({ RegistryId: registry.myRegistryId });
   const entries = extractRegistryEntries(payload);
   const target = entries.find((entry) => entry.id === registry.myRegistryId) ?? entries[0];
-  if (!target) throw new Error('Unable to locate registry in MyRegistry');
+  if (!target) throw new Error('Unable to load registry from MyRegistry');
 
   let shippingAddress: Record<string, unknown> | undefined;
   try {
@@ -904,18 +949,29 @@ export const syncMemberRegistry = async (userId: string): Promise<RegistryDto> =
   const { byId, byName } = buildAffiliateMaps(partners);
   const existingItems = await prisma.registryItem.findMany({
     where: { registryId: registry.id },
-    select: { id: true, status: true, externalGiftId: true },
+    select: { id: true, status: true, myRegistryItemId: true, externalGiftId: true },
   });
-  const existingMap = new Map(existingItems.map((item) => [item.externalGiftId, item]));
+  const existingMap = new Map<string, { id: string; status: RegistryItemStatus }>();
+  existingItems.forEach((item) => {
+    const key = item.myRegistryItemId ?? item.externalGiftId;
+    if (key) {
+      existingMap.set(key, { id: item.id, status: item.status });
+    }
+  });
 
   const seenIds = new Set<string>();
-  for (const remoteItem of target.items) {
-    seenIds.add(remoteItem.id);
+  for (const remoteItem of target.items ?? []) {
+    const remoteId = remoteItem.id;
+    if (!remoteId) continue;
+    seenIds.add(remoteId);
     const partner = resolveAffiliatePartner(remoteItem, byId, byName);
+    const productId = await ensureRemoteProduct(remoteItem);
     const upsertData = {
       userId,
+      productId,
       registryId: registry.id,
-      externalGiftId: remoteItem.id,
+      externalGiftId: remoteId,
+      myRegistryItemId: remoteId,
       name: remoteItem.name,
       title: remoteItem.name,
       url: remoteItem.affiliateUrl ?? (remoteItem.raw?.Url as string) ?? '',
@@ -929,37 +985,41 @@ export const syncMemberRegistry = async (userId: string): Promise<RegistryDto> =
       affiliateId: partner?.id ?? null,
       affiliateLink: remoteItem.affiliateUrl ?? partner?.defaultLink ?? null,
       source: REGISTRY_SOURCE,
-      myRegistryId: remoteItem.id,
+      myRegistryId: remoteId,
       notes: remoteItem.notes ?? null,
       status: toRegistryStatus(remoteItem.status),
+      section: resolveSection(remoteItem.category ?? null),
       purchaseSource: REGISTRY_SOURCE,
     };
 
-    const saved = await prisma.registryItem.upsert({
+    const existingEntry = await prisma.registryItem.findFirst({
       where: {
-        registryId_externalGiftId: {
-          registryId: registry.id,
-          externalGiftId: remoteItem.id,
-        },
+        registryId: registry.id,
+        externalGiftId: remoteId,
       },
-      create: upsertData,
-      update: upsertData,
+      select: { id: true },
     });
+    const saved = existingEntry
+      ? await prisma.registryItem.update({ where: { id: existingEntry.id }, data: upsertData })
+      : await prisma.registryItem.create({ data: upsertData });
 
-    const previous = existingMap.get(remoteItem.id);
+    const previous = existingMap.get(remoteId);
     if (!previous) {
       emitRegistryAnalytics('gift_added', {
         userId,
         registryId: registry.id,
         registryItemId: saved.id,
-        externalGiftId: remoteItem.id,
+        externalGiftId: remoteId,
       });
-    } else if (previous.status !== RegistryStatus.PURCHASED && upsertData.status === RegistryStatus.PURCHASED) {
+    } else if (
+      previous.status !== RegistryItemStatus.PURCHASED &&
+      upsertData.status === RegistryItemStatus.PURCHASED
+    ) {
       emitRegistryAnalytics('gift_purchased', {
         userId,
         registryId: registry.id,
         registryItemId: saved.id,
-        externalGiftId: remoteItem.id,
+        externalGiftId: remoteId,
       });
     }
 
@@ -974,12 +1034,15 @@ export const syncMemberRegistry = async (userId: string): Promise<RegistryDto> =
   }
 
   const removedIds = existingItems
-    .filter((item) => item.externalGiftId && !seenIds.has(item.externalGiftId))
+    .filter((item) => {
+      const key = item.myRegistryItemId ?? item.externalGiftId;
+      return Boolean(key && !seenIds.has(key));
+    })
     .map((item) => item.id);
   if (removedIds.length) {
     await prisma.registryItem.updateMany({
       where: { id: { in: removedIds } },
-      data: { status: RegistryStatus.REMOVED_REMOTE },
+    data: { status: RegistryItemStatus.REMOVED },
     });
   }
 

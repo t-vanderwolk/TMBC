@@ -7,17 +7,18 @@ import {
   saveIntakeStep as persistIntake,
 } from '@/lib/services/onboarding.service';
 import {
-  addRegistryItem as persistRegistryItem,
+  addCustomItem,
   removeRegistryItem as discardRegistryItem,
   updateRegistryItem as patchRegistryItem,
-  syncWithMyRegistry,
-} from '@/lib/services/registry.service';
+  syncMemberRegistry,
+} from '@/lib/services/server/registry.service';
 import {
   createCapsule as persistCapsule,
   updateCapsule as patchCapsule,
 } from '@/lib/services/timecapsule.service';
 import { rsvpEvent as confirmRsvp } from '@/lib/services/events.service';
 import { sendMessage as sendThreadMessage } from '@/lib/services/messages.service';
+import { RegistrySection } from '@prisma/client';
 
 const toRecord = (formData: FormData) => {
   const payload: Record<string, string> = {};
@@ -26,6 +27,15 @@ const toRecord = (formData: FormData) => {
     payload[key] = value.toString();
   });
   return payload;
+};
+
+const resolveSection = (category?: string | null): RegistrySection => {
+  const normalized = category?.toLowerCase() ?? '';
+  if (normalized.includes('nursery')) return RegistrySection.NURSERY;
+  if (normalized.includes('feed') || normalized.includes('bottle')) return RegistrySection.FEEDING;
+  if (normalized.includes('postpartum') || normalized.includes('wellness')) return RegistrySection.POSTPARTUM;
+  if (normalized.includes('later')) return RegistrySection.LATER;
+  return RegistrySection.GEAR;
 };
 
 export async function saveOnboardingStep(formData: FormData) {
@@ -57,7 +67,16 @@ export async function addRegistryItem(formData: FormData) {
     reasoning: formData.get('reasoning')?.toString(),
     mentorNotes: formData.get('mentorNotes')?.toString(),
   };
-  return persistRegistryItem(user.id, item);
+  return addCustomItem({
+    userId: user.id,
+    title: item.title,
+    url: item.affiliateUrl ?? 'https://taylor-madebaby.com',
+    merchant: item.category,
+    category: item.category,
+    section: resolveSection(item.category),
+    price: item.price,
+    image: item.image,
+  });
 }
 
 export async function removeRegistryItem(formData: FormData) {
@@ -70,14 +89,11 @@ export async function updateRegistryItem(formData: FormData) {
   const user = await getUserOrThrow();
   const itemId = formData.get('itemId')?.toString() ?? '';
   const fields = toRecord(formData);
-  return patchRegistryItem(user.id, itemId, {
-    category: fields.category,
-    title: fields.title,
-    image: fields.image,
-    affiliateUrl: fields.affiliateUrl,
-    price: fields.price ? Number(fields.price) : undefined,
-    reasoning: fields.reasoning,
-    mentorNotes: fields.mentorNotes,
+  return patchRegistryItem({
+    userId: user.id,
+    itemId,
+    notes: fields.reasoning ?? undefined,
+    purchaseSource: fields.purchaseSource ?? undefined,
   });
 }
 
@@ -117,5 +133,5 @@ export async function sendMessage(formData: FormData) {
 
 export async function syncWithRegistry() {
   const user = await getUserOrThrow();
-  return syncWithMyRegistry(user.id);
+  return syncMemberRegistry(user.id);
 }

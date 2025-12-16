@@ -25,19 +25,17 @@ export default function QuickLinksRow({ links }: QuickLinksRowProps) {
     : [{ label: "Explore the dashboard", href: "/dashboard" }];
 
   return (
-    <section className="rounded-[2.5rem] border border-[#E3D3DA] bg-white/90 p-6 shadow-[0_20px_60px_rgba(200,161,180,0.15)]">
-      <div className="flex items-center justify-between">
-        <p className="text-[0.65rem] uppercase tracking-[0.45em] text-[#C8A1B4]">
-          Quick links
-        </p>
-        <span className="text-[0.65rem] text-[#3E2F35]/50">Ready when you are</span>
+    <section className="rounded-2xl border border-[#E3D3DA] bg-white/90 p-6 shadow-sm">
+      <div className="flex flex-col gap-1 text-sm font-semibold uppercase tracking-[0.45em] text-[#C8A1B4] md:flex-row md:items-center md:justify-between">
+        <p>Quick links</p>
+        <span className="text-[0.75rem] text-[#3E2F35]/50">Ready when you are</span>
       </div>
-      <div className="mt-5 flex flex-wrap gap-3">
+      <div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-3">
         {displayLinks.map((link, index) => (
           <Link
             key={`${link.href ?? "link"}-${index}`}
             href={link.href ?? "/dashboard"}
-            className="rounded-[999px] border border-[#E1D1D5] bg-[#FEF8F5] px-4 py-2 text-[0.7rem] uppercase tracking-[0.35em] text-[#3E2F35] transition hover:border-[#C8A1B4]"
+            className="flex w-full items-center justify-center rounded-2xl border border-[#E1D1D5] bg-[#FEF8F5] px-4 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-[#3E2F35] transition hover:border-[#C8A1B4]"
           >
             {link.label ?? "Explore"}
           </Link>

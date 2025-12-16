@@ -45,6 +45,7 @@ export type AcademyModuleCard = {
   slug?: string;
   completed?: boolean;
   progress?: number;
+  estimatedMinutes?: number;
 };
 
 export interface AcademyModulesResponse {

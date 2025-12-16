@@ -3,15 +3,11 @@
 import { useState } from 'react';
 
 import AddCustomItemModal from './AddCustomItemModal';
-import type { AcademyModuleMeta } from '@/types/registry';
-
 type AddCustomItemButtonProps = {
-  modules: AcademyModuleMeta[];
-  defaultModuleCode?: string;
   onSuccess: () => void;
 };
 
-export default function AddCustomItemButton({ modules, defaultModuleCode, onSuccess }: AddCustomItemButtonProps) {
+export default function AddCustomItemButton({ onSuccess }: AddCustomItemButtonProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -22,13 +18,7 @@ export default function AddCustomItemButton({ modules, defaultModuleCode, onSucc
       >
         Add Custom Item
       </button>
-      <AddCustomItemModal
-        open={open}
-        onClose={() => setOpen(false)}
-        modules={modules}
-        defaultModuleCode={defaultModuleCode}
-        onSuccess={onSuccess}
-      />
+      <AddCustomItemModal open={open} onClose={() => setOpen(false)} onSuccess={onSuccess} />
     </>
   );
 }

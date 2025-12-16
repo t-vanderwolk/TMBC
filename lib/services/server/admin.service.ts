@@ -1,4 +1,4 @@
-import { Prisma, Role } from '@prisma/client';
+import { Prisma, RegistryItemStatus, RegistrySection, Role } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 import { getPendingWaitlist, updateWaitlistStatus } from './waitlist.service';
@@ -46,7 +46,7 @@ export type AdminStatsPayload = {
   systemActivity: SystemActivity[];
 };
 
-const PURCHASED_STATUSES = ['PURCHASED', 'PURCHASED_ELSEWHERE'];
+const PURCHASED_STATUSES: RegistryItemStatus[] = [RegistryItemStatus.PURCHASED];
 
 type AcademyModuleContent = {
   lecture?: string;
@@ -106,26 +106,25 @@ export const getAdminStats = async (): Promise<AdminStatsPayload> => {
   }));
 
   const registrySeriesRows = await prisma.$queryRaw<
-    { moduleCode: string | null; count: number }[]
-  >`SELECT COALESCE("moduleCode", 'untracked') AS "moduleCode", COUNT(*) AS count
+    { section: string | null; count: number }[]
+  >`SELECT COALESCE("section"::text, 'untracked') AS "section", COUNT(*) AS count
       FROM "RegistryItem"
       WHERE "createdAt" >= NOW() - INTERVAL '30 days'
-      GROUP BY "moduleCode"
+      GROUP BY "section"
       ORDER BY count DESC
       LIMIT 6;`;
 
-  const moduleCodes = Array.from(
-    new Set(registrySeriesRows.map((row) => row.moduleCode).filter(Boolean)),
-  ) as string[];
-  const modules = moduleCodes.length
-    ? await prisma.academyModule.findMany({
-        where: { id: { in: moduleCodes } },
-      })
-    : [];
-  const moduleNameMap = new Map(modules.map((module) => [module.id, module.title]));
+  const sectionLabels: Record<string, string> = {
+    [RegistrySection.NURSERY]: 'Nursery',
+    [RegistrySection.GEAR]: 'Gear',
+    [RegistrySection.FEEDING]: 'Feeding',
+    [RegistrySection.POSTPARTUM]: 'Postpartum',
+    [RegistrySection.LATER]: 'Later',
+    untracked: 'Untracked',
+  };
 
   const registrySeries = registrySeriesRows.map((row) => ({
-    label: moduleNameMap.get(row.moduleCode ?? '') ?? row.moduleCode ?? 'untracked',
+    label: sectionLabels[row.section ?? 'untracked'] ?? (row.section ?? 'Untracked'),
     count: Number(row.count),
   }));
 
@@ -447,7 +446,7 @@ export type RegistryEntryRow = {
   userName: string;
   merchant: string;
   productTitle: string;
-  moduleId: string | null;
+  section: string;
   purchased: boolean;
   createdAt: string;
 };
@@ -467,12 +466,12 @@ export const getAdminRegistryMonitor = async (): Promise<RegistryMonitorResult> 
     },
   });
 
-  const latestEntries = entries.map((entry) => ({
-    id: entry.id,
-    userName: entry.user?.name ?? entry.user?.email ?? 'Member',
-    merchant: entry.merchant ?? 'Unknown',
-    productTitle: entry.title,
-    moduleId: entry.moduleCode,
+    const latestEntries = entries.map((entry) => ({
+      id: entry.id,
+      userName: entry.user?.name ?? entry.user?.email ?? 'Member',
+      merchant: entry.merchant ?? 'Unknown',
+      productTitle: entry.title ?? 'Registry item',
+    section: entry.section ?? 'Unknown',
     purchased: PURCHASED_STATUSES.includes(entry.status),
     createdAt: entry.createdAt.toISOString(),
   }));

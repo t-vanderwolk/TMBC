@@ -8,9 +8,9 @@ export default function AdminDashboard() {
     <div className="space-y-10">
       <AdminInsights />
 
-      <section className="rounded-[2.5rem] p-10 bg-[#FFF8F6] shadow-[0_25px_70px_rgba(192,153,170,0.3)]">
-        <h2 className="text-4xl font-serif">System Overview</h2>
-        <p className="mt-2 text-[#3E2F35]/70">
+      <section className="rounded-2xl border border-[#E3D1DA] bg-[#FFF8F6] p-6 shadow-sm md:p-8">
+        <h2 className="text-3xl font-serif text-[#3E2F35] md:text-4xl">System Overview</h2>
+        <p className="mt-2 text-sm text-[#3E2F35]/70 md:text-base">
           Invitations, cohorts, events, and platform health.
         </p>
       </section>

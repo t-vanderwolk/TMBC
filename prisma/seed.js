@@ -42,7 +42,43 @@ async function main() {
   // Academy
   await seedAcademyModules();
 
+  // Demo product for registry metadata preview (demo data only)
+  await seedDemoRegistryProduct();
+
   console.log("🎉 TMBC seed complete");
+}
+
+async function seedDemoRegistryProduct() {
+  const existing = await prisma.product.findFirst({
+    where: { name: "Traveler's Nesting Kit (demo)" },
+  });
+
+  if (existing) {
+    return;
+  }
+
+  const product = await prisma.product.create({
+    data: {
+      name: "Traveler's Nesting Kit (demo)",
+      brand: "Taylor-Made",
+      category: "Nursery",
+      description: "A curated kit for responsive nesting on the go.",
+      notes: "DEMO: Mentor-picked for schema preview.",
+    },
+  });
+
+  await prisma.affiliateLink.create({
+    data: {
+      productId: product.id,
+      retailerName: "MacroBaby Demo",
+      network: "CJ",
+      outboundUrl: "https://example.com/demo",
+      region: "US",
+      isPrimary: true,
+    },
+  });
+
+  console.log("⚡️ Seeded demo registry product & affiliate link");
 }
 
 main()

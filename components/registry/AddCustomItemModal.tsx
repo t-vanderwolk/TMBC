@@ -1,27 +1,29 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 
 import { addCustomItem } from '@/lib/api';
-import type { AcademyModuleMeta } from '@/types/registry';
-
 const merchants = ['MacroBaby', 'AlbeeBaby', 'Silver Cross', 'Amazon', 'Other'];
 const categories = ['Stroller', 'Car Seat', 'Nursery', 'Feeding', 'Travel', 'Gear', 'Essentials', 'Custom'];
+const sections = [
+  { value: 'nursery', label: 'Nursery' },
+  { value: 'gear', label: 'Gear' },
+  { value: 'feeding', label: 'Feeding' },
+  { value: 'postpartum', label: 'Postpartum' },
+  { value: 'later', label: 'Later' },
+] as const;
+type SectionId = (typeof sections)[number]['value'];
 
 type AddCustomItemModalProps = {
   open: boolean;
   onClose: () => void;
-  modules: AcademyModuleMeta[];
-  defaultModuleCode?: string;
   onSuccess: () => void;
 };
 
 export default function AddCustomItemModal({
   open,
   onClose,
-  modules,
-  defaultModuleCode,
   onSuccess,
 }: AddCustomItemModalProps) {
   const [title, setTitle] = useState('');
@@ -30,24 +32,15 @@ export default function AddCustomItemModal({
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [moduleCode, setModuleCode] = useState('');
+  const [section, setSection] = useState<SectionId | ''>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (open) {
-      setModuleCode(defaultModuleCode || '');
+      setSection('');
     }
-  }, [open, defaultModuleCode]);
-
-  const moduleOptions = useMemo(
-    () =>
-      modules.map((module) => ({
-        value: module.id,
-        label: module.title,
-      })),
-    [modules],
-  );
+  }, [open]);
 
   if (!open) return null;
 
@@ -65,7 +58,7 @@ export default function AddCustomItemModal({
         url: productUrl,
         merchant: merchant || undefined,
         category: category || undefined,
-        moduleCode: moduleCode || undefined,
+        section: section || undefined,
         price: Number.isNaN(parsedPrice) ? undefined : parsedPrice,
         image: imageUrl || undefined,
       });
@@ -154,10 +147,10 @@ export default function AddCustomItemModal({
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold uppercase tracking-[0.3em] text-tmCharcoal/70">Module</label>
-            <select value={moduleCode} onChange={(event) => setModuleCode(event.target.value)}>
-              <option value="">Unassigned</option>
-              {moduleOptions.map((option) => (
+            <label className="text-xs font-semibold uppercase tracking-[0.3em] text-tmCharcoal/70">Section</label>
+            <select value={section} onChange={(event) => setSection(event.target.value as SectionId | '')}>
+              <option value="">Select section</option>
+              {sections.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>

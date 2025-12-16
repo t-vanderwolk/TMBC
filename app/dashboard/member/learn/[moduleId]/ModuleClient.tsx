@@ -47,16 +47,16 @@ export default function ModuleClient({ module }: ModuleClientProps) {
   const progressLabel = isCompleted ? "Completed" : module.progress ? "In progress" : "Not started";
 
   return (
-    <div className="space-y-8 rounded-[2.5rem] border border-[#EAD4D8] bg-white/90 p-6 shadow-[0_25px_70px_rgba(192,153,170,0.15)]">
-      <header className="space-y-2">
+    <div className="space-y-8 rounded-[32px] border border-[#E3C6D4] bg-[#FFF9F5] p-6 shadow-sm">
+      <header className="space-y-3">
         <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">{journeyLabel}</p>
         <h1 className="font-serif text-3xl text-[#3E2F35]">{module.title}</h1>
-        <span className="inline-flex items-center rounded-full border border-[#F1D5DA] px-3 py-1 text-[0.65rem] uppercase tracking-[0.4em] text-[#A4556A]">
+        <span className="inline-flex items-center rounded-full border border-[#F1D5DA] px-3 py-1 text-[0.65rem] uppercase tracking-[0.35em] text-[#A4556A]">
           {progressLabel}
         </span>
       </header>
 
-      <section className="space-y-3 rounded-2xl bg-[#FFF8F6] p-5 text-[#3E2F35]">
+      <section className="space-y-3 rounded-2xl border border-[#F1D5DA] bg-white/80 p-5 shadow-sm">
         <p className="text-sm leading-relaxed text-[#3E2F35]/70">
           {module.description ?? "Lean into calmer guidance crafted for you."}
         </p>
@@ -64,22 +64,24 @@ export default function ModuleClient({ module }: ModuleClientProps) {
           <p className="text-xs uppercase tracking-[0.4em] text-[#3E2F35]/60">
             Estimated time · {module.estimatedMinutes} min
           </p>
-        ) : null}
-      </section>
-
-      <section className="space-y-3 rounded-2xl border border-[#E3C6D4] bg-white/90 p-5">
-        <h2 className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Lecture</h2>
-        {module.lecture ? (
-          <p className="text-sm leading-relaxed text-[#3E2F35]/80 whitespace-pre-line">
-            {module.lecture}
-          </p>
         ) : (
-          <p className="text-sm italic text-[#3E2F35]/60">Lecture content coming soon.</p>
+          <p className="text-xs uppercase tracking-[0.4em] text-[#3E2F35]/60">Flexible pace</p>
         )}
       </section>
 
+      <section className="space-y-3 rounded-2xl border border-[#E3C6D4] bg-white/90 p-5 shadow-sm">
+        <h2 className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Lecture</h2>
+        <div className="space-y-3 text-sm leading-relaxed text-[#3E2F35]/80">
+          {module.lecture ? (
+            <p className="prose max-w-none text-[#3E2F35]/80 whitespace-pre-line">{module.lecture}</p>
+          ) : (
+            <p className="italic text-[#3E2F35]/60">Lecture content coming soon.</p>
+          )}
+        </div>
+      </section>
+
       {module.objectives && module.objectives.length ? (
-        <section className="space-y-3 rounded-2xl border border-[#E3C6D4] bg-white/80 p-5">
+        <section className="space-y-3 rounded-2xl border border-[#E3C6D4] bg-white/90 p-5 shadow-sm">
           <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Learning objectives</p>
           <ul className="space-y-2 text-sm text-[#3E2F35]/80">
             {module.objectives.map((objective) => (
@@ -93,15 +95,15 @@ export default function ModuleClient({ module }: ModuleClientProps) {
       ) : null}
 
       {module.sections && module.sections.length ? (
-        <section className="space-y-5">
+        <section className="space-y-4">
           {module.sections
             .filter((section) => section.title.toLowerCase() !== "lecture")
             .map((section) => (
               <article
                 key={section.title}
-                className="space-y-2 rounded-2xl border border-[#E3C6D4] bg-white/90 p-5 shadow-[0_10px_40px_rgba(200,160,180,0.15)]"
+                className="space-y-2 rounded-2xl border border-[#E3C6D4] bg-white/90 p-5 shadow-sm"
               >
-                <h2 className="text-sm font-semibold uppercase tracking-[0.4em] text-[#A4556A]">
+                <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-[#A4556A]">
                   {section.title}
                 </h2>
                 <p className="text-sm leading-relaxed text-[#3E2F35]/80">{section.content}</p>
@@ -114,7 +116,7 @@ export default function ModuleClient({ module }: ModuleClientProps) {
         <WorkbookClient moduleId={module.id} prompts={workbookPrompts} />
       ) : null}
 
-      <section className="space-y-3 rounded-2xl border border-[#E3C6D4] bg-white/90 p-5">
+      <section className="space-y-3 rounded-2xl border border-[#E3C6D4] bg-white/90 p-5 shadow-sm">
         <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[#C8A1B4]">
           Discuss this module
         </p>
@@ -129,7 +131,7 @@ export default function ModuleClient({ module }: ModuleClientProps) {
         </Link>
       </section>
 
-      <section className="space-y-3 rounded-2xl border border-[#E3C6D4] bg-white/90 p-5">
+      <section className="space-y-3 rounded-2xl border border-[#E3C6D4] bg-white/90 p-5 shadow-sm">
         <button
           type="button"
           onClick={handleComplete}

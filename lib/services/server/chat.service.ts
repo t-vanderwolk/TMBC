@@ -1,10 +1,10 @@
-import { ConversationMessage, User } from "@prisma/client";
+import { ConversationMessage, Role } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 export type ChatParticipant = {
   id: string;
   name?: string | null;
-  role?: string | null;
+  role: Role;
 };
 
 export type ChatMessageDTO = {
@@ -12,126 +12,587 @@ export type ChatMessageDTO = {
   content: string;
   senderId: string;
   senderName: string | null;
-  senderRole: string | null;
+  senderRole: Role | null;
   conversationId: string;
   createdAt: Date;
+  readAt: Date | null;
+  isSystem: boolean;
 };
 
-export async function getOrCreateConversation(
-  userId: string,
-  participantIds: string[]
-) {
-  const allParticipantIds = Array.from(new Set([userId, ...participantIds]));
+export type Actor = {
+  id: string;
+  role: Role;
+};
 
-  if (allParticipantIds.length !== 2) {
-    throw new Error("Conversations must include exactly two participants");
+export type ChatActor = Actor & {
+  name?: string | null;
+};
+
+type ConversationMessageWithSender = ConversationMessage & {
+  sender: {
+    id: string;
+    name: string | null;
+    role: Role;
+  } | null;
+};
+
+type ConversationParticipantInfo = {
+  id: string;
+  name: string | null;
+  role: Role;
+  mentorId: string | null;
+};
+
+const participantSelect = {
+  id: true,
+  name: true,
+  role: true,
+  mentorId: true,
+};
+
+class ChatPermissionError extends Error {
+  status: number;
+  constructor(message: string, status = 403) {
+    super(message);
+    this.status = status;
+    this.name = "ChatPermissionError";
+  }
+}
+
+type RateLimitEntry = {
+  count: number;
+  resetAt: number;
+};
+
+const rateLimits = new Map<string, RateLimitEntry>();
+
+const enforceRateLimit = (key: string, limit: number, windowMs: number) => {
+  const now = Date.now();
+  const existing = rateLimits.get(key);
+  if (!existing || existing.resetAt <= now) {
+    rateLimits.set(key, { count: 1, resetAt: now + windowMs });
+    return;
   }
 
-  const existing = await prisma.conversation.findFirst({
+  if (existing.count >= limit) {
+    throw new ChatPermissionError("You are sending messages too quickly. Please wait a moment.", 429);
+  }
+
+  existing.count += 1;
+};
+// TODO: Replace this polling-friendly guard with a WebSocket push layer once the infrastructure stabilizes.
+
+type AllowedMentorCache = Map<string, Set<string>>;
+
+const getAllowedMentorsForMember = async (
+  memberId: string,
+  cache: AllowedMentorCache = new Map(),
+): Promise<Set<string>> => {
+  if (cache.has(memberId)) {
+    return cache.get(memberId)!;
+  }
+
+  const allowed = new Set<string>();
+  const member = await prisma.user.findUnique({
+    where: { id: memberId },
+    select: { mentorId: true },
+  });
+
+  if (member?.mentorId) {
+    allowed.add(member.mentorId);
+  }
+
+  const rsvps = await prisma.eventRsvp.findMany({
     where: {
-      participants: {
-        every: {
-          id: { in: allParticipantIds },
+      userId: memberId,
+      status: "confirmed",
+      event: {
+        host: {
+          role: Role.MENTOR,
         },
       },
     },
-    include: {
-      participants: true,
+    select: {
+      event: {
+        select: {
+          hostId: true,
+        },
+      },
     },
   });
 
-  if (existing) return existing;
+  for (const rsvp of rsvps) {
+    if (rsvp.event.hostId) {
+      allowed.add(rsvp.event.hostId);
+    }
+  }
+
+  cache.set(memberId, allowed);
+  return allowed;
+};
+
+export type ChatAutomationReason = "onboarding" | "assignment" | "event" | "registry";
+
+export type ChatAutomationContext = {
+  eventId?: string;
+  eventTitle?: string;
+};
+
+type EnsureConversationInput = {
+  memberId: string;
+  mentorId: string;
+  reason: ChatAutomationReason;
+  initiatorId?: string;
+  context?: ChatAutomationContext;
+};
+
+const findExistingConversation = async (participantIds: string[]) => {
+  const uniqueIds = Array.from(new Set(participantIds));
+  if (!uniqueIds.length) return null;
+  return prisma.conversation.findFirst({
+    where: {
+      AND: [
+        { participants: { every: { id: { in: uniqueIds } } } },
+        { participants: { none: { id: { notIn: uniqueIds } } } },
+      ],
+    },
+    include: {
+      participants: { select: participantSelect },
+    },
+  });
+};
+
+const systemMessageTemplates: Record<
+  ChatAutomationReason,
+  (context?: ChatAutomationContext) => string | null
+> = {
+  onboarding: () => "You’re all set. This space is here whenever you need support.",
+  assignment: () => "Your mentor has been assigned. You can message them anytime.",
+  event: (context) =>
+    context?.eventTitle
+      ? `Thanks for attending “${context.eventTitle}”. Feel free to continue the conversation here.`
+      : "Thanks for attending. Feel free to continue the conversation here.",
+  registry: () =>
+    "Your registry is coming together beautifully — reach out if you’d like a second set of eyes.",
+};
+
+export const sendSystemMessageOnce = async ({
+  conversationId,
+  type,
+  context,
+  text,
+}: {
+  conversationId: string;
+  type: ChatAutomationReason;
+  context?: ChatAutomationContext;
+  text?: string;
+}) => {
+  const messageText = text ?? systemMessageTemplates[type]?.(context);
+  if (!messageText) {
+    return null;
+  }
+
+  const existing = await prisma.conversationMessage.findFirst({
+    where: {
+      conversationId,
+      isSystem: true,
+      content: messageText,
+    },
+  });
+
+  if (existing) {
+    console.info(`[Concierge] System message already present (type: ${type})`);
+    return existing;
+  }
+
+  const conversation = await prisma.conversation.findUnique({
+    where: { id: conversationId },
+    include: {
+      participants: {
+        select: participantSelect,
+      },
+    },
+  });
+
+  const mentor =
+    conversation?.participants.find((participant) => participant.role === Role.MENTOR) ??
+    conversation?.participants[0];
+  const senderId = mentor?.id;
+
+  if (!senderId) {
+    console.warn("[Concierge] Unable to determine sender for system message", {
+      conversationId,
+      type,
+    });
+    return null;
+  }
+
+  const message = await prisma.conversationMessage.create({
+    data: {
+      conversationId,
+      senderId,
+      content: messageText,
+      isSystem: true,
+    },
+  });
+
+  console.info(`[Concierge] System message sent (type: ${type})`);
+  return message;
+};
+
+export const ensureConversationBetweenUsers = async (input: EnsureConversationInput) => {
+  const { memberId, mentorId, reason, initiatorId, context } = input;
+  const participants = await prisma.user.findMany({
+    where: { id: { in: [memberId, mentorId] } },
+    select: { id: true, role: true },
+  });
+  const member = participants.find((participant) => participant.id === memberId);
+  const mentor = participants.find((participant) => participant.id === mentorId);
+
+  if (!member || member.role !== Role.MEMBER || !mentor || mentor.role !== Role.MENTOR) {
+    console.warn("[ChatAutomation] Invalid participants for conversation automation", {
+      memberId,
+      mentorId,
+    });
+    return null;
+  }
+
+  const existing = await findExistingConversation([memberId, mentorId]);
+  if (existing) {
+    console.info(
+      `[ChatAutomation] Conversation already exists for member ${memberId} and mentor ${mentorId}`,
+    );
+    return existing;
+  }
+
+  const initiator =
+    initiatorId && initiatorId !== memberId
+      ? await prisma.user.findUnique({ where: { id: initiatorId }, select: { id: true, role: true } })
+      : { id: memberId, role: member.role };
+  const conversation = await prisma.conversation.create({
+    data: {
+      participants: {
+        connect: [{ id: member.id }, { id: mentor.id }],
+      },
+    },
+    include: {
+      participants: { select: participantSelect },
+    },
+  });
+
+  console.info(`[ChatAutomation] Created conversation ${conversation.id} (reason: ${reason})`);
+
+  await sendSystemMessageOnce({ conversationId: conversation.id, type: reason, context });
+
+  return conversation;
+};
+
+const ensureConversationHasMentor = (participants: ConversationParticipantInfo[]) => {
+  return participants.some((participant) => participant.role === Role.MENTOR);
+};
+
+const ensureMemberMentorPair = async (
+  memberId: string,
+  mentorId: string,
+  cache: AllowedMentorCache,
+) => {
+  const allowed = await getAllowedMentorsForMember(memberId, cache);
+  if (!allowed.has(mentorId)) {
+    throw new ChatPermissionError("This mentor is not available for this member.");
+  }
+};
+
+const ensureUserCanAccessConversation = async (
+  user: Actor,
+  conversation: {
+    participants: ConversationParticipantInfo[];
+  },
+  cache: AllowedMentorCache = new Map(),
+) => {
+  if (user.role === Role.ADMIN) return;
+
+  const isParticipant = conversation.participants.some((participant) => participant.id === user.id);
+  if (!isParticipant) {
+    throw new ChatPermissionError("You are not a participant in this conversation.");
+  }
+
+  if (!ensureConversationHasMentor(conversation.participants)) {
+    throw new ChatPermissionError("Conversation must include a mentor.");
+  }
+
+  if (user.role === Role.MEMBER) {
+    const mentors = conversation.participants.filter((participant) => participant.role === Role.MENTOR);
+    if (!mentors.length) {
+      throw new ChatPermissionError("No mentor is attending this conversation.");
+    }
+    const allowed = await getAllowedMentorsForMember(user.id, cache);
+    for (const mentor of mentors) {
+      if (!allowed.has(mentor.id)) {
+        throw new ChatPermissionError("You are not allowed to message this mentor.");
+      }
+    }
+    return;
+  }
+
+  if (user.role === Role.MENTOR) {
+    const members = conversation.participants.filter((participant) => participant.role === Role.MEMBER);
+    if (!members.length) {
+      throw new ChatPermissionError("Conversation must include a member.");
+    }
+    const permissionChecks = await Promise.all(
+      members.map(async (member) => {
+        const allowed = await getAllowedMentorsForMember(member.id, cache);
+        return allowed.has(user.id);
+      }),
+    );
+    const isAllowedForAllMembers = permissionChecks.every(Boolean);
+    if (!isAllowedForAllMembers) {
+      throw new ChatPermissionError("You cannot join conversations for that member.");
+    }
+    return;
+  }
+};
+
+export type ConversationSummary = {
+  id: string;
+  mentor: ChatParticipant | null;
+  member: ChatParticipant | null;
+  lastMessage: string | null;
+  lastMessageAt: string | null;
+  updatedAt: string;
+};
+
+const buildChatParticipant = (participant: ConversationParticipantInfo): ChatParticipant => ({
+  id: participant.id,
+  name: participant.name ?? null,
+  role: participant.role,
+});
+
+export async function listUserConversations(user: Actor): Promise<ConversationSummary[]> {
+  const conversations = await prisma.conversation.findMany({
+    where: user.role === Role.ADMIN ? {} : { participants: { some: { id: user.id } } },
+    include: {
+      participants: {
+        select: participantSelect,
+      },
+      messages: {
+        orderBy: { createdAt: "desc" },
+        take: 1,
+      },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+
+  const cache: AllowedMentorCache = new Map();
+  const summaries: ConversationSummary[] = [];
+
+  for (const conversation of conversations) {
+    try {
+      await ensureUserCanAccessConversation(user, conversation, cache);
+    } catch (error) {
+      continue;
+    }
+    // TODO: Surface mentor note snippets alongside each thread (plus future AI assistant cues for mentors).
+
+    const mentor = conversation.participants.find((participant) => participant.role === Role.MENTOR);
+    const member = conversation.participants.find((participant) => participant.role === Role.MEMBER);
+    const lastMessage = conversation.messages[0];
+    summaries.push({
+      id: conversation.id,
+      mentor: mentor ? buildChatParticipant(mentor) : null,
+      member: member ? buildChatParticipant(member) : null,
+      lastMessage: lastMessage?.content ?? null,
+      lastMessageAt: lastMessage?.createdAt ? lastMessage.createdAt.toISOString() : null,
+      updatedAt: conversation.updatedAt.toISOString(),
+    });
+  }
+
+  return summaries;
+}
+
+export async function createOrGetConversation(
+  memberId: string,
+  mentorId: string,
+  initiator: Actor,
+) {
+  const cleanMemberId = memberId.trim();
+  const cleanMentorId = mentorId.trim();
+  if (!cleanMemberId || !cleanMentorId) {
+    throw new ChatPermissionError("Mentor and member IDs are required.");
+  }
+
+  if (initiator.role !== Role.ADMIN && ![cleanMemberId, cleanMentorId].includes(initiator.id)) {
+    throw new ChatPermissionError("You cannot create conversations for other people.");
+  }
+
+  enforceRateLimit(`conversation:create:${initiator.id}`, 3, 60_000);
+
+  const participants = await prisma.user.findMany({
+    where: { id: { in: [cleanMemberId, cleanMentorId] } },
+    select: participantSelect,
+  });
+
+  if (participants.length !== 2) {
+    throw new ChatPermissionError("Unable to locate both participants.");
+  }
+
+  const member = participants.find((participant) => participant.role === Role.MEMBER);
+  const mentor = participants.find((participant) => participant.role === Role.MENTOR);
+
+  if (!member || !mentor) {
+    throw new ChatPermissionError("Conversations must include both a member and a mentor.");
+  }
+
+  const cache: AllowedMentorCache = new Map();
+  if (initiator.role !== Role.ADMIN) {
+    await ensureMemberMentorPair(member.id, mentor.id, cache);
+  }
+
+  const existing = await findExistingConversation([member.id, mentor.id]);
+  if (existing) {
+    return existing;
+  }
 
   return prisma.conversation.create({
     data: {
       participants: {
-        connect: allParticipantIds.map((id) => ({ id })),
+        connect: [{ id: member.id }, { id: mentor.id }],
       },
     },
     include: {
-      participants: true,
+      participants: {
+        select: participantSelect,
+      },
     },
   });
 }
 
+export async function getOrCreateConversation(userId: string, participantIds: string[]) {
+  const initiator = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { id: true, role: true },
+  });
+  if (!initiator) {
+    throw new ChatPermissionError("Initiating user not found.");
+  }
+
+  const uniqueIds = Array.from(new Set([...participantIds, userId])).filter(Boolean);
+  if (uniqueIds.length !== 2) {
+    throw new ChatPermissionError("Conversations must include exactly two participants.");
+  }
+
+  const participants = await prisma.user.findMany({
+    where: { id: { in: uniqueIds } },
+    select: participantSelect,
+  });
+
+  const member = participants.find((participant) => participant.role === Role.MEMBER);
+  const mentor = participants.find((participant) => participant.role === Role.MENTOR);
+
+  if (!member || !mentor) {
+    throw new ChatPermissionError("Conversation must include a member and a mentor.");
+  }
+
+  return createOrGetConversation(member.id, mentor.id, initiator);
+}
+
 export async function getConversationForUser(
   conversationId: string,
-  userId: string
+  user: Actor,
 ) {
-  const convo = await prisma.conversation.findFirst({
-    where: {
-      id: conversationId,
-      participants: {
-        some: { id: userId },
-      },
-    },
+  const conversation = await prisma.conversation.findUnique({
+    where: { id: conversationId },
     include: {
-      participants: true,
+      participants: {
+        select: participantSelect,
+      },
       messages: {
         orderBy: { createdAt: "asc" },
         include: {
-          sender: true,
+          sender: {
+            select: {
+              id: true,
+              name: true,
+              role: true,
+            },
+          },
         },
       },
     },
   });
 
-  if (!convo) {
-    throw new Error("Conversation not found or access denied");
+  if (!conversation) {
+    throw new ChatPermissionError("Conversation not found or access denied.", 404);
   }
 
-  return convo;
+  await ensureUserCanAccessConversation(user, conversation);
+  return conversation;
 }
 
 export async function sendMessage({
   conversationId,
-  senderId,
+  sender,
   content,
+  isSystem = false,
 }: {
   conversationId: string;
-  senderId: string;
+  sender: ChatActor;
   content: string;
+  isSystem?: boolean;
 }) {
   if (!content.trim()) {
-    throw new Error("Message content cannot be empty");
+    throw new ChatPermissionError("Message content cannot be empty.", 400);
   }
 
-  const isParticipant = await prisma.conversation.findFirst({
-    where: {
-      id: conversationId,
+  enforceRateLimit(`chat:send:${sender.id}`, 12, 30_000);
+
+  const conversation = await prisma.conversation.findUnique({
+    where: { id: conversationId },
+    include: {
       participants: {
-        some: { id: senderId },
+        select: participantSelect,
       },
     },
   });
 
-  if (!isParticipant) {
-    throw new Error("Sender is not a participant in this conversation");
+  if (!conversation) {
+    throw new ChatPermissionError("Conversation not found.", 404);
   }
 
+  await ensureUserCanAccessConversation(sender, conversation);
+
+  // TODO: Tie concierge automation into this hook so isSystem notes can be surfaced gracefully.
   return prisma.conversationMessage.create({
     data: {
       conversationId,
-      senderId,
+      senderId: sender.id,
       content,
+      isSystem,
     },
     include: {
-      sender: true,
+      sender: {
+        select: {
+          id: true,
+          name: true,
+          role: true,
+        },
+      },
     },
   });
 }
 
 export async function getMessages(
   conversationId: string,
-  userId: string
+  user: Actor,
 ): Promise<ChatMessageDTO[]> {
-  const convo = await getConversationForUser(conversationId, userId);
-
-  return convo.messages.map((m) => toChatMessageDTO(m));
+  const conversation = await getConversationForUser(conversationId, user);
+  return conversation.messages.map((message) => toChatMessageDTO(message));
 }
 
+export { ChatPermissionError };
+
 export const toChatMessageDTO = (
-  message: ConversationMessage & { sender: User | null },
+  message: ConversationMessageWithSender,
 ): ChatMessageDTO => ({
   id: message.id,
   content: message.content,
@@ -140,4 +601,6 @@ export const toChatMessageDTO = (
   senderRole: message.sender?.role ?? null,
   conversationId: message.conversationId,
   createdAt: message.createdAt,
+  readAt: message.readAt ?? null,
+  isSystem: message.isSystem,
 });

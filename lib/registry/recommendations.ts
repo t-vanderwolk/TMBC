@@ -1,4 +1,12 @@
-import { explainRecommendation } from "@/lib/services/registry.service";
+const EXPLANATION_MAP: Record<string, string> = {
+  thoughtful: "Thoughtfully curated with you in mind.",
+  intentional: "Arranged for intentional, calm rituals.",
+  mindful: "Designed for mindful mamas seeking ease.",
+};
+
+export const explainRecommendation = (tag: string) =>
+  EXPLANATION_MAP[tag] ?? "A thoughtful pick for your journey.";
+
 export { generateLifestyleTags } from "@/lib/services/onboarding.service";
 
 export type CuratedItem = {

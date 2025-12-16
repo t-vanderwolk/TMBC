@@ -81,7 +81,7 @@ export const addCustomItem = (payload: {
   price?: number;
   image?: string;
   category?: string;
-  moduleCode?: string;
+  section?: string;
 }) => api.post('/registry/custom/add', payload);
 
 export const onboardingApi = {

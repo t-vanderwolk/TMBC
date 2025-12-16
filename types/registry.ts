@@ -6,7 +6,6 @@ export type ProductSummary = {
   imageUrl: string;
   affiliateUrl: string;
   merchant: string;
-  moduleCodes: string[];
   price: number | null;
   inStock: boolean;
 };
@@ -20,22 +19,24 @@ export type MentorNote = {
   createdAt: string;
 };
 
+export type RegistryItemStatus = 'CONSIDERING' | 'ADDED' | 'PURCHASED' | 'REMOVED';
+export type RegistrySectionType = 'NURSERY' | 'GEAR' | 'FEEDING' | 'POSTPARTUM' | 'LATER';
+
 export type RegistryItem = {
   id: string;
   productId: string | null;
   quantity: number;
-  status: 'ACTIVE' | 'NEEDED' | 'RESERVED' | 'PURCHASED' | 'PURCHASED_ELSEWHERE' | 'REMOVED_REMOTE';
+  status: RegistryItemStatus;
+  section: RegistrySectionType;
   notes: string | null;
   purchaseSource: string | null;
   myRegistryId: string | null;
   affiliateUrl: string;
   product: ProductSummary;
   mentorNotes: MentorNote[];
-  isCustom: boolean;
   title?: string;
   merchant?: string | null;
   category?: string | null;
-  moduleCode?: string | null;
   image?: string | null;
   price?: number | null;
 };
@@ -61,9 +62,10 @@ export type ModuleRecommendationsResponse = {
   }[];
 };
 
+export type ConflictField = 'quantity' | 'status' | 'customNote' | 'affiliateUrl';
 export type RegistryConflict = {
   id: string;
-  field: 'quantity' | 'status' | 'customNote' | 'affiliateUrl';
+  field: ConflictField;
   localValue: string | null;
   remoteValue: string | null;
   item: {

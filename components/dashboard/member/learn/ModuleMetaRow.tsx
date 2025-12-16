@@ -1,0 +1,19 @@
+"use client";
+
+type ModuleMetaRowProps = {
+  stage: string;
+  estimatedMinutes?: number | null;
+};
+
+export default function ModuleMetaRow({ stage, estimatedMinutes }: ModuleMetaRowProps) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3 text-[0.65rem] uppercase tracking-[0.35em] text-[#3E2F35]/65">
+      <span>{stage}</span>
+      {estimatedMinutes ? (
+        <span>{`${estimatedMinutes} min`}</span>
+      ) : (
+        <span className="text-[#3E2F35]/40">Flexible</span>
+      )}
+    </div>
+  );
+}

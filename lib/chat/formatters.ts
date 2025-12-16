@@ -4,30 +4,11 @@ import {
   ChatMessageDTO,
   toChatMessageDTO,
 } from "@/lib/services/server/chat.service";
-
-export type ParticipantDTO = {
-  id: string;
-  name: string | null;
-  role: Role;
-};
-
-export type ChatMessagePayload = {
-  id: string;
-  content: string;
-  senderId: string;
-  senderName: string | null;
-  senderRole: string | null;
-  conversationId: string;
-  createdAt: string;
-};
-
-export type ChatConversationResponse = {
-  id: string;
-  participants: ParticipantDTO[];
-  mentor: ParticipantDTO | null;
-  member: ParticipantDTO | null;
-  messages: ChatMessagePayload[];
-};
+import type {
+  ChatConversationResponse,
+  ChatMessagePayload,
+  ParticipantDTO,
+} from "@/types/chat";
 
 const formatParticipant = (participant: {
   id: string;
@@ -42,6 +23,8 @@ const formatParticipant = (participant: {
 const formatChatMessage = (message: ChatMessageDTO): ChatMessagePayload => ({
   ...message,
   createdAt: message.createdAt.toISOString(),
+  readAt: message.readAt ? message.readAt.toISOString() : null,
+  isSystem: message.isSystem,
 });
 
 export const formatConversationResponse = (conversation: {

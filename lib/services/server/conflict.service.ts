@@ -1,4 +1,4 @@
-import { Prisma, RegistryStatus } from '@prisma/client';
+import { Prisma, RegistryItemStatus } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 
@@ -27,8 +27,10 @@ const parseQuantity = (value?: string | null) => {
 const parseStatus = (value?: string | null) => {
   if (!value) return undefined;
   const normalized = value.toUpperCase();
-  const statuses = Object.values(RegistryStatus);
-  return statuses.includes(normalized as RegistryStatus) ? (normalized as RegistryStatus) : undefined;
+  const statuses = Object.values(RegistryItemStatus);
+  return statuses.includes(normalized as RegistryItemStatus)
+    ? (normalized as RegistryItemStatus)
+    : undefined;
 };
 
 const normalizeValue = (value?: string | null) => {

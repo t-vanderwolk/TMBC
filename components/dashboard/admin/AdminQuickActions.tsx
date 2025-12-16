@@ -9,12 +9,12 @@ const actions = [
 
 export default function AdminQuickActions() {
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       {actions.map((action) => (
         <button
           key={action.label}
           type="button"
-          className="hover-elevate flex flex-col items-start justify-between rounded-full border border-[var(--tmbc-mauve)] bg-white/80 px-6 py-5 text-left transition-shadow"
+          className="flex h-full flex-col gap-2 rounded-2xl border border-[var(--tmbc-mauve)] bg-white/80 px-6 py-5 text-left shadow-sm transition hover:border-[var(--tmbc-gold)]"
         >
           <span className="text-sm font-semibold tracking-[0.3em] text-[var(--tmbc-charcoal)]">
             {action.label}

@@ -27,9 +27,7 @@ export default async function LearnPage() {
 
     const data = await response.json();
     modules = data?.modules ?? [];
-    console.log("Academy modules loaded:", modules.length);
-  } catch (err) {
-    console.error("Academy modules fetch failed:", err);
+  } catch {
     error = "Unable to load your academy modules right now.";
   }
 

@@ -27,15 +27,15 @@ export default function TodayFocusCard({
     "Set an intention before today unwinds; sync will be ready when you are.";
 
   return (
-    <section className="rounded-[2.5rem] border border-[#E2D1D7] bg-[#FEF8F5] p-6 shadow-[0_25px_60px_rgba(200,161,180,0.15)]">
-      <div className="flex items-center justify-between">
+    <section className="rounded-2xl border border-[#E2D1D7] bg-[#FEF8F5] p-6 shadow-sm">
+      <div className="flex flex-col gap-2">
         <p className="text-[0.65rem] uppercase tracking-[0.45em] text-[#C8A1B4]">
           {safeTimeLabel}
         </p>
         <span className="text-[0.65rem] text-[#3E2F35]/60">Just for today</span>
       </div>
-      <h2 className="mt-3 text-3xl font-serif text-[#3E2F35]">Focus with grace</h2>
-      <p className="mt-3 text-sm text-[#3E2F35]/70">{safeMantra}</p>
+      <h2 className="mt-3 text-3xl font-serif text-[#3E2F35] md:text-4xl">Focus with grace</h2>
+      <p className="mt-3 text-sm text-[#3E2F35]/70 md:text-base">{safeMantra}</p>
       <ul className="mt-5 space-y-3 text-sm text-[#3E2F35]/80">
         {safeFocusItems.map((item, index) => (
           <li key={`${item}-${index}`} className="flex items-start gap-3">
@@ -44,7 +44,7 @@ export default function TodayFocusCard({
           </li>
         ))}
       </ul>
-      <p className="mt-6 text-xs uppercase tracking-[0.4em] text-[#3E2F35]/50">
+      <p className="mt-6 text-xs uppercase tracking-[0.4em] text-[#3E2F35]/50 md:text-sm">
         {safeNote}
       </p>
     </section>

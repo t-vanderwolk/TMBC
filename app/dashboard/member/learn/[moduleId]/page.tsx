@@ -20,8 +20,8 @@ export default async function ModulePage({ params }: ModulePageProps) {
       cookie: cookieHeader,
     });
     moduleData = response.module;
-  } catch (error) {
-    console.error("Failed to fetch module:", error);
+  } catch {
+    moduleData = null;
   }
 
   if (!moduleData) {

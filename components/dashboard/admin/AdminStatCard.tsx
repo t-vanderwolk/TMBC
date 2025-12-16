@@ -4,14 +4,19 @@ type AdminStatCardProps = {
   title: string;
   value: string | number;
   detail?: string;
+  className?: string;
 };
 
-export default function AdminStatCard({ title, value, detail }: AdminStatCardProps) {
+export default function AdminStatCard({ title, value, detail, className = "" }: AdminStatCardProps) {
   return (
-    <div className="admin-card flex flex-col justify-between rounded-[2rem] border border-[var(--tmbc-gold)] bg-[var(--tmbc-blush)] p-6 shadow-pastel">
-      <p className="text-sm uppercase tracking-[0.4em] text-[var(--tmbc-mauve)]">{title}</p>
-      <p className="mt-3 text-4xl font-semibold text-[var(--tmbc-charcoal)]">{value}</p>
-      {detail && <p className="mt-2 text-xs text-[var(--tmbc-charcoal)] text-opacity-70">{detail}</p>}
-    </div>
+    <article
+      className={`flex flex-col gap-3 rounded-2xl border border-[var(--tmbc-gold)] bg-[var(--tmbc-blush)] p-6 shadow-sm ${className}`}
+    >
+      <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-mauve)]">{title}</p>
+      <p className="text-3xl font-semibold text-[var(--tmbc-charcoal)] md:text-4xl">{value}</p>
+      {detail && (
+        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70 md:text-base">{detail}</p>
+      )}
+    </article>
   );
 }

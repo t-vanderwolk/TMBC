@@ -1,0 +1,19 @@
+-- Add MyRegistry onboarding columns
+ALTER TABLE "User"
+  ADD COLUMN IF NOT EXISTS "myRegistryRegistryId" TEXT,
+  ADD COLUMN IF NOT EXISTS "myRegistryCreatedAt" TIMESTAMP(3);
+
+ALTER TABLE "RegistryItem"
+  ADD COLUMN IF NOT EXISTS "myRegistryId" TEXT,
+  ADD COLUMN IF NOT EXISTS "myRegistryItemId" TEXT,
+  ADD COLUMN IF NOT EXISTS "title" TEXT,
+  ADD COLUMN IF NOT EXISTS "url" TEXT,
+  ADD COLUMN IF NOT EXISTS "merchant" TEXT,
+  ADD COLUMN IF NOT EXISTS "category" TEXT,
+  ADD COLUMN IF NOT EXISTS "price" DOUBLE PRECISION,
+  ADD COLUMN IF NOT EXISTS "quantity" INTEGER,
+  ADD COLUMN IF NOT EXISTS "image" TEXT,
+  ADD COLUMN IF NOT EXISTS "purchaseSource" TEXT,
+  ADD COLUMN IF NOT EXISTS "notes" TEXT;
+
+CREATE INDEX IF NOT EXISTS "RegistryItem_affiliateId_idx" ON "RegistryItem"("affiliateId");

@@ -39,17 +39,21 @@ export default function MemberWelcomeHeader({
   }, [clientName, userName]);
 
   return (
-    <section className="rounded-[2.8rem] border border-[#F3DDE4] bg-gradient-to-br from-[#FFF8F6] via-[#FCEAF0] to-[#F6E0E6] px-8 py-10 shadow-[0_30px_70px_rgba(199,166,179,0.25)]">
+    <section className="rounded-2xl border border-[#F3DDE4] bg-gradient-to-br from-[#FFF8F6] via-[#FCEAF0] to-[#F6E0E6] px-6 py-8 shadow-sm md:px-8 md:py-10">
       <p className="text-[0.65rem] uppercase tracking-[0.45em] text-[#C8A1B4]">Daily check-in</p>
-      <h1 className="mt-3 text-4xl font-serif text-[#3E2F35]">
-        Good morning, <span suppressHydrationWarning className="font-semibold text-[#3E2F35]">{safeName}</span>.
+      <h1 className="mt-3 text-3xl font-serif text-[#3E2F35] md:text-4xl">
+        Good morning,{" "}
+        <span suppressHydrationWarning className="font-semibold text-[#3E2F35]">
+          {safeName}
+        </span>
+        .
       </h1>
-      <p className="mt-4 max-w-2xl text-base text-[#3E2F35]/70 leading-relaxed">
+      <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#3E2F35]/70 md:text-base">
         {toneLine} {intentionLine}
       </p>
-      <div className="mt-6 rounded-[2rem] bg-[#fffaf7]/80 px-6 py-4 text-[#3E2F35] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
+      <div className="mt-6 rounded-2xl bg-[#fffaf7]/90 px-5 py-4 text-[#3E2F35] shadow-inner shadow-white/60">
         <p className="text-xs uppercase tracking-[0.35em] text-[#3E2F35]">Studio mantra</p>
-        <p className="mt-2 text-lg font-semibold">{highlightMessage}</p>
+        <p className="mt-2 text-lg font-semibold md:text-xl">{highlightMessage}</p>
       </div>
     </section>
   );

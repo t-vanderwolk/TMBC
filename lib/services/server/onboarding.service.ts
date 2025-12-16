@@ -4,6 +4,8 @@ import crypto from 'crypto';
 
 import { AuthService } from './auth.service';
 import { prisma } from '@/lib/prisma';
+import { ensureMyRegistryAccount } from './myregistry/provision.service';
+import { ensureConversationBetweenUsers } from './chat.service';
 
 type SaveProfilePayload = {
   userId: string;
@@ -91,12 +93,26 @@ export const assignMentor = async (userId: string) => {
     throw new Error('No mentor available');
   }
 
-  await prisma.user.update({
+  const updatedUser = await prisma.user.update({
     where: { id: userId },
     data: {
       mentorId: mentor.id,
     },
   });
+
+  try {
+    await ensureConversationBetweenUsers({
+      memberId: updatedUser.id,
+      mentorId: mentor.id,
+      reason: 'assignment',
+    });
+  } catch (error) {
+    console.warn('[ChatAutomation] Unable to create conversation during mentor assignment', {
+      memberId: updatedUser.id,
+      mentorId: mentor.id,
+      error,
+    });
+  }
 
   return mentor;
 };
@@ -107,12 +123,37 @@ export const completeOnboarding = async (userId: string) => {
     throw new Error('User not found');
   }
 
-  return prisma.user.update({
+  try {
+    await ensureMyRegistryAccount(user);
+  } catch (error) {
+    // Keep onboarding flow smooth even if registry provisioning fails.
+    console.error('Unable to provision MyRegistry account', error);
+  }
+
+  const updatedUser = await prisma.user.update({
     where: { id: userId },
     data: {
       onboardingComplete: true,
     },
   });
+
+  if (updatedUser.mentorId) {
+    try {
+      await ensureConversationBetweenUsers({
+        memberId: updatedUser.id,
+        mentorId: updatedUser.mentorId,
+        reason: 'onboarding',
+      });
+    } catch (error) {
+      console.warn('[ChatAutomation] Unable to create onboarding conversation', {
+        memberId: updatedUser.id,
+        mentorId: updatedUser.mentorId,
+        error,
+      });
+    }
+  }
+
+  return updatedUser;
 };
 
 export const finishInviteOnboarding = async ({

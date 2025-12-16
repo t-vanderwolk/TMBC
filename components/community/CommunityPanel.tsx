@@ -16,12 +16,12 @@ export default function CommunityPanel({
   cta = "Visit community",
 }: CommunityPanelProps) {
   return (
-    <section className="rounded-3xl border border-[#E3C6D4] bg-white/90 p-6 shadow-[0_20px_60px_rgba(180,143,164,0.25)]">
+    <section className="rounded-2xl border border-[#E3C6D4] bg-white/90 p-6 shadow-sm">
       <p className="text-xs uppercase tracking-[0.45em] text-[#C8A1B4]">{title}</p>
-      <p className="mt-2 text-sm text-[#3E2F35]/70">{copy}</p>
+      <p className="mt-2 text-sm text-[#3E2F35]/70 md:text-base">{copy}</p>
       <Link
         href={href}
-        className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#3E2F35] transition hover:text-[#B98AA5]"
+        className="mt-4 inline-flex items-center justify-center gap-2 rounded-2xl border border-transparent bg-[#FEF8F5] px-4 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#3E2F35] transition hover:border-[#B98AA5] hover:text-[#B98AA5]"
       >
         {cta} →
       </Link>

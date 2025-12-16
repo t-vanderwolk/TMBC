@@ -11,7 +11,7 @@ export type AcademyTrack = {
   summary: string;
 };
 
-import { ProductResponse, getProductsByCategories, getProductsByIds, getProductsByModuleCode } from './product.service';
+import { ProductResponse, getProductsByCategories, getProductsByIds } from './product.service';
 import { prisma } from '@/lib/prisma';
 
 type AcademyModuleDefinition = {
@@ -151,7 +151,7 @@ export const getModuleProducts = async (moduleCode: string) => {
     throw new Error(`Module ${moduleCode} not found`);
   }
 
-  const products = await getProductsByModuleCode(module.id);
+  const products = await getProductsByCategories(module.categories);
 
   return {
     module,

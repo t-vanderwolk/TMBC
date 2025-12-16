@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 import LogoutButton from "@/components/auth/LogoutButton";
 import { loadStoredUser } from "@/lib/auth/userStore";
 
-export default function GlobalHeader() {
+type GlobalHeaderProps = {
+  className?: string;
+};
+
+export default function GlobalHeader({ className = "" }: GlobalHeaderProps) {
   const [safeName, setSafeName] = useState("Friend");
 
   useEffect(() => {
@@ -20,7 +24,9 @@ export default function GlobalHeader() {
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-20 border-b border-[#EAD4D8]/70 bg-gradient-to-b from-white via-white/80 to-white/60 shadow-[0_24px_40px_rgba(200,161,180,0.2)] backdrop-blur">
+    <header
+      className={`fixed inset-x-0 top-0 z-20 border-b border-[#EAD4D8]/70 bg-gradient-to-b from-white via-white/80 to-white/60 shadow-[0_24px_40px_rgba(200,161,180,0.2)] backdrop-blur ${className}`}
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <div>
           <p className="text-xs uppercase tracking-[0.45em] text-[#C8A1B4]">

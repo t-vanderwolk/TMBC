@@ -1,6 +1,7 @@
-import { Product } from '@prisma/client';
+import { AffiliateLink, Prisma, Product } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
+import { buildAffiliateUrl } from './affiliate.service';
 
 export type ProductResponse = {
   id: string;
@@ -10,37 +11,36 @@ export type ProductResponse = {
   imageUrl: string;
   affiliateUrl: string;
   merchant: string;
-  moduleCodes: string[];
   price: number | null;
-  inStock: boolean;
 };
 
-const toProductResponse = (product: Product): ProductResponse => ({
-  id: product.id,
-  name: product.name,
-  brand: product.brand,
-  category: product.category,
-  imageUrl: product.imageUrl,
-  affiliateUrl: product.affiliateUrl,
-  merchant: product.merchant,
-  moduleCodes: product.moduleCodes,
-  price: product.price ?? null,
-  inStock: product.inStock,
-});
+type ProductWithLinks = Prisma.ProductGetPayload<{ include: { affiliateLinks: true } }>;
 
-export const getProductsByModuleCode = async (moduleCode: string) => {
-  const products = await prisma.product.findMany({
-    where: {
-      moduleCodes: {
-        has: moduleCode,
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
+const getPrimaryAffiliateLink = (product: ProductWithLinks) =>
+  product.affiliateLinks.find((link) => link.isPrimary) ?? product.affiliateLinks[0] ?? null;
 
-  return products.map(toProductResponse);
+const buildProductAffiliateUrl = (product: ProductWithLinks) => {
+  const link = getPrimaryAffiliateLink(product);
+  if (!link?.outboundUrl) {
+    return 'https://taylor-madebaby.com';
+  }
+  return buildAffiliateUrl({ url: link.outboundUrl, merchant: link.retailerName });
+};
+
+const toProductResponse = (product: ProductWithLinks): ProductResponse => {
+  const affiliateUrl = buildProductAffiliateUrl(product);
+  const merchant = getPrimaryAffiliateLink(product)?.retailerName ?? product.brand ?? 'Taylor Made Baby';
+
+  return {
+    id: product.id,
+    name: product.name,
+    brand: product.brand ?? 'Taylor Made Baby',
+    category: product.category,
+    imageUrl: product.imageUrl ?? '',
+    affiliateUrl,
+    merchant,
+    price: null,
+  };
 };
 
 export const getProductsByCategories = async (categories: string[]) => {
@@ -52,6 +52,7 @@ export const getProductsByCategories = async (categories: string[]) => {
     where: {
       category: { in: categories },
     },
+    include: { affiliateLinks: true },
     orderBy: {
       createdAt: 'desc',
     },
@@ -69,6 +70,7 @@ export const getProductsByIds = async (ids: string[]) => {
     where: {
       id: { in: ids },
     },
+    include: { affiliateLinks: true },
   });
 
   const productMap = new Map(products.map((product) => [product.id, toProductResponse(product)]));

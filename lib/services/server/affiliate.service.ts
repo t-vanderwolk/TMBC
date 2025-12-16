@@ -1,5 +1,3 @@
-import { Product } from '@prisma/client';
-
 const appendQueryParams = (url: string, params: Record<string, string | undefined | null>) => {
   const query = Object.entries(params)
     .filter(([, value]) => value)
@@ -56,6 +54,11 @@ export const buildAffiliateUrl = ({ url, merchant, mentorRef }: AffiliateInput) 
   }
 };
 
-export const buildAffiliateLink = (product: Pick<Product, 'affiliateUrl' | 'merchant'>, mentorRef?: string) => {
-  return buildAffiliateUrl({ url: product.affiliateUrl, merchant: product.merchant, mentorRef });
+export type AffiliateLinkPayload = {
+  url: string;
+  merchant?: string | null;
+};
+
+export const buildAffiliateLink = (link: AffiliateLinkPayload, mentorRef?: string) => {
+  return buildAffiliateUrl({ url: link.url, merchant: link.merchant, mentorRef });
 };

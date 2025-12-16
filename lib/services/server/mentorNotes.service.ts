@@ -1,95 +1,118 @@
-import { Prisma } from '@prisma/client';
+import { MentorNote } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 
-export type MentorNoteForModule = {
-  id: string;
-  moduleId: string | null;
-  memberId: string;
-  mentorId: string;
-  mentorName: string | null;
-  content: string;
-  createdAt: string;
-};
-
-interface GetMentorNotesForModuleInput {
-  memberId: string;
-  moduleId: string;
+export class MentorNotePermissionError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'MentorNotePermissionError';
+  }
 }
 
-interface AddMentorNoteInput extends GetMentorNotesForModuleInput {
-  mentorId: string;
-  content: string;
-}
+const sanitizeContent = (content: string) => content.trim();
 
-type MentorNoteWithMentor = Prisma.MentorNoteGetPayload<{
-  include: {
-    mentor: { select: { id: true; name: true } };
-    member: { select: { id: true; name: true } };
-  };
-}>;
-
-const mapMentorNote = (note: MentorNoteWithMentor): MentorNoteForModule => ({
+const mapNote = (note: MentorNote) => ({
   id: note.id,
-  moduleId: note.moduleId,
-  memberId: note.memberId,
-  mentorId: note.mentorId,
-  mentorName: note.mentor?.name || null,
   content: note.content,
+  source: 'manual',
   createdAt: note.createdAt.toISOString(),
+  updatedAt: note.updatedAt.toISOString(),
 });
 
-export const getMentorNotesForModule = async ({ memberId, moduleId }: GetMentorNotesForModuleInput) => {
+export const getMentorNotesForMember = async ({
+  mentorId,
+  memberId,
+  limit = 10,
+}: {
+  mentorId: string;
+  memberId: string;
+  limit?: number;
+}) => {
   const notes = await prisma.mentorNote.findMany({
     where: {
+      mentorId,
       memberId,
-      moduleId,
     },
     orderBy: {
-      createdAt: 'asc',
+      createdAt: 'desc',
     },
-    include: {
-      mentor: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      member: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
+    take: limit,
   });
 
-  return notes.map(mapMentorNote);
+  return notes.map(mapNote);
 };
 
-export const addMentorNote = async ({ memberId, moduleId, mentorId, content }: AddMentorNoteInput) => {
+export const createMentorNote = async ({
+  mentorId,
+  memberId,
+  content,
+}: {
+  mentorId: string;
+  memberId: string;
+  content: string;
+}) => {
+  const trimmed = sanitizeContent(content);
+  if (!trimmed) {
+    throw new Error('Note content cannot be empty.');
+  }
+
   const note = await prisma.mentorNote.create({
     data: {
-      memberId,
-      moduleId,
       mentorId,
-      content,
-    },
-    include: {
-      mentor: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      member: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
+      memberId,
+      moduleId: null,
+      productId: null,
+      content: trimmed,
     },
   });
 
-  return mapMentorNote(note);
+  console.info('[MentorNote] created', {
+    mentorId,
+    memberId,
+    noteId: note.id,
+  });
+
+  return mapNote(note);
+};
+
+export const updateMentorNote = async ({
+  mentorId,
+  noteId,
+  content,
+}: {
+  mentorId: string;
+  noteId: string;
+  content: string;
+}) => {
+  const trimmed = sanitizeContent(content);
+  if (!trimmed) {
+    throw new Error('Note content cannot be empty.');
+  }
+
+  const existing = await prisma.mentorNote.findUnique({
+    where: { id: noteId },
+  });
+
+  if (!existing) {
+    throw new MentorNotePermissionError('Mentor note not found.');
+  }
+
+  if (existing.mentorId !== mentorId) {
+    throw new MentorNotePermissionError('You are not allowed to modify this note.');
+  }
+
+  const note = await prisma.mentorNote.update({
+    where: { id: noteId },
+    data: {
+      content: trimmed,
+    },
+  });
+
+  console.info('[MentorNote] updated', {
+    mentorId,
+    memberId: note.memberId,
+    noteId: note.id,
+  });
+
+  return mapNote(note);
 };

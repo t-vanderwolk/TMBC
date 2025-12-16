@@ -16,12 +16,10 @@ type RegistryListProps = {
 };
 
 const statusLabels: Record<RegistryItem['status'], string> = {
-  ACTIVE: 'Active',
-  NEEDED: 'Needed',
-  RESERVED: 'Reserved',
+  CONSIDERING: 'Considering',
+  ADDED: 'Added',
   PURCHASED: 'Purchased',
-  PURCHASED_ELSEWHERE: 'Purchased elsewhere',
-  REMOVED_REMOTE: 'Removed on MyRegistry',
+  REMOVED: 'Removed',
 };
 
 const statusOptions = Object.entries(statusLabels).map(([value, label]) => ({ value, label }));
@@ -63,9 +61,9 @@ const RegistryListItem = ({
   };
 
   const handlePurchasedElsewhere = async () => {
-    setStatus('PURCHASED_ELSEWHERE');
+    setStatus('PURCHASED');
     await onUpdate(item.id, {
-      status: 'PURCHASED_ELSEWHERE',
+      status: 'PURCHASED',
       purchaseSource: purchaseSource || 'Purchased elsewhere',
     });
   };
@@ -80,15 +78,17 @@ const RegistryListItem = ({
     }).format(unitPrice);
   }, [unitPrice]);
 
+  const isCustom = item.productId === null;
+
   return (
-    <div className="space-y-5 rounded-3xl border border-tmBlush/40 bg-white/95 p-5 shadow-sm">
+      <div className="space-y-5 rounded-3xl border border-tmBlush/40 bg-white/95 p-5 shadow-sm">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-1 items-center gap-4">
           <CardPlaceholder className="h-20 w-20" style={{ minHeight: 0 }} />
           <div>
             <div className="flex items-center gap-2">
               <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">{item.product.brand}</p>
-              {item.isCustom && (
+              {isCustom && (
                 <span className="rounded-full bg-tmBlush/40 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-tmCharcoal">
                   Custom
                 </span>
