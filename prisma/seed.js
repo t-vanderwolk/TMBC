@@ -21,8 +21,7 @@ async function upsertUser({ email, name, role }) {
       email,
       name,
       role,
-      password: hashedPassword, // ✅ ONLY password
-      status: "ACTIVE",
+      password: hashedPassword,
     },
   });
 
