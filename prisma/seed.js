@@ -49,9 +49,12 @@ async function main() {
 }
 
 async function seedDemoRegistryProduct() {
-  const existing = await prisma.product.findFirst({
-    where: { name: "Traveler's Nesting Kit (demo)" },
-  });
+  /** Use raw SQL here so Prisma never requests the missing `subcategory` column. */
+  const existing =
+    (await prisma.$queryRawUnsafe(
+      `SELECT id FROM "Product" WHERE name = $1 LIMIT 1`,
+      "Traveler's Nesting Kit (demo)",
+    ))[0];
 
   if (existing) {
     return;
