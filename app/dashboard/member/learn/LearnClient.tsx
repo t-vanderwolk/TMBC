@@ -46,8 +46,21 @@ const moduleStage = (module: AcademyModuleCard) =>
   module.stage ?? "Studio moment";
 
 export default function LearnClient({ modules, error }: LearnClientProps) {
+  const safeModules = Array.isArray(modules) ? modules : [];
+
+  if (!safeModules.length && !error) {
+    return (
+      <div className="py-24 text-center text-muted-foreground">
+        <p className="text-lg font-serif">Your Academy is preparing…</p>
+        <p className="mt-2 text-sm">
+          Your learning journey will appear here shortly.
+        </p>
+      </div>
+    );
+  }
+
   const journeyGroups = JOURNEY_ORDER.map((journeyId) => {
-    const journeyModules = modules.filter(
+    const journeyModules = safeModules.filter(
       (module) => module.journey?.toLowerCase() === journeyId,
     );
     const journeyMeta = JOURNEY_META[journeyId];
@@ -75,7 +88,7 @@ export default function LearnClient({ modules, error }: LearnClientProps) {
         />
       )}
 
-      {!modules.length && !error ? (
+      {!safeModules.length && !error ? (
         <EmptyState
           title="Quiet for now"
           message="Nothing here yet. This space will fill as your journey unfolds."
