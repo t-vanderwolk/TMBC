@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
+const { seedAcademyModules } = require("./seedAcademyModules");
 
 const prisma = new PrismaClient();
 const PASSWORD = "Karma";
@@ -22,6 +23,8 @@ async function upsertUser({ email, name, role }) {
       name,
       role,
       password: hashedPassword,
+      emailVerified: true,
+      status: "ACTIVE",
     },
   });
 
@@ -29,23 +32,17 @@ async function upsertUser({ email, name, role }) {
 }
 
 async function main() {
-  await upsertUser({
-    email: "admin@me.com",
-    name: "Admin",
-    role: "ADMIN",
-  });
+  console.log("🌱 Starting TMBC seed…");
 
-  await upsertUser({
-    email: "mentor@me.com",
-    name: "Mentor",
-    role: "MENTOR",
-  });
+  // Users
+  await upsertUser({ email: "admin@me.com", name: "Admin", role: "ADMIN" });
+  await upsertUser({ email: "mentor@me.com", name: "Mentor", role: "MENTOR" });
+  await upsertUser({ email: "member@me.com", name: "Member", role: "MEMBER" });
 
-  await upsertUser({
-    email: "member@me.com",
-    name: "Member",
-    role: "MEMBER",
-  });
+  // Academy
+  await seedAcademyModules();
+
+  console.log("🎉 TMBC seed complete");
 }
 
 main()
