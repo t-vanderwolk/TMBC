@@ -4,7 +4,7 @@ import { FormEvent, useState } from 'react';
 import { X } from 'lucide-react';
 
 import { api } from '@/lib/api';
-import type { AdminEvent } from '@/hooks/useEvents';
+import type { AdminEvent } from '@/types/admin';
 
 type CreateEventModalProps = {
   isOpen: boolean;

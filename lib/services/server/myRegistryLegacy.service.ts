@@ -4,6 +4,9 @@ import { prisma } from '@/lib/prisma';
 import { buildAffiliateUrl } from './affiliate.service';
 import { ConflictRecordInput, recordConflicts, clearConflict, listActiveConflicts } from './conflict.service';
 
+/**
+ * @deprecated Legacy MyRegistry sync helpers. Prefer the /myregistry folder services for future work.
+ */
 export type MyRegistryResponse<T = unknown> = {
   success: boolean;
   operation: string;
