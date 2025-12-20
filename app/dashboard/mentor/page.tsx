@@ -1,51 +1,132 @@
-"use client";
-
 import CommunityPanel from "@/components/community/CommunityPanel";
 import MentorToolkit from "./components/MentorToolkit";
+import ActionButton from "@/components/dashboard/ui/ActionButton";
+import DashboardCard from "@/components/dashboard/ui/DashboardCard";
+import DashboardSection from "@/components/dashboard/ui/DashboardSection";
+import StatBadge from "@/components/dashboard/ui/StatBadge";
 
 const queue = [1, 2, 3];
 
-export default function MentorDashboard() {
+export default async function MentorDashboard() {
   return (
-    <div className="space-y-10">
+    <main className="space-y-10">
       <MentorToolkit />
 
-      <section className="rounded-2xl border border-[#E3D1DA] bg-[#FFF8F6] p-6 shadow-sm md:p-8">
-        <p className="text-xs uppercase tracking-[0.45em] text-[#C8A1B4]">Mentor Studio</p>
-        <h2 className="mt-2 text-3xl font-serif text-[#3E2F35] md:text-4xl">Your Members Today</h2>
-        <p className="mt-3 text-sm text-[#3E2F35]/70 md:text-base">
-          Insight, rhythm, and gentle guidance for each parent you support.
-        </p>
-      </section>
+      <DashboardSection
+        eyebrow="Mentor Studio"
+        title="Your Members Today"
+        description="Insight, rhythm, and gentle guidance for each parent you support."
+        action={
+          <ActionButton
+            href="/dashboard/mentor/workspace"
+            variant="ghost"
+            className="sm:w-auto"
+            fullWidth
+          >
+            Open Mentor Hub
+          </ActionButton>
+        }
+      >
+        <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+          <DashboardCard className="space-y-4 p-5">
+            <div className="flex items-center justify-between gap-4">
+              <p className="text-sm text-[#3E2F35]/70">
+                Keep the studio calm with gentle follow-ups and rhythm checks.
+              </p>
+              <StatBadge label="in queue" value={queue.length} />
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <ActionButton
+                href="/dashboard/mentor/members"
+                variant="ghost"
+                className="sm:w-auto"
+                fullWidth
+              >
+                View members
+              </ActionButton>
+              <ActionButton
+                href="/dashboard/mentor/tasks"
+                variant="ghost"
+                className="sm:w-auto"
+                fullWidth
+              >
+                Review tasks
+              </ActionButton>
+            </div>
+          </DashboardCard>
 
-      <section>
-        <h3 className="uppercase text-xs tracking-[0.4em] text-[#C8A1B4] mb-3">Member Queue</h3>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <DashboardCard className="space-y-4 p-5">
+            <p className="text-sm text-[#3E2F35]/70">
+              Track upcoming events and follow-ups without the noise.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <ActionButton
+                href="/dashboard/events"
+                variant="ghost"
+                className="sm:w-auto"
+                fullWidth
+              >
+                Upcoming events
+              </ActionButton>
+              <ActionButton
+                href="/dashboard/mentor/workspace"
+                variant="ghost"
+                className="sm:w-auto"
+                fullWidth
+              >
+                Mentor workspace
+              </ActionButton>
+            </div>
+          </DashboardCard>
+        </div>
+      </DashboardSection>
+
+      <DashboardSection
+        eyebrow="Member queue"
+        title="Gentle overview"
+        description="Each card shares a quick reminder of what this member needs next."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
           {queue.map((i) => (
-            <div
-              key={i}
-              className="rounded-2xl border border-[#E3D1DA] bg-white/80 p-6 shadow-sm"
-            >
-              <h4 className="text-lg font-serif text-[#3E2F35]">Member #{i}</h4>
-              <p className="text-sm text-[#3E2F35]/70 mt-1">
+            <DashboardCard key={i} className="space-y-3 p-5">
+              <div className="flex items-center justify-between">
+                <h4 className="text-lg font-serif text-[#3E2F35]">Member #{i}</h4>
+                <span className="text-[0.6rem] uppercase tracking-[0.35em] text-[#B98AA5]">
+                  Registry check
+                </span>
+              </div>
+              <p className="text-sm text-[#3E2F35]/70">
                 Needs a registry check-in and module approval.
               </p>
-              <a
-                href="/dashboard/mentor/members"
-                className="mt-3 inline-block text-xs uppercase tracking-[0.3em] text-[#3E2F35]"
-              >
-                Open →
-              </a>
-            </div>
+              <div className="flex flex-wrap gap-3">
+                <ActionButton
+                  href="/dashboard/mentor/members"
+                  variant="ghost"
+                  className="sm:w-auto"
+                  fullWidth
+                >
+                  Open profile
+                </ActionButton>
+                <ActionButton
+                  href="/dashboard/mentor/tasks"
+                  variant="ghost"
+                  className="sm:w-auto"
+                  fullWidth
+                >
+                  Add follow-up
+                </ActionButton>
+              </div>
+            </DashboardCard>
           ))}
         </div>
+
         <CommunityPanel
           title="Mentor Lounge"
           copy="Share wins with peers and exchange mentorship prompts."
           href="/dashboard/member/community"
           cta="Browse rooms"
         />
-      </section>
-    </div>
+      </DashboardSection>
+    </main>
   );
 }

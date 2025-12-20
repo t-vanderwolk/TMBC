@@ -35,7 +35,7 @@ const extractToken = (request?: RequestLike) => {
   return null;
 };
 
-type SafeUser = Omit<User, "password">;
+export type SafeUser = Omit<User, "password">;
 
 export async function getUserOrThrow(request?: RequestLike): Promise<SafeUser> {
   const token = extractToken(request);

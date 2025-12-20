@@ -10,6 +10,7 @@ type AnswersForm = Record<string, string>;
 
 type QuestionnaireFlowProps = {
   source: QuestionnaireSourceValue;
+  endpoint?: string;
   title?: string;
   description?: string;
   finalButtonLabel?: string;
@@ -22,6 +23,7 @@ type QuestionnaireFlowProps = {
 
 export default function QuestionnaireFlow({
   source,
+  endpoint,
   title = "TMBC Intelligent Onboarding",
   description = "We stitch your preferences into living intelligence for your registry, academy, and mentor.",
   finalButtonLabel = "See recommendations",
@@ -35,14 +37,14 @@ export default function QuestionnaireFlow({
   const [loaded, setLoaded] = useState(false);
 
   const sections = QUESTIONNAIRE_SCHEMA.sections;
-  const currentSection = sections[currentStep];
+  const currentSection = sections[currentStep] ?? sections[0];
   const totalSteps = sections.length;
 
   useEffect(() => {
     let mounted = true;
     const loadQuestionnaire = async () => {
       try {
-        const response = await fetch("/api/onboarding/questionnaire");
+        const response = await fetch(endpoint ?? "/api/onboarding/questionnaire");
         if (!response.ok) {
           throw new Error("Unable to load questionnaire");
         }
@@ -82,7 +84,7 @@ export default function QuestionnaireFlow({
     setError("");
 
     try {
-      const response = await fetch("/api/onboarding/questionnaire", {
+      const response = await fetch(endpoint ?? "/api/onboarding/questionnaire", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -122,6 +124,10 @@ export default function QuestionnaireFlow({
       setStatus("idle");
     }
   };
+
+  if (!currentSection) {
+    return null;
+  }
 
   return (
     <div className="space-y-8">

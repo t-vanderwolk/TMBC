@@ -8,6 +8,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        ivory: '#FAF8F6',
+        blush: '#F3E6EA',
+        mauve: '#C8A2B9',
+        gold: '#C9A24D',
+        charcoal: '#2E2E2E',
+        'muted-foreground': '#6F666A',
         tmIvory: '#FAF7F4',
         tmBlush: '#F6E9E6',
         tmMauve: '#C7A7B7',

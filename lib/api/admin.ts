@@ -17,10 +17,15 @@ export const updateAdminEvent = (id: string, payload: Record<string, any>) =>
   apiClient.patch(`/admin/events/${id}`, payload);
 export const deleteAdminEvent = (id: string) => apiClient.delete(`/admin/events/${id}`);
 
-export const getInviteRequests = () => apiClient.get("/invite/requests");
+export const getInviteRequests = () => apiClient.get("/admin/invite-requests");
 
 export const getAdminWaitlist = () => apiClient.get("/admin/waitlist");
 export const approveAdminWaitlist = (id: string) =>
   apiClient.post("/admin/waitlist/approve", { id });
 export const rejectAdminWaitlist = (id: string) =>
   apiClient.post("/admin/waitlist/reject", { id });
+
+export const getAdminAnalytics = (rangeDays?: number) => {
+  const suffix = rangeDays ? `?rangeDays=${rangeDays}` : "";
+  return apiClient.get(`/admin/analytics${suffix}`);
+};

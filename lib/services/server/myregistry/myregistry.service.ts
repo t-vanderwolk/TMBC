@@ -1,4 +1,7 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import type { AxiosInstance, AxiosRequestConfig, AxiosStatic } from "axios";
+
+const axios = require("axios") as AxiosStatic;
+const { isAxiosError } = axios;
 
 const BASE_URL = "https://api.myregistry.com/RegistryApi/1/0/json/";
 
@@ -30,15 +33,15 @@ const createClient = () => {
 };
 
 let client: AxiosInstance | null = null;
-const getClient = () => {
+const getClient = (): AxiosInstance => {
   if (!client) {
     client = createClient();
   }
-  return client;
+  return client!;
 };
 
 const handleError = (error: unknown): never => {
-  if (axios.isAxiosError(error)) {
+  if (isAxiosError(error)) {
     throw {
       status: error.response?.status ?? 500,
       message: error.response?.data ?? error.message,

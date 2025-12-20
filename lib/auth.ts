@@ -1,7 +1,6 @@
 "use client";
 
 import { api } from "@/lib/api";
-import { routeForRole } from "@/lib/auth/routeForRole";
 
 export type StoredUser = {
   id: string;
@@ -193,13 +192,8 @@ export async function login(email: string, password: string) {
   const res = await api.post("/auth/login", { email, password });
   const data = res.data || {};
   console.log("FRONTEND RAW LOGIN RESPONSE:", data);
-
-  const dashboard =
-    data.dashboard || data.redirect || routeForRole(data.user?.role);
-
-  return {
-    ...data,
-    dashboard,
-    redirect: dashboard,
-  };
+  if (!data?.success) {
+    throw new Error("Invalid credentials");
+  }
+  return data;
 }

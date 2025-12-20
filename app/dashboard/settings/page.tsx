@@ -1,80 +1,101 @@
-'use client';
+import { getUserOrThrow } from "@/lib/auth/getUser";
+import { redirect } from "next/navigation";
 
-import { useEffect, useState } from 'react';
+import HouseholdForm, { type HouseholdData } from "@/components/dashboard/member/settings/HouseholdForm";
+import OnboardingEditor from "@/components/dashboard/member/settings/OnboardingEditor";
+import ProfileForm from "@/components/dashboard/member/settings/ProfileForm";
+import RegenerateButton from "@/components/dashboard/member/settings/RegenerateButton";
+import SettingsTabs from "@/components/dashboard/member/settings/SettingsTabs";
+import PinterestSyncCard from "@/components/dashboard/member/settings/PinterestSyncCard";
+import { getMemberSettingsData } from "@/lib/services/server/memberSettings.service";
+import { CuratedRegistry } from "@/lib/registry/recommendations";
 
-import { api } from '@/lib/api';
+export default async function MemberSettingsPage() {
+  const user = await getUserOrThrow();
+  if (user.role !== "MEMBER") {
+    redirect("/login");
+  }
 
-export default function SettingsPinterestPage() {
-  const [connected, setConnected] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState<string | null>(null);
+  const { profile, onboardingProfile } = await getMemberSettingsData(user.id);
+  const household = (
+    (onboardingProfile?.answers as Record<string, unknown>)?.household as
+      | HouseholdData
+      | undefined
+  ) ?? undefined;
+  const recommendations = onboardingProfile?.recommendations as CuratedRegistry | null | undefined;
 
-  useEffect(() => {
-    let mounted = true;
-    const loadStatus = async () => {
-      try {
-        const response = await api.get('/pinterest/status');
-        if (!mounted) return;
-        setConnected(Boolean(response.data?.connected));
-      } catch {
-        if (mounted) {
-          setMessage('Unable to check Pinterest connection');
-        }
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    };
-
-    loadStatus();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const handleConnect = async () => {
-    setMessage(null);
-    try {
-      const response = await api.get('/pinterest/auth');
-      const authUrl = response.data?.authUrl;
-      if (authUrl) {
-        window.open(authUrl, '_blank', 'width=520,height=720');
-        setMessage('Pinterest auth window opened. Close it once connected.');
-      } else {
-        setMessage('Unable to find Pinterest auth endpoint');
-      }
-    } catch {
-      setMessage('Unable to connect to Pinterest');
-    }
-  };
+  const tabs = [
+    { id: "profile", label: "Profile Info", description: "Name, email, photo" },
+    { id: "household", label: "Household", description: "Partner & caregiving roles" },
+    { id: "preferences", label: "Preferences", description: "Questionnaire answers" },
+    { id: "recommendations", label: "Registry Suggestions", description: "Recommendations & refresh" },
+  ];
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-3xl bg-white p-6 shadow tm-fade-in">
-        <h2 className="font-playfair text-xl text-[var(--tm-deep-mauve)]">Pinterest</h2>
-        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tm-mauve)]/70">Inspiration sync</p>
-        <div className="mt-4 space-y-2">
-          {loading ? (
-            <p className="text-sm text-[var(--tm-deep-mauve)]/70">Checking connection…</p>
-          ) : connected ? (
-            <p className="text-sm text-[var(--tm-mauve)]">Connected ✓</p>
-          ) : (
-            <p className="text-sm text-[var(--tm-deep-mauve)]/80">
-              Connect Pinterest to bring board inspiration straight into your moodboards.
-            </p>
-          )}
-          {!connected && (
-            <button
-              type="button"
-              onClick={handleConnect}
-              className="inline-flex items-center justify-center rounded-xl bg-[var(--tm-mauve)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white transition hover:bg-[var(--tm-mauve)]/90"
-            >
-              Connect Pinterest
-            </button>
-          )}
+    <div className="space-y-8">
+      <SettingsTabs tabs={tabs} />
+
+      <section id="profile">
+        <div className="space-y-4">
+          <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Member · Profile</p>
+          <h1 className="text-3xl font-serif text-[#3E2F35]">Profile info</h1>
         </div>
-        {message && (
-          <p className="mt-3 text-xs text-[var(--tm-deep-mauve)]/80">{message}</p>
+        <ProfileForm
+          user={{
+            email: user.email,
+            firstName: profile?.firstName ?? user.name?.split(" ").shift() ?? "",
+            lastName: profile?.lastName ?? user.name?.split(" ").slice(1).join(" ") ?? "",
+          }}
+          profileImage={profile?.imageUrl ?? null}
+        />
+      </section>
+
+      <section id="household">
+        <div className="space-y-4">
+          <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Member · Household</p>
+          <h2 className="text-2xl font-serif text-[#3E2F35]">Household & support</h2>
+        </div>
+        <HouseholdForm household={household} />
+      </section>
+
+      <section id="preferences">
+        <OnboardingEditor />
+      </section>
+
+      <section id="recommendations" className="space-y-6">
+        <RegenerateButton lastUpdated={onboardingProfile?.updatedAt?.toISOString() ?? null} />
+        {recommendations && (
+          <div className="rounded-3xl border border-[#E3D0D7] bg-white/90 p-6 shadow-[0_30px_90px_rgba(189,147,189,0.25)]">
+            <div className="flex flex-wrap gap-2">
+              {recommendations.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-[#E3D0D7] px-3 py-1 text-[0.65rem] uppercase tracking-[0.3em] text-[#3E2F35]/70"
+                >
+                  {tag.replace(/_/g, " ")}
+                </span>
+              ))}
+            </div>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              {recommendations.categories.map((category) => (
+                <article
+                  key={category.id}
+                  className="rounded-2xl border border-[#E3D0D7] bg-[#FFF8F6] p-4"
+                >
+                  <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">{category.title}</p>
+                  <p className="mt-1 text-sm text-[#3E2F35]">{category.reason}</p>
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#3E2F35]/60">
+                    Priority {category.priority}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
         )}
+      </section>
+
+      <section>
+        <PinterestSyncCard />
       </section>
     </div>
   );

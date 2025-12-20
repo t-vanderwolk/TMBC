@@ -1,26 +1,52 @@
 "use client";
 
-import Link from "next/link";
+import ActionButton from "@/components/dashboard/ui/ActionButton";
+import DashboardCard from "@/components/dashboard/ui/DashboardCard";
 
 export default function MentorToolkit() {
   return (
-    <div className="rounded-2xl border border-[#E3C6D4] bg-white/80 p-6 shadow-sm md:p-8">
-      <h2 className="font-serif text-2xl text-[#3E2F35] md:text-3xl">Mentor Toolkit</h2>
-      <p className="mt-2 text-sm text-[#3E2F35]/70 md:text-base">
+    <DashboardCard className="space-y-4 p-6 md:p-8">
+      <div>
+        <p className="text-xs uppercase tracking-[0.45em] text-[#C8A1B4]">Mentor toolkit</p>
+        <h2 className="font-serif text-2xl text-[#3E2F35] md:text-3xl">Mentor Toolkit</h2>
+      </div>
+      <p className="text-sm text-[#3E2F35]/70 md:text-base">
         Quick access to your studio tools.
       </p>
-
-      <div className="mt-6 grid gap-3 text-sm">
-        <Link href="/dashboard/mentor/messages" className="text-[#C8A1B4] transition hover:text-[#A77991]">
-          → Respond to messages
-        </Link>
-        <Link href="/dashboard/events" className="text-[#C8A1B4] transition hover:text-[#A77991]">
-          → Host a session
-        </Link>
-        <Link href="/dashboard/member/community" className="text-[#C8A1B4] transition hover:text-[#A77991]">
-          → Moderate community rooms
-        </Link>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <ActionButton
+          href="/dashboard/mentor/messages"
+          variant="ghost"
+          className="sm:w-auto"
+          fullWidth
+        >
+          Respond to messages
+        </ActionButton>
+        <ActionButton
+          href="/dashboard/events"
+          variant="ghost"
+          className="sm:w-auto"
+          fullWidth
+        >
+          Host a session
+        </ActionButton>
+        <ActionButton
+          href="/dashboard/member/community"
+          variant="ghost"
+          className="sm:w-auto"
+          fullWidth
+        >
+          Moderate community rooms
+        </ActionButton>
+        <ActionButton
+          href="/dashboard/mentor/workspace"
+          variant="ghost"
+          className="sm:w-auto"
+          fullWidth
+        >
+          Open Mentor Workspace
+        </ActionButton>
       </div>
-    </div>
+    </DashboardCard>
   );
 }

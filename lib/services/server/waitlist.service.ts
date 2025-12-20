@@ -7,6 +7,13 @@ interface JoinPayload {
   name?: string;
 }
 
+interface AddWaitlistPayload {
+  email: string;
+  name?: string;
+  source?: string;
+  note?: string;
+}
+
 export const joinWaitlist = async ({ email, name }: JoinPayload) => {
   const existing = await prisma.waitlist.findUnique({ where: { email } });
 
@@ -22,9 +29,19 @@ export const joinWaitlist = async ({ email, name }: JoinPayload) => {
   });
 };
 
+export const addToWaitlist = async (payload: AddWaitlistPayload) => {
+  return joinWaitlist({ email: payload.email, name: payload.name });
+};
+
 export const getPendingWaitlist = async (): Promise<Waitlist[]> => {
   return prisma.waitlist.findMany({
     where: { status: 'pending' },
+    orderBy: { createdAt: 'asc' },
+  });
+};
+
+export const getWaitlist = async (): Promise<Waitlist[]> => {
+  return prisma.waitlist.findMany({
     orderBy: { createdAt: 'asc' },
   });
 };

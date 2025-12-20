@@ -1,22 +1,33 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Role } from "@/types/role";
+import { Role } from "@prisma/client";
 
-import { getUserOrThrow } from "@/lib/auth/getUser";
+import { getUserOrThrow, type SafeUser } from "@/lib/auth/getUser";
 import {
   generateInvite,
   revokeInvite,
 } from "@/lib/services/server/invite.service";
-import { updateAdminUser } from "@/lib/services/server/admin.service";
+import {
+  createAdminEvent,
+  updateAdminEvent,
+  updateAdminUser,
+} from "@/lib/services/server/admin.service";
 
 const DASHBOARD_PATH = "/dashboard/admin";
+const USER_PATH = "/dashboard/admin/users";
+const MENTOR_PATH = "/dashboard/admin/mentors";
+const EVENT_PATH = "/dashboard/admin/events";
 
-const requireAdmin = (user: { role: Role }) => {
+const requireAdmin = (user: SafeUser) => {
   if (user.role !== Role.ADMIN) {
     throw new Error("Unauthorized");
   }
   return user;
+};
+
+const revalidateAdmin = (...paths: string[]) => {
+  paths.forEach((path) => revalidatePath(path));
 };
 
 // Coerce the provided max uses into a positive integer, defaulting to single-use invites.
@@ -45,7 +56,7 @@ export async function createAdminInvite(formData: FormData) {
     `[Admin Action] ${user.email} created invite ${invite.code} ${email ? `for ${email}` : "open"}`,
   );
 
-  revalidatePath(DASHBOARD_PATH);
+  revalidateAdmin(DASHBOARD_PATH);
   return invite;
 }
 
@@ -59,7 +70,7 @@ export async function revokeAdminInvite(formData: FormData) {
   const invite = await revokeInvite(code);
 
   console.info(`[Admin Action] ${user.email} revoked invite ${invite.code}`);
-  revalidatePath(DASHBOARD_PATH);
+  revalidateAdmin(DASHBOARD_PATH);
   return invite;
 }
 
@@ -73,7 +84,7 @@ export async function updateUserStatus(formData: FormData) {
 
   await updateAdminUser(userId, { status: status as "active" | "disabled" });
   console.info(`[Admin Action] ${user.email} set status ${status} for user ${userId}`);
-  revalidatePath(DASHBOARD_PATH);
+  revalidateAdmin(DASHBOARD_PATH, USER_PATH);
 }
 
 export async function updateUserRole(formData: FormData) {
@@ -86,5 +97,74 @@ export async function updateUserRole(formData: FormData) {
 
   await updateAdminUser(userId, { role: role as "member" | "mentor" | "admin" });
   console.info(`[Admin Action] ${user.email} set role ${role} for user ${userId}`);
-  revalidatePath(DASHBOARD_PATH);
+  revalidateAdmin(DASHBOARD_PATH, USER_PATH);
+}
+
+export async function assignUserMentor(formData: FormData) {
+  const user = requireAdmin(await getUserOrThrow());
+  const userId = formData.get("userId")?.toString();
+  const mentorIdRaw = formData.get("mentorId")?.toString();
+  if (!userId) {
+    throw new Error("User id is required for reassigning mentors");
+  }
+  const mentorId = mentorIdRaw && mentorIdRaw.length > 0 ? mentorIdRaw : null;
+
+  await updateAdminUser(userId, { mentorId });
+  console.info(`[Admin Action] ${user.email} assigned mentor ${mentorId ?? "unassigned"} to user ${userId}`);
+  revalidateAdmin(USER_PATH, MENTOR_PATH);
+}
+
+export async function createEvent(formData: FormData) {
+  const user = requireAdmin(await getUserOrThrow());
+  const name = formData.get("name")?.toString().trim();
+  const date = formData.get("date")?.toString();
+  const location = formData.get("location")?.toString().trim();
+  const status = formData.get("status")?.toString();
+
+  if (!name || !date) {
+    throw new Error("Name and date are required to create an event");
+  }
+
+  await createAdminEvent(
+    { name, date, location: location || undefined, status: status || "scheduled" },
+    user.id,
+    user.name ?? undefined,
+  );
+  console.info(`[Admin Action] ${user.email} created event ${name}`);
+  revalidateAdmin(EVENT_PATH, DASHBOARD_PATH);
+}
+
+export async function updateEvent(formData: FormData) {
+  const user = requireAdmin(await getUserOrThrow());
+  const eventId = formData.get("eventId")?.toString();
+  const name = formData.get("name")?.toString().trim();
+  const date = formData.get("date")?.toString();
+  const location = formData.get("location")?.toString().trim();
+  const status = formData.get("status")?.toString();
+
+  if (!eventId) {
+    throw new Error("Event id is required");
+  }
+
+  const payload: Record<string, string> = {};
+  if (name) payload.name = name;
+  if (date) payload.date = date;
+  if (location) payload.location = location;
+  if (status) payload.status = status;
+
+  await updateAdminEvent(eventId, payload);
+  console.info(`[Admin Action] ${user.email} updated event ${eventId}`);
+  revalidateAdmin(EVENT_PATH, DASHBOARD_PATH);
+}
+
+export async function cancelEvent(formData: FormData) {
+  const user = requireAdmin(await getUserOrThrow());
+  const eventId = formData.get("eventId")?.toString();
+  if (!eventId) {
+    throw new Error("Event id is required to cancel");
+  }
+
+  await updateAdminEvent(eventId, { status: "cancelled" });
+  console.info(`[Admin Action] ${user.email} cancelled event ${eventId}`);
+  revalidateAdmin(EVENT_PATH, DASHBOARD_PATH);
 }

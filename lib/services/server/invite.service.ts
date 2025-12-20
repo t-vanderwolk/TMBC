@@ -140,3 +140,49 @@ export const getAllInvites = () => {
     orderBy: { createdAt: 'desc' },
   });
 };
+
+interface CreateInviteFromWaitlistInput {
+  waitlistId: string;
+  creatorId: string;
+  role?: string;
+}
+
+export const createInviteFromWaitlist = async ({
+  waitlistId,
+  creatorId,
+  role,
+}: CreateInviteFromWaitlistInput) => {
+  const waitlistEntry = await prisma.waitlist.findUnique({ where: { id: waitlistId } });
+  if (!waitlistEntry) {
+    throw new Error('Waitlist entry not found');
+  }
+
+  const invite = await generateInvite({
+    creatorId,
+    email: waitlistEntry.email,
+    role,
+  });
+
+  await prisma.waitlist.update({
+    where: { id: waitlistId },
+    data: { status: 'approved' },
+  });
+
+  return invite;
+};
+
+export const revokeInvite = async (code: string) => {
+  const invite = await prisma.invite.findUnique({ where: { code } });
+  if (!invite) {
+    throw new Error('Invite not found');
+  }
+
+  return prisma.invite.update({
+    where: { code },
+    data: {
+      expiresAt: new Date(),
+      used: true,
+      maxUses: 0,
+    },
+  });
+};

@@ -4,5 +4,5 @@ export function dashboardForRole(role?: string) {
   if (r === "ADMIN") return "/dashboard/admin";
   if (r === "MENTOR") return "/dashboard/mentor";
 
-  return "/dashboard/member"; // member fallback
+  return "/dashboard"; // member fallback
 }

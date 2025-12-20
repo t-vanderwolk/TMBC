@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import SectionWrapper from "@/components/dashboard/member/ui/SectionWrapper";
 import PageHeader from "@/components/dashboard/member/ui/PageHeader";
-import EmptyState from "@/components/dashboard/member/ui/EmptyState";
+import { EmptyState } from "@/components/dashboard/shared/EmptyState";
 import { Role } from "@prisma/client";
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { getCommunityRooms, type CommunityRoomSummary } from "@/lib/services/server/community.service";
@@ -40,7 +40,7 @@ export default async function MemberCommunityHomePage() {
         {rooms.length === 0 ? (
           <EmptyState
             title="The rooms are waiting"
-            message="Nothing new today — that’s okay. Rest is part of preparation."
+            description="Nothing new today — that’s okay. Rest is part of preparation."
           />
         ) : (
           <div className="space-y-4">

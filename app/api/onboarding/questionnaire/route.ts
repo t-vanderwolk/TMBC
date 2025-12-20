@@ -5,12 +5,17 @@ import { z } from "zod";
 
 import { OnboardingIntelligenceService } from "@/lib/services/server/onboardingIntelligence.service";
 import { getUserOrThrow } from "@/lib/auth/getUser";
-import { QuestionnaireSource, QuestionnaireStatus } from "@prisma/client";
+import {
+  questionnaireSourceValues,
+  questionnaireStatusValues,
+  type QuestionnaireSourceValue,
+  type QuestionnaireStatusValue,
+} from "@/lib/types/questionnaire";
 
 const questionnairePayloadSchema = z.object({
-  answers: z.record(z.any()).default({}),
-  status: z.nativeEnum(QuestionnaireStatus).optional(),
-  source: z.nativeEnum(QuestionnaireSource).optional(),
+  answers: z.record(z.string(), z.any()).default({}),
+  status: z.enum(questionnaireStatusValues).optional(),
+  source: z.enum(questionnaireSourceValues).optional(),
 });
 
 const handleError = (error: unknown, message: string) => {
@@ -47,14 +52,14 @@ export async function POST(request: NextRequest) {
   try {
     const user = await getUserOrThrow();
     const payload = questionnairePayloadSchema.parse(await request.json());
-    const source = payload.source ?? QuestionnaireSource.INITIAL;
-    const status = payload.status ?? QuestionnaireStatus.DRAFT;
+    const source: QuestionnaireSourceValue = payload.source ?? "INITIAL";
+    const status: QuestionnaireStatusValue = payload.status ?? "DRAFT";
     const latest = await OnboardingIntelligenceService.getLatestQuestionnaire(user.id);
 
     const shouldCreateNewVersion =
       !latest ||
-      (source === QuestionnaireSource.SETTINGS &&
-        (latest.source !== QuestionnaireSource.SETTINGS || latest.status === QuestionnaireStatus.COMPLETED));
+      (source === "SETTINGS" &&
+        (latest.source !== "SETTINGS" || latest.status === "COMPLETED"));
 
     let result;
     if (shouldCreateNewVersion) {

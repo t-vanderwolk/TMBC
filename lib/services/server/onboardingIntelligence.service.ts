@@ -1,194 +1,244 @@
 import type { Prisma } from '@prisma/client';
-import {
-  QuestionnaireSource,
-  QuestionnaireStatus,
-} from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 import { generateLifestyleTags } from '@/lib/services/onboarding.service';
 import {
   buildCuratedRegistry,
-  CuratedRegistry,
+  type CuratedRegistry,
 } from '@/lib/registry/recommendations';
 import { emitRegistryAnalytics } from './analytics.service';
 import { QUESTIONNAIRE_SCHEMA, type QuestionnaireSchema } from '@/lib/onboarding/questionnaireSchema';
+import {
+  questionnaireSourceValues,
+  questionnaireStatusValues,
+  type QuestionnaireSourceValue,
+  type QuestionnaireStatusValue,
+} from '@/lib/types/questionnaire';
 
-export type OnboardingAnswers = Record<string, unknown>;
+type QuestionnaireRecord = {
+  id: string;
+  version: number;
+  status: QuestionnaireStatusValue;
+  source: QuestionnaireSourceValue;
+  tags: string[];
+  answers: Record<string, unknown>;
+  registrySnapshot: CuratedRegistry | null;
+  mentorId: string | null;
+};
 
 type QuestionnaireResult = {
-  questionnaire: Prisma.OnboardingQuestionnaireGetPayload<{
-    include: {
-      revisions: true;
-    };
-  }>;
+  questionnaire: QuestionnaireRecord;
   recommendations: CuratedRegistry;
 };
 
-type CreateQuestionnaireOptions = {
-  userId: string;
-  mentorId?: string | null;
-  answers: OnboardingAnswers;
-  source?: QuestionnaireSource;
-  status?: QuestionnaireStatus;
+type OnboardingProfileWithUser = Prisma.OnboardingProfileGetPayload<{
+  include: {
+    user: {
+      select: { mentorId: true };
+    };
+  };
+}>;
+
+const DEFAULT_SOURCE: QuestionnaireSourceValue = 'INITIAL';
+const DEFAULT_STATUS: QuestionnaireStatusValue = 'DRAFT';
+const DEFAULT_VERSION = 1;
+
+const normalizeStatus = (value?: string): QuestionnaireStatusValue =>
+  value && questionnaireStatusValues.includes(value as QuestionnaireStatusValue)
+    ? (value as QuestionnaireStatusValue)
+    : DEFAULT_STATUS;
+
+const normalizeSource = (value?: string): QuestionnaireSourceValue =>
+  value && questionnaireSourceValues.includes(value as QuestionnaireSourceValue)
+    ? (value as QuestionnaireSourceValue)
+    : DEFAULT_SOURCE;
+
+const convertRecommendations = (value: Prisma.JsonValue | null | undefined): CuratedRegistry | null => {
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+  return value as CuratedRegistry;
 };
 
-type SaveQuestionnaireRevisionOptions = {
-  userId: string;
-  answers: OnboardingAnswers;
-  source?: QuestionnaireSource;
-  status?: QuestionnaireStatus;
+const convertAnswers = (value: Prisma.JsonValue | null | undefined): Record<string, unknown> => {
+  if (!value || typeof value !== 'object') {
+    return {};
+  }
+  return value as Record<string, unknown>;
+};
+
+const hydrateQuestionnaire = (
+  profile: OnboardingProfileWithUser,
+  source: QuestionnaireSourceValue,
+  tags: string[],
+  recommendations: CuratedRegistry,
+  version: number,
+): QuestionnaireRecord => ({
+  id: profile.id,
+  version,
+  status: normalizeStatus(profile.status ?? DEFAULT_STATUS),
+  source: normalizeSource(source),
+  tags,
+  answers: convertAnswers(profile.answers),
+  registrySnapshot: recommendations,
+  mentorId: profile.user?.mentorId ?? null,
+});
+
+const computeTagsFromAnswers = (answers: Record<string, unknown>) => generateLifestyleTags(answers);
+
+const buildCuratedRecommendations = (tags: string[]) => buildCuratedRegistry(tags);
+
+const logQuestionnaireAnalytics = (
+  userId: string,
+  version: number,
+  tags: string[],
+  status: QuestionnaireStatusValue,
+) => {
+  emitRegistryAnalytics('questionnaire_saved', {
+    userId,
+    version,
+    tags,
+    status,
+  });
+};
+
+const applyRegistryRerankHelper = async (userId: string, tags: string[]) => {
+  const registry = await prisma.registry.findUnique({
+    where: { userId },
+    select: {
+      id: true,
+      items: {
+        select: {
+          id: true,
+          status: true,
+        },
+        take: 1,
+      },
+    },
+  });
+  const curated = await buildCuratedRecommendations(tags);
+  return {
+    registryId: registry?.id ?? null,
+    hasItems: Boolean(registry?.items.length),
+    curated,
+  };
 };
 
 export const OnboardingIntelligenceService = {
   schema: QUESTIONNAIRE_SCHEMA,
 
-  async getLatestQuestionnaire(userId: string) {
-    return prisma.onboardingQuestionnaire.findFirst({
+  async getLatestQuestionnaire(userId: string): Promise<QuestionnaireRecord | null> {
+    const profile = await prisma.onboardingProfile.findUnique({
       where: { userId },
-      orderBy: { version: 'desc' },
       include: {
-        revisions: {
-          orderBy: { createdAt: 'desc' },
-        },
+        user: { select: { mentorId: true } },
       },
     });
+    if (!profile) {
+      return null;
+    }
+    const answers = convertAnswers(profile.answers);
+    const tags = computeTagsFromAnswers(answers);
+    const storedRecommendations = convertRecommendations(profile.recommendations);
+    const recommendations = storedRecommendations ?? (await buildCuratedRecommendations(tags));
+    return hydrateQuestionnaire(profile, DEFAULT_SOURCE, tags, recommendations, DEFAULT_VERSION);
   },
 
-  computeTagsFromAnswers(answers: OnboardingAnswers) {
-    return generateLifestyleTags(answers);
+  computeTagsFromAnswers,
+
+  async buildRecommendations(tags: string[]): Promise<CuratedRegistry> {
+    return buildCuratedRecommendations(tags);
   },
 
-  buildRecommendations(tags: string[]) {
-    return buildCuratedRegistry(tags);
-  },
+  applyRegistryRerank: applyRegistryRerankHelper,
 
-  async applyRegistryRerank(userId: string, tags: string[]) {
-    const registry = await prisma.registry.findUnique({
+  emitAnalyticsEvents: logQuestionnaireAnalytics,
+
+  async createInitialQuestionnaire(options: CreateQuestionnaireOptions): Promise<QuestionnaireResult> {
+    const { userId, answers, source, status = DEFAULT_STATUS } = options;
+    const normalizedSource = normalizeSource(source);
+    const normalizedAnswers = answers as Prisma.InputJsonValue;
+    const tags = computeTagsFromAnswers(answers);
+    const recommendations = await buildCuratedRecommendations(tags);
+    const profile = await prisma.onboardingProfile.upsert({
       where: { userId },
-      select: {
-        id: true,
-        items: {
-          select: {
-            id: true,
-            status: true,
-          },
-          take: 1,
-        },
+      create: {
+        userId,
+        answers: normalizedAnswers,
+        recommendations: recommendations as Prisma.InputJsonValue,
+        status,
+      },
+      update: {
+        answers: normalizedAnswers,
+        recommendations: recommendations as Prisma.InputJsonValue,
+        status,
+      },
+      include: {
+        user: { select: { mentorId: true } },
       },
     });
-    const curated = OnboardingIntelligenceService.buildRecommendations(tags);
+
+    logQuestionnaireAnalytics(userId, DEFAULT_VERSION, tags, status);
+    void applyRegistryRerankHelper(userId, tags);
+
     return {
-      registryId: registry?.id ?? null,
-      hasItems: Boolean(registry?.items.length),
-      curated,
+      questionnaire: hydrateQuestionnaire(profile, normalizedSource, tags, recommendations, DEFAULT_VERSION),
+      recommendations,
     };
   },
 
-  emitAnalyticsEvents(userId: string, version: number, tags: string[], status: QuestionnaireStatus) {
-    emitRegistryAnalytics('questionnaire_saved', {
-      userId,
-      version,
-      tags,
-      status,
-    });
-  },
-
-  async createInitialQuestionnaire(options: CreateQuestionnaireOptions): Promise<QuestionnaireResult> {
-    const { userId, mentorId, answers, source = QuestionnaireSource.INITIAL, status = QuestionnaireStatus.DRAFT } = options;
-    const { _max } = await prisma.onboardingQuestionnaire.aggregate({
-      where: { userId },
-      _max: { version: true },
-    });
-    const version = (_max.version ?? 0) + 1;
-    const tags = OnboardingIntelligenceService.computeTagsFromAnswers(answers);
-    const recommendations = OnboardingIntelligenceService.buildRecommendations(tags);
-
-    const questionnaire = await prisma.$transaction(async (tx) => {
-      const created = await tx.onboardingQuestionnaire.create({
-        data: {
-          userId,
-          version,
-          status,
-          source,
-          mentorId,
-          tags,
-          answers,
-          registrySnapshot: recommendations,
-        },
-        include: {
-          revisions: true,
-        },
-      });
-      await tx.onboardingQuestionnaireRevision.create({
-        data: {
-          questionnaireId: created.id,
-          version: 1,
-          source,
-          answers,
-          tags,
-        },
-      });
-      return created;
-    });
-
-    await OnboardingIntelligenceService.emitAnalyticsEvents(userId, version, tags, status);
-    void OnboardingIntelligenceService.applyRegistryRerank(userId, tags);
-
-    return { questionnaire, recommendations };
-  },
-
   async saveQuestionnaireRevision(options: SaveQuestionnaireRevisionOptions): Promise<QuestionnaireResult> {
-    const { userId, answers, source, status } = options;
-    const latest = await OnboardingIntelligenceService.getLatestQuestionnaire(userId);
-    if (!latest) {
+    const { userId, answers, source, status = DEFAULT_STATUS } = options;
+    const normalizedSource = normalizeSource(source);
+    const existing = await prisma.onboardingProfile.findUnique({
+      where: { userId },
+      include: {
+        user: { select: { mentorId: true } },
+      },
+    });
+    if (!existing) {
       throw new Error('Questionnaire not found');
     }
-
-    const tags = OnboardingIntelligenceService.computeTagsFromAnswers(answers);
-    const recommendations = OnboardingIntelligenceService.buildRecommendations(tags);
-    const nextRevisionVersionResult = await prisma.onboardingQuestionnaireRevision.aggregate({
-      where: { questionnaireId: latest.id },
-      _max: { version: true },
-    });
-    const nextRevisionVersion = (nextRevisionVersionResult._max.version ?? 0) + 1;
-    const updated = await prisma.$transaction(async (tx) => {
-      const updatedQuestionnaire = await tx.onboardingQuestionnaire.update({
-        where: { id: latest.id },
-        data: {
-          answers,
-          tags,
-          registrySnapshot: recommendations,
-          status: status ?? latest.status,
-          source: source ?? latest.source,
-        },
-        include: {
-          revisions: true,
-        },
-      });
-      await tx.onboardingQuestionnaireRevision.create({
-        data: {
-          questionnaireId: latest.id,
-          version: nextRevisionVersion,
-          source: source ?? latest.source,
-          answers,
-          tags,
-        },
-      });
-      return updatedQuestionnaire;
+    const normalizedAnswers = answers as Prisma.InputJsonValue;
+    const tags = computeTagsFromAnswers(answers);
+    const recommendations = await buildCuratedRecommendations(tags);
+    const profile = await prisma.onboardingProfile.update({
+      where: { userId },
+      data: {
+        answers: normalizedAnswers,
+        recommendations: recommendations as Prisma.InputJsonValue,
+        status,
+      },
+      include: {
+        user: { select: { mentorId: true } },
+      },
     });
 
-    await OnboardingIntelligenceService.emitAnalyticsEvents(
-      userId,
-      updated.version,
-      tags,
-      status ?? updated.status,
-    );
-    void OnboardingIntelligenceService.applyRegistryRerank(userId, tags);
+    logQuestionnaireAnalytics(userId, DEFAULT_VERSION, tags, status);
+    void applyRegistryRerankHelper(userId, tags);
 
-    return { questionnaire: updated, recommendations };
+    return {
+      questionnaire: hydrateQuestionnaire(profile, normalizedSource, tags, recommendations, DEFAULT_VERSION),
+      recommendations,
+    };
   },
 
   getSchema(): QuestionnaireSchema {
     return QUESTIONNAIRE_SCHEMA;
   },
+};
+
+type CreateQuestionnaireOptions = {
+  userId: string;
+  mentorId?: string | null;
+  answers: Record<string, unknown>;
+  source?: QuestionnaireSourceValue;
+  status?: QuestionnaireStatusValue;
+};
+
+type SaveQuestionnaireRevisionOptions = {
+  userId: string;
+  answers: Record<string, unknown>;
+  source?: QuestionnaireSourceValue;
+  status?: QuestionnaireStatusValue;
 };

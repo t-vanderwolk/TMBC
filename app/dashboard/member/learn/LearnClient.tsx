@@ -3,7 +3,7 @@
 import AcademySection from "@/components/dashboard/member/learn/AcademySection";
 import ModuleCard from "@/components/dashboard/member/learn/ModuleCard";
 import PageHeader from "@/components/dashboard/member/ui/PageHeader";
-import EmptyState from "@/components/dashboard/member/ui/EmptyState";
+import { EmptyState } from "@/components/dashboard/shared/EmptyState";
 import type { AcademyModuleCard } from "@/lib/academyClient";
 
 type LearnClientProps = {
@@ -84,14 +84,14 @@ export default function LearnClient({ modules, error }: LearnClientProps) {
       {error && (
         <EmptyState
           title="Something is off"
-          message="Unable to load your Academy just now. Please refresh when you feel ready."
+          description="Unable to load your Academy just now. Please refresh when you feel ready."
         />
       )}
 
       {!safeModules.length && !error ? (
         <EmptyState
           title="Quiet for now"
-          message="Nothing here yet. This space will fill as your journey unfolds."
+          description="Nothing here yet. This space will fill as your journey unfolds."
         />
       ) : null}
 
@@ -118,7 +118,7 @@ export default function LearnClient({ modules, error }: LearnClientProps) {
           ) : (
             <EmptyState
               title="Nothing yet"
-              message="We are curating this journey for you—check back once a new module appears."
+              description="We are curating this journey for you—check back once a new module appears."
             />
           )}
         </AcademySection>

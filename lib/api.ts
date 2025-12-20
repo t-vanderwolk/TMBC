@@ -69,9 +69,9 @@ export const adminInviteApi = {
 };
 
 export const inviteRequestApi = {
-  list: () => api.get('/invite/requests'),
-  approve: (payload: { requestId: string; adminId: string }) =>
-    api.post('/invite/approve', payload),
+  list: () => api.get('/admin/invite-requests'),
+  approve: (requestId: string) => api.post(`/admin/invite-requests/${requestId}/approve`),
+  reject: (requestId: string) => api.post(`/admin/invite-requests/${requestId}/reject`),
 };
 
 export const addCustomItem = (payload: {

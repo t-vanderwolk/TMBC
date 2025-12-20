@@ -1,4 +1,7 @@
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import type { AxiosInstance, AxiosStatic } from 'axios';
+
+const axios = require('axios') as AxiosStatic;
+const { isAxiosError } = axios;
 import crypto from 'crypto';
 
 const SYNC_BASE_URL = process.env.MYREGISTRY_SYNC_BASE_URL ?? 'https://api.myregistry.com/RegistryApi/1/0/json/';
@@ -8,7 +11,7 @@ const PARTNER_SECRET = process.env.MYREGISTRY_PARTNER_SECRET;
 const REDIRECT_URI = process.env.MYREGISTRY_REDIRECT_URI;
 
 const handleError = (error: unknown): never => {
-  if (axios.isAxiosError(error)) {
+  if (isAxiosError(error)) {
     const message = error.response?.data ?? error.message;
     throw new Error(typeof message === 'string' ? message : JSON.stringify(message));
   }
@@ -32,9 +35,9 @@ const createClient = () => {
 };
 
 let client: AxiosInstance | null = null;
-const getClient = () => {
+const getClient = (): AxiosInstance => {
   if (!client) client = createClient();
-  return client;
+  return client!;
 };
 
 const isConfigured = () => Boolean(PARTNER_KEY && PARTNER_SECRET && OAUTH_URL && REDIRECT_URI);

@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getStoredUser, clearSession } from "@/lib/auth";
-import { PUBLIC_LOGIN_ROUTE, routeForRole } from "@/lib/auth/routeForRole";
+import { clearSession } from "@/lib/auth";
+import { useCurrentUser } from "@/lib/auth/useCurrentUser";
 import { useRouter } from "next/navigation";
 import { Bell } from "lucide-react";
 
@@ -18,25 +18,23 @@ async function fetchUnreadCounts(token: string | null) {
 
 export default function GlobalNavbar() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
   const [unread, setUnread] = useState({ messages: 0, community: 0, invites: 0 });
   const [openDropdown, setOpenDropdown] = useState(false);
 
+  const user = useCurrentUser();
+
   useEffect(() => {
-    const stored = getStoredUser();
-    setUser(stored);
-    fetchUnreadCounts(stored?.token ?? null).then(setUnread);
-  }, []);
+    fetchUnreadCounts(user?.token ?? null).then(setUnread);
+  }, [user?.token]);
 
   const totalUnread = unread.messages + unread.community + unread.invites;
 
   const handleLogout = () => {
     clearSession();
-    router.push("/");
+    router.push("/logout");
   };
 
   const role = user?.role?.toUpperCase() ?? null;
-  const dashboardLink = role ? routeForRole(role) : PUBLIC_LOGIN_ROUTE;
 
   return (
     <nav className="w-full border-b border-[#EAD4D8]/60 bg-white/70 backdrop-blur-md sticky top-0 z-50">
@@ -53,14 +51,14 @@ export default function GlobalNavbar() {
               <Link href="/membership" className="text-[#3E2F35]/70 hover:text-[#C8A1B4]">
                 Membership
               </Link>
-              <Link href={PUBLIC_LOGIN_ROUTE} className="rounded-full bg-[#C8A1B4] px-4 py-2 text-white hover:bg-[#b88ca3]">
-                Log In
+              <Link href="/login" className="rounded-full bg-[#C8A1B4] px-4 py-2 text-white hover:bg-[#b88ca3]">
+                Login
               </Link>
             </>
           )}
           {user && (
             <>
-              <Link href={dashboardLink} className="text-[#3E2F35] hover:text-[#C8A1B4]">
+              <Link href="/dashboard" className="text-[#3E2F35] hover:text-[#C8A1B4]">
                 Dashboard
               </Link>
               <div className="relative">

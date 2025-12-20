@@ -1,151 +1,80 @@
-"use client";
+"use server";
 
-import { useEffect, useMemo, useState } from "react";
-import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { EmptyState } from "@/components/dashboard/shared/EmptyState";
+import { listInviteRequests } from "@/lib/services/server/inviteRequest.service";
+import { approveWaitlistEntry, rejectWaitlistEntry } from "./actions";
 
-import { getInviteRequests, inviteRequestApi } from "@/lib/api";
-import { loadSession } from "@/lib/auth";
-
-type InviteRequest = {
-  id: string;
-  email: string;
-  dueDate?: string | null;
-  vibe?: string | null;
-  supportNeeds?: string | null;
-  createdAt: string;
-  status: string;
-};
-
-const determineWindow = (value?: string | null) => {
-  if (!value) return "Planning";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Planning";
-  const weeks = (date.getTime() - Date.now()) / (1000 * 60 * 60 * 24 * 7);
-  if (weeks <= 13) return "First trimester";
-  if (weeks <= 26) return "Second trimester";
-  return "Third trimester";
-};
-
-export default function AdminWaitlistPage() {
-  const router = useRouter();
-  const [requests, setRequests] = useState<InviteRequest[]>([]);
-  const [loading, setLoading] = useState(true);
-  const session = loadSession();
-
-  useEffect(() => {
-    const role = String(session?.payload?.role ?? "").toLowerCase();
-    if (role !== "admin") {
-      router.replace("/dashboard");
-      return;
-    }
-
-    const fetchRequests = async () => {
-      setLoading(true);
-      try {
-        const response = await getInviteRequests();
-        setRequests(response.data?.data ?? response.data ?? []);
-      } catch (err) {
-        console.error("Unable to load waitlist", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    void fetchRequests();
-  }, [router, session]);
-
-  const groups = useMemo(() => {
-    const bucket: Record<string, InviteRequest[]> = {};
-    requests.forEach((request) => {
-      const window = determineWindow(request.dueDate);
-      const windowBucket = bucket[window] ?? [];
-      windowBucket.push(request);
-      bucket[window] = windowBucket;
-    });
-    return bucket;
-  }, [requests]);
-
-  const windows = useMemo(() => Object.keys(groups), [groups]);
-
-  const handleDecline = async (id: string) => {
-    console.log("Decline waitlist", id);
-  };
-
-  const handleApprove = async (id: string) => {
-    try {
-      await inviteRequestApi.approve({ requestId: id, adminId: String(session?.payload?.userId ?? session?.payload?.id) });
-      setRequests((prev) => prev.filter((request) => request.id !== id));
-    } catch (err) {
-      console.error("Unable to approve invite from waitlist", err);
-    }
-  };
-
-  if (!session) {
-    return null;
-  }
+export default async function AdminWaitlistPage() {
+  const requests = await listInviteRequests();
 
   return (
     <div className="space-y-8">
-      <header className="rounded-[3rem] border border-white/70 bg-white/80 p-6 shadow-soft">
-        <p className="text-sm uppercase tracking-[0.5em] text-[#C8A1B4]">Admin · Waitlist</p>
-        <h1 className="text-4xl text-[#3E2F35]">Families awaiting a Taylor-Made welcome</h1>
+      <header className="rounded-[2rem] border border-[#E5D4DB] bg-[#FDF6F9] p-6 shadow-[0_20px_50px_rgba(62,47,53,0.12)]">
+        <p className="text-xs uppercase tracking-[0.5em] text-[#C8A1B4]">Admin · Waitlist</p>
+        <h1 className="mt-1 text-4xl font-serif text-[#3E2F35]">Invite requests</h1>
         <p className="mt-2 text-sm text-[#3E2F35]/70">
-          Review due dates, vibe notes, and support needs grouped by trimester.
+          Approve incoming invite requests, generate codes, and keep the queue moving.
         </p>
       </header>
 
-      {loading ? (
-        <div className="rounded-[2rem] border border-[#E3C6D4] bg-white/90 p-6 text-center text-sm uppercase tracking-[0.4em] text-[#C8A1B4]">
-          Loading waitlist entries…
-        </div>
+      {requests.length === 0 ? (
+        <EmptyState
+          title="No pending requests"
+          description="Invite requests will appear here once families reach out."
+        />
       ) : (
-        windows.map((window) => {
-          const windowRequests = groups[window] ?? [];
-          return (
-            <section
-              key={window}
-              className="space-y-4 rounded-[2rem] border border-[#E3C6D4] bg-white/90 p-6 shadow-[0_20px_60px_rgba(180,143,164,0.15)]"
+        <div className="space-y-4">
+          {requests.map((request) => (
+            <article
+              key={request.id}
+              className="flex flex-col justify-between gap-4 rounded-[1.75rem] border border-[#E5D4DB] bg-white/90 p-5 shadow-[0_15px_40px_rgba(62,47,53,0.08)] lg:flex-row lg:items-center"
             >
-              <h2 className="text-xl font-semibold text-[#3E2F35]">{window}</h2>
-              <div className="space-y-4">
-                {windowRequests.map((request) => (
-                  <article
-                    key={request.id}
-                    className="flex flex-col gap-4 rounded-[1.75rem] border border-[#E3C6D4]/60 bg-[#FFFAF8]/80 p-4 lg:flex-row lg:items-center lg:justify-between"
-                  >
-                    <div className="space-y-1">
-                      <p className="text-lg font-semibold text-[#3E2F35]">{request.email}</p>
-                      <p className="text-sm text-[#3E2F35]/70">
-                        Due date: {request.dueDate ? new Date(request.dueDate).toLocaleDateString() : "TBD"}
-                      </p>
-                      <p className="text-xs uppercase tracking-[0.4em] text-[#3E2F35]/60">
-                        Vibe: {request.vibe ?? "Calm + curious"}
-                      </p>
-                      <p className="text-xs text-[#3E2F35]/70">
-                        Support: {request.supportNeeds ?? "Mentor notes pending"}
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em]">
-                      <button
-                        onClick={() => handleApprove(request.id)}
-                        className="rounded-full bg-[#C8A1B4] px-4 py-2 text-white transition hover:bg-[#b98aa5]"
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => handleDecline(request.id)}
-                        className="rounded-full border border-[#E3C6D4] px-4 py-2 text-[#3E2F35] transition hover:border-[#B98AA5]"
-                      >
-                        Decline
-                      </button>
-                    </div>
-                  </article>
-                ))}
+              <div>
+                <p className="text-lg font-semibold text-[#3E2F35]">
+                  {request.firstName ?? "Member"} {request.lastName ?? ""}
+                </p>
+                <p className="text-sm uppercase tracking-[0.35em] text-[#3E2F35]/60">{request.email}</p>
+                <p className="mt-1 text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">
+                  Status: {request.status}
+                </p>
+                <p className="text-xs text-[#3E2F35]/70">
+                  Submitted {new Date(request.createdAt).toLocaleDateString()}
+                </p>
+                {request.message && (
+                  <p className="mt-2 text-sm text-[#3E2F35]/70">{request.message}</p>
+                )}
               </div>
-            </section>
-          );
-        })
+
+              <div className="flex flex-wrap gap-3">
+                {request.inviteCode && (
+                  <span className="rounded-full border border-[#E5D4DB] px-4 py-2 text-[0.6rem] uppercase tracking-[0.4em] text-[#3E2F35]">
+                    Code {request.inviteCode}
+                  </span>
+                )}
+                <form action={approveWaitlistEntry}>
+                  <input type="hidden" name="requestId" value={request.id} />
+                  <button
+                    type="submit"
+                    className="rounded-full bg-[#C29EB3] px-5 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-white transition hover:bg-[#AE8CA3]"
+                    disabled={request.status === "approved"}
+                  >
+                    {request.status === "approved" ? "Approved" : "Approve"}
+                  </button>
+                </form>
+                <form action={rejectWaitlistEntry}>
+                  <input type="hidden" name="requestId" value={request.id} />
+                  <button
+                    type="submit"
+                    className="rounded-full border border-[#E5D4DB] px-5 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-[#3E2F35] transition hover:border-[#C29EB3]"
+                    disabled={request.status === "rejected"}
+                  >
+                    {request.status === "rejected" ? "Rejected" : "Reject"}
+                  </button>
+                </form>
+              </div>
+            </article>
+          ))}
+        </div>
       )}
     </div>
   );

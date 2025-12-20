@@ -200,12 +200,17 @@ export type AdminUser = {
   inviteCode?: string;
   joinedAt: string;
   status: 'active' | 'disabled';
+  mentorId?: string;
+  mentorName?: string;
+  onboardingComplete: boolean;
+  profileCompleted: boolean;
 };
 
 export const getAdminUsers = async (): Promise<AdminUser[]> => {
   const users = await prisma.user.findMany({
     include: {
       consumedInvite: { select: { code: true } },
+      mentor: { select: { id: true, name: true } },
     },
     orderBy: { createdAt: 'desc' },
   });
@@ -218,6 +223,10 @@ export const getAdminUsers = async (): Promise<AdminUser[]> => {
     inviteCode: user.consumedInvite?.code ?? undefined,
     joinedAt: user.createdAt.toISOString(),
     status: user.disabled ? 'disabled' : 'active',
+    mentorId: user.mentorId ?? undefined,
+    mentorName: user.mentor?.name ?? undefined,
+    onboardingComplete: user.onboardingComplete,
+    profileCompleted: user.profileCompleted,
   }));
 };
 
@@ -225,6 +234,7 @@ type UserUpdatePayload = {
   role?: 'member' | 'mentor' | 'admin';
   status?: 'active' | 'disabled';
   name?: string;
+  mentorId?: string | null;
 };
 
 export const updateAdminUser = async (id: string, payload: UserUpdatePayload) => {
@@ -237,6 +247,11 @@ export const updateAdminUser = async (id: string, payload: UserUpdatePayload) =>
   }
   if (payload.name) {
     data.name = payload.name;
+  }
+  if (payload.mentorId !== undefined) {
+    data.mentor = payload.mentorId
+      ? { connect: { id: payload.mentorId } }
+      : { disconnect: true };
   }
 
   return prisma.user.update({
@@ -504,6 +519,93 @@ export const getAdminRegistryMonitor = async (): Promise<RegistryMonitorResult> 
   };
 };
 
+export type AdminRegistryItemRow = {
+  id: string;
+  userId: string;
+  userName: string;
+  merchant: string;
+  title: string;
+  section: string;
+  status: string;
+  addedByMentor: boolean;
+  updatedAt: string;
+};
+
+export type AdminRegistryConflictRow = {
+  id: string;
+  userName: string;
+  field: string;
+  section: string;
+  status: string;
+  createdAt: string;
+};
+
+const normalizeRegistryStatus = (value?: string) => {
+  if (!value) return undefined;
+  const normalized = value.toUpperCase();
+  const statuses = Object.values(RegistryItemStatus);
+  if (statuses.includes(normalized as RegistryItemStatus)) {
+    return normalized as RegistryItemStatus;
+  }
+  return undefined;
+};
+
+export const getAdminRegistryItems = async (filters?: {
+  userId?: string;
+  status?: string;
+}): Promise<AdminRegistryItemRow[]> => {
+  const where: Prisma.RegistryItemWhereInput = {};
+  if (filters?.userId) {
+    where.userId = filters.userId;
+  }
+  const statusFilter = normalizeRegistryStatus(filters?.status);
+  if (statusFilter) {
+    where.status = statusFilter;
+  }
+
+  const items = await prisma.registryItem.findMany({
+    where,
+    include: {
+      user: { select: { id: true, name: true, email: true } },
+    },
+    orderBy: { updatedAt: "desc" },
+    take: 24,
+  });
+
+  return items.map((item) => ({
+    id: item.id,
+    userId: item.userId,
+    userName: item.user?.name ?? item.user?.email ?? "Member",
+    merchant: item.merchant ?? "Unknown",
+    title: item.title ?? "Registry item",
+    section: item.section ?? "Unknown",
+    status: item.status,
+    addedByMentor: item.addedByMentor,
+    updatedAt: item.updatedAt.toISOString(),
+  }));
+};
+
+export const getAdminRegistryConflicts = async (): Promise<AdminRegistryConflictRow[]> => {
+  const conflicts = await prisma.registryConflict.findMany({
+    where: { resolved: false },
+    include: {
+      user: { select: { name: true, email: true } },
+      item: { select: { section: true, status: true } },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 6,
+  });
+
+  return conflicts.map((conflict) => ({
+    id: conflict.id,
+    userName: conflict.user?.name ?? conflict.user?.email ?? "Member",
+    field: conflict.field,
+    section: conflict.item?.section ?? "Unknown",
+    status: conflict.item?.status ?? "Unknown",
+    createdAt: conflict.createdAt.toISOString(),
+  }));
+};
+
 export type AdminModule = {
   id: string;
   code: string;
@@ -656,4 +758,30 @@ export const approveWaitlistEntry = async (id: string) => {
 
 export const rejectWaitlistEntry = async (id: string) => {
   return updateWaitlistStatus(id, 'rejected');
+};
+
+export type AdminMemberSummary = {
+  id: string;
+  name: string;
+  mentorId?: string;
+};
+
+export const getAdminMemberRoster = async (limit = 40): Promise<AdminMemberSummary[]> => {
+  const members = await prisma.user.findMany({
+    where: { role: Role.MEMBER },
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      mentorId: true,
+    },
+  });
+
+  return members.map((member) => ({
+    id: member.id,
+    name: member.name ?? member.email,
+    mentorId: member.mentorId ?? undefined,
+  }));
 };

@@ -7,7 +7,7 @@ import SectionNav from "@/components/dashboard/SectionNav";
 import { EventItem, getEvents, rsvpToEvent } from "@/lib/api/events";
 import PageHeader from "@/components/dashboard/member/ui/PageHeader";
 import CTAButton from "@/components/dashboard/member/ui/CTAButton";
-import EmptyState from "@/components/dashboard/member/ui/EmptyState";
+import { EmptyState } from "@/components/dashboard/shared/EmptyState";
 
 type RSVPOption = {
   label: string;
@@ -94,7 +94,7 @@ export default function EventsPage() {
       <SectionNav />
 
       {loading ? (
-        <EmptyState title="Hold tight" message="We are gathering the calm calendar for you." />
+        <EmptyState title="Hold tight" description="We are gathering the calm calendar for you." />
       ) : error ? (
         <div className="rounded-[2rem] border border-red-200 bg-red-50 px-6 py-4 text-sm text-red-700">
           {error}
@@ -146,7 +146,7 @@ export default function EventsPage() {
       ) : (
         <EmptyState
           title="Calendar is calm"
-          message="No events scheduled just yet. Breathe, rest, and check back for mentor-led invitations."
+          description="No events scheduled just yet. Breathe, rest, and check back for mentor-led invitations."
         />
       )}
 

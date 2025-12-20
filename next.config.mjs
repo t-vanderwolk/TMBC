@@ -26,6 +26,10 @@ const nextConfig = {
     shims.forEach(([pkg, file]) => {
       config.resolve.alias[pkg] = path.resolve(projectRoot, "lib/shims", file);
     });
+    config.resolve.alias["lucide-react"] = path.resolve(
+      projectRoot,
+      "node_modules/lucide-react/dist 2/esm/lucide-react.js",
+    );
 
     return config;
   },

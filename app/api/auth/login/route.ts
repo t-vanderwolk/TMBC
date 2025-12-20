@@ -23,7 +23,21 @@ export async function POST(request: NextRequest) {
 
   try {
     const result = await AuthService.loginUser(String(email), String(password));
-    const response = NextResponse.json(result);
+    const { user } = result;
+    const userResponse = {
+      ...user,
+      onboardingComplete: Boolean(user?.onboardingComplete),
+      profileCompleted: Boolean(user?.profileCompleted),
+      inviteCodeUsed: Boolean(user?.inviteCodeUsed),
+    };
+    const responsePayload = {
+      success: true,
+      user: userResponse,
+      token: result.token,
+      dashboard: result.dashboard,
+      redirect: result.redirect,
+    };
+    const response = NextResponse.json(responsePayload);
     const authCookieOptions = buildAuthCookieOptions({ maxAge: AUTH_COOKIE_MAX_AGE });
 
     for (const name of AUTH_COOKIE_NAMES) {
@@ -32,7 +46,13 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unable to log in.";
-    return NextResponse.json({ error: message }, { status: 401 });
+    if (error instanceof Error && error.message === "Invalid credentials") {
+      return NextResponse.json({ error: error.message }, { status: 401 });
+    }
+    console.error("Login error", error);
+    return NextResponse.json(
+      { error: "Unable to log in." },
+      { status: 500 },
+    );
   }
 }

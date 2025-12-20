@@ -32,6 +32,12 @@ export const requireMember = (): GuardResult => {
       return;
     }
 
+    if (!stored.onboardingComplete) {
+      router.replace("/onboarding/questionnaire");
+      setLoading(false);
+      return;
+    }
+
     setUser(stored);
     setLoading(false);
   }, [router]);

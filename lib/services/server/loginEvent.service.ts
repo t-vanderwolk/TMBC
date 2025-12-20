@@ -30,3 +30,10 @@ export async function logLoginAttempt({
     },
   });
 }
+
+export const getLoginEvents = async (limit = 200) => {
+  return prisma.loginEvent.findMany({
+    orderBy: { createdAt: "desc" },
+    take: limit,
+  });
+};

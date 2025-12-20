@@ -22,6 +22,7 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
+      "lucide-react": ["./lib/shims/lucide-react.d.ts"],
       "@/components/*": [
         "./components/*"
       ],
