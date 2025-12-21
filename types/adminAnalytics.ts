@@ -108,6 +108,11 @@ export type AffiliateKpis = {
   pendingCommission: number;
   avgCommissionPerRegistry: number;
   revenueAttributed: number;
+  revenueBreakdown: {
+    productAffiliate: number;
+    eventService: number;
+    lead: number;
+  };
 };
 
 export type AdminAnalyticsPayload = {

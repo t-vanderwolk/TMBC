@@ -10,6 +10,7 @@
 import { Prisma, RegistryItemStatus } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
+import { MYREGISTRY_CANON, MYREGISTRY_SIGNUP_COMPLETED } from '@/lib/constants/affiliateCanon';
 import { blogPosts } from '@/data/blogPosts';
 import type { AdminAnalyticsPayload, AffiliateDecisionSource } from '@/types/adminAnalytics';
 
@@ -527,13 +528,38 @@ export const getAdminAnalytics = async (options?: { rangeDays?: number }): Promi
     };
   });
 
+  const productRevenue = Number(totalOrderValue.toFixed(2));
+  let leadRevenueEventCount = 0;
+  try {
+    const [leadEventRow] = (await prisma.$queryRaw<
+      { count: number }[]
+    >(Prisma.sql`
+      SELECT COUNT(*)::int AS count
+      FROM "AffiliateEvent"
+      WHERE "affiliateName" = ${MYREGISTRY_CANON.name}
+        AND "eventType" = ${MYREGISTRY_SIGNUP_COMPLETED}
+        AND "createdAt" >= ${rangeStart}
+    `)) ?? [{ count: 0 }];
+    leadRevenueEventCount = leadEventRow?.count ?? 0;
+  } catch (error) {
+    console.warn('admin analytics: unable to read affiliate events', error);
+  }
+
+  const leadRevenue = leadRevenueEventCount * MYREGISTRY_CANON.payoutValue;
+  const revenueBreakdown = {
+    productAffiliate: productRevenue,
+    eventService: 0,
+    lead: Number(leadRevenue.toFixed(2)),
+  };
+
   const affiliateKpis = {
     estimatedCommission: Number(totalEstimatedCommission.toFixed(2)),
     confirmedCommission: Number(totalEstimatedCommission.toFixed(2)),
     pendingCommission: 0,
     avgCommissionPerRegistry:
       purchasedItems.length === 0 ? 0 : Number((totalEstimatedCommission / purchasedItems.length).toFixed(2)),
-    revenueAttributed: Number(totalOrderValue.toFixed(2)),
+    revenueAttributed: productRevenue,
+    revenueBreakdown,
   };
 
   const affiliatePayload = {

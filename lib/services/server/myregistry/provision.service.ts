@@ -2,6 +2,7 @@ import { User } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 import { emitRegistryAnalytics } from '../analytics.service';
+import { trackMyRegistrySignup } from './affiliateTracking.service';
 import { MyRegistryAutomation, MyRegistryAccount } from './auto.service';
 
 export const REGISTRY_SOURCE = 'MYREGISTRY';
@@ -59,6 +60,12 @@ export const ensureMyRegistryAccount = async (user: User): Promise<MyRegistryAcc
     registryId: registry.id,
     myRegistryId: registry.myRegistryId,
   });
+
+  try {
+    await trackMyRegistrySignup(user.id);
+  } catch (error) {
+    console.error("Failed to record MyRegistry affiliate event", error);
+  }
 
   return creation;
 };

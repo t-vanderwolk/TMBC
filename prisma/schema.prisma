@@ -63,6 +63,23 @@ model User {
   timeCapsules           TimeCapsule[]
   workbookEntries        WorkbookEntry[]
   registry               Registry?          @relation("UserRegistry")
+  affiliateEvents        AffiliateEvent[]
+}
+
+model AffiliateEvent {
+  id            String   @id @default(uuid())
+  userId        String
+  affiliateName String
+  affiliateType String
+  network       String
+  merchantId    String
+  eventType     String
+  payoutValue   Float
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, affiliateName])
 }
 
 model Registry {

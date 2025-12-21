@@ -1,9 +1,9 @@
-"use server";
-
 import { NextRequest, NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { getPinterestAuthUrl } from "@/lib/services/server/pinterest.service";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {

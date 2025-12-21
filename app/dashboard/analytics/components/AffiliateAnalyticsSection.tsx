@@ -10,6 +10,11 @@ type Props = {
 
 export default function AffiliateAnalyticsSection({ data }: Props) {
   const transactions = data.transactions.slice(0, 8);
+  const revenueBreakdown = data.kpis.revenueBreakdown ?? {
+    productAffiliate: 0,
+    eventService: 0,
+    lead: 0,
+  };
 
   return (
     <section className="space-y-6 rounded-3xl border border-[#E3D1DA] bg-white/90 p-6 shadow-sm md:p-8">
@@ -38,6 +43,24 @@ export default function AffiliateAnalyticsSection({ data }: Props) {
           title="Attributed revenue"
           value={formatCurrency(data.kpis.revenueAttributed)}
           detail="Decision-aligned spend"
+        />
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-3">
+        <AdminStatCard
+          title="Product affiliate revenue"
+          value={formatCurrency(revenueBreakdown.productAffiliate)}
+          detail="Affiliate-linked purchases"
+        />
+        <AdminStatCard
+          title="Event & service revenue"
+          value={formatCurrency(revenueBreakdown.eventService)}
+          detail="Concierge & experience"
+        />
+        <AdminStatCard
+          title="Lead revenue (MyRegistry CPL)"
+          value={formatCurrency(revenueBreakdown.lead)}
+          detail="AWIN lead payouts"
         />
       </div>
 
