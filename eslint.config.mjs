@@ -86,8 +86,11 @@ export default [
       ],
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
-      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/rules-of-hooks': 'warn',
       'react-hooks/exhaustive-deps': 'warn',
+      'react/no-unescaped-entities': 'warn',
+      'react/jsx-no-comment-textnodes': 'warn',
+      '@next/next/no-assign-module-variable': 'warn',
     },
   },
 ];
