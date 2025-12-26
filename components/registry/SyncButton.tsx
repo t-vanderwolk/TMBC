@@ -86,7 +86,7 @@ export default function SyncButton({
       if (conflictsAfterDown.length) {
         setStatus('conflict');
         setMessage('Resolve conflicts to continue syncing.');
-        router.push('/dashboard/registry/conflicts');
+        router.push('/dashboard/plan/conflicts');
         return;
       }
 
@@ -100,7 +100,7 @@ export default function SyncButton({
       if (conflictsAfterUp.length) {
         setStatus('conflict');
         setMessage('Conflicts detected — review required.');
-        router.push('/dashboard/registry/conflicts');
+        router.push('/dashboard/plan/conflicts');
         return;
       }
 

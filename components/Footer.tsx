@@ -48,6 +48,9 @@ const Footer = () => {
 
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">For Mentors & Partners</p>
+          <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">
+            Affiliate & publisher partnerships welcome (CJ / AWIN / Impact).
+          </p>
           <div className="space-y-1">
             <a
               href="mailto:hello@taylormadebaby.co?subject=Mentor%20interest"

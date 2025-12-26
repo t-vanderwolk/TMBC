@@ -9,6 +9,7 @@ CREATE TABLE "RegistryItemBlogInfluence" (
     FOREIGN KEY ("registryItemId")
     REFERENCES "RegistryItem"("id")
     ON DELETE CASCADE
-    CREATE INDEX "RegistryItemBlogInfluence_postSlug_idx"
-  ON "RegistryItemBlogInfluence"("postSlug");
 );
+
+CREATE INDEX "RegistryItemBlogInfluence_postSlug_idx"
+  ON "RegistryItemBlogInfluence"("postSlug");

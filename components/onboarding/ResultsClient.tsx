@@ -65,7 +65,7 @@ export default function ResultsClient({
             key={category.id}
             title={category.title}
             description={category.reason}
-            href={`/dashboard/registry/${category.id}`}
+            href="/dashboard/plan"
             accent={<span>{category.priority ? "Priority" : "Explore"}</span>}
           />
         ))}

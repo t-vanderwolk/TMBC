@@ -8,8 +8,6 @@ import { PUBLIC_LOGIN_ROUTE } from "@/lib/auth/routeForRole";
 
 const navLinks = [
   { label: "How It Works", href: "/how-it-works" },
-  { label: "Experience", href: "/experience" },
-  { label: "Community", href: "/community" },
   { label: "Membership", href: "/membership" },
   { label: "Blog", href: "/blog" },
 ];

@@ -56,7 +56,7 @@ export default async function JourneySnapshotSection({ dataPromise }: JourneySna
           </div>
           <p className="text-xs text-[#3E2F35]/70">{data.registryStatus.detail}</p>
           <ActionButton
-            href="/dashboard/member/registry"
+            href="/dashboard/plan"
             variant="ghost"
             className="sm:w-auto"
             fullWidth

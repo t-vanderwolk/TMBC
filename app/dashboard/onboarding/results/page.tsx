@@ -15,7 +15,7 @@ export default async function DashboardOnboardingResults() {
         title="Dashboard registry results"
         subtitle="Your registry is guided by your onboarding answers."
         actions={
-          <Link href="/dashboard/member/registry">
+          <Link href="/dashboard/plan">
             <StyledButton variant="ghost">Go to registry</StyledButton>
           </Link>
         }
@@ -26,7 +26,7 @@ export default async function DashboardOnboardingResults() {
             key={category.id}
             title={category.title}
             description={category.reason}
-            href={`/dashboard/registry/${category.id}`}
+            href="/dashboard/plan"
             accent={<span>{category.priority ? "Priority" : "Fresh"}</span>}
           />
         ))}

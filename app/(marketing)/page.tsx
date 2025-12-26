@@ -132,6 +132,11 @@ export default function HomePage() {
             </p>
           </Reveal>
           <Reveal>
+            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+              Editorial-first, FTC-compliant recommendations for registry-ready families.
+            </p>
+          </Reveal>
+          <Reveal>
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
               Warm · Witty · Wise · Real — just like your mentor circle.
             </p>

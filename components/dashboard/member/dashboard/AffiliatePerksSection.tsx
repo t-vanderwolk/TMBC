@@ -24,7 +24,7 @@ export default async function AffiliatePerksSection({ dataPromise }: AffiliatePe
       title="Curated offers for gentle prep"
       action={
         <ActionButton
-          href="/dashboard/member/registry"
+          href="/dashboard/plan"
           variant="ghost"
           className="sm:w-auto"
           fullWidth

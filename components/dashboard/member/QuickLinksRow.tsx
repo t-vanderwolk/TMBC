@@ -16,7 +16,7 @@ export default function QuickLinksRow({ links }: QuickLinksRowProps) {
     ? links.filter((link) => link?.href)
     : [
         { label: "Return to Academy", href: "/dashboard/member/learn" },
-        { label: "Registry rhythm", href: "/dashboard/member/registry" },
+        { label: "Registry rhythm", href: "/dashboard/plan" },
         { label: "Community studio", href: "/dashboard/member/community" },
       ];
 

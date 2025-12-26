@@ -49,7 +49,7 @@ export default async function SuggestionsSection({ dataPromise }: SuggestionsSec
       id: 'registry',
       title: 'Review your registry',
       description: 'Share a few more essentials so the concierge knows your rhythm.',
-      href: '/dashboard/member/registry',
+      href: '/dashboard/plan',
       ctaLabel: 'Review',
       icon: <Gift className="h-4 w-4 text-[#B98AA5]" aria-hidden />,
     });

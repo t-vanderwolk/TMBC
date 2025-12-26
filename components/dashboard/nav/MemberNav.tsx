@@ -5,7 +5,7 @@ import Link from "next/link";
 const MEMBER_NAV = [
   { label: "Home", href: "/dashboard/member" },
   { label: "Academy", href: "/dashboard/member/learn" },
-  { label: "Registry", href: "/dashboard/member/registry" },
+  { label: "Registry", href: "/dashboard/plan" },
   { label: "Community", href: "/dashboard/member/community" },
 ];
 

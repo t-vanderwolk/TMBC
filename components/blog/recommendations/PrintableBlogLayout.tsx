@@ -1,18 +1,49 @@
-import type { BlogPost } from '@/data/blogPosts';
+import type { BlogContentBlock } from "@/components/blog/BlogContentRenderer";
+import BlogContentRenderer from "@/components/blog/BlogContentRenderer";
+import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
 
-import MarkdownRenderer from '@/components/blog/MarkdownRenderer';
-import AffiliateDisclosure from '@/components/blog/affiliate/AffiliateDisclosure';
-import EndOfPostRecommendations from '@/components/blog/recommendations/EndOfPostRecommendations';
-
-import PrintTrigger from './PrintTrigger';
+import PrintTrigger from "./PrintTrigger";
 
 type PrintableBlogLayoutProps = {
-  post: BlogPost;
+  post: {
+    title: string;
+    excerpt: string | null;
+    content: BlogContentBlock[];
+    publishedAt: string | null;
+    authorName: string;
+    authorRoleSnapshot: "ADMIN" | "MENTOR";
+    affiliateLinks: Array<{
+      id: string;
+      partnerName: string;
+      label: string;
+      position: "INLINE" | "CALLOUT" | "END_CARD";
+      isPrimary: boolean;
+    }>;
+  };
 };
 
+const splitContentBlocks = (blocks: BlogContentBlock[]) => {
+  const mainBlocks: BlogContentBlock[] = [];
+
+  for (const block of blocks) {
+    if (block.type === "heading" && block.text.trim().toUpperCase() === "END_CARD") {
+      break;
+    }
+    mainBlocks.push(block);
+  }
+
+  return mainBlocks;
+};
+
+const formatAuthorRole = (role: PrintableBlogLayoutProps["post"]["authorRoleSnapshot"]) =>
+  role === "ADMIN" ? "Admin" : "Mentor";
+
 export default function PrintableBlogLayout({ post }: PrintableBlogLayoutProps) {
-  const endProducts = post.affiliateProducts?.filter((item) => item.placement === 'end') ?? [];
-  const hasAffiliates = (post.affiliateProducts?.length ?? 0) > 0;
+  const contentBlocks = Array.isArray(post.content) ? post.content : [];
+  const mainBlocks = splitContentBlocks(contentBlocks);
+  const publishedLabel = post.publishedAt
+    ? new Date(post.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
+    : "Coming soon";
 
   return (
     <div className="min-h-screen bg-white text-tmCharcoal">
@@ -21,31 +52,19 @@ export default function PrintableBlogLayout({ post }: PrintableBlogLayoutProps) 
         <header className="space-y-3 border-b border-tmBlush/40 pb-6 text-center">
           <p className="text-[0.6rem] uppercase tracking-[0.5em] text-tmCharcoal/60">Taylor-Made Journal</p>
           <h1 className="font-playfair text-4xl text-tmCharcoal">{post.title}</h1>
-          {post.description && <p className="text-sm text-tmCharcoal/75">{post.description}</p>}
+          {post.excerpt && <p className="text-sm text-tmCharcoal/75">{post.excerpt}</p>}
           <div className="flex flex-wrap items-center justify-center gap-4 text-[0.65rem] uppercase tracking-[0.35em] text-tmCharcoal/65">
-            {post.author && <span>{post.author}</span>}
-            <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-            <span>•</span>
-            <span>{post.readTime}</span>
+            {post.authorName && <span>{post.authorName}</span>}
+            <span>{formatAuthorRole(post.authorRoleSnapshot)}</span>
+            <span>{publishedLabel}</span>
           </div>
         </header>
 
         <section className="space-y-10">
-          <MarkdownRenderer content={post.content} affiliates={post.affiliateProducts} />
+          <BlogContentRenderer blocks={mainBlocks} />
         </section>
 
-        {endProducts.length > 0 && (
-          <EndOfPostRecommendations
-            products={endProducts}
-            subtitle="Products we genuinely love and often recommend to families."
-          />
-        )}
-
-        {hasAffiliates && (
-          <div className="border-t border-tmBlush/30 pt-6 text-[0.65rem] text-tmCharcoal/70">
-            <AffiliateDisclosure />
-          </div>
-        )}
+        <BlogAffiliateEndCard links={post.affiliateLinks} />
       </article>
     </div>
   );

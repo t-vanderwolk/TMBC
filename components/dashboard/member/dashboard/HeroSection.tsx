@@ -56,7 +56,7 @@ export default async function HeroSection({ dataPromise, user, microcopy }: Hero
           Continue Academy
         </ActionButton>
         <ActionButton
-          href="/dashboard/member/registry"
+          href="/dashboard/plan"
           variant="ghost"
           className="sm:w-auto"
           fullWidth

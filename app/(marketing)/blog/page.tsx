@@ -1,16 +1,45 @@
-import Link from 'next/link';
+import Link from "next/link";
 
-import PlaceholderImageCard from '@/components/marketing/PlaceholderImageCard';
-import { blogPosts } from '@/data/blogPosts';
+import PlaceholderImageCard from "@/components/marketing/PlaceholderImageCard";
 
-const sortedPosts = [...blogPosts].sort(
-  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-);
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_APP_URL ||
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  "http://localhost:3000";
 
-const featuredPost = sortedPosts[0];
-const otherPosts = sortedPosts.slice(1);
+type PublicBlogPost = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  heroImage: string | null;
+  publishedAt: string | null;
+  authorName: string;
+  authorRoleSnapshot: "ADMIN" | "MENTOR";
+  tags: string[];
+};
 
-const BlogMarketingPage = () => {
+const formatAuthorRole = (role?: PublicBlogPost["authorRoleSnapshot"]) => {
+  if (role === "ADMIN") return "Admin";
+  if (role === "MENTOR") return "Mentor";
+  return "Staff";
+};
+
+const fetchPublicPosts = async (): Promise<PublicBlogPost[]> => {
+  const response = await fetch(new URL("/api/blog/public", API_BASE_URL), {
+    next: { revalidate: 300 },
+  });
+
+  if (!response.ok) {
+    return [];
+  }
+
+  return response.json();
+};
+
+const BlogMarketingPage = async () => {
+  const posts = await fetchPublicPosts();
+  const [featuredPost, ...otherPosts] = posts;
   if (!featuredPost) {
     return (
       <section className="marketing-section text-center text-base text-[var(--tmbc-charcoal)] text-opacity-70">
@@ -29,6 +58,12 @@ const BlogMarketingPage = () => {
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           Mentor essays, gear guides, and real chat that keeps you calm, curious, and ready for the next chapter.
         </p>
+        <p className="text-xs uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)] text-opacity-60">
+          Curated Picks
+        </p>
+        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+          Education-led commerce with transparent partner disclosures.
+        </p>
       </header>
 
       <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-[40px] border border-tmMauve/40 bg-tmIvory shadow-editorial transition duration-300 hover:-translate-y-0.5 sm:grid-cols-[1.1fr_0.9fr]">
@@ -39,14 +74,16 @@ const BlogMarketingPage = () => {
         <div className="flex flex-1 flex-col gap-6 p-8 sm:p-10">
           <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             <span>
-              {new Date(featuredPost.date).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
+              {featuredPost.publishedAt
+                ? new Date(featuredPost.publishedAt).toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                : "Coming soon"}
             </span>
             <span>•</span>
-            <span>{featuredPost.readTime}</span>
+            <span>{featuredPost.authorName}</span>
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
             {featuredPost.tags.map((tag) => (
@@ -54,9 +91,14 @@ const BlogMarketingPage = () => {
                 {tag}
               </span>
             ))}
+            <span className="rounded-full border border-tmBlush/70 px-3 py-1 text-[0.55rem] font-semibold text-[var(--tmbc-charcoal)]">
+              {formatAuthorRole(featuredPost.authorRoleSnapshot)}
+            </span>
           </div>
           <h2 className="font-playfair text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">{featuredPost.title}</h2>
-          <p className="text-base leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-80">{featuredPost.description}</p>
+          <p className="text-base leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-80">
+            {featuredPost.excerpt ?? ""}
+          </p>
           <Link
             href={`/blog/${featuredPost.slug}`}
             className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] text-center sm:text-left"
@@ -76,17 +118,21 @@ const BlogMarketingPage = () => {
               <div className="space-y-4">
                 <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-50">
                   <span>
-                    {new Date(post.date).toLocaleDateString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
+                    {post.publishedAt
+                      ? new Date(post.publishedAt).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                      : "Coming soon"}
                   </span>
-                  <span>{post.readTime}</span>
+                  <span>{post.authorName}</span>
                 </div>
                 <div className="h-36 rounded-[28px] bg-gradient-to-br from-tmMauve/30 via-tmBlush/70 to-tmIvory" />
                 <h3 className="font-playfair text-xl sm:text-2xl text-[var(--tmbc-charcoal)]">{post.title}</h3>
-                <p className="text-base leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-75">{post.description}</p>
+                <p className="text-base leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-75">
+                  {post.excerpt ?? ""}
+                </p>
                 <div className="flex flex-wrap gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
                   {post.tags.map((tag) => (
                     <span
@@ -96,6 +142,9 @@ const BlogMarketingPage = () => {
                       {tag}
                     </span>
                   ))}
+                  <span className="rounded-full border border-tmBlush/70 px-3 py-1 text-[0.55rem] font-semibold text-[var(--tmbc-charcoal)]">
+                    {formatAuthorRole(post.authorRoleSnapshot)}
+                  </span>
                 </div>
               </div>
               <div className="mt-6 border-t border-tmMauve/40 pt-4 text-sm uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]">

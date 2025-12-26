@@ -13,7 +13,7 @@ const FEED = [
     title: "Registry Pulse · Curated Edit",
     date: "Yesterday",
     summary: "New carbon-neutral swaddles just landed in the registry. Mark essentials and share the set with your concierge.",
-    link: "/dashboard/member/registry",
+    link: "/dashboard/plan",
   },
   {
     id: "events-update",

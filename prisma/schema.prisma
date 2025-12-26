@@ -82,6 +82,84 @@ model AffiliateEvent {
   @@unique([userId, affiliateName])
 }
 
+model BlogAffiliateEvent {
+  id              String              @id @default(cuid())
+  blogPostId      String
+  affiliateLinkId String
+  event           AffiliateEventType
+  createdAt       DateTime            @default(now())
+
+  blogPost      BlogPost          @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  affiliateLink BlogAffiliateLink @relation(fields: [affiliateLinkId], references: [id], onDelete: Cascade)
+
+  @@index([blogPostId])
+  @@index([affiliateLinkId])
+  @@index([event])
+}
+
+model BlogPost {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  title             String
+  excerpt           String?
+  content           Json
+  heroImage         String?
+
+  status             BlogStatus @default(DRAFT)
+  isAffiliate        Boolean    @default(true)
+  publishedAt        DateTime?
+
+  authorId           String
+  authorName         String
+  authorRoleSnapshot BlogAuthorRole
+
+  tags       String[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  affiliateLinks   BlogAffiliateLink[]
+  engagementEvents BlogEngagementEvent[]
+  affiliateEvents  BlogAffiliateEvent[]
+
+  @@index([status, isAffiliate])
+  @@index([publishedAt])
+}
+
+model BlogAffiliateLink {
+  id         String @id @default(cuid())
+  blogPostId String
+
+  partnerName    String
+  network        AffiliateNetwork
+  label          String
+  position       AffiliatePosition
+  destinationUrl String
+  isPrimary      Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  blogPost        BlogPost           @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  affiliateEvents BlogAffiliateEvent[]
+
+  @@index([blogPostId])
+  @@index([partnerName])
+}
+
+model BlogEngagementEvent {
+  id        String             @id @default(cuid())
+  blogPostId String
+  event     BlogEngagementType
+  viewerId  String?
+  metadata  Json?
+  createdAt DateTime           @default(now())
+
+  blogPost  BlogPost           @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+
+  @@index([blogPostId])
+  @@index([event])
+  @@index([createdAt])
+}
+
 model Registry {
   id           String         @id @default(cuid())
   userId       String         @unique
@@ -606,6 +684,35 @@ enum AffiliateNetwork {
   SHAREASALE
   MYREGISTRY
   DIRECT
+}
+
+enum BlogStatus {
+  DRAFT
+  IN_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum BlogAuthorRole {
+  ADMIN
+  MENTOR
+}
+
+enum BlogEngagementType {
+  VIEW
+  READ_75
+  SHARE
+}
+
+enum AffiliatePosition {
+  INLINE
+  CALLOUT
+  END_CARD
+}
+
+enum AffiliateEventType {
+  CLICK
+  CONVERSION
 }
 
 enum RegistrySection {

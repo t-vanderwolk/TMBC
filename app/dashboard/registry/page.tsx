@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
 export default function RegistryRedirectPage() {
-  redirect("/dashboard/member/registry");
+  // Legacy registry route; /dashboard/plan is the canonical destination.
+  redirect("/dashboard/plan");
 }

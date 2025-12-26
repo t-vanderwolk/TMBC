@@ -116,8 +116,8 @@ export default function HowItWorksPage() {
           <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
             Request Invite
           </Link>
-          <Link href="/experience" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
-            Experience Taylor-Made
+          <Link href="/membership" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
+            Explore Membership
           </Link>
         </div>
       </section>

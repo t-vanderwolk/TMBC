@@ -18,7 +18,7 @@ const QUICK_ACCESS = [
   {
     title: 'Registry',
     description: 'Review curated essentials and gifted moments.',
-    href: '/dashboard/member/registry',
+    href: '/dashboard/plan',
     icon: <ClipboardList className="h-5 w-5" aria-hidden />,
   },
   {

@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import SectionNav from "@/components/dashboard/SectionNav";
 
 import { EventItem, getEvents, rsvpToEvent } from "@/lib/api/events";
 import PageHeader from "@/components/dashboard/member/ui/PageHeader";
@@ -90,8 +89,6 @@ export default function EventsPage() {
         description="Gentle gatherings, mentor salons, and restorative Q&As—lightly curated for your rhythm."
         cta={{ label: "Back to dashboard", href: "/dashboard/member" }}
       />
-
-      <SectionNav />
 
       {loading ? (
         <EmptyState title="Hold tight" description="We are gathering the calm calendar for you." />

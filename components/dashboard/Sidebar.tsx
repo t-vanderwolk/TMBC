@@ -13,7 +13,7 @@ const NAV = {
   member: [
     { href: "/dashboard", label: "Overview" },
     { href: "/dashboard/member/learn", label: "Academy" },
-    { href: "/dashboard/member/registry", label: "Registry" },
+    { href: "/dashboard/plan", label: "Registry" },
     { href: "/dashboard/member/events", label: "Events" },
     { href: "/dashboard/member/messages", label: "Messages" },
   ],

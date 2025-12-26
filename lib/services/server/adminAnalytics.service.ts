@@ -11,7 +11,6 @@ import { Prisma, RegistryItemStatus } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 import { MYREGISTRY_CANON, MYREGISTRY_SIGNUP_COMPLETED } from '@/lib/constants/affiliateCanon';
-import { blogPosts } from '@/data/blogPosts';
 import type { AdminAnalyticsPayload, AffiliateDecisionSource } from '@/types/adminAnalytics';
 
 const ALLOWED_RANGE_DAYS = [7, 30, 90];
@@ -175,6 +174,7 @@ type AnalyticsItem = Prisma.RegistryItemGetPayload<{
 export const getAdminAnalytics = async (options?: { rangeDays?: number }): Promise<AdminAnalyticsPayload> => {
   const rangeDays = normalizeRangeDays(options?.rangeDays);
   const rangeStart = calculateRangeStart(rangeDays);
+  let blogMetaBySlug = new Map<string, string>();
 
   const seededItems = await prisma.registryItem.findMany({
     where: {
@@ -192,6 +192,15 @@ export const getAdminAnalytics = async (options?: { rangeDays?: number }): Promi
       blogInfluences: true,
     },
   }) as AnalyticsItem[];
+
+  try {
+    const blogPosts = await prisma.blogPost.findMany({
+      select: { slug: true, title: true },
+    });
+    blogMetaBySlug = new Map(blogPosts.map((post) => [post.slug, post.title]));
+  } catch (error) {
+    console.warn('admin analytics: unable to load blog metadata', error);
+  }
 
   const seededItemIds = seededItems.map((item) => item.id);
 
@@ -689,7 +698,7 @@ export const getAdminAnalytics = async (options?: { rangeDays?: number }): Promi
   );
 
   const contentPosts = Array.from(influenceBySlug.entries()).map(([slug, metrics]) => {
-    const postMeta = blogPosts.find((post) => post.slug === slug);
+    const postTitle = blogMetaBySlug.get(slug);
     const totalInfluenced = metrics.influencedRegistries.size;
     const acceptancePct =
       metrics.acceptanceCount === 0 || totalInfluenced === 0
@@ -711,7 +720,7 @@ export const getAdminAnalytics = async (options?: { rangeDays?: number }): Promi
 
     return {
       slug,
-      title: postMeta?.title,
+      title: postTitle,
       views: 0,
       influencedRegistries: totalInfluenced,
       acceptanceLiftPct: acceptanceLift,
