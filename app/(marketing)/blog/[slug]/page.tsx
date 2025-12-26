@@ -83,13 +83,15 @@ const splitContentBlocks = (blocks: BlogContentBlock[]) => {
   return mainBlocks;
 };
 
+const isHeadingBlock = (
+  block: BlogContentBlock
+): block is Extract<BlogContentBlock, { type: "heading" }> => block.type === "heading";
+
 const getTableOfContents = (blocks: BlogContentBlock[]) =>
-  blocks
-    .filter((block) => block.type === "heading")
-    .map((block) => ({
-      heading: block.text,
-      id: createHeadingId(block.text),
-    }));
+  blocks.filter(isHeadingBlock).map((block) => ({
+    heading: block.text,
+    id: createHeadingId(block.text),
+  }));
 
 const formatAuthorRole = (role: PublicBlogPost["authorRoleSnapshot"]) =>
   role === "ADMIN" ? "Admin" : "Mentor";
