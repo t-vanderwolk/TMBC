@@ -19,7 +19,9 @@ export const createHeadingId = (text: string) =>
   text.toLowerCase().replace(/[^\w]+/g, "-");
 
 const isParagraphBlock = (block: BlogContentBlock) => block.type === "paragraph";
-const isHeadingBlock = (block: BlogContentBlock) => block.type === "heading";
+const isHeadingBlock = (
+  block: BlogContentBlock
+): block is Extract<BlogContentBlock, { type: "heading" }> => block.type === "heading";
 const isListBlock = (block: BlogContentBlock) => block.type === "list";
 
 const renderHeading = (block: Extract<BlogContentBlock, { type: "heading" }>, key: string) => {
