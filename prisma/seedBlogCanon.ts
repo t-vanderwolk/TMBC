@@ -305,10 +305,30 @@ const blogCanon = [
   },
 ];
 
-const buildAffiliateLinks = (post) => {
+type SeedAffiliatePartner = {
+  partnerName: string;
+  network: string;
+};
+
+type SeedBlogPost = {
+  slug: string;
+  affiliatePartners?: SeedAffiliatePartner[];
+  affiliateCTAs?: string[];
+};
+
+type SeedAffiliateLink = {
+  partnerName: string;
+  network: string;
+  label: string;
+  position: string;
+  destinationUrl: string;
+  isPrimary: boolean;
+};
+
+const buildAffiliateLinks = (post: SeedBlogPost) => {
   const partners = post.affiliatePartners || [];
   const ctas = post.affiliateCTAs || [];
-  const links = [];
+  const links: SeedAffiliateLink[] = [];
 
   if (partners.length !== ctas.length) {
     console.warn(
