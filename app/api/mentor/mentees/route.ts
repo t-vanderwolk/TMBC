@@ -22,7 +22,8 @@ export async function GET() {
     const user = await requireMentor();
     const result = await getMenteeList(user.id);
     if (!result.ok) {
-      return NextResponse.json({ error: result.error }, { status: 400 });
+      const message = "error" in result ? result.error : "Unable to load mentees.";
+      return NextResponse.json({ error: message }, { status: 400 });
     }
     return NextResponse.json({ data: result.data });
   } catch (error) {

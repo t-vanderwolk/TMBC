@@ -33,7 +33,9 @@ export default function ModuleTabs({ module }: ModuleTabsProps) {
   const lectureSlides =
     content.lectureSlides?.length ? content.lectureSlides : deriveParagraphs(content.lecture);
   const applyList = collectListItems(content.apply);
-  const journalPrompt = content.journalPrompt || 'Reflect on what you’ve learned.';
+  const journalPrompt =
+    content.journalPrompt ||
+    'Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.';
 
   useEffect(() => {
     trigger(`module-tabs:${module.id}`);
@@ -57,7 +59,7 @@ export default function ModuleTabs({ module }: ModuleTabsProps) {
           Apply
         </div>
         <div className={tabClasses('journal')} onClick={() => setTab('journal')}>
-          Journal
+          Workbook
         </div>
       </div>
 
@@ -83,7 +85,10 @@ export default function ModuleTabs({ module }: ModuleTabsProps) {
 
       {tab === 'journal' && (
         <div className="p-6 bg-rose-50 rounded-xl shadow-inner text-gray-800">
-          <p className="font-medium mb-4">{journalPrompt}</p>
+          <p className="whitespace-pre-line font-medium mb-4">{journalPrompt}</p>
+          <p className="text-sm text-gray-600">
+            Even a short response helps your mentor plan next steps with you.
+          </p>
         </div>
       )}
     </div>

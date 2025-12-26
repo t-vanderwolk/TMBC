@@ -14,6 +14,10 @@ export type AcademyModuleSeed = {
   };
 };
 
+// TMBC Canon:
+// Workbook prompts collect planning intelligence shared with mentors.
+// They are not private journaling and are not keepsakes.
+// Responses inform mentor judgment but never trigger automation.
 export const academyModulesSeed: AcademyModuleSeed[] = [
   {
     "id": "module-nursery-vision-foundations",
@@ -36,7 +40,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Add a sound machine, humidifier, and monitor to your registry via the Dynamic Registry.",
         "Complete your Vision Board section and share with your mentor for review."
       ],
-      "journalPrompt": "As you picture welcoming your baby home, what three feelings do you want their first environment to reflect?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nShare a quick photo or sketch of the space (messy rooms welcome), rough dimensions, and 2-3 feelings you want the nursery to support. Even a quick answer helps.",
       "resources": []
     }
   },
@@ -61,7 +65,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Add crib and glider options from MacroBaby feed.",
         "Check your mentor's ergonomics checklist."
       ],
-      "journalPrompt": "Which nursery item do you imagine yourself using most in those first few weeks-and what moments do you picture happening there?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nList any furniture you already have or plan to reuse, your doorway width (approx), and the one daily task you want to feel easiest.",
       "resources": []
     }
   },
@@ -86,7 +90,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Add a dimmable nightlight to registry.",
         "Upload favorite lighting mood to your Pinterest Moodboard."
       ],
-      "journalPrompt": "How do you want the nursery to feel during nighttime feeds or early mornings-calming, energizing, cozy, or bright?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nTell us how much natural light the room gets, what bulbs or lamps you already own, and whether you prefer warm, dim light or brighter mornings.",
       "resources": []
     }
   },
@@ -111,15 +115,15 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Add air purifier and monitor to registry.",
         "Review mentor video 'Safe Sleep Zone Setup.'"
       ],
-      "journalPrompt": "Which safety feature or setup would help you feel most relaxed and confident before bringing your baby home?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nNote any safety concerns (stairs, cords, pets, older siblings), materials to avoid, and any areas you want extra peace of mind around.",
       "resources": []
     }
   },
   {
     "id": "module-nursery-memory-corners",
-    "title": "Finishing Touches & Memory Corners",
-    "subtitle": "Design moments that hold emotion and story",
-    "description": "Design moments that hold emotion and story",
+    "title": "Finishing Touches & Personal Details",
+    "subtitle": "Layer warmth and intention without the clutter",
+    "description": "Layer warmth and intention without the clutter",
     "heroImage": "/images/academy/placeholder.jpg",
     "trackId": "nursery",
     "content": {
@@ -127,16 +131,16 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Every room tells a story-add touches that grow with baby."
       ],
       "lecture": [
-        "Finishing a nursery means more than hanging décor-it's about marking identity. Whether it's a framed ultrasound photo or a handmade quilt, memory pieces remind you that this space celebrates a real family, not just a theme.",
-        "Textures bring warmth: a woven rug softens hard floors, a linen curtain diffuses sunlight, and a cozy throw invites skin-to-skin moments. Select items that photograph beautifully but feel even better in use. Function meets sentiment when you create tactile memories.",
-        "Lastly, plan for change. Leave blank space-physical and emotional-for growth. That empty shelf today becomes tomorrow's art gallery of milestones. A nursery that evolves gracefully mirrors the way you'll grow as a parent."
+        "Finishing a nursery means more than hanging décor-it's about choosing personal touches that feel grounded and practical. A favorite textile, a calming print, or a family object can make the space feel like home without turning it into a display wall.",
+        "Textures bring warmth: a woven rug softens hard floors, a linen curtain diffuses sunlight, and a cozy throw invites skin-to-skin moments. Choose items that feel good in use, not just in photos.",
+        "Lastly, plan for change. Leave breathing room-physical and emotional-for growth. A nursery that evolves gracefully mirrors the way your routines will evolve too."
       ],
       "apply": [
         "Add storage baskets or frames to registry.",
         "Upload décor picks to your board.",
         "Tag your mentor for feedback."
       ],
-      "journalPrompt": "What personal object, color, or keepsake would make your baby's nursery feel uniquely yours from day one?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nShare any decor items you already love, colors or patterns to avoid, and the vibe you want (cozy, minimal, playful, neutral).",
       "resources": []
     }
   },
@@ -158,10 +162,10 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
       ],
       "apply": [
         "Add baskets, drawer organizers, and shelving units to registry.",
-        "Upload your storage layout photo to Journal.",
+        "Upload your storage layout photo to the Workbook.",
         "Share with mentor for optimization tips."
       ],
-      "journalPrompt": "Which part of your current home feels calmest-and how can you bring that same energy into your nursery setup?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nSnap a photo of current storage (closet or shelves), note what must stay in the room, and any storage pain points.",
       "resources": []
     }
   },
@@ -183,10 +187,10 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
       ],
       "apply": [
         "Save 3 color palette options to your Pinterest Moodboard.",
-        "Add swatches or paint samples to Journal.",
+        "Add swatches or paint samples to the Workbook.",
         "Tag your mentor for tone matching feedback."
       ],
-      "journalPrompt": "When you imagine holding your baby in the finished nursery, what colors and materials do you see around you?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nList 2-3 calming colors, materials you prefer or want to avoid, and any texture sensitivities in your home.",
       "resources": []
     }
   },
@@ -208,10 +212,10 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
       ],
       "apply": [
         "Add foldable storage or modular furniture to registry.",
-        "Sketch your room to-scale in Journal.",
+        "Sketch your room to-scale in the Workbook.",
         "Share your layout with mentor for optimization."
       ],
-      "journalPrompt": "If you had to fit your entire nursery into one small room, what would stay-and what could go?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nApproximate room dimensions, other uses of the space, and the top 3 nursery items you consider non-negotiable.",
       "resources": []
     }
   },
@@ -233,10 +237,10 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
       ],
       "apply": [
         "Add humidifier and purifier to registry.",
-        "Record favorite white-noise clip in Journal.",
+        "Record favorite white-noise notes in the Workbook.",
         "Upload scent notes or diffuser setup to your board."
       ],
-      "journalPrompt": "Which sense-sight, smell, or sound-most influences your own sense of calm?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nShare any scent sensitivities, preferred sound environment (quiet, white noise, soft music), and whether pets or city noise are factors.",
       "resources": []
     }
   },
@@ -261,7 +265,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Share final photos with mentor for review.",
         "Celebrate completion by marking this module as Certified Ready."
       ],
-      "journalPrompt": "When you imagine walking into your finished nursery with your baby for the first time, what emotion do you hope to feel most?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nWhat are the top 3 tasks left before baby arrives, your target timeframe, and who can realistically help?",
       "resources": []
     }
   },
@@ -286,7 +290,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Add your top stroller pick from MacroBaby Affiliate Feed (ID 4496818) to your registry.",
         "Schedule a mentor review for car-seat compatibility."
       ],
-      "journalPrompt": "Where do you imagine strolling with your baby for the first time-around your neighborhood, a favorite park, or a family trip?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nWhere will you use the stroller most (city sidewalks, trails, travel), your car storage size, and any must-have features.",
       "resources": []
     }
   },
@@ -311,7 +315,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Add your preferred seat and base to your registry.",
         "Mark this module complete to unlock Car-Seat Safety Certification."
       ],
-      "journalPrompt": "When you picture the drive home from the hospital, what would help you feel calm and prepared for that first ride together?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nShare your car model, number of seats, and whether you plan to install once or move seats often.",
       "resources": []
     }
   },
@@ -336,7 +340,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Add top carrier pick to registry.",
         "Schedule mentor Q&A on fit."
       ],
-      "journalPrompt": "What moments do you look forward to most while keeping your baby close-daily walks, quiet mornings, or soothing cuddles?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nNote your preferred carry style (wrap, soft structured, hip carrier), climate or season, and any back or shoulder considerations.",
       "resources": []
     }
   },
@@ -361,7 +365,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Bookmark highchair recommendations.",
         "Review mentor guide 'Feeding Flow Zone.'"
       ],
-      "journalPrompt": "How do you imagine your feeding routine looking in those early weeks-what comforts or tools would make it smoother?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nTell us your feeding plan (breast, bottle, combo), any bottles or pumps you already own, and where you plan to prep or store supplies.",
       "resources": []
     }
   },
@@ -383,10 +387,10 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
       ],
       "apply": [
         "Add swaddle and sound machine.",
-        "Set bedtime playlist in Journal.",
+        "Set bedtime playlist notes in the Workbook.",
         "Mark mentor review complete."
       ],
-      "journalPrompt": "What does an ideal bedtime routine feel like to you right now as you prepare for baby's arrival?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nDescribe where baby will sleep at first, your space constraints, and any soothing tools you want to try.",
       "resources": []
     }
   },
@@ -407,11 +411,11 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Finally, we explore digital minimalism for families: setting phone-free hours, using automation wisely, and establishing healthy boundaries around monitoring. Peace of mind should feel like calm, not constant alerts."
       ],
       "apply": [
-        "Research monitor options and note pros/cons in Journal.",
+        "Research monitor options and note pros/cons in the Workbook.",
         "Add one smart but simple monitor to registry.",
         "Set a 'tech boundary' goal with your mentor."
       ],
-      "journalPrompt": "Which moments at home do you imagine wanting to check in on your baby most-and how could technology support that calmly rather than constantly?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nShare what you want to monitor (sound only, video, breathing), home layout size, and any tech you prefer to keep minimal.",
       "resources": []
     }
   },
@@ -434,9 +438,9 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
       "apply": [
         "Add travel-ready stroller and portable crib to registry.",
         "Bookmark BabyQuip rental guide.",
-        "Save your 'travel day checklist' in Journal."
+        "Save your 'travel day checklist' in the Workbook."
       ],
-      "journalPrompt": "Picture your first trip with baby-what do you want to feel more of: prepared, spontaneous, or adventurous?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nHow often do you travel, how (car, plane), and what travel moments you want to feel easiest.",
       "resources": []
     }
   },
@@ -461,7 +465,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Add safety gates or locks to registry.",
         "Take a photo of your baby-proofing setup for mentor feedback."
       ],
-      "journalPrompt": "What space in your home makes you most nervous about mobility-and how could you redesign it to feel safe and stylish?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nList the rooms you want to baby-proof first, key hazards (stairs, sharp corners), and any pet or sibling considerations.",
       "resources": []
     }
   },
@@ -484,9 +488,9 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
       "apply": [
         "Add play mat or gym to registry.",
         "Create a small rotation system for toys.",
-        "Record one playful memory prompt in Journal."
+        "Record one playful moment prompt in the Workbook."
       ],
-      "journalPrompt": "When you imagine playing with your baby, what kind of moments bring you the most joy-quiet connection, movement, or laughter?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nHow much play space do you have, indoor vs outdoor use, and any sensory preferences (quiet, bright, tactile).",
       "resources": []
     }
   },
@@ -511,7 +515,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Add maintenance kit to registry.",
         "Bookmark donation or resale resource list."
       ],
-      "journalPrompt": "What items do you plan to reuse, share, or pass along-and how does that idea make you feel?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nAre you open to secondhand gear, and what materials or brands you prefer to avoid? Note any storage space for cleaning or repairs.",
       "resources": []
     }
   },
@@ -536,7 +540,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Save your Rest Routine checklist.",
         "Review mentor video 'Healing at Home.'"
       ],
-      "journalPrompt": "What are three things you can set up now to make your first week home feel restful and supported?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nWhat support do you have at home, which tasks you want to minimize, and any comfort items you already rely on.",
       "resources": []
     }
   },
@@ -561,7 +565,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Save a lactation consultant contact.",
         "Write a personal affirmation for feeding days."
       ],
-      "journalPrompt": "How would you like feeding time to feel in your home-peaceful, supported, flexible, or routine?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nShare your feeding goals, any concerns you want your mentor to know, and what kind of support feels helpful.",
       "resources": []
     }
   },
@@ -577,16 +581,16 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Little rituals sustain new parents when big changes hit."
       ],
       "lecture": [
-        "Self-care isn't indulgence-it's maintenance. Postpartum life brings sleep deprivation, fluctuating hormones, and identity shifts. This module introduces micro-rituals that rebuild steadiness: a warm tea ritual, a five-minute stretch, or journaling before bed.",
+        "Self-care isn't indulgence-it's maintenance. Postpartum life brings sleep deprivation, fluctuating hormones, and identity shifts. This module introduces micro-rituals that rebuild steadiness: a warm tea ritual, a five-minute stretch, or a quick workbook note before bed.",
         "We discuss habit stacking-pairing new behaviors with existing ones to make wellness effortless. For example, hydrating after every feeding becomes a built-in mindfulness cue.",
         "Lastly, self-care is relational. Inviting your partner or support system into these rituals transforms them from chores to shared care. The goal isn't productivity-it's preservation."
       ],
       "apply": [
         "Add robe and snack basket items to registry.",
-        "Record your top 3 rituals in Journal.",
+        "Record your top 3 rituals in the Workbook.",
         "Share with mentor for accountability."
       ],
-      "journalPrompt": "What small rituals or moments already help you recharge during pregnancy-and how might you carry them into life with baby?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nList 1-2 daily rituals that feel doable, plus the time of day you can most realistically protect.",
       "resources": []
     }
   },
@@ -609,9 +613,9 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
       "apply": [
         "Try weekly 'Connection Minute'.",
         "Add couples therapy resource link.",
-        "Note reflection in Journal."
+        "Note your takeaways in the Workbook."
       ],
-      "journalPrompt": "What's one way you and your partner (or support person) can practice communication and teamwork before baby arrives?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nWhat does a fair split of tasks look like to you, and where do you anticipate friction? Even a short answer helps.",
       "resources": []
     }
   },
@@ -636,7 +640,7 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Add doula gift card to registry.",
         "RSVP to community Zoom via dashboard."
       ],
-      "journalPrompt": "Who in your circle can you lean on after baby's arrival, and how can you ask for their support now?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nWho is in your support circle, what help feels most useful, and how often you want check-ins.",
       "resources": []
     }
   },
@@ -657,11 +661,11 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Most importantly, you'll leave with real strategies for support: identifying your go-to person, setting up a postpartum plan before birth, and creating gentle daily grounding practices. Emotional wellness isn't something you chase after-it's something you build now."
       ],
       "apply": [
-        "Add a postpartum therapist or virtual support link to Journal.",
+        "Add a postpartum therapist or virtual support link to the Workbook.",
         "Save mental health resource cards inside Dashboard.",
         "Create a 'Mood SOS' plan with mentor guidance."
       ],
-      "journalPrompt": "What emotions do you imagine feeling in the first week home-and who could you share them with safely, without judgment?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nWhat helps you feel grounded when stressed, and what signs should your mentor watch for? Optional: any history your mentor should keep in mind.",
       "resources": []
     }
   },
@@ -682,11 +686,11 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "We end with humor and grace: some days, your biggest win will be showering before noon. That counts."
       ],
       "apply": [
-        "Create a post-baby weekly flow chart in Journal.",
+        "Create a post-baby weekly flow chart in the Workbook.",
         "Add pumping supplies or laptop bag to registry.",
         "Draft your back-to-work checklist."
       ],
-      "journalPrompt": "When you picture your ideal work-life rhythm after baby, what does a 'successful day' truly feel like-not just look like?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nWhen do you expect to return to work, what childcare plan is forming, and any non-negotiable schedule constraints.",
       "resources": []
     }
   },
@@ -707,11 +711,11 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "Confidence doesn't appear overnight; it accumulates through consistency and connection. You'll end this module realizing that no influencer or book knows your baby better than you."
       ],
       "apply": [
-        "Write an affirmation letter to future-you as a parent.",
+        "Write a short affirmation for the first tough week.",
         "Share your parenting values with your mentor.",
-        "Add a keepsake notebook to registry for reflections."
+        "Add a planning notebook to your registry."
       ],
-      "journalPrompt": "What kind of parent do you want to be remembered as-and what small habits could reflect that from the start?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nWhat parts of parenting feel natural already, what feels uncertain, and what kind of encouragement helps you most.",
       "resources": []
     }
   },
@@ -732,36 +736,36 @@ export const academyModulesSeed: AcademyModuleSeed[] = [
         "We wrap with science-backed rest hacks and humor (yes, the car-seat nap counts). The goal isn't perfection-it's preservation."
       ],
       "apply": [
-        "Draft a 'night shift' plan in Journal.",
+        "Draft a 'night shift' plan in the Workbook.",
         "Add blackout curtains or sleep tools to registry.",
         "Discuss roles with partner during mentor session."
       ],
-      "journalPrompt": "What does 'rest' realistically look like in your relationship, and how can you both protect it together?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nHow do you and your partner want to handle nights (shifts, trade-offs), and what would make mornings easier.",
       "resources": []
     }
   },
   {
     "id": "module-postpartum-letters-legacy",
-    "title": "Letters to Baby & Legacy Reflection",
-    "subtitle": "Capture memories and meaning for the future you're building",
-    "description": "Capture memories and meaning for the future you're building",
+    "title": "Values & First-Year Priorities",
+    "subtitle": "Clarify what matters most before the chaos starts",
+    "description": "Clarify what matters most before the chaos starts",
     "heroImage": "/images/academy/placeholder.jpg",
     "trackId": "postpartum",
     "content": {
       "explore": [
-        "Parenthood is a love story worth documenting."
+        "A calm planning checkpoint for values, priorities, and boundaries."
       ],
       "lecture": [
-        "In the quiet moments-late-night feeds, first smiles, or tiny kicks-your baby's story is being written. This final module invites you to pause and record it. We'll explore different ways to preserve your memories: digital journals, printed keepsake books, or voice memos.",
-        "Letter writing becomes an act of grounding. Whether you write to your newborn, your future toddler, or your past self, the process reminds you that growth is happening on both sides of the crib.",
-        "Legacy isn't about perfection-it's about presence. What matters is that your child will one day read these words and see how deeply loved they were before they even arrived."
+        "When life gets loud, clarity helps. This module turns values into practical choices: what matters most in the first year, what can wait, and what you want to protect in your routines.",
+        "We translate priorities into decisions. If rest is a top value, that might mean fewer errands, fewer outings, and more repeatable meals. If connection matters most, it might mean a smaller registry and more time blocks for support.",
+        "The goal isn't perfection-it's alignment. You and your mentor can use these priorities as a compass for every future decision."
       ],
       "apply": [
-        "Upload first letter to Journal.",
-        "Add keepsake box or photo album to registry.",
-        "Mark this as your Reflection Milestone completion."
+        "List your top three first-year priorities in the Workbook.",
+        "Name one decision you want to postpone until later.",
+        "Share your priorities with your mentor."
       ],
-      "journalPrompt": "If you could write one sentence for your baby to read in 20 years, what would it say?",
+      "journalPrompt": "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\nName 3 priorities for the first year, 2 things that can wait, and any routines or traditions you want to protect.",
       "resources": []
     }
   }

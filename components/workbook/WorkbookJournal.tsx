@@ -21,7 +21,7 @@ const WorkbookJournal = ({ value, onChange, status, disabled }: WorkbookJournalP
   <section className="tm-editorial-card tm-paper-texture space-y-4 relative overflow-hidden">
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Workbook journal</p>
+        <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Workbook notes</p>
         <p className="text-xs uppercase tracking-[0.3em] text-[var(--tm-deep-mauve)]">{statusCopy[status]}</p>
       </div>
       <span className="text-[0.6rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Mentor visibility on</span>
@@ -35,7 +35,7 @@ const WorkbookJournal = ({ value, onChange, status, disabled }: WorkbookJournalP
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.35 }}
         >
-          ✨ Saved with love
+          Saved
         </motion.div>
       )}
     </AnimatePresence>
@@ -45,7 +45,7 @@ const WorkbookJournal = ({ value, onChange, status, disabled }: WorkbookJournalP
       disabled={disabled}
       rows={9}
       className="min-h-[230px] w-full rounded-[28px] border border-[var(--tm-blush)] bg-white/90 px-5 py-4 text-sm leading-relaxed text-[var(--tm-charcoal)] outline-none transition focus:border-[var(--tm-deep-mauve)]"
-      placeholder="Capture the rituals, instincts, and feelings that came up while designing this module."
+      placeholder="Capture planning notes, measurements, and preferences from this module."
     />
     <p className="text-[0.6rem] uppercase tracking-[0.35em] text-[var(--tm-mauve)]">
       Auto-saving in the background for your mentor to reference during check-ins.

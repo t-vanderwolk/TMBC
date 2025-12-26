@@ -53,7 +53,7 @@ type MentorSuggestion = {
   productName: string;
   productBrand: string;
   productImageUrl: string | null;
-  note: string;
+  note: string | null;
   createdAt: string;
 };
 
@@ -303,6 +303,7 @@ export const recordCompareDecision = async ({
     }
 
     if (acceptedSuggestionId) {
+      // TMBC Canon: Mentors advise. Suggestions stay drafts until a member accepts.
       const suggestion = await prisma.mentorProductSuggestion.findFirst({
         where: { id: acceptedSuggestionId, memberId: userId, acceptedAt: null },
         include: {
@@ -323,7 +324,7 @@ export const recordCompareDecision = async ({
       const created = await addRegistryItem({
         userId,
         productId: suggestion.productId,
-        notes: suggestion.note,
+        notes: suggestion.note ?? undefined,
         status: RegistryItemStatus.ADDED,
         section: inferSectionFromCategory(suggestion.category),
       });
@@ -359,11 +360,11 @@ export const recordCompareDecision = async ({
       }
 
       await prisma.registryItem.update({
-        where: { id: acceptedItemId },
+        where: { id: accepted.id },
         data: { decisionStatus: "ACCEPTED" },
       });
 
-      await ensurePriceWatchForItem(acceptedItemId);
+      await ensurePriceWatchForItem(accepted.id);
     }
   }
 

@@ -32,6 +32,10 @@ export default async function LearnPage() {
     error = "Unable to load your academy modules right now.";
   }
 
+  // TMBC Canon:
+  // Academy Learn is mobile-first by design.
+  // UI prioritizes calm, vertical flow, and one clear action per screen
+  // to reduce overwhelm and support mentor-led planning.
   return (
     <main className="space-y-10 px-4 pb-12 text-[#3E2F35] sm:px-6">
       <LearnClient modules={modules} error={error} />

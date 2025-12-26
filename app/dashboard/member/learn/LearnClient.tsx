@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import AcademySection from "@/components/dashboard/member/learn/AcademySection";
 import ModuleCard from "@/components/dashboard/member/learn/ModuleCard";
 import PageHeader from "@/components/dashboard/member/ui/PageHeader";
@@ -47,6 +48,10 @@ const moduleStage = (module: AcademyModuleCard) =>
 
 export default function LearnClient({ modules, error }: LearnClientProps) {
   const safeModules = Array.isArray(modules) ? modules : [];
+  const continueModule = safeModules.find((module) => {
+    const progress = module.progress ?? (module.completed ? 100 : 0);
+    return progress > 0 && progress < 100;
+  }) ?? safeModules.find((module) => !module.completed);
 
   if (!safeModules.length && !error) {
     return (
@@ -93,6 +98,22 @@ export default function LearnClient({ modules, error }: LearnClientProps) {
           title="Quiet for now"
           description="Nothing here yet. This space will fill as your journey unfolds."
         />
+      ) : null}
+
+      {continueModule ? (
+        <section className="rounded-[28px] bg-white/95 p-5 shadow-sm">
+          <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Continue where you left off</p>
+          <h2 className="mt-2 font-serif text-2xl text-[#3E2F35]">{continueModule.title}</h2>
+          <p className="mt-2 text-sm text-[#3E2F35]/70">
+            Pick up the next small step when you feel ready.
+          </p>
+          <Link
+            href={`/dashboard/member/learn/${continueModule.id}`}
+            className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-[#C8A1B4] px-5 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-white transition hover:bg-[#B98AA5]"
+          >
+            Continue
+          </Link>
+        </section>
       ) : null}
 
       {journeyGroups.map((journey) => (

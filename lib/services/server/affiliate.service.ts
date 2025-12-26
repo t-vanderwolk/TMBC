@@ -1,3 +1,6 @@
+// TMBC Canon:
+// Affiliate routing is admin-owned.
+// Never expose or delegate PIDs.
 const appendQueryParams = (url: string, params: Record<string, string | undefined | null>) => {
   const query = Object.entries(params)
     .filter(([, value]) => value)
@@ -15,42 +18,30 @@ const appendQueryParams = (url: string, params: Record<string, string | undefine
 type AffiliateInput = {
   url: string;
   merchant?: string | null;
-  mentorRef?: string;
 };
 
 const normalizeMerchant = (merchant?: string | null) => (merchant || '').toLowerCase().replace(/\s+/g, '');
 const hasParam = (url: string, param: string) => url.toLowerCase().includes(`${param.toLowerCase()}=`);
 
-export const buildAffiliateUrl = ({ url, merchant, mentorRef }: AffiliateInput) => {
+export const buildAffiliateUrl = ({ url, merchant }: AffiliateInput) => {
   const normalized = normalizeMerchant(merchant);
-  const mentor = mentorRef?.trim() || undefined;
 
   switch (normalized) {
     case 'macrobaby':
-      return hasParam(url, 'ref')
-        ? appendQueryParams(url, { mentor })
-        : appendQueryParams(url, { ref: 'tmbc', mentor });
+      return hasParam(url, 'ref') ? url : appendQueryParams(url, { ref: 'tmbc' });
     case 'albeebaby':
-      return hasParam(url, 'affid')
-        ? appendQueryParams(url, { mentor })
-        : appendQueryParams(url, { affid: 'tmbc', mentor });
+      return hasParam(url, 'affid') ? url : appendQueryParams(url, { affid: 'tmbc' });
     case 'silvercross':
     case 'silvercrossus':
     case 'silvercrossusa':
-      return hasParam(url, 'clickref')
-        ? appendQueryParams(url, { mentor })
-        : appendQueryParams(url, { clickref: mentor || 'tmbc' });
+      return hasParam(url, 'clickref') ? url : appendQueryParams(url, { clickref: 'tmbc' });
     case 'cj':
     case 'cjaffiliate':
-      return hasParam(url, 'sid')
-        ? appendQueryParams(url, { mentor })
-        : appendQueryParams(url, { sid: mentor || 'tmbc' });
+      return hasParam(url, 'sid') ? url : appendQueryParams(url, { sid: 'tmbc' });
     case 'awin':
-      return hasParam(url, 'clickref')
-        ? appendQueryParams(url, { mentor })
-        : appendQueryParams(url, { clickref: mentor || 'tmbc' });
+      return hasParam(url, 'clickref') ? url : appendQueryParams(url, { clickref: 'tmbc' });
     default:
-      return mentor ? appendQueryParams(url, { mentor }) : url;
+      return url;
   }
 };
 
@@ -59,6 +50,6 @@ export type AffiliateLinkPayload = {
   merchant?: string | null;
 };
 
-export const buildAffiliateLink = (link: AffiliateLinkPayload, mentorRef?: string) => {
-  return buildAffiliateUrl({ url: link.url, merchant: link.merchant, mentorRef });
+export const buildAffiliateLink = (link: AffiliateLinkPayload) => {
+  return buildAffiliateUrl({ url: link.url, merchant: link.merchant });
 };

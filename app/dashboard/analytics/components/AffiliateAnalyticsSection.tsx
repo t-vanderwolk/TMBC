@@ -9,6 +9,9 @@ type Props = {
 };
 
 export default function AffiliateAnalyticsSection({ data }: Props) {
+  // TMBC Canon:
+  // Affiliate routing is admin-owned.
+  // Never expose or delegate PIDs.
   const transactions = data.transactions.slice(0, 8);
   const revenueBreakdown = data.kpis.revenueBreakdown ?? {
     productAffiliate: 0,
@@ -19,7 +22,7 @@ export default function AffiliateAnalyticsSection({ data }: Props) {
   return (
     <section className="space-y-6 rounded-3xl border border-[#E3D1DA] bg-white/90 p-6 shadow-sm md:p-8">
       <div>
-        <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Affiliate Earnings</p>
+        <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Affiliate governance</p>
         <h2 className="text-3xl font-serif text-[#3E2F35]">Decision-based attribution</h2>
       </div>
 
@@ -37,7 +40,7 @@ export default function AffiliateAnalyticsSection({ data }: Props) {
         <AdminStatCard
           title="Avg commission / registry"
           value={formatCurrency(data.kpis.avgCommissionPerRegistry)}
-          detail="Per converting registry"
+          detail="Per active registry"
         />
         <AdminStatCard
           title="Attributed revenue"
@@ -180,7 +183,7 @@ export default function AffiliateAnalyticsSection({ data }: Props) {
       </div>
 
       <div className="space-y-4">
-        <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Recent conversions</p>
+        <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Recent attribution events</p>
         <div className="overflow-x-auto rounded-2xl border border-[#E3D1DA] bg-white/80 p-4">
           <table className="w-full text-left text-sm text-[#3E2F35]">
             <thead>
@@ -205,7 +208,7 @@ export default function AffiliateAnalyticsSection({ data }: Props) {
               {transactions.length === 0 && (
                 <tr>
                   <td colSpan={5} className="py-4 text-center text-xs text-[#3E2F35]/70">
-                    Awaiting affiliate conversions.
+                    Awaiting affiliate attributions.
                   </td>
                 </tr>
               )}

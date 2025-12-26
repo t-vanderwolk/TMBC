@@ -6,7 +6,11 @@ import {
   QUESTIONNAIRE_SCHEMA,
   type QuestionnaireQuestion,
 } from "@/lib/onboarding/questionnaireSchema";
-import { QuestionnaireSourceValue, QuestionnaireStatus } from "@/lib/types/questionnaire";
+import {
+  QuestionnaireSourceValue,
+  QuestionnaireStatus,
+  type QuestionnaireStatusValue,
+} from "@/lib/types/questionnaire";
 
 type AnswerValue = string | string[];
 type AnswersForm = Record<string, AnswerValue>;
@@ -105,7 +109,7 @@ export default function QuestionnaireFlow({
     [currentStep, totalSteps],
   );
 
-  const saveQuestionnaire = async (nextStatus: QuestionnaireStatus, isAutoSave = false) => {
+  const saveQuestionnaire = async (nextStatus: QuestionnaireStatusValue, isAutoSave = false) => {
     try {
       const response = await fetch(endpoint ?? "/api/onboarding/questionnaire", {
         method: "POST",

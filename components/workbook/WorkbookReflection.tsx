@@ -12,10 +12,10 @@ type WorkbookReflectionProps = {
 };
 
 const statusCopy: Record<SaveStatus, string> = {
-  idle: 'Reflection auto-saved',
-  saving: 'Saving reflections…',
-  saved: 'Reflections saved',
-  error: 'Unable to save reflections',
+  idle: 'Notes auto-saved',
+  saving: 'Saving notes…',
+  saved: 'Notes saved',
+  error: 'Unable to save notes',
 };
 
 const WorkbookReflection = ({ value, onChange, prompts, status }: WorkbookReflectionProps) => {
@@ -48,10 +48,10 @@ const WorkbookReflection = ({ value, onChange, prompts, status }: WorkbookReflec
     <section className="tm-editorial-card tm-paper-texture space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Reflection lane</p>
+          <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Planning lane</p>
           <p className="text-[0.75rem] text-[var(--tm-deep-mauve)]">{statusCopy[status]}</p>
         </div>
-        <span className="text-[0.6rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Mentor eyes only</span>
+        <span className="text-[0.6rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Shared with mentor</span>
       </div>
       <div className="relative">
         <AnimatePresence mode="wait">
@@ -94,7 +94,7 @@ const WorkbookReflection = ({ value, onChange, prompts, status }: WorkbookReflec
         value={value}
         onChange={(event) => onChange(event.target.value)}
         rows={6}
-        placeholder="Capture how your learnings are reshaping your rituals."
+        placeholder="Capture planning notes, questions, or preferences from this module."
         className="w-full rounded-[28px] border border-[var(--tm-blush)] bg-white/90 px-5 py-4 text-sm leading-relaxed text-[var(--tm-charcoal)] outline-none transition focus:border-[var(--tm-deep-mauve)]"
       />
     </section>

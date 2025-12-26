@@ -22,17 +22,34 @@ export default function ModuleCard({
   status,
   className = "",
 }: ModuleCardProps) {
+  const statusIcon = status.toLowerCase().includes("lock") ? "🔒" : "●";
+  const statusLower = status.toLowerCase();
+  const actionLabel = statusLower.includes("lock")
+    ? "Coming next"
+    : statusLower.includes("completed")
+      ? "Review"
+      : statusLower.includes("progress")
+        ? "Continue"
+        : "Enter";
   return (
     <Link href={href} className={`block ${className}`}>
-      <article className="flex flex-col gap-3 rounded-2xl border border-[#E3C6D4] bg-white/95 p-5 shadow-[0_15px_40px_rgba(199,166,199,0.25)] transition hover:-translate-y-0.5 hover:border-[#C8A1B4]">
-        <div className="flex items-center justify-between">
+      <article className="flex min-h-[140px] max-h-[160px] flex-col gap-3 overflow-hidden rounded-2xl bg-white/95 p-5 shadow-[0_15px_40px_rgba(199,166,199,0.18)] transition hover:-translate-y-0.5 sm:min-h-0 sm:max-h-none sm:rounded-3xl">
+        <div className="flex items-start justify-between gap-3">
           <h3 className="text-lg font-semibold text-[#3E2F35]">{title}</h3>
-          <span className="rounded-full border border-[#E3C6D4] px-3 py-1 text-[0.65rem] uppercase tracking-[0.35em] text-[#B98AA5]">
+          <span className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.35em] text-[#B98AA5]">
+            <span aria-hidden>{statusIcon}</span>
             {status}
           </span>
         </div>
-        {subtitle && <p className="text-sm text-[#3E2F35]/70">{subtitle}</p>}
+        {subtitle && (
+          <p className="max-h-12 overflow-hidden text-sm text-[#3E2F35]/70 sm:max-h-none">
+            {subtitle}
+          </p>
+        )}
         <ModuleMetaRow stage={stage} estimatedMinutes={estimatedMinutes} />
+        <div className="text-right text-[0.6rem] uppercase tracking-[0.35em] text-[#A4556A]">
+          {actionLabel}
+        </div>
       </article>
     </Link>
   );

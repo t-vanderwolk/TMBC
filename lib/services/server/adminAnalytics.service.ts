@@ -134,6 +134,8 @@ const resolveNetwork = (item: AnalyticsItem) => {
 
 const commissionRateForNetwork = (network: string) => COMMISSION_RATES[network] ?? 0.035;
 
+// TMBC Canon:
+// "recommendation" sources here refer to seeded/admin-reviewed canon, not automation.
 const isSeededOnboarding = (item: AnalyticsItem) => {
   const normalizedSource = item.source?.toLowerCase();
   return item.purchaseSource === 'recommendation' || normalizedSource === 'onboarding';

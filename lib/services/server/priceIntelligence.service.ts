@@ -40,7 +40,12 @@ const shouldNotify = (lastNotifiedAt: Date | null) => {
   return lastNotifiedAt < nowMinusHours(NOTIFY_COOLDOWN_HOURS);
 };
 
-const fetchAffiliatePrice = async (_productId: string) => {
+type AffiliatePriceInfo = {
+  price: number;
+  currency?: string | null;
+};
+
+const fetchAffiliatePrice = async (_productId: string): Promise<AffiliatePriceInfo | null> => {
   // Advocacy-first: only use approved affiliate feeds (no scraping). Disabled by default.
   if (!isPriceFeedConfigured()) {
     return null;
@@ -63,6 +68,7 @@ const recordPriceSnapshot = async (productId: string, affiliatePartnerId: string
 
   if (recent) return;
 
+  // Store numeric price snapshots only (no scraped HTML payloads).
   await prisma.priceSnapshot.create({
     data: {
       productId,
@@ -84,6 +90,7 @@ const evaluateSnapshots = async (watch: {
     decisionStatus: string | null;
   };
 }) => {
+  // Advisory only: price signals never mutate registry decisions.
   const productId = watch.registryItem.productId;
   const category = watch.registryItem.category ?? "general";
 
@@ -171,6 +178,7 @@ export const recordPurchaseForWatch = async (registryItemId: string) => {
 };
 
 export const refreshPriceWatchesForUser = async (userId: string) => {
+  // Price intelligence is advisory and only runs post-acceptance.
   const watches = await prisma.registryPriceWatch.findMany({
     where: {
       registryItem: {
@@ -192,7 +200,9 @@ export const refreshPriceWatchesForUser = async (userId: string) => {
       continue;
     }
 
-    const priceInfo = await fetchAffiliatePrice(watch.registryItem.productId);
+    const priceInfo: AffiliatePriceInfo | null = await fetchAffiliatePrice(
+      watch.registryItem.productId,
+    );
     if (priceInfo?.price) {
       await recordPriceSnapshot(watch.registryItem.productId, null, priceInfo.price);
     }

@@ -13,6 +13,10 @@ export type WorkbookPrompt = {
   section: WorkbookSection;
 };
 
+// TMBC Canon:
+// Workbook prompts collect planning intelligence shared with mentors.
+// They are not private journaling and are not keepsakes.
+// Responses inform mentor judgment but never trigger automation.
 export function deriveWorkbookPrompts(sections?: AcademyModuleSectionSnapshot[]) {
   if (!Array.isArray(sections) || sections.length < 3) {
     return [];

@@ -101,7 +101,7 @@ export default function WorkbookClient({ moduleId, prompts }: WorkbookClientProp
       });
 
       if (!response.ok) {
-        throw new Error("Unable to save reflection");
+        throw new Error("Unable to save response");
       }
 
       setResponses((prev) => ({
@@ -167,7 +167,7 @@ export default function WorkbookClient({ moduleId, prompts }: WorkbookClientProp
     if (!promptState?.value.trim()) {
       setShareMeta((prev) => ({
         ...prev,
-        [prompt.id]: { ...(prev[prompt.id] ?? { anonymous: false, status: "idle" }), status: "error", message: "Write your reflection before sharing." },
+        [prompt.id]: { ...(prev[prompt.id] ?? { anonymous: false, status: "idle" }), status: "error", message: "Add a response before sharing." },
       }));
       return;
     }
@@ -196,7 +196,7 @@ export default function WorkbookClient({ moduleId, prompts }: WorkbookClientProp
       }));
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Unable to share reflection right now.";
+        error instanceof Error ? error.message : "Unable to share note right now.";
       setShareMeta((prev) => ({
         ...prev,
         [prompt.id]: {
@@ -208,45 +208,48 @@ export default function WorkbookClient({ moduleId, prompts }: WorkbookClientProp
     }
   };
 
-  return (
-    <section className="space-y-4 rounded-[2.25rem] border border-[#E3C6D4] bg-white/90 p-6 shadow-[0_25px_70px_rgba(192,153,170,0.15)]">
-      <div className="space-y-1">
-        <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Workbook reflections</p>
-        <h3 className="text-2xl font-serif text-[#3E2F35]">This space is just for you.</h3>
-        <p className="text-sm leading-relaxed text-[#3E2F35]/70">
-          Note what resonates, what feels uncertain, or anything you want to revisit later.
-        </p>
-      </div>
+  const mentorPrefix =
+    "Shared with your mentor.\nYour responses help your mentor personalize recommendations and plan next steps with you.\n\n";
+  const formatPromptBody = (value: string) =>
+    value.startsWith(mentorPrefix) ? value.slice(mentorPrefix.length) : value;
 
-        <div className="space-y-5">
-          {prompts.map((prompt) => {
-            const promptState = responses[prompt.prompt] ?? { value: "", status: "idle" };
-            const share = getShareMeta(prompt.id);
-            const sectionLabel = prompt.section === "APPLY"
-              ? "Applied change"
+  return (
+    <section className="space-y-4 rounded-[2.25rem] bg-white/90 p-5 shadow-[0_25px_70px_rgba(192,153,170,0.15)]">
+      <p className="flex items-center gap-2 text-xs text-[#3E2F35]/70">
+        <span aria-hidden>•</span>
+        Shared with your mentor
+      </p>
+
+      <div className="space-y-6">
+        {prompts.map((prompt) => {
+          const promptState = responses[prompt.prompt] ?? { value: "", status: "idle" };
+          const share = getShareMeta(prompt.id);
+          const sectionLabel =
+            prompt.section === "APPLY"
+              ? "Apply note"
               : prompt.section === "INTEGRATE"
                 ? "Integration note"
-                : "Reflection";
-            return (
-              <div
-                key={prompt.id}
-                className="space-y-2 rounded-2xl border border-[#F1D5DA] bg-[#FFF8F6] p-4"
-              >
-              <p className="text-sm font-medium uppercase tracking-[0.3em] text-[#A4556A]">
+                : "Planning note";
+          return (
+            <div key={prompt.id} className="space-y-3 rounded-2xl bg-[#FFF8F6] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#A4556A]">
                 {prompt.title}
               </p>
-              <p className="text-sm leading-relaxed text-[#3E2F35]/80">{prompt.prompt}</p>
+              <p className="text-sm leading-relaxed text-[#3E2F35]/80">
+                {formatPromptBody(prompt.prompt)}
+              </p>
               <textarea
-                className="h-28 w-full rounded-2xl border border-[#E3C6D4] bg-white/80 p-3 text-sm leading-relaxed text-[#3E2F35] outline-none transition focus:border-[#C8A1B4]"
+                className="min-h-[7rem] w-full rounded-2xl border border-[#E3C6D4] bg-white/80 p-3 text-sm leading-relaxed text-[#3E2F35] outline-none transition focus:border-[#C8A1B4]"
                 value={promptState.value}
                 onChange={(event) => handleChange(prompt.prompt, event.target.value)}
                 onBlur={() => handleBlur(prompt.prompt)}
-                placeholder="Begin typing your reflection..."
+                placeholder="Start with a quick note. Even short answers help."
               />
+              <p className="text-xs text-[#3E2F35]/60">Approximate is totally fine.</p>
               <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[#3E2F35]/60">
                 {statusText(promptState.status)}
               </p>
-              <div className="mt-4 space-y-2 text-[0.7rem] text-[#3E2F35]/70">
+              <div className="space-y-2 text-[0.7rem] text-[#3E2F35]/70">
                 <label className="flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-[#3E2F35]/60">
                   <input
                     type="checkbox"
@@ -268,21 +271,22 @@ export default function WorkbookClient({ moduleId, prompts }: WorkbookClientProp
                     type="button"
                     onClick={() => handleShare(prompt)}
                     disabled={share.status === "sharing"}
-                    className="rounded-full border border-[#C8A1B4] bg-transparent px-4 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-[#3E2F35] transition hover:border-[#A4556A] hover:text-[#A4556A] disabled:opacity-60"
+                    className="text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] transition hover:text-[#7C3B53] disabled:opacity-60"
                   >
                     {share.status === "sharing"
                       ? "Sharing…"
                       : share.status === "shared"
                         ? "Shared"
-                        : "Share reflection"}
+                        : "Share note"}
                   </button>
                   <span className="text-[0.65rem] uppercase tracking-[0.35em] text-[#A4556A]">
                     {sectionLabel}
                   </span>
                 </div>
-                {share.message && (
-                  <p className="text-[0.6rem] text-[#3E2F35]/60">{share.message}</p>
-                )}
+                {share.message && <p className="text-[0.6rem] text-[#3E2F35]/60">{share.message}</p>}
+                <p className="text-[0.65rem] text-[#3E2F35]/60">
+                  Even a quick note helps your mentor.
+                </p>
               </div>
             </div>
           );

@@ -22,6 +22,18 @@ const mockMentees: Mentee[] = [
   { id: 'member-2', name: 'Morgan A.', focus: 'Feeding plan', stage: '28 weeks' },
 ];
 
+const mockOnboardingContext = [
+  { label: 'Home setup', value: 'Apartment, shared nursery, limited storage' },
+  { label: 'Planning focus', value: 'Feeding comfort + calm bedtime routines' },
+  { label: 'Lifestyle notes', value: 'Walkable neighborhood, minimal gear preference' },
+];
+
+const mentorAnalytics = [
+  { label: 'Suggestions sent', value: '12' },
+  { label: 'Acceptance rate', value: '58%' },
+  { label: 'Top categories', value: 'Sleep · Feeding · Travel' },
+];
+
 export default function MentorWorkspacePage() {
   const [mentees, setMentees] = useState<Mentee[]>(mockMentees);
   const [tasks, setTasks] = useState<MentorTask[]>([]);
@@ -66,6 +78,27 @@ export default function MentorWorkspacePage() {
         </p>
       </header>
 
+      <section className="rounded-3xl border border-white/70 bg-white/90 p-6 shadow-soft">
+        {/* TMBC Canon:
+            Onboarding is mentor context only.
+            Mentors decide what to suggest. */}
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Onboarding context</p>
+            <p className="text-sm text-tmCharcoal/70">Read-only insights to guide your next suggestions.</p>
+          </div>
+          <span className="text-xs text-tmCharcoal/60">No registry items are created from this view.</span>
+        </div>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          {mockOnboardingContext.map((item) => (
+            <div key={item.label} className="rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
+              <p className="text-xs uppercase tracking-[0.4em] text-tmMauve">{item.label}</p>
+              <p className="mt-2 text-sm text-tmCharcoal/80">{item.value}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="grid gap-6 lg:grid-cols-3">
         <div className="rounded-3xl border border-white/70 bg-white/90 p-5 shadow-soft">
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.5em] text-tmMauve">
@@ -92,6 +125,38 @@ export default function MentorWorkspacePage() {
             Tasks to Review
           </div>
           <MentorTaskList tasks={tasks} />
+        </div>
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-2">
+        <div className="rounded-3xl border border-white/70 bg-white/90 p-6 shadow-soft">
+          {/* TMBC Canon:
+              Mentors advise.
+              Monetization is admin-owned. */}
+          <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Suggestion drafts</p>
+          <p className="mt-2 text-sm text-tmCharcoal/70">
+            Capture intentional product ideas with optional mentor notes. Drafts stay pending until a member accepts.
+          </p>
+          <div className="mt-4 rounded-2xl border border-dashed border-tmBlush/40 bg-tmIvory/70 p-4 text-sm text-tmCharcoal/70">
+            // TODO: Connect to mentor suggestion creation flow (addedByMentor + optional note).
+          </div>
+        </div>
+        <div className="rounded-3xl border border-white/70 bg-white/90 p-6 shadow-soft">
+          {/* TMBC Canon:
+              Mentors advise.
+              Monetization is admin-owned. */}
+          <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Mentor analytics</p>
+          <p className="mt-2 text-sm text-tmCharcoal/70">
+            Track guidance volume and category coverage (no revenue metrics).
+          </p>
+          <div className="mt-4 space-y-3">
+            {mentorAnalytics.map((stat) => (
+              <div key={stat.label} className="rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
+                <p className="text-xs uppercase tracking-[0.4em] text-tmMauve">{stat.label}</p>
+                <p className="mt-1 text-base font-semibold text-tmCharcoal">{stat.value}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

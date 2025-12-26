@@ -22,13 +22,16 @@ const WorkbookEditorial = ({ module }: WorkbookEditorialProps) => {
         <PenLine className="h-5 w-5 text-[var(--tm-gold)]" />
         <div>
           <p className="text-[0.65rem] uppercase tracking-[0.45em] text-[var(--tm-mauve)]">Workbook Studio</p>
-          <h2 className="tm-serif-title text-3xl">Milestone companion</h2>
+          <h2 className="tm-serif-title text-3xl">Planning companion</h2>
         </div>
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-[28px] border border-[var(--tm-blush)] bg-white/80 p-5">
-          <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Milestone prompt</p>
+          <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tm-mauve)]">Workbook prompt</p>
           <p className="mt-3 text-lg text-[var(--tm-charcoal)]/80">{journalPrompt}</p>
+          <p className="mt-3 text-sm text-[var(--tm-charcoal)]/70">
+            Shared with your mentor. Your notes guide the next steps you plan together.
+          </p>
         </div>
         <div className="rounded-[28px] border border-[var(--tm-blush)] bg-[var(--tm-blush)]/60 p-5">
           <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tm-deep-mauve)]">Lecture note</p>

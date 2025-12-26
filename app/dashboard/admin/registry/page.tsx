@@ -68,6 +68,8 @@ export default async function AdminRegistryPage({ searchParams }: { searchParams
         <p className="mt-2 text-sm text-[#3E2F35]/70">
           Monitor items, resolve conflicts, and see every mentor contribution to member registries.
         </p>
+        {/* TODO:
+            Canon approval workflow */}
       </header>
 
       <section className="grid gap-4 md:grid-cols-3">

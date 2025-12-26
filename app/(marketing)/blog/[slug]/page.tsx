@@ -43,31 +43,39 @@ type Params = {
 };
 
 const fetchPublicPosts = async () => {
-  const response = await fetch(new URL("/api/blog/public", API_BASE_URL), {
-    next: { revalidate: 300 },
-  });
+  try {
+    const response = await fetch(new URL("/api/blog/public", API_BASE_URL), {
+      next: { revalidate: 300 },
+    });
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return [] as Array<{ slug: string }>;
+    }
+
+    return response.json();
+  } catch {
     return [] as Array<{ slug: string }>;
   }
-
-  return response.json();
 };
 
 const fetchPublicPost = async (slug: string): Promise<PublicBlogPost | null> => {
-  const response = await fetch(new URL(`/api/blog/public/${slug}`, API_BASE_URL), {
-    next: { revalidate: 300 },
-  });
+  try {
+    const response = await fetch(new URL(`/api/blog/public/${slug}`, API_BASE_URL), {
+      next: { revalidate: 300 },
+    });
 
-  if (response.status === 404) {
+    if (response.status === 404) {
+      return null;
+    }
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return response.json();
+  } catch {
     return null;
   }
-
-  if (!response.ok) {
-    return null;
-  }
-
-  return response.json();
 };
 
 const splitContentBlocks = (blocks: BlogContentBlock[]) => {

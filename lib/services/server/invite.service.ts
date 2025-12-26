@@ -24,7 +24,7 @@ const isUniqueConstraintError = (error: unknown) =>
   error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';
 
 const createInviteWithUniqueCode = async (
-  data: Omit<Parameters<typeof prisma.invite.create>[0]['data'], 'code'>,
+  data: Omit<Prisma.InviteUncheckedCreateInput, 'code'>,
 ) => {
   for (let attempt = 0; attempt < 5; attempt += 1) {
     try {

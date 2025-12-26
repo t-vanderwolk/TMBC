@@ -26,15 +26,19 @@ const formatAuthorRole = (role?: PublicBlogPost["authorRoleSnapshot"]) => {
 };
 
 const fetchPublicPosts = async (): Promise<PublicBlogPost[]> => {
-  const response = await fetch(new URL("/api/blog/public", API_BASE_URL), {
-    next: { revalidate: 300 },
-  });
+  try {
+    const response = await fetch(new URL("/api/blog/public", API_BASE_URL), {
+      next: { revalidate: 300 },
+    });
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return [];
+    }
+
+    return response.json();
+  } catch {
     return [];
   }
-
-  return response.json();
 };
 
 const BlogMarketingPage = async () => {

@@ -20,7 +20,7 @@ export default function RegistryAnalyticsSection({ data, rangeDays }: Props) {
     {
       title: "Acceptance rate",
       value: formatPercent(data.kpis.acceptanceRate),
-      detail: "Seeded suggestions accepted",
+      detail: "Seeded items accepted",
     },
     {
       title: "Modification rate",
@@ -59,7 +59,7 @@ export default function RegistryAnalyticsSection({ data, rangeDays }: Props) {
           detail="Mentor notes per seeded item"
         />
         <AdminStatCard
-          title="Confident conversions"
+          title="Confident decisions"
           value={`${data.kpis.purchaseConfidenceScore.toFixed(1)}%`}
           detail="Purchases stable after 14 days"
         />

@@ -9,7 +9,8 @@ export function generateInviteCode(length = DEFAULT_CODE_LENGTH) {
   const bytes = crypto.randomBytes(size);
   let code = "";
   for (let i = 0; i < size; i += 1) {
-    code += INVITE_ALPHABET[bytes[i] % INVITE_ALPHABET.length];
+    const byte = bytes[i] ?? 0;
+    code += INVITE_ALPHABET[byte % INVITE_ALPHABET.length];
   }
   return `${INVITE_PREFIX}${code}`;
 }

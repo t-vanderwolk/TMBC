@@ -10,7 +10,7 @@ export default function ModuleMetaRow({
   estimatedMinutes,
 }: ModuleMetaRowProps) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 text-[0.65rem] uppercase tracking-[0.35em] text-[#3E2F35]/65">
+    <div className="flex flex-col gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-[#3E2F35]/65 sm:flex-row sm:items-center sm:justify-between">
       <span>{stage ?? "Stage"}</span>
       {estimatedMinutes ? (
         <span>{`${estimatedMinutes} min`}</span>

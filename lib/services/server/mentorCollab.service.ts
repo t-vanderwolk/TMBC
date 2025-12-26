@@ -163,7 +163,8 @@ export const getMemberProfileForMentor = async (mentorId: string, memberId: stri
         },
         orderBy: { createdAt: 'desc' },
       }),
-      listRegistryItems(memberId, mentorId),
+      // TMBC Canon: Mentors view registry context without affiliate PIDs.
+      listRegistryItems(memberId),
       fetchSharedJournalEntries(mentorId, memberId),
     ]);
 

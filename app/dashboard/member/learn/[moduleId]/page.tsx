@@ -28,6 +28,10 @@ export default async function ModulePage({ params }: ModulePageProps) {
     return notFound();
   }
 
+  // TMBC Canon:
+  // Academy Learn is mobile-first by design.
+  // UI prioritizes calm, vertical flow, and one clear action per screen
+  // to reduce overwhelm and support mentor-led planning.
   return (
     <div className="space-y-8 px-4 pb-12 pt-6 text-[#3E2F35] sm:px-6">
       <ModuleClient module={moduleData} />

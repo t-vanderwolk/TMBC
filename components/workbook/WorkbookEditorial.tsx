@@ -79,10 +79,14 @@ const WorkbookEditorial = ({ module }: WorkbookEditorialProps) => {
 
   const pinSuggestions = useMemo(() => generatePinSuggestions(moodboardTiles), [moodboardTiles]);
 
+  // TMBC Canon:
+  // Workbook prompts collect planning intelligence shared with mentors.
+  // They are not private journaling and are not keepsakes.
+  // Responses inform mentor judgment but never trigger automation.
   const prompts = useMemo(
     () => [
-      { label: 'Journal prompt', text: journalPrompt },
-      { label: 'Module whisper', text: exploreCopy },
+      { label: 'Workbook prompt', text: journalPrompt },
+      { label: 'Module cue', text: exploreCopy },
       { label: 'Concierge note', text: lectureCopy.split('\n')[0] ?? lectureCopy },
     ],
     [exploreCopy, journalPrompt, lectureCopy],
