@@ -9,7 +9,7 @@ type RegistryHeaderProps = {
 
 export default function RegistryHeader({
   title = "Your Registry",
-  subtitle = "A living list — shaped by your space, lifestyle, and support system.",
+  subtitle = "Suggested by your mentor after reviewing your onboarding answers.",
   status,
   className = "",
 }: RegistryHeaderProps) {

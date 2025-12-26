@@ -14,6 +14,7 @@ type Mentee = {
   name: string;
   focus: string;
   stage: string;
+  mentorCollabConfirmedAt?: string | null;
 };
 
 const mockMentees: Mentee[] = [
@@ -39,6 +40,7 @@ export default function MentorWorkspacePage() {
             name: item.name || 'Member',
             focus: item.email || 'Focus TBD',
             stage: 'Onboarding',
+            mentorCollabConfirmedAt: item.mentorCollabConfirmedAt ?? null,
           })),
         );
 
@@ -77,6 +79,9 @@ export default function MentorWorkspacePage() {
                 <p className="text-base font-semibold text-tmCharcoal">{mentee.name}</p>
                 <p className="text-sm text-tmCharcoal/70">{mentee.focus}</p>
                 <p className="text-xs text-tmCharcoal/60">{mentee.stage}</p>
+                <p className="mt-2 text-xs text-tmMauve">
+                  MyRegistry collaboration: {mentee.mentorCollabConfirmedAt ? 'Yes' : 'No'}
+                </p>
               </div>
             ))}
           </div>

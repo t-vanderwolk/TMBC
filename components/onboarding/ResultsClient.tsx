@@ -5,6 +5,7 @@ import SectionHeader from "@/components/tmbc/SectionHeader";
 import StyledButton from "@/components/tmbc/StyledButton";
 import type { CuratedRegistry } from "@/lib/registry/recommendations";
 import { useState } from "react";
+import Link from "next/link";
 
 type ResultsClientProps = {
   initialRegistry: CuratedRegistry;
@@ -78,9 +79,15 @@ export default function ResultsClient({
           disabled={status === "loading"}
           className="flex flex-1 min-w-[220px] rounded-full px-5 py-3 text-xs font-semibold uppercase tracking-[0.4em] transition bg-tmMauve text-white disabled:opacity-70"
         >
-          {status === "loading" ? "Adding…" : "Add all"}
+          {status === "loading" ? "Refreshing…" : "Refresh suggestions"}
         </button>
         <StyledButton variant="secondary">Customize</StyledButton>
+        <Link
+          href="/dashboard/settings/questionnaire"
+          className="rounded-full px-5 py-3 text-xs font-semibold uppercase tracking-[0.4em] transition border border-transparent bg-transparent text-[#3E2F35] hover:text-[#B98AA5]"
+        >
+          Edit my answers
+        </Link>
         <StyledButton variant="ghost">View reasoning</StyledButton>
       </div>
 

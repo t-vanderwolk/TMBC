@@ -20,6 +20,7 @@ import { RecommendationsResult } from '@/lib/utils/server/recommendations';
 import { MyRegistryService } from './myregistry/myregistry.service';
 import { emitRegistryAnalytics } from './analytics.service';
 import { ensureMyRegistryAccount, REGISTRY_SOURCE } from './myregistry/provision.service';
+import { recordPurchaseForWatch } from './priceIntelligence.service';
 
 export type MentorNoteResponse = {
   id: string;
@@ -444,6 +445,10 @@ export const updateRegistryItem = async ({
     },
   });
 
+  if (item.status !== RegistryItemStatus.PURCHASED && updated.status === RegistryItemStatus.PURCHASED) {
+    await recordPurchaseForWatch(updated.id);
+  }
+
   if (updated.myRegistryId && (await isConnected(userId))) {
     try {
       const productPayload = updated.product ? productToResponse(updated.product) : null;
@@ -559,54 +564,14 @@ type SuggestedRegistryItem = {
 };
 
 export const seedRegistryFromOnboarding = async (
-  userId: string,
-  recommendations: RecommendationsResult,
+  _userId: string,
+  _recommendations: RecommendationsResult,
 ): Promise<SuggestedRegistryItem[]> => {
-  const customProductId = await ensureCustomProduct();
-  const buckets: { items: string[]; category: string }[] = [
-    { items: recommendations.strollers, category: 'Strollers' },
-    { items: recommendations.carSeats, category: 'Car Seats' },
-    { items: recommendations.nursery, category: 'Nursery' },
-    { items: recommendations.travel, category: 'Travel' },
-  ];
-
-  const created: SuggestedRegistryItem[] = [];
-  const seen = new Set<string>();
-
-  for (const bucket of buckets) {
-    for (const label of bucket.items) {
-      if (!label || seen.has(label)) {
-        continue;
-      }
-      seen.add(label);
-
-      const item = await prisma.registryItem.create({
-        data: {
-          userId,
-          productId: customProductId,
-          title: label,
-          url: 'https://taylormadebabyco.com/registry',
-          affiliateLink: 'https://taylormadebabyco.com/registry',
-          merchant: 'Taylor-Made Baby Co.',
-          category: bucket.category,
-          section: resolveSection(bucket.category),
-          status: RegistryItemStatus.CONSIDERING,
-          notes: 'Suggested from onboarding recommendations',
-          purchaseSource: 'recommendation',
-        },
-      });
-
-      created.push({
-        id: item.id,
-        title: item.title ?? 'Suggested item',
-        category: item.category,
-        notes: item.notes,
-        status: item.status,
-      });
-    }
-  }
-
-  return created;
+  // TMBC Canon:
+  // Onboarding informs mentors.
+  // Registry items are NEVER auto-created.
+  console.warn('[registry] seedRegistryFromOnboarding is disabled');
+  return [];
 };
 
 export const getRegistrySummary = async (userId: string) => {

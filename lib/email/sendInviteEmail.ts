@@ -1,6 +1,7 @@
+import { getOfficialSenderEmail } from "@/lib/utils/server/officialSender";
+
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const FRONTEND_URL = process.env.FRONTEND_URL ?? "https://www.taylormadebaby.co";
-const FROM_EMAIL = process.env.EMAIL_FROM ?? "hello@taylormadebaby.co";
 const FROM_NAME = "Taylor-Made Baby Co.";
 
 type SendInviteEmailOptions = {
@@ -12,6 +13,8 @@ export async function sendInviteEmail({ email, inviteCode }: SendInviteEmailOpti
   if (!SENDGRID_API_KEY) {
     throw new Error("Missing SendGrid API key");
   }
+
+  const fromEmail = getOfficialSenderEmail();
 
   const message = [
     "Hi,",
@@ -36,7 +39,7 @@ export async function sendInviteEmail({ email, inviteCode }: SendInviteEmailOpti
       },
     ],
     from: {
-      email: FROM_EMAIL,
+      email: fromEmail,
       name: FROM_NAME,
     },
     subject: "You're Invited to Taylor-Made Baby Co.",

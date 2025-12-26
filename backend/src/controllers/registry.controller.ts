@@ -10,7 +10,6 @@ import {
   listMentorNotes,
   listRegistryItems,
   removeRegistryItem,
-  seedRegistryFromOnboarding,
   updateRegistryItem,
 } from '../services/registry.service';
 import {
@@ -20,8 +19,6 @@ import {
   markConflictResolved,
 } from '../services/conflict.service';
 import { updateMyRegistryGift } from '../services/myRegistryLegacy.service';
-import { getOnboardingProfile } from '../services/onboarding.service';
-import { RecommendationsResult } from '../utils/recommendations';
 
 const getUserId = (req: Request) => (req as any).user?.userId as string | undefined;
 const parseStatus = (value?: string) => {
@@ -267,15 +264,12 @@ export const seedRegistryFromOnboardingController = async (req: Request, res: Re
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const onboardingProfile = await getOnboardingProfile(userId);
-  const recommendations = onboardingProfile?.recommendations as RecommendationsResult | undefined;
-
-  if (!recommendations) {
-    return res.status(400).json({ error: 'Complete onboarding before seeding your registry' });
-  }
-
-  const suggestedItems = await seedRegistryFromOnboarding(userId, recommendations);
-  res.json({ suggestedItems });
+  // TMBC Canon:
+  // Onboarding informs mentors.
+  // Registry items are NEVER auto-created.
+  return res.status(410).json({
+    error: 'Registry seeding from onboarding is disabled. Mentor curation only.',
+  });
 };
 
 const buildRemotePayload = (field: string, value: string | null) => {

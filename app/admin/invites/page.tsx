@@ -15,6 +15,8 @@ interface InviteEntry {
   used: boolean;
   usedAt?: string;
   createdAt: string;
+  createdByEmail?: string | null;
+  sentAt?: string | null;
 }
 
 const AdminInvitesPage = () => {
@@ -28,6 +30,12 @@ const AdminInvitesPage = () => {
   const [success, setSuccess] = useState('');
   const [sending, setSending] = useState(false);
 
+  const resolveStatus = (invite: InviteEntry) => {
+    if (invite.used) return 'approved';
+    if (invite.sentAt) return 'sent';
+    return 'pending';
+  };
+
   useEffect(() => {
     const payload = Auth.decode();
     if (!payload || payload.role !== 'admin') {
@@ -39,7 +47,7 @@ const AdminInvitesPage = () => {
       try {
         setLoading(true);
         const response = await adminInviteApi.list();
-        setInvites(response.data || []);
+        setInvites(response.data.invites || []);
       } catch (err: any) {
         const message = err?.response?.data?.message || 'Unable to load invites.';
         setError(message);
@@ -77,13 +85,25 @@ const AdminInvitesPage = () => {
 
     try {
       setSending(true);
-      await adminInviteApi.send(inviteCode, inviteEmail);
+      const response = await adminInviteApi.send(inviteCode, inviteEmail);
+      if (response.data?.invite) {
+        setInvites((prev) => prev.map((invite) => (invite.id === response.data.invite.id ? response.data.invite : invite)));
+      }
       setSuccess('Invite email sent.');
     } catch (err: any) {
       const message = err?.response?.data?.message || 'Unable to send invite email.';
       setError(message);
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleCopyCode = async (inviteCode: string) => {
+    try {
+      await navigator.clipboard.writeText(inviteCode);
+      setSuccess('Invite code copied.');
+    } catch {
+      setError('Unable to copy invite code.');
     }
   };
 
@@ -145,25 +165,43 @@ const AdminInvitesPage = () => {
             <tr>
               <th className="px-6 py-3">Code</th>
               <th className="px-6 py-3">Email</th>
+              <th className="px-6 py-3">Created by</th>
               <th className="px-6 py-3">Role</th>
               <th className="px-6 py-3">Status</th>
+              <th className="px-6 py-3">Last sent</th>
               <th className="px-6 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-tmDust">
             {invites.length === 0 && (
               <tr>
-                <td className="px-6 py-6 text-center text-tmCharcoal/70" colSpan={5}>
+                <td className="px-6 py-6 text-center text-tmCharcoal/70" colSpan={7}>
                   No invites generated yet.
                 </td>
               </tr>
             )}
             {invites.map((invite) => (
               <tr key={invite.id}>
-                <td className="px-6 py-4 font-mono">{invite.code}</td>
+                <td className="px-6 py-4 font-mono">
+                  <div className="flex items-center gap-3">
+                    <span>{invite.code}</span>
+                    <button
+                      className="btn-secondary px-3 py-1 text-[0.6rem]"
+                      onClick={() => handleCopyCode(invite.code)}
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </td>
                 <td className="px-6 py-4">{invite.email || '—'}</td>
+                <td className="px-6 py-4 text-xs uppercase tracking-[0.2em] text-tmCharcoal/70">
+                  {invite.createdByEmail || '—'}
+                </td>
                 <td className="px-6 py-4 capitalize">{invite.role?.toLowerCase() || 'member'}</td>
-                <td className="px-6 py-4">{invite.used ? 'Used' : 'Active'}</td>
+                <td className="px-6 py-4 capitalize">{resolveStatus(invite)}</td>
+                <td className="px-6 py-4">
+                  {invite.sentAt ? new Date(invite.sentAt).toLocaleDateString() : '—'}
+                </td>
                 <td className="px-6 py-4 text-right">
                   <button
                     className="btn-secondary px-5 py-2 text-xs disabled:opacity-60"

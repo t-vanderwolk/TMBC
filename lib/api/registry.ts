@@ -5,5 +5,4 @@ export type RegistrySummaryResponse = {
   confirmedCount: number;
 };
 
-export const seedRegistryFromOnboarding = () => apiClient.post('/registry/seedFromOnboarding');
 export const getRegistrySummary = () => apiClient.get<RegistrySummaryResponse>('/registry/summary');

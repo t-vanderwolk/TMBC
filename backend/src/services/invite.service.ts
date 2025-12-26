@@ -1,8 +1,9 @@
-import { Invite, Role, User } from '@prisma/client';
+import { Invite, Prisma, Role, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
 
 import { prisma } from '../../prisma/client';
+import { generateInviteCode } from '../utils/inviteCode';
+import { getOfficialSenderEmail } from '../utils/officialSender';
 
 const INVITE_LIMITS: Record<Role, number | null> = {
   [Role.MEMBER]: 0,
@@ -19,7 +20,30 @@ const normalizeRole = (role?: string | null): Role => {
   return normalized as Role;
 };
 
-const createInviteCode = () => crypto.randomBytes(8).toString('hex').toUpperCase();
+const isUniqueConstraintError = (error: unknown) =>
+  error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';
+
+const createInviteWithUniqueCode = async (
+  data: Omit<Parameters<typeof prisma.invite.create>[0]['data'], 'code'>,
+) => {
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    try {
+      return await prisma.invite.create({
+        data: {
+          ...data,
+          code: generateInviteCode(),
+        },
+      });
+    } catch (error) {
+      if (isUniqueConstraintError(error)) {
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  throw new Error('Unable to generate a unique invite code');
+};
 
 interface GenerateInviteInput {
   creatorId: string;
@@ -68,16 +92,16 @@ export const generateInvite = async ({
 
   await enforceMentorLimit(creator.id, creator.role);
 
-  return prisma.invite.create({
-    data: {
-      code: createInviteCode(),
-      createdById: creator.id,
-      createdByEmail: creator.email,
-      role: normalizeRole(role),
-      email,
-      expiresAt,
-      maxUses,
-    },
+  const createdByEmail =
+    creator.role === Role.ADMIN ? getOfficialSenderEmail() : creator.email;
+
+  return createInviteWithUniqueCode({
+    createdById: creator.id,
+    createdByEmail,
+    role: normalizeRole(role),
+    email,
+    expiresAt,
+    maxUses,
   });
 };
 

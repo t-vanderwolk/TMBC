@@ -9,6 +9,7 @@ import {
 import { prisma } from '../../prisma/client';
 import { signToken } from '../utils/jwt';
 import { sendInviteEmail } from '../services/email.service';
+import { getOfficialSenderEmail } from '../utils/officialSender';
 
 type AuthedRequest = Request & { user?: { id: string; email?: string } };
 
@@ -60,7 +61,16 @@ export const sendInvite = async (req: Request, res: Response, next: NextFunction
       code: invite.code,
     });
 
-    res.json({ success: true });
+    const updatedInvite = await prisma.invite.update({
+      where: { id: invite.id },
+      data: { sentAt: new Date() },
+    });
+
+    console.info(
+      `[Admin Action] ${getOfficialSenderEmail()} sent invite ${invite.code} to ${email}`,
+    );
+
+    res.json({ success: true, invite: updatedInvite });
   } catch (error) {
     next(error);
   }

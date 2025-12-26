@@ -12,31 +12,45 @@ export type IntakeSummary = {
   lastUpdated: string;
 };
 
-export function generateLifestyleTags(responses: Record<string, unknown>) {
-  const text = Object.values(responses)
-    .map((value) => String(value).toLowerCase())
-    .join(' ');
-  const suggestions = new Set<string>(['intentional', 'calm']);
+const flattenAnswerValues = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.flatMap((entry) => flattenAnswerValues(entry));
+  }
+  if (value && typeof value === "object") {
+    return Object.values(value).flatMap((entry) => flattenAnswerValues(entry));
+  }
+  if (value == null) return [];
+  return [String(value)];
+};
 
-  if (text.includes('stairs') || text.includes('hike') || text.includes('mountain')) {
-    suggestions.add('stairs');
-    suggestions.add('rugged_terrain');
+export function generateLifestyleTags(responses: Record<string, unknown>) {
+  const flattenedValues = Object.values(responses)
+    .flatMap((value) => flattenAnswerValues(value))
+    .map((value) => value.toLowerCase());
+
+  const valueSet = new Set(flattenedValues);
+  const text = flattenedValues.join(" ");
+  const suggestions = new Set<string>(["intentional", "calm"]);
+
+  if (valueSet.has("full_flight") || valueSet.has("few") || text.includes("stairs")) {
+    suggestions.add("stairs");
+    suggestions.add("rugged_terrain");
   }
-  if (text.includes('store') || text.includes('storage') || text.includes('minimal')) {
-    suggestions.add('low-storage');
-    suggestions.add('neutral_aesthetic');
+  if (valueSet.has("apartment") || valueSet.has("condo") || valueSet.has("small")) {
+    suggestions.add("low-storage");
+    suggestions.add("neutral_aesthetic");
   }
-  if (text.includes('travel') || text.includes('airport') || text.includes('city')) {
-    suggestions.add('travel_friendly');
+  if (valueSet.has("sedan") || text.includes("travel") || text.includes("city")) {
+    suggestions.add("travel_friendly");
   }
-  if (text.includes('pump') || text.includes('feeding') || text.includes('bottle')) {
-    suggestions.add('pumping_heavy');
+  if (valueSet.has("breastfeeding") || valueSet.has("combo") || text.includes("feeding")) {
+    suggestions.add("pumping_heavy");
   }
-  if (text.includes('soft') || text.includes('wood') || text.includes('calm')) {
-    suggestions.add('neutral_aesthetic');
+  if (text.includes("soft") || text.includes("wood") || text.includes("calm")) {
+    suggestions.add("neutral_aesthetic");
   }
-  if (text.includes('outdoor') || text.includes('sunny')) {
-    suggestions.add('sunny_routine');
+  if (text.includes("outdoor") || text.includes("sunny")) {
+    suggestions.add("sunny_routine");
   }
 
   return Array.from(suggestions);

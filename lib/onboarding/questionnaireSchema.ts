@@ -1,19 +1,28 @@
-export type QuestionnaireFieldType = "text" | "textarea";
+export type QuestionOption = {
+  label: string;
+  value: string;
+};
 
-export type QuestionnaireField = {
-  name: string;
+export type QuestionnaireQuestionType = "single" | "multi";
+
+export type QuestionnaireQuestion = {
+  id: string;
   label: string;
   description?: string;
-  placeholder?: string;
-  rows?: number;
-  type: QuestionnaireFieldType;
+  type: QuestionnaireQuestionType;
+  options: QuestionOption[];
+  required?: boolean;
+  dependsOn?: {
+    id: string;
+    value: string | string[];
+  };
 };
 
 export type QuestionnaireSection = {
   id: string;
   title: string;
   summary: string;
-  fields: QuestionnaireField[];
+  questions: QuestionnaireQuestion[];
 };
 
 export type QuestionnaireSchema = {
@@ -22,74 +31,221 @@ export type QuestionnaireSchema = {
 };
 
 export const QUESTIONNAIRE_SCHEMA: QuestionnaireSchema = {
-  version: "1.2",
+  version: "2.0",
   sections: [
     {
-      id: "philosophy",
-      title: "Philosophy",
-      summary: "What drives your care rhythm during this season?",
-      fields: [
+      id: "home_environment",
+      title: "Home & environment",
+      summary: "Tell us about your living space so we can tailor your setup.",
+      questions: [
         {
-          name: "philosophy",
-          label: "Describe the core value that guides your parenting practice.",
-          placeholder: "Presence, ease, ritual, playful intention…",
-          type: "textarea",
-          rows: 3,
+          id: "livingSpaceType",
+          label: "Living space type",
+          type: "single",
+          required: true,
+          options: [
+            { label: "Apartment", value: "APARTMENT" },
+            { label: "Condo", value: "CONDO" },
+            { label: "Townhome", value: "TOWNHOME" },
+            { label: "House", value: "HOUSE" },
+          ],
+        },
+        {
+          id: "spaceSize",
+          label: "Home size",
+          type: "single",
+          required: true,
+          options: [
+            { label: "Small", value: "SMALL" },
+            { label: "Medium", value: "MEDIUM" },
+            { label: "Large", value: "LARGE" },
+          ],
+        },
+        {
+          id: "stairAccess",
+          label: "Stairs present",
+          type: "single",
+          required: true,
+          options: [
+            { label: "None", value: "NONE" },
+            { label: "A few steps", value: "FEW" },
+            { label: "Full flight", value: "FULL_FLIGHT" },
+          ],
         },
       ],
     },
     {
-      id: "home",
-      title: "Home & lifestyle",
-      summary: "Tell us about your rituals so we can reflect them in your registry.",
-      fields: [
+      id: "transportation",
+      title: "Transportation",
+      summary: "Share your daily travel setup for gear fit and portability.",
+      questions: [
         {
-          name: "homeFeeling",
-          label: "How would you describe the feeling of your home?",
-          placeholder: "Warm blush, collected woods, airy modern, etc.",
-          type: "textarea",
-          rows: 3,
+          id: "primaryVehicleType",
+          label: "Primary vehicle type",
+          type: "single",
+          required: true,
+          options: [
+            { label: "Sedan", value: "SEDAN" },
+            { label: "SUV", value: "SUV" },
+            { label: "Minivan", value: "MINIVAN" },
+            { label: "Truck", value: "TRUCK" },
+            { label: "No vehicle", value: "NONE" },
+          ],
+        },
+        {
+          id: "secondaryVehicleType",
+          label: "Secondary vehicle type (optional)",
+          type: "single",
+          options: [
+            { label: "Sedan", value: "SEDAN" },
+            { label: "SUV", value: "SUV" },
+            { label: "Minivan", value: "MINIVAN" },
+            { label: "Truck", value: "TRUCK" },
+            { label: "No secondary vehicle", value: "NONE" },
+          ],
+        },
+        {
+          id: "caregiverHeightRange",
+          label: "Caregiver height range",
+          description: "Select all that apply for the caregivers using daily gear.",
+          type: "multi",
+          required: true,
+          options: [
+            { label: "Under 5'4\"", value: "UNDER_5_4" },
+            { label: "5'4\" to 5'8\"", value: "FIVE_4_TO_FIVE_8" },
+            { label: "5'8\" to 6'0\"", value: "FIVE_8_TO_SIX" },
+            { label: "Over 6'0\"", value: "OVER_6" },
+          ],
         },
       ],
     },
     {
-      id: "mobility",
-      title: "Mobility & outings",
-      summary: "Share how often you travel, attend events, or dream of effortless outings.",
-      fields: [
+      id: "care_feeding",
+      title: "Care & feeding",
+      summary: "Feeding rhythms help us tailor comfort and support essentials.",
+      questions: [
         {
-          name: "outings",
-          label: "What kind of outings do you plan in the first 6 months?",
-          placeholder: "Park strolls, city visits, weekend escapes…",
-          type: "textarea",
-          rows: 3,
+          id: "feedingIntent",
+          label: "Feeding intent",
+          type: "single",
+          required: true,
+          options: [
+            { label: "Breastfeeding", value: "BREASTFEEDING" },
+            { label: "Formula", value: "FORMULA" },
+            { label: "Combination", value: "COMBO" },
+            { label: "Undecided", value: "UNDECIDED" },
+          ],
+        },
+        {
+          id: "feedingCaregivers",
+          label: "Primary caregivers feeding baby",
+          description: "Choose everyone who may share feeding responsibilities.",
+          type: "multi",
+          required: true,
+          options: [
+            { label: "Parent", value: "PARENT" },
+            { label: "Partner", value: "PARTNER" },
+            { label: "Family member", value: "FAMILY" },
+            { label: "Night nurse", value: "NIGHT_NURSE" },
+            { label: "Doula", value: "DOULA" },
+            { label: "Nanny", value: "NANNY" },
+          ],
         },
       ],
     },
     {
-      id: "emotional",
-      title: "Emotional check-in",
-      summary: "How can we keep your inner rhythm calm and resilient?",
-      fields: [
+      id: "family_support",
+      title: "Family & support",
+      summary: "Knowing your support network helps us prioritize what matters.",
+      questions: [
         {
-          name: "emotion",
-          label: "What emotion are you carrying most right now?",
-          placeholder: "Joy, overwhelmed, hopeful…",
-          type: "text",
+          id: "supportSystem",
+          label: "Support system",
+          type: "multi",
+          required: true,
+          options: [
+            { label: "Partner", value: "PARTNER" },
+            { label: "Family nearby", value: "FAMILY_NEARBY" },
+            { label: "Friends", value: "FRIENDS" },
+            { label: "Night nurse", value: "NIGHT_NURSE" },
+            { label: "Doula", value: "DOULA" },
+          ],
+        },
+        {
+          id: "olderSiblings",
+          label: "Older siblings in the home",
+          type: "single",
+          required: true,
+          options: [
+            { label: "Yes", value: "YES" },
+            { label: "No", value: "NO" },
+          ],
+        },
+        {
+          id: "siblingAgeRanges",
+          label: "Sibling age ranges",
+          type: "multi",
+          options: [
+            { label: "Under 3", value: "UNDER_3" },
+            { label: "3 to 5", value: "THREE_TO_FIVE" },
+            { label: "6 to 8", value: "SIX_TO_EIGHT" },
+            { label: "9 and up", value: "NINE_PLUS" },
+          ],
+          dependsOn: {
+            id: "olderSiblings",
+            value: "YES",
+          },
+        },
+        {
+          id: "animalsInHome",
+          label: "Animals in the home",
+          description: "Select all that apply.",
+          type: "multi",
+          options: [
+            { label: "Dog", value: "DOG" },
+            { label: "Cat", value: "CAT" },
+            { label: "Other", value: "OTHER" },
+          ],
         },
       ],
     },
     {
-      id: "budget",
-      title: "Budget & focus",
-      summary: "Let us know what feels luxe vs. practical so intel lands where it matters.",
-      fields: [
+      id: "registry_context",
+      title: "Registry context",
+      summary: "Let us know what you already have so we can fill the gaps.",
+      questions: [
         {
-          name: "splurge",
-          label: "Where do you want to splurge?",
-          placeholder: "Nursery armchair, mentor consultations…",
-          type: "textarea",
-          rows: 3,
+          id: "gearAlreadyPurchased",
+          label: "Have you already purchased gear?",
+          type: "single",
+          required: true,
+          options: [
+            { label: "Yes", value: "YES" },
+            { label: "No", value: "NO" },
+          ],
+        },
+        {
+          id: "gearAlreadyGifted",
+          label: "Have you already been gifted gear?",
+          type: "single",
+          required: true,
+          options: [
+            { label: "Yes", value: "YES" },
+            { label: "No", value: "NO" },
+          ],
+        },
+        {
+          id: "categoriesInterested",
+          label: "Categories already interested in",
+          type: "multi",
+          options: [
+            { label: "Mobility", value: "MOBILITY" },
+            { label: "Nursery", value: "NURSERY" },
+            { label: "Feeding", value: "FEEDING" },
+            { label: "Soothing", value: "SOOTHING" },
+            { label: "Travel", value: "TRAVEL" },
+            { label: "Daily care", value: "DAILY_CARE" },
+          ],
         },
       ],
     },

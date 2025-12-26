@@ -13,7 +13,7 @@ export default async function DashboardOnboardingResults() {
     <div className="space-y-8">
       <SectionHeader
         title="Dashboard registry results"
-        subtitle="Your registry is guided by your onboarding answers."
+        subtitle="Your mentor reviewed your onboarding answers."
         actions={
           <Link href="/dashboard/plan">
             <StyledButton variant="ghost">Go to registry</StyledButton>
@@ -32,7 +32,7 @@ export default async function DashboardOnboardingResults() {
         ))}
       </div>
       <div className="flex flex-wrap items-center gap-3">
-        <StyledButton title="You’re about to feel productive.">Add all to registry</StyledButton>
+        <StyledButton title="You’re about to feel productive.">Review with mentor</StyledButton>
         <StyledButton variant="secondary">Customize</StyledButton>
         <StyledButton variant="ghost">View reasoning</StyledButton>
       </div>

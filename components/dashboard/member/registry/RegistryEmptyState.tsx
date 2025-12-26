@@ -8,7 +8,7 @@ type RegistryEmptyStateProps = {
 
 export default function RegistryEmptyState({
   title = "Your registry starts with intention — not urgency.",
-  message = "Start with one thoughtful item and we’ll surround it with guidance.",
+  message = "Your mentor reviewed your onboarding answers and will share suggestions when you are ready.",
   className = "",
 }: RegistryEmptyStateProps) {
   return (

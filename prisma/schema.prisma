@@ -31,6 +31,9 @@ model User {
   inviteCodeUsed         Boolean            @default(false)
   location               String?
   mentorId               String?
+  mentorCollabRequestedAt DateTime?
+  mentorCollabConfirmedAt DateTime?
+  mentorCollabEmail       String?
   onboardingComplete     Boolean            @default(false)
   profileCompleted       Boolean            @default(false)
   academyProgress        AcademyProgress[]
@@ -53,6 +56,9 @@ model User {
   mentorNotes            MentorNote[]       @relation("MentorNotesMentor")
   mentorTasksMember      MentorTask[]       @relation("MentorTasksMember")
   mentorTasksMentor      MentorTask[]       @relation("MentorTasksMentor")
+  compareEvents          CompareEvent[]
+  mentorSuggestionsAuthored MentorProductSuggestion[] @relation("MentorSuggestions")
+  mentorSuggestionsReceived MentorProductSuggestion[] @relation("MemberSuggestions")
   onboardingProfile      OnboardingProfile?
   profile                Profile?
   registryConflicts      RegistryConflict[]
@@ -171,6 +177,7 @@ model Registry {
   shippingAddress Json?
   user         User           @relation("UserRegistry", fields: [userId], references: [id], onDelete: Cascade)
   items        RegistryItem[] @relation("RegistryItems")
+  compareEvents CompareEvent[]
 }
 
 model LoginEvent {
@@ -206,6 +213,7 @@ model OnboardingProfile {
   userId          String   @unique
   answers         Json
   recommendations Json
+  lifestyleSnapshot Json?
   status          String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -232,6 +240,7 @@ model Invite {
   used           Boolean   @default(false)
   usedAt         DateTime?
   usedById       String?   @unique
+  sentAt         DateTime?
   expiresAt      DateTime?
   createdAt      DateTime  @default(now())
   createdByEmail String?
@@ -288,7 +297,9 @@ model Product {
   updatedAt     DateTime       @updatedAt
 
   affiliateLinks AffiliateLink[]
+  priceSnapshots PriceSnapshot[]
   registryItems  RegistryItem[]
+  mentorSuggestions MentorProductSuggestion[]
   mentorNotes    MentorNote[]
 }
 
@@ -316,6 +327,7 @@ model RegistryItem {
   purchaseSource   String?
   section          RegistrySection
   status           RegistryItemStatus @default(CONSIDERING)
+  decisionStatus   RegistryDecisionStatus?
   mentorNote       String?
   userNote         String?
   notes            String?
@@ -331,9 +343,28 @@ model RegistryItem {
 
   mentorFeedback    MentorFeedback[]   @relation("RegistryFeedback")
   registryConflicts RegistryConflict[]
+  priceWatch        RegistryPriceWatch?
   blogInfluences    RegistryItemBlogInfluence[]
 
   @@index([affiliateId])
+}
+
+model CompareEvent {
+  id         String         @id @default(cuid())
+  userId     String
+  registryId String
+  category   String
+  itemIds    String[]
+  decision   CompareDecision
+  source     CompareSource
+  createdAt  DateTime       @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  registry Registry @relation(fields: [registryId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([registryId])
+  @@index([category])
 }
 
 model RegistryItemBlogInfluence {
@@ -382,6 +413,25 @@ model MentorNote {
 
   @@index([memberId])
   @@index([mentorId])
+}
+
+model MentorProductSuggestion {
+  id         String   @id @default(cuid())
+  mentorId   String
+  memberId   String
+  category   String
+  productId  String
+  note       String?
+  createdAt  DateTime @default(now())
+  acceptedAt DateTime?
+
+  mentor User @relation(name: "MentorSuggestions", fields: [mentorId], references: [id], onDelete: Cascade)
+  member User @relation(name: "MemberSuggestions", fields: [memberId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([mentorId])
+  @@index([memberId])
+  @@index([category])
 }
 
 model AcademyModule {
@@ -613,6 +663,32 @@ model RegistryConflict {
   @@index([userId, resolved])
 }
 
+model PriceSnapshot {
+  id                String   @id @default(cuid())
+  productId         String
+  affiliatePartnerId String?
+  price             Float
+  currency          String
+  capturedAt        DateTime @default(now())
+
+  product          Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  affiliatePartner AffiliatePartner? @relation(fields: [affiliatePartnerId], references: [id])
+
+  @@index([productId])
+  @@index([affiliatePartnerId])
+  @@index([capturedAt])
+}
+
+model RegistryPriceWatch {
+  id                String   @id @default(cuid())
+  registryItemId    String   @unique
+  watchStartedAt    DateTime @default(now())
+  purchaseRecordedAt DateTime?
+  lastNotifiedAt    DateTime?
+
+  registryItem RegistryItem @relation(fields: [registryItemId], references: [id], onDelete: Cascade)
+}
+
 model AffiliatePartner {
   id          String           @id
   name        String
@@ -623,6 +699,7 @@ model AffiliatePartner {
   defaultLink String?
   createdAt   DateTime         @default(now())
   items       RegistryItem[]
+  priceSnapshots PriceSnapshot[]
 }
 
 model MessageThread {
@@ -660,6 +737,61 @@ enum AcademyJourney {
   gear
   nursery
   postpartum
+}
+
+enum LivingSpaceType {
+  APARTMENT
+  CONDO
+  TOWNHOME
+  HOUSE
+}
+
+enum SpaceSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+enum StairAccess {
+  NONE
+  FEW
+  FULL_FLIGHT
+}
+
+enum VehicleType {
+  SEDAN
+  SUV
+  MINIVAN
+  TRUCK
+  NONE
+}
+
+enum CaregiverHeightRange {
+  UNDER_5_4
+  FIVE_4_TO_FIVE_8
+  FIVE_8_TO_SIX
+  OVER_6
+}
+
+enum FeedingIntent {
+  BREASTFEEDING
+  FORMULA
+  COMBO
+  UNDECIDED
+}
+
+enum AnimalType {
+  DOG
+  CAT
+  OTHER
+}
+
+enum SupportSystem {
+  PARTNER
+  FAMILY_NEARBY
+  FRIENDS
+  NIGHT_NURSE
+  DOULA
 }
 
 enum Role {
@@ -728,6 +860,23 @@ enum RegistryItemStatus {
   ADDED
   PURCHASED
   REMOVED
+}
+
+enum RegistryDecisionStatus {
+  ACCEPTED
+}
+
+enum CompareDecision {
+  accept
+  modify
+  defer
+}
+
+enum CompareSource {
+  onboarding
+  academy
+  mentor
+  member
 }
 
 enum WorkbookEntryType {

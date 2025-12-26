@@ -14,6 +14,10 @@ import {
   type QuestionnaireSourceValue,
   type QuestionnaireStatusValue,
 } from '@/lib/types/questionnaire';
+import {
+  buildLifestyleSnapshot,
+  type LifestyleSnapshot,
+} from '@/lib/onboarding/lifestyleSnapshot';
 
 type QuestionnaireRecord = {
   id: string;
@@ -23,6 +27,7 @@ type QuestionnaireRecord = {
   tags: string[];
   answers: Record<string, unknown>;
   registrySnapshot: CuratedRegistry | null;
+  lifestyleSnapshot: LifestyleSnapshot | null;
   mentorId: string | null;
 };
 
@@ -60,6 +65,13 @@ const convertRecommendations = (value: Prisma.JsonValue | null | undefined): Cur
   return value as CuratedRegistry;
 };
 
+const convertSnapshot = (value: Prisma.JsonValue | null | undefined): LifestyleSnapshot | null => {
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+  return value as LifestyleSnapshot;
+};
+
 const convertAnswers = (value: Prisma.JsonValue | null | undefined): Record<string, unknown> => {
   if (!value || typeof value !== 'object') {
     return {};
@@ -81,10 +93,12 @@ const hydrateQuestionnaire = (
   tags,
   answers: convertAnswers(profile.answers),
   registrySnapshot: recommendations,
+  lifestyleSnapshot: convertSnapshot(profile.lifestyleSnapshot),
   mentorId: profile.user?.mentorId ?? null,
 });
 
 const computeTagsFromAnswers = (answers: Record<string, unknown>) => generateLifestyleTags(answers);
+const computeSnapshotFromAnswers = (answers: Record<string, unknown>) => buildLifestyleSnapshot(answers);
 
 const buildCuratedRecommendations = (tags: string[]) => buildCuratedRegistry(tags);
 
@@ -139,9 +153,13 @@ export const OnboardingIntelligenceService = {
     }
     const answers = convertAnswers(profile.answers);
     const tags = computeTagsFromAnswers(answers);
+    const lifestyleSnapshot = convertSnapshot(profile.lifestyleSnapshot) ?? computeSnapshotFromAnswers(answers);
     const storedRecommendations = convertRecommendations(profile.recommendations);
     const recommendations = storedRecommendations ?? (await buildCuratedRecommendations(tags));
-    return hydrateQuestionnaire(profile, DEFAULT_SOURCE, tags, recommendations, DEFAULT_VERSION);
+    return {
+      ...hydrateQuestionnaire(profile, DEFAULT_SOURCE, tags, recommendations, DEFAULT_VERSION),
+      lifestyleSnapshot,
+    };
   },
 
   computeTagsFromAnswers,
@@ -159,6 +177,7 @@ export const OnboardingIntelligenceService = {
     const normalizedSource = normalizeSource(source);
     const normalizedAnswers = answers as Prisma.InputJsonValue;
     const tags = computeTagsFromAnswers(answers);
+    const lifestyleSnapshot = computeSnapshotFromAnswers(answers);
     const recommendations = await buildCuratedRecommendations(tags);
     const profile = await prisma.onboardingProfile.upsert({
       where: { userId },
@@ -166,11 +185,13 @@ export const OnboardingIntelligenceService = {
         userId,
         answers: normalizedAnswers,
         recommendations: recommendations as Prisma.InputJsonValue,
+        lifestyleSnapshot: lifestyleSnapshot as Prisma.InputJsonValue,
         status,
       },
       update: {
         answers: normalizedAnswers,
         recommendations: recommendations as Prisma.InputJsonValue,
+        lifestyleSnapshot: lifestyleSnapshot as Prisma.InputJsonValue,
         status,
       },
       include: {
@@ -201,12 +222,14 @@ export const OnboardingIntelligenceService = {
     }
     const normalizedAnswers = answers as Prisma.InputJsonValue;
     const tags = computeTagsFromAnswers(answers);
+    const lifestyleSnapshot = computeSnapshotFromAnswers(answers);
     const recommendations = await buildCuratedRecommendations(tags);
     const profile = await prisma.onboardingProfile.update({
       where: { userId },
       data: {
         answers: normalizedAnswers,
         recommendations: recommendations as Prisma.InputJsonValue,
+        lifestyleSnapshot: lifestyleSnapshot as Prisma.InputJsonValue,
         status,
       },
       include: {

@@ -25,7 +25,17 @@ const mapFeedback = (feedback: any) => ({
 const fetchMenteesViaInvites = async (mentorId: string) => {
   const invites = await prisma.invite.findMany({
     where: { createdById: mentorId, used: true },
-    include: { usedBy: { select: { id: true, name: true, email: true, createdAt: true } } },
+    include: {
+      usedBy: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+          mentorCollabConfirmedAt: true,
+        },
+      },
+    },
   });
 
   const mentees = invites
@@ -37,6 +47,7 @@ const fetchMenteesViaInvites = async (mentorId: string) => {
     name: mentee.name,
     email: mentee.email,
     onboardedAt: mentee.createdAt,
+    mentorCollabConfirmedAt: mentee.mentorCollabConfirmedAt,
   }));
 };
 
@@ -107,7 +118,7 @@ export const getMenteeList = async (mentorId: string) => {
 
     const fallbackMembers = await prisma.user.findMany({
       where: { role: Role.MEMBER },
-      select: { id: true, name: true, email: true, createdAt: true },
+      select: { id: true, name: true, email: true, createdAt: true, mentorCollabConfirmedAt: true },
       take: 5,
     });
 
@@ -118,6 +129,7 @@ export const getMenteeList = async (mentorId: string) => {
         name: member.name,
         email: member.email,
         onboardedAt: member.createdAt,
+        mentorCollabConfirmedAt: member.mentorCollabConfirmedAt,
       })),
     };
   } catch (error) {

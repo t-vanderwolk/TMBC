@@ -192,7 +192,7 @@ export default function RegistryList({ items, onUpdate, onRemove }: RegistryList
       <div className="rounded-3xl border border-dashed border-tmBlush/60 bg-white/80 p-6 text-center">
         <Gift className="mx-auto h-10 w-10 text-tmMauve" />
         <p className="mt-4 text-lg font-semibold text-tmCharcoal">No items yet</p>
-        <p className="text-sm text-tmCharcoal/70">Add your first finds from the Academy recommendations below.</p>
+        <p className="text-sm text-tmCharcoal/70">Add your first finds with mentor guidance when you are ready.</p>
       </div>
     );
   }

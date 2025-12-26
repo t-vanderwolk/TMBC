@@ -425,52 +425,14 @@ type SuggestedRegistryItem = {
 };
 
 export const seedRegistryFromOnboarding = async (
-  userId: string,
-  recommendations: RecommendationsResult,
+  _userId: string,
+  _recommendations: RecommendationsResult,
 ): Promise<SuggestedRegistryItem[]> => {
-  const buckets: { items: string[]; category: string }[] = [
-    { items: recommendations.strollers, category: 'Strollers' },
-    { items: recommendations.carSeats, category: 'Car Seats' },
-    { items: recommendations.nursery, category: 'Nursery' },
-    { items: recommendations.travel, category: 'Travel' },
-  ];
-
-  const created: SuggestedRegistryItem[] = [];
-  const seen = new Set<string>();
-
-  for (const bucket of buckets) {
-    for (const label of bucket.items) {
-      if (!label || seen.has(label)) {
-        continue;
-      }
-      seen.add(label);
-
-      const item = await prisma.registryItem.create({
-        data: {
-          userId,
-          isCustom: true,
-          title: label,
-          url: 'https://taylormadebabyco.com/registry',
-          merchant: 'Taylor-Made Baby Co.',
-          category: bucket.category,
-          moduleCode: 'onboarding',
-          status: RegistryStatus.NEEDED,
-          notes: 'Suggested from onboarding recommendations',
-          purchaseSource: 'recommendation',
-        },
-      });
-
-      created.push({
-        id: item.id,
-        title: item.title,
-        category: item.category,
-        notes: item.notes,
-        status: item.status,
-      });
-    }
-  }
-
-  return created;
+  // TMBC Canon:
+  // Onboarding informs mentors.
+  // Registry items are NEVER auto-created.
+  console.warn('[registry] seedRegistryFromOnboarding is disabled');
+  return [];
 };
 
 export const getRegistrySummary = async (userId: string) => {

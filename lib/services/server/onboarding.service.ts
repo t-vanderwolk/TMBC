@@ -4,6 +4,7 @@ import crypto from 'crypto';
 
 import { AuthService } from './auth.service';
 import { prisma } from '@/lib/prisma';
+import { buildLifestyleSnapshot } from '@/lib/onboarding/lifestyleSnapshot';
 import { ensureMyRegistryAccount } from './myregistry/provision.service';
 import { ensureConversationBetweenUsers } from './chat.service';
 
@@ -209,17 +210,22 @@ type OnboardingProfilePayload = {
 };
 
 export const upsertOnboardingProfile = async (userId: string, payload: OnboardingProfilePayload) => {
+  const lifestyleSnapshot = buildLifestyleSnapshot(
+    (payload.answers as Record<string, unknown>) ?? {},
+  );
   return prisma.onboardingProfile.upsert({
     where: { userId },
     create: {
       userId,
       answers: payload.answers,
       recommendations: payload.recommendations,
+      lifestyleSnapshot: lifestyleSnapshot as Prisma.InputJsonValue,
       status: payload.status,
     },
     update: {
       answers: payload.answers,
       recommendations: payload.recommendations,
+      lifestyleSnapshot: lifestyleSnapshot as Prisma.InputJsonValue,
       status: payload.status,
     },
   });

@@ -11,6 +11,9 @@ type RegistryItemCardProps = {
   statusLabel?: string;
   mentorNote?: string | null;
   mentorName?: string | null;
+  selectable?: boolean;
+  selected?: boolean;
+  onToggleSelect?: () => void;
   className?: string;
 };
 
@@ -30,6 +33,9 @@ export default function RegistryItemCard({
   statusLabel,
   mentorNote,
   mentorName,
+  selectable = false,
+  selected = false,
+  onToggleSelect,
   className = "",
 }: RegistryItemCardProps) {
   const status = statusLabel ? STATUS_DISPLAY[statusLabel] ?? statusLabel : "Considering";
@@ -40,6 +46,20 @@ export default function RegistryItemCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
+          {selectable && (
+            <button
+              type="button"
+              onClick={onToggleSelect}
+              aria-pressed={selected}
+              className={`flex h-9 w-9 items-center justify-center rounded-full border text-xs font-semibold uppercase tracking-[0.2em] ${
+                selected
+                  ? "border-[#C8A1B4] bg-[#C8A1B4] text-white"
+                  : "border-[#E3C6D4] bg-white/90 text-[#B98AA5]"
+              }`}
+            >
+              {selected ? "On" : "Cmp"}
+            </button>
+          )}
           <div className="h-16 w-16 overflow-hidden rounded-2xl bg-[#FFF8F6]">
             {image ? (
               <img src={image} alt={name} className="h-full w-full object-cover" />

@@ -38,6 +38,7 @@ export async function GET() {
             tags: questionnaire.tags,
             answers: questionnaire.answers,
             registrySnapshot: questionnaire.registrySnapshot,
+            lifestyleSnapshot: questionnaire.lifestyleSnapshot,
             mentorId: questionnaire.mentorId,
           }
         : null,
@@ -88,6 +89,7 @@ export async function POST(request: NextRequest) {
         tags: result.questionnaire.tags,
         answers: result.questionnaire.answers,
         registrySnapshot: result.questionnaire.registrySnapshot,
+        lifestyleSnapshot: result.questionnaire.lifestyleSnapshot,
         mentorId: result.questionnaire.mentorId,
       },
       recommendations: result.recommendations,

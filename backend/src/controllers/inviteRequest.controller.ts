@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import { Role } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 
 import { prisma } from '../../prisma/client';
 import { generateInviteCode } from '../utils/inviteCode';
 import { generateToken, verifyToken } from '../utils/jwt';
 import { hashPassword } from '../utils/password';
+import { getOfficialSenderEmail } from '../utils/officialSender';
 
 export async function submitInviteRequest(req: Request, res: Response, next: NextFunction) {
   try {
@@ -28,13 +29,34 @@ export async function submitInviteRequest(req: Request, res: Response, next: Nex
 export async function adminApproveInvite(req: Request, res: Response, next: NextFunction) {
   try {
     const { requestId, adminId } = req.body;
+    const isUniqueConstraintError = (error: unknown) =>
+      error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';
 
-    const code = generateInviteCode();
+    let updated = null;
 
-    const updated = await prisma.inviteRequest.update({
-      where: { id: requestId },
-      data: { status: 'approved', inviteCode: code, approvedById: adminId },
-    });
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const code = generateInviteCode();
+      try {
+        updated = await prisma.inviteRequest.update({
+          where: { id: requestId },
+          data: { status: 'approved', inviteCode: code, approvedById: adminId },
+        });
+        break;
+      } catch (error) {
+        if (isUniqueConstraintError(error)) {
+          continue;
+        }
+        throw error;
+      }
+    }
+
+    if (!updated) {
+      throw new Error('Unable to generate a unique invite code');
+    }
+
+    console.info(
+      `[Admin Action] ${getOfficialSenderEmail()} approved invite request ${updated.id} (adminId=${adminId})`,
+    );
 
     res.json({ ok: true, inviteCode: updated.inviteCode });
   } catch (err) {

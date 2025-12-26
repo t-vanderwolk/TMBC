@@ -1,6 +1,9 @@
+import { Prisma } from "@prisma/client";
+
 import { prisma } from "@/lib/prisma";
-import { generateInviteCode } from "@/lib/utils/server/inviteCode";
 import { sendInviteEmail } from "@/lib/services/server/email.service";
+import { generateInviteCode } from "@/lib/utils/server/inviteCode";
+import { getOfficialSenderEmail } from "@/lib/utils/server/officialSender";
 
 export type InviteRequestRow = {
   id: string;
@@ -50,24 +53,44 @@ export const approveInviteRequest = async (id: string, approverId: string) => {
     };
   }
 
-  const inviteCodeValue = generateInviteCode();
+  const isUniqueConstraintError = (error: unknown) =>
+    error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
 
-  const [inviteCodeRow, updatedRequest] = await prisma.$transaction([
-    prisma.inviteCode.create({
-      data: {
-        code: inviteCodeValue,
-        email: existing.email,
-      },
-    }),
-    prisma.inviteRequest.update({
-      where: { id },
-      data: {
-        status: "approved",
-        inviteCode: inviteCodeValue,
-        approvedById: approverId,
-      },
-    }),
-  ]);
+  let inviteCodeRow;
+  let updatedRequest;
+
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const inviteCodeValue = generateInviteCode();
+
+    try {
+      [inviteCodeRow, updatedRequest] = await prisma.$transaction([
+        prisma.inviteCode.create({
+          data: {
+            code: inviteCodeValue,
+            email: existing.email,
+          },
+        }),
+        prisma.inviteRequest.update({
+          where: { id },
+          data: {
+            status: "approved",
+            inviteCode: inviteCodeValue,
+            approvedById: approverId,
+          },
+        }),
+      ]);
+      break;
+    } catch (error) {
+      if (isUniqueConstraintError(error)) {
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  if (!inviteCodeRow || !updatedRequest) {
+    throw new Error("Unable to generate a unique invite code");
+  }
 
   let emailSent = false;
   try {
@@ -79,6 +102,10 @@ export const approveInviteRequest = async (id: string, approverId: string) => {
   } catch (error) {
     console.error("Failed to send invite email", error);
   }
+
+  console.info(
+    `[Admin Action] ${getOfficialSenderEmail()} approved invite request ${updatedRequest.id} for ${existing.email}`,
+  );
 
   return {
     request: updatedRequest,

@@ -8,6 +8,7 @@ import {
   generateInvite,
   revokeInvite,
 } from "@/lib/services/server/invite.service";
+import { getOfficialSenderEmail } from "@/lib/utils/server/officialSender";
 import {
   createAdminEvent,
   updateAdminEvent,
@@ -53,7 +54,9 @@ export async function createAdminInvite(formData: FormData) {
   });
 
   console.info(
-    `[Admin Action] ${user.email} created invite ${invite.code} ${email ? `for ${email}` : "open"}`,
+    `[Admin Action] ${getOfficialSenderEmail()} created invite ${invite.code} ${
+      email ? `for ${email}` : "open"
+    } (adminId=${user.id})`,
   );
 
   revalidateAdmin(DASHBOARD_PATH);
@@ -69,7 +72,9 @@ export async function revokeAdminInvite(formData: FormData) {
 
   const invite = await revokeInvite(code);
 
-  console.info(`[Admin Action] ${user.email} revoked invite ${invite.code}`);
+  console.info(
+    `[Admin Action] ${getOfficialSenderEmail()} revoked invite ${invite.code} (adminId=${user.id})`,
+  );
   revalidateAdmin(DASHBOARD_PATH);
   return invite;
 }
