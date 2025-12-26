@@ -22,7 +22,10 @@ const isParagraphBlock = (block: BlogContentBlock) => block.type === "paragraph"
 const isHeadingBlock = (
   block: BlogContentBlock
 ): block is Extract<BlogContentBlock, { type: "heading" }> => block.type === "heading";
-const isListBlock = (block: BlogContentBlock) => block.type === "list";
+const isListBlock = (
+  block: BlogContentBlock
+): block is Extract<BlogContentBlock, { type: "list" }> =>
+  block.type === "list";
 
 const renderHeading = (block: Extract<BlogContentBlock, { type: "heading" }>, key: string) => {
   const level = block.level ?? 2;
