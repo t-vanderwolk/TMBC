@@ -27,6 +27,9 @@ const isListBlock = (
 ): block is Extract<BlogContentBlock, { type: "list" }> =>
   block.type === "list";
 
+// TMBC Canon:
+// Blog content educates and reassures.
+// It never drives automatic registry decisions.
 const renderHeading = (block: Extract<BlogContentBlock, { type: "heading" }>, key: string) => {
   const level = block.level ?? 2;
   const headingId = createHeadingId(block.text);

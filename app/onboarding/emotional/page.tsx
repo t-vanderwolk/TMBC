@@ -8,8 +8,8 @@ export default function Emotional() {
       step="emotional"
       nextStep="/onboarding/results"
       title="Emotional check-in"
-      description="How can we keep your inner rhythm calm and resilient?"
-      submitText="Save & see your results"
+      description="How can we keep your inner rhythm calm and resilient? This helps your mentor understand your lifestyle."
+      submitText="Save & finish"
     >
       <label className="flex flex-col gap-2 text-sm text-[#3E2F35]">
         What emotion are you carrying most right now?

@@ -13,7 +13,7 @@ export default function ThankYouPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#C8A1B4]">Thank you</p>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#3E2F35]">Your invite request is with us</h1>
           <p className="text-base text-[#3E2F35]/80">
-            We’ll reply within two business days with your concierge onboarding note. In the meantime, explore membership details or read the journal.
+            We'll reply within two business days. We keep TMBC invite-only so mentors can offer real, attentive support. In the meantime, explore membership details or read the journal.
           </p>
           <div className="flex flex-col gap-3 justify-center sm:flex-row sm:gap-4">
             <Link href={"/blog" as Route} className={SECONDARY_BUTTON_CLASSES}>

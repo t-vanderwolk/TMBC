@@ -22,6 +22,9 @@ export default function QuestionnaireRunner({ userId }: QuestionnaireRunnerProps
     setFinalizing(true);
 
     try {
+      // TMBC Canon:
+      // Onboarding informs mentors.
+      // It never mutates the registry.
       const response = await fetch("/api/onboarding/complete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

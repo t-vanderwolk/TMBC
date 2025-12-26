@@ -1,4 +1,4 @@
-import { generateLifestyleTags } from "@/lib/registry/recommendations";
+import { generateLifestyleTags } from "@/lib/services/onboarding.service";
 
 export type IntakeStepPayload = {
   step: string;

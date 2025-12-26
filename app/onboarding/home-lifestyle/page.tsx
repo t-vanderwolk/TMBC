@@ -8,7 +8,7 @@ export default function HomeLifestyle() {
       step="home-lifestyle"
       nextStep="/onboarding/mobility"
       title="Home & lifestyle"
-      description="Tell us about your rituals so we can reflect them in your registry."
+      description="Tell us about your rituals so we can reflect them in mentor planning. This helps your mentor understand your lifestyle."
     >
       <label className="flex flex-col gap-2 text-sm text-[#3E2F35]">
         How would you describe the feeling of your home?

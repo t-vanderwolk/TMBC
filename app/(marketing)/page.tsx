@@ -7,80 +7,81 @@ import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
 import Reveal from "@/components/marketing/Reveal";
 import TestimonialsCarousel from "@/components/marketing/TestimonialsCarousel";
+import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
 import { api } from "@/lib/api";
 import { PUBLIC_LOGIN_ROUTE } from "@/lib/auth/routeForRole";
 
 const pillars = [
   {
-    title: "Learn",
-    icon: "📖",
-    description: "Academy modules that feel like afternoon reading, not homework.",
+    title: "Human guidance",
+    icon: "🤝",
+    description: "A real mentor helps you sort what matters and what can wait.",
     bullets: [
-      "Narrated lessons with instant mentor notes.",
-      "Checkpoint prompts that ask how you're really doing.",
-      "Soft homework you can pause, rewind, and finish on your own rhythm.",
+      "No trick questions.",
+      "Notes that explain the why, not just the what.",
+      "Support that adapts when your life does.",
     ],
   },
   {
-    title: "Plan",
-    icon: "🗂️",
-    description: "Dynamic registry edits that mimic a curated wardrobe drop.",
+    title: "Thoughtful planning",
+    icon: "🧭",
+    description: "We map the big decisions in order, so nothing feels urgent.",
     bullets: [
-      "Registry cards that show mentor notes and reasoning.",
-      "Pairs beautifully with your nursery mood board.",
-      "Automations that keep chaos off your feed.",
+      "Plan together, not in a vacuum.",
+      "Room for changing your mind.",
+      "Steady pacing over sprinting.",
     ],
   },
   {
-    title: "Connect",
-    icon: "✨",
-    description: "Member-to-mentor community moments built for late-night 'is this normal?' chats.",
+    title: "Advocacy over sales",
+    icon: "🕊️",
+    description: "We are on your side, not a pushy feed.",
     bullets: [
-      "Mentor circles and salons you can slide into anytime.",
-      "Polls, reflections, and tiny celebrations that feel personal.",
-      "Weekly calls, expert lunches, and gentle follow-ups.",
+      "No pressure to decide right now.",
+      "Examples, not directives.",
+      "Mentors who say \"skip it\" when it doesn't fit.",
     ],
   },
 ];
 
 const steps = [
   {
-    title: "Request an invite",
-    detail: "Tell us your due date, support needs, and the vibe you want for your village.",
-    snippet: "Soft intake note + concierge scheduling.",
+    title: "Tell us about your life",
+    detail: "A short intake about your home, support, and what calm looks like. No trick questions.",
+    snippet: "Context, not a quiz.",
   },
   {
-    title: "Get matched to a mentor",
-    detail: "We pair you with a mentor circle or 1:1 guide that mirrors your rhythm.",
-    snippet: "Mentor preview + warm welcome RSVP.",
+    title: "Meet your mentor",
+    detail: "We match you with a real human who listens, follows up, and stays in your corner.",
+    snippet: "A real intro, not a handoff.",
   },
   {
-    title: "Start the academy journey",
-    detail: "We guide you through nursery, gear, and postpartum training in a calm, cinematic path.",
-    snippet: "Module card snapshots with progress bars.",
+    title: "Plan together",
+    detail: "You and your mentor map nursery, gear, and recovery at a pace that fits your life.",
+    snippet: "Shared plan, not a list dump.",
   },
   {
-    title: "Build your registry as you go",
-    detail: "Registry lives beside your learning, so every click feels purposeful.",
-    snippet: "Live registry tile + mentor notes.",
+    title: "Decide when you're ready",
+    detail: "You make the call on what stays, what waits, and what never needed to happen.",
+    snippet: "No countdown timers. No panic buying.",
   },
 ];
 
 const dashboardHighlights = [
   {
-    title: "Academy",
-    caption: "Car Seat Masterclass · 40% complete",
-    note: 'Mentor voice note: “You already get the softness, now nail the base.”',
+    title: "Mentor notes",
+    caption: "Weekly check-in · 2 notes",
+    note: "Mentor: \"Let's keep this week simple and steady.\"",
   },
   {
-    title: "Registry",
-    caption: "Curated essentials · 12 items",
-    note: 'Mentor: “Skip the wipe warmer unless you love the glow.”',
+    title: "Shared plan",
+    caption: "Priorities · 4 decisions pending",
+    note: 'Mentor: "We can wait on the high chair."',
   },
   {
-    title: "Mentor chat",
-    caption: "Upcoming salons · 2",
-    note: 'Mentor: “Journal prompt: what’s the one thing you want to keep from this trimester?”',
+    title: "Community",
+    caption: "Mentor circle · 1 upcoming chat",
+    note: 'Mentor: "Quick check-in: what would make this week easier?"',
   },
 ];
 
@@ -117,28 +118,28 @@ export default function HomePage() {
         <div className="space-y-6">
           <Reveal>
             <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Invite-only concierge
+              Invite-only mentor-led planning
             </p>
           </Reveal>
           <Reveal>
             <h1 className="font-serif text-4xl leading-tight text-[var(--tmbc-charcoal)] sm:text-5xl">
-              Baby prep, Taylor-Made.
+              Baby planning, guided by someone who's actually done this before.
             </h1>
           </Reveal>
           <Reveal>
             <p className="max-w-2xl text-lg text-[var(--tmbc-charcoal)] text-opacity-80">
-              An invite-only concierge community where you learn, build your registry, and get real support from
-              people who&apos;ve been there before you even ask.
+              Taylor-Made Baby Co. is an invite-only, mentor-led baby planning experience. No auto-picks. No overwhelm.
+              Just thoughtful guidance from a real human.
             </p>
           </Reveal>
           <Reveal>
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Editorial-first, FTC-compliant recommendations for registry-ready families.
+              Mentor-led planning for registry decisions that fit your real life.
             </p>
           </Reveal>
           <Reveal>
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              Warm · Witty · Wise · Real — just like your mentor circle.
+              Warm · Witty · Wise · Real - just like your mentor circle.
             </p>
           </Reveal>
           <Reveal>
@@ -150,10 +151,10 @@ export default function HomePage() {
                 Request Invite
               </Link>
               <Link
-                href={PUBLIC_LOGIN_ROUTE}
+                href="/how-it-works"
                 className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
               >
-                Already invited? Log in
+                How It Works
               </Link>
             </div>
           </Reveal>
@@ -183,61 +184,28 @@ export default function HomePage() {
                   {submitting ? "Submitting..." : "Begin onboarding"}
                 </button>
               </form>
+              <Link
+                href={PUBLIC_LOGIN_ROUTE}
+                className="inline-flex items-center text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-70"
+              >
+                Already invited? Log in
+              </Link>
               {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
             </div>
           </Reveal>
           <Reveal>
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
-              Member-to-mentor community with receipts.
+              Member-to-mentor community with real humans.
             </p>
           </Reveal>
         </div>
 
         <Reveal>
-          <div className="group relative overflow-hidden rounded-[48px] border border-[var(--tmbc-mauve)] bg-gradient-to-b from-white via-[var(--tmbc-ivory)] to-[var(--tmbc-blush)] p-6 shadow-[0_20px_80px_rgba(199,166,199,0.35)]">
-            <div className="pointer-events-none absolute inset-0 rounded-[48px] bg-[radial-gradient(circle_at_top,_rgba(212,181,121,0.15),_transparent_55%)] opacity-80" />
-            <div className="pointer-events-none absolute -top-6 left-6 flex gap-2 text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-gold)]">
-              <span className="animate-[pulse_5s_ease-in-out_infinite]">✨</span>
-              <span className="animate-[pulse_5s_ease-in-out_infinite] delay-200">✨</span>
-            </div>
-            <div className="relative flex flex-col gap-4">
-              <div className="space-y-3 rounded-[32px] bg-white/80 p-4 shadow-[0_20px_60px_rgba(199,166,199,0.25)] transition duration-300 group-hover:-translate-y-1">
-                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-50">Academy</p>
-                <h3 className="font-semibold text-lg text-[var(--tmbc-charcoal)]">Car Seat Masterclass</h3>
-                <div className="h-1.5 rounded-full bg-[var(--tmbc-blush)]">
-                  <div className="h-full w-2/5 rounded-full bg-[var(--tmbc-mauve)]" />
-                </div>
-                <p className="text-xs text-[var(--tmbc-charcoal)] text-opacity-60">Mentor circle: Ellie + Marisol</p>
-              </div>
-              <div className="grid gap-3 rounded-[32px] bg-[var(--tmbc-ivory)] p-4 shadow-[0_18px_40px_rgba(199,166,199,0.22)]">
-                <div className="flex items-center justify-between text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  <span>Registry</span>
-                  <span>Quiet edit</span>
-                </div>
-                <p className="text-sm font-semibold text-[var(--tmbc-charcoal)]">
-                  Modern crib · mixed sorter · 1 note
-                </p>
-                <p className="text-[0.7rem] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  Mentor: “Skip the wipe warmer unless you love glow.”
-                </p>
-              </div>
-              <div className="rounded-[32px] bg-white/90 p-4 text-sm text-[var(--tmbc-charcoal)] shadow-[0_15px_45px_rgba(199,166,199,0.25)]">
-                <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                  Mentor chat
-                </p>
-                <p className="mt-1 text-base font-semibold">Upcoming salons</p>
-                <p className="text-xs text-[var(--tmbc-charcoal)] text-opacity-70">
-                  Mindful third trimester Q&amp;A · Friday · 6p PST
-                </p>
-              </div>
-            </div>
-
-            <div className="absolute inset-0 -z-10 rounded-[48px] bg-gradient-to-br from-[var(--tmbc-mauve)]/30 via-[var(--tmbc-blush)]/20 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
-            <div className="pointer-events-none absolute -bottom-6 right-8 flex gap-1 text-[0.75rem] text-[var(--tmbc-gold)] opacity-70 transition duration-500 group-hover:translate-y-1">
-              <span>confetti ✶</span>
-              <span>confetti ✶</span>
-            </div>
-          </div>
+          <VisualPlaceholder
+            label="Hero lifestyle image or calm planning moment"
+            className="h-full"
+            minHeightClassName="min-h-[420px]"
+          />
         </Reveal>
       </section>
 
@@ -245,10 +213,12 @@ export default function HomePage() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Pillars</p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">Learn · Plan · Connect</h2>
+            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+              Human Guidance · Thoughtful Planning · Advocacy Over Sales
+            </h2>
           </div>
           <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-            A concierge rhythm that feels cinematic, not chaotic.
+            A calm, human rhythm instead of a loud checklist.
           </p>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
@@ -309,7 +279,7 @@ export default function HomePage() {
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Inside the dashboard</p>
           <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">Inside your Taylor-Made dashboard</h2>
           <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-            Academy, registry, and mentor notes live together in one calm, curated screen.
+            Your plan, mentor notes, and check-ins live together in one calm view.
           </p>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
@@ -330,13 +300,13 @@ export default function HomePage() {
         </div>
         <div className="grid gap-4 text-base text-[var(--tmbc-charcoal)] md:grid-cols-3">
           <p className="rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/70 p-4">
-            See learning, registry, and events in one calm view.
+            See your plan, notes, and next steps in one calm view.
           </p>
           <p className="rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/70 p-4">
             Mentors see what you see and leave notes directly.
           </p>
           <p className="rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/70 p-4">
-            Every click quietly tracks what you love for future perks.
+            Nothing is auto-filled. Every decision stays in your hands.
           </p>
         </div>
       </section>
@@ -352,7 +322,7 @@ export default function HomePage() {
           Let&apos;s build your baby village before the baby arrives.
         </h2>
         <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-          TMBC is currently invite-only, with limited beta spots open each month.
+          We keep TMBC invite-only so every member gets real, attentive support from a mentor.
         </p>
         <div className="marketing-form mx-auto w-full max-w-xl rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-6 shadow-[0_20px_80px_rgba(199,166,199,0.25)]">
           <label>
@@ -370,14 +340,14 @@ export default function HomePage() {
           </Link>
         </div>
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-          Takes 2 minutes · No spam · We&apos;ll tell you if we&apos;re not the right fit. Invite-only and curated.
+          Takes 2 minutes · No spam · We&apos;ll tell you if we&apos;re not the right fit.
         </p>
       </section>
 
       <CTARibbon
-        headline="Ready for something gently extraordinary?"
-        supportingText="Invitation spaces are curated each season to keep the experience quiet, intentional, and luminous."
-        buttonLabel="Share Your Intentions"
+        headline="Ready for a calmer way to prepare?"
+        supportingText="We keep invitations limited so mentors can offer real, attentive support."
+        buttonLabel="Request an Invite"
         buttonHref="/request-invite"
       />
     </div>

@@ -2,37 +2,37 @@ import Link from "next/link";
 
 const membershipPerks = [
   {
-    title: "Academy access",
+    title: "Mentor-led planning",
     description:
-      "Curated modules that pair style, research, and mentor annotations. Think modern salon notes, not spreadsheet blurbs.",
+      "Real humans guide the plan, explain the why, and help you sort what matters now.",
   },
   {
-    title: "Dynamic registry builder",
+    title: "Shared decision map",
     description:
-      "Registry grows beside the learning so your essentials, textiles, and heirloom cues feel intentional and editable.",
+      "A calm space to organize priorities and decisions without pressure to move fast.",
   },
   {
     title: "Mentor messaging",
     description:
-      "Ping mentors, drop voice notes, and get handwritten-feeling edits without the noise.",
+      "Ask questions, share context, and get thoughtful replies without the noise.",
   },
   {
-    title: "Community & events",
+    title: "Community & circles",
     description:
-      "Weekly salons, small circles, and guest experts that keep you feeling held and ahead of the calendar.",
+      "Small groups, mentor check-ins, and honest conversations that feel human.",
   },
   {
-    title: "Affiliate perks library",
+    title: "Advocacy over sales",
     description:
-      "We quietly share partner edits with gifts, interiors, and postpartum resources that earn you perks, not pressure.",
+      "We help you decide what fits your life, and we're fine saying \"skip it.\"",
   },
 ];
 
 const faqs = [
   {
-    question: "Do I have to buy everything through your links?",
+    question: "Do I have to buy anything through TMBC?",
     answer:
-      "Nope. We share curated options, but you can shop anywhere. We just keep the concierge notes organized for you.",
+      "No. We don't sell products. Mentors help you weigh options, and you decide what's right.",
   },
   {
     question: "Can my partner or co-parent join too?",
@@ -42,7 +42,7 @@ const faqs = [
   {
     question: "What if I already have a registry elsewhere?",
     answer:
-      "We mirror what you already love, then layer in curator edits, smart swaps, and gentle reminders. No duplicate spreadsheets, just one calm dashboard.",
+      "We can work with what you already have and help you sort what stays, what waits, and what can go.",
   },
 ];
 
@@ -52,10 +52,10 @@ export default function MembershipPage() {
       <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
         <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Membership</p>
         <h1 className="mt-3 font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-          An invite-only membership for parents who want less noise, more clarity.
+          An invite-only membership for parents who want human guidance, not noise.
         </h1>
         <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Boutique care, curated mentors, and a registry concierge keep your path Editorial. Learn · Plan · Connect with a village that keeps the tone warm, witty, and real.
+          Mentors, steady planning, and a calm community keep your path clear. Learn · Plan · Connect with people who keep the tone warm, witty, and real.
         </p>
         <div className="mt-6 flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
           <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
@@ -70,7 +70,7 @@ export default function MembershipPage() {
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="flex flex-col gap-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">What you get</p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">Checklist with concierge glow</h2>
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">A calm plan, shaped together</h2>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {membershipPerks.map((perk) => (
@@ -91,10 +91,10 @@ export default function MembershipPage() {
           <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">During beta: membership fee waived.</h2>
         </div>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Invites are limited because mentors and capacity matter. We intro each member with gentle intention, so we can keep the experience intimate.
+          Invites are limited because mentors and capacity matter. We welcome each member with care, so the support stays personal.
         </p>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Future membership will be a one-time $500 lifetime access. For now, we're keeping the gates steady and the vibe calm.
+          Future membership will be a one-time $500 lifetime access. For now, we're keeping the gates steady and the pace calm.
         </p>
         <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:items-center sm:gap-4">
           <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">

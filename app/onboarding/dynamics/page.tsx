@@ -8,7 +8,7 @@ export default function Dynamics() {
       step="dynamics"
       nextStep="/onboarding/style"
       title="Dynamics"
-      description="How do you imagine your day-to-day flow once baby arrives?"
+      description="How do you imagine your day-to-day flow once baby arrives? This helps your mentor understand your lifestyle."
     >
       <label className="flex flex-col gap-2 text-sm text-[#3E2F35]">
         Describe a typical morning, nap, or evening routine you dream of.

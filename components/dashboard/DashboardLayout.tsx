@@ -1,16 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { type ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   Home,
   BookOpen,
   CalendarDays,
+  ClipboardCheck,
   ClipboardList,
+  LifeBuoy,
   MessageCircle,
-  Shield,
-  Settings,
+  Users,
+  BarChart3,
 } from "lucide-react";
 import type { LucideProps } from "lucide-react";
 import { useLogout } from "@/lib/auth/logout";
@@ -20,117 +22,162 @@ export type DashboardRole = "member" | "mentor" | "admin";
 type NavItem = {
   label: string;
   href: string;
-  icon: React.ComponentType<LucideProps>;
-  roles: DashboardRole[];
+  icon?: React.ComponentType<LucideProps>;
 };
 
-const DASHBOARD_NAV_ITEMS: NavItem[] = [
+const MEMBER_NAV_ITEMS: NavItem[] = [
   {
     label: "Home",
-    href: "/dashboard",
+    href: "/dashboard/member",
     icon: Home,
-    roles: ["member", "mentor", "admin"],
   },
   {
-    label: "Academy",
-    href: "/dashboard/learn",
-    icon: BookOpen,
-    roles: ["member", "mentor"],
-  },
-  {
-    label: "Registry",
+    label: "Plan",
     href: "/dashboard/plan",
     icon: ClipboardList,
-    roles: ["member", "mentor"],
+  },
+  {
+    label: "Learn",
+    href: "/dashboard/member/learn",
+    icon: BookOpen,
   },
   {
     label: "Community",
-    href: "/dashboard/community",
+    href: "/dashboard/member/community",
     icon: MessageCircle,
-    roles: ["member", "mentor"],
   },
   {
-    label: "Events",
-    href: "/dashboard/events",
+    label: "Support",
+    href: "/dashboard/member/support",
+    icon: LifeBuoy,
+  },
+];
+
+const MENTOR_NAV_ITEMS: NavItem[] = [
+  {
+    label: "Home",
+    href: "/dashboard/mentor",
+    icon: Home,
+  },
+  {
+    label: "Mentees",
+    href: "/dashboard/mentor/members",
+    icon: Users,
+  },
+  {
+    label: "Suggestions",
+    href: "/dashboard/mentor/tasks",
+    icon: ClipboardCheck,
+  },
+  {
+    label: "Calendar",
+    href: "/dashboard/mentor/events",
     icon: CalendarDays,
-    roles: ["member", "mentor", "admin"],
   },
   {
-    label: "Admin",
+    label: "Insights",
+    href: "/dashboard/mentor/workspace",
+    icon: BarChart3,
+  },
+];
+
+const ADMIN_NAV_ITEMS: NavItem[] = [
+  {
+    label: "Home",
     href: "/dashboard/admin",
-    icon: Shield,
-    roles: ["admin"],
+  },
+  {
+    label: "Overview",
+    href: "/dashboard/admin",
+  },
+  {
+    label: "Members",
+    href: "/dashboard/admin/users",
+  },
+  {
+    label: "Mentors",
+    href: "/dashboard/admin/mentors",
+  },
+  {
+    label: "Registry Intelligence",
+    href: "/dashboard/admin/registry",
+  },
+  {
+    label: "Analytics",
+    href: "/dashboard/analytics",
   },
   {
     label: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-    roles: ["member", "mentor", "admin"],
+    href: "/dashboard/admin/settings",
   },
 ];
 
 type DashboardNavProps = {
   items: NavItem[];
+  showIcons?: boolean;
+  onLogout?: () => void;
 };
 
-const navLinkBase =
-  "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold tracking-wide transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-charcoal";
-
-function DashboardNav({ items }: DashboardNavProps) {
+// Navigation is portal-specific.
+// Avoid global abstractions.
+function PortalNavMenu({ items, onLogout }: DashboardNavProps) {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const activeItem =
+    items.find((item) => pathname === item.href || pathname?.startsWith(`${item.href}/`)) ??
+    items[0];
 
   return (
-    <nav className="space-y-2">
-      {items.map((item) => {
-        const isActive =
-          pathname === item.href || pathname?.startsWith(`${item.href}/`);
-        const Icon = item.icon;
-
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`${navLinkBase} ${
-              isActive
-                ? "border-l-4 border-gold bg-blush text-charcoal shadow-sm"
-                : "text-[#3E2F35]/80 hover:bg-[#F6EEF2]"
-            }`}
-            aria-current={isActive ? "page" : undefined}
-          >
-            {Icon ? <Icon size={18} className="text-mauve" aria-hidden="true" /> : null}
-            <span>{item.label}</span>
-          </Link>
-        );
-      })}
-    </nav>
-  );
-}
-
-function MobileNav({ items }: DashboardNavProps) {
-  const pathname = usePathname();
-
-  return (
-    <nav className="flex w-full items-center gap-2 overflow-x-auto">
-      {items.map((item) => {
-        const isActive =
-          pathname === item.href || pathname?.startsWith(`${item.href}/`);
-        const Icon = item.icon;
-
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`flex flex-none flex-col items-center justify-center gap-1 rounded-2xl px-3 py-2 text-[0.55rem] font-semibold uppercase tracking-[0.35em] transition ${
-              isActive ? "bg-blush text-charcoal" : "text-[#3E2F35]/70 hover:bg-[#F6EEF2]"
-            }`}
-            aria-current={isActive ? "page" : undefined}
-          >
-            {Icon ? <Icon size={18} aria-hidden="true" /> : null}
-            <span>{item.label}</span>
-          </Link>
-        );
-      })}
-    </nav>
+    <div className="relative w-full">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex w-full items-center justify-between rounded-2xl bg-transparent px-0 py-2 text-sm font-semibold text-[#3E2F35]"
+        aria-expanded={open}
+        aria-haspopup="menu"
+      >
+        <span className="flex-1 text-center text-sm font-semibold text-[#3E2F35]/80">
+          {activeItem?.label ?? "Menu"}
+        </span>
+        <span className="text-xl">☰</span>
+      </button>
+      {open && (
+        <div className="absolute left-0 right-0 top-full z-20 mt-2 rounded-2xl bg-white shadow-[0_20px_40px_rgba(62,47,53,0.12)]">
+          <nav className="py-2">
+            {items.map((item) => {
+              const isActive =
+                pathname === item.href || pathname?.startsWith(`${item.href}/`);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={`flex items-center justify-between px-4 py-3 text-sm font-semibold ${
+                    isActive ? "bg-[#F6EEF2] text-[#3E2F35]" : "text-[#3E2F35]/80"
+                  }`}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <span>{item.label}</span>
+                  {isActive ? <span className="text-xs uppercase tracking-[0.3em]">Current</span> : null}
+                </Link>
+              );
+            })}
+            {onLogout ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  onLogout();
+                }}
+                className="flex w-full items-center justify-between px-4 py-3 text-sm font-semibold text-[#3E2F35]/80"
+              >
+                <span>Log out</span>
+              </button>
+            ) : null}
+          </nav>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -141,37 +188,31 @@ export default function DashboardShell({
   children: ReactNode;
   role: DashboardRole;
 }) {
-  const navItems = DASHBOARD_NAV_ITEMS.filter((item) => item.roles.includes(role));
+  // TMBC UX Canon:
+  // Mobile-first. Calm. Contextual navigation.
+  // No top navbar.
+  const navItems =
+    role === "mentor"
+      ? MENTOR_NAV_ITEMS
+      : role === "admin"
+        ? ADMIN_NAV_ITEMS
+        : MEMBER_NAV_ITEMS;
   const logout = useLogout();
 
   return (
-    <div className="flex min-h-screen bg-ivory text-charcoal">
-      <aside className="hidden w-64 flex-none border-r border-[#EAD4D8]/70 bg-white px-4 py-8 shadow-sm md:block">
-        <div className="flex h-full flex-col justify-between">
-          <DashboardNav items={navItems} />
-          <button
-            onClick={() => void logout()}
-            className="mt-6 rounded-full border border-[#E8D1D9] px-4 py-2 text-sm font-semibold text-[#3E2F35] transition hover:bg-[#F4E6EA]"
-          >
-            Logout
-          </button>
+    <div className="min-h-screen bg-ivory text-charcoal">
+      <main className="px-4 pb-12 pt-6 sm:px-6 md:pt-10">
+        <div className="mx-auto w-full max-w-6xl space-y-6">
+          {/* TMBC UX Canon:
+              No global top navbar.
+              Navigation is contextual and calm. */}
+          <section className="rounded-3xl bg-white/90 p-4 shadow-sm sm:p-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <PortalNavMenu items={navItems} onLogout={() => void logout()} />
+            </div>
+          </section>
+          <div className="mx-auto w-full max-w-6xl">{children}</div>
         </div>
-      </aside>
-
-      <header className="fixed top-0 z-40 flex h-14 w-full items-center border-b border-[#EAD4D8]/70 bg-white/95 px-4 py-2 shadow-sm md:hidden">
-        <div className="flex flex-1 items-center gap-2">
-          <MobileNav items={navItems} />
-        </div>
-        <button
-          onClick={() => void logout()}
-          className="rounded-full border border-[#E8D1D9] px-3 py-1 text-[0.55rem] font-semibold uppercase tracking-[0.35em] text-[#3E2F35] transition hover:bg-[#F4E6EA]"
-        >
-          Logout
-        </button>
-      </header>
-
-      <main className="flex-1 px-4 pb-10 pt-20 md:pt-8">
-        <div className="mx-auto w-full max-w-6xl">{children}</div>
       </main>
     </div>
   );

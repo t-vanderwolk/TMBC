@@ -1,11 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-import { api } from '@/lib/api';
 import type { AcademyModule } from '../../app/dashboard/member/learn/modules';
 import ProgressStars from '@/components/academy/ProgressStars';
 import { moduleProgressSteps, useModuleProgress } from '@/hooks/useModuleProgress';
@@ -16,41 +15,12 @@ type ModuleCardEditorialProps = {
 };
 
 const ModuleCardEditorial = ({ module }: ModuleCardEditorialProps) => {
-  const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState<string | null>(null);
   const { progress } = useModuleProgress(module.id);
   const completedSteps = useMemo(
     () => moduleProgressSteps.filter((step) => progress[step.id] === 'completed').length,
     [progress],
   );
   const progressPercent = Math.round((completedSteps / moduleProgressSteps.length) * 100);
-
-  const handleAddAll = async () => {
-    if (loading) return;
-    setLoading(true);
-    setFeedback(null);
-
-    try {
-      const recommended = await api.get(`/academy/module/${module.id}/recommended`);
-      const products = (recommended.data?.products ?? []) as { id: string }[];
-      if (!products.length) {
-        setFeedback('No recommended items at the moment.');
-        return;
-      }
-
-      await api.post('/registry/bulk/add', {
-        productIds: products.map((product) => product.id),
-      });
-
-      setFeedback('Luxury set added to your registry.');
-      setTimeout(() => setFeedback(null), 2200);
-    } catch (error: any) {
-      const message = error?.response?.data?.error || 'Unable to add items right now.';
-      setFeedback(message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <motion.article
@@ -122,22 +92,13 @@ const ModuleCardEditorial = ({ module }: ModuleCardEditorialProps) => {
           Enter module
           <ArrowRight className="h-4 w-4" />
         </Link>
-        <button
-          onClick={handleAddAll}
-          disabled={loading}
-          className="rounded-full border border-[var(--tm-deep-mauve)] px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-[var(--tm-deep-mauve)] disabled:opacity-60"
-        >
-          {loading ? (
-            <span className="inline-flex items-center gap-2">
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              Adding...
-            </span>
-          ) : (
-            'Add all to registry'
-          )}
-        </button>
+        <span className="rounded-full border border-[var(--tm-deep-mauve)] px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-[var(--tm-deep-mauve)]">
+          Mentor-led registry
+        </span>
       </div>
-      {feedback && <span className="mt-3 text-xs text-[var(--tm-deep-mauve)]/80">{feedback}</span>}
+      <span className="mt-3 text-xs text-[var(--tm-deep-mauve)]/80">
+        Suggested by your mentor after reviewing your onboarding answers.
+      </span>
     </motion.article>
   );
 };

@@ -41,17 +41,17 @@ const postCompare = async (path: string, payload: Record<string, unknown>) => {
   return data;
 };
 
-  const postPriceIntelligence = async () => {
-    const response = await fetch("/api/registry/price-intelligence", {
-      method: "POST",
-      cache: "no-store",
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data?.error || "Unable to refresh price insights.");
-    }
-    return data as { alerts: Array<{ message: string }> };
-  };
+const postPriceIntelligence = async () => {
+  const response = await fetch("/api/registry/price-intelligence", {
+    method: "POST",
+    cache: "no-store",
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data?.error || "Unable to refresh price insights.");
+  }
+  return data as { alerts: Array<{ message: string }> };
+};
 
 const SECTIONS = [
   {
@@ -163,6 +163,19 @@ export default function RegistryPage() {
   const [compareError, setCompareError] = useState("");
   const [acceptedItemId, setAcceptedItemId] = useState<string | null>(null);
 
+  const loadPriceInsights = useCallback(async () => {
+    try {
+      setPriceAlertLoading(true);
+      const payload = await postPriceIntelligence();
+      setPriceAlerts((payload.alerts ?? []).map((alert) => alert.message));
+      setPriceAlertError("");
+    } catch (error) {
+      setPriceAlertError(error instanceof Error ? error.message : "Unable to load price insights.");
+    } finally {
+      setPriceAlertLoading(false);
+    }
+  }, []);
+
   const loadRegistry = useCallback(async () => {
     setLoading(true);
     setStatusMessage("");
@@ -179,23 +192,6 @@ export default function RegistryPage() {
   useEffect(() => {
     void loadRegistry();
   }, [loadRegistry]);
-
-  useEffect(() => {
-    const loadPriceInsights = async () => {
-      try {
-        setPriceAlertLoading(true);
-        const payload = await postPriceIntelligence();
-        setPriceAlerts((payload.alerts ?? []).map((alert) => alert.message));
-        setPriceAlertError("");
-      } catch (error) {
-        setPriceAlertError(error instanceof Error ? error.message : "Unable to load price insights.");
-      } finally {
-        setPriceAlertLoading(false);
-      }
-    };
-
-    void loadPriceInsights();
-  }, []);
 
   const handleSync = useCallback(async () => {
     setSyncing(true);
@@ -305,6 +301,9 @@ export default function RegistryPage() {
             decision === "accept" && !options?.acceptedSuggestionId ? acceptedItemId : null,
           acceptedSuggestionId: options?.acceptedSuggestionId ?? null,
         });
+        if (decision === "accept") {
+          await loadPriceInsights();
+        }
         setComparePayload(null);
         setAcceptedItemId(null);
         clearSelection();
@@ -314,7 +313,7 @@ export default function RegistryPage() {
         setCompareBusy(false);
       }
     },
-    [acceptedItemId, clearSelection, selectedIds],
+    [acceptedItemId, clearSelection, loadPriceInsights, selectedIds],
   );
 
   return (

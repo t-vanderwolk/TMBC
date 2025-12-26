@@ -29,6 +29,9 @@ const heroVariant = {
   visible: { opacity: 1, y: 0 },
 };
 
+// TMBC Canon:
+// Marketing reflects mentor-led planning.
+// We do not promise automation the app does not deliver.
 const MarketingHero = ({
   eyebrow = "Taylor-Made Baby Co.",
   scriptLine,

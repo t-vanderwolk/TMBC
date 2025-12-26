@@ -2,7 +2,6 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
-import type { CuratedRegistry } from "@/lib/registry/recommendations";
 import {
   QUESTIONNAIRE_SCHEMA,
   type QuestionnaireQuestion,
@@ -19,7 +18,6 @@ type QuestionnaireFlowProps = {
   description?: string;
   finalButtonLabel?: string;
   onSuccess?: (result: {
-    recommendations?: CuratedRegistry;
     tags?: string[];
   }) => void;
   onComplete?: () => void;
@@ -29,8 +27,8 @@ export default function QuestionnaireFlow({
   source,
   endpoint,
   title = "TMBC Intelligent Onboarding",
-  description = "We stitch your preferences into living intelligence for your registry, academy, and mentor.",
-  finalButtonLabel = "See recommendations",
+  description = "Share your rhythms and preferences so your mentor can guide you. This helps your mentor understand your lifestyle.",
+  finalButtonLabel = "Finish onboarding",
   onSuccess,
   onComplete,
 }: QuestionnaireFlowProps) {
@@ -137,7 +135,6 @@ export default function QuestionnaireFlow({
       lastSavedRef.current = JSON.stringify(normalizedAnswers);
 
       onSuccess?.({
-        recommendations: payload?.recommendations,
         tags: payload?.questionnaire?.tags,
       });
 

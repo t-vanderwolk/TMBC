@@ -8,7 +8,7 @@ export default function Philosophy() {
       step="philosophy"
       nextStep="/onboarding/budget"
       title="Philosophy"
-      description="How do you want to show up for your family during this season?"
+      description="How do you want to show up for your family during this season? This helps your mentor understand your lifestyle."
     >
       <label className="flex flex-col gap-2 text-sm text-[#3E2F35]">
         Describe the core value that guides your parenting practice.

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import CardPlaceholder from "@/components/ui/CardPlaceholder";
+import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
 import BlogContentRenderer, {
   createHeadingId,
   type BlogContentBlock,
@@ -158,7 +158,11 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
       <article className="marketing-section bg-tmIvory/80">
         <div className="mx-auto space-y-12 px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="relative overflow-hidden rounded-[40px] border border-tmMauve/40 bg-white/90 p-10 shadow-editorial">
-            <CardPlaceholder className="absolute inset-0 h-full w-full opacity-60" />
+            <VisualPlaceholder
+              label="Hero lifestyle image or calm planning moment"
+              className="absolute inset-0 h-full w-full opacity-60"
+              minHeightClassName="min-h-full"
+            />
             <div className="absolute inset-0 bg-gradient-to-b from-tmIvory via-white/90 to-white/70" />
             <div className="absolute -right-2 top-8 hidden text-[140px] font-playfair uppercase tracking-[0.2em] text-tmGold/20 lg:block">
               Journal
@@ -168,7 +172,7 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
               <h1 className="font-playfair text-3xl sm:text-4xl md:text-5xl text-tmCharcoal">{post.title}</h1>
               {post.excerpt && <p className="text-base italic text-tmCharcoal/70">{post.excerpt}</p>}
               <p className="text-xs uppercase tracking-[0.45em] text-tmCharcoal/60">
-                Education-led commerce with transparent partner disclosures.
+                Calm context from mentors who've been here.
               </p>
               <div className="flex flex-wrap gap-3 text-[0.65rem] uppercase tracking-[0.4em] text-tmCharcoal/65">
                 {post.tags.map((tag) => (
@@ -236,18 +240,19 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
                 <div className="tm-print-divider" />
               </div>
               <BlogContentRenderer blocks={mainBlocks} />
+              <p className="subtle-note">
+                Every family is different. Your mentor can help you decide what actually fits your life.
+              </p>
               <BlogAffiliateEndCard links={post.affiliateLinks} />
               <div className="rounded-3xl border-l-4 border-tmGold/60 bg-tmIvory/80 px-6 py-6">
                 <p className="font-playfair text-2xl uppercase tracking-[0.3em] text-tmCharcoal">
-                  “Taylor-Made concierge care turns preparation into a love letter for your baby.”
+                  "Mentor-led planning turns preparation into something steady and kind."
                 </p>
               </div>
               <div className="tm-print-hide rounded-3xl border border-tmGold/40 bg-gradient-to-r from-tmMauve/70 via-tmBlush/70 to-tmIvory p-8 text-white shadow-editorial">
-                <p className="text-xs uppercase tracking-[0.6em]">Need bespoke support?</p>
-                <h2 className="mt-3 text-3xl">Want personalized help? Request an Invite.</h2>
-                <p className="mt-2 text-sm text-white/85">
-                  Tap into concierge mentors, curated registry planning, and the Taylor-Made Academy tailored to your due date.
-                </p>
+                <p className="text-xs uppercase tracking-[0.6em]">Need a steady guide?</p>
+                <h2 className="mt-3 text-3xl">If this raised questions for you, that's normal.</h2>
+                <p className="mt-2 text-sm text-white/85">That's what mentors are for.</p>
                 <Link
                   href="/request-invite"
                   className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]"
@@ -268,7 +273,7 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
               ← Back to Journal
             </Link>
             <p className="mt-2 max-w-3xl leading-relaxed text-base">
-              Want a more guided conversation? Drop us a note and a mentor will help map every detail—registry, gear, safety checks, and the rituals that keep you steady.
+              If you want a mentor to walk through this with you, we're here.
             </p>
           </div>
         </div>

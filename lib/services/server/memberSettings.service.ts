@@ -1,8 +1,5 @@
 import type { Prisma } from "@prisma/client";
-import type { CuratedRegistry } from "@/lib/registry/recommendations";
-import { OnboardingIntelligenceService } from "@/lib/services/server/onboardingIntelligence.service";
 import {
-  upsertOnboardingProfile,
   getOnboardingProfile,
 } from "@/lib/services/server/onboarding.service";
 import { prisma } from "@/lib/prisma";
@@ -24,24 +21,8 @@ export type ProfileUpdatePayload = {
   email: string;
 };
 
-type RecommendationDiff = {
-  added: number;
-  removed: number;
-};
-
 /* ─────────────────────── Utilities ───────────────────────── */
-
-const buildRecommendationDiff = (
-  previous: CuratedRegistry | null | undefined,
-  next: CuratedRegistry,
-): RecommendationDiff => {
-  const previousIds = previous?.categories.map((cat) => cat.id) ?? [];
-  const nextIds = next.categories.map((cat) => cat.id);
-  return {
-    added: nextIds.filter((id) => !previousIds.includes(id)).length,
-    removed: previousIds.filter((id) => !nextIds.includes(id)).length,
-  };
-};
+const EMPTY_RECOMMENDATIONS = { tags: [], categories: [] };
 
 const baseProfileSelect = {
   id: true,
@@ -148,25 +129,29 @@ export const updateMemberProfile = async (
   await prisma.$transaction([userUpdate, profileUpdate]);
 };
 
-/* ─────────────── Recommendations Logic ─────────────── */
+/* ─────────────── Onboarding Context Updates ─────────────── */
 
-const computeRecommendations = async (
+const saveOnboardingAnswers = async (
   userId: string,
   answers: Record<string, unknown>,
   status = "member-settings",
 ) => {
   const formattedAnswers = answers as Prisma.InputJsonValue;
-  const tags = OnboardingIntelligenceService.computeTagsFromAnswers(answers);
-  const recommendations =
-    await OnboardingIntelligenceService.buildRecommendations(tags);
 
-  await upsertOnboardingProfile(userId, {
-    answers: formattedAnswers,
-    recommendations,
-    status,
+  await prisma.onboardingProfile.upsert({
+    where: { userId },
+    create: {
+      userId,
+      answers: formattedAnswers,
+      recommendations: EMPTY_RECOMMENDATIONS as Prisma.InputJsonValue,
+      status,
+    },
+    update: {
+      answers: formattedAnswers,
+      recommendations: EMPTY_RECOMMENDATIONS as Prisma.InputJsonValue,
+      status,
+    },
   });
-
-  return recommendations;
 };
 
 export const updateMemberHousehold = async (
@@ -201,26 +186,7 @@ export const updateMemberHousehold = async (
     household: updatedHousehold,
   };
 
-  await computeRecommendations(userId, mergedAnswers, "household-update");
-};
-
-export const refreshMemberRecommendations = async (userId: string) => {
-  const onboardingProfile = await getOnboardingProfile(userId);
-  const answers =
-    (onboardingProfile?.answers as Record<string, unknown>) ?? {};
-  const previous =
-    onboardingProfile?.recommendations as CuratedRegistry | null | undefined;
-
-  const recommendations = await computeRecommendations(
-    userId,
-    answers,
-    "recommendation-refresh",
-  );
-
-  return {
-    diff: buildRecommendationDiff(previous, recommendations),
-    recommendations,
-  };
+  await saveOnboardingAnswers(userId, mergedAnswers, "household-update");
 };
 
 /* ─────────────── Profile Image Handling ─────────────── */

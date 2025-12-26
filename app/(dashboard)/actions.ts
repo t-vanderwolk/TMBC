@@ -2,7 +2,6 @@
 
 import { redirect } from 'next/navigation';
 import { getUserOrThrow } from '@/lib/auth/getUser';
-import { buildCuratedRegistry } from '@/lib/registry/recommendations';
 import {
   saveIntakeStep as persistIntake,
 } from '@/lib/services/onboarding.service';
@@ -48,12 +47,6 @@ export async function saveOnboardingStep(formData: FormData) {
     redirect(nextStep);
   }
   return { tags };
-}
-
-export async function generateCuratedRegistry(formData: FormData) {
-  const tagPayload = formData.get('tags')?.toString() ?? '[]';
-  const tags = JSON.parse(tagPayload);
-  return buildCuratedRegistry(tags);
 }
 
 export async function addRegistryItem(formData: FormData) {

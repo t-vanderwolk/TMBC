@@ -8,7 +8,7 @@ export default function Mobility() {
       step="mobility"
       nextStep="/onboarding/dynamics"
       title="Mobility"
-      description="Share how often you travel, attend events, or want to unlock effortless outings."
+      description="Share how often you travel, attend events, or want to unlock effortless outings. This helps your mentor understand your lifestyle."
     >
       <label className="flex flex-col gap-2 text-sm text-[#3E2F35]">
         What kind of outings do you plan to take with baby in the first 6 months?

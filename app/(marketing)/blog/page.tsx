@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import PlaceholderImageCard from "@/components/marketing/PlaceholderImageCard";
+import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -53,22 +53,21 @@ const BlogMarketingPage = async () => {
       <header className="space-y-3 text-center">
         <p className="text-xs uppercase tracking-[0.6em] text-[var(--tmbc-charcoal)] text-opacity-60">Taylor-Made Journal</p>
         <h1 className="font-playfair text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-          Low-stress stories from the nursery floor
+          Notes from the planning side of parenthood
         </h1>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Mentor essays, gear guides, and real chat that keeps you calm, curious, and ready for the next chapter.
+          Calm context, helpful perspective, and things we wish someone told us sooner.
         </p>
-        <p className="text-xs uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)] text-opacity-60">
-          Curated Picks
-        </p>
-        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-          Education-led commerce with transparent partner disclosures.
-        </p>
+        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">No "must-have" lists. We promise.</p>
       </header>
 
       <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-[40px] border border-tmMauve/40 bg-tmIvory shadow-editorial transition duration-300 hover:-translate-y-0.5 sm:grid-cols-[1.1fr_0.9fr]">
         <div className="marketing-media relative min-h-[320px] flex-1">
-          <PlaceholderImageCard className="absolute inset-0 h-full w-full" />
+          <VisualPlaceholder
+            label="Hero lifestyle image or calm planning moment"
+            className="absolute inset-0 h-full w-full"
+            minHeightClassName="min-h-full"
+          />
           <div className="absolute inset-0 bg-gradient-to-br from-tmGold/20 via-tmIvory/80 to-transparent" />
         </div>
         <div className="flex flex-1 flex-col gap-6 p-8 sm:p-10">
@@ -128,7 +127,11 @@ const BlogMarketingPage = async () => {
                   </span>
                   <span>{post.authorName}</span>
                 </div>
-                <div className="h-36 rounded-[28px] bg-gradient-to-br from-tmMauve/30 via-tmBlush/70 to-tmIvory" />
+                <VisualPlaceholder
+                  label="Story image placeholder"
+                  className="rounded-[28px]"
+                  minHeightClassName="min-h-[144px]"
+                />
                 <h3 className="font-playfair text-xl sm:text-2xl text-[var(--tmbc-charcoal)]">{post.title}</h3>
                 <p className="text-base leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-75">
                   {post.excerpt ?? ""}

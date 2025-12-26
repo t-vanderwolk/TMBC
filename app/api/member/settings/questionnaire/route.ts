@@ -92,7 +92,6 @@ export async function POST(request: NextRequest) {
         lifestyleSnapshot: result.questionnaire.lifestyleSnapshot,
         mentorId: result.questionnaire.mentorId,
       },
-      recommendations: result.recommendations,
       schema: OnboardingIntelligenceService.getSchema(),
     });
   } catch (error) {

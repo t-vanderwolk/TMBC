@@ -240,6 +240,10 @@
     @apply w-full rounded-2xl border border-[var(--tmbc-blush)] bg-white/80 px-4 py-3 text-base leading-relaxed text-[var(--tmbc-charcoal)] shadow-sm transition focus:border-[var(--tmbc-charcoal)] focus:outline-none;
   }
 
+  .subtle-note {
+    @apply text-sm italic text-[var(--tmbc-charcoal)] text-opacity-70;
+  }
+
   .marketing-media img,
   .marketing-media video {
     @apply w-full h-auto;

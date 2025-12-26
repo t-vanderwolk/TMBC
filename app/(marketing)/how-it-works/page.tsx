@@ -5,69 +5,90 @@ import { useEffect, useRef, useState } from "react";
 
 const phases = [
   {
-    title: "Phase 1 · Onboard",
-    summary: "Request invite → mentor match → cozy welcome",
+    title: "Tell us about your life",
+    summary: "A short intake with real context",
     description:
-      "We ask about your timing, emotions, and what calm feels like. Then we match you with a mentor circle or 1:1 guide.",
+      "We ask about your timing, your support, and what calm feels like. No trick questions.",
     bullets: [
-      "Concierge intake call with thoughtful prompts",
-      "Mentor circle recommendation plus welcome notes",
-      "Calendar + micro-checklist that feels like a letter",
+      "Share your due date, home setup, and the pace you want.",
+      "This is where a quiz would normally spit out a list. We don't do that.",
+      "We read every note before matching you with a mentor.",
     ],
-    peek: "Intake note + mentor preview card",
+    peek: "Intake snapshot + mentor context note",
   },
   {
-    title: "Phase 2 · Learn & Build",
-    summary: "Academy, registry, and moodboard aligned with your style",
+    title: "Meet your mentor",
+    summary: "A real human, ready to guide",
     description:
-      "We guide you through nursery, gear, postpartum, and registry planning at a pace that feels cinematic, not frantic.",
+      "You meet the mentor who will walk with you. It's a real intro, not a handoff.",
     bullets: [
-      "Binge-worthy academy modules with mentor feedback",
-      "Dynamic registry tiles that show edits + thrifted pairings",
-      "Moodboard + planner pulses that mirror your home",
+      "A warm welcome and a clear first check-in.",
+      "You can ask the messy questions here.",
+      "Mentor notes that feel personal, not templated.",
     ],
-    peek: "Modular academy card + registry tile",
+    peek: "Mentor intro + first check-in",
   },
   {
-    title: "Phase 3 · Connect & Grow",
-    summary: "Mentor salons, community pulses, and evolving care",
+    title: "Plan together",
+    summary: "Shared decisions, paced on purpose",
     description:
-      "Mentors, experts, and peers pop in with mini salons, voice notes, and check-ins so you always have a steady village.",
+      "You and your mentor map nursery, gear, and recovery in order, so nothing feels urgent.",
     bullets: [
-      "Small mentor salons with real-time chat",
-      "Guest experts + prompts that feel like a journal",
-      "Community pulse polls with thoughtful reflections",
+      "Examples, not directives.",
+      "No countdown timers. No panic buying.",
+      "Decide what matters now vs later.",
     ],
-    peek: "Mentor chat + salon invite snippet",
+    peek: "Shared plan + decision notes",
+  },
+  {
+    title: "Decide when you're ready",
+    summary: "You make the calls, at your pace",
+    description:
+      "When you're ready, you decide what stays, what waits, and what never needed to happen.",
+    bullets: [
+      "You stay in control of every decision.",
+      "Room to change your mind.",
+      "Mentor support if you want another pass.",
+    ],
+    peek: "Decision recap + next-step note",
   },
 ];
 
 const monthlyExpectations = [
   {
-    title: "Month 1 · The gentle intake",
-    summary: "We learn your rituals, match the mentor energy, and send a luxe welcome kit.",
+    title: "Step 1 · The calm intake",
+    summary: "We learn your rhythms and context so your mentor starts with the right picture.",
     points: [
-      "Concierge intake call with voice note replies",
-      "Mentor match preview + private chat link",
-      "Registry moodboard + calm timeline",
+      "A short intake you can finish in one sitting.",
+      "No surprise quizzes or auto-generated lists.",
+      "Notes are read by real humans, every time.",
     ],
   },
   {
-    title: "Month 2 · The Binge-worthy academy",
-    summary: "Modules land weekly. Every resource links back to your registry + mentor notes.",
+    title: "Step 2 · The mentor hello",
+    summary: "You meet your mentor and start with a clear, gentle first check-in.",
     points: [
-      "Car seat, nursery, and postpartum modules",
-      "Mentor-styled registry edits drop beside each lesson",
-      "Soft prompts that feel like a journal entry",
+      "A human intro, not a bot handoff.",
+      "Clear next steps, no pressure to sprint.",
+      "Ask the questions you've been holding.",
     ],
   },
   {
-    title: "Month 3 · The mentor pulse",
-    summary: "Community salons, pulse checks, and curated invites keep you feeling held.",
+    title: "Step 3 · The shared plan",
+    summary: "You and your mentor map what matters now and what can wait.",
     points: [
-      "Weekly salons + guest expert drops",
-      "Community call recaps with honest insights",
-      "Mentor notes that turn into future perk hints",
+      "Plan together with context, not urgency.",
+      "No countdown timers. No panic buying.",
+      "Your pace leads, mentors follow.",
+    ],
+  },
+  {
+    title: "Step 4 · The final decisions",
+    summary: "When you're ready, you decide. We're here if you want a second look.",
+    points: [
+      "You choose what stays and what goes.",
+      "Room to change your mind anytime.",
+      "Mentors support, they never push.",
     ],
   },
 ];
@@ -105,12 +126,12 @@ export default function HowItWorksPage() {
         <div>
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Process</p>
           <h1 className="font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-            This is how we take you from 'Where do I even start?' to 'I've got this.'
+            This is how we keep baby planning calm, human, and honest.
           </h1>
         </div>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Every phase keeps your story slow and luminous. Learn · Plan · Connect with mentors who keep the vibe
-          calm, witty, and real.
+          You share context, meet your mentor, plan together, and decide when you're ready. No list dumps. No
+          pressure.
         </p>
         <div className="flex flex-col gap-3 text-[0.7rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
           <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
@@ -136,10 +157,10 @@ export default function HowItWorksPage() {
               ))}
             </div>
           </div>
-          <div className="grid gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60 md:grid-cols-3">
+          <div className="grid gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60 md:grid-cols-4">
             {phases.map((phase) => (
               <span key={phase.title} className="text-center">
-                {phase.title.split(' · ').pop()}
+                {phase.title}
               </span>
             ))}
           </div>
@@ -189,9 +210,11 @@ export default function HowItWorksPage() {
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div className="flex flex-col gap-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Monthly cadence</p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">What to expect each month</h2>
-          <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">Lean into the cadence, and we'll keep the village warm.</p>
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">What to expect</p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">A steady, four-step rhythm</h2>
+          <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+            A clear path that keeps decisions calm and paced.
+          </p>
         </div>
         <div className="space-y-3">
           {monthlyExpectations.map((month, index) => (
@@ -235,7 +258,7 @@ export default function HowItWorksPage() {
         <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Next step</p>
         <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">Ready for the invite-only cadence?</h2>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Every season is curated so you can stay intentional. Apply now and we'll tell you when the next mentor circle opens.
+          We keep invitations limited so mentors can offer real, attentive support. Apply now and we'll tell you when the next mentor circle opens.
         </p>
         <div className="mx-auto mt-4 flex w-full max-w-sm flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] sm:flex-row sm:justify-center sm:gap-4">
           <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">

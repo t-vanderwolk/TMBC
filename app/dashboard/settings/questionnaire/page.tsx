@@ -14,9 +14,9 @@ export default function SettingsQuestionnairePage() {
     <div className="space-y-6">
       <section className="rounded-3xl border border-[#E3D0D7] bg-white/90 p-6 shadow-[0_20px_60px_rgba(62,47,53,0.15)]">
         <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Questionnaire editor</p>
-        <h1 className="font-serif text-3xl text-[#3E2F35]">Refresh your intelligence</h1>
+        <h1 className="font-serif text-3xl text-[#3E2F35]">Update your onboarding context</h1>
         <p className="text-sm text-[#3E2F35]/70">
-          Edit your preferences to re-rank recommendations without breaking your existing registry or mentor pairing.
+          Edit your preferences so your mentor can keep your plan aligned. This helps your mentor understand your lifestyle.
         </p>
       </section>
 
@@ -30,7 +30,7 @@ export default function SettingsQuestionnairePage() {
             setStatusMessage(`Tags updated: ${tags.join(", ")}`);
           }
         }}
-        onComplete={() => setStatusMessage("Preferences saved. New version queued for regeneration.")}
+        onComplete={() => setStatusMessage("Preferences saved. Your mentor can review the update.")}
       />
 
       {statusMessage && (

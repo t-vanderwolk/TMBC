@@ -40,6 +40,9 @@ const normalizeRoleValue = (src?: string): DashboardRole => {
 
 export default async function DashboardAppLayout({ children }: { children: ReactNode }) {
   // Keep this layout name distinct from the client-side DashboardShell to avoid naming conflicts.
+  // TMBC UX Canon:
+  // Mobile-first. Calm. Contextual navigation.
+  // No top navbar.
   let user;
   try {
     user = await getUserOrThrow();

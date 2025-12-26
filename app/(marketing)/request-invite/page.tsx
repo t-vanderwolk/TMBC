@@ -47,7 +47,7 @@ const RequestInvitePage = () => {
           <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">Invite request</p>
           <h1 className="mt-2 font-serif text-3xl sm:text-4xl">Request an Invitation</h1>
           <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-            Share a few details and our concierge will reply with a personalized onboarding note and invite timeline.
+            We keep TMBC invite-only so every member gets real, attentive support from a mentor. Share a few details and we'll reply with your next steps.
           </p>
           <form onSubmit={submit} className="marketing-form mt-6">
             <label>

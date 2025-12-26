@@ -15,6 +15,7 @@ export default function OnboardingLayout({ children }: OnboardingLayoutProps) {
           <h1 className="font-serif text-3xl text-[#3E2F35]">Bespoke onboarding</h1>
           <p className="max-w-3xl text-sm text-[#3E2F35]/70">
             Finish the three-step concierge flow to secure your profile, pair with a mentor, and unlock your dashboard.
+            This helps your mentor understand your lifestyle.
           </p>
         </header>
         <main className="flex-1">

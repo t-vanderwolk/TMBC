@@ -1,18 +1,14 @@
 "use server";
 
 import Link from "next/link";
-import CategoryTile from "@/components/tmbc/CategoryTile";
 import SectionHeader from "@/components/tmbc/SectionHeader";
 import StyledButton from "@/components/tmbc/StyledButton";
-import { buildCuratedRegistry } from "@/lib/registry/recommendations";
 
 export default async function DashboardOnboardingResults() {
-  const curated = await buildCuratedRegistry(["nesting", "care", "travel"]);
-
   return (
     <div className="space-y-8">
       <SectionHeader
-        title="Dashboard registry results"
+        title="Onboarding context"
         subtitle="Your mentor reviewed your onboarding answers."
         actions={
           <Link href="/dashboard/plan">
@@ -20,21 +16,11 @@ export default async function DashboardOnboardingResults() {
           </Link>
         }
       />
-      <div className="grid gap-4 md:grid-cols-3">
-        {curated.categories.map((category) => (
-          <CategoryTile
-            key={category.id}
-            title={category.title}
-            description={category.reason}
-            href="/dashboard/plan"
-            accent={<span>{category.priority ? "Priority" : "Fresh"}</span>}
-          />
-        ))}
-      </div>
-      <div className="flex flex-wrap items-center gap-3">
-        <StyledButton title="You’re about to feel productive.">Review with mentor</StyledButton>
-        <StyledButton variant="secondary">Customize</StyledButton>
-        <StyledButton variant="ghost">View reasoning</StyledButton>
+      <div className="rounded-[2rem] border border-[#E3C6D4] bg-[#FFFAF8] px-6 py-5 text-sm text-[#3E2F35]">
+        <p className="text-base font-semibold text-[#3E2F35]">Mentor-led planning</p>
+        <p className="mt-2 text-sm text-[#3E2F35]/75">
+          This helps your mentor understand your lifestyle. Registry items appear only when you or your mentor adds them.
+        </p>
       </div>
     </div>
   );

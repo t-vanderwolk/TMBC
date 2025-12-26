@@ -8,7 +8,6 @@ import { revalidatePath } from "next/cache";
 import { getUserOrThrow, type SafeUser } from "@/lib/auth/getUser";
 import {
   HouseholdPayload,
-  refreshMemberRecommendations,
   saveProfileImagePath,
   updateMemberHousehold,
   updateMemberProfile,
@@ -53,15 +52,6 @@ export async function updateHouseholdDetails(formData: FormData) {
 
   await updateMemberHousehold(user.id, payload);
   revalidatePath(SETTINGS_PATH);
-}
-
-export async function regenerateRecommendations() {
-  const user = requireMember(await getUserOrThrow());
-  const result = await refreshMemberRecommendations(user.id);
-  revalidatePath(SETTINGS_PATH);
-  return {
-    message: `Recommendations updated. ${result.diff.added} new category${result.diff.added === 1 ? "" : "ies"}, ${result.diff.removed} removed.`,
-  };
 }
 
 const PROFILE_UPLOAD_DIR = path.join(process.cwd(), "public", "uploads", "profiles");

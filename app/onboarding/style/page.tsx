@@ -8,7 +8,7 @@ export default function Style() {
       step="style"
       nextStep="/onboarding/philosophy"
       title="Style"
-      description="Which textures, patterns, and finishes feel like you?"
+      description="Which textures, patterns, and finishes feel like you? This helps your mentor understand your lifestyle."
     >
       <label className="flex flex-col gap-2 text-sm text-[#3E2F35]">
         Pick three words that describe your nursery moodboard.

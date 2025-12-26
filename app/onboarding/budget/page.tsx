@@ -8,7 +8,7 @@ export default function Budget() {
       step="budget"
       nextStep="/onboarding/emotional"
       title="Budget"
-      description="Share what feels luxe vs. practical so we tailor intel to you."
+      description="Share what feels luxe vs. practical so your mentor can plan with you. This helps your mentor understand your lifestyle."
     >
       <label className="flex flex-col gap-2 text-sm text-[#3E2F35]">
         Where do you want to splurge (details, rituals, education)?
