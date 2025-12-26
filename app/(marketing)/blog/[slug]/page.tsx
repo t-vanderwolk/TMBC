@@ -98,7 +98,7 @@ const formatAuthorRole = (role: PublicBlogPost["authorRoleSnapshot"]) =>
 
 export const generateStaticParams = async () => {
   const posts = await fetchPublicPosts();
-  return posts.map((post) => ({ slug: post.slug }));
+  return posts.map((post: { slug: string }) => ({ slug: post.slug }));
 };
 
 export const generateMetadata = async ({ params }: { params: Params }): Promise<Metadata> => {
