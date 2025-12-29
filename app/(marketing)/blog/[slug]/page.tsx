@@ -8,6 +8,7 @@ import BlogContentRenderer, {
   type BlogContentBlock,
 } from "@/components/blog/BlogContentRenderer";
 import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
+import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -35,6 +36,19 @@ type PublicBlogPost = {
   authorName: string;
   authorRoleSnapshot: "ADMIN" | "MENTOR";
   tags: string[];
+  highlights: Array<{
+    id: string;
+    productId: string | null;
+    brandName: string | null;
+    note: string;
+    product: {
+      id: string;
+      name: string;
+      brand: string | null;
+      category: string | null;
+      imageUrl: string | null;
+    } | null;
+  }>;
   affiliateLinks: PublicAffiliateLink[];
 };
 
@@ -251,6 +265,7 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
               <p className="subtle-note">
                 Every family is different. Your mentor can help you decide what actually fits your life.
               </p>
+              <BlogHighlightSection highlights={post.highlights ?? []} />
               <BlogAffiliateEndCard links={post.affiliateLinks} />
               <div className="rounded-3xl border-l-4 border-tmGold/60 bg-tmIvory/80 px-6 py-6">
                 <p className="font-playfair text-2xl uppercase tracking-[0.3em] text-tmCharcoal">

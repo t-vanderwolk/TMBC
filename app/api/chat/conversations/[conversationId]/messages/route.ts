@@ -32,7 +32,7 @@ export async function GET(
   const actor: Actor = { id: user.id, role: user.role };
   try {
     const convo = await getConversationForUser(conversationId, actor);
-    // TODO: Attach mentor-only AI assistant suggestions to this payload when that experience launches.
+    // INTENTIONAL: Mentor-only assistant suggestions are deferred until that experience launches.
     const payload = formatConversationResponse(convo);
     return NextResponse.json({ conversation: payload });
   } catch (error) {

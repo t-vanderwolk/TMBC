@@ -9,6 +9,12 @@ type SidebarProps = {
   };
 };
 
+type NavEntry = {
+  href: string;
+  label: string;
+  disabled?: boolean;
+};
+
 const NAV = {
   member: [
     { href: "/dashboard", label: "Overview" },
@@ -16,14 +22,16 @@ const NAV = {
     { href: "/dashboard/plan", label: "Registry" },
     { href: "/dashboard/member/events", label: "Events" },
     { href: "/dashboard/member/messages", label: "Messages" },
-  ],
+  ] satisfies NavEntry[],
   mentor: [
-    { href: "/dashboard", label: "Overview" },
-    { href: "/dashboard/mentor/members", label: "My Members" },
-    { href: "/dashboard/mentor/tasks", label: "Tasks" },
-    { href: "/dashboard/mentor/journal-review", label: "Journal Review" },
-    { href: "/dashboard/mentor/events", label: "Events" },
-  ],
+    { href: "/dashboard/mentor", label: "Mentor Home" },
+    { href: "/dashboard/mentor/mentees", label: "Mentees" },
+    { href: "/dashboard/mentor/workspace", label: "Workspace", disabled: true },
+    { href: "/dashboard/mentor/circles", label: "Mentor Circles" },
+    { href: "/dashboard/mentor/messages", label: "Messages" },
+    { href: "/dashboard/mentor/blog", label: "Content Studio" },
+    { href: "/dashboard/mentor/insights", label: "Insights" },
+  ] satisfies NavEntry[],
   admin: [
     { href: "/dashboard", label: "Overview" },
     { href: "/dashboard/admin/invites", label: "Invites" },
@@ -31,7 +39,7 @@ const NAV = {
     { href: "/dashboard/admin/registry", label: "Registry" },
     { href: "/dashboard/admin/login-events", label: "Login Events" },
     { href: "/dashboard/admin/settings", label: "Settings" },
-  ],
+  ] satisfies NavEntry[],
 };
 
 export default function Sidebar({ user }: SidebarProps) {
@@ -41,15 +49,25 @@ export default function Sidebar({ user }: SidebarProps) {
 
   return (
     <aside className="sidebar">
-      {entries.map((item) => (
-        <Link
-          key={item.href}
-          href={item.href}
-          className={`sidebar-link ${path === item.href ? "active" : ""}`}
-        >
-          {item.label}
-        </Link>
-      ))}
+      {entries.map((item) =>
+        item.disabled ? (
+          <span
+            key={item.href}
+            className="sidebar-link cursor-not-allowed opacity-40"
+            aria-disabled="true"
+          >
+            {item.label}
+          </span>
+        ) : (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`sidebar-link ${path === item.href ? "active" : ""}`}
+          >
+            {item.label}
+          </Link>
+        ),
+      )}
     </aside>
   );
 }

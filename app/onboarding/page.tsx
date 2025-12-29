@@ -28,9 +28,9 @@ function OnboardingPageContent() {
     setError("");
 
     api
-      .post("/invites/validate", { code })
+      .post("/onboarding/validate", { code })
       .then((response) => {
-        const email = response.data?.email;
+        const email = response.data?.invite?.email;
         if (!email) {
           throw new Error("Invite missing email");
         }

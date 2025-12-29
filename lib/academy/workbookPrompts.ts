@@ -44,5 +44,20 @@ export function deriveWorkbookPrompts(sections?: AcademyModuleSectionSnapshot[])
     return [];
   }
 
-  return prompts;
+  const supplementalPrompts: WorkbookPrompt[] = [
+    {
+      id: 'space-photo',
+      title: 'Photo or sketch',
+      prompt: 'Add a link to a photo or describe the space you are planning for.',
+      section: 'APPLY',
+    },
+    {
+      id: 'key-measurements',
+      title: 'Key measurements',
+      prompt: 'Capture the key measurements (room size, door widths, or furniture dimensions).',
+      section: 'APPLY',
+    },
+  ];
+
+  return [...prompts, ...supplementalPrompts];
 }

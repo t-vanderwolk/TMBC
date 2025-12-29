@@ -13,7 +13,6 @@ const MentorJournalShareBanner = ({ shares }: MentorJournalShareBannerProps) => 
     return (
       <div className="rounded-2xl border border-dashed border-tmBlush/40 bg-white/80 p-4 text-sm text-tmCharcoal/70">
         <p className="font-semibold text-tmCharcoal">No journal entries shared yet</p>
-        <p className="text-xs text-tmCharcoal/60">// TODO: Hook live share count for surface banner</p>
       </div>
     );
   }
@@ -34,7 +33,6 @@ const MentorJournalShareBanner = ({ shares }: MentorJournalShareBannerProps) => 
           </li>
         ))}
       </ul>
-      <p className="text-xs text-tmCharcoal/60">// TODO: Link to mentor journal view page</p>
     </div>
   );
 };

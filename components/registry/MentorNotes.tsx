@@ -97,7 +97,6 @@ export default function MentorNotes({ notes, registryItemId }: MentorNotesProps)
             <MessageSquarePlus className="h-4 w-4 text-tmMauve" />
             Threaded Advice
           </div>
-          <p className="text-xs text-tmCharcoal/60">// TODO: Replace mock thread with live mentor feedback data</p>
           {loadingThread ? (
             <div className="flex items-center gap-2 text-sm text-tmCharcoal/60">
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -114,7 +113,7 @@ export default function MentorNotes({ notes, registryItemId }: MentorNotesProps)
                 </div>
               ))}
               {!thread.length && (
-                <p className="text-xs text-tmCharcoal/60">// TODO: Encourage mentor/member to start thread</p>
+                <p className="text-xs text-tmCharcoal/60">No thread messages yet.</p>
               )}
             </div>
           )}

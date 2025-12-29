@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -13,34 +14,24 @@ import { PUBLIC_LOGIN_ROUTE } from "@/lib/auth/routeForRole";
 
 const pillars = [
   {
-    title: "Human guidance",
-    icon: "🤝",
-    description: "A real mentor helps you sort what matters and what can wait.",
-    bullets: [
-      "No trick questions.",
-      "Notes that explain the why, not just the what.",
-      "Support that adapts when your life does.",
-    ],
+    title: "A calm, concierge-led journey",
+    description: "Personalized planning guided by real humans — thoughtfully paced, never rushed.",
   },
   {
-    title: "Thoughtful planning",
-    icon: "🧭",
-    description: "We map the big decisions in order, so nothing feels urgent.",
-    bullets: [
-      "Plan together, not in a vacuum.",
-      "Room for changing your mind.",
-      "Steady pacing over sprinting.",
-    ],
+    title: "A living plan that evolves with you",
+    description: "Not static checklists. A roadmap that adapts as your family and priorities change.",
   },
   {
-    title: "Advocacy over sales",
-    icon: "🕊️",
-    description: "We are on your side, not a pushy feed.",
-    bullets: [
-      "No pressure to decide right now.",
-      "Examples, not directives.",
-      "Mentors who say \"skip it\" when it doesn't fit.",
-    ],
+    title: "Community that feels intimate",
+    description: "Moderated conversations, meaningful gatherings, and connections that actually last.",
+  },
+  {
+    title: "A Member-for-Life promise",
+    description: "Return for new chapters — siblings, refreshes, transitions — without starting over.",
+  },
+  {
+    title: "A Mentor-to-Member pathway",
+    description: "Lived experience becomes shared wisdom, supporting the families who come next.",
   },
 ];
 
@@ -67,24 +58,6 @@ const steps = [
   },
 ];
 
-const dashboardHighlights = [
-  {
-    title: "Mentor notes",
-    caption: "Weekly check-in · 2 notes",
-    note: "Mentor: \"Let's keep this week simple and steady.\"",
-  },
-  {
-    title: "Shared plan",
-    caption: "Priorities · 4 decisions pending",
-    note: 'Mentor: "We can wait on the high chair."',
-  },
-  {
-    title: "Community",
-    caption: "Mentor circle · 1 upcoming chat",
-    note: 'Mentor: "Quick check-in: what would make this week easier?"',
-  },
-];
-
 export default function HomePage() {
   const router = useRouter();
   const [inviteCode, setInviteCode] = useState("");
@@ -103,7 +76,7 @@ export default function HomePage() {
     setSubmitting(true);
 
     try {
-      await api.post("/invites/validate", { code: trimmed });
+      await api.post("/onboarding/validate", { code: trimmed });
       router.push(`/onboarding?code=${encodeURIComponent(trimmed)}`);
     } catch (err) {
       setError("Invalid or already used invite code.");
@@ -151,10 +124,10 @@ export default function HomePage() {
                 Request Invite
               </Link>
               <Link
-                href="/how-it-works"
+                href="/experience"
                 className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
               >
-                How It Works
+                The Experience
               </Link>
             </div>
           </Reveal>
@@ -209,40 +182,28 @@ export default function HomePage() {
         </Reveal>
       </section>
 
-      <section className="space-y-8 rounded-[48px] border border-[var(--tmbc-mauve)]/40 bg-white/70 p-8 shadow-[0_25px_70px_rgba(199,166,199,0.25)] marketing-section">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Pillars</p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              Human Guidance · Thoughtful Planning · Advocacy Over Sales
-            </h2>
-          </div>
-          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-            A calm, human rhythm instead of a loud checklist.
-          </p>
+      <section className="space-y-8 rounded-[48px] border border-[var(--tmbc-mauve)]/40 bg-white/70 p-8 pb-10 shadow-[0_25px_70px_rgba(199,166,199,0.25)] marketing-section">
+        <div className="space-y-3">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Pillars</p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+            A different way to prepare — steady, thoughtful, and human.
+          </h2>
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
+        {/* TODO: Expand this pillar section with testimonials or visuals later. */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {pillars.map((pillar) => (
             <div
               key={pillar.title}
-              className="group relative overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-[var(--tmbc-ivory)]/80 p-6 shadow-[0_18px_60px_rgba(199,166,199,0.15)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_25px_60px_rgba(199,166,199,0.3)]"
+              className="rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-[var(--tmbc-ivory)]/80 p-6 shadow-[0_18px_60px_rgba(199,166,199,0.15)]"
             >
-              <div className="text-2xl">{pillar.icon}</div>
-              <h3 className="mt-3 text-xl sm:text-2xl font-semibold text-[var(--tmbc-charcoal)]">{pillar.title}</h3>
-              <p className="mt-2 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{pillar.description}</p>
-              <div className="mt-4 max-h-0 overflow-hidden text-[0.7rem] text-[var(--tmbc-charcoal)] text-opacity-60 transition-all duration-500 group-hover:max-h-40">
-                <ul className="space-y-1">
-                  {pillar.bullets.map((bullet) => (
-                    <li key={bullet} className="flex items-start gap-2">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[var(--tmbc-mauve)]" />
-                      <span className="text-xs uppercase tracking-[0.35em]">{bullet}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <h3 className="text-xl sm:text-2xl font-semibold font-serif text-[var(--tmbc-charcoal)]">
+                {pillar.title}
+              </h3>
+              <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{pillar.description}</p>
             </div>
           ))}
         </div>
+        <div className="h-px w-full bg-[var(--tmbc-mauve)]/20" />
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_20px_90px_rgba(199,166,199,0.25)] marketing-section">
@@ -282,21 +243,15 @@ export default function HomePage() {
             Your plan, mentor notes, and check-ins live together in one calm view.
           </p>
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {dashboardHighlights.map((highlight) => (
-            <div
-              key={highlight.title}
-              className="rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/60 p-5 text-[var(--tmbc-charcoal)] shadow-[0_15px_45px_rgba(199,166,199,0.2)]"
-            >
-              <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                {highlight.title}
-              </p>
-              <h3 className="mt-3 text-xl font-semibold sm:text-2xl text-[var(--tmbc-charcoal)]">
-                {highlight.caption}
-              </h3>
-              <p className="mt-2 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{highlight.note}</p>
-            </div>
-          ))}
+        <div className="flex items-center justify-center rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/60 p-6 shadow-[0_15px_45px_rgba(199,166,199,0.2)]">
+          <Image
+            src="/images/marketing/ecosystem-preview.png"
+            alt="Member dashboard mobile preview"
+            width={640}
+            height={1200}
+            className="h-auto max-h-[520px] w-auto"
+            priority
+          />
         </div>
         <div className="grid gap-4 text-base text-[var(--tmbc-charcoal)] md:grid-cols-3">
           <p className="rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/70 p-4">

@@ -191,7 +191,7 @@ export const updateMemberHousehold = async (
 
 /* ─────────────── Profile Image Handling ─────────────── */
 
-// NOTE: Keep the profile field camelCase (`imageUrl`) and avoid alternate casing.
+// INTENTIONAL: Keep the profile field camelCase (`imageUrl`) and avoid alternate casing.
 export const saveProfileImagePath = async (
   userId: string,
   imageUrl: string,

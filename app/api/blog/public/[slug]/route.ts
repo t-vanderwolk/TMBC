@@ -15,7 +15,6 @@ export async function GET(_request: Request, context: RouteContext) {
     where: {
       slug,
       status: "PUBLISHED",
-      isAffiliate: true,
     },
     select: {
       id: true,
@@ -28,6 +27,24 @@ export async function GET(_request: Request, context: RouteContext) {
       authorName: true,
       authorRoleSnapshot: true,
       tags: true,
+      highlights: {
+        orderBy: { createdAt: "asc" },
+        select: {
+          id: true,
+          productId: true,
+          brandName: true,
+          note: true,
+          product: {
+            select: {
+              id: true,
+              name: true,
+              brand: true,
+              category: true,
+              imageUrl: true,
+            },
+          },
+        },
+      },
       affiliateLinks: {
         orderBy: { isPrimary: "desc" },
         select: {

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { prisma } from "@/lib/prisma";
-import { createMentorSuggestedItem } from "@/lib/services/server/registry.service";
+import { createMentorProductSuggestion } from "@/lib/services/server/registry.service";
 
 // TMBC Canon:
 // Mentors advise.
@@ -27,7 +27,7 @@ export async function POST(
   { params }: { params: { memberId: string } },
 ) {
   try {
-    await requireMentor();
+    const mentor = await requireMentor();
     const member = await prisma.user.findUnique({
       where: { id: params.memberId },
       select: { id: true, role: true },
@@ -56,7 +56,8 @@ export async function POST(
       );
     }
 
-    const item = await createMentorSuggestedItem({
+    const item = await createMentorProductSuggestion({
+      mentorId: mentor.id,
       memberId: member.id,
       productId: payload.productId ?? null,
       title,

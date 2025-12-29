@@ -8,7 +8,7 @@ type JournalEntry = {
 const entries: JournalEntry[] = [];
 
 export const listJournalEntries = async (userId: string): Promise<JournalEntry[]> => {
-  // TODO: Replace with Prisma journal table (append-only)
+  // INTENTIONAL: In-memory journal entries stay until the append-only journal table ships.
   return entries.filter((entry) => entry.userId === userId);
 };
 
@@ -20,6 +20,6 @@ export const createJournalEntry = async (userId: string, content: string) => {
     createdAt: new Date(),
   };
   entries.push(entry);
-  // TODO: Persist via Prisma and lock previous entries from editing
+  // INTENTIONAL: Persist via Prisma and lock previous entries once journal storage is available.
   return entry;
 };

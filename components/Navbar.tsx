@@ -1,13 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 
 import { greatVibes } from "@/lib/fonts";
 import { PUBLIC_LOGIN_ROUTE } from "@/lib/auth/routeForRole";
 
-const navLinks = [
+const PRIMARY_NAV = [
   { label: "How It Works", href: "/how-it-works" },
+  { label: "Learn", href: "/learn" },
+  { label: "Plan", href: "/plan" },
+  { label: "Connect", href: "/connect" },
+  { label: "Reflect", href: "/reflect" },
   { label: "Membership", href: "/membership" },
   { label: "Blog", href: "/blog" },
 ];
@@ -15,6 +20,15 @@ const navLinks = [
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const mobileNav = useMemo(
+    () => [
+      ...PRIMARY_NAV,
+      { label: "Request Invite", href: "/request-invite", variant: "primary" as const },
+      { label: "Login", href: PUBLIC_LOGIN_ROUTE, variant: "text" as const },
+    ],
+    [],
+  );
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -33,6 +47,14 @@ const Navbar = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [menuOpen]);
+
+  const isActive = (href: string) =>
+    pathname === href || (href !== "/" && pathname?.startsWith(`${href}/`));
+
+  const linkClassName = (href: string) =>
+    `transition hover:text-[var(--tmbc-mauve)] ${
+      isActive(href) ? "text-[var(--tmbc-mauve)]" : ""
+    }`;
 
   return (
     <header
@@ -59,23 +81,19 @@ const Navbar = () => {
         </Link>
 
         <nav className="hidden items-center gap-6 text-[0.65rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-80 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="transition hover:text-[var(--tmbc-mauve)]"
-            >
+          {PRIMARY_NAV.map((link) => (
+            <Link key={link.href} href={link.href} className={linkClassName(link.href)}>
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 text-[0.55rem] uppercase tracking-[0.35em] md:flex">
+        <div className="hidden items-center gap-4 text-[0.55rem] uppercase tracking-[0.35em] md:flex">
           <Link
             href={PUBLIC_LOGIN_ROUTE}
-            className="rounded-[999px] border border-[var(--tmbc-mauve)] px-4 py-2 text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-gold)] hover:text-[var(--tmbc-mauve)]"
+            className="text-[var(--tmbc-charcoal)] text-opacity-70 transition hover:text-[var(--tmbc-mauve)]"
           >
-            Log in
+            Login
           </Link>
           <Link
             href="/request-invite"
@@ -102,33 +120,21 @@ const Navbar = () => {
         <div className="md:hidden">
           <div className="mx-auto flex max-w-screen-xl flex-col gap-4 border-t border-[var(--tmbc-mauve)]/30 px-6 py-6 text-[0.75rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-80">
             <nav className="flex flex-col gap-3">
-              {navLinks.map((link) => (
+              {mobileNav.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="block py-2 transition hover:text-[var(--tmbc-mauve)]"
+                  className={
+                    link.variant === "primary"
+                      ? "marketing-btn marketing-btn-primary uppercase"
+                      : `block py-2 ${linkClassName(link.href)}`
+                  }
                   onClick={() => setMenuOpen(false)}
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
-            <div className="flex flex-col gap-3 pt-2 text-[0.65rem] tracking-[0.4em]">
-              <Link
-                href={PUBLIC_LOGIN_ROUTE}
-                className="marketing-btn marketing-btn-secondary uppercase"
-                onClick={() => setMenuOpen(false)}
-              >
-                Log in
-              </Link>
-              <Link
-                href="/request-invite"
-                className="marketing-btn marketing-btn-primary uppercase"
-                onClick={() => setMenuOpen(false)}
-              >
-                Request Invite
-              </Link>
-            </div>
           </div>
         </div>
       )}

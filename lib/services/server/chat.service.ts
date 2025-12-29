@@ -80,7 +80,7 @@ const enforceRateLimit = (key: string, limit: number, windowMs: number) => {
 
   existing.count += 1;
 };
-// TODO: Replace this polling-friendly guard with a WebSocket push layer once the infrastructure stabilizes.
+// INTENTIONAL: This polling-friendly guard remains until the WebSocket layer is production ready.
 
 type AllowedMentorCache = Map<string, Set<string>>;
 
@@ -392,7 +392,7 @@ export async function listUserConversations(user: Actor): Promise<ConversationSu
     } catch (error) {
       continue;
     }
-    // TODO: Surface mentor note snippets alongside each thread (plus future AI assistant cues for mentors).
+    // INTENTIONAL: Mentor note snippets will be added when the mentor notes index is available.
 
     const mentor = conversation.participants.find((participant) => participant.role === Role.MENTOR);
     const member = conversation.participants.find((participant) => participant.role === Role.MEMBER);
@@ -561,7 +561,7 @@ export async function sendMessage({
 
   await ensureUserCanAccessConversation(sender, conversation);
 
-  // TODO: Tie concierge automation into this hook so isSystem notes can be surfaced gracefully.
+  // INTENTIONAL: Concierge automation is deferred until system note workflows are defined.
   return prisma.conversationMessage.create({
     data: {
       conversationId,

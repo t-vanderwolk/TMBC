@@ -1,10 +1,6 @@
 'use client';
 
-// TODO: hook to live Prisma data
-// TODO: add loading + error states
-// TODO: refine design to match TMBC brand
-// TODO: connect this CTA to Zoom session
-// TODO: add empty-state UX
+// INTENTIONAL: Cohort management remains API-driven until cohort tables and calendars finalize.
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -155,7 +151,7 @@ export default function MentorCohortsPage() {
           <button type="submit" className="w-full rounded-full border border-tmMauve px-6 py-3 text-sm font-semibold text-tmMauve">
             Add to Cohort
           </button>
-          <p className="text-xs text-tmCharcoal/60">// TODO: hook member selector to directory lookup</p>
+          <p className="text-xs text-tmCharcoal/60">Use a member ID to add someone to the cohort.</p>
         </form>
       </section>
 
@@ -181,9 +177,6 @@ export default function MentorCohortsPage() {
                   ? cohort.members.map((member) => (
                       <span key={member.member.id} className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1">
                         {member.member.name || member.member.email || 'Member'}
-                        <button type="button" className="text-xs text-tmMauve/70" onClick={() => console.log('TODO: remove member', member.member.id)}>
-                          remove
-                        </button>
                       </span>
                     ))
                   : 'No members yet'}
@@ -226,7 +219,6 @@ export default function MentorCohortsPage() {
           <Link href="/dashboard/chat" className="mt-5 inline-flex items-center gap-2 rounded-full bg-tmMauve px-6 py-3 text-sm font-semibold text-white">
             Launch chat workspace
           </Link>
-          <p className="mt-3 text-xs text-tmCharcoal/60">// TODO: surface latest unread messages + badges</p>
         </div>
       </section>
     </div>

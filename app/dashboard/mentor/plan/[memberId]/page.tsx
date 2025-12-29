@@ -29,6 +29,38 @@ type MentorPlanPayload = {
     responses: Array<{ prompt: string; response: string }>;
   }>;
   registryItems: RegistryItemResponse[];
+  mentorSuggestions: Array<{
+    id: string;
+    mentorId: string;
+    mentorName: string | null;
+    memberId: string;
+    category: string;
+    productId: string;
+    productName: string;
+    productBrand: string | null;
+    productImageUrl: string | null;
+    note: string | null;
+    createdAt: string;
+    acceptedAt: string | null;
+  }>;
+  externalRegistries: Array<{
+    id: string;
+    provider: string;
+    title: string | null;
+    url: string | null;
+    documentUrl: string | null;
+    documentLabel: string | null;
+    referenceOnly: boolean;
+    createdAt: string;
+    notes: Array<{
+      id: string;
+      authorId: string;
+      authorName: string | null;
+      authorRole: string;
+      note: string;
+      createdAt: string;
+    }>;
+  }>;
 };
 
 const formatLabel = (value: string) =>
@@ -46,6 +78,28 @@ const summarizeValue = (value: unknown) => {
 
 const truncate = (value: string, max = 140) =>
   value.length > max ? `${value.slice(0, max)}...` : value;
+
+const statusLabelForItem = (item: RegistryItemResponse) => {
+  if (item.decisionStatus === "ACCEPTED") return "Confirmed";
+  if (item.status === "REMOVED") return "Not moving forward";
+  if (item.status === "CONSIDERING") return "Awaiting member";
+  if (item.status === "ADDED" || item.status === "PURCHASED") return "Confirmed";
+  return "Needs discussion";
+};
+
+const formatDateValue = (value: unknown) => {
+  if (value === null || value === undefined) return "";
+  if (typeof value === "string" || typeof value === "number") {
+    const parsed = new Date(value);
+    if (!Number.isNaN(parsed.valueOf())) {
+      return parsed.toLocaleDateString();
+    }
+  }
+  return summarizeValue(value);
+};
+
+const chipClasses =
+  "rounded-full border border-[#E3C6D4] bg-white/90 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.3em] text-[#A4556A]";
 
 export default function MentorPlanPage() {
   useRequireRole(["MENTOR", "ADMIN"]);
@@ -87,23 +141,26 @@ export default function MentorPlanPage() {
   }, [memberId]);
 
   const registryItems = (payload?.registryItems ?? []) as RegistryItemResponse[];
+  const mentorSuggestions = payload?.mentorSuggestions ?? [];
+  const pendingSuggestions = mentorSuggestions.filter((suggestion) => !suggestion.acceptedAt);
+  const externalRegistries = payload?.externalRegistries ?? [];
+  const [externalNotes, setExternalNotes] = useState<Record<string, string>>({});
 
   const registrySummary = useMemo(() => {
-    const suggested = registryItems.filter(
-      (item) => item.addedByMentor && item.decisionStatus !== "ACCEPTED" && item.status !== "REMOVED",
-    );
+    const suggested = pendingSuggestions;
     const accepted = registryItems.filter(
-      (item) => item.decisionStatus === "ACCEPTED" || (!item.addedByMentor && item.status !== "REMOVED"),
+      (item) =>
+        item.decisionStatus === "ACCEPTED" || item.status === "ADDED" || item.status === "PURCHASED",
     );
     const deferred = registryItems.filter((item) => item.status === "REMOVED");
     return { suggested, accepted, deferred };
-  }, [registryItems]);
+  }, [pendingSuggestions, registryItems]);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setFormError("");
     if (!title.trim() || !category.trim() || !mentorNote.trim()) {
-      setFormError("Add a product, category, and mentor rationale before sending.");
+      setFormError("Add a suggested option, category, and mentor rationale before proposing.");
       return;
     }
     try {
@@ -122,7 +179,7 @@ export default function MentorPlanPage() {
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data?.error || "Unable to send suggestion.");
+        throw new Error(data?.error || "Unable to propose for plan.");
       }
       setTitle("");
       setBrand("");
@@ -131,25 +188,73 @@ export default function MentorPlanPage() {
       setProductId("");
       await loadPlan();
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : "Unable to send suggestion.");
+      setFormError(err instanceof Error ? err.message : "Unable to propose for plan.");
     } finally {
       setSaving(false);
     }
   };
 
+  const handleExternalNote = async (registryId: string) => {
+    const note = externalNotes[registryId]?.trim() ?? "";
+    if (!note) {
+      setFormError("Add a note before saving.");
+      return;
+    }
+    try {
+      setFormError("");
+      const response = await fetch(`/api/mentor/external-registries/${registryId}/notes`, {
+        method: "POST",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ note }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.error || "Unable to save note.");
+      }
+      setExternalNotes((prev) => ({ ...prev, [registryId]: "" }));
+      await loadPlan();
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : "Unable to save note.");
+    }
+  };
+
   const onboardingAnswers = payload?.onboarding?.answers ?? {};
+  const onboardingTags = payload?.onboarding?.tags ?? [];
   const answerEntries = Object.entries(onboardingAnswers).slice(0, 6);
+  const dueDateEntry = Object.entries(onboardingAnswers).find(([key]) =>
+    key.toLowerCase().includes("due"),
+  );
+  const dueDate = dueDateEntry ? formatDateValue(dueDateEntry[1]) : "";
+  const memberName = payload?.member?.name || payload?.member?.email || "this member";
 
   return (
     <main className="space-y-6 px-4 pb-20 pt-6 text-[#3E2F35] sm:px-6">
-      <header className="space-y-2 rounded-[28px] bg-[#FFF9F5] p-5 shadow-sm">
-        <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Mentor plan</p>
-        <h1 className="font-serif text-3xl text-[#3E2F35]">
-          {payload?.member?.name ? `Plan for ${payload.member.name}` : "Plan overview"}
-        </h1>
-        <p className="text-sm text-[#3E2F35]/70">
-          Context is read-only. Suggestions are manual, intentional, and mentor-led.
-        </p>
+      <header className="space-y-4 rounded-[28px] bg-[#FFF9F5] p-5 shadow-sm">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="space-y-2">
+            <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Mentor plan</p>
+            <h1 className="font-serif text-3xl text-[#3E2F35]">
+              {payload?.member?.name ? `Plan for ${payload.member.name}` : `Plan for ${memberName}`}
+            </h1>
+            <p className="text-sm text-[#3E2F35]/70">
+              One shared plan, shaped by mentor guidance and member confirmation.
+            </p>
+          </div>
+          <div className="w-full rounded-2xl bg-white/90 p-4 text-xs text-[#3E2F35]/70 sm:w-[260px]">
+            <p className="text-[0.6rem] uppercase tracking-[0.35em] text-[#C8A1B4]">Member snapshot</p>
+            <p className="mt-2 text-sm font-semibold text-[#3E2F35]">
+              {payload?.member?.name || payload?.member?.email || "Member"}
+            </p>
+            <p className="mt-1">Due date: {dueDate || "Not shared yet."}</p>
+            <p className="mt-1">
+              Key constraints: {onboardingTags.length ? onboardingTags.join(", ") : "None shared yet."}
+            </p>
+            <Link href="#workbook" className="mt-2 inline-block text-xs text-[#A4556A] hover:text-[#7C3B53]">
+              View workbook
+            </Link>
+          </div>
+        </div>
       </header>
 
       {error ? (
@@ -205,7 +310,7 @@ export default function MentorPlanPage() {
             )}
           </section>
 
-          <section className="space-y-3 rounded-[28px] bg-white/95 p-5 shadow-sm">
+          <section id="workbook" className="space-y-3 rounded-[28px] bg-white/95 p-5 shadow-sm">
             <div className="space-y-1">
               <h2 className="text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A]">
                 Workbook highlights
@@ -244,53 +349,186 @@ export default function MentorPlanPage() {
           <section className="space-y-3 rounded-[28px] bg-white/95 p-5 shadow-sm">
             <div className="space-y-1">
               <h2 className="text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A]">
-                Registry overview
+                Planning In Progress
               </h2>
-              <p className="text-sm text-[#3E2F35]/70">Mentor suggestions and member decisions.</p>
+              <p className="text-sm text-[#3E2F35]/70">
+                Suggestions in flight while members decide what to confirm.
+              </p>
             </div>
             <div className="grid gap-3 text-sm text-[#3E2F35]/70 sm:grid-cols-3">
               <div className="rounded-2xl bg-[#FFF9F5] p-4">
-                <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Suggested</p>
+                <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Awaiting member</p>
                 <p className="mt-2 text-2xl font-semibold text-[#3E2F35]">
                   {registrySummary.suggested.length}
                 </p>
               </div>
               <div className="rounded-2xl bg-[#FFF9F5] p-4">
-                <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Accepted</p>
+                <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Confirmed</p>
                 <p className="mt-2 text-2xl font-semibold text-[#3E2F35]">
                   {registrySummary.accepted.length}
                 </p>
               </div>
               <div className="rounded-2xl bg-[#FFF9F5] p-4">
-                <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Deferred</p>
+                <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Not moving forward</p>
                 <p className="mt-2 text-2xl font-semibold text-[#3E2F35]">
                   {registrySummary.deferred.length}
                 </p>
               </div>
             </div>
-            {registryItems.length ? (
-              <div className="space-y-2">
-                {registryItems.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between text-xs text-[#3E2F35]/70">
-                    <span>{item.title ?? item.product?.name}</span>
-                    <span className="uppercase tracking-[0.3em] text-[#A4556A]">
-                      {item.status.toLowerCase()}
-                    </span>
+            {pendingSuggestions.length ? (
+              <div className="space-y-3 text-sm text-[#3E2F35]/80">
+                {pendingSuggestions.map((suggestion) => (
+                  <div key={suggestion.id} className="rounded-2xl bg-[#FFF9F5] p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">
+                          {suggestion.category}
+                        </p>
+                        <p className="mt-2 text-base font-semibold text-[#3E2F35]">
+                          {suggestion.productName}
+                          {suggestion.productBrand ? ` · ${suggestion.productBrand}` : ""}
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <span className={chipClasses}>Suggested by you</span>
+                        <span className={chipClasses}>Awaiting member</span>
+                      </div>
+                    </div>
+                    <p className="mt-2 text-sm text-[#3E2F35]/70">
+                      Mentor context: {suggestion.note ?? "Context coming soon."}
+                    </p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-[#3E2F35]/70">No registry items yet.</p>
+              <p className="mt-3 text-sm text-[#3E2F35]/70">
+                Use this space to guide the family based on their onboarding answers and workbook notes. Nothing
+                appears in their plan until they confirm.
+              </p>
+            )}
+          </section>
+
+          <section className="space-y-3 rounded-[28px] bg-white/95 p-5 shadow-sm">
+            <div className="space-y-1">
+              <h2 className="text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A]">
+                Confirmed Plan
+              </h2>
+              <p className="text-sm text-[#3E2F35]/70">Items the member has confirmed for their plan.</p>
+            </div>
+            {registrySummary.accepted.length ? (
+              <div className="space-y-3 text-sm text-[#3E2F35]/80">
+                {registrySummary.accepted.map((item) => (
+                  <div key={item.id} className="rounded-2xl bg-[#FFF9F5] p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
+                      <p className="text-base font-semibold text-[#3E2F35]">
+                        {item.title ?? item.product?.name ?? "Registry item"}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {item.addedByMentor ? <span className={chipClasses}>Suggested by you</span> : null}
+                        <span className={chipClasses}>Confirmed by member</span>
+                      </div>
+                    </div>
+                    <p className="mt-2 text-xs text-[#3E2F35]/60">{statusLabelForItem(item)}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-[#3E2F35]/70">No confirmed plan items yet.</p>
+            )}
+          </section>
+
+          <section className="space-y-3 rounded-[28px] bg-white/95 p-5 shadow-sm">
+            <div className="space-y-1">
+              <h2 className="text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A]">
+                Existing Registry (Reference Only)
+              </h2>
+              <p className="text-sm text-[#3E2F35]/70">
+                Members can share external registries for context. TMBC never imports or edits them.
+              </p>
+            </div>
+            {externalRegistries.length ? (
+              <div className="space-y-4">
+                {externalRegistries.map((registry) => (
+                  <div key={registry.id} className="rounded-2xl bg-[#FFF9F5] p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">
+                          {registry.provider}
+                        </p>
+                        <p className="mt-2 text-base font-semibold text-[#3E2F35]">
+                          {registry.title || "External registry"}
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <span className={chipClasses}>From existing registry</span>
+                        <span className={chipClasses}>Reference only</span>
+                      </div>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-3 text-xs text-[#A4556A]">
+                      {registry.url ? (
+                        <a href={registry.url} target="_blank" rel="noreferrer" className="hover:text-[#7C3B53]">
+                          Open registry
+                        </a>
+                      ) : null}
+                      {registry.documentUrl ? (
+                        <a
+                          href={registry.documentUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="hover:text-[#7C3B53]"
+                        >
+                          {registry.documentLabel || "Open upload"}
+                        </a>
+                      ) : null}
+                    </div>
+                    <div className="mt-4 space-y-2 text-sm text-[#3E2F35]/70">
+                      {registry.notes.length ? (
+                        registry.notes.map((note) => (
+                          <div key={note.id} className="rounded-xl bg-white/80 p-3">
+                            <p>{note.note}</p>
+                            <p className="mt-1 text-xs text-[#3E2F35]/60">
+                              {note.authorName || note.authorRole.toLowerCase()} · Shared with member ·{" "}
+                              {new Date(note.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                        ))
+                      ) : (
+                        <p>No mentor notes yet.</p>
+                      )}
+                    </div>
+                    <div className="mt-3 space-y-2">
+                      <textarea
+                        value={externalNotes[registry.id] ?? ""}
+                        onChange={(event) =>
+                          setExternalNotes((prev) => ({ ...prev, [registry.id]: event.target.value }))
+                        }
+                        rows={3}
+                        placeholder="Add planning context for this registry..."
+                        className="w-full rounded-2xl border border-[#E3C6D4] bg-white/90 p-3 text-sm text-[#3E2F35]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleExternalNote(registry.id)}
+                        className="rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A]"
+                      >
+                        Save note
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-[#3E2F35]/70">No external registries shared yet.</p>
             )}
           </section>
 
           <section className="space-y-4 rounded-[28px] bg-[#FFF9F5] p-5 shadow-sm">
             <div className="space-y-1">
               <h2 className="text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A]">
-                Send a suggestion
+                Propose for plan
               </h2>
               <p className="text-sm text-[#3E2F35]/70">
-                Mentor proposals are intentional drafts. Members decide what to accept.
+                Proposals are intentional drafts. Members decide what to confirm.
               </p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-3">
@@ -313,12 +551,12 @@ export default function MentorPlanPage() {
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">Product reference</label>
+                <label className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">Suggested option</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
-                  placeholder="Manual product name"
+                  placeholder="Describe the option"
                   className="w-full rounded-2xl border border-[#E3C6D4] bg-white/90 p-3 text-sm text-[#3E2F35]"
                 />
               </div>
@@ -362,7 +600,7 @@ export default function MentorPlanPage() {
                 disabled={saving}
                 className="w-full rounded-full bg-[#C8A1B4] px-5 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-white disabled:opacity-60"
               >
-                {saving ? "Sending..." : "Send suggestion"}
+                {saving ? "Sending..." : "Propose for plan"}
               </button>
             </form>
             <Link href="/dashboard/mentor/messages" className="text-xs text-[#A4556A] hover:text-[#7C3B53]">

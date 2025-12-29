@@ -4,6 +4,7 @@ import Link from "next/link";
 import { type ReactNode, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
+  Compass,
   Home,
   BookOpen,
   CalendarDays,
@@ -23,6 +24,7 @@ type NavItem = {
   label: string;
   href: string;
   icon?: React.ComponentType<LucideProps>;
+  disabled?: boolean;
 };
 
 const MEMBER_NAV_ITEMS: NavItem[] = [
@@ -55,28 +57,39 @@ const MEMBER_NAV_ITEMS: NavItem[] = [
 
 const MENTOR_NAV_ITEMS: NavItem[] = [
   {
-    label: "Home",
+    label: "Mentor Home",
     href: "/dashboard/mentor",
-    icon: Home,
+    icon: Compass,
   },
   {
     label: "Mentees",
-    href: "/dashboard/mentor/members",
+    href: "/dashboard/mentor/mentees",
     icon: Users,
   },
   {
-    label: "Suggestions",
-    href: "/dashboard/mentor/tasks",
+    label: "Workspace",
+    href: "/dashboard/mentor/workspace",
     icon: ClipboardCheck,
+    disabled: true,
   },
   {
-    label: "Calendar",
-    href: "/dashboard/mentor/events",
+    label: "Mentor Circles",
+    href: "/dashboard/mentor/circles",
     icon: CalendarDays,
   },
   {
+    label: "Messages",
+    href: "/dashboard/mentor/messages",
+    icon: MessageCircle,
+  },
+  {
+    label: "Content Studio",
+    href: "/dashboard/mentor/blog",
+    icon: BookOpen,
+  },
+  {
     label: "Insights",
-    href: "/dashboard/mentor/workspace",
+    href: "/dashboard/mentor/insights",
     icon: BarChart3,
   },
 ];
@@ -87,8 +100,8 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
     href: "/dashboard/admin",
   },
   {
-    label: "Overview",
-    href: "/dashboard/admin",
+    label: "Waitlist",
+    href: "/dashboard/admin/waitlist",
   },
   {
     label: "Members",
@@ -147,6 +160,18 @@ function PortalNavMenu({ items, onLogout }: DashboardNavProps) {
             {items.map((item) => {
               const isActive =
                 pathname === item.href || pathname?.startsWith(`${item.href}/`);
+              if (item.disabled) {
+                return (
+                  <div
+                    key={item.href}
+                    className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-[#3E2F35]/40"
+                    aria-disabled="true"
+                  >
+                    <span>{item.label}</span>
+                    <span className="text-xs uppercase tracking-[0.3em]">Select mentee</span>
+                  </div>
+                );
+              }
               return (
                 <Link
                   key={item.href}
@@ -191,6 +216,7 @@ export default function DashboardShell({
   // TMBC UX Canon:
   // Mobile-first. Calm. Contextual navigation.
   // No top navbar.
+  // TODO: If a mobile bottom nav is introduced, use Home | Mentees | Workspace | Messages | More.
   const navItems =
     role === "mentor"
       ? MENTOR_NAV_ITEMS

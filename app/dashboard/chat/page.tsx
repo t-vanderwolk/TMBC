@@ -89,7 +89,7 @@ export default function ChatPage() {
         <p className="text-sm uppercase tracking-[0.5em] text-tmMauve">Mentor Chat</p>
         <h1 className="text-3xl text-tmCharcoal">{mentorName}</h1>
         <p className="mt-2 text-sm text-tmCharcoal/70">
-          Keep everything in one warm thread—photos, approvals, pep talks. // TODO: Connect to realtime typing indicator
+          Keep everything in one warm thread—photos, approvals, pep talks.
         </p>
       </header>
 
@@ -99,7 +99,6 @@ export default function ChatPage() {
             <MessageCircle className="h-4 w-4 text-tmMauve" />
             Threads
           </div>
-          <p className="mt-1 text-xs text-tmCharcoal/60">// TODO: group by type + show read state from API</p>
           <div className="mt-4 space-y-4">
             {(['REGISTRY_REVIEW', 'MODULE_REVIEW', 'GENERAL'] as const).map((type) => (
               <div key={type}>
@@ -164,7 +163,7 @@ export default function ChatPage() {
                   </div>
                 ))}
                 {!messages.length && (
-                  <p className="text-xs text-tmCharcoal/60">// TODO: show typing indicator + empty state</p>
+                  <p className="text-xs text-tmCharcoal/60">No messages yet.</p>
                 )}
               </div>
               <div className="mt-4 flex items-center gap-3 rounded-2xl border border-tmBlush/50 bg-white/80 p-3">

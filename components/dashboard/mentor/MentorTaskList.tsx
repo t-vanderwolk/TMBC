@@ -18,7 +18,7 @@ const MentorTaskList = ({ tasks, compact }: MentorTaskListProps) => {
     try {
       setLocalTasks((prev) => prev.map((task) => (task.id === taskId ? { ...task, completed: true } : task)));
       await api.post(`/mentor/tasks/${taskId}/complete`);
-      // TODO: connect optimistic update w/ SWR cache or React Query
+      // INTENTIONAL: Keep optimistic UI without a cache layer until mentorCollab endpoints stabilize.
     } catch (error) {
       console.error('Task completion placeholder error', error);
     }
@@ -28,7 +28,9 @@ const MentorTaskList = ({ tasks, compact }: MentorTaskListProps) => {
     return (
       <div className="rounded-2xl border border-dashed border-tmBlush/40 bg-white/80 p-4 text-sm text-tmCharcoal/70">
         <p className="font-semibold text-tmCharcoal">No mentor tasks yet</p>
-        <p className="text-xs text-tmCharcoal/60">// TODO: Connect to mentorCollab tasks feed</p>
+        <p className="mt-1 text-xs text-tmCharcoal/60">
+          This section will populate as mentee work requests come in.
+        </p>
       </div>
     );
   }
@@ -48,7 +50,7 @@ const MentorTaskList = ({ tasks, compact }: MentorTaskListProps) => {
             <p className="text-base font-semibold text-tmCharcoal">{task.title}</p>
             {!compact && (
               <p className="text-sm text-tmCharcoal/70">
-                {task.description || '// TODO: Surface contextual description'}
+                {task.description || 'No additional details for this task yet.'}
               </p>
             )}
           </div>

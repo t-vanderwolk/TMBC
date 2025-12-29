@@ -6,10 +6,7 @@ import {
   getAllInvites,
   validateInvite as validateInviteService,
 } from '../services/invite.service';
-import { prisma } from '../../prisma/client';
 import { signToken } from '../utils/jwt';
-import { sendInviteEmail } from '../services/email.service';
-import { getOfficialSenderEmail } from '../utils/officialSender';
 
 type AuthedRequest = Request & { user?: { id: string; email?: string } };
 
@@ -47,33 +44,9 @@ export const generate = async (
 };
 
 export const sendInvite = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { code, email } = req.body;
-
-    if (!code || !email) {
-      return res.status(400).json({ message: 'Code and email are required' });
-    }
-
-    const invite = await validateInviteService(code);
-
-    await sendInviteEmail({
-      to: email,
-      code: invite.code,
-    });
-
-    const updatedInvite = await prisma.invite.update({
-      where: { id: invite.id },
-      data: { sentAt: new Date() },
-    });
-
-    console.info(
-      `[Admin Action] ${getOfficialSenderEmail()} sent invite ${invite.code} to ${email}`,
-    );
-
-    res.json({ success: true, invite: updatedInvite });
-  } catch (error) {
-    next(error);
-  }
+  return res.status(409).json({
+    message: 'Invite emails are only sent when an admin approves an invite request.',
+  });
 };
 
 export const listInvites = async (_req: Request, res: Response, next: NextFunction) => {

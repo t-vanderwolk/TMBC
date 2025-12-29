@@ -1,8 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies, headers } from "next/headers";
 
-import { approveInviteRequest, rejectInviteRequest } from "@/lib/services/server/inviteRequest.service";
 import { getUserOrThrow } from "@/lib/auth/getUser";
 
 const WAITLIST_PATH = "/dashboard/admin/waitlist";
@@ -16,12 +16,41 @@ const requireAdmin = async () => {
 };
 
 export async function approveWaitlistEntry(formData: FormData) {
-  const user = await requireAdmin();
+  await requireAdmin();
   const requestId = formData.get("requestId")?.toString();
   if (!requestId) {
     throw new Error("Request id is required");
   }
-  await approveInviteRequest(requestId, user.id);
+
+  const headerList = headers();
+  const host = headerList.get("host");
+  const protocol = headerList.get("x-forwarded-proto") ?? "http";
+  if (!host) {
+    throw new Error("Unable to determine host for approval request");
+  }
+
+  const cookieHeader = cookies()
+    .getAll()
+    .map(({ name, value }) => `${name}=${value}`)
+    .join("; ");
+
+  const response = await fetch(
+    `${protocol}://${host}/api/admin/invite-requests/${requestId}/approve`,
+    {
+      method: "POST",
+      headers: {
+        cookie: cookieHeader,
+      },
+      cache: "no-store",
+    },
+  );
+
+  if (!response.ok) {
+    const payload = await response.json().catch(() => null);
+    const message =
+      (payload as { error?: string })?.error ?? "Unable to approve invite request";
+    throw new Error(message);
+  }
   revalidatePath(WAITLIST_PATH);
 }
 
@@ -31,6 +60,35 @@ export async function rejectWaitlistEntry(formData: FormData) {
   if (!requestId) {
     throw new Error("Request id is required");
   }
-  await rejectInviteRequest(requestId);
+
+  const headerList = headers();
+  const host = headerList.get("host");
+  const protocol = headerList.get("x-forwarded-proto") ?? "http";
+  if (!host) {
+    throw new Error("Unable to determine host for rejection request");
+  }
+
+  const cookieHeader = cookies()
+    .getAll()
+    .map(({ name, value }) => `${name}=${value}`)
+    .join("; ");
+
+  const response = await fetch(
+    `${protocol}://${host}/api/admin/invite-requests/${requestId}/reject`,
+    {
+      method: "POST",
+      headers: {
+        cookie: cookieHeader,
+      },
+      cache: "no-store",
+    },
+  );
+
+  if (!response.ok) {
+    const payload = await response.json().catch(() => null);
+    const message =
+      (payload as { error?: string })?.error ?? "Unable to reject invite request";
+    throw new Error(message);
+  }
   revalidatePath(WAITLIST_PATH);
 }

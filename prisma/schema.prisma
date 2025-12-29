@@ -59,6 +59,8 @@ model User {
   compareEvents          CompareEvent[]
   mentorSuggestionsAuthored MentorProductSuggestion[] @relation("MentorSuggestions")
   mentorSuggestionsReceived MentorProductSuggestion[] @relation("MemberSuggestions")
+  externalRegistries    ExternalRegistry[]    @relation("ExternalRegistryOwner")
+  externalRegistryNotes ExternalRegistryNote[] @relation("ExternalRegistryNoteAuthor")
   onboardingProfile      OnboardingProfile?
   profile                Profile?
   registryConflicts      RegistryConflict[]
@@ -126,6 +128,7 @@ model BlogPost {
   affiliateLinks   BlogAffiliateLink[]
   engagementEvents BlogEngagementEvent[]
   affiliateEvents  BlogAffiliateEvent[]
+  highlights       BlogHighlight[]
 
   @@index([status, isAffiliate])
   @@index([publishedAt])
@@ -162,6 +165,40 @@ model BlogEngagementEvent {
   blogPost  BlogPost           @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
 
   @@index([blogPostId])
+  @@index([event])
+  @@index([createdAt])
+}
+
+model BlogHighlight {
+  id         String   @id @default(cuid())
+  blogPostId String
+  productId  String?
+  brandName  String?
+  note       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  blogPost BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  product  Product? @relation(fields: [productId], references: [id])
+  events   BlogHighlightEvent[]
+
+  @@index([blogPostId])
+  @@index([productId])
+  @@index([brandName])
+}
+
+model BlogHighlightEvent {
+  id          String                @id @default(cuid())
+  blogPostId  String
+  highlightId String
+  event       BlogHighlightEventType
+  createdAt   DateTime              @default(now())
+
+  blogPost  BlogPost      @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  highlight BlogHighlight @relation(fields: [highlightId], references: [id], onDelete: Cascade)
+
+  @@index([blogPostId])
+  @@index([highlightId])
   @@index([event])
   @@index([createdAt])
 }
@@ -301,6 +338,7 @@ model Product {
   registryItems  RegistryItem[]
   mentorSuggestions MentorProductSuggestion[]
   mentorNotes    MentorNote[]
+  blogHighlights BlogHighlight[]
 }
 
 model RegistryItem {
@@ -379,7 +417,7 @@ model RegistryItemBlogInfluence {
   @@index([postSlug])
 }
 
-/// TODO: Affiliate click tracking
+/// INTENTIONAL: Affiliate click tracking is deferred until the admin analytics pipeline is finalized.
 model AffiliateLink {
   id           String           @id @default(cuid())
   productId    String
@@ -394,8 +432,8 @@ model AffiliateLink {
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
-/// TODO: Conversion webhooks
-/// TODO: International storefront routing
+/// INTENTIONAL: Conversion webhooks are deferred to avoid partial attribution logic.
+/// INTENTIONAL: International storefront routing will be added with localized catalog support.
 
 model MentorNote {
   id        String         @id @default(cuid())
@@ -432,6 +470,38 @@ model MentorProductSuggestion {
   @@index([mentorId])
   @@index([memberId])
   @@index([category])
+}
+
+model ExternalRegistry {
+  id            String   @id @default(cuid())
+  memberId      String
+  provider      String
+  title         String?
+  url           String?
+  documentUrl   String?
+  documentLabel String?
+  referenceOnly Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  member User @relation("ExternalRegistryOwner", fields: [memberId], references: [id], onDelete: Cascade)
+  notes  ExternalRegistryNote[]
+
+  @@index([memberId])
+}
+
+model ExternalRegistryNote {
+  id         String   @id @default(cuid())
+  registryId String
+  authorId   String
+  note       String
+  createdAt  DateTime @default(now())
+
+  registry ExternalRegistry @relation(fields: [registryId], references: [id], onDelete: Cascade)
+  author   User             @relation("ExternalRegistryNoteAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([registryId])
+  @@index([authorId])
 }
 
 model AcademyModule {
@@ -600,8 +670,8 @@ model ConversationMessage {
   id             String       @id @default(cuid())
   content        String
   createdAt      DateTime     @default(now())
-  readAt         DateTime?    /// TODO: honor read receipts in future UX.
-  isSystem       Boolean      @default(false) /// TODO: flag concierge/system notes for later workflows.
+  readAt         DateTime?    /// INTENTIONAL: Read receipts will be honored once chat UX supports them end-to-end.
+  isSystem       Boolean      @default(false) /// INTENTIONAL: System notes are reserved for future concierge workflows.
 
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id])
@@ -834,6 +904,10 @@ enum BlogEngagementType {
   VIEW
   READ_75
   SHARE
+}
+
+enum BlogHighlightEventType {
+  CLICK
 }
 
 enum AffiliatePosition {

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { adminInviteApi, inviteApi } from '@/lib/api';
+import { adminInviteApi } from '@/lib/api';
 import { Auth } from '@/lib/auth';
 import { routeForRole } from '@/lib/auth/routeForRole';
 
@@ -28,7 +28,6 @@ const AdminInvitesPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [sending, setSending] = useState(false);
 
   const resolveStatus = (invite: InviteEntry) => {
     if (invite.used) return 'approved';
@@ -74,27 +73,6 @@ const AdminInvitesPage = () => {
     } catch (err: any) {
       const message = err?.response?.data?.message || 'Unable to generate invite.';
       setError(message);
-    }
-  };
-
-  const handleSendEmail = async (inviteCode: string, inviteEmail: string | undefined) => {
-    if (!inviteEmail) {
-      setError('Invite does not have an email attached.');
-      return;
-    }
-
-    try {
-      setSending(true);
-      const response = await adminInviteApi.send(inviteCode, inviteEmail);
-      if (response.data?.invite) {
-        setInvites((prev) => prev.map((invite) => (invite.id === response.data.invite.id ? response.data.invite : invite)));
-      }
-      setSuccess('Invite email sent.');
-    } catch (err: any) {
-      const message = err?.response?.data?.message || 'Unable to send invite email.';
-      setError(message);
-    } finally {
-      setSending(false);
     }
   };
 
@@ -202,15 +180,7 @@ const AdminInvitesPage = () => {
                 <td className="px-6 py-4">
                   {invite.sentAt ? new Date(invite.sentAt).toLocaleDateString() : '—'}
                 </td>
-                <td className="px-6 py-4 text-right">
-                  <button
-                    className="btn-secondary px-5 py-2 text-xs disabled:opacity-60"
-                    disabled={sending}
-                    onClick={() => handleSendEmail(invite.code, invite.email)}
-                  >
-                    Send Email
-                  </button>
-                </td>
+                <td className="px-6 py-4 text-right">—</td>
               </tr>
             ))}
           </tbody>

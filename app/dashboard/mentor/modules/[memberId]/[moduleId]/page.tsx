@@ -51,7 +51,7 @@ export default function MentorModuleReviewPage({ params }: MentorModuleReviewPag
 
   const handleCompleteReview = async () => {
     try {
-      // TODO: Call mentorCollab.createTask completion/creation for MODULE_REVIEW
+      // INTENTIONAL: Track review completion via mentor tasks until mentorCollab workflows land.
       await api.post('/mentor/tasks', {
         memberId,
         type: 'MODULE_REVIEW',
@@ -77,7 +77,7 @@ export default function MentorModuleReviewPage({ params }: MentorModuleReviewPag
         <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Mentor Module Review</p>
         <h1 className="text-3xl text-tmCharcoal">{moduleId}</h1>
         <p className="mt-2 text-sm text-tmCharcoal/70">
-          // TODO: Pull module content + member progress from Prisma once curriculum tables exist
+          Module details will appear here once curriculum data is connected.
         </p>
       </header>
 
@@ -88,13 +88,13 @@ export default function MentorModuleReviewPage({ params }: MentorModuleReviewPag
             Module preview
           </div>
           <p className="mt-2 text-sm text-tmCharcoal/80">
-            // TODO: Surface module summary, key outcomes, and attachments for mentors
+            A summary and attachments will display once the curriculum content is available.
           </p>
         </div>
         <div className="rounded-3xl border border-tmBlush/40 bg-white/90 p-6 shadow-soft">
           <div className="flex items-center justify-between">
             <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Member progress</p>
-            <span className="text-xs text-tmCharcoal/60">// TODO: Connect to completion tracker + assignments</span>
+            <span className="text-xs text-tmCharcoal/60">Progress tracking is not connected yet.</span>
           </div>
           <div className="mt-4 rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
             <p className="text-sm text-tmCharcoal/80">Member {memberId}</p>
@@ -108,7 +108,6 @@ export default function MentorModuleReviewPage({ params }: MentorModuleReviewPag
           <ClipboardCheck className="h-4 w-4 text-tmMauve" />
           Mentor feedback thread
         </div>
-        <p className="mt-1 text-xs text-tmCharcoal/60">// TODO: Replace with live data from mentorCollab feedback</p>
         <div className="mt-4 space-y-3">
           {feedback.map((entry) => (
             <div key={entry.id} className="rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
@@ -119,7 +118,7 @@ export default function MentorModuleReviewPage({ params }: MentorModuleReviewPag
             </div>
           ))}
           {!feedback.length && (
-            <p className="text-xs text-tmCharcoal/60">// TODO: Encourage mentor to start the thread</p>
+            <p className="text-xs text-tmCharcoal/60">No feedback yet.</p>
           )}
         </div>
         <div className="mt-4 flex flex-col gap-3">

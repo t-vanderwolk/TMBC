@@ -3,7 +3,11 @@ import { WorkbookEntryType } from "@prisma/client";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { prisma } from "@/lib/prisma";
-import { listRegistryItems } from "@/lib/services/server/registry.service";
+import {
+  listMentorSuggestionsForMember,
+  listRegistryItems,
+} from "@/lib/services/server/registry.service";
+import { listExternalRegistriesForMember } from "@/lib/services/server/externalRegistry.service";
 import { OnboardingIntelligenceService } from "@/lib/services/server/onboardingIntelligence.service";
 
 const requireMentor = async () => {
@@ -35,13 +39,16 @@ export async function GET(
       return NextResponse.json({ error: "Member not found." }, { status: 404 });
     }
 
-    const [registryItems, onboarding, workbookEntries] = await Promise.all([
+    const [registryItems, onboarding, workbookEntries, mentorSuggestions, externalRegistries] =
+      await Promise.all([
       listRegistryItems(member.id),
       OnboardingIntelligenceService.getLatestQuestionnaire(member.id),
       prisma.workbookEntry.findMany({
         where: { userId: member.id, type: WorkbookEntryType.REFLECTION },
         orderBy: { updatedAt: "desc" },
       }),
+      listMentorSuggestionsForMember(member.id),
+      listExternalRegistriesForMember(member.id),
     ]);
 
     const moduleIds = Array.from(new Set(workbookEntries.map((entry) => entry.moduleId)));
@@ -70,6 +77,8 @@ export async function GET(
       onboarding,
       workbook,
       registryItems,
+      mentorSuggestions,
+      externalRegistries,
     });
   } catch (error) {
     return handleError(error);

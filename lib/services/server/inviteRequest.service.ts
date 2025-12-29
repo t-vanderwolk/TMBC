@@ -1,9 +1,7 @@
 import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
-import { sendInviteEmail } from "@/lib/services/server/email.service";
 import { generateInviteCode } from "@/lib/utils/server/inviteCode";
-import { getOfficialSenderEmail } from "@/lib/utils/server/officialSender";
 
 export type InviteRequestRow = {
   id: string;
@@ -45,12 +43,8 @@ export const approveInviteRequest = async (id: string, approverId: string) => {
     throw new Error("Invite request not found");
   }
 
-  if (existing.status === "approved" && existing.inviteCode) {
-    return {
-      request: existing,
-      inviteCode: existing.inviteCode,
-      emailSent: false,
-    };
+  if (existing.status === "approved") {
+    throw new Error("Invite request already approved");
   }
 
   const isUniqueConstraintError = (error: unknown) =>
@@ -92,25 +86,9 @@ export const approveInviteRequest = async (id: string, approverId: string) => {
     throw new Error("Unable to generate a unique invite code");
   }
 
-  let emailSent = false;
-  try {
-    await sendInviteEmail({
-      to: existing.email,
-      code: inviteCodeRow.code,
-    });
-    emailSent = true;
-  } catch (error) {
-    console.error("Failed to send invite email", error);
-  }
-
-  console.info(
-    `[Admin Action] ${getOfficialSenderEmail()} approved invite request ${updatedRequest.id} for ${existing.email}`,
-  );
-
   return {
     request: updatedRequest,
     inviteCode: inviteCodeRow.code,
-    emailSent,
   };
 };
 

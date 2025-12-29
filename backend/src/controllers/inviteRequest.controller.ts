@@ -6,6 +6,7 @@ import { generateInviteCode } from '../utils/inviteCode';
 import { generateToken, verifyToken } from '../utils/jwt';
 import { hashPassword } from '../utils/password';
 import { getOfficialSenderEmail } from '../utils/officialSender';
+import { sendInviteEmail } from '../services/email.service';
 
 export async function submitInviteRequest(req: Request, res: Response, next: NextFunction) {
   try {
@@ -32,7 +33,16 @@ export async function adminApproveInvite(req: Request, res: Response, next: Next
     const isUniqueConstraintError = (error: unknown) =>
       error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';
 
-    let updated = null;
+    const existing = await prisma.inviteRequest.findUnique({ where: { id: requestId } });
+    if (!existing) {
+      return res.status(404).json({ error: 'Invite request not found' });
+    }
+
+    if (existing.status === 'approved') {
+      return res.status(409).json({ error: 'Invite request already approved' });
+    }
+
+    let updated: typeof existing | null = null;
 
     for (let attempt = 0; attempt < 5; attempt += 1) {
       const code = generateInviteCode();
@@ -52,6 +62,17 @@ export async function adminApproveInvite(req: Request, res: Response, next: Next
 
     if (!updated) {
       throw new Error('Unable to generate a unique invite code');
+    }
+
+    // Approval must include a successful invite email send; otherwise we roll back the approval.
+    try {
+      await sendInviteEmail({ to: updated.email, code: updated.inviteCode! });
+    } catch (error) {
+      await prisma.inviteRequest.update({
+        where: { id: updated.id },
+        data: { status: 'pending', inviteCode: null, approvedById: null },
+      });
+      throw error;
     }
 
     console.info(

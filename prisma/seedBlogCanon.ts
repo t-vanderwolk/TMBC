@@ -3,7 +3,7 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-const PLACEHOLDER_URL = 'https://example.com/affiliate/placeholder';
+const DEFAULT_DESTINATION_URL = 'https://www.taylormadebaby.co';
 const SUPPORTED_NETWORKS = new Set(['CJ', 'IMPACT', 'AWIN', 'SHAREASALE', 'MYREGISTRY', 'DIRECT']);
 
 const blogCanon = [
@@ -356,7 +356,7 @@ const buildAffiliateLinks = (post: SeedBlogPost) => {
       network,
       label,
       position: 'END_CARD',
-      destinationUrl: PLACEHOLDER_URL,
+      destinationUrl: DEFAULT_DESTINATION_URL,
       isPrimary: index === 0,
     });
   });

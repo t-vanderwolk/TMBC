@@ -16,7 +16,6 @@ const MentorFeedbackCard = ({ feedback }: MentorFeedbackCardProps) => {
         <MessageSquare className="h-4 w-4 text-tmMauve" />
         Mentor Feedback
       </div>
-      <p className="mt-1 text-xs text-tmCharcoal/60">// TODO: Replace mock data with feed from mentorCollab service</p>
       <p className="mt-3 text-lg font-semibold text-tmCharcoal">{subtitle}</p>
       <p className="mt-2 text-sm text-tmCharcoal/80">{feedback.message}</p>
       <p className="mt-3 text-xs text-tmCharcoal/50">

@@ -1,8 +1,3 @@
-// TODO: hook to live Prisma data
-// TODO: add loading + error states
-// TODO: refine design to match TMBC brand
-// TODO: connect this CTA to Zoom session
-// TODO: add empty-state UX
 type CalendarGridEvent = {
   date: string;
   title: string;
@@ -87,7 +82,9 @@ export function CalendarGrid({ month = new Date(), events = [] }: CalendarGridPr
           );
         })}
       </div>
-      <p className="text-xs text-tmCharcoal/50">// TODO: add empty-state UX</p>
+      {events.length === 0 && (
+        <p className="text-xs text-tmCharcoal/50">No events scheduled yet.</p>
+      )}
     </div>
   );
 }

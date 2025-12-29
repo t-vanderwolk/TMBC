@@ -37,7 +37,6 @@ export default function RegistryActionMenu({ className = "" }: RegistryActionMen
                 className="w-full rounded-2xl bg-[#FFFBF9] px-3 py-2 text-left text-sm text-[#3E2F35]/80 transition hover:bg-[#FFF5F0]"
                 onClick={() => {
                   setOpen(false);
-                  // TODO: wire up action handlers (move, purchase, remove, note)
                 }}
               >
                 {action}

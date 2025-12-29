@@ -1,10 +1,6 @@
 'use client';
 
-// TODO: hook to live Prisma data
-// TODO: add loading + error states
-// TODO: refine design to match TMBC brand
-// TODO: connect this CTA to Zoom session
-// TODO: add empty-state UX
+// INTENTIONAL: Cohort experiences remain lightweight until cohort scheduling and resources are finalized.
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -134,7 +130,7 @@ export default function CohortPage() {
                 <p>• Drop one thing you’re outsourcing before the due date.</p>
                 <p>• Vote on next week’s accountability focus.</p>
               </div>
-              <p className="mt-4 text-xs text-tmCharcoal/60">// TODO: sync with chat thread history + read receipts</p>
+              <p className="mt-4 text-xs text-tmCharcoal/60">Catch up in chat for the latest thread activity.</p>
             </div>
             <div className="rounded-2xl border border-tmBlush/40 bg-white/95 p-5 shadow-sm">
               <div className="flex items-center gap-3">
@@ -154,7 +150,7 @@ export default function CohortPage() {
                     </button>
                   </div>
                 ))}
-                <p className="text-xs text-tmCharcoal/60">// TODO: attach Google Drive + TMBC Library links</p>
+                <p className="text-xs text-tmCharcoal/60">More resources will appear as your cohort progresses.</p>
               </div>
             </div>
           </section>

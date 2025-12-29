@@ -94,10 +94,17 @@ export default function RegistryPage() {
   const [loading, setLoading] = useState(true);
   const [statusMessage, setStatusMessage] = useState("");
   const [decisionBusyId, setDecisionBusyId] = useState<string | null>(null);
+  const [suggestionBusyId, setSuggestionBusyId] = useState<string | null>(null);
   const [compareSelection, setCompareSelection] = useState<string[]>([]);
   const [compareError, setCompareError] = useState("");
   const [comparePayload, setComparePayload] = useState<ComparePayload | null>(null);
   const [compareOpen, setCompareOpen] = useState(false);
+  const [externalProvider, setExternalProvider] = useState("");
+  const [externalTitle, setExternalTitle] = useState("");
+  const [externalUrl, setExternalUrl] = useState("");
+  const [externalDocumentUrl, setExternalDocumentUrl] = useState("");
+  const [externalDocumentLabel, setExternalDocumentLabel] = useState("");
+  const [externalSaving, setExternalSaving] = useState(false);
 
   const loadRegistry = useCallback(async () => {
     setLoading(true);
@@ -117,6 +124,8 @@ export default function RegistryPage() {
   }, [loadRegistry]);
 
   const items = (registry?.items ?? []) as PlanItem[];
+  const mentorSuggestions = registry?.mentorSuggestions ?? [];
+  const externalRegistries = registry?.externalRegistries ?? [];
 
   const suggestedItems = items.filter(
     (item) => item.addedByMentor && item.decisionStatus !== "ACCEPTED" && item.status !== "REMOVED",
@@ -141,6 +150,71 @@ export default function RegistryPage() {
     },
     [loadRegistry],
   );
+
+  const handleSuggestionAccept = useCallback(
+    async (suggestionId: string) => {
+      try {
+        setSuggestionBusyId(suggestionId);
+        setStatusMessage("");
+        const response = await fetch(`/api/registry/suggestions/${suggestionId}/accept`, {
+          method: "POST",
+          cache: "no-store",
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data?.error || "Unable to accept suggestion.");
+        }
+        await loadRegistry();
+      } catch (error) {
+        setStatusMessage(error instanceof Error ? error.message : "Unable to accept suggestion.");
+      } finally {
+        setSuggestionBusyId(null);
+      }
+    },
+    [loadRegistry],
+  );
+
+  const handleExternalRegistrySave = async () => {
+    setStatusMessage("");
+    if (!externalProvider.trim()) {
+      setStatusMessage("Choose a registry provider.");
+      return;
+    }
+    if (!externalUrl.trim() && !externalDocumentUrl.trim()) {
+      setStatusMessage("Add a registry link or upload URL.");
+      return;
+    }
+
+    try {
+      setExternalSaving(true);
+      const response = await fetch("/api/registry/external", {
+        method: "POST",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          provider: externalProvider,
+          title: externalTitle,
+          url: externalUrl,
+          documentUrl: externalDocumentUrl,
+          documentLabel: externalDocumentLabel,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.error || "Unable to save external registry.");
+      }
+      setExternalProvider("");
+      setExternalTitle("");
+      setExternalUrl("");
+      setExternalDocumentUrl("");
+      setExternalDocumentLabel("");
+      await loadRegistry();
+    } catch (error) {
+      setStatusMessage(error instanceof Error ? error.message : "Unable to save external registry.");
+    } finally {
+      setExternalSaving(false);
+    }
+  };
 
   const openCompare = useCallback(
     (itemId: string) => {
@@ -216,13 +290,202 @@ export default function RegistryPage() {
         </section>
       ) : null}
 
-      {!loading && !items.length ? (
+      {!loading && !items.length && !mentorSuggestions.length ? (
         <section className="rounded-[28px] bg-white/95 p-5 shadow-sm">
           <p className="text-sm text-[#3E2F35]/70">
             Your mentor will start sending suggestions once your onboarding context is reviewed.
           </p>
         </section>
       ) : null}
+
+      <section className="space-y-4 rounded-[28px] bg-white/95 p-5 shadow-sm">
+        <div className="space-y-1">
+          <h2 className="text-sm font-semibold uppercase tracking-[0.35em] text-[#A4556A]">
+            Existing registry (Reference Only)
+          </h2>
+          <p className="text-sm text-[#3E2F35]/70">
+            Share links or uploads from MyRegistry, Babylist, or other platforms. TMBC never edits or imports these.
+          </p>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2">
+          <div className="space-y-2">
+            <label className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">Provider</label>
+            <select
+              value={externalProvider}
+              onChange={(event) => setExternalProvider(event.target.value)}
+              className="w-full rounded-2xl border border-[#E3C6D4] bg-white/90 p-3 text-sm text-[#3E2F35]"
+            >
+              <option value="">Choose provider</option>
+              <option value="MyRegistry">MyRegistry</option>
+              <option value="Babylist">Babylist</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">Title</label>
+            <input
+              value={externalTitle}
+              onChange={(event) => setExternalTitle(event.target.value)}
+              placeholder="Optional title"
+              className="w-full rounded-2xl border border-[#E3C6D4] bg-white/90 p-3 text-sm text-[#3E2F35]"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">Registry link</label>
+            <input
+              value={externalUrl}
+              onChange={(event) => setExternalUrl(event.target.value)}
+              placeholder="https://"
+              className="w-full rounded-2xl border border-[#E3C6D4] bg-white/90 p-3 text-sm text-[#3E2F35]"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">Upload link</label>
+            <input
+              value={externalDocumentUrl}
+              onChange={(event) => setExternalDocumentUrl(event.target.value)}
+              placeholder="PDF or photo link"
+              className="w-full rounded-2xl border border-[#E3C6D4] bg-white/90 p-3 text-sm text-[#3E2F35]"
+            />
+          </div>
+          <div className="space-y-2 md:col-span-2">
+            <label className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">Upload label</label>
+            <input
+              value={externalDocumentLabel}
+              onChange={(event) => setExternalDocumentLabel(event.target.value)}
+              placeholder="Optional label for the upload"
+              className="w-full rounded-2xl border border-[#E3C6D4] bg-white/90 p-3 text-sm text-[#3E2F35]"
+            />
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={handleExternalRegistrySave}
+          disabled={externalSaving}
+          className="rounded-full bg-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white disabled:opacity-70"
+        >
+          {externalSaving ? "Saving..." : "Save reference"}
+        </button>
+
+        {externalRegistries.length ? (
+          <div className="space-y-3">
+            {externalRegistries.map((external) => (
+              <div key={external.id} className="rounded-2xl bg-[#FFF9F5] p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">
+                      {external.provider}
+                    </p>
+                    <p className="mt-2 text-base font-semibold text-[#3E2F35]">
+                      {external.title || "External registry"}
+                    </p>
+                  </div>
+                  <span className="text-[0.6rem] uppercase tracking-[0.35em] text-[#A4556A]">
+                    Reference Only
+                  </span>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-3 text-xs text-[#A4556A]">
+                  {external.url ? (
+                    <a href={external.url} target="_blank" rel="noreferrer" className="hover:text-[#7C3B53]">
+                      Open registry
+                    </a>
+                  ) : null}
+                  {external.documentUrl ? (
+                    <a
+                      href={external.documentUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="hover:text-[#7C3B53]"
+                    >
+                      {external.documentLabel || "Open upload"}
+                    </a>
+                  ) : null}
+                </div>
+                {external.notes.length ? (
+                  <div className="mt-3 space-y-2 text-sm text-[#3E2F35]/70">
+                    {external.notes.map((note) => (
+                      <div key={note.id} className="rounded-xl bg-white/80 p-3">
+                        <p>{note.note}</p>
+                        <p className="mt-1 text-xs text-[#3E2F35]/60">
+                          {note.authorName || note.authorRole.toLowerCase()} ·{" "}
+                          {new Date(note.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-3 text-sm text-[#3E2F35]/70">No mentor notes yet.</p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-[#3E2F35]/70">No external registries added yet.</p>
+        )}
+      </section>
+
+      {!!mentorSuggestions.length && (
+        <section className="space-y-4 rounded-[28px] bg-[#FFF9F5] p-5 shadow-sm">
+          <div className="space-y-1">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.35em] text-[#A4556A]">
+              Mentor suggestions
+            </h2>
+            <p className="text-sm text-[#3E2F35]/70">
+              Suggested products with mentor context. Decide when you are ready.
+            </p>
+          </div>
+          <div className="space-y-3">
+            {mentorSuggestions.map((suggestion) => (
+              <article key={suggestion.id} className="rounded-2xl bg-white/95 p-4 shadow-sm">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">
+                      {suggestion.category}
+                    </p>
+                    <h3 className="mt-2 text-lg font-semibold text-[#3E2F35]">
+                      {suggestion.productName}
+                    </h3>
+                    {suggestion.productBrand ? (
+                      <p className="text-xs uppercase tracking-[0.3em] text-[#A4556A]">
+                        {suggestion.productBrand}
+                      </p>
+                    ) : null}
+                  </div>
+                  <span className="text-[0.6rem] uppercase tracking-[0.35em] text-[#A4556A]">
+                    Suggested
+                  </span>
+                </div>
+                <p className="mt-2 text-sm text-[#3E2F35]/70">
+                  Mentor context: {suggestion.note ?? "Mentor context incoming."}
+                </p>
+                <div className="mt-4 space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => handleSuggestionAccept(suggestion.id)}
+                    disabled={suggestionBusyId === suggestion.id}
+                    className="w-full rounded-full bg-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white disabled:opacity-70"
+                  >
+                    {suggestionBusyId === suggestion.id ? "Saving..." : "Accept"}
+                  </button>
+                  <div className="flex items-center justify-between text-xs text-[#A4556A]">
+                    <a
+                      href={`/api/registry/suggestions/${suggestion.id}/link`}
+                      className="hover:text-[#7C3B53]"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View product
+                    </a>
+                    <Link href="/dashboard/member/messages" className="hover:text-[#7C3B53]">
+                      Ask your mentor
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       {!!suggestedItems.length && (
         <section className="space-y-4 rounded-[28px] bg-[#FFF9F5] p-5 shadow-sm">

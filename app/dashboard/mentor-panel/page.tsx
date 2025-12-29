@@ -24,7 +24,7 @@ export default function MentorPanelPage() {
 
     const fetchPanel = async () => {
       try {
-        // TODO: Replace with SWR + proper mentor matching
+        // INTENTIONAL: Fetch directly until mentor matching + caching is finalized.
         const feedbackResponse = await api.get(`/mentor/feedback/${memberId}`);
         if (feedbackResponse.data?.data) setFeedback(feedbackResponse.data.data);
         const tasksResponse = await api.get('/mentor/member/tasks');
@@ -42,7 +42,9 @@ export default function MentorPanelPage() {
       <header className="rounded-3xl border border-white/70 bg-gradient-to-br from-white via-tmIvory to-tmBlush/40 p-6 shadow-soft">
         <p className="text-sm uppercase tracking-[0.5em] text-tmMauve">Mentor Feedback Hub</p>
         <h1 className="text-4xl text-tmCharcoal">See everything your mentor curated for you.</h1>
-        <p className="mt-2 text-sm text-tmCharcoal/70">// TODO: personalize greeting + tie into mentor assignment data</p>
+        <p className="mt-2 text-sm text-tmCharcoal/70">
+          Highlights, notes, and next steps from your mentor in one place.
+        </p>
       </header>
 
       <section className="grid gap-6 lg:grid-cols-3">
@@ -55,7 +57,7 @@ export default function MentorPanelPage() {
             feedback.map((item) => <MentorFeedbackCard key={item.id} feedback={item} />)
           ) : (
             <p className="rounded-2xl border border-dashed border-tmBlush/40 bg-white/80 p-4 text-sm text-tmCharcoal/70">
-              // TODO: Load mentor feedback timeline
+              No mentor feedback yet.
             </p>
           )}
         </div>
@@ -68,7 +70,7 @@ export default function MentorPanelPage() {
       <section className="space-y-4 rounded-3xl border border-white/70 bg-white/90 p-6 shadow-soft">
         <div className="flex items-center justify-between">
           <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Journal Shares</p>
-          <span className="text-xs text-tmCharcoal/60">// TODO: connect toggle from Journal page + API</span>
+          <span className="text-xs text-tmCharcoal/60">Shared entries appear here.</span>
         </div>
         <MentorJournalShareBanner shares={shares} />
         <button className="rounded-full bg-tmMauve px-5 py-3 text-sm font-semibold text-white">

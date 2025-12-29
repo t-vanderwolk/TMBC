@@ -1,123 +1,244 @@
 import Link from "next/link";
 
-const membershipPerks = [
+const membershipPillars = [
   {
-    title: "Mentor-led planning",
-    description:
-      "Real humans guide the plan, explain the why, and help you sort what matters now.",
+    title: "Learn",
+    items: [
+      "Academy journeys (Nursery, Gear, Postpartum)",
+      "Guided reflections and workbooks",
+      "Community learning spaces",
+    ],
   },
   {
-    title: "Shared decision map",
-    description:
-      "A calm space to organize priorities and decisions without pressure to move fast.",
+    title: "Plan",
+    items: [
+      "Registry activation and organization",
+      "Mentor-guided decisions",
+      "Ongoing updates (not one-time lists)",
+    ],
   },
   {
-    title: "Mentor messaging",
-    description:
-      "Ask questions, share context, and get thoughtful replies without the noise.",
-  },
-  {
-    title: "Community & circles",
-    description:
-      "Small groups, mentor check-ins, and honest conversations that feel human.",
-  },
-  {
-    title: "Advocacy over sales",
-    description:
-      "We help you decide what fits your life, and we're fine saying \"skip it.\"",
+    title: "Connect",
+    items: [
+      "Direct mentor messaging",
+      "Circles & events",
+      "Shared learning — not forums",
+    ],
   },
 ];
 
-const faqs = [
+const pathwaySteps = [
   {
-    question: "Do I have to buy anything through TMBC?",
-    answer:
-      "No. We don't sell products. Mentors help you weigh options, and you decide what's right.",
+    title: "Member",
+    items: [
+      "Learns through the Academy",
+      "Plans registry with guidance",
+      "Participates in community",
+    ],
   },
   {
-    question: "Can my partner or co-parent join too?",
-    answer:
-      "Yes, they can join the community, the mentor chats, and the registry. Invite them in the intake form.",
+    title: "Experienced Member",
+    items: [
+      "Shares reflections",
+      "Supports discussions",
+      "Builds confidence",
+    ],
   },
   {
-    question: "What if I already have a registry elsewhere?",
-    answer:
-      "We can work with what you already have and help you sort what stays, what waits, and what can go.",
+    title: "Mentor (Invite + Certification)",
+    items: [
+      "Completes Taylor-Made Baby Academy certification",
+      "Supports new members",
+      "Hosts events and curates guidance",
+    ],
   },
+];
+
+const mentorCapabilities = [
+  "One-on-one guidance",
+  "Group circles",
+  "Educational content",
+  "Registry support",
+];
+
+const platformSupport = [
+  "Tools and templates",
+  "Admin moderation",
+  "Editorial review",
+  "Compliance handling",
+];
+
+const inviteReasons = [
+  "Keeps mentor ratios healthy",
+  "Preserves quality conversations",
+  "Allows intentional growth",
 ];
 
 export default function MembershipPage() {
   return (
     <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
       <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
-        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Membership</p>
+        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+          Membership
+        </p>
         <h1 className="mt-3 font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-          An invite-only membership for parents who want human guidance, not noise.
+          A Member-to-Mentor Ecosystem for Thoughtful Baby Planning
         </h1>
         <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Mentors, steady planning, and a calm community keep your path clear. Learn · Plan · Connect with people who keep the tone warm, witty, and real.
+          Learn with support. Plan with clarity. Grow into mentorship — if and when it feels right.
+        </p>
+        <p className="mt-3 text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
+          Editorial-first guidance · Invite-only access · Transparent partner disclosures
         </p>
         <div className="mt-6 flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
           <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
-            Request Invite
+            Request an Invite
           </Link>
           <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
-            How It Works
+            How mentorship works
           </Link>
         </div>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="flex flex-col gap-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">What you get</p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">A calm plan, shaped together</h2>
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+            What membership means
+          </p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+            Membership is your foundation — not your finish line.
+          </h2>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {membershipPerks.map((perk) => (
+        <div className="grid gap-4 md:grid-cols-3">
+          {membershipPillars.map((pillar) => (
             <div
-              key={perk.title}
+              key={pillar.title}
               className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-6 shadow-[0_12px_40px_rgba(199,166,199,0.15)]"
             >
-              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">{perk.title}</p>
-              <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{perk.description}</p>
+              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                {pillar.title}
+              </p>
+              <ul className="mt-4 space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                {pillar.items.map((item) => (
+                  <li key={item}>• {item}</li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
+        <p className="text-center text-sm uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-70">
+          Membership gives you access. Mentorship gives you impact.
+        </p>
       </section>
 
-      <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
-        <div>
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Pricing & beta</p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">During beta: membership fee waived.</h2>
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+        <div className="flex flex-col gap-2">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+            Member → Mentor pathway
+          </p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+            From Member to Mentor — by design, not pressure.
+          </h2>
         </div>
-        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Invites are limited because mentors and capacity matter. We welcome each member with care, so the support stays personal.
-        </p>
-        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Future membership will be a one-time $500 lifetime access. For now, we're keeping the gates steady and the pace calm.
-        </p>
-        <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:items-center sm:gap-4">
-          <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
-            Request Invite
-          </Link>
-          <span className="text-[var(--tmbc-charcoal)] text-opacity-60">
-            Takes 2 minutes · We'll tell you if we're not the right fit.
-          </span>
+        <div className="grid gap-4 md:grid-cols-3">
+          {pathwaySteps.map((step, index) => (
+            <div
+              key={step.title}
+              className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6 shadow-[0_12px_40px_rgba(199,166,199,0.15)]"
+            >
+              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                Step {index + 1}
+              </p>
+              <p className="mt-2 text-lg font-semibold text-[var(--tmbc-charcoal)]">{step.title}</p>
+              <ul className="mt-3 space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                {step.items.map((item) => (
+                  <li key={item}>• {item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
+        <p className="text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+          Mentorship is optional, earned, and supported — never required.
+        </p>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="flex flex-col gap-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">FAQ</p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">We keep answers honest.</h2>
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+            What mentors unlock
+          </p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+            Mentorship is about contribution — with recognition built in.
+          </h2>
         </div>
-        <div className="space-y-4">
-          {faqs.map((faq) => (
-            <div key={faq.question} className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-6">
-              <p className="text-base font-semibold text-[var(--tmbc-charcoal)]">{faq.question}</p>
-              <p className="mt-2 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{faq.answer}</p>
-            </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-6">
+            <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+              Mentor capabilities
+            </p>
+            <ul className="mt-4 space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              {mentorCapabilities.map((item) => (
+                <li key={item}>• {item}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-6">
+            <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+              Platform support
+            </p>
+            <ul className="mt-4 space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              {platformSupport.map((item) => (
+                <li key={item}>• {item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+          Mentors never ‘sell’ — recommendations are contextual, optional, and fully disclosed.
+        </p>
+      </section>
+
+      <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/50 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+        <div className="flex flex-col gap-2">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+            Why this model exists
+          </p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+            We built the platform we wish existed.
+          </h2>
+        </div>
+        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+          Hourly consults can feel transactional. Courses can feel isolating. Affiliate-driven content can
+          struggle to earn trust. We wanted a slower, more human system that keeps guidance calm, clear, and
+          accountable.
+        </p>
+        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+          This is a slower, smarter, more human way to prepare for parenthood.
+        </p>
+      </section>
+
+      <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+        <div className="space-y-2">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+            Invite-only clarification
+          </p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+            Membership is invite-only to protect the experience.
+          </h2>
+        </div>
+        <ul className="space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+          {inviteReasons.map((item) => (
+            <li key={item}>• {item}</li>
           ))}
+        </ul>
+        <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:items-center sm:gap-4">
+          <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
+            Request an Invite
+          </Link>
+          <span className="text-[var(--tmbc-charcoal)] text-opacity-60 text-xs normal-case">
+            Requests are reviewed weekly. Not all requests are accepted.
+          </span>
         </div>
       </section>
     </div>

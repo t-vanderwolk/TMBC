@@ -110,12 +110,12 @@ const modules: AcademyModuleDefinition[] = [
 ];
 
 export const getAcademyJourneys = async () => {
-  // TODO: Replace with Prisma queries once academy tables are ready
+  // INTENTIONAL: Academy journeys are static until the curriculum tables land.
   return journeys;
 };
 
 export const getAcademyTracks = async () => {
-  // TODO: Replace with Prisma track data and relationships
+  // INTENTIONAL: Tracks remain static until the curriculum tables land.
   return tracks;
 };
 

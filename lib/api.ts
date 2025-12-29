@@ -65,7 +65,6 @@ export const adminInviteApi = {
   list: () => api.get('/invite/list'),
   generate: (payload: { role?: string; email?: string; maxUses?: number }) =>
     api.post('/invite/generate', payload),
-  send: (code: string, email: string) => api.post('/invite/send', { code, email }),
 };
 
 export const inviteRequestApi = {

@@ -40,7 +40,7 @@ export default function MentorJournalPage({ params }: MentorJournalPageProps) {
       <header className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-soft">
         <p className="text-xs uppercase tracking-[0.5em] text-tmMauve">Member Journal</p>
         <h1 className="text-3xl text-tmCharcoal">Shared entries · {memberId}</h1>
-        <p className="mt-2 text-sm text-tmCharcoal/70">// TODO: show member name + entry count</p>
+        <p className="mt-2 text-sm text-tmCharcoal/70">Shared reflections from this member.</p>
       </header>
 
       <section className="space-y-4 rounded-3xl border border-tmBlush/40 bg-white/90 p-6 shadow-soft">
@@ -60,7 +60,7 @@ export default function MentorJournalPage({ params }: MentorJournalPageProps) {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-tmCharcoal/70">// TODO: show CTA for members to share entries</p>
+          <p className="text-sm text-tmCharcoal/70">No shared entries yet.</p>
         )}
       </section>
     </div>

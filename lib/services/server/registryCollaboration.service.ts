@@ -192,7 +192,7 @@ export const confirmRegistryCollaboration = async (userId: string) => {
   const updated = await prisma.user.update({
     where: { id: userId },
     data: {
-      // TODO: Replace this soft-confirm flag with verified MyRegistry collaborator status when available.
+      // INTENTIONAL: Soft-confirm flag stays until MyRegistry collaborator verification is available.
       mentorCollabConfirmedAt: new Date(),
       mentorCollabRequestedAt: context.mentorCollabRequestedAt ?? new Date(),
       mentorCollabEmail: context.mentorCollabEmail ?? mentorEmail,

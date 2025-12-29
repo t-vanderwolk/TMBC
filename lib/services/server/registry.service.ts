@@ -22,6 +22,7 @@ import { MyRegistryService } from './myregistry/myregistry.service';
 import { emitRegistryAnalytics } from './analytics.service';
 import { ensureMyRegistryAccount, REGISTRY_SOURCE } from './myregistry/provision.service';
 import { recordPurchaseForWatch } from './priceIntelligence.service';
+import { listExternalRegistriesForMember, type ExternalRegistryDto } from './externalRegistry.service';
 
 export type MentorNoteResponse = {
   id: string;
@@ -412,57 +413,205 @@ export const addCustomItem = async ({
   return formatItem(created, new Map(), undefined);
 };
 
-export const createMentorSuggestedItem = async ({
+const formatMentorSuggestion = (
+  suggestion: Prisma.MentorProductSuggestionGetPayload<{
+    include: {
+      mentor: { select: { id: true, name: true } };
+      product: { select: { id: true; name: true; brand: true; imageUrl: true } };
+    };
+  }>,
+): MentorProductSuggestionDto => ({
+  id: suggestion.id,
+  mentorId: suggestion.mentorId,
+  mentorName: suggestion.mentor?.name ?? null,
+  memberId: suggestion.memberId,
+  category: suggestion.category,
+  productId: suggestion.productId,
+  productName: suggestion.product?.name ?? 'Suggested product',
+  productBrand: suggestion.product?.brand ?? null,
+  productImageUrl: suggestion.product?.imageUrl ?? null,
+  note: suggestion.note ?? null,
+  createdAt: suggestion.createdAt.toISOString(),
+  acceptedAt: suggestion.acceptedAt ? suggestion.acceptedAt.toISOString() : null,
+});
+
+const getSuggestionFallbackUrl = () => {
+  const baseUrl =
+    process.env.FRONTEND_URL ??
+    process.env.NEXT_PUBLIC_APP_URL ??
+    'https://www.taylormadebaby.co';
+  return `${baseUrl.replace(/\/$/, '')}/dashboard/plan`;
+};
+
+export const createMentorProductSuggestion = async ({
   memberId,
   productId,
   title,
   brand,
   category,
   mentorNote,
-}: MentorSuggestedItemInput) => {
-  const registry = await prisma.registry.findUnique({ where: { userId: memberId } });
-  const resolvedProductId = productId ?? (await ensureCustomProduct());
-  const product = await prisma.product.findUnique({
-    where: { id: resolvedProductId },
-    include: { affiliateLinks: true },
-  });
-
-  if (!product) {
-    throw new Error('Product not found');
+  mentorId,
+}: MentorSuggestedItemInput & { mentorId: string }) => {
+  if (!category) {
+    throw new Error('Category is required for mentor suggestions.');
+  }
+  if (!mentorNote) {
+    throw new Error('Mentor context is required for suggestions.');
   }
 
-  const resolvedTitle = title ?? product.name ?? 'Mentor suggestion';
-  const resolvedBrand = brand ?? product.brand ?? null;
-  const resolvedCategory = category ?? product.category ?? null;
-  const resolvedSection = resolveSection(resolvedCategory, null);
+  let resolvedProductId = productId ?? null;
+  if (!resolvedProductId) {
+    const name = title?.trim();
+    if (!name) {
+      throw new Error('Product title is required for mentor suggestions.');
+    }
+    const createdProduct = await prisma.product.create({
+      data: {
+        name,
+        brand: brand?.trim() || null,
+        category: category.trim(),
+      },
+    });
+    resolvedProductId = createdProduct.id;
+  }
 
-  const created = await prisma.registryItem.create({
-    data: {
-      userId: memberId,
-      registryId: registry?.id ?? null,
+  const existing = await prisma.mentorProductSuggestion.findFirst({
+    where: {
+      memberId,
       productId: resolvedProductId,
-      title: resolvedTitle,
-      brand: resolvedBrand,
-      category: resolvedCategory,
-      imageUrl: product.imageUrl ?? null,
-      image: product.imageUrl ?? null,
-      merchant: product.brand ?? null,
-      status: RegistryItemStatus.CONSIDERING,
-      decisionStatus: null,
-      section: resolvedSection,
-      addedByMentor: true,
-      mentorNote: mentorNote ?? null,
+      acceptedAt: null,
+    },
+  });
+  if (existing) {
+    throw new Error('This suggestion is already queued for the member.');
+  }
+
+  const created = await prisma.mentorProductSuggestion.create({
+    data: {
+      mentorId,
+      memberId,
+      productId: resolvedProductId,
+      category: category.trim(),
+      note: mentorNote.trim(),
     },
     include: {
-      product: {
-        include: { affiliateLinks: true },
-      },
-      affiliate: true,
+      mentor: { select: { id: true, name: true } },
+      product: { select: { id: true, name: true, brand: true, imageUrl: true } },
     },
   });
 
-  const mentorLookup = await hydrateMentorNotes(memberId, [created.productId ?? null]);
-  return formatItem(created, mentorLookup, undefined);
+  const registry = await prisma.registry.findUnique({ where: { userId: memberId } });
+  emitRegistryAnalytics('mentor_suggested', {
+    mentorId,
+    userId: memberId,
+    registryId: registry?.id ?? null,
+    suggestionId: created.id,
+    productId: resolvedProductId,
+    category: created.category,
+  });
+
+  return formatMentorSuggestion(created);
+};
+
+export const listMentorSuggestionsForMember = async (memberId: string) => {
+  const suggestions = await prisma.mentorProductSuggestion.findMany({
+    where: { memberId, acceptedAt: null },
+    include: {
+      mentor: { select: { id: true, name: true } },
+      product: { select: { id: true, name: true, brand: true, imageUrl: true } },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return suggestions.map(formatMentorSuggestion);
+};
+
+export const acceptMentorProductSuggestion = async (memberId: string, suggestionId: string) => {
+  const suggestion = await prisma.mentorProductSuggestion.findFirst({
+    where: { id: suggestionId, memberId, acceptedAt: null },
+    include: {
+      product: true,
+      mentor: { select: { id: true, name: true } },
+    },
+  });
+  if (!suggestion) {
+    throw new Error('Mentor suggestion not found.');
+  }
+
+  const created = await addRegistryItem({
+    userId: memberId,
+    productId: suggestion.productId,
+    notes: suggestion.note ?? undefined,
+    status: RegistryItemStatus.ADDED,
+    section: inferSectionFromCategory(suggestion.category),
+  });
+
+  await prisma.registryItem.update({
+    where: { id: created.item.id },
+    data: {
+      addedByMentor: true,
+      mentorNote: suggestion.note ?? null,
+      source: 'mentor_suggestion',
+      decisionStatus: RegistryDecisionStatus.ACCEPTED,
+    },
+  });
+
+  await prisma.mentorProductSuggestion.update({
+    where: { id: suggestion.id },
+    data: { acceptedAt: new Date() },
+  });
+
+  const registry = await prisma.registry.findUnique({ where: { userId: memberId } });
+  emitRegistryAnalytics('mentor_suggestion_accepted', {
+    mentorId: suggestion.mentorId,
+    userId: memberId,
+    registryId: registry?.id ?? null,
+    suggestionId: suggestion.id,
+    productId: suggestion.productId,
+    category: suggestion.category,
+  });
+
+  return created.item;
+};
+
+export const resolveMentorSuggestionOutboundLink = async (
+  memberId: string,
+  suggestionId: string,
+): Promise<{ url: string; affiliateAvailable: boolean }> => {
+  const suggestion = await prisma.mentorProductSuggestion.findFirst({
+    where: { id: suggestionId, memberId },
+    include: {
+      product: { include: { affiliateLinks: true } },
+    },
+  });
+  if (!suggestion) {
+    throw new Error('Mentor suggestion not found.');
+  }
+
+  const affiliateLink =
+    suggestion.product.affiliateLinks.find((link) => link.isPrimary) ??
+    suggestion.product.affiliateLinks[0];
+
+  const resolvedUrl = affiliateLink
+    ? buildAffiliateLink({ url: affiliateLink.outboundUrl, merchant: suggestion.product.brand })
+    : getSuggestionFallbackUrl();
+
+  const registry = await prisma.registry.findUnique({ where: { userId: memberId } });
+  emitRegistryAnalytics('mentor_suggestion_clicked', {
+    mentorId: suggestion.mentorId,
+    userId: memberId,
+    registryId: registry?.id ?? null,
+    suggestionId: suggestion.id,
+    productId: suggestion.productId,
+    category: suggestion.category,
+    affiliateAvailable: Boolean(affiliateLink),
+  });
+
+  return { url: resolvedUrl, affiliateAvailable: Boolean(affiliateLink) };
+};
+
+export const createMentorSuggestedItem = async (input: MentorSuggestedItemInput & { mentorId: string }) => {
+  return createMentorProductSuggestion(input);
 };
 
 type UpdateRegistryItemInput = {
@@ -738,6 +887,23 @@ export type RegistryDto = {
   lastSyncedAt: string | null;
   shippingAddress: RegistryShippingAddress | null;
   items: RegistryItemResponse[];
+  mentorSuggestions: MentorProductSuggestionDto[];
+  externalRegistries: ExternalRegistryDto[];
+};
+
+export type MentorProductSuggestionDto = {
+  id: string;
+  mentorId: string;
+  mentorName: string | null;
+  memberId: string;
+  category: string;
+  productId: string;
+  productName: string;
+  productBrand: string | null;
+  productImageUrl: string | null;
+  note: string | null;
+  createdAt: string;
+  acceptedAt: string | null;
 };
 
 const normalizeText = (value?: string | null) =>
@@ -927,7 +1093,11 @@ export const getMemberRegistryState = async (userId: string): Promise<RegistryDt
 
   if (!registry) return null;
 
-  const items = await listRegistryItems(userId);
+  const [items, mentorSuggestions, externalRegistries] = await Promise.all([
+    listRegistryItems(userId),
+    listMentorSuggestionsForMember(userId),
+    listExternalRegistriesForMember(userId),
+  ]);
 
   return {
     id: registry.id,
@@ -937,6 +1107,8 @@ export const getMemberRegistryState = async (userId: string): Promise<RegistryDt
     lastSyncedAt: registry.lastSyncedAt?.toISOString() ?? null,
     shippingAddress: parseShippingAddressPayload(registry.shippingAddress as Record<string, unknown> | null),
     items,
+    mentorSuggestions,
+    externalRegistries,
   };
 };
 

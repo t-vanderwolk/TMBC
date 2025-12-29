@@ -32,7 +32,10 @@ const JOURNEY_META: Record<
 
 const JOURNEY_ORDER: Lowercase<string>[] = ["nursery", "gear", "postpartum"];
 
-const moduleStatusLabel = (module: AcademyModuleCard) => {
+const moduleStatusLabel = (module: AcademyModuleCard, lockedLabel?: string) => {
+  if (lockedLabel) {
+    return lockedLabel;
+  }
   const progress = module.progress ?? (module.completed ? 100 : 0);
   if (progress >= 100 || module.completed) {
     return "Completed";
@@ -64,17 +67,43 @@ export default function LearnClient({ modules, error }: LearnClientProps) {
     );
   }
 
-  const journeyGroups = JOURNEY_ORDER.map((journeyId) => {
+  const journeyState = JOURNEY_ORDER.reduce<Record<string, { unlocked: boolean; completed: boolean }>>(
+    (acc, journeyId, index) => {
+      const journeyModules = safeModules.filter(
+        (module) => module.journey?.toLowerCase() === journeyId,
+      );
+      const completed =
+        journeyModules.length === 0 ||
+        journeyModules.every((module) => {
+          const progress = module.progress ?? (module.completed ? 100 : 0);
+          return progress >= 100 || module.completed;
+        });
+      const previousJourneyId = JOURNEY_ORDER[index - 1];
+      const unlocked = index === 0 || acc[previousJourneyId]?.completed === true;
+      acc[journeyId] = { unlocked, completed };
+      return acc;
+    },
+    {},
+  );
+
+  const journeyGroups = JOURNEY_ORDER.map((journeyId, index) => {
     const journeyModules = safeModules.filter(
       (module) => module.journey?.toLowerCase() === journeyId,
     );
     const journeyMeta = JOURNEY_META[journeyId];
+    const previousJourneyId = JOURNEY_ORDER[index - 1];
+    const previousJourneyTitle = JOURNEY_META[previousJourneyId]?.title ?? "previous journey";
 
     return {
       id: journeyId,
       title: journeyMeta?.title ?? "Journey",
       emotion: journeyMeta?.emotion ?? "",
       modules: journeyModules,
+      unlocked: journeyState[journeyId]?.unlocked ?? index === 0,
+      lockLabel:
+        index === 0
+          ? null
+          : `Locked until ${previousJourneyTitle} is complete`,
     };
   });
 
@@ -124,17 +153,25 @@ export default function LearnClient({ modules, error }: LearnClientProps) {
         >
           {journey.modules.length ? (
             <div className="space-y-3">
-              {journey.modules.map((module) => (
-                <ModuleCard
-                  key={module.id}
-                  href={`/dashboard/member/learn/${module.id}`}
-                  title={module.title}
-                  subtitle={module.description ?? module.summary}
-                  estimatedMinutes={module.estimatedMinutes ?? null}
-                  stage={moduleStage(module)}
-                  status={moduleStatusLabel(module)}
-                />
-              ))}
+              {journey.modules.map((module) => {
+                const isLocked = !journey.unlocked && !module.completed;
+                const statusLabel = moduleStatusLabel(
+                  module,
+                  isLocked ? journey.lockLabel ?? "Locked" : undefined,
+                );
+                return (
+                  <ModuleCard
+                    key={module.id}
+                    href={`/dashboard/member/learn/${module.id}`}
+                    title={module.title}
+                    subtitle={module.description ?? module.summary}
+                    estimatedMinutes={module.estimatedMinutes ?? null}
+                    stage={moduleStage(module)}
+                    status={statusLabel}
+                    disabled={isLocked}
+                  />
+                );
+              })}
             </div>
           ) : (
             <EmptyState
