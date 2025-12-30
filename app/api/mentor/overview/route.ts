@@ -5,6 +5,7 @@ import { getUserOrThrow } from "@/lib/auth/getUser";
 import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const handleError = (error: unknown) => {
   const message =
@@ -16,7 +17,7 @@ const handleError = (error: unknown) => {
 export async function GET(request: NextRequest) {
   try {
     const user = await getUserOrThrow(request);
-    if (![Role.MENTOR, Role.ADMIN].includes(user.role)) {
+    if (user.role !== Role.MENTOR && user.role !== Role.ADMIN) {
       return NextResponse.json({ error: "Mentor access required." }, { status: 403 });
     }
 

@@ -4,11 +4,14 @@ import ActionButton from "@/components/dashboard/ui/ActionButton";
 import DashboardCard from "@/components/dashboard/ui/DashboardCard";
 import DashboardSection from "@/components/dashboard/ui/DashboardSection";
 import StatBadge from "@/components/dashboard/ui/StatBadge";
+export const dynamic = "force-dynamic";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ??
   process.env.NEXT_PUBLIC_SITE_URL ??
   "http://localhost:3000";
+const SHOULD_SKIP_OVERVIEW_FETCH =
+  process.env.npm_lifecycle_event === "build";
 
 const mentorOverviewFallback = {
   mentor: {
@@ -35,6 +38,10 @@ const mentorOverviewFallback = {
 };
 
 const loadMentorOverview = async () => {
+  if (SHOULD_SKIP_OVERVIEW_FETCH) {
+    return mentorOverviewFallback;
+  }
+
   try {
     const response = await fetch(new URL("/api/mentor/overview", API_BASE_URL), {
       cache: "no-store",

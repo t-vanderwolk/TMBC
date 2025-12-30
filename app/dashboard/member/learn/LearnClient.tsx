@@ -78,8 +78,8 @@ export default function LearnClient({ modules, error }: LearnClientProps) {
           const progress = module.progress ?? (module.completed ? 100 : 0);
           return progress >= 100 || module.completed;
         });
-      const previousJourneyId = JOURNEY_ORDER[index - 1];
-      const unlocked = index === 0 || acc[previousJourneyId]?.completed === true;
+      const previousJourneyId = index > 0 ? JOURNEY_ORDER[index - 1] : undefined;
+      const unlocked = index === 0 || (previousJourneyId ? acc[previousJourneyId]?.completed === true : false);
       acc[journeyId] = { unlocked, completed };
       return acc;
     },
@@ -91,8 +91,9 @@ export default function LearnClient({ modules, error }: LearnClientProps) {
       (module) => module.journey?.toLowerCase() === journeyId,
     );
     const journeyMeta = JOURNEY_META[journeyId];
-    const previousJourneyId = JOURNEY_ORDER[index - 1];
-    const previousJourneyTitle = JOURNEY_META[previousJourneyId]?.title ?? "previous journey";
+    const previousJourneyId = index > 0 ? JOURNEY_ORDER[index - 1] : undefined;
+    const previousJourneyTitle =
+      previousJourneyId ? JOURNEY_META[previousJourneyId]?.title ?? "previous journey" : "previous journey";
 
     return {
       id: journeyId,

@@ -6,6 +6,8 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
   process.env.NEXT_PUBLIC_SITE_URL ||
   "http://localhost:3000";
+const SHOULD_SKIP_PUBLIC_BLOG_FETCH =
+  process.env.npm_lifecycle_event === "build";
 
 type PublicBlogPost = {
   id: string;
@@ -26,6 +28,10 @@ const formatAuthorRole = (role?: PublicBlogPost["authorRoleSnapshot"]) => {
 };
 
 const fetchPublicPosts = async (): Promise<PublicBlogPost[]> => {
+  if (SHOULD_SKIP_PUBLIC_BLOG_FETCH) {
+    return [];
+  }
+
   try {
     const response = await fetch(new URL("/api/blog/public", API_BASE_URL), {
       next: { revalidate: 300 },

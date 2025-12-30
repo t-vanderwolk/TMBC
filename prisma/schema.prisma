@@ -129,6 +129,7 @@ model BlogPost {
   engagementEvents BlogEngagementEvent[]
   affiliateEvents  BlogAffiliateEvent[]
   highlights       BlogHighlight[]
+  highlightEvents  BlogHighlightEvent[]
 
   @@index([status, isAffiliate])
   @@index([publishedAt])

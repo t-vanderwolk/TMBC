@@ -15,14 +15,14 @@ type NavEntry = {
   disabled?: boolean;
 };
 
-const NAV = {
+const NAV: Record<string, NavEntry[]> = {
   member: [
     { href: "/dashboard", label: "Overview" },
     { href: "/dashboard/member/learn", label: "Academy" },
     { href: "/dashboard/plan", label: "Registry" },
     { href: "/dashboard/member/events", label: "Events" },
     { href: "/dashboard/member/messages", label: "Messages" },
-  ] satisfies NavEntry[],
+  ],
   mentor: [
     { href: "/dashboard/mentor", label: "Mentor Home" },
     { href: "/dashboard/mentor/mentees", label: "Mentees" },
@@ -31,7 +31,7 @@ const NAV = {
     { href: "/dashboard/mentor/messages", label: "Messages" },
     { href: "/dashboard/mentor/blog", label: "Content Studio" },
     { href: "/dashboard/mentor/insights", label: "Insights" },
-  ] satisfies NavEntry[],
+  ],
   admin: [
     { href: "/dashboard", label: "Overview" },
     { href: "/dashboard/admin/invites", label: "Invites" },
@@ -39,13 +39,13 @@ const NAV = {
     { href: "/dashboard/admin/registry", label: "Registry" },
     { href: "/dashboard/admin/login-events", label: "Login Events" },
     { href: "/dashboard/admin/settings", label: "Settings" },
-  ] satisfies NavEntry[],
+  ],
 };
 
 export default function Sidebar({ user }: SidebarProps) {
   const path = usePathname();
   const role = (user?.role ?? "member").toLowerCase();
-  const entries = NAV[role as keyof typeof NAV] ?? NAV.member;
+  const entries: NavEntry[] = NAV[role] ?? NAV.member ?? [];
 
   return (
     <aside className="sidebar">

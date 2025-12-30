@@ -7,7 +7,13 @@ import { usePathname } from "next/navigation";
 import { greatVibes } from "@/lib/fonts";
 import { PUBLIC_LOGIN_ROUTE } from "@/lib/auth/routeForRole";
 
-const PRIMARY_NAV = [
+type NavLink = {
+  label: string;
+  href: string;
+  variant?: "primary" | "text";
+};
+
+const PRIMARY_NAV: NavLink[] = [
   { label: "How It Works", href: "/how-it-works" },
   { label: "Learn", href: "/learn" },
   { label: "Plan", href: "/plan" },
@@ -21,11 +27,11 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const mobileNav = useMemo(
+  const mobileNav = useMemo<NavLink[]>(
     () => [
       ...PRIMARY_NAV,
-      { label: "Request Invite", href: "/request-invite", variant: "primary" as const },
-      { label: "Login", href: PUBLIC_LOGIN_ROUTE, variant: "text" as const },
+      { label: "Request Invite", href: "/request-invite", variant: "primary" },
+      { label: "Login", href: PUBLIC_LOGIN_ROUTE, variant: "text" },
     ],
     [],
   );

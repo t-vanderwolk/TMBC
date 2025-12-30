@@ -14,6 +14,8 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
   process.env.NEXT_PUBLIC_SITE_URL ||
   "http://localhost:3000";
+const SHOULD_SKIP_PUBLIC_BLOG_FETCH =
+  process.env.npm_lifecycle_event === "build";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.taylormadebaby.co";
 
@@ -57,6 +59,10 @@ type Params = {
 };
 
 const fetchPublicPosts = async () => {
+  if (SHOULD_SKIP_PUBLIC_BLOG_FETCH) {
+    return [] as Array<{ slug: string }>;
+  }
+
   try {
     const response = await fetch(new URL("/api/blog/public", API_BASE_URL), {
       next: { revalidate: 300 },
@@ -73,6 +79,10 @@ const fetchPublicPosts = async () => {
 };
 
 const fetchPublicPost = async (slug: string): Promise<PublicBlogPost | null> => {
+  if (SHOULD_SKIP_PUBLIC_BLOG_FETCH) {
+    return null;
+  }
+
   try {
     const response = await fetch(new URL(`/api/blog/public/${slug}`, API_BASE_URL), {
       next: { revalidate: 300 },

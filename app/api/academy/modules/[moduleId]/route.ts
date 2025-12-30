@@ -5,6 +5,8 @@ import { normalizeModuleContent } from "@/lib/academy/normalizeModuleContent";
 import { deriveWorkbookPrompts } from "@/lib/academy/workbookPrompts";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest, { params }: { params: { moduleId: string } }) {
   const user = await getUserOrThrow(request);
   const module = await prisma.academyModule.findUnique({

@@ -42,24 +42,25 @@ const ensureContentBlocks = (content: unknown) => {
       throw new Error("Content blocks are malformed.");
     }
 
-    const type = (block as BlogContentBlock).type;
-    if (type === "paragraph" && typeof (block as BlogContentBlock).text === "string") {
-      const text = (block as BlogContentBlock).text.trim();
+    const record = block as Record<string, unknown>;
+    const type = record.type;
+    if (type === "paragraph" && typeof record.text === "string") {
+      const text = record.text.trim();
       assertNoUrls("Content", text);
       blocks.push({ type, text });
       continue;
     }
 
-    if (type === "heading" && typeof (block as BlogContentBlock).text === "string") {
-      const text = (block as BlogContentBlock).text.trim();
+    if (type === "heading" && typeof record.text === "string") {
+      const text = record.text.trim();
       assertNoUrls("Content", text);
-      const level = (block as BlogContentBlock).level;
+      const level = record.level;
       blocks.push({ type, text, level: level ? Number(level) : undefined });
       continue;
     }
 
-    if (type === "list" && Array.isArray((block as BlogContentBlock).items)) {
-      const items = (block as BlogContentBlock).items.map((item) => {
+    if (type === "list" && Array.isArray(record.items)) {
+      const items = record.items.map((item) => {
         const trimmed = String(item).trim();
         assertNoUrls("Content", trimmed);
         return trimmed;

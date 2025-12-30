@@ -63,7 +63,10 @@ export default function MentorWorkspacePage() {
 
     const hasActive = mentees.some((mentee) => mentee.id === activeMenteeId);
     if (!hasActive) {
-      setActiveMenteeId(mentees[0].id);
+      const firstMentee = mentees[0];
+      if (firstMentee) {
+        setActiveMenteeId(firstMentee.id);
+      }
     }
   }, [activeMenteeId, mentees]);
 

@@ -29,12 +29,15 @@ export async function GET(request: Request, context: RouteContext) {
   const fallbackUrl = `${siteUrl}/blog/${highlight.blogPost.slug}`;
   let destinationUrl = fallbackUrl;
 
-  if (highlight.product?.affiliateLinks.length) {
-    const affiliate = highlight.product.affiliateLinks[0];
-    destinationUrl = buildAffiliateLink({
-      url: affiliate.outboundUrl,
-      merchant: highlight.product.brand ?? affiliate.retailerName,
-    });
+  const affiliateLinks = highlight.product?.affiliateLinks ?? [];
+  if (affiliateLinks.length > 0) {
+    const affiliate = affiliateLinks[0];
+    if (affiliate) {
+      destinationUrl = buildAffiliateLink({
+        url: affiliate.outboundUrl,
+        merchant: highlight.product?.brand ?? affiliate.retailerName,
+      });
+    }
   }
 
   void prisma.blogHighlightEvent

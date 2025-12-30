@@ -5,6 +5,10 @@
  * - Never override Heroku config vars
  */
 
+const { execSync } = require("node:child_process");
+const { existsSync } = require("node:fs");
+const path = require("node:path");
+
 if (process.env.NODE_ENV !== "production") {
   try {
     // Optional dependency — safe if missing
@@ -20,3 +24,11 @@ console.log(
   "[Prebuild] DATABASE_URL:",
   process.env.DATABASE_URL?.includes("localhost") ? "⚠️ localhost" : "✅ non-local"
 );
+
+const prismaBinary = path.join(process.cwd(), "node_modules", ".bin", "prisma");
+if (existsSync(prismaBinary)) {
+  console.log("[Prebuild] prisma generate");
+  execSync(`${prismaBinary} generate`, { stdio: "inherit" });
+} else {
+  console.log("[Prebuild] prisma CLI missing, skipping generate");
+}
