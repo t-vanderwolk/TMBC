@@ -38,14 +38,22 @@ const ConversationRow = ({
   const otherName = getDisplayName(summary, viewerRole);
   const preview = summary.lastMessage ?? "Touch base with your mentor when you're ready.";
   const timestamp = summary.lastMessageAt ?? null;
-  const unread = !summary.lastMessageAt;
+  const unread = Boolean(
+    summary.lastMessageSenderRole && summary.lastMessageSenderRole !== viewerRole,
+  );
+  const mentorHighlight =
+    viewerRole === "MEMBER" && summary.lastMessageSenderRole === "MENTOR";
 
   return (
     <button
       type="button"
       onClick={() => onSelect(summary)}
       className={`flex w-full items-start justify-between gap-3 rounded-[22px] px-4 py-3 text-left transition ${
-        selected ? "bg-[#FBE9EE]" : "bg-white hover:bg-[#FFF8F6]"
+        selected
+          ? "bg-[#FBE9EE]"
+          : mentorHighlight
+            ? "border border-[#E3C6D4] bg-[#FFF8F6]"
+            : "bg-white hover:bg-[#FFF8F6]"
       }`}
     >
       <div className="flex flex-col gap-1">
@@ -56,7 +64,12 @@ const ConversationRow = ({
         <span className="text-[0.65rem] uppercase tracking-[0.45em] text-[#3E2F35]/60">
           {formatTimestamp(timestamp)}
         </span>
-        {unread && <span className="h-2 w-2 rounded-full bg-[#C8A1B4]" aria-hidden />}
+        {unread && (
+          <span
+            className={`h-2 w-2 rounded-full ${mentorHighlight ? "bg-[#B98AA5]" : "bg-[#C8A1B4]"}`}
+            aria-hidden
+          />
+        )}
       </div>
     </button>
   );

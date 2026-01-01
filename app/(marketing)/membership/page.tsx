@@ -1,5 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 
+import promiseVisual from "../../../assets/images/diagram-membership-promise.png";
+import membershipEditorial from "../../../assets/images/editorial-about-family-bump.jpeg";
 const membershipPillars = [
   {
     title: "Learn",
@@ -82,10 +85,10 @@ export default function MembershipPage() {
           Membership
         </p>
         <h1 className="mt-3 font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-          A Member-to-Mentor Ecosystem for Thoughtful Baby Planning
+          Membership that can grow into mentorship, if and when it feels right
         </h1>
         <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Learn with support. Plan with clarity. Grow into mentorship — if and when it feels right.
+          Learn with support. Plan with clarity. Stay connected as your questions evolve. (No rush, ever.)
         </p>
         <p className="mt-3 text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
           Editorial-first guidance · Invite-only access · Transparent partner disclosures
@@ -97,6 +100,18 @@ export default function MembershipPage() {
           <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
             How mentorship works
           </Link>
+        </div>
+      </section>
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+        <div className="relative w-full overflow-hidden rounded-[36px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/3]">
+          <Image
+            src={promiseVisual}
+            alt="The registry process doesn't have to be overwhelming"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 70vw"
+          />
         </div>
       </section>
 
@@ -127,7 +142,7 @@ export default function MembershipPage() {
           ))}
         </div>
         <p className="text-center text-sm uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-70">
-          Membership gives you access. Mentorship gives you impact.
+          Membership gives you access. Mentorship gives you impact. (Only if you want it.)
         </p>
       </section>
 
@@ -159,7 +174,7 @@ export default function MembershipPage() {
           ))}
         </div>
         <p className="text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-          Mentorship is optional, earned, and supported — never required.
+          Mentorship is optional, earned, and supported — never required. (Some members stay right where they are.)
         </p>
       </section>
 
@@ -195,7 +210,7 @@ export default function MembershipPage() {
           </div>
         </div>
         <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-          Mentors never ‘sell’ — recommendations are contextual, optional, and fully disclosed.
+          Mentors never ‘sell’ — recommendations are contextual, optional, and fully disclosed. (Always.)
         </p>
       </section>
 
@@ -208,14 +223,24 @@ export default function MembershipPage() {
             We built the platform we wish existed.
           </h2>
         </div>
-        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Hourly consults can feel transactional. Courses can feel isolating. Affiliate-driven content can
-          struggle to earn trust. We wanted a slower, more human system that keeps guidance calm, clear, and
-          accountable.
-        </p>
-        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          This is a slower, smarter, more human way to prepare for parenthood.
-        </p>
+        <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-center">
+          <div className="space-y-4 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+            <p>
+              Hourly consults can feel transactional. Courses can feel isolating. Affiliate-driven content can struggle
+              to earn trust. We wanted a slower, more human system that keeps guidance calm, clear, and accountable.
+            </p>
+            <p>Think of it as a steady hand — not another list.</p>
+          </div>
+          <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5]">
+            <Image
+              src={membershipEditorial}
+              alt="Parent resting with a growing bump"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+          </div>
+        </div>
       </section>
 
       <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
@@ -237,7 +262,7 @@ export default function MembershipPage() {
             Request an Invite
           </Link>
           <span className="text-[var(--tmbc-charcoal)] text-opacity-60 text-xs normal-case">
-            Requests are reviewed weekly. Not all requests are accepted.
+            Requests are reviewed weekly. (We read every one.)
           </span>
         </div>
       </section>

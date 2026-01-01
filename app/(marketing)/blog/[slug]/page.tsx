@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
+import heroFallback from "../../../../assets/images/heirloom-blog-card-ultrasound-flatlay.jpeg";
 import BlogContentRenderer, {
   createHeadingId,
   type BlogContentBlock,
@@ -190,10 +190,11 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
       <article className="marketing-section bg-tmIvory/80">
         <div className="mx-auto space-y-12 px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="relative overflow-hidden rounded-[40px] border border-tmMauve/40 bg-white/90 p-10 shadow-editorial">
-            <VisualPlaceholder
-              label="Hero lifestyle image or calm planning moment"
-              className="absolute inset-0 h-full w-full opacity-60"
-              minHeightClassName="min-h-full"
+            <img
+              src={post.heroImage ?? heroFallback.src}
+              alt={post.title}
+              className="absolute inset-0 h-full w-full object-cover opacity-60"
+              loading="eager"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-tmIvory via-white/90 to-white/70" />
             <div className="absolute -right-2 top-8 hidden text-[140px] font-playfair uppercase tracking-[0.2em] text-tmGold/20 lg:block">

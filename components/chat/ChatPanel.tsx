@@ -2,7 +2,6 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
-import { api } from "@/lib/api";
 import { useChat, type ChatMessage, type ChatStatus } from "@/hooks/useChat";
 
 type ChatPanelProps = {
@@ -65,17 +64,25 @@ export default function ChatPanel({
     setLoading(true);
     setFetchError("");
 
-    api
-      .get(`/chat/${mentorId}/${memberId}`)
-      .then((response) => {
+    fetch("/api/chat/conversations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mentorId, memberId }),
+    })
+      .then(async (response) => {
         if (cancelled) return;
-        const conversation = response.data?.conversation;
+        if (!response.ok) {
+          const payload = await response.json().catch(() => null);
+          throw new Error(payload?.error ?? "Conversation could not be loaded.");
+        }
+        const payload = await response.json().catch(() => null);
+        const conversation = payload?.conversation;
         if (!conversation) {
           setFetchError("Conversation could not be loaded.");
           return;
         }
         setConversationId(conversation.id);
-        setInitialMessages(conversation.messages ?? []);
+        setInitialMessages([]);
       })
       .catch(() => {
         if (cancelled) return;

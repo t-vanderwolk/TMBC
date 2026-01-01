@@ -16,7 +16,14 @@ export async function GET(request: NextRequest) {
   const actor: Actor = { id: user.id, role: user.role };
   try {
     const conversations = await listUserConversations(actor);
-    return NextResponse.json({ conversations });
+    return NextResponse.json({
+      conversations,
+      viewer: {
+        id: user.id,
+        role: user.role,
+        mentorId: user.role === Role.MEMBER ? user.mentorId ?? null : null,
+      },
+    });
   } catch (error) {
     console.error("Unable to load chat conversations", { userId: user.id, error });
     const message =

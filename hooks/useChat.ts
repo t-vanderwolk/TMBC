@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { getCurrentConversation } from "@/lib/api/chat";
 import { getSessionToken } from "@/lib/auth";
 
 export type ChatMessage = {
@@ -59,11 +58,14 @@ export const useChat = ({
 
     let active = true;
 
-    getCurrentConversation()
-      .then((response) => {
-        if (!active) return;
-        const convo = response.data?.conversation;
-        if (convo?.id !== conversationId) return;
+    fetch(`/api/chat/conversations/${conversationId}/messages`)
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("Unable to load the chat.");
+        }
+        const payload = await response.json().catch(() => null);
+        const convo = payload?.conversation;
+        if (!active || !convo || convo.id !== conversationId) return;
         setMessages(() => convo.messages ?? []);
       })
       .catch(() => {
@@ -169,13 +171,12 @@ export const useChat = ({
         throw new Error("Session expired.");
       }
 
-      const response = await fetch("/api/chat/send", {
+      const response = await fetch(`/api/chat/conversations/${conversationId}/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${resolvedToken}`,
         },
-        body: JSON.stringify({ conversationId, content: content.trim() }),
+        body: JSON.stringify({ content: content.trim() }),
       });
 
       if (!response.ok) {

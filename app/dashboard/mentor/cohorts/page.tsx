@@ -168,8 +168,8 @@ export default function MentorCohortsPage() {
             <div key={cohort.id} className="rounded-2xl border border-tmBlush/30 bg-tmIvory/70 p-4">
               <div className="flex items-center justify-between">
                 <p className="text-base font-semibold text-tmCharcoal">{cohort.name}</p>
-                <Link href={`/dashboard/chat?channel=${cohort.id}`} className="text-sm font-semibold text-tmMauve">
-                  Open chat
+                <Link href="/dashboard/mentor/messages" className="text-sm font-semibold text-tmMauve">
+                  Open messages
                 </Link>
               </div>
               <div className="mt-3 flex flex-wrap gap-2 text-sm text-tmCharcoal/70">
@@ -216,8 +216,8 @@ export default function MentorCohortsPage() {
           <p className="mt-3 text-sm text-tmCharcoal/70">
             Tap into the TMBC chat hub to drop resources, voice notes, or check-ins for each cohort thread.
           </p>
-          <Link href="/dashboard/chat" className="mt-5 inline-flex items-center gap-2 rounded-full bg-tmMauve px-6 py-3 text-sm font-semibold text-white">
-            Launch chat workspace
+          <Link href="/dashboard/mentor/messages" className="mt-5 inline-flex items-center gap-2 rounded-full bg-tmMauve px-6 py-3 text-sm font-semibold text-white">
+            Go to messages
           </Link>
         </div>
       </section>

@@ -43,6 +43,8 @@ export const formatConversationResponse = (conversation: {
     participants,
     mentor,
     member,
+    mentorId: mentor?.id ?? null,
+    memberId: member?.id ?? null,
     messages: conversation.messages.map((message) =>
       formatChatMessage(toChatMessageDTO(message)),
     ),

@@ -102,31 +102,6 @@ const getAllowedMentorsForMember = async (
     allowed.add(member.mentorId);
   }
 
-  const rsvps = await prisma.eventRsvp.findMany({
-    where: {
-      userId: memberId,
-      status: "confirmed",
-      event: {
-        host: {
-          role: Role.MENTOR,
-        },
-      },
-    },
-    select: {
-      event: {
-        select: {
-          hostId: true,
-        },
-      },
-    },
-  });
-
-  for (const rsvp of rsvps) {
-    if (rsvp.event.hostId) {
-      allowed.add(rsvp.event.hostId);
-    }
-  }
-
   cache.set(memberId, allowed);
   return allowed;
 };
@@ -287,8 +262,13 @@ export const ensureConversationBetweenUsers = async (input: EnsureConversationIn
   return conversation;
 };
 
-const ensureConversationHasMentor = (participants: ConversationParticipantInfo[]) => {
-  return participants.some((participant) => participant.role === Role.MENTOR);
+const resolveMentorMemberPair = (participants: ConversationParticipantInfo[]) => {
+  const mentors = participants.filter((participant) => participant.role === Role.MENTOR);
+  const members = participants.filter((participant) => participant.role === Role.MEMBER);
+  if (mentors.length !== 1 || members.length !== 1) {
+    throw new ChatPermissionError("Conversation must include exactly one member and one mentor.");
+  }
+  return { mentor: mentors[0], member: members[0] };
 };
 
 const ensureMemberMentorPair = async (
@@ -316,37 +296,29 @@ const ensureUserCanAccessConversation = async (
     throw new ChatPermissionError("You are not a participant in this conversation.");
   }
 
-  if (!ensureConversationHasMentor(conversation.participants)) {
-    throw new ChatPermissionError("Conversation must include a mentor.");
+  const { mentor, member } = resolveMentorMemberPair(conversation.participants);
+  if (user.role === Role.MEMBER && member.id !== user.id) {
+    throw new ChatPermissionError("You are not a participant in this conversation.");
+  }
+  if (user.role === Role.MENTOR && mentor.id !== user.id) {
+    throw new ChatPermissionError("You are not a participant in this conversation.");
+  }
+
+  if (!member.mentorId || member.mentorId !== mentor.id) {
+    throw new ChatPermissionError("Conversation must align with the assigned mentor.");
   }
 
   if (user.role === Role.MEMBER) {
-    const mentors = conversation.participants.filter((participant) => participant.role === Role.MENTOR);
-    if (!mentors.length) {
-      throw new ChatPermissionError("No mentor is attending this conversation.");
-    }
     const allowed = await getAllowedMentorsForMember(user.id, cache);
-    for (const mentor of mentors) {
-      if (!allowed.has(mentor.id)) {
-        throw new ChatPermissionError("You are not allowed to message this mentor.");
-      }
+    if (!allowed.has(mentor.id)) {
+      throw new ChatPermissionError("You are not allowed to message this mentor.");
     }
     return;
   }
 
   if (user.role === Role.MENTOR) {
-    const members = conversation.participants.filter((participant) => participant.role === Role.MEMBER);
-    if (!members.length) {
-      throw new ChatPermissionError("Conversation must include a member.");
-    }
-    const permissionChecks = await Promise.all(
-      members.map(async (member) => {
-        const allowed = await getAllowedMentorsForMember(member.id, cache);
-        return allowed.has(user.id);
-      }),
-    );
-    const isAllowedForAllMembers = permissionChecks.every(Boolean);
-    if (!isAllowedForAllMembers) {
+    const allowed = await getAllowedMentorsForMember(member.id, cache);
+    if (!allowed.has(user.id)) {
       throw new ChatPermissionError("You cannot join conversations for that member.");
     }
     return;
@@ -357,8 +329,11 @@ export type ConversationSummary = {
   id: string;
   mentor: ChatParticipant | null;
   member: ChatParticipant | null;
+  mentorId: string | null;
+  memberId: string | null;
   lastMessage: string | null;
   lastMessageAt: string | null;
+  lastMessageSenderRole: Role | null;
   updatedAt: string;
 };
 
@@ -378,6 +353,14 @@ export async function listUserConversations(user: Actor): Promise<ConversationSu
       messages: {
         orderBy: { createdAt: "desc" },
         take: 1,
+        include: {
+          sender: {
+            select: {
+              id: true,
+              role: true,
+            },
+          },
+        },
       },
     },
     orderBy: { updatedAt: "desc" },
@@ -394,15 +377,25 @@ export async function listUserConversations(user: Actor): Promise<ConversationSu
     }
     // INTENTIONAL: Mentor note snippets will be added when the mentor notes index is available.
 
-    const mentor = conversation.participants.find((participant) => participant.role === Role.MENTOR);
-    const member = conversation.participants.find((participant) => participant.role === Role.MEMBER);
+    let mentor: ConversationParticipantInfo | null = null;
+    let member: ConversationParticipantInfo | null = null;
+    try {
+      const pair = resolveMentorMemberPair(conversation.participants);
+      mentor = pair.mentor;
+      member = pair.member;
+    } catch {
+      continue;
+    }
     const lastMessage = conversation.messages[0];
     summaries.push({
       id: conversation.id,
       mentor: mentor ? buildChatParticipant(mentor) : null,
       member: member ? buildChatParticipant(member) : null,
+      mentorId: mentor?.id ?? null,
+      memberId: member?.id ?? null,
       lastMessage: lastMessage?.content ?? null,
       lastMessageAt: lastMessage?.createdAt ? lastMessage.createdAt.toISOString() : null,
+      lastMessageSenderRole: lastMessage?.sender?.role ?? null,
       updatedAt: conversation.updatedAt.toISOString(),
     });
   }

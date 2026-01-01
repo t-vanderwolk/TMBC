@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import CTARibbon from "@/components/marketing/CTARibbon";
-import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
+import reflectPreview from "../../../assets/images/ui-plan-hero-registry-preview.png";
 
 const benefits = [
   {
@@ -33,22 +34,26 @@ export default function ReflectPage() {
             Reflect with meaning and care
           </h1>
           <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-            A private, gentle space to capture memories, moments, and the story you want to keep.
+            A private, gentle space to capture memories, moments, and the story you want to keep. (Even the in-between ones.)
           </p>
           <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
             <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
               Request Your Invite
             </Link>
             <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
-              How It Works
+              How It Works (softly)
             </Link>
           </div>
         </div>
-        <VisualPlaceholder
-          label="Keepsake journal or baby book moment"
-          className="h-full"
-          minHeightClassName="min-h-[260px]"
-        />
+        <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5] md:aspect-[3/4]">
+          <Image
+            src={reflectPreview}
+            alt="Taylor-Made Baby Co. preview"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 40vw"
+          />
+        </div>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
@@ -67,7 +72,7 @@ export default function ReflectPage() {
           </p>
           <p>
             Prompt-driven journaling helps you capture the small moments as they happen, without the pressure
-            to be perfect.
+            to be perfect. You can write a sentence and call it a day.
           </p>
           <p>
             Over time, this becomes a baby book that feels intentional, private, and meaningful.
@@ -108,13 +113,13 @@ export default function ReflectPage() {
         </h2>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           Reflection keeps the experience meaningful, tying the learning, planning, and connection together in
-          a way that feels personal.
+          a way that feels personal. You don&apos;t have to remember it all — this holds it for you.
         </p>
       </section>
 
       <CTARibbon
         headline="Keep the story with care"
-        supportingText="Invite-only keeps this space private and intentional."
+        supportingText="Invite-only keeps this space private and intentional. (No pressure to share.)"
         buttonLabel="Request Your Invite"
         buttonHref="/request-invite"
       />

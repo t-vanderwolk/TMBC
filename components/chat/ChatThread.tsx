@@ -127,7 +127,9 @@ const ChatThread = ({ conversationId, viewerRole }: ChatThreadProps) => {
         )}
         {!loading && !error && messages.length === 0 && (
           <p className="text-[0.9rem] text-[#3E2F35]/60">
-            No messages yet—share a quiet update when you’re ready.
+            {viewerRole === "MEMBER"
+              ? "Your mentor will respond here."
+              : "No messages yet—send a calm check-in when you’re ready."}
           </p>
         )}
         {!loading &&

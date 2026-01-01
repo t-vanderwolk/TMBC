@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import CTARibbon from "@/components/marketing/CTARibbon";
-import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
+import learnPreview from "../../../assets/images/ui-reflect-hero-journal-preview.png";
 
 const benefits = [
   {
@@ -33,22 +34,26 @@ export default function LearnPage() {
             Learn with calm, not overwhelm
           </h1>
           <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-            We translate the noise into clear, mentor-led guidance so you can feel steady and informed.
+            We translate the noise into clear, mentor-led guidance so you can feel steady and informed. (No pop quizzes.)
           </p>
           <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
             <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
               Request Your Invite
             </Link>
             <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
-              How It Works
+              How It Works (gently)
             </Link>
           </div>
         </div>
-        <VisualPlaceholder
-          label="Learning moment or mentor notes"
-          className="h-full"
-          minHeightClassName="min-h-[260px]"
-        />
+        <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5] md:aspect-[3/4]">
+          <Image
+            src={learnPreview}
+            alt="Guided learning and reflection preview"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 40vw"
+          />
+        </div>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
@@ -66,12 +71,12 @@ export default function LearnPage() {
             loading you down with endless lists.
           </p>
           <p>
-            Academy modules and workbook prompts help you understand the decisions ahead without the noise.
+            Academy modules and workbook prompts help you understand what&apos;s ahead without the noise.
             Everything is shaped around your timing and the questions you actually have.
           </p>
           <p>
-            The goal is not to become an expert overnight. It is to feel confident in the choices you make
-            next.
+            The goal is not to become an expert overnight. It is to feel confident in the next few choices
+            you make.
           </p>
         </div>
       </section>
@@ -109,13 +114,13 @@ export default function LearnPage() {
         </h2>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           Learning sets the foundation so planning feels clear, connection feels meaningful, and reflection
-          feels intentional.
+          feels intentional. You don’t need to learn it all at once.
         </p>
       </section>
 
       <CTARibbon
         headline="Ready to learn with calm?"
-        supportingText="Invite-only keeps the guidance personal and paced for you."
+        supportingText="Invite-only keeps the guidance personal and paced for you. (We’ll remind you to take breaks.)"
         buttonLabel="Request Your Invite"
         buttonHref="/request-invite"
       />

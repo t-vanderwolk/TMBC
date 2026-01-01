@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import CTARibbon from "@/components/marketing/CTARibbon";
-import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
+import planPreview from "../../../assets/images/ui-home-hero-platform-preview.png";
 
 const benefits = [
   {
@@ -45,15 +46,19 @@ export default function PlanPage() {
               Request Your Invite
             </Link>
             <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
-              How It Works
+              How It Works (no rush)
             </Link>
           </div>
         </div>
-        <VisualPlaceholder
-          label="Shared plan or mentor notes"
-          className="h-full"
-          minHeightClassName="min-h-[260px]"
-        />
+        <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5] md:aspect-[3/4]">
+          <Image
+            src={planPreview}
+            alt="Guided planning preview"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 40vw"
+          />
+        </div>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
@@ -71,8 +76,8 @@ export default function PlanPage() {
             define what fits your life.
           </p>
           <p>
-            Registry guidance is shaped around context, timing, and budget awareness without the loud push to
-            buy everything now.
+            Registry guidance is shaped around context, timing, and budget awareness — without the loud push to
+            buy everything now. We decide one meaningful thing at a time.
           </p>
           <p>
             If you already started a registry elsewhere, we help you refine it with clarity and calm.
@@ -113,7 +118,7 @@ export default function PlanPage() {
         </h2>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           Planning turns learning into calm next steps, while connection and reflection keep the plan aligned
-          with your life.
+          with your life. (We’ll help you pause before buying “just in case.”)
         </p>
       </section>
 

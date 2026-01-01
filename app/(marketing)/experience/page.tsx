@@ -1,32 +1,37 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import CTARibbon from "@/components/marketing/CTARibbon";
-import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
+import learnPreview from "../../../assets/images/ui-learn-hero-classes-preview.png";
+import planPreview from "../../../assets/images/ui-plan-hero-registry-preview.png";
+import connectPreview from "../../../assets/images/ui-connect-hero-community-preview.png";
+import reflectPreview from "../../../assets/images/ui-reflect-hero-journal-preview.png";
+import lifestylePreview from "../../../assets/images/editorial-experience-hero-nursery.jpg";
 
 const pillars = [
   {
     title: "Learn",
     description:
-      "Understanding replaces overwhelm, so confidence grows with each thoughtful step.",
-    visual: "Quiet learning moment",
+      "We sort the noise into what matters now, next, and later so you feel steady.",
+    visual: learnPreview,
   },
   {
     title: "Plan",
     description:
-      "Decisions are guided, never rushed, and your registry becomes intentional.",
-    visual: "Shared planning rhythm",
+      "One decision at a time, with guidance that keeps buying pressure off your shoulders.",
+    visual: planPreview,
   },
   {
     title: "Connect",
     description:
-      "Support is structured, mentor-led, and calm, without the noise of social feeds.",
-    visual: "Mentor-led circle",
+      "Mentor-led support that feels like a steady conversation, not a noisy feed.",
+    visual: connectPreview,
   },
   {
     title: "Reflect",
     description:
-      "Your journey is captured, preserved, and honored with care.",
-    visual: "Keepsake reflection",
+      "A place to capture the moments you want to remember (even the tiny ones).",
+    visual: reflectPreview,
   },
 ];
 
@@ -34,12 +39,12 @@ const philosophyPoints = [
   {
     title: "Mentors over algorithms",
     description:
-      "Human guidance replaces automation so you feel heard, not processed.",
+      "Human guidance replaces automation, so you feel heard, not processed.",
   },
   {
     title: "Steady pacing",
     description:
-      "Presence matters more than pressure. We move with your season.",
+      "Presence matters more than pressure. We move with your season (not the trend cycle).",
   },
   {
     title: "Clarity over consumption",
@@ -61,8 +66,18 @@ export default function ExperiencePage() {
           </h1>
         </div>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          A calm, guided journey through pregnancy, planning, and early parenthood, designed to support you at every step.
+          A calm, guided journey through pregnancy, planning, and early parenthood — with a mentor who helps you decide
+          what matters now, next, and later. (We keep it simple on purpose.)
         </p>
+        <div className="relative w-full overflow-hidden rounded-[36px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/3]">
+          <Image
+            src={lifestylePreview}
+            alt="Soft nursery preparation moment"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 80vw"
+          />
+        </div>
         <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
           <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
             Request Your Invite
@@ -83,8 +98,8 @@ export default function ExperiencePage() {
           </h2>
         </div>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          This is not an app you use. It is a relationship you move through, where each chapter connects to the
-          next with intention, guidance, and steady support.
+          This is not an app you use. It is a relationship you move through, where each chapter connects to the next
+          with intention, guidance, and steady support.
         </p>
         <div className="grid gap-6 md:grid-cols-2">
           {pillars.map((pillar) => (
@@ -101,11 +116,15 @@ export default function ExperiencePage() {
                     {pillar.description}
                   </p>
                 </div>
-                <VisualPlaceholder
-                  label={pillar.visual}
-                  className="rounded-[28px]"
-                  minHeightClassName="min-h-[160px]"
-                />
+                <div className="relative w-full overflow-hidden rounded-[28px] border border-[var(--tmbc-mauve)]/15 bg-white/80 aspect-[4/3]">
+                  <Image
+                    src={pillar.visual}
+                    alt={`${pillar.title} preview`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                  />
+                </div>
               </div>
             </div>
           ))}
@@ -138,7 +157,7 @@ export default function ExperiencePage() {
 
       <CTARibbon
         headline="A calmer way to prepare"
-        supportingText="Memberships are limited to ensure personalized care."
+        supportingText="Memberships are limited to ensure personalized care. (We never want it to feel crowded.)"
         buttonLabel="Request Your Invite"
         buttonHref="/request-invite"
       />

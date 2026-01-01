@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import CTARibbon from "@/components/marketing/CTARibbon";
-import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
+import connectPreview from "../../../assets/images/ui-connect-hero-community-preview.png";
 
 const benefits = [
   {
@@ -40,15 +41,19 @@ export default function ConnectPage() {
               Request Your Invite
             </Link>
             <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
-              How It Works
+              How It Works (quietly)
             </Link>
           </div>
         </div>
-        <VisualPlaceholder
-          label="Mentor circle or calm discussion room"
-          className="h-full"
-          minHeightClassName="min-h-[260px]"
-        />
+        <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5] md:aspect-[3/4]">
+          <Image
+            src={connectPreview}
+            alt="Community chat room preview"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 40vw"
+          />
+        </div>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
@@ -67,7 +72,7 @@ export default function ConnectPage() {
           </p>
           <p>
             Rooms are organized around real-life topics, not feeds or engagement metrics. You can step in,
-            listen, and leave without pressure.
+            listen, and leave without pressure. (No awkward “introduce yourself” prompts.)
           </p>
           <p>
             The goal is to feel supported, not overstimulated. Every space stays mentor-guided and kind.
@@ -114,7 +119,7 @@ export default function ConnectPage() {
 
       <CTARibbon
         headline="A calm circle is waiting"
-        supportingText="Invite-only keeps the community thoughtful and mentor-led."
+        supportingText="Invite-only keeps the community thoughtful and mentor-led. (You can lurk first.)"
         buttonLabel="Request Your Invite"
         buttonHref="/request-invite"
       />

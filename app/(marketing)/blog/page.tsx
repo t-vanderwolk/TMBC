@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
+import heroFallback from "../../../assets/images/heirloom-blog-hero-ultrasound-wall.jpeg";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -54,6 +54,7 @@ const BlogMarketingPage = async () => {
     return (
       <section className="marketing-section text-center text-base text-[var(--tmbc-charcoal)] text-opacity-70">
         <p>No journal entries are available yet.</p>
+        <p className="mt-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-60">Check back soon — we publish gently.</p>
       </section>
     );
   }
@@ -66,17 +67,18 @@ const BlogMarketingPage = async () => {
           Notes from the planning side of parenthood
         </h1>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Calm context, helpful perspective, and things we wish someone told us sooner.
+          Calm context, helpful perspective, and things we wish someone told us sooner. (Often over tea.)
         </p>
         <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">No "must-have" lists. We promise.</p>
       </header>
 
       <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-[40px] border border-tmMauve/40 bg-tmIvory shadow-editorial transition duration-300 hover:-translate-y-0.5 sm:grid-cols-[1.1fr_0.9fr]">
         <div className="marketing-media relative min-h-[320px] flex-1">
-          <VisualPlaceholder
-            label="Hero lifestyle image or calm planning moment"
-            className="absolute inset-0 h-full w-full"
-            minHeightClassName="min-h-full"
+          <img
+            src={featuredPost.heroImage ?? heroFallback.src}
+            alt={featuredPost.title}
+            className="absolute inset-0 h-full w-full object-cover"
+            loading="eager"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-tmGold/20 via-tmIvory/80 to-transparent" />
         </div>
@@ -112,7 +114,7 @@ const BlogMarketingPage = async () => {
             href={`/blog/${featuredPost.slug}`}
             className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] text-center sm:text-left"
           >
-            Read the story
+            Read the story (take your time)
           </Link>
         </div>
       </article>
@@ -137,11 +139,6 @@ const BlogMarketingPage = async () => {
                   </span>
                   <span>{post.authorName}</span>
                 </div>
-                <VisualPlaceholder
-                  label="Story image placeholder"
-                  className="rounded-[28px]"
-                  minHeightClassName="min-h-[144px]"
-                />
                 <h3 className="font-playfair text-xl sm:text-2xl text-[var(--tmbc-charcoal)]">{post.title}</h3>
                 <p className="text-base leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-75">
                   {post.excerpt ?? ""}

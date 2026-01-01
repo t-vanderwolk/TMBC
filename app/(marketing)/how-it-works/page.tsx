@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import CTARibbon from "@/components/marketing/CTARibbon";
-import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
+import howItWorksVisual from "../../../assets/images/diagram-how-it-works-process.png";
 
 const steps = [
   {
@@ -61,11 +62,15 @@ export default function HowItWorksPage() {
             </Link>
           </div>
         </div>
-        <VisualPlaceholder
-          label="Mentor-led planning moment"
-          className="h-full"
-          minHeightClassName="min-h-[260px]"
-        />
+        <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5] md:aspect-[3/4]">
+          <Image
+            src={howItWorksVisual}
+            alt="Taylor-Made Baby Co. process overview"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 40vw"
+          />
+        </div>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">

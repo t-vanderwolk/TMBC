@@ -86,8 +86,8 @@ export default function CohortPage() {
                   ? cohort.members.map((member) => member.member.name || 'Member').join(', ')
                   : 'Pending invites'}
               </div>
-              <Link href={`/dashboard/chat?channel=${cohort.id}`} className="mt-5 inline-flex items-center gap-2 rounded-full bg-tmMauve px-5 py-3 text-sm font-semibold text-white">
-                Open cohort chat
+              <Link href="/dashboard/member/messages" className="mt-5 inline-flex items-center gap-2 rounded-full bg-tmMauve px-5 py-3 text-sm font-semibold text-white">
+                Open mentor messages
               </Link>
             </div>
             <div className="rounded-2xl border border-tmBlush/40 bg-white/95 p-5 shadow-sm">

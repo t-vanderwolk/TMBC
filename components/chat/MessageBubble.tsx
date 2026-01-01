@@ -22,14 +22,17 @@ const MessageBubble = ({ message, viewerRole, isOwn }: MessageBubbleProps) => {
   const isMentorMessage = message.senderRole === "MENTOR" && !isOwn;
   const bubbleAlignment = isOwn ? "items-end" : "items-start";
   const bubbleColor = isOwn ? "bg-[#F0D4D9]" : isMentorMessage ? "bg-[#FFFAF8]" : "bg-white";
+  const mentorHighlight = viewerRole === "MEMBER" && message.senderRole === "MENTOR" ? "ring-1 ring-[#C8A1B4]/60" : "";
+
+  const fallbackName = viewerRole === "MEMBER" ? "Mentor" : "Member";
 
   return (
     <div className={`flex w-full ${bubbleAlignment}`}>
       <div
-        className={`max-w-[80%] rounded-[24px] px-4 py-3 text-sm font-medium leading-relaxed text-[#3E2F35] shadow-[0_10px_30px_rgba(192,153,170,0.2)] ${bubbleColor}`}
+        className={`max-w-[80%] rounded-[24px] px-4 py-3 text-sm font-medium leading-relaxed text-[#3E2F35] shadow-[0_10px_30px_rgba(192,153,170,0.2)] ${bubbleColor} ${mentorHighlight}`}
       >
         <p className="text-[0.8rem] uppercase tracking-[0.35em] text-[#3E2F35]/60">
-          {message.senderRole === viewerRole ? "You" : message.senderName ?? "Mentor"}
+          {message.senderRole === viewerRole ? "You" : message.senderName ?? fallbackName}
         </p>
         <p className="mt-1 whitespace-pre-line">{message.content}</p>
         <span className="mt-2 inline-flex text-[0.65rem] uppercase tracking-[0.35em] text-[#3E2F35]/50">

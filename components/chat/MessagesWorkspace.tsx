@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import ConversationList from "./ConversationList";
 import ChatThread from "./ChatThread";
-import type { RoleType, ConversationSummary } from "@/types/chat";
+import type { ConversationSummary, ConversationViewer, RoleType } from "@/types/chat";
 
 type MessagesWorkspaceProps = {
   viewerRole: RoleType;
@@ -14,8 +14,18 @@ type MessagesWorkspaceProps = {
 
 const MessagesWorkspace = ({ viewerRole, title, description }: MessagesWorkspaceProps) => {
   const [selected, setSelected] = useState<ConversationSummary | null>(null);
+  const [assignedMentorId, setAssignedMentorId] = useState<string | null>(null);
 
-  const handleLoad = (conversations: ConversationSummary[]) => {
+  const handleLoad = ({
+    conversations,
+    assignedMentorId: mentorId,
+    viewer: _viewer,
+  }: {
+    conversations: ConversationSummary[];
+    assignedMentorId: string | null;
+    viewer: ConversationViewer | null;
+  }) => {
+    setAssignedMentorId(mentorId);
     if (!conversations.length) {
       setSelected(null);
       return;
@@ -47,7 +57,19 @@ const MessagesWorkspace = ({ viewerRole, title, description }: MessagesWorkspace
           />
         </aside>
         <div className="flex-1">
-          <ChatThread conversationId={selected?.id ?? undefined} viewerRole={viewerRole} />
+          {viewerRole === "MEMBER" && assignedMentorId === null ? (
+            <div className="flex flex-1 flex-col justify-center rounded-[28px] border border-[#E3C6D4] bg-white/80 p-6 text-center shadow-[0_16px_50px_rgba(180,143,164,0.2)]">
+              <p className="text-sm text-[#3E2F35]/70">
+                Your mentor will be assigned soon. Messaging will unlock automatically.
+              </p>
+            </div>
+          ) : viewerRole === "MEMBER" && !selected ? (
+            <div className="flex flex-1 flex-col justify-center rounded-[28px] border border-[#E3C6D4] bg-white/80 p-6 text-center shadow-[0_16px_50px_rgba(180,143,164,0.2)]">
+              <p className="text-sm text-[#3E2F35]/70">Setting up your mentor thread.</p>
+            </div>
+          ) : (
+            <ChatThread conversationId={selected?.id ?? undefined} viewerRole={viewerRole} />
+          )}
         </div>
       </div>
     </div>
