@@ -265,10 +265,12 @@ export const ensureConversationBetweenUsers = async (input: EnsureConversationIn
 const resolveMentorMemberPair = (participants: ConversationParticipantInfo[]) => {
   const mentors = participants.filter((participant) => participant.role === Role.MENTOR);
   const members = participants.filter((participant) => participant.role === Role.MEMBER);
-  if (mentors.length !== 1 || members.length !== 1) {
+  const mentor = mentors[0];
+  const member = members[0];
+  if (!mentor || !member || mentors.length !== 1 || members.length !== 1) {
     throw new ChatPermissionError("Conversation must include exactly one member and one mentor.");
   }
-  return { mentor: mentors[0], member: members[0] };
+  return { mentor, member };
 };
 
 const ensureMemberMentorPair = async (

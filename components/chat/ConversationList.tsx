@@ -54,8 +54,14 @@ const ConversationList = ({
     participants?: Array<{ id: string; name?: string | null; role: RoleType }>;
   }): ConversationSummary => {
     const participants = conversation.participants ?? [];
-    const mentor = participants.find((participant) => participant.role === "MENTOR") ?? null;
-    const member = participants.find((participant) => participant.role === "MEMBER") ?? null;
+    const mentorMatch = participants.find((participant) => participant.role === "MENTOR") ?? null;
+    const memberMatch = participants.find((participant) => participant.role === "MEMBER") ?? null;
+    const mentor = mentorMatch
+      ? { ...mentorMatch, name: mentorMatch.name ?? null }
+      : null;
+    const member = memberMatch
+      ? { ...memberMatch, name: memberMatch.name ?? null }
+      : null;
     const updatedAt =
       typeof conversation.updatedAt === "string"
         ? conversation.updatedAt
