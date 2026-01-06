@@ -1,7 +1,8 @@
 import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
-import HeroSection from "@/components/marketing/HeroSection";
+import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
+import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 
 const benefits = [
   {
@@ -23,49 +24,54 @@ const benefits = [
 
 export default function ReflectPage() {
   return (
-    <div className="space-y-24 sm:space-y-28 text-[var(--tmbc-charcoal)]">
-      <HeroSection
-        backgroundImage="standard"
+    <>
+      <ContainedFullWidthHero
+        imageSrc="/assets/images/section-background-soft-ribbon.png"
         imageAlt="Editorial hero artwork for the Reflect pillar."
-        title="Reflect with meaning and care"
-        supporting="A private, gentle space to capture memories, reassurance, and the story you want to keep."
-      />
+      >
+        <h1 className="hero-headline">
+          Reflect with meaning and care
+        </h1>
+        <p className="hero-supporting">
+          A private, gentle space to capture memories, reassurance, and the story you want to keep.
+        </p>
+        <div className="mt-10 flex justify-center gap-4">
+          <Link
+            href="/request-invite"
+            className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+          >
+            Request Your Invite
+          </Link>
+          <Link
+            href="/how-it-works"
+            className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
+          >
+            How It Works (softly)
+          </Link>
+        </div>
+      </ContainedFullWidthHero>
 
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+      <div className="mt-20 sm:mt-24">
+        <MarketingContainer className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
+        <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             Reflect
           </p>
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
-            <Link
-              href="/request-invite"
-              className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
-            >
-              Request Your Invite
-            </Link>
-            <Link
-              href="/how-it-works"
-              className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] opacity-90 hover:opacity-100"
-            >
-              How It Works (softly)
-            </Link>
-          </div>
           <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
             A soft divider that signals privacy and calm.
           </p>
         </div>
       </section>
 
-      <div className="w-screen left-1/2 right-1/2 -translate-x-1/2">
-        <RibbonDivider variant="full" />
-      </div>
+      <RibbonDivider />
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section sm:pb-12">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What this is
           </p>
-          <h2 className="font-serif text-2xl font-medium text-[var(--tmbc-charcoal)] text-opacity-80 sm:text-3xl">
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
             Keepsakes with an heirloom feel
           </h2>
         </div>
@@ -95,7 +101,7 @@ export default function ReflectPage() {
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             How it supports parents
           </p>
-          <h2 className="font-serif text-2xl font-medium text-[var(--tmbc-charcoal)] text-opacity-80 sm:text-3xl">
+          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
             A quiet place to remember
           </h2>
         </div>
@@ -137,6 +143,8 @@ export default function ReflectPage() {
         />
       </div>
       {/* TODO: Expand Reflect pillar with journaling rituals and keepsake previews. */}
-    </div>
+      </MarketingContainer>
+      </div>
+    </>
   );
 }

@@ -3,10 +3,10 @@ export const revalidate = 0;
 
 import type { ReactNode } from "react";
 
-type MentorLayoutProps = {
+type AdminAppLayoutProps = {
   children: ReactNode;
 };
 
-export default function MentorLayout({ children }: MentorLayoutProps) {
+export default function AdminAppLayout({ children }: AdminAppLayoutProps) {
   return <>{children}</>;
 }

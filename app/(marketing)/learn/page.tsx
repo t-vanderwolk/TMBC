@@ -1,7 +1,8 @@
 import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
-import HeroSection from "@/components/marketing/HeroSection";
+import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
+import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 
 const benefits = [
   {
@@ -23,39 +24,47 @@ const benefits = [
 
 export default function LearnPage() {
   return (
-    <div className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
-      <HeroSection
-        backgroundImage="learn"
+    <>
+      <ContainedFullWidthHero
+        imageSrc="/assets/images/section-background-learning-flow.png"
         imageAlt="Educational hero artwork for the Learn pillar."
-        title="Learn with calm, not overwhelm"
-        supporting="Clear, mentor-led guidance that keeps education steady, useful, and in the right sequence."
-      />
+      >
+        <h1 className="hero-headline">
+          Learn with calm, not overwhelm
+        </h1>
+        <p className="hero-supporting">
+          Clear, mentor-led guidance that keeps education steady, useful, and in the right sequence.
+        </p>
+        <div className="mt-10 flex justify-center gap-4">
+          <Link
+            href="/request-invite"
+            className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+          >
+            Request Your Invite
+          </Link>
+          <Link
+            href="/how-it-works"
+            className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
+          >
+            How It Works (gently)
+          </Link>
+        </div>
+      </ContainedFullWidthHero>
 
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+      <div className="mt-20 sm:mt-24">
+        <MarketingContainer className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
+        <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             Learn
           </p>
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
-            <Link
-              href="/request-invite"
-              className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
-            >
-              Request Your Invite
-            </Link>
-            <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
-              How It Works (gently)
-            </Link>
-          </div>
           <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
             A gentle divider that keeps the learning rhythm calm and clear.
           </p>
         </div>
       </section>
 
-      <div className="w-screen left-1/2 right-1/2 -translate-x-1/2">
-        <RibbonDivider variant="full" />
-      </div>
+      <RibbonDivider />
 
       <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
         <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
@@ -133,6 +142,8 @@ export default function LearnPage() {
         tone="soft"
       />
       {/* TODO: Expand Learn pillar with stories and mentor-led lesson previews. */}
-    </div>
+      </MarketingContainer>
+      </div>
+    </>
   );
 }

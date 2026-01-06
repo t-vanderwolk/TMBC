@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import { useRequireRole } from "@/lib/auth/useRequireRole";
 import type { RegistryItemResponse } from "@/lib/services/server/registry.service";
 import PlanSectionShell from "@/components/plan/PlanSectionShell";
+import type { PlanDecisionState } from "@/lib/services/server/planSections.service";
 import { planSectionKeys } from "@/lib/plan/planSectionMap";
 
 // TMBC Canon:
@@ -76,6 +77,10 @@ type PlanSection = {
   updatedByRole: string | null;
   updatedAt: string;
 };
+
+const allowedDecisionStates: PlanDecisionState[] = ["considering", "waiting", "approved", "deferred"];
+const normalizeDecisionState = (value: string | null) =>
+  allowedDecisionStates.includes(value as PlanDecisionState) ? (value as PlanDecisionState) : null;
 
 const formatLabel = (value: string) =>
   value
@@ -415,7 +420,9 @@ export default function MentorPlanPage() {
         <>
           <PlanSectionShell
             sectionKey={planSectionKeys.onboardingContext}
-            decisionState={planSectionLookup[planSectionKeys.onboardingContext]?.decisionState ?? null}
+            decisionState={normalizeDecisionState(
+              planSectionLookup[planSectionKeys.onboardingContext]?.decisionState ?? null,
+            )}
             onDecisionChange={(value) => handleDecisionStateChange(planSectionKeys.onboardingContext, value)}
             updatedByRole={planSectionLookup[planSectionKeys.onboardingContext]?.updatedByRole ?? null}
             updatedAt={planSectionLookup[planSectionKeys.onboardingContext]?.updatedAt ?? null}
@@ -529,7 +536,9 @@ export default function MentorPlanPage() {
 
           <PlanSectionShell
             sectionKey={planSectionKeys.mentorSuggestions}
-            decisionState={planSectionLookup[planSectionKeys.mentorSuggestions]?.decisionState ?? null}
+            decisionState={normalizeDecisionState(
+              planSectionLookup[planSectionKeys.mentorSuggestions]?.decisionState ?? null,
+            )}
             onDecisionChange={(value) => handleDecisionStateChange(planSectionKeys.mentorSuggestions, value)}
             updatedByRole={planSectionLookup[planSectionKeys.mentorSuggestions]?.updatedByRole ?? null}
             updatedAt={planSectionLookup[planSectionKeys.mentorSuggestions]?.updatedAt ?? null}
@@ -665,7 +674,9 @@ export default function MentorPlanPage() {
 
           <PlanSectionShell
             sectionKey={planSectionKeys.accepted}
-            decisionState={planSectionLookup[planSectionKeys.accepted]?.decisionState ?? null}
+            decisionState={normalizeDecisionState(
+              planSectionLookup[planSectionKeys.accepted]?.decisionState ?? null,
+            )}
             onDecisionChange={(value) => handleDecisionStateChange(planSectionKeys.accepted, value)}
             updatedByRole={planSectionLookup[planSectionKeys.accepted]?.updatedByRole ?? null}
             updatedAt={planSectionLookup[planSectionKeys.accepted]?.updatedAt ?? null}
@@ -710,7 +721,9 @@ export default function MentorPlanPage() {
 
           <PlanSectionShell
             sectionKey={planSectionKeys.externalRegistries}
-            decisionState={planSectionLookup[planSectionKeys.externalRegistries]?.decisionState ?? null}
+            decisionState={normalizeDecisionState(
+              planSectionLookup[planSectionKeys.externalRegistries]?.decisionState ?? null,
+            )}
             onDecisionChange={(value) => handleDecisionStateChange(planSectionKeys.externalRegistries, value)}
             updatedByRole={planSectionLookup[planSectionKeys.externalRegistries]?.updatedByRole ?? null}
             updatedAt={planSectionLookup[planSectionKeys.externalRegistries]?.updatedAt ?? null}

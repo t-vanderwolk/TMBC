@@ -156,7 +156,7 @@
   .marketing-content p,
   .marketing-content li,
   .marketing-content span {
-    @apply text-base leading-relaxed sm:text-lg;
+    @apply text-base leading-[1.75] sm:text-lg;
   }
 
   .marketing-content p + p {
@@ -199,6 +199,20 @@
   .marketing-content h3 {
     @apply text-xl font-semibold leading-tight;
     color: rgba(62, 47, 53, 0.8);
+  }
+
+  .hero-headline {
+    font-family: serif;
+    font-size: clamp(2.2rem, 5vw, 3rem);
+    line-height: 1.2;
+    color: #2e2e2e;
+  }
+
+  .hero-supporting {
+    margin-top: 1rem;
+    font-size: clamp(1rem, 2.5vw, 1.125rem);
+    line-height: 1.6;
+    color: rgba(0, 0, 0, 0.65);
   }
 
   @screen sm {
@@ -302,6 +316,26 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes partnerLogoMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.partner-logo-marquee {
+  animation: partnerLogoMarquee 80s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-logo-marquee {
+    animation: none;
   }
 }
 

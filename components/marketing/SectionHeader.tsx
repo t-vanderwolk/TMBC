@@ -1,20 +1,22 @@
+import type { ReactNode } from "react";
+
 import HeroSection from "@/components/marketing/HeroSection";
 
 type SectionBackground = "standard" | "learn";
 
 type SectionHeaderProps = {
   backgroundImage: SectionBackground;
-  title: string;
-  supporting: string;
+  lead: ReactNode;
+  ctas?: ReactNode;
   imageAlt?: string;
 };
 
-const SectionHeader = ({ backgroundImage, title, supporting, imageAlt }: SectionHeaderProps) => {
+const SectionHeader = ({ backgroundImage, lead, ctas, imageAlt }: SectionHeaderProps) => {
   return (
     <HeroSection
       backgroundImage={backgroundImage}
-      title={title}
-      supporting={supporting}
+      lead={lead}
+      ctas={ctas}
       imageAlt={imageAlt}
     />
   );

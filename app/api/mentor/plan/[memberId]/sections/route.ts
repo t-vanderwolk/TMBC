@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
+import type { PlanDecisionState } from "@/lib/services/server/planSections.service";
 import { listPlanSectionsForMember, upsertPlanSection } from "@/lib/services/server/planSections.service";
 
 const requireMentor = async () => {
@@ -47,10 +48,15 @@ export async function POST(
       return NextResponse.json({ error: "Section key is required." }, { status: 400 });
     }
 
+    const allowedDecisionStates: PlanDecisionState[] = ["considering", "waiting", "approved", "deferred"];
+    const decisionState = allowedDecisionStates.includes(payload.decisionState as PlanDecisionState)
+      ? (payload.decisionState as PlanDecisionState)
+      : undefined;
+
     const section = await upsertPlanSection({
       memberId: params.memberId,
       sectionKey,
-      decisionState: payload.decisionState ?? undefined,
+      decisionState,
       mentorNote: payload.mentorNote ?? undefined,
       updatedByRole: "MENTOR",
     });

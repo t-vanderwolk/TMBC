@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
+import type { PlanDecisionState } from "@/lib/services/server/planSections.service";
 import { listPlanSectionsForMember, upsertPlanSection } from "@/lib/services/server/planSections.service";
 
 const handleError = (error: unknown, fallback = "Unable to update plan section.") => {
@@ -39,10 +40,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Section key is required." }, { status: 400 });
     }
 
+    const allowedDecisionStates: PlanDecisionState[] = ["considering", "waiting", "approved", "deferred"];
+    const decisionState = allowedDecisionStates.includes(payload.decisionState as PlanDecisionState)
+      ? (payload.decisionState as PlanDecisionState)
+      : undefined;
+
     const section = await upsertPlanSection({
       memberId: user.id,
       sectionKey,
-      decisionState: payload.decisionState ?? undefined,
+      decisionState,
       memberNote: payload.memberNote ?? undefined,
       memberAcknowledgement: payload.memberAcknowledgement ?? undefined,
       updatedByRole: "MEMBER",

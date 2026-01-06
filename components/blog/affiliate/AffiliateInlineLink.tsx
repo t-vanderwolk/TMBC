@@ -1,4 +1,9 @@
-import type { AffiliateProduct } from '@/data/blogPosts';
+type AffiliateProduct = {
+  title: string;
+  description: string;
+  affiliateUrl: string;
+  brand?: string;
+};
 
 type AffiliateInlineLinkProps = {
   product: AffiliateProduct;

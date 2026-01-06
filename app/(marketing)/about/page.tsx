@@ -141,7 +141,7 @@ export default function AboutPage() {
         <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           A visual pause that echoes the values guiding the invite.
         </p>
-        <RibbonDivider variant="full" />
+        <RibbonDivider />
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
@@ -169,7 +169,7 @@ export default function AboutPage() {
       </section>
 
       <section>
-        <RibbonDivider variant="full" />
+        <RibbonDivider />
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">

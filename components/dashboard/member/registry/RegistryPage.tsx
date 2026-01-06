@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { RegistryDto, RegistryItemResponse } from "@/lib/services/server/registry.service";
 import PlanSectionShell from "@/components/plan/PlanSectionShell";
+import type { PlanDecisionState } from "@/lib/services/server/planSections.service";
 import { planSectionKeys } from "@/lib/plan/planSectionMap";
 
 // TMBC Canon:
@@ -15,6 +16,9 @@ import { planSectionKeys } from "@/lib/plan/planSectionMap";
 // Learn and Workbook inform decisions but never mutate the registry.
 
 const API_BASE = "/api/registry";
+const allowedDecisionStates: PlanDecisionState[] = ["considering", "waiting", "approved", "deferred"];
+const normalizeDecisionState = (value: string | null) =>
+  allowedDecisionStates.includes(value as PlanDecisionState) ? (value as PlanDecisionState) : null;
 
 const fetchRegistry = async () => {
   const response = await fetch(API_BASE, { cache: "no-store" });
@@ -498,7 +502,9 @@ export default function RegistryPage() {
 
       <PlanSectionShell
         sectionKey={planSectionKeys.mentorSuggestions}
-        decisionState={planSectionLookup[planSectionKeys.mentorSuggestions]?.decisionState ?? null}
+        decisionState={normalizeDecisionState(
+          planSectionLookup[planSectionKeys.mentorSuggestions]?.decisionState ?? null,
+        )}
         onDecisionChange={(value) => handleDecisionStateChange(planSectionKeys.mentorSuggestions, value)}
         updatedByRole={planSectionLookup[planSectionKeys.mentorSuggestions]?.updatedByRole ?? null}
         updatedAt={planSectionLookup[planSectionKeys.mentorSuggestions]?.updatedAt ?? null}
@@ -623,7 +629,9 @@ export default function RegistryPage() {
 
       <PlanSectionShell
         sectionKey={planSectionKeys.accepted}
-        decisionState={planSectionLookup[planSectionKeys.accepted]?.decisionState ?? null}
+        decisionState={normalizeDecisionState(
+          planSectionLookup[planSectionKeys.accepted]?.decisionState ?? null,
+        )}
         onDecisionChange={(value) => handleDecisionStateChange(planSectionKeys.accepted, value)}
         updatedByRole={planSectionLookup[planSectionKeys.accepted]?.updatedByRole ?? null}
         updatedAt={planSectionLookup[planSectionKeys.accepted]?.updatedAt ?? null}
@@ -746,7 +754,9 @@ export default function RegistryPage() {
 
       <PlanSectionShell
         sectionKey={planSectionKeys.externalRegistries}
-        decisionState={planSectionLookup[planSectionKeys.externalRegistries]?.decisionState ?? null}
+        decisionState={normalizeDecisionState(
+          planSectionLookup[planSectionKeys.externalRegistries]?.decisionState ?? null,
+        )}
         onDecisionChange={(value) => handleDecisionStateChange(planSectionKeys.externalRegistries, value)}
         updatedByRole={planSectionLookup[planSectionKeys.externalRegistries]?.updatedByRole ?? null}
         updatedAt={planSectionLookup[planSectionKeys.externalRegistries]?.updatedAt ?? null}

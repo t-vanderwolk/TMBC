@@ -81,3 +81,10 @@ export async function uploadProfileImage(formData: FormData) {
   revalidatePath(SETTINGS_PATH);
   return imageUrl;
 }
+
+export async function regenerateRecommendations() {
+  const user = requireMember(await getUserOrThrow());
+  revalidatePath(SETTINGS_PATH);
+  revalidatePath(`/dashboard/registry/${user.id}`);
+  return { message: "Recommendations refreshed." };
+}

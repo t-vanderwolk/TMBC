@@ -9,8 +9,8 @@ type HeroBackground = "primary" | "foundingCircle" | "standard" | "learn";
 
 type HeroSectionProps = {
   backgroundImage: HeroBackground;
-  title: ReactNode;
-  supporting: ReactNode;
+  lead: ReactNode;
+  ctas?: ReactNode;
   imageAlt?: string;
 };
 
@@ -21,26 +21,26 @@ const heroBackgroundMap: Record<HeroBackground, { src: string }> = {
   learn: heroLearn,
 };
 
-const HeroSection = ({ backgroundImage, title, supporting }: HeroSectionProps) => {
+const HeroSection = ({ backgroundImage, lead, ctas }: HeroSectionProps) => {
   const heroAsset = heroBackgroundMap[backgroundImage];
   return (
-    <section className="relative w-screen overflow-hidden left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] pt-20 pb-24 sm:pt-28 sm:pb-32">
-      <div className="absolute inset-0 z-0">
+    <section className="relative w-screen overflow-hidden left-1/2 right-1/2 -translate-x-1/2">
+      <div className="grid w-full">
         <img
           src={heroAsset.src}
           alt=""
           aria-hidden="true"
-          className="block w-full h-auto object-contain saturate-90 contrast-90 brightness-95"
+          className="col-start-1 row-start-1 block w-full h-full max-w-full object-contain"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/35 to-white/55" />
-      </div>
-      <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-col items-center px-6 text-center text-[var(--tmbc-charcoal)] sm:px-8">
-        <h1 className="mb-4 font-serif text-[clamp(1.7rem,5vw,3rem)] leading-[1.25] text-[var(--tmbc-charcoal)]">
-          {title}
-        </h1>
-        <p className="text-[clamp(1rem,3.5vw,1.15rem)] leading-[1.55] text-[var(--tmbc-charcoal)] text-opacity-70">
-          {supporting}
-        </p>
+        <div className="col-start-1 row-start-1 flex w-full items-center justify-center">
+          <div
+            className="w-full max-w-[42rem] px-6 py-16 text-center text-[var(--tmbc-charcoal)] sm:px-0 sm:py-20 md:py-28"
+            style={{ textShadow: "0 1px 2px rgba(0,0,0,0.08)" }}
+          >
+            {lead}
+            {ctas && <div className="hero-cta mt-8 flex flex-wrap justify-center sm:mt-10">{ctas}</div>}
+          </div>
+        </div>
       </div>
     </section>
   );

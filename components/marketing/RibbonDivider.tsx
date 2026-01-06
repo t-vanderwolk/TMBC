@@ -1,16 +1,20 @@
+import dividerRibbon from "../../assets/images/divider-ribbon-horizontal.png";
+
 type RibbonDividerProps = {
   className?: string;
 };
 
 const RibbonDivider = ({ className = "" }: RibbonDividerProps) => {
   return (
-    <div className={`flex w-full justify-center mt-12 mb-14 sm:mt-16 sm:mb-20 ${className}`}>
-      <img
-        src="assets/images/divider-ribbon-horizontal.png"
-        alt=""
-        aria-hidden="true"
-        className="block h-auto w-[220px] object-contain opacity-90 sm:w-[260px] md:w-[300px]"
-      />
+    <div className={`my-12 flex w-full justify-center sm:my-16 lg:my-24 ${className}`}>
+      <div className="w-full max-w-[920px] px-4 sm:px-6">
+        <img
+          src={dividerRibbon.src}
+          alt=""
+          aria-hidden="true"
+          className="mx-auto block h-auto w-[86%] max-w-[520px] object-contain sm:w-[640px] sm:max-w-none lg:w-[820px]"
+        />
+      </div>
     </div>
   );
 };

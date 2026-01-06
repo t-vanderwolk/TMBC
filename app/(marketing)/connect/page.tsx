@@ -1,6 +1,7 @@
 import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
-import HeroSection from "@/components/marketing/HeroSection";
+import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
+import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const benefits = [
@@ -23,36 +24,44 @@ const benefits = [
 
 export default function ConnectPage() {
   return (
-    <div className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
-      <HeroSection
-        backgroundImage="standard"
+    <>
+      <ContainedFullWidthHero
+        imageSrc="/assets/images/section-background-soft-ribbon.png"
         imageAlt="Editorial hero artwork for the Connect pillar."
-        title="Connection without the noise"
-        supporting="Mentor-led connection that stays steady, kind, and centered on shared understanding."
-      />
+      >
+        <h1 className="hero-headline">
+          Connection without the noise
+        </h1>
+        <p className="hero-supporting">
+          Mentor-led connection that stays steady, kind, and centered on shared understanding.
+        </p>
+        <div className="mt-10 flex justify-center gap-4">
+          <Link
+            href="/request-invite"
+            className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+          >
+            Request Your Invite
+          </Link>
+          <Link
+            href="/how-it-works"
+            className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
+          >
+            How It Works (quietly)
+          </Link>
+        </div>
+      </ContainedFullWidthHero>
 
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+      <div className="mt-20 sm:mt-24">
+        <MarketingContainer className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
+        <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             Connect
           </p>
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
-            <Link
-              href="/request-invite"
-              className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
-            >
-              Request Your Invite
-            </Link>
-            <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
-              How It Works (quietly)
-            </Link>
-          </div>
         </div>
       </section>
 
-      <div className="w-screen left-1/2 right-1/2 -translate-x-1/2">
-        <RibbonDivider variant="full" />
-      </div>
+      <RibbonDivider />
 
       <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
         {/* Structural: move the emotional pause ahead of diagrams to establish warmth before explanation. */}
@@ -136,6 +145,8 @@ export default function ConnectPage() {
         tone="medium"
       />
       {/* TODO: Expand Connect pillar with mentor circle previews and room rituals. */}
-    </div>
+      </MarketingContainer>
+      </div>
+    </>
   );
 }
