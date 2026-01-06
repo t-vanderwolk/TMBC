@@ -26,6 +26,7 @@ const logos = logoContext.keys().map((key) => {
   const mod = logoContext<StaticImageData | { default: StaticImageData }>(key);
   return "default" in mod ? mod.default : mod;
 });
+const displayedLogos = logos.slice(0, 6);
 
 type PartnerLogoCarouselProps = {
   eyebrowText?: string;
@@ -34,29 +35,25 @@ type PartnerLogoCarouselProps = {
 const PartnerLogoCarousel = ({
   eyebrowText = "Proudly partnered with",
 }: PartnerLogoCarouselProps) => {
-  const loopedLogos = [...logos, ...logos];
-
   return (
-    <section className="w-full bg-[var(--tmbc-ivory)]/80 py-10 sm:py-14 lg:py-[4.5rem]">
+    <section className="w-full bg-[var(--tmbc-ivory)]/80 py-20 md:py-32">
       <MarketingContainer className="flex flex-col items-center gap-6">
         {eyebrowText ? (
           <p className="text-center text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
             {eyebrowText}
           </p>
         ) : null}
-        <div className="w-full overflow-x-auto sm:overflow-hidden [-webkit-overflow-scrolling:touch]">
-          <div className="partner-logo-marquee flex w-max items-center gap-10 sm:gap-12 lg:gap-16 motion-reduce:animate-none">
-            {loopedLogos.map((logo, index) => (
-              <Image
-                key={`${logo.src}-${index}`}
-                src={logo}
-                alt=""
-                aria-hidden="true"
-                className="h-8 w-auto opacity-70 transition-opacity duration-300 sm:h-10 lg:h-12 lg:hover:opacity-100"
-                sizes="(min-width: 1024px) 96px, (min-width: 640px) 80px, 64px"
-              />
-            ))}
-          </div>
+        <div className="grid w-full grid-cols-2 items-center justify-items-center gap-8 md:grid-cols-4">
+          {displayedLogos.map((logo) => (
+            <Image
+              key={logo.src}
+              src={logo}
+              alt=""
+              aria-hidden="true"
+              className="h-8 w-auto opacity-60 sm:h-10 lg:h-12"
+              sizes="(min-width: 1024px) 96px, (min-width: 640px) 80px, 64px"
+            />
+          ))}
         </div>
       </MarketingContainer>
     </section>

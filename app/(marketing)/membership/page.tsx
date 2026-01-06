@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ContainedFullWidthHero } from "@/components/marketing/ContainedFullWidthHero";
+import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 const membershipPillars = [
@@ -82,11 +82,17 @@ export default function MembershipPage() {
       <ContainedFullWidthHero
         imageSrc="/assets/images/section-background-soft-ribbon.png"
         imageAlt="Founding Circle hero artwork for membership."
-        headline="Start as a member. Grow into a mentor."
-        supporting="Membership gives you guided baby prep, personal support, and a clear path to becoming the calm voice for someone else — when you’re ready. (No pressure. No rush.)"
-        mobileKey="membership"
       >
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="hero-copy md:contents">
+          <h1 className="hero-headline">
+            Start as a member. Grow into a mentor.
+          </h1>
+          <p className="hero-supporting mt-6">
+            Membership gives you guided baby prep, personal support, and a clear path to becoming the calm voice for
+            someone else — when you’re ready. (No pressure. No rush.)
+          </p>
+        </div>
+        <div className="hero-cta mt-10 hidden flex-col gap-4 justify-center md:flex md:flex-row">
           <Link
             href="/request-invite"
             className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
@@ -102,9 +108,24 @@ export default function MembershipPage() {
         </div>
       </ContainedFullWidthHero>
 
+      <div className="hero-cta mt-10 flex flex-col gap-4 justify-center px-6 md:hidden">
+        <Link
+          href="/request-invite"
+          className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
+        >
+          Request an Invite
+        </Link>
+        <Link
+          href="/how-it-works"
+          className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
+        >
+          How mentorship works
+        </Link>
+      </div>
+
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-        <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+        <section className="marketing-section marketing-card mb-24 md:mb-28 bg-[var(--tmbc-ivory)]/90 px-8 text-center">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Membership
@@ -117,7 +138,7 @@ export default function MembershipPage() {
 
       <RibbonDivider />
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card space-y-6 bg-[var(--tmbc-ivory)]/40 px-8 py-20 md:py-32">
         <div className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What membership means
@@ -130,7 +151,7 @@ export default function MembershipPage() {
           {membershipPillars.map((pillar) => (
             <div
               key={pillar.title}
-              className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-6 shadow-[0_12px_40px_rgba(199,166,199,0.15)]"
+              className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6"
             >
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 {pillar.title}
@@ -148,7 +169,7 @@ export default function MembershipPage() {
         </p>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card space-y-6 bg-[var(--tmbc-ivory)]/40 px-8 py-20 md:py-32">
         <div className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Member → Mentor pathway
@@ -161,7 +182,7 @@ export default function MembershipPage() {
           {pathwaySteps.map((step, index) => (
             <div
               key={step.title}
-              className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6 shadow-[0_12px_40px_rgba(199,166,199,0.15)]"
+              className="marketing-card bg-white/80 p-6"
             >
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 Step {index + 1}
@@ -180,7 +201,7 @@ export default function MembershipPage() {
         </p>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
         <div className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What mentors unlock
@@ -190,7 +211,7 @@ export default function MembershipPage() {
           </h2>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-6">
+          <div className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
             <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
               Mentor capabilities
             </p>
@@ -200,7 +221,7 @@ export default function MembershipPage() {
               ))}
             </ul>
           </div>
-          <div className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-6">
+          <div className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
             <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
               Platform support
             </p>
@@ -216,7 +237,7 @@ export default function MembershipPage() {
         </p>
       </section>
 
-      <section className="space-y-5 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/50 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card space-y-5 bg-white/80 px-8 py-20 md:py-32">
         <div className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Why this model exists
@@ -236,7 +257,7 @@ export default function MembershipPage() {
         </div>
       </section>
 
-      <section className="space-y-5 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card space-y-5 bg-white/80 px-8 py-20 md:py-32">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Invite-only clarification

@@ -34,8 +34,8 @@ const VerifyContent = () => {
   return (
     <div className="space-y-10 text-[var(--tmbc-charcoal)]">
       <section className="marketing-section">
-        <div className="mx-auto max-w-md rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-8 shadow-[0_25px_60px_rgba(199,166,199,0.25)]">
-          <h1 className="font-serif text-3xl sm:text-4xl">Verify your invitation</h1>
+        <div className="mx-auto max-w-[90%] md:max-w-md rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-8 shadow-[0_25px_60px_rgba(199,166,199,0.25)]">
+          <h1 className="font-serif text-2xl md:text-4xl">Verify your invitation</h1>
           <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
             Enter the email and invite code from your concierge note to continue creating your profile.
           </p>

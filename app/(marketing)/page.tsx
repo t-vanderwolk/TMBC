@@ -3,7 +3,7 @@
 import { FormEvent, Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ContainedFullWidthHero } from "@/components/marketing/ContainedFullWidthHero";
+import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
@@ -62,13 +62,20 @@ function HomePageContent() {
     <>
       <ContainedFullWidthHero
         imageSrc="/assets/images/hero-marketing-signature.png"
-        imageAlt="Primary Taylor-Made Baby Co. hero artwork."
-        headline="A calmer way to prepare for baby — and parenthood."
-        supporting="Thoughtful guidance for pregnancy and early parenthood, with a trusted mentor to help you decide what actually matters. (Spoiler: not all of it.)"
-        mobileKey="home"
+        imageAlt="Taylor-Made Baby Co. marketing hero"
         priority
       >
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="hero-copy md:contents">
+          <h1 className="hero-headline">
+            A calmer way to prep for baby — and parenthood.
+          </h1>
+          <p className="hero-supporting mt-6">
+            Think less spiraling, more steady steps. We help you learn, plan,
+            connect, and reflect — with a real human mentor who’s been there
+            (and won’t judge your 2 a.m. questions).
+          </p>
+        </div>
+        <div className="hero-cta mt-10 hidden flex-col gap-4 justify-center md:flex md:flex-row">
           <Link
             href="/request-invite"
             className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
@@ -79,14 +86,29 @@ function HomePageContent() {
             href="/how-it-works"
             className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
           >
-            How it works (in plain language)
+            How it works (without the overwhelm)
           </Link>
         </div>
       </ContainedFullWidthHero>
 
+      <div className="hero-cta mt-10 flex flex-col gap-4 justify-center px-6 md:hidden">
+        <Link
+          href="/request-invite"
+          className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+        >
+          Request an Invite
+        </Link>
+        <Link
+          href="/how-it-works"
+          className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
+        >
+          How it works (without the overwhelm)
+        </Link>
+      </div>
+
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-        <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+        <section className="marketing-section marketing-card mb-24 md:mb-28 bg-[var(--tmbc-ivory)]/90 px-8 text-center">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
           <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             Invite-only · Mentor-guided · Calm digital planning
@@ -112,7 +134,7 @@ function HomePageContent() {
                   if (inviteError) setInviteError("");
                 }}
                 placeholder="Enter your invite code"
-                className="w-full rounded-full border border-[var(--tmbc-mauve)]/40 bg-white px-4 py-3 text-sm text-[var(--tmbc-charcoal)] shadow-sm"
+                className="w-full min-h-[56px] rounded-full border border-[var(--tmbc-mauve)]/40 bg-white px-4 py-4 text-base text-[var(--tmbc-charcoal)] shadow-sm"
               />
               <button
                 type="submit"
@@ -135,7 +157,7 @@ function HomePageContent() {
 
       <PartnerLogoCarousel />
 
-      <section className="space-y-5 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/50 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.22)] marketing-section">
+      <section className="marketing-section marketing-card space-y-5 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/50 px-8 py-20 md:py-32">
         <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Why it feels loud</p>
         <div className="max-w-[680px] space-y-6 text-base text-[var(--tmbc-charcoal)] text-opacity-80">
           <p>
@@ -150,7 +172,7 @@ function HomePageContent() {
         </div>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What makes this different
@@ -195,7 +217,7 @@ function HomePageContent() {
         </div>
       </section>
 
-      <section className="relative space-y-6 overflow-hidden rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card relative space-y-6 overflow-hidden bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32">
         <div className="space-y-2">
           <p className="system-language">
             Learn · Plan · Connect · Reflect
@@ -205,25 +227,25 @@ function HomePageContent() {
           </h2>
         </div>
         <div className="space-y-6 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
-          <div className="flex flex-col gap-4 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
+          <div className="marketing-card flex flex-col gap-4 bg-white/80 p-5">
             <div className="space-y-1">
               <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Learn</p>
               <p>Understand what matters next.</p>
             </div>
           </div>
-          <div className="flex flex-col gap-4 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
+          <div className="marketing-card flex flex-col gap-4 bg-white/80 p-5">
             <div className="space-y-1">
               <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Plan</p>
               <p>Make decisions in the right order.</p>
             </div>
           </div>
-          <div className="flex flex-col gap-4 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
+          <div className="marketing-card flex flex-col gap-4 bg-white/80 p-5">
             <div className="space-y-1">
               <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Connect</p>
               <p>Ask questions when they come up.</p>
             </div>
           </div>
-          <div className="flex flex-col gap-4 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
+          <div className="marketing-card flex flex-col gap-4 bg-white/80 p-5">
             <div className="space-y-1">
               <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Reflect</p>
               <p>Capture the moments you’ll want to remember.</p>
@@ -232,7 +254,7 @@ function HomePageContent() {
         </div>
       </section>
 
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-[var(--tmbc-ivory)]/80 p-10 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/80 px-10 py-20 md:py-32 text-center">
         <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
           Member to mentor
         </p>
@@ -248,7 +270,7 @@ function HomePageContent() {
         </p>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What this gives you
@@ -272,11 +294,11 @@ function HomePageContent() {
         </p>
       </section>
 
-      <section className="grid gap-8 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-2">
+      <section className="marketing-section marketing-card grid gap-8 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32 md:grid-cols-2">
         <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70 md:col-span-2">
           There’s no right or wrong way to prepare — just what feels supportive to you.
         </p>
-        <div className="space-y-4 rounded-[28px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-6">
+        <div className="marketing-card space-y-4 bg-white/80 p-6">
           <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
             This is for you if...
           </p>
@@ -286,7 +308,7 @@ function HomePageContent() {
             <li>• You prefer thoughtful decisions</li>
           </ul>
         </div>
-        <div className="space-y-4 rounded-[28px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-6">
+        <div className="marketing-card space-y-4 bg-white/80 p-6">
           <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
             This may not be for you if...
           </p>
@@ -297,7 +319,7 @@ function HomePageContent() {
         </div>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/40 bg-[var(--tmbc-ivory)]/80 p-10 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card space-y-6 bg-[var(--tmbc-ivory)]/80 px-10 py-20 md:py-32 text-center">
         <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Invite-only</p>
         <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
           Taylor-Made Baby Co. is invite-only so we can keep guidance personal and intentional.

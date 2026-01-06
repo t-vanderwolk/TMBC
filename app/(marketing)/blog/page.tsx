@@ -1,6 +1,6 @@
 import Link from "next/link";
 import MarketingImage from "@/components/marketing/MarketingImage";
-import { ContainedFullWidthHero } from "@/components/marketing/ContainedFullWidthHero";
+import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 
 const API_BASE_URL =
@@ -57,15 +57,23 @@ const BlogMarketingPage = async () => {
         <ContainedFullWidthHero
           imageSrc="/assets/images/section-background-soft-ribbon.png"
           imageAlt="Soft ribbon background"
-          eyebrow="Taylor-Made Journal"
-          headline="Clear thinking for pregnancy and early parenthood."
-          supporting="Real conversations about baby prep, decisions, and life with a new child — without fear-based advice. (Or a 47-tab deep dive at midnight.)"
-          headlineClassName="hero-headline hero-headline--small"
-          mobileKey="blog"
-        />
+        >
+          <p className="text-xs uppercase tracking-[0.6em] text-[var(--tmbc-charcoal)]">
+            Taylor-Made Journal
+          </p>
+          <div className="hero-copy md:contents">
+            <h1 className="hero-headline">
+              Clear thinking for pregnancy and early parenthood.
+            </h1>
+            <p className="hero-supporting mt-6">
+              Real conversations about baby prep, decisions, and life with a new child — without fear-based advice.
+              (Or a 47-tab deep dive at midnight.)
+            </p>
+          </div>
+        </ContainedFullWidthHero>
         <MarketingContent>
           <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-          <section className="marketing-section text-center text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+          <section className="marketing-section mb-24 md:mb-28 text-center text-base text-[var(--tmbc-charcoal)] text-opacity-70">
             <p>No journal entries are available yet.</p>
             <p className="mt-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
               Check back soon — we publish gently.
@@ -82,23 +90,31 @@ const BlogMarketingPage = async () => {
       <ContainedFullWidthHero
         imageSrc="/assets/images/section-background-soft-ribbon.png"
         imageAlt="Soft ribbon background"
-        eyebrow="Taylor-Made Journal"
-        headline="Clear thinking for pregnancy and early parenthood."
-        supporting="Real conversations about baby prep, decisions, and life with a new child — without fear-based advice. (Or a 47-tab deep dive at midnight.)"
-        headlineClassName="hero-headline hero-headline--small"
-        mobileKey="blog"
-      />
+      >
+        <p className="text-xs uppercase tracking-[0.6em] text-[var(--tmbc-charcoal)]">
+          Taylor-Made Journal
+        </p>
+        <div className="hero-copy md:contents">
+          <h1 className="hero-headline">
+            Clear thinking for pregnancy and early parenthood.
+          </h1>
+          <p className="hero-supporting mt-6">
+            Real conversations about baby prep, decisions, and life with a new child — without fear-based advice.
+            (Or a 47-tab deep dive at midnight.)
+          </p>
+        </div>
+      </ContainedFullWidthHero>
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-        <section className="marketing-section space-y-10">
-          <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-[40px] border border-tmMauve/40 bg-tmIvory shadow-editorial transition duration-300 sm:grid-cols-[1.1fr_0.9fr]">
+        <section className="marketing-section space-y-10 mb-24 md:mb-28">
+          <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-2xl border border-[var(--tmbc-ivory)]/60 bg-tmIvory transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:grid-cols-[1.1fr_0.9fr]">
             <div className="marketing-media flex-1">
-              <div className="py-16 sm:py-24">
+              <div className="py-20 md:py-32">
                 <MarketingImage
                   variant="hero-editorial"
                   aspectRatio="4/3"
-                  maxWidth={760}
+                  maxWidth={920}
                   priority
                   label="Journal - Featured post hero image"
                   page="/blog"
@@ -109,7 +125,7 @@ const BlogMarketingPage = async () => {
               </div>
             </div>
             <div className="flex flex-1 flex-col gap-6 p-8 sm:p-10">
-              <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+              <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 <span>
                   {featuredPost.publishedAt
                     ? new Date(featuredPost.publishedAt).toLocaleDateString("en-US", {
@@ -122,7 +138,7 @@ const BlogMarketingPage = async () => {
                 <span>•</span>
                 <span>{featuredPost.authorName}</span>
               </div>
-              <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+              <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 {featuredPost.tags.map((tag) => (
                   <span key={tag} className="rounded-full bg-tmBlush/70 px-3 py-1 font-semibold text-[0.55rem] tracking-[0.3em] text-tmCharcoal">
                     {tag}
@@ -145,12 +161,12 @@ const BlogMarketingPage = async () => {
             </div>
           </article>
 
-          <section className="space-y-6 marketing-section">
+        <section className="marketing-section space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {otherPosts.map((post) => (
                 <article
                   key={post.slug}
-                  className="group flex min-h-[320px] flex-col justify-between overflow-hidden rounded-[32px] border border-tmMauve/30 bg-white/80 p-6 shadow-soft transition duration-300 hover:shadow-editorial"
+                  className="marketing-card group flex min-h-[320px] flex-col justify-between overflow-hidden bg-white/80 p-6"
                 >
                   <div className="space-y-4">
                     <MarketingImage
@@ -180,7 +196,7 @@ const BlogMarketingPage = async () => {
                     <p className="text-base leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-75">
                       {post.excerpt ?? ""}
                     </p>
-                    <div className="flex flex-wrap gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                    <div className="flex flex-wrap gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                       {post.tags.map((tag) => (
                         <span
                           key={tag}

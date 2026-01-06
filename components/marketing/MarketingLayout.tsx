@@ -27,7 +27,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen overflow-hidden bg-gradient-to-b from-[var(--tmbc-ivory)] via-[var(--tmbc-blush)]/60 to-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
       <Navbar />
-      <main className="-mt-10 pb-20 sm:mt-0 sm:pb-24 lg:pb-28">
+      <main className="pb-20 sm:pb-24 lg:pb-28">
         {shouldBreakoutHero ? (
           children
         ) : (

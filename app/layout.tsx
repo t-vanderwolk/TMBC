@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${greatVibes.variable} ${playfair.variable} ${nunito.variable}`}
     >
       <body className="min-h-screen bg-tmIvory font-sans text-tmCharcoal">
-        <main className="flex min-h-screen flex-col pb-16 pt-10">
+        <main className="flex min-h-screen flex-col pb-16">
           {children}
         </main>
       </body>

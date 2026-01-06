@@ -88,9 +88,9 @@ function SignupForm() {
 
   return (
     <section className="marketing-section">
-      <div className="mx-auto max-w-xl rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-8 shadow-[0_25px_60px_rgba(199,166,199,0.25)] text-[var(--tmbc-charcoal)]">
+      <div className="mx-auto max-w-[90%] md:max-w-xl rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-8 shadow-[0_25px_60px_rgba(199,166,199,0.25)] text-[var(--tmbc-charcoal)]">
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">Sign up</p>
-        <h1 className="mt-2 font-serif text-3xl sm:text-4xl">Create your TMBC + MyRegistry account</h1>
+        <h1 className="mt-2 font-serif text-2xl md:text-4xl">Create your TMBC + MyRegistry account</h1>
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           Make sure you have your invite code handy. We&apos;ll create your TMBC user and sync with MyRegistry at once.
         </p>

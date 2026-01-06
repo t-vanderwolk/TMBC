@@ -28,9 +28,9 @@ const trustSignals = [
 export default function CommunityPage() {
   return (
     <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/70 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/70 px-10 py-20 md:py-32 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section">
         <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Community</p>
-        <h1 className="mt-3 font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
+        <h1 className="mt-3 font-serif text-2xl md:text-4xl text-[var(--tmbc-charcoal)]">
           You don't have to Google this alone.
         </h1>
         <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
@@ -52,7 +52,7 @@ export default function CommunityPage() {
         </div>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_70px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 px-8 py-20 md:py-32 shadow-[0_20px_70px_rgba(199,166,199,0.25)] marketing-section">
         <div className="flex flex-col gap-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Community modes</p>
           <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">Modes that keep the village human</h2>
@@ -70,7 +70,7 @@ export default function CommunityPage() {
         </div>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-8 shadow-[0_20px_70px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/90 px-8 py-20 md:py-32 shadow-[0_20px_70px_rgba(199,166,199,0.25)] marketing-section">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-6 shadow-[0_15px_45px_rgba(199,166,199,0.15)]">
             <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">Member</p>
@@ -96,7 +96,7 @@ export default function CommunityPage() {
         </p>
       </section>
 
-      <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/40 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/40 px-8 py-20 md:py-32 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Trust signals</p>
           <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">A village that keeps the tone calm + honest</h2>

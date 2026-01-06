@@ -51,12 +51,12 @@ const philosophyPoints = [
 export default function ExperiencePage() {
   return (
     <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 px-10 py-20 md:py-32 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Experience
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
+          <h1 className="font-serif text-2xl md:text-4xl text-[var(--tmbc-charcoal)]">
             The Taylor-Made Experience
           </h1>
         </div>
@@ -64,11 +64,11 @@ export default function ExperiencePage() {
           A calm, guided journey through pregnancy, planning, and early parenthood — with a mentor who helps you decide
           what matters now, next, and later. (We keep it simple on purpose.)
         </p>
-        <div className="py-16 sm:py-24">
+        <div className="my-12 md:my-16">
           <MarketingImage
             variant="hero-editorial"
             aspectRatio="16/9"
-            maxWidth={960}
+            maxWidth={520}
             priority
             label="Experience - Hero editorial: guided journey atmosphere"
             page="/experience"
@@ -87,7 +87,7 @@ export default function ExperiencePage() {
         </div>
       </section>
 
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 px-8 py-20 md:py-32 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
         <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           A quiet pause that captures how support shows up behind the scenes.
         </p>
@@ -97,7 +97,7 @@ export default function ExperiencePage() {
         <RibbonDivider />
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Learn · Plan · Connect · Reflect
@@ -143,13 +143,13 @@ export default function ExperiencePage() {
         </div>
       </section>
 
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 px-8 py-20 md:py-32 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
         <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           A calm closing beat before the invitation.
         </p>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 px-8 py-20 md:py-32 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Mentor-led philosophy

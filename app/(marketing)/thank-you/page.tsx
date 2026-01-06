@@ -11,7 +11,7 @@ export default function ThankYouPage() {
       <PageSection className="min-h-[60vh]">
         <div className="mx-auto flex max-w-screen-xl flex-col items-center justify-center gap-6 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#C8A1B4]">Thank you</p>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#3E2F35]">Your invite request is with us</h1>
+          <h1 className="font-serif text-2xl md:text-4xl lg:text-5xl text-[#3E2F35]">Your invite request is with us</h1>
           <p className="text-base text-[#3E2F35]/80">
             We'll reply within two business days. We keep TMBC invite-only so mentors can offer real, attentive support. In the meantime, explore membership details or read the journal.
           </p>

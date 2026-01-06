@@ -1,7 +1,7 @@
 import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
-import { ContainedFullWidthHero } from "@/components/marketing/ContainedFullWidthHero";
+import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 
 const benefits = [
@@ -33,11 +33,17 @@ export default function PlanPage() {
       <ContainedFullWidthHero
         imageSrc="/assets/images/section-background-soft-ribbon.png"
         imageAlt="Editorial hero artwork for the Plan pillar."
-        headline="Plan for baby — with someone in your corner."
-        supporting="From registries to real-life logistics, your mentor helps you plan for pregnancy, birth, and early parenthood step by step. (We’ll hold the map. You set the pace.)"
-        mobileKey="plan"
       >
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="hero-copy md:contents">
+          <h1 className="hero-headline">
+            Plan for baby — with someone in your corner.
+          </h1>
+          <p className="hero-supporting mt-6">
+            From registries to real-life logistics, your mentor helps you plan for pregnancy, birth, and early parenthood
+            step by step. (We’ll hold the map. You set the pace.)
+          </p>
+        </div>
+        <div className="hero-cta mt-10 hidden flex-col gap-4 justify-center md:flex md:flex-row">
           <Link
             href="/request-invite"
             className="marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]"
@@ -53,9 +59,24 @@ export default function PlanPage() {
         </div>
       </ContainedFullWidthHero>
 
+      <div className="hero-cta mt-10 flex flex-col gap-4 justify-center px-6 md:hidden">
+        <Link
+          href="/request-invite"
+          className="marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]"
+        >
+          Request Your Invite
+        </Link>
+        <Link
+          href="/how-it-works"
+          className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
+        >
+          How It Works (no rush)
+        </Link>
+      </div>
+
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-        <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+      <section className="marketing-section marketing-card mb-24 md:mb-28 bg-[var(--tmbc-ivory)]/90 px-8 text-center">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             Plan
@@ -68,7 +89,7 @@ export default function PlanPage() {
 
       <RibbonDivider />
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card space-y-6 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What this is
@@ -92,13 +113,13 @@ export default function PlanPage() {
         </div>
       </section>
 
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
+      <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-32">
         <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
           A visual moment that centers calm, human guidance.
         </p>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             How it supports parents
@@ -111,7 +132,7 @@ export default function PlanPage() {
           {benefits.map((benefit) => (
             <div
               key={benefit.title}
-              className="rounded-[28px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-5 shadow-[0_12px_40px_rgba(199,166,199,0.15)]"
+              className="marketing-card bg-[var(--tmbc-ivory)]/80 p-5"
             >
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 {benefit.title}
@@ -122,7 +143,7 @@ export default function PlanPage() {
         </div>
       </section>
 
-      <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="marketing-section marketing-card space-y-4 bg-white/80 px-8 py-20 md:py-32">
         <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
           Relationship to the system
         </p>

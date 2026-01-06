@@ -60,12 +60,12 @@ const whatItsNot = [
 export default function AboutPage() {
   return (
     <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 px-10 py-20 md:py-32 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             About
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
+          <h1 className="font-serif text-2xl md:text-4xl text-[var(--tmbc-charcoal)]">
             Why Taylor-Made Baby Co.
           </h1>
         </div>
@@ -82,12 +82,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="grid gap-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-2">
-        <div className="py-16 sm:py-24">
+      <section className="grid gap-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-2">
+        <div className="my-12 md:my-16">
           <MarketingImage
             variant="editorial"
             aspectRatio="4/3"
-            maxWidth={720}
+            maxWidth={520}
             lazy
             label="About - Editorial pause: calm home moment"
             page="/about"
@@ -110,7 +110,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="grid gap-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-2">
+      <section className="grid gap-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 px-8 py-20 md:py-32 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-2">
         <div className="space-y-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Real life, held gently
@@ -122,11 +122,11 @@ export default function AboutPage() {
             TMBC supports you through each season — first babies, siblings, and every shift in between.
           </p>
         </div>
-        <div className="py-16 sm:py-24">
+        <div className="my-12 md:my-16">
           <MarketingImage
             variant="editorial"
             aspectRatio="4/3"
-            maxWidth={720}
+            maxWidth={520}
             lazy
             label="About - Editorial pause: family support moment"
             page="/about"
@@ -144,7 +144,7 @@ export default function AboutPage() {
         <RibbonDivider />
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             The philosophy
@@ -172,7 +172,7 @@ export default function AboutPage() {
         <RibbonDivider />
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 px-8 py-20 md:py-32 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Who it is for
@@ -196,7 +196,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 px-8 py-20 md:py-32 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What makes this different
@@ -220,15 +220,15 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 px-8 py-20 md:py-32 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
         <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           People-first moments that keep the focus on families, not founders.
         </p>
-        <div className="py-16 sm:py-24">
+        <div className="my-12 md:my-16">
           <MarketingImage
             variant="editorial"
             aspectRatio="4/5"
-            maxWidth={720}
+            maxWidth={520}
             lazy
             label="About - Editorial pause: people-first moment"
             page="/about"

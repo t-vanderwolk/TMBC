@@ -157,13 +157,13 @@
   .marketing-body {
     font-family: var(--font-nunito), "Nunito", sans-serif;
     color: var(--tmbc-charcoal);
-    line-height: 1.7;
+    line-height: 1.8;
   }
 
   .marketing-content p,
   .marketing-content li,
   .marketing-content span {
-    @apply text-base leading-[1.75] sm:text-lg;
+    @apply text-base leading-[1.8] sm:text-lg;
   }
 
   .marketing-content p + p {
@@ -209,19 +209,53 @@
   }
 
   .hero-headline {
-    @apply font-serif text-4xl md:text-5xl leading-tight tracking-tight text-charcoal;
-  }
-
-  .hero-headline--small {
-    @apply font-serif text-3xl md:text-4xl leading-tight tracking-tight text-charcoal;
+    font-family: serif;
+    font-size: clamp(2.25rem, 5vw, 3.25rem);
+    line-height: 1.15;
+    color: var(--tmbc-charcoal);
   }
 
   .hero-supporting {
-    @apply mt-6 text-base md:text-lg text-charcoal/80 leading-[1.7];
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(0, 0, 0, 0.72);
+  }
+
+  .hero-copy {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  @screen md {
+    .marketing-body {
+      line-height: 1.7;
+    }
+
+    .marketing-content p,
+    .marketing-content li,
+    .marketing-content span {
+      line-height: 1.7;
+    }
+
+    .hero-copy {
+      max-width: 560px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-headline {
+      font-size: clamp(2rem, 7vw, 2.6rem);
+      line-height: 1.2;
+    }
+
+    .hero-supporting {
+      font-size: 1rem;
+      line-height: 1.8;
+    }
   }
 
   .hero-cta-group {
-    @apply mt-10 flex flex-col sm:flex-row gap-4 justify-center;
+    @apply mt-10 flex flex-col gap-4 justify-center md:flex-row;
   }
 
   @screen sm {
@@ -231,11 +265,20 @@
   }
 
   .marketing-section {
-    @apply py-24 md:py-32;
+    @apply py-20 md:py-32;
+  }
+
+  .marketing-section h2 + p {
+    @apply mt-6;
   }
 
   .marketing-section h2 {
     @apply tracking-tight max-w-[640px];
+  }
+
+  .marketing-card {
+    @apply rounded-2xl border transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)];
+    border-color: rgba(250, 247, 244, 0.6);
   }
 
   .marketing-section-inner {
@@ -262,7 +305,10 @@
   }
 
   .marketing-btn-secondary {
-    @apply bg-white border border-[var(--tmbc-charcoal)] text-[var(--tmbc-charcoal)];
+    @apply border;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-color: rgba(62, 47, 53, 0.4);
+    color: rgba(62, 47, 53, 0.85);
   }
 
   .marketing-btn-ghost {
@@ -285,7 +331,7 @@
   .marketing-form input,
   .marketing-form select,
   .marketing-form textarea {
-    @apply w-full rounded-2xl border border-[var(--tmbc-blush)] bg-white/80 px-4 py-3 text-base leading-relaxed text-[var(--tmbc-charcoal)] shadow-sm transition focus:border-[var(--tmbc-charcoal)] focus:outline-none;
+    @apply w-full min-h-[56px] rounded-2xl border border-[var(--tmbc-blush)] bg-white/80 px-4 py-4 text-base leading-relaxed text-[var(--tmbc-charcoal)] shadow-sm transition focus:border-[var(--tmbc-charcoal)] focus:outline-none;
   }
 
   .subtle-note {

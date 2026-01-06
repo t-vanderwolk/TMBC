@@ -1,69 +1,43 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 
-import { heroCopy, type HeroKey } from "./heroCopy";
-
-export interface ContainedFullWidthHeroProps {
+interface ContainedFullWidthHeroProps {
   imageSrc: string;
-  imageAlt?: string;
-  headline: string;
-  supporting: string;
-  mobileKey?: HeroKey;
+  imageAlt: string;
   priority?: boolean;
-  eyebrow?: ReactNode;
-  headlineClassName?: string;
-  supportingClassName?: string;
-  children?: ReactNode;
+  children: ReactNode;
 }
 
-export function ContainedFullWidthHero({
+export default function ContainedFullWidthHero({
   imageSrc,
-  imageAlt = "",
-  headline,
-  supporting,
-  mobileKey,
+  imageAlt,
   priority = false,
-  eyebrow,
-  headlineClassName = "hero-headline",
-  supportingClassName = "hero-supporting",
   children,
 }: ContainedFullWidthHeroProps) {
-  const mobileCopy = mobileKey ? heroCopy[mobileKey]?.mobile : null;
-
   return (
-    <section className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mb-28 md:mb-36">
-      <div className="relative w-full min-h-[80vh] md:min-h-[72vh] aspect-[3/2]">
+    <section
+      className="
+        relative
+        w-screen
+        left-1/2 right-1/2
+        -ml-[50vw] -mr-[50vw]
+        bg-[#FBF7F4]
+        min-h-[85vh] md:min-h-[72vh]
+        mb-24 md:mb-28
+        overflow-hidden
+      "
+    >
+      <div className="relative w-full aspect-[3/2] min-h-[85vh] md:min-h-[72vh]">
         <Image
           src={imageSrc}
           alt={imageAlt}
           fill
-          priority={priority}
           className="object-contain"
+          sizes="100vw"
+          priority={priority}
         />
-
-        <div className="absolute inset-0 flex">
-          <div className="marketing-body mx-auto w-full max-w-[560px] px-6 text-center flex min-h-full flex-col justify-center">
-            {eyebrow && (
-              <p className="text-xs uppercase tracking-[0.6em] text-[var(--tmbc-charcoal)]">
-                {eyebrow}
-              </p>
-            )}
-            <h1 className={headlineClassName}>
-              <span className="block md:hidden">
-                {mobileCopy?.headline ?? headline}
-              </span>
-              <span className="hidden md:block">
-                {headline}
-              </span>
-            </h1>
-            <p className={supportingClassName}>
-              <span className="block md:hidden">
-                {mobileCopy?.supporting ?? supporting}
-              </span>
-              <span className="hidden md:block">
-                {supporting}
-              </span>
-            </p>
+        <div className="absolute inset-0 flex items-center justify-center px-6 py-24 md:py-32">
+          <div className="w-full max-w-[520px] md:max-w-[560px] text-center">
             {children}
           </div>
         </div>
@@ -71,5 +45,3 @@ export function ContainedFullWidthHero({
     </section>
   );
 }
-
-export default ContainedFullWidthHero;
