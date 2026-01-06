@@ -1,8 +1,8 @@
 import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
-import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
-import { MarketingContainer } from "@/components/marketing/MarketingContainer";
+import { ContainedFullWidthHero } from "@/components/marketing/ContainedFullWidthHero";
+import MarketingContent from "@/components/marketing/MarketingContent";
 
 const benefits = [
   {
@@ -28,17 +28,14 @@ export default function ReflectPage() {
       <ContainedFullWidthHero
         imageSrc="/assets/images/section-background-soft-ribbon.png"
         imageAlt="Editorial hero artwork for the Reflect pillar."
+        headline="A quiet place for the early days."
+        supporting="Capture thoughts, moments, and memories from pregnancy and parenthood — privately, gently, and shared only if you choose. (Some seasons are meant to be held, not optimized.)"
+        mobileKey="reflect"
       >
-        <h1 className="hero-headline">
-          Reflect with meaning and care
-        </h1>
-        <p className="hero-supporting">
-          A private, gentle space to capture memories, reassurance, and the story you want to keep.
-        </p>
-        <div className="mt-10 flex justify-center gap-4">
+        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/request-invite"
-            className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+            className="marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]"
           >
             Request Your Invite
           </Link>
@@ -51,8 +48,8 @@ export default function ReflectPage() {
         </div>
       </ContainedFullWidthHero>
 
-      <div className="mt-20 sm:mt-24">
-        <MarketingContainer className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
+      <MarketingContent>
+        <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
         <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
@@ -66,7 +63,7 @@ export default function ReflectPage() {
 
       <RibbonDivider />
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section sm:pb-12">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What this is
@@ -96,7 +93,7 @@ export default function ReflectPage() {
         </p>
       </section>
 
-      <section className="mt-14 sm:mt-20 space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             How it supports parents
@@ -120,7 +117,7 @@ export default function ReflectPage() {
         </div>
       </section>
 
-      <section className="mt-12 sm:mt-14 space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
           Relationship to the system
         </p>
@@ -133,18 +130,16 @@ export default function ReflectPage() {
         </p>
       </section>
 
-      <div className="pt-10 sm:pt-12">
-        <CTARibbon
-          headline="Keep the story with care"
-          supportingText="Invite-only keeps this space private and intentional. (No pressure to share.)"
-          buttonLabel="Request Your Invite"
-          buttonHref="/request-invite"
-          tone="soft"
-        />
-      </div>
+      <CTARibbon
+        headline="Keep the story with care"
+        supportingText="Invite-only keeps this space private and intentional. (No pressure to share.)"
+        buttonLabel="Request Your Invite"
+        buttonHref="/request-invite"
+        tone="soft"
+      />
       {/* TODO: Expand Reflect pillar with journaling rituals and keepsake previews. */}
-      </MarketingContainer>
-      </div>
+        </div>
+      </MarketingContent>
     </>
   );
 }

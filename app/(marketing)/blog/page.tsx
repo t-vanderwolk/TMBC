@@ -1,7 +1,7 @@
 import Link from "next/link";
 import MarketingImage from "@/components/marketing/MarketingImage";
-import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
-import { MarketingContainer } from "@/components/marketing/MarketingContainer";
+import { ContainedFullWidthHero } from "@/components/marketing/ContainedFullWidthHero";
+import MarketingContent from "@/components/marketing/MarketingContent";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -54,55 +54,45 @@ const BlogMarketingPage = async () => {
   if (!featuredPost) {
     return (
       <>
-        <ContainedFullWidthHero imageSrc="/assets/images/section-background-soft-ribbon.png" imageAlt="Soft ribbon background">
-          <p className="text-xs uppercase tracking-[0.6em] text-[var(--tmbc-charcoal)]">
-            Taylor-Made Journal
-          </p>
-          <h1 className="hero-headline">
-            Notes from the planning side of parenthood
-          </h1>
-          <p className="hero-supporting">
-            Calm context, helpful perspective, and things we wish someone told us sooner. (Often over tea.)
-          </p>
-          <p className="hero-supporting">
-            No "must-have" lists. We promise.
-          </p>
-        </ContainedFullWidthHero>
-        <div className="mt-20 sm:mt-24">
-          <MarketingContainer className="text-[var(--tmbc-charcoal)]">
-            <section className="marketing-section text-center text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-              <p>No journal entries are available yet.</p>
-              <p className="mt-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
-                Check back soon — we publish gently.
-              </p>
-            </section>
-          </MarketingContainer>
-        </div>
+        <ContainedFullWidthHero
+          imageSrc="/assets/images/section-background-soft-ribbon.png"
+          imageAlt="Soft ribbon background"
+          eyebrow="Taylor-Made Journal"
+          headline="Clear thinking for pregnancy and early parenthood."
+          supporting="Real conversations about baby prep, decisions, and life with a new child — without fear-based advice. (Or a 47-tab deep dive at midnight.)"
+          headlineClassName="hero-headline hero-headline--small"
+          mobileKey="blog"
+        />
+        <MarketingContent>
+          <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
+          <section className="marketing-section text-center text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+            <p>No journal entries are available yet.</p>
+            <p className="mt-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
+              Check back soon — we publish gently.
+            </p>
+          </section>
+          </div>
+        </MarketingContent>
       </>
     );
   }
 
   return (
     <>
-      <ContainedFullWidthHero imageSrc="/assets/images/section-background-soft-ribbon.png" imageAlt="Soft ribbon background">
-        <p className="text-xs uppercase tracking-[0.6em] text-[var(--tmbc-charcoal)]">
-          Taylor-Made Journal
-        </p>
-        <h1 className="hero-headline">
-          Notes from the planning side of parenthood
-        </h1>
-        <p className="hero-supporting">
-          Calm context, helpful perspective, and things we wish someone told us sooner. (Often over tea.)
-        </p>
-        <p className="hero-supporting">
-          No "must-have" lists. We promise.
-        </p>
-      </ContainedFullWidthHero>
+      <ContainedFullWidthHero
+        imageSrc="/assets/images/section-background-soft-ribbon.png"
+        imageAlt="Soft ribbon background"
+        eyebrow="Taylor-Made Journal"
+        headline="Clear thinking for pregnancy and early parenthood."
+        supporting="Real conversations about baby prep, decisions, and life with a new child — without fear-based advice. (Or a 47-tab deep dive at midnight.)"
+        headlineClassName="hero-headline hero-headline--small"
+        mobileKey="blog"
+      />
 
-      <div className="mt-20 sm:mt-24">
-        <MarketingContainer className="text-[var(--tmbc-charcoal)]">
+      <MarketingContent>
+        <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
         <section className="marketing-section space-y-10">
-          <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-[40px] border border-tmMauve/40 bg-tmIvory shadow-editorial transition duration-300 hover:-translate-y-0.5 sm:grid-cols-[1.1fr_0.9fr]">
+          <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-[40px] border border-tmMauve/40 bg-tmIvory shadow-editorial transition duration-300 sm:grid-cols-[1.1fr_0.9fr]">
             <div className="marketing-media flex-1">
               <div className="py-16 sm:py-24">
                 <MarketingImage
@@ -160,7 +150,7 @@ const BlogMarketingPage = async () => {
               {otherPosts.map((post) => (
                 <article
                   key={post.slug}
-                  className="group flex min-h-[320px] flex-col justify-between overflow-hidden rounded-[32px] border border-tmMauve/30 bg-white/80 p-6 shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-editorial"
+                  className="group flex min-h-[320px] flex-col justify-between overflow-hidden rounded-[32px] border border-tmMauve/30 bg-white/80 p-6 shadow-soft transition duration-300 hover:shadow-editorial"
                 >
                   <div className="space-y-4">
                     <MarketingImage
@@ -215,8 +205,8 @@ const BlogMarketingPage = async () => {
             </div>
           </section>
         </section>
-      </MarketingContainer>
-      </div>
+        </div>
+      </MarketingContent>
     </>
   );
 };

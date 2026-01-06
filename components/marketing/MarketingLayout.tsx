@@ -19,13 +19,15 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
     "/membership",
     "/blog",
   ];
-  const shouldHideFooter = hideFooterRoutes.includes(pathname);
-  const shouldBreakoutHero = breakoutHeroRoutes.includes(pathname);
+  const normalizedPathname =
+    pathname && pathname !== "/" ? pathname.replace(/\/$/, "") : pathname;
+  const shouldHideFooter = hideFooterRoutes.includes(normalizedPathname);
+  const shouldBreakoutHero = breakoutHeroRoutes.includes(normalizedPathname);
 
   return (
     <div className="min-h-screen overflow-hidden bg-gradient-to-b from-[var(--tmbc-ivory)] via-[var(--tmbc-blush)]/60 to-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
       <Navbar />
-      <main className="pb-20 sm:pb-24 lg:pb-28">
+      <main className="-mt-10 pb-20 sm:mt-0 sm:pb-24 lg:pb-28">
         {shouldBreakoutHero ? (
           children
         ) : (

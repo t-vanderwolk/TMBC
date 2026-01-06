@@ -1,6 +1,6 @@
 import Link from "next/link";
-import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
-import { MarketingContainer } from "@/components/marketing/MarketingContainer";
+import { ContainedFullWidthHero } from "@/components/marketing/ContainedFullWidthHero";
+import MarketingContent from "@/components/marketing/MarketingContent";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 const membershipPillars = [
   {
@@ -80,16 +80,13 @@ export default function MembershipPage() {
   return (
     <>
       <ContainedFullWidthHero
-        imageSrc="/assets/images/hero-founding-circle.png"
+        imageSrc="/assets/images/section-background-soft-ribbon.png"
         imageAlt="Founding Circle hero artwork for membership."
+        headline="Start as a member. Grow into a mentor."
+        supporting="Membership gives you guided baby prep, personal support, and a clear path to becoming the calm voice for someone else — when you’re ready. (No pressure. No rush.)"
+        mobileKey="membership"
       >
-        <h1 className="hero-headline">
-          Membership that can grow into mentorship, if and when it feels right
-        </h1>
-        <p className="hero-supporting">
-          Learn with support. Plan with clarity. Stay connected as your questions evolve. (No rush, ever.)
-        </p>
-        <div className="mt-10 flex justify-center gap-4">
+        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/request-invite"
             className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
@@ -105,8 +102,8 @@ export default function MembershipPage() {
         </div>
       </ContainedFullWidthHero>
 
-      <div className="mt-20 sm:mt-24">
-        <MarketingContainer className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
+      <MarketingContent>
+        <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
         <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -265,8 +262,8 @@ export default function MembershipPage() {
           </span>
         </div>
       </section>
-      </MarketingContainer>
-      </div>
+        </div>
+      </MarketingContent>
     </>
   );
 }

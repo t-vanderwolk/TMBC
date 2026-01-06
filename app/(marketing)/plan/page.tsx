@@ -1,8 +1,8 @@
 import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
-import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
-import { MarketingContainer } from "@/components/marketing/MarketingContainer";
+import { ContainedFullWidthHero } from "@/components/marketing/ContainedFullWidthHero";
+import MarketingContent from "@/components/marketing/MarketingContent";
 
 const benefits = [
   {
@@ -33,17 +33,14 @@ export default function PlanPage() {
       <ContainedFullWidthHero
         imageSrc="/assets/images/section-background-soft-ribbon.png"
         imageAlt="Editorial hero artwork for the Plan pillar."
+        headline="Plan for baby — with someone in your corner."
+        supporting="From registries to real-life logistics, your mentor helps you plan for pregnancy, birth, and early parenthood step by step. (We’ll hold the map. You set the pace.)"
+        mobileKey="plan"
       >
-        <h1 className="hero-headline">
-          Plan with steady, human guidance
-        </h1>
-        <p className="hero-supporting">
-          A shared workspace for calm decisions, steady pacing, and mentor context.
-        </p>
-        <div className="mt-10 flex justify-center gap-4">
+        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/request-invite"
-            className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+            className="marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]"
           >
             Request Your Invite
           </Link>
@@ -56,8 +53,8 @@ export default function PlanPage() {
         </div>
       </ContainedFullWidthHero>
 
-      <div className="mt-20 sm:mt-24">
-        <MarketingContainer className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
+      <MarketingContent>
+        <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
         <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
@@ -146,8 +143,8 @@ export default function PlanPage() {
         tone="medium"
       />
       {/* TODO: Expand Plan pillar with decision stories and registry flow previews. */}
-      </MarketingContainer>
-      </div>
+        </div>
+      </MarketingContent>
     </>
   );
 }

@@ -29,6 +29,7 @@
     background: var(--tmbc-ivory);
     font-family: var(--font-nunito), 'Nunito', sans-serif;
     color: var(--tmbc-charcoal);
+    line-height: 1.7;
   }
 
   h1,
@@ -150,7 +151,13 @@
   }
 
   .marketing-content {
-    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-[var(--tmbc-charcoal)];
+    @apply w-full max-w-7xl mx-auto text-[var(--tmbc-charcoal)];
+  }
+
+  .marketing-body {
+    font-family: var(--font-nunito), "Nunito", sans-serif;
+    color: var(--tmbc-charcoal);
+    line-height: 1.7;
   }
 
   .marketing-content p,
@@ -202,17 +209,19 @@
   }
 
   .hero-headline {
-    font-family: serif;
-    font-size: clamp(2.2rem, 5vw, 3rem);
-    line-height: 1.2;
-    color: #2e2e2e;
+    @apply font-serif text-4xl md:text-5xl leading-tight tracking-tight text-charcoal;
+  }
+
+  .hero-headline--small {
+    @apply font-serif text-3xl md:text-4xl leading-tight tracking-tight text-charcoal;
   }
 
   .hero-supporting {
-    margin-top: 1rem;
-    font-size: clamp(1rem, 2.5vw, 1.125rem);
-    line-height: 1.6;
-    color: rgba(0, 0, 0, 0.65);
+    @apply mt-6 text-base md:text-lg text-charcoal/80 leading-[1.7];
+  }
+
+  .hero-cta-group {
+    @apply mt-10 flex flex-col sm:flex-row gap-4 justify-center;
   }
 
   @screen sm {
@@ -222,7 +231,11 @@
   }
 
   .marketing-section {
-    @apply pt-20 pb-12 sm:pt-24 sm:pb-14 lg:pt-32 lg:pb-20;
+    @apply py-24 md:py-32;
+  }
+
+  .marketing-section h2 {
+    @apply tracking-tight max-w-[640px];
   }
 
   .marketing-section-inner {
@@ -739,10 +752,6 @@
 
   .section-ritual-xl {
     @apply px-6 py-[110px] md:px-10 md:py-[130px];
-  }
-
-  .hero-gradient-ring {
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.45), transparent 55%);
   }
 
   .glow-outline {

@@ -3,8 +3,8 @@
 import { FormEvent, Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
-import { MarketingContainer } from "@/components/marketing/MarketingContainer";
+import { ContainedFullWidthHero } from "@/components/marketing/ContainedFullWidthHero";
+import MarketingContent from "@/components/marketing/MarketingContent";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
 import AppJourneySection from "@/components/marketing/AppJourneySection";
@@ -63,16 +63,12 @@ function HomePageContent() {
       <ContainedFullWidthHero
         imageSrc="/assets/images/hero-marketing-signature.png"
         imageAlt="Primary Taylor-Made Baby Co. hero artwork."
+        headline="A calmer way to prepare for baby — and parenthood."
+        supporting="Thoughtful guidance for pregnancy and early parenthood, with a trusted mentor to help you decide what actually matters. (Spoiler: not all of it.)"
+        mobileKey="home"
         priority
       >
-        <h1 className="hero-headline">
-          A calmer way to learn, plan, connect, and reflect.
-        </h1>
-        <p className="hero-supporting">
-          Taylor-Made Baby Co. pairs you with a trusted mentor to guide your next steps in the right order, without
-          pressure.
-        </p>
-        <div className="mt-10 flex justify-center gap-4">
+        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/request-invite"
             className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
@@ -88,8 +84,8 @@ function HomePageContent() {
         </div>
       </ContainedFullWidthHero>
 
-      <div className="mt-20 sm:mt-24">
-        <MarketingContainer className="space-y-20 sm:space-y-24 lg:space-y-28 text-[var(--tmbc-charcoal)]">
+      <MarketingContent>
+        <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
         <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
           <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
@@ -319,8 +315,8 @@ function HomePageContent() {
           Request an Invite
         </Link>
       </section>
-      </MarketingContainer>
-      </div>
+        </div>
+      </MarketingContent>
     </>
   );
 }
