@@ -8,7 +8,7 @@ import { routeForRole } from "@/lib/auth/routeForRole";
 
 function OnboardingPageContent() {
   const params = useSearchParams();
-  const code = params.get("code");
+  const code = params.get("code")?.trim().toUpperCase() ?? "";
   const router = useRouter();
 
   const [inviteEmail, setInviteEmail] = useState("");
@@ -19,16 +19,11 @@ function OnboardingPageContent() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!code) {
-      setError("Invite code missing. Please use your invite link.");
-      return;
-    }
-
     setValidating(true);
     setError("");
 
     api
-      .post("/onboarding/validate", { code })
+      .post("/onboarding/validate", code ? { code } : {})
       .then((response) => {
         const email = response.data?.invite?.email;
         if (!email) {
@@ -36,8 +31,9 @@ function OnboardingPageContent() {
         }
         setInviteEmail(email);
       })
-      .catch(() => {
-        setError("Invalid or already used invite code.");
+      .catch((err) => {
+        const message = err?.response?.data?.error || "Invalid or already used invite code.";
+        setError(message);
       })
       .finally(() => {
         setValidating(false);
@@ -46,11 +42,6 @@ function OnboardingPageContent() {
 
   const handleOnboard = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!code) {
-      setError("Invite code missing. Please return to your invite link.");
-      return;
-    }
-
     if (!inviteEmail) {
       setError("Unable to verify invite email.");
       return;
@@ -71,7 +62,6 @@ function OnboardingPageContent() {
 
     try {
       const response = await api.post("/onboarding/complete-invite", {
-        code,
         name: name.trim(),
         password,
       });
@@ -97,7 +87,7 @@ function OnboardingPageContent() {
     }
   };
 
-  const isFormDisabled = Boolean(!code || validating || !inviteEmail);
+  const isFormDisabled = Boolean(validating || !inviteEmail);
 
   return (
     <div className="max-w-xl mx-auto p-10 space-y-6">

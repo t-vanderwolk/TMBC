@@ -9,6 +9,7 @@ import {
 } from "@/lib/services/server/registry.service";
 import { listExternalRegistriesForMember } from "@/lib/services/server/externalRegistry.service";
 import { OnboardingIntelligenceService } from "@/lib/services/server/onboardingIntelligence.service";
+import { listPlanSectionsForMember } from "@/lib/services/server/planSections.service";
 
 const requireMentor = async () => {
   const user = await getUserOrThrow();
@@ -39,7 +40,7 @@ export async function GET(
       return NextResponse.json({ error: "Member not found." }, { status: 404 });
     }
 
-    const [registryItems, onboarding, workbookEntries, mentorSuggestions, externalRegistries] =
+    const [registryItems, onboarding, workbookEntries, mentorSuggestions, externalRegistries, planSections] =
       await Promise.all([
       listRegistryItems(member.id),
       OnboardingIntelligenceService.getLatestQuestionnaire(member.id),
@@ -49,6 +50,7 @@ export async function GET(
       }),
       listMentorSuggestionsForMember(member.id),
       listExternalRegistriesForMember(member.id),
+      listPlanSectionsForMember(member.id),
     ]);
 
     const moduleIds = Array.from(new Set(workbookEntries.map((entry) => entry.moduleId)));
@@ -79,6 +81,7 @@ export async function GET(
       registryItems,
       mentorSuggestions,
       externalRegistries,
+      planSections,
     });
   } catch (error) {
     return handleError(error);

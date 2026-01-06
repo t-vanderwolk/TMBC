@@ -1,37 +1,32 @@
 import Link from "next/link";
-import Image from "next/image";
-
 import CTARibbon from "@/components/marketing/CTARibbon";
-import learnPreview from "../../../assets/images/ui-learn-hero-classes-preview.png";
-import planPreview from "../../../assets/images/ui-plan-hero-registry-preview.png";
-import connectPreview from "../../../assets/images/ui-connect-hero-community-preview.png";
-import reflectPreview from "../../../assets/images/ui-reflect-hero-journal-preview.png";
-import lifestylePreview from "../../../assets/images/editorial-experience-hero-nursery.jpg";
+import MarketingImage from "@/components/marketing/MarketingImage";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const pillars = [
   {
     title: "Learn",
     description:
       "We sort the noise into what matters now, next, and later so you feel steady.",
-    visual: learnPreview,
+    imageDescription: "Pillar support image: Learn.",
   },
   {
     title: "Plan",
     description:
       "One decision at a time, with guidance that keeps buying pressure off your shoulders.",
-    visual: planPreview,
+    imageDescription: "Pillar support image: Plan.",
   },
   {
     title: "Connect",
     description:
       "Mentor-led support that feels like a steady conversation, not a noisy feed.",
-    visual: connectPreview,
+    imageDescription: "Pillar support image: Connect.",
   },
   {
     title: "Reflect",
     description:
       "A place to capture the moments you want to remember (even the tiny ones).",
-    visual: reflectPreview,
+    imageDescription: "Pillar support image: Reflect.",
   },
 ];
 
@@ -69,13 +64,17 @@ export default function ExperiencePage() {
           A calm, guided journey through pregnancy, planning, and early parenthood — with a mentor who helps you decide
           what matters now, next, and later. (We keep it simple on purpose.)
         </p>
-        <div className="relative w-full overflow-hidden rounded-[36px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/3]">
-          <Image
-            src={lifestylePreview}
-            alt="Soft nursery preparation moment"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 80vw"
+        <div className="py-16 sm:py-24">
+          <MarketingImage
+            variant="hero-editorial"
+            aspectRatio="16/9"
+            maxWidth={960}
+            priority
+            label="Experience - Hero editorial: guided journey atmosphere"
+            page="/experience"
+            section="Hero"
+            assetPath="TBD"
+            assetPriority="high"
           />
         </div>
         <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
@@ -86,6 +85,16 @@ export default function ExperiencePage() {
             The Experience
           </Link>
         </div>
+      </section>
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
+        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+          A quiet pause that captures how support shows up behind the scenes.
+        </p>
+      </section>
+
+      <section>
+        <RibbonDivider variant="full" />
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
@@ -108,6 +117,18 @@ export default function ExperiencePage() {
               className="rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-6 shadow-[0_18px_60px_rgba(199,166,199,0.2)]"
             >
               <div className="space-y-4">
+                <MarketingImage
+                  variant="editorial"
+                  aspectRatio="4/3"
+                  maxWidth={200}
+                  lazy
+                  description={pillar.imageDescription}
+                  label={`Experience - Pillar image: ${pillar.title}`}
+                  page="/experience"
+                  section="Pillars"
+                  assetPath="TBD"
+                  assetPriority="low"
+                />
                 <div>
                   <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
                     {pillar.title}
@@ -116,19 +137,16 @@ export default function ExperiencePage() {
                     {pillar.description}
                   </p>
                 </div>
-                <div className="relative w-full overflow-hidden rounded-[28px] border border-[var(--tmbc-mauve)]/15 bg-white/80 aspect-[4/3]">
-                  <Image
-                    src={pillar.visual}
-                    alt={`${pillar.title} preview`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                  />
-                </div>
               </div>
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
+        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+          A calm closing beat before the invitation.
+        </p>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">

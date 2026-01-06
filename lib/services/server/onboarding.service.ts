@@ -28,6 +28,15 @@ export const validateInviteCode = async (code: string) => {
   if (invite.used) {
     throw new Error('Invite code already used');
   }
+
+  const approval = await prisma.inviteRequest.findFirst({
+    where: { inviteCode: code, status: 'approved' },
+    select: { id: true },
+  });
+  if (!approval) {
+    throw new Error('Invite not approved');
+  }
+
   return invite;
 };
 

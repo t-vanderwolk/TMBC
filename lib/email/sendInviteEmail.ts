@@ -25,7 +25,7 @@ export async function sendInviteEmail({ email, inviteCode }: SendInviteEmailOpti
     "",
     `INVITE CODE: ${inviteCode}`,
     "",
-    `Get started here: ${FRONTEND_URL}/signup?code=${encodeURIComponent(inviteCode)}`,
+    `Get started here: ${FRONTEND_URL}/?invite=${encodeURIComponent(inviteCode)}`,
     "",
     "This invite is unique to you.",
     "",

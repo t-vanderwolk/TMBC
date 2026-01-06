@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import heroFallback from "../../../../assets/images/heirloom-blog-card-ultrasound-flatlay.jpeg";
 import BlogContentRenderer, {
   createHeadingId,
   type BlogContentBlock,
 } from "@/components/blog/BlogContentRenderer";
 import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
 import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
+import MarketingImage from "@/components/marketing/MarketingImage";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -189,40 +189,44 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
     <>
       <article className="marketing-section bg-tmIvory/80">
         <div className="mx-auto space-y-12 px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="relative overflow-hidden rounded-[40px] border border-tmMauve/40 bg-white/90 p-10 shadow-editorial">
-            <img
-              src={post.heroImage ?? heroFallback.src}
-              alt={post.title}
-              className="absolute inset-0 h-full w-full object-cover opacity-60"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-tmIvory via-white/90 to-white/70" />
-            <div className="absolute -right-2 top-8 hidden text-[140px] font-playfair uppercase tracking-[0.2em] text-tmGold/20 lg:block">
+        <div className="relative overflow-hidden rounded-[40px] border border-tmMauve/40 bg-white/90 p-10 shadow-editorial">
+          <MarketingImage
+            variant="hero-editorial"
+            aspectRatio="16/9"
+            maxWidth={960}
+            priority
+            label="Journal - Article hero image"
+            page="/blog/[slug]"
+            section="Hero"
+            assetPath="TBD"
+            assetPriority="high"
+          />
+          <div className="relative mt-8 max-w-3xl space-y-4">
+            <div className="absolute -right-2 -top-6 hidden text-[140px] font-playfair uppercase tracking-[0.2em] text-tmGold/20 lg:block">
               Journal
             </div>
-            <div className="relative space-y-4 max-w-3xl">
-              <p className="text-xs uppercase tracking-[0.6em] text-tmCharcoal/60">Taylor-Made Journal</p>
-              <h1 className="font-playfair text-3xl sm:text-4xl md:text-5xl text-tmCharcoal">{post.title}</h1>
-              {post.excerpt && <p className="text-base italic text-tmCharcoal/70">{post.excerpt}</p>}
-              <p className="text-xs uppercase tracking-[0.45em] text-tmCharcoal/60">
-                Calm context from mentors who've been here.
-              </p>
-              <div className="flex flex-wrap gap-3 text-[0.65rem] uppercase tracking-[0.4em] text-tmCharcoal/65">
-                {post.tags.map((tag) => (
-                  <span key={tag} className="rounded-full border border-tmMauve/40 px-3 py-1 text-[0.55rem] font-semibold text-tmCharcoal">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.35em] text-tmCharcoal/60">
-                <span>{publishedLabel}</span>
-                <span>•</span>
-                <span>{post.authorName}</span>
-                <span>•</span>
-                <span>{formatAuthorRole(post.authorRoleSnapshot)}</span>
-              </div>
+            <p className="text-xs uppercase tracking-[0.6em] text-tmCharcoal/60">Taylor-Made Journal</p>
+            <h1 className="font-playfair text-3xl sm:text-4xl md:text-5xl text-tmCharcoal">{post.title}</h1>
+            {post.excerpt && <p className="text-base italic text-tmCharcoal/70">{post.excerpt}</p>}
+            <p className="text-xs uppercase tracking-[0.45em] text-tmCharcoal/60">
+              Calm context from mentors who've been here.
+            </p>
+            <div className="flex flex-wrap gap-3 text-[0.65rem] uppercase tracking-[0.4em] text-tmCharcoal/65">
+              {post.tags.map((tag) => (
+                <span key={tag} className="rounded-full border border-tmMauve/40 px-3 py-1 text-[0.55rem] font-semibold text-tmCharcoal">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.35em] text-tmCharcoal/60">
+              <span>{publishedLabel}</span>
+              <span>•</span>
+              <span>{post.authorName}</span>
+              <span>•</span>
+              <span>{formatAuthorRole(post.authorRoleSnapshot)}</span>
             </div>
           </div>
+        </div>
 
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,240px)_1fr]">
             <aside className="tm-print-hide space-y-6 rounded-3xl border border-tmMauve/40 bg-white/90 p-6 shadow-soft">

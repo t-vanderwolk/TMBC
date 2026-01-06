@@ -1,8 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
-
 import CTARibbon from "@/components/marketing/CTARibbon";
-import howItWorksVisual from "../../../assets/images/diagram-how-it-works-process.png";
+import HeroSection from "@/components/marketing/HeroSection";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const steps = [
   {
@@ -40,21 +39,24 @@ const expectations = [
 
 export default function HowItWorksPage() {
   return (
-    <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
-      <section className="grid gap-8 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-[1.1fr_0.9fr]">
-        <div className="space-y-4">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+    <div className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
+      <HeroSection
+        backgroundImage="primary"
+        imageAlt="Primary Taylor-Made Baby Co. hero artwork."
+        title="A guided journey, not a noisy checklist"
+        supporting="Taylor-Made Baby Co. pairs you with a mentor and a calm system that keeps decisions clear and supportive from start to finish."
+      />
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+        <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
+          <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             How it works
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-            A guided journey, not a noisy checklist
-          </h1>
-          <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-            Taylor-Made Baby Co. pairs you with a mentor and a calm system that keeps decisions clear and
-            supportive from start to finish.
-          </p>
-          <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
-            <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+            <Link
+              href="/request-invite"
+              className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+            >
               Request Your Invite
             </Link>
             <Link href="/experience" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
@@ -62,16 +64,11 @@ export default function HowItWorksPage() {
             </Link>
           </div>
         </div>
-        <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5] md:aspect-[3/4]">
-          <Image
-            src={howItWorksVisual}
-            alt="Taylor-Made Baby Co. process overview"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 40vw"
-          />
-        </div>
       </section>
+
+      <div className="w-screen left-1/2 right-1/2 -translate-x-1/2">
+        <RibbonDivider variant="full" />
+      </div>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
@@ -91,7 +88,7 @@ export default function HowItWorksPage() {
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 {step.title}
               </p>
-              <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{step.summary}</p>
+              <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-65">{step.summary}</p>
             </div>
           ))}
         </div>
@@ -115,7 +112,7 @@ export default function HowItWorksPage() {
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 {item.title}
               </p>
-              <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{item.description}</p>
+              <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-65">{item.description}</p>
             </div>
           ))}
         </div>
@@ -126,6 +123,7 @@ export default function HowItWorksPage() {
         supportingText="Invite-only keeps the guidance personal and steady."
         buttonLabel="Request Your Invite"
         buttonHref="/request-invite"
+        tone="medium"
       />
     </div>
   );

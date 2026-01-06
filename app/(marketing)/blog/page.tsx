@@ -1,6 +1,5 @@
 import Link from "next/link";
-
-import heroFallback from "../../../assets/images/heirloom-blog-hero-ultrasound-wall.jpeg";
+import MarketingImage from "@/components/marketing/MarketingImage";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -73,14 +72,20 @@ const BlogMarketingPage = async () => {
       </header>
 
       <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-[40px] border border-tmMauve/40 bg-tmIvory shadow-editorial transition duration-300 hover:-translate-y-0.5 sm:grid-cols-[1.1fr_0.9fr]">
-        <div className="marketing-media relative min-h-[320px] flex-1">
-          <img
-            src={featuredPost.heroImage ?? heroFallback.src}
-            alt={featuredPost.title}
-            className="absolute inset-0 h-full w-full object-cover"
-            loading="eager"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-tmGold/20 via-tmIvory/80 to-transparent" />
+        <div className="marketing-media flex-1">
+          <div className="py-16 sm:py-24">
+            <MarketingImage
+              variant="hero-editorial"
+              aspectRatio="4/3"
+              maxWidth={760}
+              priority
+              label="Journal - Featured post hero image"
+              page="/blog"
+              section="Featured Post"
+              assetPath="TBD"
+              assetPriority="high"
+            />
+          </div>
         </div>
         <div className="flex flex-1 flex-col gap-6 p-8 sm:p-10">
           <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -127,6 +132,17 @@ const BlogMarketingPage = async () => {
               className="group flex min-h-[320px] flex-col justify-between overflow-hidden rounded-[32px] border border-tmMauve/30 bg-white/80 p-6 shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-editorial"
             >
               <div className="space-y-4">
+                <MarketingImage
+                  variant="editorial"
+                  aspectRatio="4/3"
+                  maxWidth={640}
+                  lazy
+                  label="Journal - Post card image"
+                  page="/blog"
+                  section="Post Grid"
+                  assetPath="TBD"
+                  assetPriority="med"
+                />
                 <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-50">
                   <span>
                     {post.publishedAt

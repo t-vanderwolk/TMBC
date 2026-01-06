@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
 
 import { greatVibes } from "@/lib/fonts";
 import Reveal from "@/components/marketing/Reveal";
+import VisualPlaceholder from "@/components/marketing/VisualPlaceholder";
 
 type CTA = {
   label: string;
@@ -22,6 +22,11 @@ type MarketingHeroProps = {
   secondaryCTA?: CTA;
   supportingCopy?: string;
   backgroundImage?: string;
+  backgroundLabel?: string;
+  backgroundAssetPath?: string;
+  backgroundPage?: string;
+  backgroundSection?: string;
+  backgroundPriority?: "low" | "med" | "high";
 };
 
 const heroVariant = {
@@ -42,38 +47,27 @@ const MarketingHero = ({
   secondaryCTA,
   supportingCopy,
   backgroundImage,
+  backgroundLabel,
+  backgroundAssetPath,
+  backgroundPage,
+  backgroundSection,
+  backgroundPriority,
 }: MarketingHeroProps) => {
-  const heroRef = useRef<HTMLElement | null>(null);
-  const [parallaxOffset, setParallaxOffset] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!heroRef.current) return;
-      const rect = heroRef.current.getBoundingClientRect();
-      setParallaxOffset(rect.top * 0.12);
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const resolvedLabel = backgroundLabel ?? `${title} - hero background`;
+  const resolvedAssetPath = backgroundAssetPath ?? backgroundImage ?? "TBD";
+  const resolvedSection = backgroundSection ?? "Hero Background";
 
   return (
     <section
-      ref={heroRef}
       className="relative overflow-hidden rounded-[48px] border border-[var(--tmbc-gold)/60] bg-[var(--tmbc-ivory)] p-6 shadow-[0_40px_120px_rgba(199,165,196,0.35)] marketing-section"
     >
-      <div
-        className="absolute inset-0 -z-10 transition-transform duration-700"
-        style={{
-          backgroundImage: backgroundImage
-            ? `linear-gradient(180deg, rgba(250,247,244,0.9), rgba(199,167,187,0.65)), url(${backgroundImage})`
-            : "radial-gradient(circle at top, rgba(247,236,233,0.9), rgba(199,167,187,0.5), rgba(64,44,56,0.4))",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          transform: `translateY(${parallaxOffset}px)`,
-        }}
-        aria-hidden="true"
+      <VisualPlaceholder
+        label={resolvedLabel}
+        page={backgroundPage}
+        section={resolvedSection}
+        assetPath={resolvedAssetPath}
+        priority={backgroundPriority}
+        className="absolute inset-0 -z-10 pointer-events-none"
       />
       <div className="absolute inset-y-12 left-6 w-px rounded-full bg-gradient-to-b from-transparent via-[var(--tmbc-gold)] to-transparent" />
 

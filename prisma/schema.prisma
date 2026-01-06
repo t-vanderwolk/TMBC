@@ -65,6 +65,7 @@ model User {
   profile                Profile?
   registryConflicts      RegistryConflict[]
   registryItems          RegistryItem[]
+  planSections           PlanSection[]      @relation("MemberPlanSections")
   mentor                 User?              @relation("Mentorship", fields: [mentorId], references: [id])
   mentees                User[]             @relation("Mentorship")
   intakeResponses        IntakeResponse[]
@@ -503,6 +504,24 @@ model ExternalRegistryNote {
 
   @@index([registryId])
   @@index([authorId])
+}
+
+model PlanSection {
+  id                   String   @id @default(cuid())
+  memberId             String
+  sectionKey           String
+  decisionState        String?
+  mentorNote           String?
+  memberNote           String?
+  memberAcknowledgement String?
+  updatedByRole        String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  member User @relation("MemberPlanSections", fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([memberId, sectionKey])
+  @@index([memberId])
 }
 
 model AcademyModule {

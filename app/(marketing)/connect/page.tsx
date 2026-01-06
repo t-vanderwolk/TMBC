@@ -1,8 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
-
 import CTARibbon from "@/components/marketing/CTARibbon";
-import connectPreview from "../../../assets/images/ui-connect-hero-community-preview.png";
+import HeroSection from "@/components/marketing/HeroSection";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const benefits = [
   {
@@ -24,20 +23,24 @@ const benefits = [
 
 export default function ConnectPage() {
   return (
-    <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
-      <section className="grid gap-8 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-[1.1fr_0.9fr]">
-        <div className="space-y-4">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+    <div className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
+      <HeroSection
+        backgroundImage="standard"
+        imageAlt="Editorial hero artwork for the Connect pillar."
+        title="Connection without the noise"
+        supporting="Mentor-led connection that stays steady, kind, and centered on shared understanding."
+      />
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+        <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             Connect
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-            Connection without the noise
-          </h1>
-          <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-            A mentor-led community that feels steady, safe, and structured around what you actually need.
-          </p>
-          <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
-            <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+            <Link
+              href="/request-invite"
+              className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+            >
               Request Your Invite
             </Link>
             <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
@@ -45,15 +48,17 @@ export default function ConnectPage() {
             </Link>
           </div>
         </div>
-        <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5] md:aspect-[3/4]">
-          <Image
-            src={connectPreview}
-            alt="Community chat room preview"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 40vw"
-          />
-        </div>
+      </section>
+
+      <div className="w-screen left-1/2 right-1/2 -translate-x-1/2">
+        <RibbonDivider variant="full" />
+      </div>
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
+        {/* Structural: move the emotional pause ahead of diagrams to establish warmth before explanation. */}
+        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
+          A pause that reflects the warmth of being held by a real community.
+        </p>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
@@ -65,7 +70,7 @@ export default function ConnectPage() {
             Structured community, not social media
           </h2>
         </div>
-        <div className="space-y-4 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+        <div className="max-w-[680px] space-y-7 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           <p>
             Connection inside TMBC is designed to feel calm and purposeful. Mentors keep conversations warm and
             grounded, so your questions land in the right places.
@@ -98,20 +103,26 @@ export default function ConnectPage() {
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 {benefit.title}
               </p>
-              <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{benefit.description}</p>
+              <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-65">{benefit.description}</p>
             </div>
           ))}
         </div>
       </section>
 
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
+        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
+          A gentle look at how conversations stay focused and kind.
+        </p>
+      </section>
+
       <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
-        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+        <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
           Relationship to the system
         </p>
-        <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+        <h2 className="system-language pt-2 text-[0.7rem] sm:text-[0.8rem]">
           Where Connect fits in Learn · Plan · Connect · Reflect
         </h2>
-        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
           Connection keeps the experience human, weaving learning, planning, and reflection into a steady
           support system.
         </p>
@@ -122,6 +133,7 @@ export default function ConnectPage() {
         supportingText="Invite-only keeps the community thoughtful and mentor-led. (You can lurk first.)"
         buttonLabel="Request Your Invite"
         buttonHref="/request-invite"
+        tone="medium"
       />
       {/* TODO: Expand Connect pillar with mentor circle previews and room rituals. */}
     </div>

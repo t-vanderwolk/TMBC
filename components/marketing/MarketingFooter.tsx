@@ -22,22 +22,18 @@ export default function MarketingFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="rounded-[32px] border border-[var(--tmbc-mauve)]/15 bg-[var(--tmbc-ivory)]/90 px-8 py-12 text-[var(--tmbc-charcoal)]">
-      <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="space-y-4">
+    <footer className="rounded-[32px] border border-[var(--tmbc-mauve)]/15 bg-[var(--tmbc-ivory)]/90 px-8 py-14 text-[var(--tmbc-charcoal)] sm:py-16">
+      <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="space-y-5">
           <p className="font-serif text-lg text-[var(--tmbc-charcoal)]">Taylor-Made Baby Co.</p>
-          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-            Thoughtful guidance for modern parenthood.
-          </p>
-          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
-            You don&apos;t have to figure this out alone.
-          </p>
-          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
-            And you don&apos;t have to do it all today.
-          </p>
+          <div className="space-y-2 pt-4 text-[0.65rem] text-[var(--tmbc-charcoal)] text-opacity-55">
+            <p>Thoughtful guidance for modern parenthood.</p>
+            <p>You don&apos;t have to figure this out alone.</p>
+            <p>And you don&apos;t have to do it all today.</p>
+          </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-5 pt-4">
           <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
             The Experience
           </p>
@@ -50,7 +46,7 @@ export default function MarketingFooter() {
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-5 pt-4">
           <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Taylor-Made Baby Co.
           </p>
@@ -63,7 +59,7 @@ export default function MarketingFooter() {
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-5 pt-4">
           <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Support
           </p>
@@ -77,7 +73,7 @@ export default function MarketingFooter() {
         </div>
       </div>
 
-      <div className="mt-10 border-t border-[var(--tmbc-mauve)]/20 pt-6 text-xs text-[var(--tmbc-charcoal)] text-opacity-60">
+      <div className="mt-12 border-t border-[var(--tmbc-mauve)]/20 pt-7 text-xs text-[var(--tmbc-charcoal)] text-opacity-60">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <span>© {year} Taylor-Made Baby Co.</span>
           <div className="flex flex-wrap gap-6">

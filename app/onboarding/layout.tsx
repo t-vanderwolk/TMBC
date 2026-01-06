@@ -1,12 +1,29 @@
 import type { ReactNode } from "react";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import OnboardingRedirectGuard from "@/components/onboarding/OnboardingRedirectGuard";
+import { INVITE_COOKIE_NAME } from "@/lib/constants/invite";
+import { validateInviteCode } from "@/lib/services/server/onboarding.service";
 
 type OnboardingLayoutProps = {
   children: ReactNode;
 };
 
-export default function OnboardingLayout({ children }: OnboardingLayoutProps) {
+export default async function OnboardingLayout({ children }: OnboardingLayoutProps) {
+  const cookieStore = cookies();
+  const inviteCode = cookieStore.get(INVITE_COOKIE_NAME)?.value?.trim().toUpperCase();
+
+  if (!inviteCode) {
+    redirect("/?invite_error=1");
+  }
+
+  try {
+    await validateInviteCode(inviteCode);
+  } catch {
+    redirect("/?invite_error=1");
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-[#FFF8F4] to-[#FBE9EE] text-[#3E2F35]">
       <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-8 px-4 py-10 lg:px-12">

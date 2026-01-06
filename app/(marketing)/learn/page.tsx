@@ -1,8 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
-
 import CTARibbon from "@/components/marketing/CTARibbon";
-import learnPreview from "../../../assets/images/ui-reflect-hero-journal-preview.png";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
+import HeroSection from "@/components/marketing/HeroSection";
 
 const benefits = [
   {
@@ -24,36 +23,44 @@ const benefits = [
 
 export default function LearnPage() {
   return (
-    <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
-      <section className="grid gap-8 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-[1.1fr_0.9fr]">
-        <div className="space-y-4">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+    <div className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
+      <HeroSection
+        backgroundImage="learn"
+        imageAlt="Educational hero artwork for the Learn pillar."
+        title="Learn with calm, not overwhelm"
+        supporting="Clear, mentor-led guidance that keeps education steady, useful, and in the right sequence."
+      />
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+        <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             Learn
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-            Learn with calm, not overwhelm
-          </h1>
-          <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-            We translate the noise into clear, mentor-led guidance so you can feel steady and informed. (No pop quizzes.)
-          </p>
-          <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
-            <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+            <Link
+              href="/request-invite"
+              className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
+            >
               Request Your Invite
             </Link>
             <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
               How It Works (gently)
             </Link>
           </div>
+          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
+            A gentle divider that keeps the learning rhythm calm and clear.
+          </p>
         </div>
-        <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5] md:aspect-[3/4]">
-          <Image
-            src={learnPreview}
-            alt="Guided learning and reflection preview"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 40vw"
-          />
-        </div>
+      </section>
+
+      <div className="w-screen left-1/2 right-1/2 -translate-x-1/2">
+        <RibbonDivider variant="full" />
+      </div>
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
+        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
+          A soft editorial pause before the learning flow begins.
+        </p>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
@@ -65,7 +72,7 @@ export default function LearnPage() {
             Education that feels gentle and useful
           </h2>
         </div>
-        <div className="space-y-4 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+        <div className="max-w-[680px] space-y-7 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           <p>
             Learning inside TMBC is calm, paced, and rooted in real context. We share what matters without
             loading you down with endless lists.
@@ -99,20 +106,20 @@ export default function LearnPage() {
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 {benefit.title}
               </p>
-              <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{benefit.description}</p>
+              <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-65">{benefit.description}</p>
             </div>
           ))}
         </div>
       </section>
 
       <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
-        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+        <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
           Relationship to the system
         </p>
-        <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+        <h2 className="system-language pt-2 text-[0.7rem] sm:text-[0.8rem]">
           Part of the Learn · Plan · Connect · Reflect rhythm
         </h2>
-        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
           Learning sets the foundation so planning feels clear, connection feels meaningful, and reflection
           feels intentional. You don’t need to learn it all at once.
         </p>
@@ -123,6 +130,7 @@ export default function LearnPage() {
         supportingText="Invite-only keeps the guidance personal and paced for you. (We’ll remind you to take breaks.)"
         buttonLabel="Request Your Invite"
         buttonHref="/request-invite"
+        tone="soft"
       />
       {/* TODO: Expand Learn pillar with stories and mentor-led lesson previews. */}
     </div>

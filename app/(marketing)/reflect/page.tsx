@@ -1,8 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
-
 import CTARibbon from "@/components/marketing/CTARibbon";
-import reflectPreview from "../../../assets/images/ui-plan-hero-registry-preview.png";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
+import HeroSection from "@/components/marketing/HeroSection";
 
 const benefits = [
   {
@@ -24,48 +23,53 @@ const benefits = [
 
 export default function ReflectPage() {
   return (
-    <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
-      <section className="grid gap-8 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-[1.1fr_0.9fr]">
-        <div className="space-y-4">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+    <div className="space-y-24 sm:space-y-28 text-[var(--tmbc-charcoal)]">
+      <HeroSection
+        backgroundImage="standard"
+        imageAlt="Editorial hero artwork for the Reflect pillar."
+        title="Reflect with meaning and care"
+        supporting="A private, gentle space to capture memories, reassurance, and the story you want to keep."
+      />
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+        <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             Reflect
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-            Reflect with meaning and care
-          </h1>
-          <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-            A private, gentle space to capture memories, moments, and the story you want to keep. (Even the in-between ones.)
-          </p>
-          <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
-            <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+            <Link
+              href="/request-invite"
+              className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
+            >
               Request Your Invite
             </Link>
-            <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
+            <Link
+              href="/how-it-works"
+              className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] opacity-90 hover:opacity-100"
+            >
               How It Works (softly)
             </Link>
           </div>
-        </div>
-        <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5] md:aspect-[3/4]">
-          <Image
-            src={reflectPreview}
-            alt="Taylor-Made Baby Co. preview"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 40vw"
-          />
+          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
+            A soft divider that signals privacy and calm.
+          </p>
         </div>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <div className="w-screen left-1/2 right-1/2 -translate-x-1/2">
+        <RibbonDivider variant="full" />
+      </div>
+
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section sm:pb-12">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What this is
           </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+          <h2 className="font-serif text-2xl font-medium text-[var(--tmbc-charcoal)] text-opacity-80 sm:text-3xl">
             Keepsakes with an heirloom feel
           </h2>
         </div>
-        <div className="space-y-4 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+        <div className="mx-auto max-w-[680px] space-y-7 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           <p>
             Reflection inside TMBC is designed to feel gentle and personal. It is not a feed, and it is not
             about sharing publicly.
@@ -80,49 +84,58 @@ export default function ReflectPage() {
         </div>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="rounded-[48px] bg-transparent p-8 shadow-none marketing-section">
+        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
+          A keepsake detail that feels intimate and lasting.
+        </p>
+      </section>
+
+      <section className="mt-14 sm:mt-20 space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             How it supports parents
           </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+          <h2 className="font-serif text-2xl font-medium text-[var(--tmbc-charcoal)] text-opacity-80 sm:text-3xl">
             A quiet place to remember
           </h2>
         </div>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-3">
           {benefits.map((benefit) => (
             <div
               key={benefit.title}
-              className="rounded-[28px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-5 shadow-[0_12px_40px_rgba(199,166,199,0.15)]"
+              className="rounded-[28px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-4 shadow-[0_12px_40px_rgba(199,166,199,0.15)]"
             >
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 {benefit.title}
               </p>
-              <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{benefit.description}</p>
+              <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-65">{benefit.description}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
-        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+      <section className="mt-12 sm:mt-14 space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
           Relationship to the system
         </p>
-        <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+        <h2 className="system-language pt-2 text-[0.7rem] sm:text-[0.8rem]">
           How Reflect fits into Learn · Plan · Connect · Reflect
         </h2>
-        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
           Reflection keeps the experience meaningful, tying the learning, planning, and connection together in
           a way that feels personal. You don&apos;t have to remember it all — this holds it for you.
         </p>
       </section>
 
-      <CTARibbon
-        headline="Keep the story with care"
-        supportingText="Invite-only keeps this space private and intentional. (No pressure to share.)"
-        buttonLabel="Request Your Invite"
-        buttonHref="/request-invite"
-      />
+      <div className="pt-10 sm:pt-12">
+        <CTARibbon
+          headline="Keep the story with care"
+          supportingText="Invite-only keeps this space private and intentional. (No pressure to share.)"
+          buttonLabel="Request Your Invite"
+          buttonHref="/request-invite"
+          tone="soft"
+        />
+      </div>
       {/* TODO: Expand Reflect pillar with journaling rituals and keepsake previews. */}
     </div>
   );

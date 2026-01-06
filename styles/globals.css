@@ -159,6 +159,10 @@
     @apply text-base leading-relaxed sm:text-lg;
   }
 
+  .marketing-content p + p {
+    margin-top: 1.25rem;
+  }
+
   .marketing-content h1 {
     @apply text-3xl leading-tight;
   }
@@ -177,6 +181,7 @@
 
   .marketing-content h2 {
     @apply text-2xl font-semibold leading-tight;
+    color: rgba(62, 47, 53, 0.82);
   }
 
   @screen sm {
@@ -193,6 +198,7 @@
 
   .marketing-content h3 {
     @apply text-xl font-semibold leading-tight;
+    color: rgba(62, 47, 53, 0.8);
   }
 
   @screen sm {
@@ -202,7 +208,7 @@
   }
 
   .marketing-section {
-    @apply py-12 sm:py-16 lg:py-24;
+    @apply pt-20 pb-12 sm:pt-24 sm:pb-14 lg:pt-32 lg:pb-20;
   }
 
   .marketing-section-inner {
@@ -217,12 +223,27 @@
     @apply bg-gradient-to-r from-[var(--tmbc-blush)] to-[var(--tmbc-mauve)] text-[var(--tmbc-charcoal)] shadow-[0_15px_45px_rgba(212,181,121,0.35)];
   }
 
+  .marketing-btn-primary-medium {
+    @apply text-[var(--tmbc-charcoal)] shadow-[0_12px_32px_rgba(199,166,199,0.3)];
+    background: linear-gradient(90deg, rgba(247, 232, 229, 0.7), rgba(206, 177, 194, 0.6));
+  }
+
+  .marketing-btn-primary-soft {
+    @apply border text-[var(--tmbc-charcoal)] shadow-[0_10px_28px_rgba(199,166,199,0.2)];
+    border-color: rgba(206, 177, 194, 0.4);
+    background-color: rgba(251, 248, 242, 0.9);
+  }
+
   .marketing-btn-secondary {
     @apply bg-white border border-[var(--tmbc-charcoal)] text-[var(--tmbc-charcoal)];
   }
 
   .marketing-btn-ghost {
     @apply text-[var(--tmbc-charcoal)] hover:text-[var(--tmbc-mauve)];
+  }
+
+  .hero-cta .marketing-btn {
+    @apply px-4 py-2 sm:px-6 sm:py-3;
   }
 
   .marketing-form {
@@ -247,6 +268,14 @@
   .marketing-media img,
   .marketing-media video {
     @apply w-full h-auto;
+  }
+
+  .system-language {
+    @apply text-[0.6rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-45;
+  }
+
+  .marketing-section img {
+    filter: saturate(0.92) contrast(0.95) brightness(0.98);
   }
 }
 

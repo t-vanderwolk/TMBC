@@ -14,11 +14,11 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen overflow-hidden bg-gradient-to-b from-[var(--tmbc-ivory)] via-[var(--tmbc-blush)]/60 to-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
       <Navbar />
-      <main className="py-12 sm:py-16 lg:py-20">
-        <MarketingContainer className="space-y-16">{children}</MarketingContainer>
+      <main className="pb-20 sm:pb-24 lg:pb-28">
+        <MarketingContainer className="space-y-20">{children}</MarketingContainer>
       </main>
       {!shouldHideFooter && (
-        <div className="pb-10">
+        <div className="pb-14 sm:pb-16">
           <MarketingContainer>
             <MarketingFooter />
           </MarketingContainer>

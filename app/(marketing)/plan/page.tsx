@@ -1,8 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
-
 import CTARibbon from "@/components/marketing/CTARibbon";
-import planPreview from "../../../assets/images/ui-home-hero-platform-preview.png";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
+import HeroSection from "@/components/marketing/HeroSection";
 
 const benefits = [
   {
@@ -29,37 +28,39 @@ const benefits = [
 
 export default function PlanPage() {
   return (
-    <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
-      <section className="grid gap-8 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-[1.1fr_0.9fr]">
-        <div className="space-y-4">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+    <div className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
+      <HeroSection
+        backgroundImage="standard"
+        imageAlt="Editorial hero artwork for the Plan pillar."
+        title="Plan with steady, human guidance"
+        supporting="A shared workspace for calm decisions, steady pacing, and mentor context."
+      />
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+        <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
             Plan
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-            Plan with steady, human guidance
-          </h1>
-          <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-            Decision support that keeps the pace calm and the priorities clear, without turning planning into shopping.
-          </p>
-          <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
-            <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+            <Link
+              href="/request-invite"
+              className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+            >
               Request Your Invite
             </Link>
             <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
               How It Works (no rush)
             </Link>
           </div>
-        </div>
-        <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5] md:aspect-[3/4]">
-          <Image
-            src={planPreview}
-            alt="Guided planning preview"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 40vw"
-          />
+          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
+            A gentle divider that reinforces calm pacing and clarity.
+          </p>
         </div>
       </section>
+
+      <div className="w-screen left-1/2 right-1/2 -translate-x-1/2">
+        <RibbonDivider variant="full" />
+      </div>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
@@ -70,7 +71,7 @@ export default function PlanPage() {
             Decision support without the pressure
           </h2>
         </div>
-        <div className="space-y-4 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+        <div className="max-w-[680px] space-y-7 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           <p>
             Planning inside TMBC means you never have to decide alone. Your mentor helps you sort priorities and
             define what fits your life.
@@ -83,6 +84,12 @@ export default function PlanPage() {
             If you already started a registry elsewhere, we help you refine it with clarity and calm.
           </p>
         </div>
+      </section>
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
+        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
+          A visual moment that centers calm, human guidance.
+        </p>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
@@ -103,7 +110,7 @@ export default function PlanPage() {
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                 {benefit.title}
               </p>
-              <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{benefit.description}</p>
+              <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-65">{benefit.description}</p>
             </div>
           ))}
         </div>
@@ -113,10 +120,10 @@ export default function PlanPage() {
         <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
           Relationship to the system
         </p>
-        <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+        <h2 className="system-language pt-2 text-[0.7rem] sm:text-[0.8rem]">
           How Plan fits into Learn · Plan · Connect · Reflect
         </h2>
-        <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+        <p className="max-w-[680px] text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           Planning turns learning into calm next steps, while connection and reflection keep the plan aligned
           with your life. (We’ll help you pause before buying “just in case.”)
         </p>
@@ -127,6 +134,7 @@ export default function PlanPage() {
         supportingText="Invite-only keeps the planning support personal and unhurried."
         buttonLabel="Request Your Invite"
         buttonHref="/request-invite"
+        tone="medium"
       />
       {/* TODO: Expand Plan pillar with decision stories and registry flow previews. */}
     </div>

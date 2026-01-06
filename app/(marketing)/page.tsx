@@ -1,79 +1,133 @@
 "use client";
 
-import Image from "next/image";
+import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
-
-import heroPreview from "../../assets/images/ui-learn-hero-classes-preview.png";
-import heroDetailPreview from "../../assets/images/IMG_9982.jpeg";
+import { useRouter, useSearchParams } from "next/navigation";
+import HeroSection from "@/components/marketing/HeroSection";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 export default function HomePage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [inviteCode, setInviteCode] = useState("");
+  const [inviteError, setInviteError] = useState("");
+  const [inviteSubmitting, setInviteSubmitting] = useState(false);
+
+  useEffect(() => {
+    const code = searchParams.get("invite");
+    if (code) {
+      setInviteCode(code.trim().toUpperCase());
+    }
+    if (searchParams.get("invite_error")) {
+      setInviteError("Invite code missing or invalid. Please enter your approved invite code.");
+    }
+  }, [searchParams]);
+
+  const handleInviteSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const normalized = inviteCode.trim().toUpperCase();
+    if (!normalized) {
+      setInviteError("Please enter your invite code.");
+      return;
+    }
+
+    setInviteSubmitting(true);
+    setInviteError("");
+
+    try {
+      const response = await fetch("/api/invite/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: normalized }),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        setInviteError(payload?.error || "Invalid or already used invite code.");
+        return;
+      }
+
+      router.push("/onboarding/start");
+    } catch {
+      setInviteError("Unable to validate invite code.");
+    } finally {
+      setInviteSubmitting(false);
+    }
+  };
+
   return (
-    <div className="space-y-12 sm:space-y-16 lg:space-y-20 text-[var(--tmbc-charcoal)]">
-      <section className="grid gap-10 rounded-[56px] border border-[var(--tmbc-mauve)]/40 bg-white/80 p-10 shadow-[0_30px_90px_rgba(199,166,199,0.35)] marketing-section md:grid-cols-[1.05fr_0.95fr]">
-        <div className="space-y-6">
-          <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            Invite-only, mentor-led baby planning — guided by a real human
+    <div className="space-y-20 sm:space-y-24 lg:space-y-28 text-[var(--tmbc-charcoal)]">
+      <HeroSection
+        backgroundImage="primary"
+        imageAlt="Primary Taylor-Made Baby Co. hero artwork."
+        title="A calmer way to learn, plan, connect, and reflect."
+        supporting="Taylor-Made Baby Co. pairs you with a trusted mentor to guide your next steps in the right order, without pressure."
+      />
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+        <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
+          <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
+            Invite-only · Mentor-guided · Calm digital planning
           </p>
-          <h1 className="font-serif text-4xl leading-tight text-[var(--tmbc-charcoal)] sm:text-5xl">
-            A calmer way to prepare for life with a baby.
-          </h1>
-          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-            Paired with a real mentor who helps you learn, plan, and prepare — step by step.
-          </p>
-          <p className="max-w-xl text-lg text-[var(--tmbc-charcoal)] text-opacity-80">
-            Taylor-Made Baby Co. pairs you with a trusted mentor to help you plan, choose, and prepare — thoughtfully,
-            in the right order, without pressure. (You don’t need to know everything yet.)
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-6">
-            <div className="flex flex-col gap-2">
-              <Link
-                href="/request-invite"
-                className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]"
-              >
-                Request an Invite
-              </Link>
-              <span className="text-xs text-[var(--tmbc-charcoal)] text-opacity-60">
-                Takes about 60 seconds · No commitment
-              </span>
-            </div>
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+            <Link
+              href="/request-invite"
+              className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]"
+            >
+              Request an Invite
+            </Link>
             <Link
               href="/how-it-works"
-              className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70"
+              className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
             >
               How it works (in plain language)
             </Link>
           </div>
-          <div className="space-y-2 text-xs text-[var(--tmbc-charcoal)] text-opacity-60">
+          <span className="text-[0.65rem] text-[var(--tmbc-charcoal)] text-opacity-50">
+            Takes about 60 seconds · No commitment
+          </span>
+          <div className="space-y-3 text-xs text-[var(--tmbc-charcoal)] text-opacity-60">
             <p>We’ll start where you are. The rest can wait.</p>
-            <p className="uppercase tracking-[0.45em]">Learn → Plan → Connect → Reflect</p>
+            <p className="system-language pt-2">
+              Learn → Plan → Connect → Reflect
+            </p>
           </div>
-        </div>
-        <div className="flex flex-col gap-6">
-          <div className="relative w-full overflow-hidden rounded-[36px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/70 aspect-[4/5] md:aspect-[3/4]">
-            <Image
-              src={heroPreview}
-              alt="Guided learning and planning preview"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 45vw"
-              priority
-            />
-          </div>
-          <div className="relative w-full overflow-hidden rounded-[28px] border border-[var(--tmbc-mauve)]/15 bg-[var(--tmbc-ivory)]/70 aspect-[4/3]">
-            <Image
-              src={heroDetailPreview}
-              alt="Newborn details in soft light"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 45vw"
-            />
+          <div className="w-full space-y-3 pt-2">
+            <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">
+              Already have an invite?
+            </p>
+            <form className="flex flex-col gap-3 sm:flex-row" onSubmit={handleInviteSubmit}>
+              <input
+                value={inviteCode}
+                onChange={(event) => {
+                  setInviteCode(event.target.value);
+                  if (inviteError) setInviteError("");
+                }}
+                placeholder="Enter your invite code"
+                className="w-full rounded-full border border-[var(--tmbc-mauve)]/40 bg-white px-4 py-3 text-sm text-[var(--tmbc-charcoal)] shadow-sm"
+              />
+              <button
+                type="submit"
+                className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] disabled:opacity-70"
+                disabled={inviteSubmitting}
+              >
+                {inviteSubmitting ? "Checking..." : "Continue"}
+              </button>
+            </form>
+            {inviteError && (
+              <p className="text-xs text-red-600">{inviteError}</p>
+            )}
           </div>
         </div>
       </section>
 
-      <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/50 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.22)] marketing-section">
+      <div className="w-screen left-1/2 right-1/2 -translate-x-1/2">
+        <RibbonDivider variant="full" />
+      </div>
+
+      <section className="space-y-5 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/50 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.22)] marketing-section">
         <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Why it feels loud</p>
-        <div className="space-y-3 text-base text-[var(--tmbc-charcoal)] text-opacity-80">
+        <div className="max-w-[680px] space-y-6 text-base text-[var(--tmbc-charcoal)] text-opacity-80">
           <p>
             Most parents don&apos;t feel confused because they&apos;re unprepared.
             They feel confused because everything feels urgent — all at once.
@@ -95,7 +149,7 @@ export default function HomePage() {
             Grounded guidance, not generic advice.
           </h2>
         </div>
-        <div className="space-y-5 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
+        <div className="space-y-8 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
           <div>
             <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
               Human-led, not algorithm-led
@@ -104,7 +158,6 @@ export default function HomePage() {
               You work with a real mentor who understands your life, your space, and your priorities — not a preset list.
             </p>
           </div>
-          <div className="h-px w-full bg-[var(--tmbc-mauve)]/20" />
           <div>
             <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
               Sequence over urgency
@@ -113,7 +166,6 @@ export default function HomePage() {
               We guide decisions in the right order — so nothing feels rushed or forgotten (or panic-Googled at 2am).
             </p>
           </div>
-          <div className="h-px w-full bg-[var(--tmbc-mauve)]/20" />
           <div>
             <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
               Advocacy, not sales
@@ -122,7 +174,6 @@ export default function HomePage() {
               We don&apos;t push products. We help you choose what&apos;s right for you, and what can wait.
             </p>
           </div>
-          <div className="h-px w-full bg-[var(--tmbc-mauve)]/20" />
           <div>
             <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
               From planning to support
@@ -134,31 +185,39 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="relative space-y-6 overflow-hidden rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+          <p className="system-language">
             Learn · Plan · Connect · Reflect
           </p>
           <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
             A clear rhythm for each step.
           </h2>
         </div>
-        <div className="space-y-4 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
-          <div className="flex flex-col gap-2 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Learn</p>
-            <p>Understand what matters next.</p>
+        <div className="space-y-6 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
+          <div className="flex flex-col gap-4 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Learn</p>
+              <p>Understand what matters next.</p>
+            </div>
           </div>
-          <div className="flex flex-col gap-2 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Plan</p>
-            <p>Make decisions in the right order.</p>
+          <div className="flex flex-col gap-4 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Plan</p>
+              <p>Make decisions in the right order.</p>
+            </div>
           </div>
-          <div className="flex flex-col gap-2 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Connect</p>
-            <p>Ask questions when they come up.</p>
+          <div className="flex flex-col gap-4 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Connect</p>
+              <p>Ask questions when they come up.</p>
+            </div>
           </div>
-          <div className="flex flex-col gap-2 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Reflect</p>
-            <p>Capture the moments you’ll want to remember.</p>
+          <div className="flex flex-col gap-4 rounded-[24px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-5">
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">Reflect</p>
+              <p>Capture the moments you’ll want to remember.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -170,16 +229,16 @@ export default function HomePage() {
         <h2 className="mt-3 font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
           Our mentors were once members themselves.
         </h2>
-        <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
+        <p className="mx-auto mt-4 max-w-[680px] text-base text-[var(--tmbc-charcoal)] text-opacity-75">
           They&apos;ve planned, prepared, and learned inside this system — and now guide others with empathy, clarity,
           and lived experience (the kind that can&apos;t be faked).
         </p>
-        <p className="mt-4 text-sm uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+        <p className="mt-6 system-language">
           This is not coaching. This is guided preparation.
         </p>
       </section>
 
-      <section className="space-y-5 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What this gives you
@@ -188,10 +247,10 @@ export default function HomePage() {
             A calm, steady experience.
           </h2>
         </div>
-        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           A calmer way to move forward — without pressure or panic decisions.
         </p>
-        <ul className="space-y-3 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
+        <ul className="space-y-4 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
           <li>• A dedicated mentor</li>
           <li>• Guided learning &amp; planning flow</li>
           <li>• Registry support without pressure</li>
@@ -203,8 +262,8 @@ export default function HomePage() {
         </p>
       </section>
 
-      <section className="grid gap-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-2">
-        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70 md:col-span-2">
+      <section className="grid gap-8 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-2">
+        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70 md:col-span-2">
           There’s no right or wrong way to prepare — just what feels supportive to you.
         </p>
         <div className="space-y-4 rounded-[28px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-6">
@@ -228,15 +287,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="space-y-5 rounded-[48px] border border-[var(--tmbc-mauve)]/40 bg-[var(--tmbc-ivory)]/80 p-10 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/40 bg-[var(--tmbc-ivory)]/80 p-10 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
         <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Invite-only</p>
         <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
           Taylor-Made Baby Co. is invite-only so we can keep guidance personal and intentional.
         </h2>
-        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+        <p className="mx-auto max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           We keep it small so the care stays real.
         </p>
-        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+        <p className="mx-auto max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           You don’t need to feel ready to request an invite.
         </p>
         <Link

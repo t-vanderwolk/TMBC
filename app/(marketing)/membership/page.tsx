@@ -1,8 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
-
-import promiseVisual from "../../../assets/images/diagram-membership-promise.png";
-import membershipEditorial from "../../../assets/images/editorial-about-family-bump.jpeg";
+import HeroSection from "@/components/marketing/HeroSection";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
 const membershipPillars = [
   {
     title: "Learn",
@@ -79,44 +77,42 @@ const inviteReasons = [
 
 export default function MembershipPage() {
   return (
-    <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-10 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
-        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-          Membership
-        </p>
-        <h1 className="mt-3 font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-          Membership that can grow into mentorship, if and when it feels right
-        </h1>
-        <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Learn with support. Plan with clarity. Stay connected as your questions evolve. (No rush, ever.)
-        </p>
-        <p className="mt-3 text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-          Editorial-first guidance · Invite-only access · Transparent partner disclosures
-        </p>
-        <div className="mt-6 flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
-          <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
-            Request an Invite
-          </Link>
-          <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
-            How mentorship works
-          </Link>
+    <div className="space-y-20 sm:space-y-24 text-[var(--tmbc-charcoal)]">
+      <HeroSection
+        backgroundImage="foundingCircle"
+        imageAlt="Founding Circle hero artwork for membership."
+        title="Membership that can grow into mentorship, if and when it feels right"
+        supporting="Learn with support. Plan with clarity. Stay connected as your questions evolve. (No rush, ever.)"
+      />
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 pt-6 pb-10 text-center shadow-[0_20px_70px_rgba(199,166,199,0.2)] sm:pt-8 sm:pb-14 lg:pt-10">
+        <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+            Membership
+          </p>
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+            <Link
+              href="/request-invite"
+              className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
+            >
+              Request an Invite
+            </Link>
+            <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
+              How mentorship works
+            </Link>
+          </div>
+          <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
+            Editorial-first guidance · Invite-only access · Transparent partner disclosures
+          </p>
         </div>
       </section>
 
-      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
-        <div className="relative w-full overflow-hidden rounded-[36px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/3]">
-          <Image
-            src={promiseVisual}
-            alt="The registry process doesn't have to be overwhelming"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 70vw"
-          />
-        </div>
-      </section>
+      <div className="w-screen left-1/2 right-1/2 -translate-x-1/2">
+        <RibbonDivider variant="full" />
+      </div>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What membership means
           </p>
@@ -141,13 +137,13 @@ export default function MembershipPage() {
             </div>
           ))}
         </div>
-        <p className="text-center text-sm uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-70">
+        <p className="mx-auto max-w-[680px] text-center text-sm uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-70">
           Membership gives you access. Mentorship gives you impact. (Only if you want it.)
         </p>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Member → Mentor pathway
           </p>
@@ -173,13 +169,13 @@ export default function MembershipPage() {
             </div>
           ))}
         </div>
-        <p className="text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+        <p className="mx-auto max-w-[680px] text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           Mentorship is optional, earned, and supported — never required. (Some members stay right where they are.)
         </p>
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             What mentors unlock
           </p>
@@ -209,13 +205,13 @@ export default function MembershipPage() {
             </ul>
           </div>
         </div>
-        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           Mentors never ‘sell’ — recommendations are contextual, optional, and fully disclosed. (Always.)
         </p>
       </section>
 
-      <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/50 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
-        <div className="flex flex-col gap-2">
+      <section className="space-y-5 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/50 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
+        <div className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Why this model exists
           </p>
@@ -224,26 +220,17 @@ export default function MembershipPage() {
           </h2>
         </div>
         <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-center">
-          <div className="space-y-4 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+          <div className="max-w-[680px] space-y-6 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
             <p>
               Hourly consults can feel transactional. Courses can feel isolating. Affiliate-driven content can struggle
               to earn trust. We wanted a slower, more human system that keeps guidance calm, clear, and accountable.
             </p>
             <p>Think of it as a steady hand — not another list.</p>
           </div>
-          <div className="relative w-full overflow-hidden rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/5]">
-            <Image
-              src={membershipEditorial}
-              alt="Parent resting with a growing bump"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 40vw"
-            />
-          </div>
         </div>
       </section>
 
-      <section className="space-y-4 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
+      <section className="space-y-5 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
             Invite-only clarification
@@ -252,13 +239,16 @@ export default function MembershipPage() {
             Membership is invite-only to protect the experience.
           </h2>
         </div>
-        <ul className="space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+        <ul className="space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           {inviteReasons.map((item) => (
             <li key={item}>• {item}</li>
           ))}
         </ul>
         <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:items-center sm:gap-4">
-          <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
+          <Link
+            href="/request-invite"
+            className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
+          >
             Request an Invite
           </Link>
           <span className="text-[var(--tmbc-charcoal)] text-opacity-60 text-xs normal-case">
@@ -266,6 +256,7 @@ export default function MembershipPage() {
           </span>
         </div>
       </section>
+
     </div>
   );
 }

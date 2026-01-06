@@ -1,9 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
-
 import CTARibbon from "@/components/marketing/CTARibbon";
-import nurseryPreview from "../../../assets/images/editorial-about-nursery-corner.png";
-import familyPreview from "../../../assets/images/editorial-about-family-bump.jpeg";
+import MarketingImage from "@/components/marketing/MarketingImage";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const philosophy = [
   {
@@ -85,13 +83,17 @@ export default function AboutPage() {
       </section>
 
       <section className="grid gap-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-2">
-        <div className="relative w-full overflow-hidden rounded-[36px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/3]">
-          <Image
-            src={nurseryPreview}
-            alt="A calm nursery scene"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
+        <div className="py-16 sm:py-24">
+          <MarketingImage
+            variant="editorial"
+            aspectRatio="4/3"
+            maxWidth={720}
+            lazy
+            label="About - Editorial pause: calm home moment"
+            page="/about"
+            section="Editorial Pause"
+            assetPath="TBD"
+            assetPriority="med"
           />
         </div>
         <div className="space-y-3">
@@ -120,15 +122,26 @@ export default function AboutPage() {
             TMBC supports you through each season — first babies, siblings, and every shift in between.
           </p>
         </div>
-        <div className="relative w-full overflow-hidden rounded-[36px] border border-[var(--tmbc-mauve)]/20 bg-white/80 aspect-[4/3]">
-          <Image
-            src={familyPreview}
-            alt="Family moment during pregnancy"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
+        <div className="py-16 sm:py-24">
+          <MarketingImage
+            variant="editorial"
+            aspectRatio="4/3"
+            maxWidth={720}
+            lazy
+            label="About - Editorial pause: family support moment"
+            page="/about"
+            section="Editorial Pause"
+            assetPath="TBD"
+            assetPriority="med"
           />
         </div>
+      </section>
+
+      <section className="space-y-4">
+        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+          A visual pause that echoes the values guiding the invite.
+        </p>
+        <RibbonDivider variant="full" />
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 p-8 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">
@@ -153,6 +166,10 @@ export default function AboutPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section>
+        <RibbonDivider variant="full" />
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
@@ -200,6 +217,25 @@ export default function AboutPage() {
               <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{item.description}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
+        <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+          People-first moments that keep the focus on families, not founders.
+        </p>
+        <div className="py-16 sm:py-24">
+          <MarketingImage
+            variant="editorial"
+            aspectRatio="4/5"
+            maxWidth={720}
+            lazy
+            label="About - Editorial pause: people-first moment"
+            page="/about"
+            section="Editorial Pause"
+            assetPath="TBD"
+            assetPriority="med"
+          />
         </div>
       </section>
 
