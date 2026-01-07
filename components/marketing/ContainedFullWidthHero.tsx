@@ -36,7 +36,7 @@ export default function ContainedFullWidthHero({
           sizes="100vw"
           priority={priority}
         />
-        <div className="absolute inset-0 flex items-center justify-center px-6 py-24 md:py-32">
+        <div className="absolute inset-0 flex items-center justify-center px-6 py-20 sm:py-24 md:py-32">
           <div className="w-full max-w-[520px] md:max-w-[560px] text-center">
             {children}
           </div>

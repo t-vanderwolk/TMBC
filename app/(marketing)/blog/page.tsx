@@ -1,7 +1,8 @@
 import Link from "next/link";
 import MarketingImage from "@/components/marketing/MarketingImage";
-import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -48,37 +49,54 @@ const fetchPublicPosts = async (): Promise<PublicBlogPost[]> => {
   }
 };
 
+const heroSupportingText = (
+  <>
+    <span className="text-xs uppercase tracking-[0.6em] text-[var(--tmbc-charcoal)]">
+      Taylor-Made Journal
+    </span>
+    <span className="block mt-4">
+      Real conversations about baby prep, decisions, and life with a new child — without fear-based advice. (Or a 47-tab deep dive at midnight.)
+    </span>
+  </>
+);
+
+const heroSection = (
+  <MarketingHero
+    imageSrc="/assets/images/section-background-soft-ribbon.png"
+    imageAlt="Soft ribbon background"
+    imageWidth={1536}
+    imageHeight={1024}
+    headline="Clear thinking for pregnancy and early parenthood."
+    supportingText={heroSupportingText}
+    primaryCta={{
+      label: "Request an Invite",
+      href: "/request-invite",
+      className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
+    }}
+    secondaryCta={{
+      label: "How the journal works",
+      href: "/how-it-works",
+    }}
+    priority
+  />
+);
+
 const BlogMarketingPage = async () => {
   const posts = await fetchPublicPosts();
   const [featuredPost, ...otherPosts] = posts;
+
   if (!featuredPost) {
     return (
       <>
-        <ContainedFullWidthHero
-          imageSrc="/assets/images/section-background-soft-ribbon.png"
-          imageAlt="Soft ribbon background"
-        >
-          <p className="text-xs uppercase tracking-[0.6em] text-[var(--tmbc-charcoal)]">
-            Taylor-Made Journal
-          </p>
-          <div className="hero-copy md:contents">
-            <h1 className="hero-headline">
-              Clear thinking for pregnancy and early parenthood.
-            </h1>
-            <p className="hero-supporting mt-6">
-              Real conversations about baby prep, decisions, and life with a new child — without fear-based advice.
-              (Or a 47-tab deep dive at midnight.)
-            </p>
-          </div>
-        </ContainedFullWidthHero>
+        {heroSection}
         <MarketingContent>
           <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-          <section className="marketing-section mb-24 md:mb-28 text-center text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-            <p>No journal entries are available yet.</p>
-            <p className="mt-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
-              Check back soon — we publish gently.
-            </p>
-          </section>
+            <section className="marketing-section mb-24 md:mb-28 text-center text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p>No journal entries are available yet.</p>
+              <p className="mt-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
+                Check back soon — we publish gently.
+              </p>
+            </section>
           </div>
         </MarketingContent>
       </>
@@ -87,81 +105,66 @@ const BlogMarketingPage = async () => {
 
   return (
     <>
-      <ContainedFullWidthHero
-        imageSrc="/assets/images/section-background-soft-ribbon.png"
-        imageAlt="Soft ribbon background"
-      >
-        <p className="text-xs uppercase tracking-[0.6em] text-[var(--tmbc-charcoal)]">
-          Taylor-Made Journal
-        </p>
-        <div className="hero-copy md:contents">
-          <h1 className="hero-headline">
-            Clear thinking for pregnancy and early parenthood.
-          </h1>
-          <p className="hero-supporting mt-6">
-            Real conversations about baby prep, decisions, and life with a new child — without fear-based advice.
-            (Or a 47-tab deep dive at midnight.)
-          </p>
-        </div>
-      </ContainedFullWidthHero>
-
+      {heroSection}
+      <RibbonDivider />
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-        <section className="marketing-section space-y-10 mb-24 md:mb-28">
-          <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-2xl border border-[var(--tmbc-ivory)]/60 bg-tmIvory transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:grid-cols-[1.1fr_0.9fr]">
-            <div className="marketing-media flex-1">
-              <div className="py-20 md:py-32">
-                <MarketingImage
-                  variant="hero-editorial"
-                  aspectRatio="4/3"
-                  maxWidth={920}
-                  priority
-                  label="Journal - Featured post hero image"
-                  page="/blog"
-                  section="Featured Post"
-                  assetPath="TBD"
-                  assetPriority="high"
-                />
+          <section className="marketing-section space-y-10 mb-24 md:mb-28">
+            <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-2xl border border-[var(--tmbc-ivory)]/60 bg-tmIvory transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:grid-cols-[1.1fr_0.9fr]">
+              <div className="marketing-media flex-1">
+                <div className="py-20 md:py-32">
+                  <MarketingImage
+                    variant="hero-editorial"
+                    aspectRatio="4/3"
+                    maxWidth={920}
+                    priority
+                    label="Journal - Featured post hero image"
+                    page="/blog"
+                    section="Featured Post"
+                    assetPath="TBD"
+                    assetPriority="high"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="flex flex-1 flex-col gap-6 p-8 sm:p-10">
-              <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                <span>
-                  {featuredPost.publishedAt
-                    ? new Date(featuredPost.publishedAt).toLocaleDateString("en-US", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      })
-                    : "Coming soon"}
-                </span>
-                <span>•</span>
-                <span>{featuredPost.authorName}</span>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                {featuredPost.tags.map((tag) => (
-                  <span key={tag} className="rounded-full bg-tmBlush/70 px-3 py-1 font-semibold text-[0.55rem] tracking-[0.3em] text-tmCharcoal">
-                    {tag}
+              <div className="flex flex-1 flex-col gap-6 p-8 sm:p-10">
+                <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                  <span>
+                    {featuredPost.publishedAt
+                      ? new Date(featuredPost.publishedAt).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                      : "Coming soon"}
                   </span>
-                ))}
-                <span className="rounded-full border border-tmBlush/70 px-3 py-1 text-[0.55rem] font-semibold text-[var(--tmbc-charcoal)]">
-                  {formatAuthorRole(featuredPost.authorRoleSnapshot)}
-                </span>
+                  <span>•</span>
+                  <span>{featuredPost.authorName}</span>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                  {featuredPost.tags.map((tag) => (
+                    <span key={tag} className="rounded-full bg-tmBlush/70 px-3 py-1 font-semibold text-[0.55rem] tracking-[0.3em] text-tmCharcoal">
+                      {tag}
+                    </span>
+                  ))}
+                  <span className="rounded-full border border-tmBlush/70 px-3 py-1 text-[0.55rem] font-semibold text-[var(--tmbc-charcoal)]">
+                    {formatAuthorRole(featuredPost.authorRoleSnapshot)}
+                  </span>
+                </div>
+                <h2 className="font-playfair text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">{featuredPost.title}</h2>
+                <p className="text-base leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-80">
+                  {featuredPost.excerpt ?? ""}
+                </p>
+                <Link
+                  href={`/blog/${featuredPost.slug}`}
+                  className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] text-center sm:text-left"
+                >
+                  Read the story (take your time)
+                </Link>
               </div>
-              <h2 className="font-playfair text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">{featuredPost.title}</h2>
-              <p className="text-base leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-80">
-                {featuredPost.excerpt ?? ""}
-              </p>
-              <Link
-                href={`/blog/${featuredPost.slug}`}
-                className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] text-center sm:text-left"
-              >
-                Read the story (take your time)
-              </Link>
-            </div>
-          </article>
+            </article>
+          </section>
 
-        <section className="marketing-section space-y-6">
+          <section className="marketing-section space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {otherPosts.map((post) => (
                 <article
@@ -220,7 +223,6 @@ const BlogMarketingPage = async () => {
               ))}
             </div>
           </section>
-        </section>
         </div>
       </MarketingContent>
     </>

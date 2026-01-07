@@ -1,7 +1,6 @@
-import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
-import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 
 const benefits = [
@@ -25,49 +24,24 @@ const benefits = [
 export default function LearnPage() {
   return (
     <>
-      <ContainedFullWidthHero
+      <MarketingHero
         imageSrc="/assets/images/section-background-learning-flow.png"
         imageAlt="Educational hero artwork for the Learn pillar."
-      >
-        <div className="hero-copy md:contents">
-          <h1 className="hero-headline">
-            Learn what matters for pregnancy and baby.
-          </h1>
-          <p className="hero-supporting mt-6">
-            Clear, practical guidance on baby gear, safety, routines, and real-life decisions — without the pressure to
-            master everything at once. (Nobody does.)
-          </p>
-        </div>
-        <div className="hero-cta mt-10 hidden flex-col gap-4 justify-center md:flex md:flex-row">
-          <Link
-            href="/request-invite"
-            className="marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]"
-          >
-            Request Your Invite
-          </Link>
-          <Link
-            href="/how-it-works"
-            className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
-          >
-            How It Works (gently)
-          </Link>
-        </div>
-      </ContainedFullWidthHero>
-
-      <div className="hero-cta mt-10 flex flex-col gap-4 justify-center px-6 md:hidden">
-        <Link
-          href="/request-invite"
-          className="marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]"
-        >
-          Request Your Invite
-        </Link>
-        <Link
-          href="/how-it-works"
-          className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
-        >
-          How It Works (gently)
-        </Link>
-      </div>
+        imageWidth={1536}
+        imageHeight={1024}
+        headline="Learn what matters for pregnancy and baby."
+        supportingText="Clear, practical guidance on baby gear, safety, routines, and real-life decisions — without the pressure to master everything at once. (Nobody does.)"
+        primaryCta={{
+          label: "Request Your Invite",
+          href: "/request-invite",
+          className: "marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]",
+        }}
+        secondaryCta={{
+          label: "How It Works (gently)",
+          href: "/how-it-works",
+        }}
+      />
+      <RibbonDivider />
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
@@ -81,8 +55,6 @@ export default function LearnPage() {
           </p>
         </div>
       </section>
-
-      <RibbonDivider />
 
       <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-32">
         <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">

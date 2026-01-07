@@ -1,7 +1,6 @@
-import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
-import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 
 const benefits = [
@@ -30,49 +29,24 @@ const benefits = [
 export default function PlanPage() {
   return (
     <>
-      <ContainedFullWidthHero
+      <MarketingHero
         imageSrc="/assets/images/section-background-soft-ribbon.png"
         imageAlt="Editorial hero artwork for the Plan pillar."
-      >
-        <div className="hero-copy md:contents">
-          <h1 className="hero-headline">
-            Plan for baby — with someone in your corner.
-          </h1>
-          <p className="hero-supporting mt-6">
-            From registries to real-life logistics, your mentor helps you plan for pregnancy, birth, and early parenthood
-            step by step. (We’ll hold the map. You set the pace.)
-          </p>
-        </div>
-        <div className="hero-cta mt-10 hidden flex-col gap-4 justify-center md:flex md:flex-row">
-          <Link
-            href="/request-invite"
-            className="marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]"
-          >
-            Request Your Invite
-          </Link>
-          <Link
-            href="/how-it-works"
-            className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
-          >
-            How It Works (no rush)
-          </Link>
-        </div>
-      </ContainedFullWidthHero>
-
-      <div className="hero-cta mt-10 flex flex-col gap-4 justify-center px-6 md:hidden">
-        <Link
-          href="/request-invite"
-          className="marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]"
-        >
-          Request Your Invite
-        </Link>
-        <Link
-          href="/how-it-works"
-          className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
-        >
-          How It Works (no rush)
-        </Link>
-      </div>
+        imageWidth={1536}
+        imageHeight={1024}
+        headline="Plan for baby — with someone in your corner."
+        supportingText="From registries to real-life logistics, your mentor helps you plan for pregnancy, birth, and early parenthood step by step. (We’ll hold the map. You set the pace.)"
+        primaryCta={{
+          label: "Request Your Invite",
+          href: "/request-invite",
+          className: "marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]",
+        }}
+        secondaryCta={{
+          label: "How It Works (no rush)",
+          href: "/how-it-works",
+        }}
+      />
+      <RibbonDivider />
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
@@ -86,8 +60,6 @@ export default function PlanPage() {
           </p>
         </div>
       </section>
-
-      <RibbonDivider />
 
       <section className="marketing-section marketing-card space-y-6 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32">
         <div className="space-y-2">

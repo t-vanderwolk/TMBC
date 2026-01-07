@@ -1,7 +1,6 @@
-import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
-import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const benefits = [
@@ -25,49 +24,24 @@ const benefits = [
 export default function ConnectPage() {
   return (
     <>
-      <ContainedFullWidthHero
+      <MarketingHero
         imageSrc="/assets/images/section-background-soft-ribbon.png"
         imageAlt="Editorial hero artwork for the Connect pillar."
-      >
-        <div className="hero-copy md:contents">
-          <h1 className="hero-headline">
-            You’re not meant to do this alone.
-          </h1>
-          <p className="hero-supporting mt-6">
-            A supportive community of parents, mentors, and professionals navigating pregnancy and early parenthood
-            together — honestly, kindly, and without comparison. (No one’s keeping score.)
-          </p>
-        </div>
-        <div className="hero-cta mt-10 hidden flex-col gap-4 justify-center md:flex md:flex-row">
-          <Link
-            href="/request-invite"
-            className="marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]"
-          >
-            Request Your Invite
-          </Link>
-          <Link
-            href="/how-it-works"
-            className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
-          >
-            How It Works (quietly)
-          </Link>
-        </div>
-      </ContainedFullWidthHero>
-
-      <div className="hero-cta mt-10 flex flex-col gap-4 justify-center px-6 md:hidden">
-        <Link
-          href="/request-invite"
-          className="marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]"
-        >
-          Request Your Invite
-        </Link>
-        <Link
-          href="/how-it-works"
-          className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
-        >
-          How It Works (quietly)
-        </Link>
-      </div>
+        imageWidth={1536}
+        imageHeight={1024}
+        headline="You’re not meant to do this alone."
+        supportingText="A supportive community of parents, mentors, and professionals navigating pregnancy and early parenthood together — honestly, kindly, and without comparison. (No one’s keeping score.)"
+        primaryCta={{
+          label: "Request Your Invite",
+          href: "/request-invite",
+          className: "marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]",
+        }}
+        secondaryCta={{
+          label: "How It Works (quietly)",
+          href: "/how-it-works",
+        }}
+      />
+      <RibbonDivider />
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)] text-base md:text-lg">
@@ -78,8 +52,6 @@ export default function ConnectPage() {
           </p>
         </div>
       </section>
-
-      <RibbonDivider />
 
       <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-32">
         {/* Structural: move the emotional pause ahead of diagrams to establish warmth before explanation. */}

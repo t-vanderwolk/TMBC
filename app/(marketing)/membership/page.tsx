@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ContainedFullWidthHero from "@/components/marketing/ContainedFullWidthHero";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 const membershipPillars = [
@@ -79,49 +79,25 @@ const inviteReasons = [
 export default function MembershipPage() {
   return (
     <>
-      <ContainedFullWidthHero
+      <MarketingHero
         imageSrc="/assets/images/section-background-soft-ribbon.png"
         imageAlt="Founding Circle hero artwork for membership."
-      >
-        <div className="hero-copy md:contents">
-          <h1 className="hero-headline">
-            Start as a member. Grow into a mentor.
-          </h1>
-          <p className="hero-supporting mt-6">
-            Membership gives you guided baby prep, personal support, and a clear path to becoming the calm voice for
-            someone else — when you’re ready. (No pressure. No rush.)
-          </p>
-        </div>
-        <div className="hero-cta mt-10 hidden flex-col gap-4 justify-center md:flex md:flex-row">
-          <Link
-            href="/request-invite"
-            className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
-          >
-            Request an Invite
-          </Link>
-          <Link
-            href="/how-it-works"
-            className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
-          >
-            How mentorship works
-          </Link>
-        </div>
-      </ContainedFullWidthHero>
-
-      <div className="hero-cta mt-10 flex flex-col gap-4 justify-center px-6 md:hidden">
-        <Link
-          href="/request-invite"
-          className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
-        >
-          Request an Invite
-        </Link>
-        <Link
-          href="/how-it-works"
-          className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
-        >
-          How mentorship works
-        </Link>
-      </div>
+        imageWidth={1536}
+        imageHeight={1024}
+        headline="Start as a member. Grow into a mentor."
+        supportingText="Membership gives you guided baby prep, personal support, and a clear path to becoming the calm voice for someone else — when you’re ready. (No pressure. No rush.)"
+        primaryCta={{
+          label: "Request an Invite",
+          href: "/request-invite",
+          className: "marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]",
+        }}
+        secondaryCta={{
+          label: "How mentorship works",
+          href: "/how-it-works",
+        }}
+        priority
+      />
+      <RibbonDivider />
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
@@ -135,8 +111,6 @@ export default function MembershipPage() {
           </p>
         </div>
       </section>
-
-      <RibbonDivider />
 
       <section className="marketing-section marketing-card space-y-6 bg-[var(--tmbc-ivory)]/40 px-8 py-20 md:py-32">
         <div className="flex flex-col gap-3">
