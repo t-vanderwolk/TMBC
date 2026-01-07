@@ -29,13 +29,14 @@ const DEFAULT_SECONDARY_CLASSES =
 
 const MOBILE_HERO_SOURCES: Record<string, string> = {
   "/": "/assets/images/hero-marketing-signature-mobile.png",
-  "/how-it-works": "/assets/images/hero-founding-circle-mobile.png",
+  "/how-it-works": "/assets/images/hero-marketing-signature-mobile.png",
   "/learn": "/assets/images/section-background-learning-flow-mobile.png",
   "/plan": "/assets/images/section-background-soft-ribbon-mobile.png",
   "/connect": "/assets/images/section-background-soft-ribbon-mobile.png",
   "/reflect": "/assets/images/section-background-soft-ribbon-mobile.png",
   "/membership": "/assets/images/section-background-soft-ribbon-mobile.png",
   "/blog": "/assets/images/section-background-soft-ribbon-mobile.png",
+  "/about": "/assets/images/hero-marketing-signature-mobile.png",
 };
 
 export default function MarketingHero({

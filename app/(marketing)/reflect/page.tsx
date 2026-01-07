@@ -110,19 +110,6 @@ export default function ReflectPage() {
         </div>
       </section>
 
-      <section className="marketing-section marketing-card space-y-4 bg-white/80 px-8 py-20 md:py-32">
-        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
-          Relationship to the system
-        </p>
-        <h2 className="system-language pt-2 text-[0.7rem] sm:text-[0.8rem]">
-          How Reflect fits into Learn · Plan · Connect · Reflect
-        </h2>
-        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
-          Reflection keeps the experience meaningful, tying the learning, planning, and connection together in
-          a way that feels personal. You don&apos;t have to remember it all — this holds it for you.
-        </p>
-      </section>
-
       <CTARibbon
         headline="Keep the story with care"
         supportingText="Invite-only keeps this space private and intentional. (No pressure to share.)"

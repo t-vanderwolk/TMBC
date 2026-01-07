@@ -1,63 +1,73 @@
 "use client";
 
-import Image, { type StaticImageData } from "next/image";
-import { MarketingContainer } from "@/components/marketing/MarketingContainer";
+import { useEffect, useMemo, useState } from "react";
 
-type WebpackRequire = {
-  context: (
-    directory: string,
-    useSubdirectories: boolean,
-    regExp: RegExp
-  ) => {
-    keys: () => string[];
-    <T>(id: string): T;
-  };
+type Logo = {
+  name: string;
+  src: string;
+  alt: string;
 };
 
-declare const require: WebpackRequire;
+const formatAlt = (fileName: string) =>
+  fileName
+    .replace(/\.[^.]+$/, "")
+    .replace(/[-_]/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 
-const logoContext = require.context(
-  "../../assets/logos",
-  false,
-  /\.(png|jpe?g|svg)$/
-);
+export default function PartnerLogoCarousel() {
+  const [logos, setLogos] = useState<Logo[]>([]);
 
-const logos = logoContext.keys().map((key) => {
-  const mod = logoContext<StaticImageData | { default: StaticImageData }>(key);
-  return "default" in mod ? mod.default : mod;
-});
-const displayedLogos = logos.slice(0, 6);
+  useEffect(() => {
+    let isMounted = true;
 
-type PartnerLogoCarouselProps = {
-  eyebrowText?: string;
-};
+    fetch("/api/logos")
+      .then((response) => response.json())
+      .then((files: string[]) => {
+        if (!isMounted) return;
+        const mapped = files.map((fileName) => ({
+          name: fileName,
+          src: `/api/logos/${encodeURIComponent(fileName)}`,
+          alt: formatAlt(fileName),
+        }));
+        setLogos(mapped);
+      })
+      .catch(() => {
+        /* ignore */
+      });
 
-const PartnerLogoCarousel = ({
-  eyebrowText = "Proudly partnered with",
-}: PartnerLogoCarouselProps) => {
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const repeatedLogos = useMemo(() => (logos.length ? [...logos, ...logos] : []), [logos]);
+
   return (
-    <section className="w-full bg-[var(--tmbc-ivory)]/80 py-20 md:py-32">
-      <MarketingContainer className="flex flex-col items-center gap-6">
-        {eyebrowText ? (
-          <p className="text-center text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
-            {eyebrowText}
-          </p>
-        ) : null}
-        <div className="grid w-full grid-cols-2 items-center justify-items-center gap-8 md:grid-cols-4">
-          {displayedLogos.map((logo) => (
-            <Image
-              key={logo.src}
-              src={logo}
-              alt=""
-              aria-hidden="true"
-              className="h-8 w-auto opacity-60 sm:h-10 lg:h-12"
-              sizes="(min-width: 1024px) 96px, (min-width: 640px) 80px, 64px"
-            />
-          ))}
-        </div>
-      </MarketingContainer>
+    <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/80 px-8 text-center">
+      <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
+        Calm partners we trust
+      </p>
+      <div className="partner-logo-carousel">
+        {repeatedLogos.length ? (
+          <div className="partner-logo-track partner-logo-marquee">
+            {repeatedLogos.map((logo, index) => (
+              <div key={`${logo.name}-${index}`} className="flex h-16 w-40 items-center justify-center">
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-auto object-contain"
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="partner-logo-track partner-logo-marquee opacity-0">
+            <div className="flex h-16 w-40 items-center justify-center" />
+          </div>
+        )}
+      </div>
     </section>
   );
-};
-
-export default PartnerLogoCarousel;
+}

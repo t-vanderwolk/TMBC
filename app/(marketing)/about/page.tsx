@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingImage from "@/components/marketing/MarketingImage";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 
@@ -59,7 +60,25 @@ const whatItsNot = [
 
 export default function AboutPage() {
   return (
-    <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
+    <>
+      <MarketingHero
+        imageSrc="/assets/images/hero-marketing-signature.png"
+        imageAlt="Taylor-Made Baby Co. hero art"
+        imageWidth={1536}
+        imageHeight={1024}
+        headline="Why Taylor-Made Baby Co."
+        supportingText="We guide you through each season with calm clarity, mentor-led pacing, and intentional next steps."
+        primaryCta={{
+          label: "Request Your Invite",
+          href: "/request-invite",
+          className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
+        }}
+        secondaryCta={{
+          label: "How it works (gently)",
+          href: "/how-it-works",
+        }}
+      />
+      <div className="space-y-12 sm:space-y-16 text-[var(--tmbc-charcoal)]">
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 px-10 py-20 md:py-32 shadow-[0_30px_90px_rgba(199,166,199,0.25)] marketing-section">
         <div className="space-y-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -72,14 +91,6 @@ export default function AboutPage() {
         <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
           Calm preparation over consumption. Mentor-led guidance that respects your pace and priorities.
         </p>
-        <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
-          <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
-            Request Your Invite
-          </Link>
-          <Link href="/how-it-works" className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]">
-            How It Works
-          </Link>
-        </div>
       </section>
 
       <section className="grid gap-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-br from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section md:grid-cols-2">
@@ -196,30 +207,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/30 bg-white/80 px-8 py-20 md:py-32 shadow-[0_20px_80px_rgba(199,166,199,0.25)] marketing-section">
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            What makes this different
-          </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-            A quieter, more human alternative
-          </h2>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {whatItsNot.map((item) => (
-            <div
-              key={item.title}
-              className="rounded-[28px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/80 p-5 shadow-[0_12px_40px_rgba(199,166,199,0.15)]"
-            >
-              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                {item.title}
-              </p>
-              <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{item.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section className="rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-white/80 px-8 py-20 md:py-32 shadow-[0_20px_80px_rgba(199,166,199,0.2)] marketing-section">
         <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           People-first moments that keep the focus on families, not founders.
@@ -246,5 +233,6 @@ export default function AboutPage() {
         buttonHref="/request-invite"
       />
     </div>
+  </>
   );
 }

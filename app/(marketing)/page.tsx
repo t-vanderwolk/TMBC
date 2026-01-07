@@ -7,18 +7,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
+import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
 import academyPreview from "../../assets/images/academypreview.png";
 import planPreview from "../../assets/images/planpreview.png";
 import connectPreview from "../../assets/images/connectpreview.png";
 import reflectPreview from "../../assets/images/reflectpreview.png";
-import babyQuipLogo from "../../assets/logos/baby-quip-logo.svg";
-import babyShusherLogo from "../../assets/logos/babyshusherlogo.png";
-import ergobabyLogo from "../../assets/logos/ergobabylogo.png";
-import joolbabyLogo from "../../assets/logos/joolbabylogo.png";
-import makeAFortLogo from "../../assets/logos/make-a-fortlogo.png";
-import inklingLogo from "../../assets/logos/inklinglogo.jpeg";
-import macrobabyLogo from "../../assets/logos/macrobaby-logo.webp";
-import dadadaLogo from "../../assets/logos/dadadadalogo.png";
 
 interface FeatureBlock {
   label: string;
@@ -90,17 +83,6 @@ const featureBlocks: FeatureBlock[] = [
     image: reflectPreview,
     alt: "Reflective journal preview.",
   },
-];
-
-const partnerLogos: StaticImageData[] = [
-  babyQuipLogo,
-  babyShusherLogo,
-  ergobabyLogo,
-  joolbabyLogo,
-  makeAFortLogo,
-  inklingLogo,
-  macrobabyLogo,
-  dadadaLogo,
 ];
 
 function HomePageContent() {
@@ -251,23 +233,7 @@ function HomePageContent() {
             </div>
           </section>
 
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/80 px-8 text-center space-y-6">
-            <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Calm partners we trust
-            </p>
-            <div className="mt-32 mb-24 grid grid-cols-2 gap-8 md:grid-cols-4 opacity-60">
-              {partnerLogos.map((logo) => (
-                <Image
-                  key={logo.src}
-                  src={logo}
-                  alt=""
-                  aria-hidden="true"
-                  className="h-10 w-auto object-contain"
-                  sizes="(min-width: 768px) 96px, 80px"
-                />
-              ))}
-            </div>
-          </section>
+          <PartnerLogoCarousel />
 
           <RibbonDivider />
 

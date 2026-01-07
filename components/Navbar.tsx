@@ -14,27 +14,30 @@ type NavLink = {
 };
 
 const PRIMARY_NAV: NavLink[] = [
+  { label: "About", href: "/about" },
   { label: "How It Works", href: "/how-it-works" },
+  { label: "Membership", href: "/membership" },
+  { label: "Blog", href: "/blog" },
+];
+
+const EXPERIENCE_NAV_ITEMS: NavLink[] = [
   { label: "Learn", href: "/learn" },
   { label: "Plan", href: "/plan" },
   { label: "Connect", href: "/connect" },
   { label: "Reflect", href: "/reflect" },
-  { label: "Membership", href: "/membership" },
-  { label: "Blog", href: "/blog" },
 ];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const mobileNav = useMemo<NavLink[]>(
-    () => [
-      ...PRIMARY_NAV,
-      { label: "Request Invite", href: "/request-invite", variant: "primary" },
-      { label: "Login", href: PUBLIC_LOGIN_ROUTE, variant: "text" },
-    ],
-    [],
-  );
+  const mobileNav = useMemo<NavLink[]>(() => [
+    ...PRIMARY_NAV,
+    { label: "Experience", href: "/learn" },
+    ...EXPERIENCE_NAV_ITEMS,
+    { label: "Request Invite", href: "/request-invite", variant: "primary" },
+    { label: "Login", href: PUBLIC_LOGIN_ROUTE, variant: "text" },
+  ], []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -56,6 +59,8 @@ const Navbar = () => {
 
   const isActive = (href: string) =>
     pathname === href || (href !== "/" && pathname?.startsWith(`${href}/`));
+
+  const experienceActive = EXPERIENCE_NAV_ITEMS.some((item) => isActive(item.href));
 
   const linkClassName = (href: string) =>
     `transition hover:text-[var(--tmbc-mauve)] ${
@@ -87,7 +92,34 @@ const Navbar = () => {
         </Link>
 
         <nav className="hidden items-center gap-6 text-[0.65rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-80 md:flex">
-          {PRIMARY_NAV.map((link) => (
+          {PRIMARY_NAV.slice(0, 2).map((link) => (
+            <Link key={link.href} href={link.href} className={linkClassName(link.href)}>
+              {link.label}
+            </Link>
+          ))}
+          <div className="group relative">
+            <button
+              type="button"
+              className={`text-[0.65rem] uppercase tracking-[0.3em] transition ${
+                experienceActive ? "text-[var(--tmbc-mauve)]" : ""
+              }`}
+              aria-haspopup="menu"
+            >
+              Experience
+            </button>
+            <div className="absolute left-0 top-full mt-3 hidden flex-col gap-2 rounded-[26px] border border-[#C8A1B4]/50 bg-[#FFF9F5] p-4 text-left text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] shadow-[0_15px_40px_rgba(199,166,199,0.25)] group-hover:flex group-focus-within:flex">
+              {EXPERIENCE_NAV_ITEMS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="transition hover:text-[var(--tmbc-mauve)]"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+          {PRIMARY_NAV.slice(2).map((link) => (
             <Link key={link.href} href={link.href} className={linkClassName(link.href)}>
               {link.label}
             </Link>

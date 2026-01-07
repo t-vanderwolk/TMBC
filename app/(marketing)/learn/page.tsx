@@ -64,31 +64,6 @@ export default function LearnPage() {
         </p>
       </section>
 
-      <section className="marketing-section marketing-card space-y-6 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32">
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            What this is
-          </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-            Education that feels gentle and useful
-          </h2>
-        </div>
-        <div className="max-w-[680px] space-y-7 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          <p>
-            Learning inside TMBC is calm, paced, and rooted in real context. We share what matters without
-            loading you down with endless lists.
-          </p>
-          <p>
-            Academy modules and workbook prompts help you understand what&apos;s ahead without the noise.
-            Everything is shaped around your timing and the questions you actually have.
-          </p>
-          <p>
-            The goal is not to become an expert overnight. It is to feel confident in the next few choices
-            you make.
-          </p>
-        </div>
-      </section>
-
       <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">

@@ -112,69 +112,6 @@ export default function MembershipPage() {
         </div>
       </section>
 
-      <section className="marketing-section marketing-card space-y-6 bg-[var(--tmbc-ivory)]/40 px-8 py-20 md:py-32">
-        <div className="flex flex-col gap-3">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            What membership means
-          </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-            Membership is your foundation — not your finish line.
-          </h2>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {membershipPillars.map((pillar) => (
-            <div
-              key={pillar.title}
-              className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6"
-            >
-              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                {pillar.title}
-              </p>
-              <ul className="mt-4 space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                {pillar.items.map((item) => (
-                  <li key={item}>• {item}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <p className="mx-auto max-w-[680px] text-center text-sm uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-70">
-          Membership gives you access. Mentorship gives you impact. (Only if you want it.)
-        </p>
-      </section>
-
-      <section className="marketing-section marketing-card space-y-6 bg-[var(--tmbc-ivory)]/40 px-8 py-20 md:py-32">
-        <div className="flex flex-col gap-3">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            Member → Mentor pathway
-          </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-            From Member to Mentor — by design, not pressure.
-          </h2>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {pathwaySteps.map((step, index) => (
-            <div
-              key={step.title}
-              className="marketing-card bg-white/80 p-6"
-            >
-              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                Step {index + 1}
-              </p>
-              <p className="mt-2 text-lg font-semibold text-[var(--tmbc-charcoal)]">{step.title}</p>
-              <ul className="mt-3 space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                {step.items.map((item) => (
-                  <li key={item}>• {item}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <p className="mx-auto max-w-[680px] text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-          Mentorship is optional, earned, and supported — never required. (Some members stay right where they are.)
-        </p>
-      </section>
-
       <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
         <div className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -209,26 +146,6 @@ export default function MembershipPage() {
         <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
           Mentors never ‘sell’ — recommendations are contextual, optional, and fully disclosed. (Always.)
         </p>
-      </section>
-
-      <section className="marketing-section marketing-card space-y-5 bg-white/80 px-8 py-20 md:py-32">
-        <div className="flex flex-col gap-3">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            Why this model exists
-          </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-            We built the platform we wish existed.
-          </h2>
-        </div>
-        <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-center">
-          <div className="max-w-[680px] space-y-6 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-            <p>
-              Hourly consults can feel transactional. Courses can feel isolating. Affiliate-driven content can struggle
-              to earn trust. We wanted a slower, more human system that keeps guidance calm, clear, and accountable.
-            </p>
-            <p>Think of it as a steady hand — not another list.</p>
-          </div>
-        </div>
       </section>
 
       <section className="marketing-section marketing-card space-y-5 bg-white/80 px-8 py-20 md:py-32">

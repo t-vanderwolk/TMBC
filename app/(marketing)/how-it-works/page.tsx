@@ -82,8 +82,8 @@ export default function HowItWorksPage() {
   return (
     <>
       <MarketingHero
-        imageSrc="/assets/images/hero-founding-circle.png"
-        imageAlt="Primary Taylor-Made Baby Co. hero artwork."
+        imageSrc="/assets/images/hero-marketing-signature.png"
+        imageAlt="Taylor-Made Baby Co. hero art"
         imageWidth={1536}
         imageHeight={1024}
         headline="Baby prep, minus the spiral."
@@ -139,29 +139,6 @@ export default function HowItWorksPage() {
           <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
             <div className="space-y-2">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                The experience
-              </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                One continuous experience, shaped with care
-              </h2>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2">
-              {experiencePillars.map((pillar) => (
-                <div key={pillar.title} className="marketing-card bg-white/80 p-6">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {pillar.title}
-                  </p>
-                  <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-                    {pillar.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 What to expect
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
@@ -178,27 +155,6 @@ export default function HowItWorksPage() {
                     {item.title}
                   </p>
                   <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-65">{item.description}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="marketing-section marketing-card space-y-6 bg-[var(--tmbc-ivory)]/80 px-8 py-20 md:py-32">
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                Mentor-led philosophy
-              </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                Guidance that feels calm, not loud
-              </h2>
-            </div>
-            <div className="grid gap-4 md:grid-cols-3">
-              {experiencePhilosophy.map((item) => (
-                <div key={item.title} className="marketing-card bg-white/80 p-5">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {item.title}
-                  </p>
-                  <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{item.description}</p>
                 </div>
               ))}
             </div>

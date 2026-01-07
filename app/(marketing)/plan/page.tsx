@@ -61,30 +61,6 @@ export default function PlanPage() {
         </div>
       </section>
 
-      <section className="marketing-section marketing-card space-y-6 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32">
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            What this is
-          </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-            Decision support without the pressure
-          </h2>
-        </div>
-        <div className="max-w-[680px] space-y-7 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          <p>
-            Planning inside TMBC means you never have to decide alone. Your mentor helps you sort priorities and
-            define what fits your life.
-          </p>
-          <p>
-            Registry guidance is shaped around context, timing, and budget awareness — without the loud push to
-            buy everything now. We decide one meaningful thing at a time.
-          </p>
-          <p>
-            If you already started a registry elsewhere, we help you refine it with clarity and calm.
-          </p>
-        </div>
-      </section>
-
       <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-32">
         <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
           A visual moment that centers calm, human guidance.
@@ -113,19 +89,6 @@ export default function PlanPage() {
             </div>
           ))}
         </div>
-      </section>
-
-      <section className="marketing-section marketing-card space-y-4 bg-white/80 px-8 py-20 md:py-32">
-        <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-          Relationship to the system
-        </p>
-        <h2 className="system-language pt-2 text-[0.7rem] sm:text-[0.8rem]">
-          How Plan fits into Learn · Plan · Connect · Reflect
-        </h2>
-        <p className="max-w-[680px] text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          Planning turns learning into calm next steps, while connection and reflection keep the plan aligned
-          with your life. (We’ll help you pause before buying “just in case.”)
-        </p>
       </section>
 
       <CTARibbon

@@ -350,6 +350,20 @@
   .marketing-section img {
     filter: saturate(0.92) contrast(0.95) brightness(0.98);
   }
+
+  .partner-logo-carousel {
+    @apply mt-10 overflow-hidden rounded-[32px] bg-white/80 px-6 py-10 shadow-[0_25px_60px_rgba(199,166,199,0.25)];
+    border: 1px solid rgba(199, 167, 187, 0.4);
+  }
+
+  .partner-logo-track {
+    @apply flex items-center gap-10 whitespace-nowrap;
+    min-width: max-content;
+  }
+
+  .partner-logo-track > div {
+    flex: 0 0 auto;
+  }
 }
 
 @layer utilities {

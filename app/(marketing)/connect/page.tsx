@@ -53,37 +53,6 @@ export default function ConnectPage() {
         </div>
       </section>
 
-      <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-32">
-        {/* Structural: move the emotional pause ahead of diagrams to establish warmth before explanation. */}
-        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
-          A pause that reflects the warmth of being held by a real community.
-        </p>
-      </section>
-
-      <section className="marketing-section marketing-card space-y-6 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32">
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            What this is
-          </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-            Structured community, not social media
-          </h2>
-        </div>
-        <div className="max-w-[680px] space-y-7 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-          <p>
-            Connection inside TMBC is designed to feel calm and purposeful. Mentors keep conversations warm and
-            grounded, so your questions land in the right places.
-          </p>
-          <p>
-            Rooms are organized around real-life topics, not feeds or engagement metrics. You can step in,
-            listen, and leave without pressure. (No awkward “introduce yourself” prompts.)
-          </p>
-          <p>
-            The goal is to feel supported, not overstimulated. Every space stays mentor-guided and kind.
-          </p>
-        </div>
-      </section>
-
       <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -111,19 +80,6 @@ export default function ConnectPage() {
       <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-32">
         <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
           A gentle look at how conversations stay focused and kind.
-        </p>
-      </section>
-
-      <section className="marketing-section marketing-card space-y-4 bg-white/80 px-8 py-20 md:py-32">
-        <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
-          Relationship to the system
-        </p>
-        <h2 className="system-language pt-2 text-[0.7rem] sm:text-[0.8rem]">
-          Where Connect fits in Learn · Plan · Connect · Reflect
-        </h2>
-        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-60">
-          Connection keeps the experience human, weaving learning, planning, and reflection into a steady
-          support system.
         </p>
       </section>
 
