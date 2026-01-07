@@ -74,7 +74,7 @@ export default function MarketingHero({
         "
       >
         <div className="absolute inset-0">
-          <picture>
+          <picture className="h-full w-full">
             {mobileHeroSrc && (
               <source media="(max-width: 768px)" srcSet={mobileHeroSrc} />
             )}
@@ -83,13 +83,13 @@ export default function MarketingHero({
               alt={imageAlt}
               width={imageWidth}
               height={imageHeight}
-              className="w-full h-full object-contain"
+              className="h-full w-full object-cover"
               style={{ objectPosition: "top" }}
             />
           </picture>
         </div>
 
-        <div className="relative z-10 flex w-full min-h-[85vh] flex-col items-center justify-start gap-12 px-6 pt-4 pb-8 text-center md:py-0 md:px-12 md:justify-center">
+        <div className="relative z-10 flex w-full min-h-[85vh] flex-col items-center justify-center gap-12 px-6 pt-4 pb-8 text-center md:py-0 md:px-12">
           <div className="hero-copy space-y-6 max-w-[90%] md:max-w-[560px]">
             <h1 className="hero-headline">{headline}</h1>
             <p className="hero-supporting mt-6">{supportingText}</p>
