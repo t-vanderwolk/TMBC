@@ -2,6 +2,7 @@ import CTARibbon from "@/components/marketing/CTARibbon";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import ModuleSpotlightCard from "@/components/marketing/ModuleSpotlightCard";
 
 const benefits = [
   {
@@ -41,6 +42,7 @@ export default function LearnPage() {
           href: "/how-it-works",
         }}
       />
+      <ModuleSpotlightCard />
       <RibbonDivider />
 
       <MarketingContent>
