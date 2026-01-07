@@ -37,6 +37,8 @@ const MOBILE_HERO_SOURCES: Record<string, string> = {
   "/membership": "/assets/images/section-background-soft-ribbon-mobile.png",
   "/blog": "/assets/images/section-background-soft-ribbon-mobile.png",
   "/about": "/assets/images/hero-marketing-signature-mobile.png",
+  "/contact": "/assets/images/hero-marketing-signature-mobile.png",
+  "/faq": "/assets/images/hero-marketing-signature-mobile.png",
 };
 
 export default function MarketingHero({

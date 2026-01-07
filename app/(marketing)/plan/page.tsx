@@ -1,28 +1,59 @@
-import CTARibbon from "@/components/marketing/CTARibbon";
+import Link from "next/link";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 
-const benefits = [
+const planningMeaning = [
   {
-    title: "Mentor notes, not noise",
+    title: "Thinking through the details with a mentor",
     description:
-      "Clear guidance from someone who knows your priorities and your pace.",
+      "You surface the questions first, then make gentle choices with someone who knows how to keep the pace steady.",
   },
   {
-    title: "Registry clarity",
+    title: "De-stressing timelines",
     description:
-      "Thoughtful decisions about what fits your life, without pressure to buy.",
+      "No launch dates, no countdown timers — just signals about what feels right now and what can be parked until later.",
   },
   {
-    title: "Timing awareness",
+    title: "Registry gently guided",
     description:
-      "Steady pacing around what matters now, what can wait, and what can skip.",
+      "We treat registries as living plans, not purchases, so additions happen when you feel ready rather than when you feel rushed.",
+  },
+];
+
+const decisionSupport = [
+  {
+    title: "Mentor notes",
+    description:
+      "Short, contextual reflections keep you aware of why a choice matters, not just what you should pick.",
   },
   {
-    title: "Existing registry support",
+    title: "Paced conversations",
     description:
-      "Bring what you already have and refine it with calm guidance.",
+      "We revisit decisions together, truncate distractions, and let the next step reveal itself without pressure.",
+  },
+  {
+    title: "Confidence over completion",
+    description:
+      "The goal is peace of mind, not crossing off tasks — mentors help you hold the whole picture while you respond to this moment.",
+  },
+];
+
+const planFit = [
+  {
+    title: "You want clarity without rush",
+    description:
+      "You appreciate gentle prompts and follow-ups, not new dates every day.",
+  },
+  {
+    title: "You prefer conversation to shopping lists",
+    description:
+      "Registry updates happen in context, so you only adjust what still feels essential.",
+  },
+  {
+    title: "You trust mentors to guard the pace",
+    description:
+      "Planning stays calm because people are keeping tabs on the rhythm, not piling on more tasks.",
   },
 ];
 
@@ -34,8 +65,8 @@ export default function PlanPage() {
         imageAlt="Editorial hero artwork for the Plan pillar."
         imageWidth={1536}
         imageHeight={1024}
-        headline="Plan for baby — with someone in your corner."
-        supportingText="From registries to real-life logistics, your mentor helps you plan for pregnancy, birth, and early parenthood step by step. (We’ll hold the map. You set the pace.)"
+        headline="Planning is steady clarity, not shopping."
+        supportingText="A mentor helps you see the next right step without glossing over the questions you still have. We hold the map gently while you choose when to move."
         primaryCta={{
           label: "Request Your Invite",
           href: "/request-invite",
@@ -50,55 +81,107 @@ export default function PlanPage() {
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-      <section className="marketing-section marketing-card mb-24 md:mb-28 bg-[var(--tmbc-ivory)]/90 px-8 text-center">
-        <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
-            Plan
-          </p>
-          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
-            A gentle divider that reinforces calm pacing and clarity.
-          </p>
-        </div>
-      </section>
-
-      <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-32">
-        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
-          A visual moment that centers calm, human guidance.
-        </p>
-      </section>
-
-      <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            How it supports parents
-          </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-            A plan that stays yours
-          </h2>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          {benefits.map((benefit) => (
-            <div
-              key={benefit.title}
-              className="marketing-card bg-[var(--tmbc-ivory)]/80 p-5"
-            >
-              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                {benefit.title}
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                What planning means here
               </p>
-              <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-65">{benefit.description}</p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+                Planning is a calm conversation, not a checklist race.
+              </h2>
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                We reframe registries, timelines, and logistics as steady decision points you revisit with a mentor who
+                honors your season.
+              </p>
             </div>
-          ))}
-        </div>
-      </section>
+            <div className="mt-12 grid gap-6 md:grid-cols-3">
+              {planningMeaning.map((meaning) => (
+                <div key={meaning.title} className="marketing-card bg-white/80 p-6">
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                    {meaning.title}
+                  </p>
+                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{meaning.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
 
-      <CTARibbon
-        headline="Plan with a steady guide"
-        supportingText="Invite-only keeps the planning support personal and unhurried."
-        buttonLabel="Request Your Invite"
-        buttonHref="/request-invite"
-        tone="medium"
-      />
-      {/* TODO: Expand Plan pillar with decision stories and registry flow previews. */}
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
+            <div className="flex flex-col gap-3">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                How decisions are supported
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+                Mentors keep the decisions grounded and gentle.
+              </h2>
+            </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {decisionSupport.map((signal) => (
+                <div key={signal.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                    {signal.title}
+                  </p>
+                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{signal.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
+            <div className="flex flex-col gap-3 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Registry as a living plan
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+                Registries evolve with you.
+              </h2>
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                Bring what you already have, revisit it slowly, and let mentors remind you that every update is optional.
+                This is not a shopping sprint but a living plan you adjust when it feels right.
+              </p>
+            </div>
+          </section>
+
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
+            <div className="flex flex-col gap-3">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Who this helps most
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+                For people who want planning to feel steady.
+              </h2>
+            </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {planFit.map((fit) => (
+                <div key={fit.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                    {fit.title}
+                  </p>
+                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{fit.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
+            <div className="flex flex-col items-center gap-6 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Closing reassurance
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+                Planning keeps pace with learning and reflection.
+              </h2>
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                Decisions stay calm because mentors keep watch, and the plan shifts as you learn and reflect. When you feel ready, request an invite and continue the rhythm.
+              </p>
+              <Link
+                href="/request-invite"
+                className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+              >
+                Request Your Invite
+              </Link>
+            </div>
+          </section>
         </div>
       </MarketingContent>
     </>

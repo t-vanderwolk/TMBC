@@ -2,78 +2,67 @@ import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
-const membershipPillars = [
+
+const membershipHighlights = [
   {
-    title: "Learn",
-    items: [
-      "Academy journeys (Nursery, Gear, Postpartum)",
-      "Guided reflections and workbooks",
-      "Community learning spaces",
-    ],
+    title: "Belonging",
+    description:
+      "Mentor-led rhythms keep you steady, so the preparation feels like a circle of support rather than a race.",
   },
   {
-    title: "Plan",
-    items: [
-      "Registry activation and organization",
-      "Mentor-guided decisions",
-      "Ongoing updates (not one-time lists)",
-    ],
+    title: "Rhythm",
+    description:
+      "Academy moments, planning check-ins, and small circles rotate through a calm cadence you can revisit when needed.",
   },
   {
-    title: "Connect",
-    items: [
-      "Direct mentor messaging",
-      "Circles & events",
-      "Shared learning — not forums",
-    ],
+    title: "Continuity",
+    description:
+      "We build space to continue learning, connecting, and reflecting — even after a milestone passes.",
   },
 ];
 
-const pathwaySteps = [
+const supportSignals = [
   {
-    title: "Member",
-    items: [
-      "Learns through the Academy",
-      "Plans registry with guidance",
-      "Participates in community",
-    ],
+    title: "Personal mentor",
+    description:
+      "A real human meets you where you are, keeps the conversation grounded, and remembers the details that matter.",
   },
   {
-    title: "Experienced Member",
-    items: [
-      "Shares reflections",
-      "Supports discussions",
-      "Builds confidence",
-    ],
+    title: "Guided learning",
+    description:
+      "Modules surface clarity, not overwhelm, so planning feels like a conversation about your next calm step.",
   },
   {
-    title: "Mentor (Invite + Certification)",
-    items: [
-      "Completes Taylor-Made Baby Academy certification",
-      "Supports new members",
-      "Hosts events and curates guidance",
-    ],
+    title: "Shared circles",
+    description:
+      "Small group connections, curated events, and thoughtful follow-ups keep the village gentle instead of noisy.",
+  },
+  {
+    title: "Private reflection",
+    description:
+      "We leave room to reflect quietly, write what feels true, and return whenever the story needs reshaping.",
   },
 ];
 
-const mentorCapabilities = [
-  "One-on-one guidance",
-  "Group circles",
-  "Educational content",
-  "Registry support",
-];
-
-const platformSupport = [
-  "Tools and templates",
-  "Admin moderation",
-  "Editorial review",
-  "Compliance handling",
+const progression = [
+  {
+    stage: "Member",
+    description: "You begin with learning, planning quietly, and leaning into mentors who listen.",
+  },
+  {
+    stage: "Experienced Member",
+    description: "Confidence grows, reflections deepen, and you share insight when it feels right.",
+  },
+  {
+    stage: "Mentor",
+    description: "When you’re ready, you guide others — still within the same calm, intentional circle.",
+  },
 ];
 
 const inviteReasons = [
-  "Keeps mentor ratios healthy",
-  "Preserves quality conversations",
-  "Allows intentional growth",
+  "Keeps mentor ratios healthy so each member feels seen.",
+  "Preserves the pacing and tone the village relies on.",
+  "Ensures every request is reviewed with care.",
 ];
 
 export default function MembershipPage() {
@@ -81,99 +70,117 @@ export default function MembershipPage() {
     <>
       <MarketingHero
         imageSrc="/assets/images/section-background-soft-ribbon.png"
-        imageAlt="Founding Circle hero artwork for membership."
+        imageAlt="Soft ribbon hero art for membership."
         imageWidth={1536}
         imageHeight={1024}
-        headline="Start as a member. Grow into a mentor."
-        supportingText="Membership gives you guided baby prep, personal support, and a clear path to becoming the calm voice for someone else — when you’re ready. (No pressure. No rush.)"
+        headline="Membership is a calm circle, not a checklist."
+        supportingText="It exists for people who want thoughtful mentor care, ongoing learning, and the chance to keep guiding others when they are ready."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
           className: "marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]",
         }}
-        secondaryCta={{
-          label: "How mentorship works",
-          href: "/how-it-works",
-        }}
         priority
       />
       <RibbonDivider />
-
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-        <section className="marketing-section marketing-card mb-24 md:mb-28 bg-[var(--tmbc-ivory)]/90 px-8 text-center">
-        <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            Membership
-          </p>
-          <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            Editorial-first guidance · Invite-only access · Transparent partner disclosures
-          </p>
-        </div>
-      </section>
-
-      <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
-        <div className="flex flex-col gap-3">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            What mentors unlock
-          </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-            Mentorship is about contribution — with recognition built in.
-          </h2>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
-            <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-              Mentor capabilities
-            </p>
-            <ul className="mt-4 space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              {mentorCapabilities.map((item) => (
-                <li key={item}>• {item}</li>
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
+            <div className="text-center space-y-4">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                What membership gives you
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl">
+                Belonging, rhythm, and continuous care.
+              </h2>
+              <p className="max-w-3xl mx-auto text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                Membership keeps you rooted in learning, planning at your pace, and connecting without comparison.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {membershipHighlights.map((highlight) => (
+                <div key={highlight.title} className="marketing-card bg-white/80 p-6">
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                    {highlight.title}
+                  </p>
+                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+                    {highlight.description}
+                  </p>
+                </div>
               ))}
-            </ul>
-          </div>
-          <div className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
-            <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-              Platform support
-            </p>
-            <ul className="mt-4 space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              {platformSupport.map((item) => (
-                <li key={item}>• {item}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-          Mentors never ‘sell’ — recommendations are contextual, optional, and fully disclosed. (Always.)
-        </p>
-      </section>
+            </div>
+          </section>
 
-      <section className="marketing-section marketing-card space-y-5 bg-white/80 px-8 py-20 md:py-32">
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            Invite-only clarification
-          </p>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-            Membership is invite-only to protect the experience.
-          </h2>
-        </div>
-        <ul className="space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-          {inviteReasons.map((item) => (
-            <li key={item}>• {item}</li>
-          ))}
-        </ul>
-        <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:items-center sm:gap-4">
-          <Link
-            href="/request-invite"
-            className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
-          >
-            Request an Invite
-          </Link>
-          <span className="text-[var(--tmbc-charcoal)] text-opacity-60 text-xs normal-case">
-            Requests are reviewed weekly. (We read every one.)
-          </span>
-        </div>
-      </section>
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
+            <div className="flex flex-col gap-3">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Mentor-guided support
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl">
+                The care shows up intentionally.
+              </h2>
+            </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              {supportSignals.map((signal) => (
+                <div key={signal.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                    {signal.title}
+                  </p>
+                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+                    {signal.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
+            <div className="flex flex-col gap-3 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Member → Mentor journey
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl">
+                Growth happens at your pace.
+              </h2>
+            </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {progression.map((step) => (
+                <div
+                  key={step.stage}
+                  className="marketing-card bg-white/80 p-6 text-center"
+                >
+                  <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                    {step.stage}
+                  </p>
+                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+                    {step.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
+            <div className="flex flex-col gap-4 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Invite-only care
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl">
+                We keep the village small for the support to stay personal.
+              </h2>
+              <div className="space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+                {inviteReasons.map((reason) => (
+                  <p key={reason}>• {reason}</p>
+                ))}
+              </div>
+              <Link
+                href="/request-invite"
+                className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
+              >
+                Request an Invite
+              </Link>
+            </div>
+          </section>
         </div>
       </MarketingContent>
     </>

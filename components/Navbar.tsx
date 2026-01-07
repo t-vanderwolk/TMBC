@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { greatVibes } from "@/lib/fonts";
@@ -11,6 +11,7 @@ type NavLink = {
   label: string;
   href: string;
   variant?: "primary" | "text";
+  isLabel?: boolean;
 };
 
 const PRIMARY_NAV: NavLink[] = [
@@ -18,6 +19,8 @@ const PRIMARY_NAV: NavLink[] = [
   { label: "How It Works", href: "/how-it-works" },
   { label: "Membership", href: "/membership" },
   { label: "Blog", href: "/blog" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const EXPERIENCE_NAV_ITEMS: NavLink[] = [
@@ -27,17 +30,23 @@ const EXPERIENCE_NAV_ITEMS: NavLink[] = [
   { label: "Reflect", href: "/reflect" },
 ];
 
+const MOBILE_NAV: NavLink[] = [
+  { label: "About", href: "/about" },
+  { label: "How It Works", href: "/how-it-works" },
+  { label: "Experience", href: "/learn", isLabel: true },
+  ...EXPERIENCE_NAV_ITEMS,
+  { label: "Membership", href: "/membership" },
+  { label: "Blog", href: "/blog" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Contact", href: "/contact" },
+  { label: "Request Invite", href: "/request-invite", variant: "primary" },
+  { label: "Login", href: PUBLIC_LOGIN_ROUTE, variant: "text" },
+];
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const mobileNav = useMemo<NavLink[]>(() => [
-    ...PRIMARY_NAV,
-    { label: "Experience", href: "/learn" },
-    ...EXPERIENCE_NAV_ITEMS,
-    { label: "Request Invite", href: "/request-invite", variant: "primary" },
-    { label: "Login", href: PUBLIC_LOGIN_ROUTE, variant: "text" },
-  ], []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -158,20 +167,33 @@ const Navbar = () => {
         <div className="md:hidden">
           <div className="mx-auto flex max-w-screen-xl flex-col gap-4 border-t border-[var(--tmbc-mauve)]/30 px-6 py-6 text-[0.75rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-80">
             <nav className="flex flex-col gap-3">
-              {mobileNav.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={
-                    link.variant === "primary"
-                      ? "marketing-btn marketing-btn-primary uppercase"
-                      : `block py-2 ${linkClassName(link.href)}`
-                  }
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {MOBILE_NAV.map((link) =>
+                link.isLabel ? (
+                  <div
+                    key={link.label}
+                    className="text-xs uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)] text-opacity-60"
+                  >
+                    {link.label}
+                  </div>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={
+                      link.variant === "primary"
+                        ? "marketing-btn marketing-btn-primary uppercase"
+                        : `block py-2 ${linkClassName(link.href)} ${
+                            EXPERIENCE_NAV_ITEMS.some((item) => item.href === link.href)
+                              ? "pl-6"
+                              : ""
+                          }`
+                    }
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
             </nav>
           </div>
         </div>

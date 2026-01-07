@@ -1,139 +1,60 @@
-"use client";
-
-import Image, { type StaticImageData } from "next/image";
+import { Suspense } from "react";
 import Link from "next/link";
-import { FormEvent, Suspense, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
+import MarketingContent from "@/components/marketing/MarketingContent";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
-import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
-import academyPreview from "../../assets/images/academypreview.png";
-import planPreview from "../../assets/images/planpreview.png";
-import connectPreview from "../../assets/images/connectpreview.png";
-import reflectPreview from "../../assets/images/reflectpreview.png";
+import InviteSection from "@/components/marketing/InviteSection";
 
-interface FeatureBlock {
-  label: string;
-  headline: string;
-  body: string;
-  image: StaticImageData;
-  alt: string;
-}
-
-const aboutPhilosophy = [
-  {
-    title: "Invite-only by design",
-    description:
-      "A smaller, more attentive community lets mentors stay present and personal.",
-  },
-  {
-    title: "Mentor-first planning",
-    description:
-      "Human guidance keeps decisions grounded in your life, not a generic list.",
-  },
-  {
-    title: "Fewer decisions, better ones",
-    description:
-      "We slow the pace so you can choose what fits and skip what does not.",
-  },
+const noiseNotes = [
+  "Every checklist is shouting for attention, making the next decision feel urgent even when you just need a breather.",
+  "Social feeds and product hype make preparation feel performative, leaving you second-guessing your own instincts.",
+  "It is hard to hear your own questions when every screen demands a ‘complete’ button."
 ];
 
-const aboutNot = [
-  {
-    title: "Not a registry",
-    description: "We do not push products or fill lists on your behalf.",
-  },
-  {
-    title: "Not a marketplace",
-    description: "There is no shopping feed or urgency to buy.",
-  },
-  {
-    title: "Not social media",
-    description: "No algorithms, no performance, just focused support.",
-  },
+const quietResponse = [
+  "We slowed down the rhythm so your mentor-led circle can surface context before you ever pick a task.",
+  "Intentional pacing keeps the care calm — no countdowns, no pressure, just thoughtful presence.",
+  "We keep the experience human, private, and leaning toward long-term support rather than short-term urgency."
 ];
 
-const featureBlocks: FeatureBlock[] = [
-  {
-    label: "Learn",
-    headline: "Education that feels gentle and useful.",
-    body: "Clear, practical guidance on baby gear, safety, routines, and real-life decisions - without the pressure to master everything at once. (Nobody does.)",
-    image: academyPreview,
-    alt: "Academy preview screen showing calm lessons.",
-  },
-  {
-    label: "Plan",
-    headline: "Decision support without the pressure.",
-    body: "From registries to real-life logistics, your mentor helps you plan step by step - we will hold the map, you set the pace.",
-    image: planPreview,
-    alt: "Planning workspace preview with mentor notes.",
-  },
-  {
-    label: "Connect",
-    headline: "Structured community, not social media.",
-    body: "A supportive circle of parents, mentors, and professionals navigating pregnancy and early parenthood together - honestly, kindly, and without comparison.",
-    image: connectPreview,
-    alt: "Community dashboard preview.",
-  },
-  {
-    label: "Reflect",
-    headline: "Keepsakes with an heirloom feel.",
-    body: "Capture thoughts, moments, and memories privately, gently, and shared only if you choose. (Some seasons are meant to be held, not optimized.)",
-    image: reflectPreview,
-    alt: "Reflective journal preview.",
-  },
+const differenceHighlights = [
+  "Mentors, not algorithms.",
+  "Pacing, not rushing.",
+  "Care, not checklists."
 ];
 
-function HomePageContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [inviteCode, setInviteCode] = useState("");
-  const [inviteError, setInviteError] = useState("");
-  const [inviteSubmitting, setInviteSubmitting] = useState(false);
+const rhythms = [
+  "Learn — give yourself new clarity without frantic consumption.",
+  "Plan — make quiet choices with a mentor instead of Googling at 2am.",
+  "Connect — settle into moderated rooms that honor your privacy.",
+  "Reflect — keep keepsakes that feel like letters, not feeds."
+];
 
-  useEffect(() => {
-    const code = searchParams.get("invite");
-    if (code) {
-      setInviteCode(code.trim().toUpperCase());
-    }
-    if (searchParams.get("invite_error")) {
-      setInviteError("Invite code missing or invalid. Please enter your approved invite code.");
-    }
-  }, [searchParams]);
+const inviteEchos = [
+  "Invite-only keeps mentor ratios healthy so care stays personal.",
+  "We welcome members slowly so every conversation remains attentive.",
+  "This is not about scarcity; it is about protecting the calm."
+];
 
-  const handleInviteSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const normalized = inviteCode.trim().toUpperCase();
-    if (!normalized) {
-      setInviteError("Please enter your invite code.");
-      return;
-    }
+const fitStatements = [
+  {
+    title: "You want permission to pause",
+    description:
+      "You prefer thoughtful nudges to loud notifications and value mentors who listen before they advise.",
+  },
+  {
+    title: "You choose your own pace",
+    description:
+      "Every decision or question arrives on your schedule, and TMBC adapts with you.",
+  },
+  {
+    title: "You honor quiet support",
+    description:
+      "You’re ready for guidance that feels steady and rare, not hype and urgent."
+    },
+];
 
-    setInviteSubmitting(true);
-    setInviteError("");
-
-    try {
-      const response = await fetch("/api/invite/validate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: normalized }),
-      });
-
-      if (!response.ok) {
-        const payload = await response.json().catch(() => ({}));
-        setInviteError(payload?.error || "Invalid or already used invite code.");
-        return;
-      }
-
-      router.push("/onboarding/start");
-    } catch {
-      setInviteError("Unable to validate invite code.");
-    } finally {
-      setInviteSubmitting(false);
-    }
-  };
-
+export default function HomePage() {
   return (
     <>
       <MarketingHero
@@ -141,307 +62,157 @@ function HomePageContent() {
         imageAlt="Taylor-Made Baby Co. marketing hero"
         imageWidth={1536}
         imageHeight={1024}
-        headline="A new way to prep for baby - and parenthood."
-        supportingText="Think less spiraling, more steady steps. We help you learn, plan, connect, and reflect - with a real human mentor who's been there (and won't judge your 2 a.m. questions)."
+        headline="You’re not behind. You’re just surrounded by noise."
+        supportingText="We offer calm, mentor-led preparation — emotional orientation before features, care before urgency."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
           className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
         secondaryCta={{
-          label: "How it works (without the overwhelm)",
+          label: "How it works (gently)",
           href: "/how-it-works",
         }}
         priority
       />
       <RibbonDivider />
-
       <MarketingContent>
+        <Suspense fallback={<div className="min-h-[20vh]" />}>
+          <InviteSection />
+        </Suspense>
         <div className="marketing-content space-y-20 md:space-y-24 text-[var(--tmbc-charcoal)]">
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 text-center">
-            <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
-              <p className="text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-70">
-                Invite-only · Mentor-guided · Calm digital planning
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Why it feels loud
               </p>
-              <span className="text-[0.65rem] text-[var(--tmbc-charcoal)] text-opacity-50">
-                Takes about 60 seconds · No commitment
-              </span>
-              <div className="space-y-3 text-xs text-[var(--tmbc-charcoal)] text-opacity-60">
-                <p>We'll start where you are. The rest can wait.</p>
-                <p className="system-language pt-2">
-                  Learn → Plan → Connect → Reflect
-                </p>
-              </div>
-              <div className="w-full space-y-3 pt-2">
-                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">
-                  Already have an invite?
-                </p>
-                <form
-                  className="mt-6 flex w-full flex-col gap-3 md:flex-row md:items-end"
-                  onSubmit={handleInviteSubmit}
-                >
-                  <input
-                    value={inviteCode}
-                    onChange={(event) => {
-                      setInviteCode(event.target.value);
-                      if (inviteError) setInviteError("");
-                    }}
-                    placeholder="Enter your invite code"
-                    className="w-full h-14 rounded-full border border-[var(--tmbc-mauve)]/40 bg-white px-4 text-base text-[var(--tmbc-charcoal)] shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--tmbc-mauve)]/40"
-                  />
-                  <button
-                    type="submit"
-                    className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] w-full md:w-auto"
-                    disabled={inviteSubmitting}
-                  >
-                    {inviteSubmitting ? "Checking..." : "Continue"}
-                  </button>
-                </form>
-                {inviteError && (
-                  <p className="text-xs text-red-600">{inviteError}</p>
-                )}
-              </div>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+                The noise is louder than the questions.
+              </h2>
             </div>
-          </section>
-
-          <section className="marketing-section marketing-card bg-white/80 px-8">
-            <div className="space-y-24">
-              {featureBlocks.map((block) => (
-                <article
-                  key={block.label}
-                  className="max-w-[90%] md:max-w-[640px] mx-auto space-y-6"
-                >
-                  <div className="space-y-6">
-                    <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                      {block.label}
-                    </p>
-                    <h3 className="font-serif text-2xl sm:text-3xl">{block.headline}</h3>
-                    <p className="text-base leading-[1.8] md:leading-[1.7] text-[var(--tmbc-charcoal)] text-opacity-80">
-                      {block.body}
-                    </p>
-                  </div>
-                  <div className="max-w-[85%] md:max-w-[520px] mx-auto mt-16 mb-24">
-                    <Image
-                      src={block.image}
-                      alt={block.alt}
-                      className="w-full h-auto object-contain"
-                      sizes="(min-width: 768px) 520px, 90vw"
-                    />
-                  </div>
-                </article>
+            <div className="mt-8 space-y-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              {noiseNotes.map((note) => (
+                <p key={note}>{note}</p>
               ))}
             </div>
           </section>
 
-          <PartnerLogoCarousel />
-
-          <RibbonDivider />
-
-          <section className="marketing-section marketing-card space-y-8 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/50 px-8">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Why it feels loud
-            </p>
-            <div className="space-y-6 leading-[1.8] text-base text-[var(--tmbc-charcoal)] text-opacity-80">
-              <p>
-                Most parents don't feel confused because they're unprepared. They feel confused because everything feels urgent - all at once.
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                So we built something quieter
               </p>
-              <p>
-                Registries, checklists, and social feeds make it louder. We make it quieter.
-              </p>
-              <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
-                You're not behind. You're just hearing too many voices.
-              </p>
-              <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-65">
-                So we built something quieter.
-              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+                Orientation before explanation.
+              </h2>
+            </div>
+            <div className="mt-8 space-y-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              {quietResponse.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
             </div>
           </section>
 
-          <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8 py-20 md:py-32">
-            <div className="space-y-2">
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
+            <div className="flex flex-col items-center gap-4 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 What makes this different
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                Grounded guidance, not generic advice.
+                Values, not features.
               </h2>
             </div>
-            <div className="space-y-8 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
-              <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  Human-led, not algorithm-led
-                </p>
-                <p className="mt-2">
-                  You work with a real mentor who understands your life, your space, and your priorities - not a preset list.
-                </p>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  Sequence over urgency
-                </p>
-                <p className="mt-2">
-                  We guide decisions in the right order - so nothing feels rushed or forgotten (or panic-Googled at 2am).
-                </p>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  Advocacy, not sales
-                </p>
-                <p className="mt-2">
-                  We don't push products. We help you choose what's right for you, and what can wait.
-                </p>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  From planning to support
-                </p>
-                <p className="mt-2">
-                  We stay with you - through learning, planning, connection, and reflection (and the questions that show up later).
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8">
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                About TMBC
-              </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                Calm preparation over consumption.
-              </h2>
-            </div>
-            <p className="max-w-[680px] text-base text-[var(--tmbc-charcoal)] text-opacity-75">
-              Mentor-led guidance that respects your pace and priorities, so baby prep feels steady instead of urgent.
-            </p>
-            <div className="grid gap-4 md:grid-cols-3">
-              {aboutPhilosophy.map((item) => (
-                <div key={item.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-5">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {item.title}
-                  </p>
-                  <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{item.description}</p>
+            <div className="mt-8 grid gap-6 md:grid-cols-3">
+              {differenceHighlights.map((highlight) => (
+                <div key={highlight} className="marketing-card bg-white/80 p-6">
+                  <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{highlight}</p>
                 </div>
               ))}
             </div>
           </section>
 
-          <section className="marketing-section marketing-card space-y-6 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8">
-            <div className="space-y-2">
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
+            <div className="flex flex-col items-center gap-4 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                What this is not
+                The four rhythms
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                A quieter, more human alternative.
+                Learn, plan, connect, reflect.
               </h2>
             </div>
-            <div className="grid gap-4 md:grid-cols-3">
-              {aboutNot.map((item) => (
-                <div key={item.title} className="marketing-card bg-white/80 p-5">
+            <div className="mt-8 space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              {rhythms.map((rhythm) => (
+                <p key={rhythm}>{rhythm}</p>
+              ))}
+            </div>
+          </section>
+
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Invite-only, reframed
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+                Careful intake keeps the care personal.
+              </h2>
+            </div>
+            <div className="mt-8 space-y-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              {inviteEchos.map((note) => (
+                <p key={note}>{note}</p>
+              ))}
+            </div>
+          </section>
+
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Who this is for / not for
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+                Permission to opt in or out.
+              </h2>
+            </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {fitStatements.map((fit) => (
+                <div key={fit.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {item.title}
+                    {fit.title}
                   </p>
-                  <p className="mt-3 text-base text-[var(--tmbc-charcoal)] text-opacity-70">{item.description}</p>
+                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{fit.description}</p>
                 </div>
               ))}
             </div>
           </section>
 
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/80 px-10 text-center">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Member to mentor
-            </p>
-            <h2 className="mt-3 font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              Our mentors were once members themselves.
-            </h2>
-            <p className="mx-auto mt-4 max-w-[680px] text-base text-[var(--tmbc-charcoal)] text-opacity-75">
-              They've planned, prepared, and learned inside this system - and now guide others with empathy, clarity,
-              and lived experience (the kind that can't be faked).
-            </p>
-            <p className="mt-6 system-language">
-              This is not coaching. This is guided preparation.
-            </p>
-          </section>
-
-          <section className="marketing-section marketing-card space-y-6 bg-white/80 px-8">
-            <div className="space-y-2">
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
+            <div className="flex flex-col items-center gap-6 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                What this gives you
+                Closing confidence
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                A calm, steady experience.
+                We hold care, not urgency.
               </h2>
-            </div>
-            <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              A calmer way to move forward - without pressure or panic decisions.
-            </p>
-            <ul className="space-y-4 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
-              <li>• A dedicated mentor</li>
-              <li>• Guided learning &amp; planning flow</li>
-              <li>• Registry support without pressure</li>
-              <li>• Ongoing access as questions evolve</li>
-              <li>• A calm, private space - no feeds, no noise (no doomscrolling, promise)</li>
-            </ul>
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Affiliate partnerships exist, but guidance always comes first.
-            </p>
-          </section>
-
-          <section className="marketing-section marketing-card grid gap-8 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8 md:grid-cols-2">
-            <p className="max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70 md:col-span-2">
-              There's no right or wrong way to prepare - just what feels supportive to you.
-            </p>
-            <div className="marketing-card space-y-4 bg-white/80 p-6">
-              <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                This is for you if...
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                When you’re ready, request an invite and keep leaning into the calm support we keep showing up with.
               </p>
-              <ul className="space-y-2 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
-                <li>• You want clarity, not chaos</li>
-                <li>• You value guidance over opinions</li>
-                <li>• You prefer thoughtful decisions</li>
-              </ul>
-            </div>
-            <div className="marketing-card space-y-4 bg-white/80 p-6">
-              <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                This may not be for you if...
-              </p>
-              <ul className="space-y-2 text-base text-[var(--tmbc-charcoal)] text-opacity-75">
-                <li>• You want flash sales and trend lists</li>
-                <li>• You're looking for a quick checklist only</li>
-              </ul>
+              <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+                <Link
+                  href="/request-invite"
+                  className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+                >
+                  Request an Invite
+                </Link>
+                <Link
+                  href="/how-it-works"
+                  className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
+                >
+                  How it works (gently)
+                </Link>
+              </div>
             </div>
           </section>
-
-          <footer className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/80 px-10 pt-20 pb-20 md:py-32 space-y-4 text-center">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Invite-only
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              Taylor-Made Baby Co. is invite-only so we can keep guidance personal and intentional.
-            </h2>
-            <p className="mx-auto max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              We keep it small so the care stays real.
-            </p>
-            <p className="mx-auto max-w-[680px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              You don't need to feel ready to request an invite.
-            </p>
-            <Link
-              href="/request-invite"
-              className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em] mt-10"
-            >
-              Request an Invite
-            </Link>
-          </footer>
         </div>
       </MarketingContent>
     </>
-  );
-}
-
-export default function HomePage() {
-  return (
-    <Suspense fallback={<div className="min-h-[20vh]" />}>
-      <HomePageContent />
-    </Suspense>
   );
 }

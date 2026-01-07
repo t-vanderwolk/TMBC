@@ -9,9 +9,9 @@ const experienceLinks = [
 
 const companyLinks = [
   { label: "About", href: "/about" },
-  { label: "Membership", href: "/membership" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Contact", href: "/contact" },
   { label: "Journal", href: "/blog" },
-  { label: "Request an Invite", href: "/request-invite" },
 ];
 
 const supportLinks = [
