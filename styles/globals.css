@@ -281,10 +281,82 @@
     max-width: 640px;
   }
 
-  .marketing-section h3 {
-    color: rgba(62, 47, 53, 0.78);
-    font-weight: 400;
+.marketing-section h3 {
+  color: rgba(62, 47, 53, 0.78);
+  font-weight: 400;
+}
+
+.motion-hidden {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.motion-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-motion .hero-headline,
+.hero-motion .hero-supporting,
+.hero-motion .hero-cta-group {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: heroFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-motion .hero-supporting {
+  animation-delay: 0.08s;
+}
+
+.hero-motion .hero-cta-group {
+  animation-delay: 0.15s;
+}
+
+@keyframes heroFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+.marketing-btn {
+  transition: background-color 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s ease;
+}
+
+.marketing-btn:hover {
+  transform: translateY(-1px);
+}
+
+.marketing-body a {
+  transition: opacity 0.4s ease;
+}
+
+.marketing-body a:hover {
+  opacity: 0.8;
+}
+
+.marketing-card {
+  transition: box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.marketing-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 25px 35px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-hidden,
+  .motion-visible,
+  .hero-motion .hero-headline,
+  .hero-motion .hero-supporting,
+  .hero-motion .hero-cta-group,
+  .marketing-btn,
+  .marketing-card {
+    transition: none;
+    animation: none;
+  }
+}
 
   .marketing-section h2 + p {
     margin-top: 1rem;

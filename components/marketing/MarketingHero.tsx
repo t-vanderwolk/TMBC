@@ -70,14 +70,14 @@ export default function MarketingHero({
   return (
     <>
       <section
-        className={`relative overflow-hidden
+        className={`hero-motion relative overflow-hidden
           w-screen left-1/2 right-1/2
           -ml-[50vw]
           -mr-[50vw]
           bg-cover bg-center
           text-[var(--tmbc-charcoal)]
           ${backgroundClasses}
-          ${spacingClasses}`}
+          ${spacingClasses}`.trim()}
       >
         <div className="absolute inset-0">
           <picture className="h-full w-full">
