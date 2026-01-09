@@ -72,8 +72,14 @@ const Navbar = () => {
   const experienceActive = EXPERIENCE_NAV_ITEMS.some((item) => isActive(item.href));
 
   const linkClassName = (href: string) =>
-    `transition hover:text-[var(--tmbc-mauve)] ${
-      isActive(href) ? "text-[var(--tmbc-mauve)]" : ""
+    `relative group transition-colors duration-200 ${
+      isActive(href)
+        ? "text-[var(--tmbc-mauve)]"
+        : "text-[var(--tmbc-charcoal)] text-opacity-80 hover:text-[var(--tmbc-mauve)]"
+    }`;
+  const indicatorClassName = (href: string) =>
+    `absolute bottom-0 left-1/2 h-[2px] w-8 -translate-x-1/2 rounded-full bg-[var(--tmbc-mauve)] transition-transform duration-200 ${
+      isActive(href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
     }`;
 
   return (
@@ -102,21 +108,33 @@ const Navbar = () => {
 
         <nav className="hidden items-center gap-6 text-[0.65rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-80 md:flex">
           {PRIMARY_NAV.slice(0, 2).map((link) => (
-            <Link key={link.href} href={link.href} className={linkClassName(link.href)}>
-              {link.label}
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`${linkClassName(link.href)} flex flex-col items-center pb-3`}
+            >
+              <span>{link.label}</span>
+              <span className={indicatorClassName(link.href)} />
             </Link>
           ))}
           <div className="group relative">
             <button
               type="button"
-              className={`text-[0.65rem] uppercase tracking-[0.3em] transition ${
-                experienceActive ? "text-[var(--tmbc-mauve)]" : ""
+              className={`relative flex flex-col items-center gap-1 pb-2 text-[0.65rem] uppercase tracking-[0.3em] transition-colors duration-200 ${
+                experienceActive
+                  ? "text-[var(--tmbc-mauve)]"
+                  : "text-[var(--tmbc-charcoal)] text-opacity-80 hover:text-[var(--tmbc-mauve)]"
               }`}
               aria-haspopup="menu"
             >
-              Experience
+              <span>Experience</span>
+              <span
+                className={`absolute bottom-0 left-1/2 h-[2px] w-8 -translate-x-1/2 rounded-full bg-[var(--tmbc-mauve)] transition-transform duration-200 ${
+                  experienceActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                }`}
+              />
             </button>
-            <div className="absolute left-0 top-full mt-3 hidden flex-col gap-2 rounded-[26px] border border-[#C8A1B4]/50 bg-[#FFF9F5] p-4 text-left text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] shadow-[0_15px_40px_rgba(199,166,199,0.25)] group-hover:flex group-focus-within:flex">
+            <div className="absolute left-0 top-full mt-3 hidden flex-col gap-2 rounded-[26px] border border-[#C8A1B4]/50 bg-[#FFF9F5] p-4 text-left text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] shadow-[0_15px_40px_rgba(199,166,199,0.25)] group-hover:flex group-focus-within:flex group-hover:shadow-[0_25px_70px_rgba(199,166,199,0.35)] ring-1 ring-[var(--tmbc-mauve)]/20">
               {EXPERIENCE_NAV_ITEMS.map((link) => (
                 <Link
                   key={link.href}
@@ -129,8 +147,13 @@ const Navbar = () => {
             </div>
           </div>
           {PRIMARY_NAV.slice(2).map((link) => (
-            <Link key={link.href} href={link.href} className={linkClassName(link.href)}>
-              {link.label}
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`${linkClassName(link.href)} flex flex-col items-center pb-3`}
+            >
+              <span>{link.label}</span>
+              <span className={indicatorClassName(link.href)} />
             </Link>
           ))}
         </nav>

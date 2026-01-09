@@ -1,7 +1,7 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
+import dividerRibbon from "../../../assets/images/divider-ribbon-horizontal.png";
 
 const problemStatements = [
   "The questions ahead feel louder than the answers because every list demands urgency.",
@@ -64,15 +64,15 @@ export default function AboutPage() {
         primaryCta={{
           label: "Request Your Invite",
           href: "/request-invite",
-          className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
+          className: "marketing-btn marketing-btn-primary-soft marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
         priority
       />
 
       <MarketingContent>
-        <div className="marketing-content space-y-20 md:space-y-24 text-[var(--tmbc-charcoal)]">
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-            <div className="flex flex-col items-center gap-3 text-center">
+        <div className="marketing-content space-y-16 md:space-y-20 text-[var(--tmbc-charcoal)]">
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28 mt-12">
+            <div className="flex flex-col items-center gap-2 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 The problem we noticed
               </p>
@@ -80,7 +80,7 @@ export default function AboutPage() {
                 You feel pressure, noise, and isolation — and you should not.
               </h2>
             </div>
-            <div className="mt-8 space-y-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+            <div className="mt-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-80 leading-relaxed space-y-3">
               {problemStatements.map((statement) => (
                 <p key={statement}>{statement}</p>
               ))}
@@ -96,31 +96,31 @@ export default function AboutPage() {
                 Calm, guided, paced.
               </h2>
             </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="mt-12 space-y-5 text-sm text-[var(--tmbc-charcoal)] text-opacity-80 leading-relaxed">
               {philosophyPoints.map((point) => (
-                <div key={point.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                <div key={point.title} className="space-y-1">
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
                     {point.title}
                   </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{point.description}</p>
+                  <p>{point.description}</p>
                 </div>
               ))}
             </div>
           </section>
 
-          <div className="py-24 flex justify-center">
+          <div className="py-28 my-6 flex justify-center">
             <div className="w-full max-w-[520px]">
-              <MobilePreviewImage
-                src="/assets/images/babybookpic.jpeg"
-                alt="Soft keepsake baby book resting beside dried flowers"
-                width={520}
-                height={780}
+              <img
+                src={dividerRibbon.src}
+                alt="Calm bow ribbon divider"
+                className="w-full h-auto object-contain"
+                loading="lazy"
               />
             </div>
           </div>
 
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-            <div className="flex flex-col items-center gap-3 text-center">
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-6">
+            <div className="flex flex-col items-center gap-2 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 How we chose to respond
               </p>
@@ -128,7 +128,7 @@ export default function AboutPage() {
                 Mentor-led, invite-only, slow by design.
               </h2>
             </div>
-            <div className="mt-8 space-y-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+            <div className="mt-6 space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80 leading-relaxed">
               {responseChoices.map((choice) => (
                 <p key={choice}>{choice}</p>
               ))}
@@ -144,15 +144,33 @@ export default function AboutPage() {
                 You choose whether to stay.
               </h2>
             </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {fitStatements.map((fit) => (
-                <div key={fit.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {fit.title}
-                  </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{fit.description}</p>
-                </div>
-              ))}
+            <div className="mt-12 grid gap-8 md:grid-cols-2">
+              <div className="space-y-4">
+                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                  For this
+                </p>
+                {fitStatements.slice(0, 2).map((fit) => (
+                  <div key={fit.title} className="space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+                    <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                      {fit.title}
+                    </p>
+                    <p>{fit.description}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-4">
+                <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                  Not for this
+                </p>
+                {fitStatements.slice(2).map((fit) => (
+                  <div key={fit.title} className="space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+                    <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                      {fit.title}
+                    </p>
+                    <p>{fit.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
 
@@ -172,14 +190,10 @@ export default function AboutPage() {
                 href="/request-invite"
                 className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
               >
-                Request Your Invite
+                Request quiet access
               </Link>
             </div>
           </section>
-          {/* Placeholder: Atmospheric image reinforcing closing vision */}
-          <div className="py-24 flex justify-center">
-            <div className="w-full max-w-[520px] h-[320px] rounded-2xl bg-gradient-to-br from-white to-[var(--tmbc-ivory)]" />
-          </div>
         </div>
       </MarketingContent>
     </>

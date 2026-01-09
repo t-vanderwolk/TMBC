@@ -1,6 +1,7 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -71,10 +72,6 @@ const heroSection = (
       href: "/request-invite",
       className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
     }}
-    secondaryCta={{
-      label: "How the journal works",
-      href: "/how-it-works",
-    }}
     priority
   />
 );
@@ -105,7 +102,7 @@ const BlogMarketingPage = async () => {
     <>
       {heroSection}
       <MarketingContent>
-        <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
+        <div className="marketing-content space-y-28 md:space-y-36 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section space-y-10 mb-24 md:mb-28">
             <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-2xl border border-[var(--tmbc-ivory)]/60 bg-tmIvory transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)]">
               <div className="flex flex-col gap-6 p-8 sm:p-10">
@@ -138,13 +135,15 @@ const BlogMarketingPage = async () => {
                 </p>
                 <Link
                   href={`/blog/${featuredPost.slug}`}
-                  className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] text-center sm:text-left"
+                  className="inline-flex items-center justify-center gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-70 transition hover:text-[var(--tmbc-mauve)]"
                 >
                   Read the story (take your time)
                 </Link>
-              </div>
-            </article>
-          </section>
+                </div>
+              </article>
+            </section>
+
+          <RibbonDivider className="my-16 md:my-20" />
 
           <section className="marketing-section space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -185,7 +184,10 @@ const BlogMarketingPage = async () => {
                     </div>
                   </div>
                   <div className="mt-6 border-t border-tmMauve/40 pt-4 text-sm uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]">
-                    <Link href={`/blog/${post.slug}`} className="inline-flex items-center gap-2 font-semibold">
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="inline-flex items-center gap-2 text-[0.75rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-70 transition hover:text-[var(--tmbc-mauve)]"
+                    >
                       Read more
                       <span aria-hidden>→</span>
                     </Link>

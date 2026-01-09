@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import RibbonDivider from "@/components/marketing/RibbonDivider";
 import InviteSection from "@/components/marketing/InviteSection";
-import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const noiseNotes = [
   "Every checklist shouts louder than the midnight spit-up clean-up, making your next decision feel urgent.",
@@ -88,7 +88,7 @@ const partnerLogos = [
   { file: "tommee-tippee-logo.png", alt: "Tommee Tippee" },
 ];
 
-const whatThisBlocks = [
+const whatThisHighlights = [
   { title: "What this really is for parenthood", copy: quietResponse },
   { title: "What this is not for parenthood", copy: whatThisIsntHighlights },
 ];
@@ -116,150 +116,98 @@ export default function HomePage() {
         }}
         priority
       />
-      <section className="py-24 flex justify-center">
-        <div className="w-full max-w-[520px] flex justify-center">
-          <img
-            src="/assets/images/invite-only.png"
-            alt="Invite-only access calming signal"
-            className="w-full rounded-2xl"
-          />
-        </div>
-      </section>
+      <div className="px-6 text-center">
+        <p className="mt-4 max-w-3xl mx-auto text-[0.8rem] text-[var(--tmbc-charcoal)] text-opacity-60">
+          A concierge-led baby planning membership with mentors, intentional community rooms, and ongoing access for your rhythm.
+        </p>
+      </div>
       <MarketingContent>
         <section className="marketing-section marketing-card bg-white/90 px-6 py-16 md:px-12 md:py-24 mt-16">
-          <div className="max-w-5xl mx-auto grid gap-12 md:grid-cols-2">
-            {whatThisBlocks.map((block) => (
-              <div key={block.title} className="space-y-4">
-                <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  {block.title}
-                </p>
-                <div className="space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-                  {block.copy.map((line) => (
-                    <p key={line}>{line}</p>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-6 py-16 md:px-12 md:py-24 mt-24">
-          <div className="max-w-5xl mx-auto space-y-6 text-center">
+          <div className="max-w-5xl mx-auto text-center space-y-4">
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              SYSTEM FLOW
+              What this is · What this isn’t
             </p>
             <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              Learn, plan, connect, reflect—each stage waits until you can actually feel the next step with your baby in your arms.
+              We slow the rhythm so you can notice what matters, not scramble for every next step.
             </h2>
             <p className="max-w-3xl mx-auto text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              The TMBC flow keeps you oriented through babyhood so every choice lands with clarity.
+              Members get mentorship, calm community rooms, and the space to learn, plan, connect, and reflect without noise.
             </p>
           </div>
-          <div className="mt-10 space-y-8">
-            {systemStages.map((stage, index) => (
-              <div key={stage.title} className="flex flex-col gap-3 rounded-[24px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6">
-                <div className="flex items-center justify-between">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {stage.title}
-                  </p>
-                  <span className="text-xs font-mono text-[var(--tmbc-charcoal)] text-opacity-60">
-                    {`0${index + 1}`}
-                  </span>
-                </div>
-                <h3 className="font-serif text-xl text-[var(--tmbc-charcoal)]">{stage.heading}</h3>
-                <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">{stage.description}</p>
-                <p className="text-[0.7rem] text-[var(--tmbc-charcoal)] text-opacity-60">{stage.micro}</p>
-                {stage.preview && (
-                  <MobilePreviewImage
-                    src={stage.preview.src}
-                    alt={stage.preview.alt}
-                    width={240}
-                    height={520}
-                    containerClassName="mt-4 w-full max-w-[240px] self-center"
-                  />
-                )}
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            {whatThisHighlights.map((block) => (
+              <div
+                key={block.title}
+                className="marketing-card bg-[var(--tmbc-ivory)]/70 p-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-80"
+              >
+                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                  {block.title}
+                </p>
+                <ul className="mt-4 space-y-3 list-disc pl-4">
+                  {block.copy.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-32">
-          <div className="max-w-3xl mx-auto text-center">
+        <RibbonDivider className="my-12 md:my-16" />
+
+        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-6 py-16 md:px-12 md:py-24 mt-24">
+          <div className="max-w-4xl mx-auto text-center space-y-5">
+            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+              The system in place
+            </p>
+            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+              Learn · Plan · Connect · Reflect
+            </h2>
+            <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              Each pillar waits for you to feel ready before the next begins, honoring your rhythm, not chasing tasks.
+            </p>
+          </div>
+          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {systemStages.map((stage) => (
+              <div
+                key={stage.title}
+                className="marketing-card rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6 text-sm text-[var(--tmbc-charcoal)]"
+              >
+                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                  {stage.title}
+                </p>
+                <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">{stage.micro}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link
+              href="/experience"
+              className="text-sm uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-80 underline"
+            >
+              See how the experience unfolds →
+            </Link>
+          </div>
+        </section>
+
+        <section className="marketing-section marketing-card bg-white/80 px-8 py-24 mt-24">
+          <div className="max-w-3xl mx-auto space-y-5 text-center">
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
               Why it feels loud
             </p>
             <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
               The noise is louder than the baby cues.
             </h2>
-            <div className="mt-8 space-y-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+            <ul className="space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
               {noiseNotes.map((note) => (
-                <p key={note}>{note}</p>
+                <li key={note}>{note}</li>
               ))}
-            </div>
+            </ul>
           </div>
         </section>
 
-          <div className="py-24 flex justify-center">
-            <div className="w-full max-w-[520px]">
-              <img
-                src="/assets/images/baby-booties.jpeg"
-                alt="Small booties resting gently, offering a quiet pause"
-                className="w-full rounded-2xl"
-              />
-            </div>
-          </div>
-
-        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-16 md:py-24 mt-12">
-          <div className="max-w-3xl mx-auto text-center space-y-4">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              What makes this different
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              Calm care, steady context for parenthood.
-            </h2>
-          </div>
-          <div className="mt-8 space-y-6 leading-relaxed text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-            {differenceHighlights.map((highlight) => (
-              <p key={highlight}>• {highlight}</p>
-            ))}
-          </div>
-        </section>
-
-        <section className="marketing-section marketing-card bg-white/80 px-6 py-16 md:px-12 md:py-24 mt-32 opacity-80">
-          <div className="max-w-5xl mx-auto text-center space-y-6">
-            <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Partners keeping it calm
-            </p>
-            <div className="grid grid-cols-2 gap-6 md:grid-cols-4 items-center justify-center">
-              {partnerLogos.map((logo) => {
-                const logoSrc = `/api/logos/${encodeURIComponent(logo.file)}`;
-                return (
-                  <div key={logo.file} className="flex items-center justify-center p-4">
-                    <img
-                      src={logoSrc}
-                      alt={logo.alt}
-                      width={140}
-                      height={60}
-                      className="h-14 w-auto object-contain"
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            <p className="text-xs text-[var(--tmbc-charcoal)] text-opacity-70">
-              Curious about the mentors holding this steady space while baby naps? <Link className="underline" href="/about">Meet them on the About page.</Link>
-            </p>
-          </div>
-        </section>
-
-        <div className="mt-20">
-          <Suspense fallback={<div className="min-h-[24rem]" />}>
-            <InviteSection />
-          </Suspense>
-        </div>
-
-        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/80 px-8 py-20 md:py-28 mt-24 mb-16">
-          <div className="max-w-3xl mx-auto space-y-5 text-center">
+        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28 mt-24 mb-12">
+          <div className="max-w-3xl mx-auto space-y-4 text-center">
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
               Ready when baby lets you breathe
             </p>
@@ -267,14 +215,27 @@ export default function HomePage() {
               Care that keeps pace with your parenting rhythm.
             </h2>
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              Request an invite when the baby schedule lets you breathe; we'll keep leaning in while you juggle feedings.
+              Request an invite when the baby schedule lets you breathe; we’ll keep leaning in while you juggle feedings.
             </p>
-            <Link
-              href="/request-invite"
-              className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
-            >
-              Plan calmly
-            </Link>
+            <div className="space-y-2">
+              <Link
+                href="/request-invite"
+                className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+              >
+                Plan calmly
+              </Link>
+              <Link
+                href="/request-invite?returning=true"
+                className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-70 underline"
+              >
+                Already have an invite? Enter it here.
+              </Link>
+            </div>
+            <div className="mt-8 max-w-md mx-auto">
+              <Suspense fallback={<div className="h-24" />}>
+                <InviteSection />
+              </Suspense>
+            </div>
           </div>
         </section>
       </MarketingContent>

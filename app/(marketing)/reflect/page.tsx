@@ -79,7 +79,7 @@ export default function ReflectPage() {
                 />
               </div>
             </div>
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
+            <div className="mt-14 grid gap-8 md:grid-cols-3">
               {reflectClarifications.map((clarification) => (
                 <div key={clarification.title} className="marketing-card bg-white/80 p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
@@ -197,7 +197,7 @@ export default function ReflectPage() {
                 href="/request-invite"
                 className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
               >
-                Request Your Invite
+                Return by invitation
               </Link>
             </div>
           </section>

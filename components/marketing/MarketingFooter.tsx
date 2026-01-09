@@ -22,9 +22,9 @@ export default function MarketingFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="rounded-[32px] border border-[var(--tmbc-mauve)]/15 bg-[var(--tmbc-ivory)]/90 px-8 pb-12 pt-16 space-y-4 text-[var(--tmbc-charcoal)] sm:pb-14 sm:pt-18">
-      <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="space-y-5">
+    <footer className="rounded-[32px] border border-[var(--tmbc-mauve)]/15 bg-[var(--tmbc-ivory)]/80 px-8 pb-12 pt-16 space-y-6 text-[var(--tmbc-charcoal)] sm:pb-14 sm:pt-18 shadow-[0_18px_60px_rgba(62,47,53,0.1)]">
+      <div className="grid gap-10 lg:grid-cols-4">
+        <div className="space-y-4">
           <p className="font-serif text-lg text-[var(--tmbc-charcoal)]">Taylor-Made Baby Co.</p>
           <div className="space-y-2 pt-4 text-[0.65rem] text-[var(--tmbc-charcoal)] text-opacity-55">
             <p>Thoughtful guidance for modern parenthood.</p>
@@ -35,7 +35,7 @@ export default function MarketingFooter() {
 
         <div className="space-y-5 pt-4">
           <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            The Experience
+            Experience
           </p>
           <div className="flex flex-col gap-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
             {experienceLinks.map((link) => (
@@ -48,7 +48,7 @@ export default function MarketingFooter() {
 
         <div className="space-y-5 pt-4">
           <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            Taylor-Made Baby Co.
+            Company
           </p>
           <div className="flex flex-col gap-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
             {companyLinks.map((link) => (

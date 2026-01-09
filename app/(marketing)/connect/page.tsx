@@ -47,21 +47,6 @@ const quietBelonging = [
   "Every interaction is private, intentional, and modeled by mentors who keep the tone kind.",
 ];
 
-const connectFit = [
-  {
-    title: "You value steady support",
-    description: "You want company that remains gentle even when you’re unsure what to say.",
-  },
-  {
-    title: "You prefer moderation over noise",
-    description: "Space is opened with intention and closed when the emotional work is done.",
-  },
-  {
-    title: "You need permission to rest",
-    description: "You can step back, reflect, and rejoin without fear of missing anything important.",
-  },
-];
-
 export default function ConnectPage() {
   return (
     <>
@@ -86,41 +71,43 @@ export default function ConnectPage() {
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-          <div className="flex flex-col items-center gap-4 text-center">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              What “Connect” means here
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              Connection without the noise.
+            <div className="flex flex-col items-center gap-4 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                What “Connect” means here
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+                Connection without the noise.
               </h2>
-            <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              Our rooms are curated, moderated, and anchored by mentors so that the space never feels performative,
-              noisy, or pressure-filled.
-            </p>
-          </div>
-          <div className="mt-12 mb-24 flex justify-center">
-            <div className="w-full max-w-[520px]">
-              <Image
-                src={connectExplained}
-                alt="Connect preview showing community chat rooms, forums, and messaging"
-                width={1536}
-                height={1024}
-                className="h-auto w-full max-w-[85%] md:max-w-full object-contain"
-              />
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                Our rooms are curated, moderated, and anchored by mentors so that the space never feels performative,
+                noisy, or pressure-filled.
+              </p>
             </div>
-          </div>
-          <p className="max-w-3xl mx-auto text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-            The diagram above maps how mentors keep the circle calm across forums, rooms, and intimate messaging.
-          </p>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {connectMeaning.map((meaning) => (
-                <div key={meaning.title} className="marketing-card bg-white/80 p-6">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {meaning.title}
-                  </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{meaning.description}</p>
-                </div>
-              ))}
+            <div className="mt-12 mb-24 flex justify-center">
+              <div className="w-full max-w-[520px]">
+                <Image
+                  src={connectExplained}
+                  alt="Connect preview showing community chat rooms, forums, and messaging"
+                  width={1536}
+                  height={1024}
+                  className="h-auto w-full max-w-[85%] md:max-w-full object-contain"
+                />
+              </div>
+            </div>
+            <p className="max-w-3xl mx-auto text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              The diagram above maps how mentors keep the circle calm across forums, rooms, and intimate messaging.
+            </p>
+            <div className="mt-14 rounded-[40px] border border-[var(--tmbc-charcoal)]/10 bg-white/90 p-8 shadow-[0_25px_60px_rgba(62,47,53,0.12)]">
+              <div className="grid gap-6 md:gap-8 md:grid-cols-3">
+                {connectMeaning.map((meaning) => (
+                  <div key={meaning.title} className="marketing-card bg-white/80 p-6">
+                    <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                      {meaning.title}
+                    </p>
+                    <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{meaning.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
 
@@ -143,7 +130,7 @@ export default function ConnectPage() {
                 />
               </div>
             </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="mt-12 grid gap-8 md:grid-cols-3">
               {mentorCircles.map((circle) => (
                 <div key={circle.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
@@ -177,27 +164,6 @@ export default function ConnectPage() {
             </ul>
           </section>
 
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
-            <div className="flex flex-col gap-3">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                Who this helps most
-              </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                People seeking steady, intentional connection.
-              </h2>
-            </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {connectFit.map((fit) => (
-                <div key={fit.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {fit.title}
-                  </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{fit.description}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
             <div className="flex flex-col items-center gap-6 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -210,12 +176,12 @@ export default function ConnectPage() {
                 The Connect pillar supports your learning and planning moments by offering a breathing room, not a
                 feed. When it feels right, request an invite and keep the circle gentle.
               </p>
-              <Link
-                href="/request-invite"
-                className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
-              >
-                Request Your Invite
-              </Link>
+            <Link
+              href="/request-invite"
+              className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
+            >
+              Join by invitation
+            </Link>
             </div>
           </section>
         </div>

@@ -27,7 +27,6 @@
 | /reflect | Editorial Pause | Reflect - Editorial pause: baby book page with keepsake photo | 4/5, maxWidth 640 | med | assets/images/babybookpic.jpeg |
 | /reflect | Editorial Pause | Reflect - Editorial pause: keepsake journal detail | 4/5, maxWidth 720 | med | assets/images/babybook.jpeg |
 | /reflect | Divider | Reflect - Divider ribbon | 16/9, maxWidth 960 | low | assets/images/ribbon-divider.jpeg |
-| /membership | Hero | Membership - Hero editorial: invite-only card graphic | 16/9, maxWidth 780 | high | assets/images/invite-only.png |
 | /membership | Editorial Pause | Membership - Editorial pause: exclusivity moment | 4/3, maxWidth 760 | med | TBD |
 | /membership | Diagram | Membership - Diagram: member to mentor pathway | 16/9, maxWidth 720 | low | TBD |
 | /membership | Editorial Pause | Membership - Editorial pause: human guidance moment | 4/5, maxWidth 720 | med | TBD |

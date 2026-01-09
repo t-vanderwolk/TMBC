@@ -6,7 +6,7 @@ type RibbonDividerProps = {
 
 const RibbonDivider = ({ className = "" }: RibbonDividerProps) => {
   return (
-    <div className={`my-32 flex w-full justify-center ${className}`}>
+    <div className={`flex w-full justify-center ${className}`.trim()}>
       <div className="w-full max-w-[920px] px-2 sm:px-6">
         <img
           src={dividerRibbon.src}

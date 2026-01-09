@@ -237,7 +237,7 @@
   }
 
   .hero-copy {
-    max-width: 520px;
+    max-width: min(460px, 85vw);
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -245,24 +245,45 @@
 
   @screen md {
     .hero-copy {
-      max-width: 600px;
+      max-width: 620px;
       text-align: center;
     }
   }
 
   .hero-cta-group {
-    @apply mt-6 flex flex-col gap-3 justify-center md:flex-row md:items-center;
+    @apply mt-10 flex flex-col gap-4 justify-center md:flex-row md:items-center;
   }
 
   .marketing-section {
-    margin-top: 3.5rem;
+    margin-top: 4.75rem;
+  }
+
+  @media (max-width: 767px) {
+    .marketing-section {
+      padding-left: 1.25rem !important;
+      padding-right: 1.25rem !important;
+    }
+
+    .marketing-section .marketing-card {
+      padding-left: 1.35rem !important;
+      padding-right: 1.35rem !important;
+    }
+
+    .marketing-section + .marketing-section {
+      margin-top: 5rem;
+    }
   }
 
   .marketing-section h2 {
     font-weight: 400;
     letter-spacing: 0.02em;
-    color: rgba(62, 47, 53, 0.95);
+    color: rgba(62, 47, 53, 0.85);
     max-width: 640px;
+  }
+
+  .marketing-section h3 {
+    color: rgba(62, 47, 53, 0.78);
+    font-weight: 400;
   }
 
   .marketing-section h2 + p {
@@ -272,6 +293,13 @@
 
   .marketing-section-inner {
     @apply rounded-[48px] border border-[rgba(62, 47, 53, 0.12)] bg-white/90 p-8;
+  }
+
+  .marketing-section + .marketing-section::before {
+    content: "";
+    display: block;
+    margin-bottom: 2rem;
+    border-top: 1px solid rgba(62, 47, 53, 0.08);
   }
 
   .marketing-btn {

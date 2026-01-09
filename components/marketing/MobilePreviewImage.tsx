@@ -17,7 +17,7 @@ export default function MobilePreviewImage({
   priority = false,
   containerClassName = "",
 }: MobilePreviewImageProps) {
-  const wrapperClass = `mx-auto flex w-full justify-center mt-12 mb-24 ${containerClassName}`.trim();
+  const wrapperClass = `mx-auto flex w-full justify-center px-4 sm:px-0 mt-12 mb-24 ${containerClassName}`.trim();
   return (
     <div className={wrapperClass}>
       <div className="w-full max-w-[85%]">

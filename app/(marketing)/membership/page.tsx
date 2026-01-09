@@ -1,7 +1,6 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const membershipHighlights = [
   {
@@ -89,22 +88,12 @@ export default function MembershipPage() {
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 What membership gives you
               </p>
-              <h2 className="font-serif text-2xl sm:text-3xl">
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 Belonging, rhythm, and continuous care.
               </h2>
               <p className="max-w-3xl mx-auto text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Membership keeps you rooted in learning, planning at your pace, and connecting without comparison.
               </p>
-            </div>
-            <div className="mt-8 flex w-full justify-center">
-              <div className="w-full max-w-[80%] md:max-w-[360px]">
-                <MobilePreviewImage
-                  src="/assets/images/dashboardpreview.png"
-                  alt="Taylor-Made Baby Co. member dashboard showing Academy progress, registry access, and community suggestions."
-                  width={360}
-                  height={720}
-                />
-              </div>
             </div>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {membershipHighlights.map((highlight) => (
@@ -119,59 +108,40 @@ export default function MembershipPage() {
               ))}
             </div>
           </section>
+
           <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
-            <div className="flex flex-col gap-3">
+            <div className="text-center space-y-4">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                Mentor-guided support
+                Mentor-guided access
               </p>
-              <h2 className="font-serif text-2xl sm:text-3xl">
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 The care shows up intentionally.
               </h2>
+              <p className="max-w-3xl mx-auto text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                You get a personal mentor, guided learning, shared circles, and space for reflection without noise.
+              </p>
             </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <div className="mt-8 grid gap-6 md:grid-cols-2">
               {supportSignals.map((signal) => (
                 <div key={signal.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                     {signal.title}
                   </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+                  <p className="mt-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
                     {signal.description}
                   </p>
                 </div>
               ))}
             </div>
-          </section>
-
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-            <div className="flex flex-col gap-3 text-center">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                Member → Mentor journey
+            <div className="mt-10 space-y-3 text-left text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Member → Mentor path
               </p>
-              <h2 className="font-serif text-2xl sm:text-3xl">
-                Growth happens at your pace.
-              </h2>
-            </div>
-            <div className="mt-16 mb-24 flex justify-center">
-              <img
-                src="/assets/images/membertomentor.png"
-                alt="Taylor-Made Baby Co. member to mentor community lifecycle"
-                className="w-full max-w-[85%] rounded-2xl"
-              />
-            </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {progression.map((step) => (
-                <div
-                  key={step.stage}
-                  className="marketing-card bg-white/80 p-6 text-center"
-                >
-                  <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {step.stage}
-                  </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-                    {step.description}
-                  </p>
-                </div>
-              ))}
+              <div className="grid gap-2 sm:grid-cols-3">
+                {progression.map((step) => (
+                  <p key={step.stage}>• {step.stage}: {step.description}</p>
+                ))}
+              </div>
             </div>
           </section>
 
@@ -180,7 +150,7 @@ export default function MembershipPage() {
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 Invite-only care
               </p>
-              <h2 className="font-serif text-2xl sm:text-3xl">
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 We keep the village small for the support to stay personal.
               </h2>
               <div className="space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">

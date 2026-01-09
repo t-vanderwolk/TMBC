@@ -1,7 +1,6 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const planningMeaning = [
   {
@@ -57,6 +56,8 @@ const planFit = [
   },
 ];
 
+const planningSignals = [...planningMeaning, ...decisionSupport];
+
 export default function PlanPage() {
   return (
     <>
@@ -81,93 +82,46 @@ export default function PlanPage() {
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-          <div className="flex flex-col items-center gap-4 text-center">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              What planning means here
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              Planning is a calm conversation, not a checklist race.
-            </h2>
-            <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              We reframe registries, timelines, and logistics as steady decision points you revisit with a mentor who
-              honors your season.
-            </p>
-          </div>
-          <div className="mt-8 flex w-full justify-center">
-            <div className="w-full max-w-[80%] md:max-w-[360px]">
-              <MobilePreviewImage
-                src="/assets/images/planpreview.png"
-                alt="Taylor-Made Baby Co. planning workspace preview with guided decisions."
-                width={360}
-                height={720}
-              />
-            </div>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {planningMeaning.map((meaning) => (
-                <div key={meaning.title} className="marketing-card bg-white/80 p-6">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {meaning.title}
-                  </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{meaning.description}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
-            <div className="flex flex-col gap-3">
+            <div className="text-center space-y-4">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                How decisions are supported
+                What planning means here
               </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                Mentors keep the decisions grounded and gentle.
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
+                Planning is a calm conversation, not a checklist race.
               </h2>
+              <p className="max-w-3xl mx-auto text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                We reframe registries, timelines, and logistics as steady decision points you revisit with a mentor who honors your season.
+              </p>
             </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {decisionSupport.map((signal) => (
-                <div key={signal.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              {planningSignals.map((signal) => (
+                <div key={signal.title} className="marketing-card bg-white/80 p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                     {signal.title}
                   </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{signal.description}</p>
+                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+                    {signal.description}
+                  </p>
                 </div>
               ))}
             </div>
           </section>
 
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-            <div className="flex flex-col gap-3 text-center">
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
+            <div className="flex flex-col gap-4 items-center text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 Registry as a living plan
               </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 Registries evolve with you.
               </h2>
               <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                Bring what you already have, revisit it slowly, and let mentors remind you that every update is optional.
-                This is not a shopping sprint but a living plan you adjust when it feels right.
+                Bring what you already have, revisit it slowly, and let mentors remind you that every update is optional. This is not a shopping sprint but a living plan you adjust when it feels right.
               </p>
             </div>
-          </section>
-
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
-            <div className="flex flex-col gap-3">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                Who this helps most
-              </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                For people who want planning to feel steady.
-              </h2>
-            </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="mt-8 grid gap-4 text-left text-sm text-[var(--tmbc-charcoal)] text-opacity-80 md:grid-cols-3">
               {planFit.map((fit) => (
-                <div key={fit.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {fit.title}
-                  </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{fit.description}</p>
-                </div>
+                <p key={fit.title}>• {fit.description}</p>
               ))}
             </div>
           </section>
@@ -177,7 +131,7 @@ export default function PlanPage() {
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 Closing reassurance
               </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 Planning keeps pace with learning and reflection.
               </h2>
               <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
@@ -187,7 +141,7 @@ export default function PlanPage() {
                 href="/request-invite"
                 className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
               >
-                Request Your Invite
+                Continue the rhythm
               </Link>
             </div>
           </section>

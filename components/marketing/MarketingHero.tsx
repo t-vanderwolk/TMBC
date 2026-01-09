@@ -25,7 +25,7 @@ interface MarketingHeroProps {
 const DEFAULT_PRIMARY_CLASSES =
   "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]";
 const DEFAULT_SECONDARY_CLASSES =
-  "marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]";
+  "text-[0.7rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 underline transition hover:text-[var(--tmbc-mauve)]";
 
 const MOBILE_HERO_SOURCES: Record<string, string> = {
   "/": "/assets/images/hero-marketing-signature-mobile.png",
@@ -56,24 +56,28 @@ export default function MarketingHero({
   const normalizedPathname =
     pathname && pathname !== "/" ? pathname.replace(/\/$/, "") : pathname;
   const mobileHeroSrc = normalizedPathname ? MOBILE_HERO_SOURCES[normalizedPathname] : undefined;
+  const backgroundClasses =
+    priority
+      ? "min-h-[85vh] md:min-h-[72vh] max-h-[92vh] md:max-h-[82vh]"
+      : "min-h-[70vh] md:min-h-[60vh] max-h-[80vh] md:max-h-[70vh]";
+  const spacingClasses =
+    priority
+      ? "pt-24 md:pt-32 pb-16 md:pb-20 mb-16 md:mb-20"
+      : "pt-20 md:pt-28 pb-14 md:pb-16 mb-12 md:mb-16";
+  const contentHeightClasses =
+    priority ? "min-h-[85vh] md:min-h-[72vh]" : "min-h-[70vh] md:min-h-[60vh]";
 
   return (
     <>
       <section
-        className="
-          relative overflow-hidden
+        className={`relative overflow-hidden
           w-screen left-1/2 right-1/2
           -ml-[50vw]
           -mr-[50vw]
-          min-h-[85vh]
-          md:min-h-[72vh]
-          pt-24
-          md:pt-32
-          pb-16
-          md:pb-20
-          mb-16
-          md:mb-20
-        "
+          bg-cover bg-center
+          text-[var(--tmbc-charcoal)]
+          ${backgroundClasses}
+          ${spacingClasses}`}
       >
         <div className="absolute inset-0">
           <picture className="h-full w-full">
@@ -92,7 +96,9 @@ export default function MarketingHero({
         </div>
         <div className="absolute inset-0 bg-[var(--tmbc-ivory)]/70" aria-hidden />
 
-        <div className="relative z-10 flex w-full min-h-[85vh] flex-col items-center justify-center gap-12 px-6 pt-4 pb-8 text-center md:py-0 md:px-12">
+        <div
+          className={`relative z-10 flex w-full ${contentHeightClasses} flex-col items-center justify-center gap-12 px-6 pt-4 pb-8 text-center md:py-0 md:px-12`}
+        >
           <div className="hero-copy space-y-6">
             <h1 className="hero-headline">{headline}</h1>
             <p className="hero-supporting mt-6">{supportingText}</p>
