@@ -2,7 +2,6 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
 
 export default function InviteSection() {
   const router = useRouter();
@@ -17,7 +16,7 @@ export default function InviteSection() {
       setInviteCode(code.trim().toUpperCase());
     }
     if (searchParams.get("invite_error")) {
-      setInviteError("Invite code missing or invalid. Please enter the approved invite code.");
+      setInviteError("That code did not match—double-check the invite we sent.");
     }
   }, [searchParams]);
 
@@ -25,7 +24,7 @@ export default function InviteSection() {
     event.preventDefault();
     const normalized = inviteCode.trim().toUpperCase();
     if (!normalized) {
-      setInviteError("Please enter your invite code.");
+      setInviteError("Please enter your invite code before we can check it.");
       return;
     }
 
@@ -41,13 +40,13 @@ export default function InviteSection() {
 
       if (!response.ok) {
         const payload = await response.json().catch(() => ({}));
-        setInviteError(payload?.error || "Invalid or already used invite code.");
+        setInviteError(payload?.error || "That code isn't valid or it already had a dance with us.");
         return;
       }
 
       router.push("/onboarding/start");
     } catch {
-      setInviteError("Unable to validate invite code.");
+      setInviteError("Something went sideways validating that code—try again in a moment.");
     } finally {
       setInviteSubmitting(false);
     }
@@ -57,9 +56,11 @@ export default function InviteSection() {
     <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 text-[var(--tmbc-charcoal)]">
       <div className="space-y-4 text-center">
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-          Already have an invite?
+          Returning with an invite?
         </p>
-        <h2 className="font-serif text-2xl sm:text-3xl">Enter the code we sent you.</h2>
+        <h2 className="font-serif text-2xl sm:text-3xl">
+          Drop the code we sent and we'll keep the door open while you hold the baby.
+        </h2>
       </div>
       <form
         className="mt-8 flex flex-col gap-4 md:flex-row md:items-end"
@@ -71,7 +72,7 @@ export default function InviteSection() {
             setInviteCode(event.target.value);
             if (inviteError) setInviteError("");
           }}
-          placeholder="INVITE CODE"
+          placeholder="YOUR CODE"
           className="w-full rounded-full border border-[var(--tmbc-mauve)]/40 bg-white px-4 py-3 text-sm text-[var(--tmbc-charcoal)] shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--tmbc-mauve)]/40"
         />
         <button
@@ -79,13 +80,10 @@ export default function InviteSection() {
           className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] w-full md:w-auto"
           disabled={inviteSubmitting}
         >
-          {inviteSubmitting ? "Checking..." : "Continue"}
+          {inviteSubmitting ? "Checking..." : "Submit code"}
         </button>
       </form>
       {inviteError && <p className="mt-2 text-xs text-red-600">{inviteError}</p>}
-      <div className="mt-12">
-        <PartnerLogoCarousel />
-      </div>
     </section>
   );
 }

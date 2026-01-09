@@ -110,6 +110,15 @@ export default function MembershipPage() {
               ))}
             </div>
           </section>
+          <section className="py-24 md:py-32 flex justify-center">
+            <div className="w-full max-w-[90%] md:max-w-[520px] flex justify-center">
+              <img
+                src="/assets/images/dashboardpreview.png"
+                alt="Taylor-Made Baby Co. member dashboard showing Academy progress, registry access, and community suggestions."
+                className="ui-preview-image w-full h-auto object-contain rounded-[28px] shadow-[0_30px_80px_rgba(0,0,0,0.08)]"
+              />
+            </div>
+          </section>
 
           <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
             <div className="flex flex-col gap-3">

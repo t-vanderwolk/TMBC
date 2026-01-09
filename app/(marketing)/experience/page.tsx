@@ -1,6 +1,5 @@
 import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
-import MarketingImage from "@/components/marketing/MarketingImage";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const pillars = [
@@ -64,19 +63,6 @@ export default function ExperiencePage() {
           A calm, guided journey through pregnancy, planning, and early parenthood — with a mentor who helps you decide
           what matters now, next, and later. (We keep it simple on purpose.)
         </p>
-        <div className="my-12 md:my-16">
-          <MarketingImage
-            variant="hero-editorial"
-            aspectRatio="16/9"
-            maxWidth={520}
-            priority
-            label="Experience - Hero editorial: guided journey atmosphere"
-            page="/experience"
-            section="Hero"
-            assetPath="TBD"
-            assetPriority="high"
-          />
-        </div>
         <div className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.35em] sm:flex-row sm:gap-4">
           <Link href="/request-invite" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]">
             Request Your Invite
@@ -117,18 +103,6 @@ export default function ExperiencePage() {
               className="rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/80 p-6 shadow-[0_18px_60px_rgba(199,166,199,0.2)]"
             >
               <div className="space-y-4">
-                <MarketingImage
-                  variant="editorial"
-                  aspectRatio="4/3"
-                  maxWidth={200}
-                  lazy
-                  description={pillar.imageDescription}
-                  label={`Experience - Pillar image: ${pillar.title}`}
-                  page="/experience"
-                  section="Pillars"
-                  assetPath="TBD"
-                  assetPriority="low"
-                />
                 <div>
                   <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
                     {pillar.title}

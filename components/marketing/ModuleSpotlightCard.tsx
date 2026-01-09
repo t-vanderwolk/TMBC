@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export default function ModuleSpotlightCard() {
   return (
     <section className="space-y-6 rounded-[32px] border border-[#C8A1B4]/40 bg-[#FFF9F5] p-6 shadow-[0_20px_50px_rgba(199,166,199,0.25)]">
@@ -9,15 +7,6 @@ export default function ModuleSpotlightCard() {
         <p className="text-sm text-[var(--tmbc-charcoal)]/75">
           Real-time car-seat guidance for babies 0–12 months, so every ride feels steady.
         </p>
-      </div>
-      <div className="overflow-hidden rounded-2xl bg-white/90">
-        <Image
-          src="/assets/images/modulepreview.png"
-          alt="Preview of the Car Seat Masterclass Academy module"
-          width={1200}
-          height={630}
-          className="h-auto w-full object-contain"
-        />
       </div>
       <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#B98AA5]">
         GEAR JOURNEY • 0–12 MONTHS • 35 MIN

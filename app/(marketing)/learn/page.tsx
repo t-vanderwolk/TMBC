@@ -1,73 +1,21 @@
+import Image from "next/image";
 import Link from "next/link";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import ModuleSpotlightCard from "@/components/marketing/ModuleSpotlightCard";
 
-const learningFocus = [
-  {
-    title: "Paced guidance",
-    description:
-      "We surface what matters this week so the Academy feels gentle, not like a load of homework.",
-  },
-  {
-    title: "Context first",
-    description:
-      "Each touchpoint explains why a topic matters for you, then offers the optional tools when you want them.",
-  },
-  {
-    title: "Only what you need",
-    description:
-      "The rhythm is modular — revisit nursery, gear, and postpartum touchpoints whenever curiosity or calm calls for it.",
-  },
-];
-
-const mentorSupport = [
-  {
-    title: "Guides who listen",
-    description:
-      "Mentors meet you where you are, highlight the right details, and quietly honor your pace.",
-  },
-  {
-    title: "Check-ins, not checklists",
-    description:
-      "Short, thoughtful prompts help you drop the noise and keep the focus on the next meaningful step.",
-  },
-  {
-    title: "Contextual care",
-    description:
-      "Decisions stay personal because mentors remind you of the why, not just the what.",
-  },
-];
-
-const learnFit = [
-  {
-    title: "You’re curious but cautious",
-    description:
-      "You want clarity without feeling pushed to keep up, and you trust mentors to guide a steady pace.",
-  },
-  {
-    title: "You study when it feels right",
-    description:
-      "Modules sit beside your daily life — dip in, reflect, and step away when the moment calls for rest.",
-  },
-  {
-    title: "You prefer listening over scrolling",
-    description:
-      "You value human context, conversation, and quiet reminders more than endless video playlists.",
-  },
-];
 
 export default function LearnPage() {
   return (
     <>
-      <MarketingHero
-        imageSrc="/assets/images/section-background-learning-flow.png"
-        imageAlt="Educational hero artwork for the Learn pillar."
-        imageWidth={1536}
-        imageHeight={1024}
-        headline="Learning is the calmest way to start."
-        supportingText="We keep the Academy human, paced, and optional so you learn exactly what matters for your season with a mentor who respects your rhythm."
+      <div className="learn-hero-target">
+        <MarketingHero
+          imageSrc="/assets/images/section-background-learning-flow.png"
+          imageAlt="Educational hero artwork for the Learn pillar."
+          imageWidth={1536}
+          imageHeight={1024}
+        headline="Learn what matters — in the right order."
+        supportingText="The Taylor-Made Baby Academy is a mentor-guided learning path that helps you understand what decisions are ahead before you plan, buy, or prepare. Calm, practical, and paced — one journey at a time."
         primaryCta={{
           label: "Request Your Invite",
           href: "/request-invite",
@@ -77,107 +25,180 @@ export default function LearnPage() {
           label: "How It Works (gently)",
           href: "/how-it-works",
         }}
-      />
+        />
+      </div>
       <RibbonDivider />
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-            <div className="flex flex-col items-center gap-4 text-center">
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-12 mb-8">
+            <div className="flex flex-col items-center space-y-6 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                What learning looks like here
+                THE ACADEMY APPROACH
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                The Academy is steady, contextual, and always optional.
+                This isn’t a course library or a checklist to finish.
               </h2>
               <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                We translate research and experience into mentor-led reflections so you can absorb what matters most
-                without feeling like you need to complete a course catalog.
+                The Academy exists to give you clarity before decisions — so planning feels grounded, not rushed.
+              </p>
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                Each journey unlocks only when the previous one is complete, keeping the focus on what matters most right
+                now.
               </p>
             </div>
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {learningFocus.map((focus) => (
-                <div key={focus.title} className="marketing-card bg-white/80 p-6">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {focus.title}
-                  </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{focus.description}</p>
-                </div>
-              ))}
+            <div className="mt-10 flex flex-col items-center space-y-6 text-center">
+              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                TAYLOR-MADE ACADEMY
+              </p>
+              <h3 className="font-serif text-2xl text-[var(--tmbc-charcoal)]">
+                Your guided learning path — with a mentor beside you
+              </h3>
+              <p className="max-w-[90%] text-sm text-[var(--tmbc-charcoal)] text-opacity-70 md:max-w-[520px]">
+                A calm, decision-first Academy designed to help you understand what matters, when it matters — before you
+                plan, buy, or commit.
+              </p>
             </div>
+            <div className="mt-4 flex w-full justify-center">
+              <div className="w-full max-w-[80%] md:max-w-[520px] flex justify-center">
+                <Image
+                  src="/assets/images/academydashboardpreview.png"
+                  alt="Taylor-Made Academy dashboard preview"
+                  width={520}
+                  height={900}
+                  sizes="(min-width: 1024px) 520px, 90vw"
+                  priority
+                  className="h-auto object-contain rounded-[28px]"
+                  style={{ width: "auto", height: "auto", maxWidth: "100%" }}
+                />
+              </div>
+            </div>
+            <p className="mt-6 text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+              Orientation first; module previews follow.
+            </p>
           </section>
-
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
-            <div className="flex flex-col gap-3">
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28 mt-24 mb-8">
+            <div className="flex flex-col items-center space-y-6 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                Module spotlight
+                Guided journeys
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                One guided moment from the Academy
+                The Academy is organized into three guided journeys
               </h2>
               <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                The Car Seat Masterclass walks you through choices with mentor commentary, so it feels like a conversation
-                rather than a lecture. It is an invitation to pause, learn, and return with questions.
+                Mentors keep you moving through Nursery, Gear, and Postpartum in order so each decision feels steady and
+                grounded in real-life timing.
               </p>
             </div>
-            <div className="mt-10">
-              <ModuleSpotlightCard />
+            <div className="mt-10 space-y-8">
+              <div className="flex flex-col gap-3 rounded-[24px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6">
+                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                  This is typically a third-trimester learning phase.
+                </p>
+                <h3 className="font-serif text-xl text-[var(--tmbc-charcoal)]">Nursery comes first — for a reason</h3>
+                <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                  Nursery decisions involve the highest price points, long shipping timelines, and foundational safety choices.
+                  This journey focuses on layout, safe sleep, lighting, and home readiness so those big, early decisions land thoughtfully and without pressure.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 rounded-[24px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6">
+                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                  Decisions here are practical, not brand-driven.
+                </p>
+                <h3 className="font-serif text-xl text-[var(--tmbc-charcoal)]">Gear follows once the foundation is set</h3>
+                <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                  Gear learning focuses on safety, compatibility, and real-world use—from car seats to travel systems. You’ll learn how products fit your routines before choosing what to buy, with mentor guidance built in.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 rounded-[24px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6">
+                <h3 className="font-serif text-xl text-[var(--tmbc-charcoal)]">Postpartum learning comes last — intentionally</h3>
+                <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                  Postpartum modules prepare you for recovery, feeding strategies, and personal care as birth approaches. This journey centers you—helping you plan support, routines, and essentials for the fourth trimester.
+                </p>
+              </div>
+            </div>
+            <div className="flex w-full flex-col items-center gap-10 px-4 mt-12 md:flex-row md:justify-center md:gap-8">
+              <div className="flex w-full max-w-[80%] justify-center md:max-w-[360px]">
+                <Image
+                  src="/assets/images/nurserymodulepreview.png"
+                  alt="Nursery module preview"
+                  width={360}
+                  height={720}
+                  sizes="(min-width: 1024px) 360px, 90vw"
+                  priority
+                  className="w-full h-auto object-contain rounded-[28px]"
+                />
+              </div>
+              <div className="flex w-full max-w-[80%] justify-center md:max-w-[360px]">
+                <Image
+                  src="/assets/images/gearmodulepreview.png"
+                  alt="Gear module preview"
+                  width={360}
+                  height={720}
+                  sizes="(min-width: 1024px) 360px, 90vw"
+                  priority
+                  className="w-full h-auto object-contain rounded-[28px]"
+                />
+              </div>
+              <div className="flex w-full max-w-[80%] justify-center md:max-w-[360px]">
+                <Image
+                  src="/assets/images/postpartummodulepreview.png"
+                  alt="Postpartum module preview"
+                  width={360}
+                  height={720}
+                  sizes="(min-width: 1024px) 360px, 90vw"
+                  className="w-full h-auto object-contain rounded-[28px]"
+                />
+              </div>
             </div>
           </section>
 
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-            <div className="flex flex-col gap-3">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                How mentors support learning
-              </p>
+
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-24 mb-8">
+            <div className="flex flex-col space-y-6 items-center text-center">
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                Mentors keep the learning gentle and human.
+                Learning in the Academy is never meant to happen alone.
               </h2>
-            </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {mentorSupport.map((signal) => (
-                <div key={signal.title} className="marketing-card bg-white/80 p-6">
+              <div className="w-full max-w-[80%] md:max-w-[520px]">
+                <div className="flex flex-col items-center gap-3">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {signal.title}
+                    WORKBOOK PREVIEW
                   </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{signal.description}</p>
+                  <div className="flex w-full justify-center">
+                    <Image
+                      src="/assets/images/academyworkbookpreview.png"
+                      alt="Academy workbook preview"
+                      width={520}
+                      height={900}
+                      sizes="(min-width: 1024px) 520px, 90vw"
+                      className="h-auto object-contain rounded-[28px]"
+                      style={{ width: "auto", height: "auto", maxWidth: "100%" }}
+                    />
+                  </div>
                 </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
-            <div className="flex flex-col gap-3">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                Who this is for
+              </div>
+              <ul className="ml-4 list-disc space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                <li>Your mentor helps you decide what to focus on next</li>
+                <li>Workbook reflections are shared directly with your mentor</li>
+                <li>Questions and uncertainties are expected — not signs you’re behind</li>
+              </ul>
+              <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                The goal isn’t completion. It’s clarity.
               </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                For people who want relief, not another curriculum.
-              </h2>
-            </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {learnFit.map((fit) => (
-                <div key={fit.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {fit.title}
-                  </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{fit.description}</p>
-                </div>
-              ))}
             </div>
           </section>
 
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28 mt-24 mb-8">
             <div className="flex flex-col items-center gap-6 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 Closing reassurance
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                Learning sits beside planning, connecting, and reflecting with calm continuity.
+                Learning always comes before planning.
               </h2>
               <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                The Academy is a calm, guided space you return to as questions arise, so you can keep moving without
-                feeling overwhelmed.
+                Once you understand your options, your mentor helps translate that clarity into a plan that fits your
+                life — not someone else’s checklist.
               </p>
               <Link
                 href="/request-invite"

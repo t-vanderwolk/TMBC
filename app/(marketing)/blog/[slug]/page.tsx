@@ -8,7 +8,6 @@ import BlogContentRenderer, {
 } from "@/components/blog/BlogContentRenderer";
 import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
 import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
-import MarketingImage from "@/components/marketing/MarketingImage";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -190,17 +189,6 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
       <article className="marketing-section bg-tmIvory/80">
         <div className="mx-auto space-y-12 px-4 sm:px-6 lg:px-8 max-w-6xl">
         <div className="relative overflow-hidden rounded-[40px] border border-tmMauve/40 bg-white/90 p-10 shadow-editorial">
-          <MarketingImage
-            variant="hero-editorial"
-            aspectRatio="16/9"
-            maxWidth={960}
-            priority
-            label="Journal - Article hero image"
-            page="/blog/[slug]"
-            section="Hero"
-            assetPath="TBD"
-            assetPriority="high"
-          />
           <div className="relative mt-8 max-w-3xl space-y-4">
             <div className="absolute -right-2 -top-6 hidden text-[140px] font-playfair uppercase tracking-[0.2em] text-tmGold/20 lg:block">
               Journal

@@ -80,6 +80,15 @@ export default function PlanPage() {
       <RibbonDivider />
 
       <MarketingContent>
+        <section className="py-24 md:py-32 flex justify-center">
+          <div className="w-full max-w-[90%] md:max-w-[520px] flex justify-center">
+            <img
+              src="/assets/images/planpreview.png"
+              alt="Taylor-Made Baby Co. planning workspace preview with guided decisions."
+              className="ui-preview-image w-full h-auto object-contain rounded-[28px] shadow-[0_30px_80px_rgba(0,0,0,0.08)]"
+            />
+          </div>
+        </section>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
             <div className="flex flex-col items-center gap-4 text-center">

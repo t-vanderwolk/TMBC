@@ -1,5 +1,4 @@
 import Link from "next/link";
-import MarketingImage from "@/components/marketing/MarketingImage";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
@@ -110,23 +109,8 @@ const BlogMarketingPage = async () => {
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section space-y-10 mb-24 md:mb-28">
-            <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-2xl border border-[var(--tmbc-ivory)]/60 bg-tmIvory transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)] sm:grid-cols-[1.1fr_0.9fr]">
-              <div className="marketing-media flex-1">
-                <div className="py-20 md:py-32">
-                  <MarketingImage
-                    variant="hero-editorial"
-                    aspectRatio="4/3"
-                    maxWidth={920}
-                    priority
-                    label="Journal - Featured post hero image"
-                    page="/blog"
-                    section="Featured Post"
-                    assetPath="TBD"
-                    assetPriority="high"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-1 flex-col gap-6 p-8 sm:p-10">
+            <article className="mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-2xl border border-[var(--tmbc-ivory)]/60 bg-tmIvory transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)]">
+              <div className="flex flex-col gap-6 p-8 sm:p-10">
                 <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-50">
                   <span>
                     {featuredPost.publishedAt
@@ -172,17 +156,6 @@ const BlogMarketingPage = async () => {
                   className="marketing-card group flex min-h-[320px] flex-col justify-between overflow-hidden bg-white/80 p-6"
                 >
                   <div className="space-y-4">
-                    <MarketingImage
-                      variant="editorial"
-                      aspectRatio="4/3"
-                      maxWidth={640}
-                      lazy
-                      label="Journal - Post card image"
-                      page="/blog"
-                      section="Post Grid"
-                      assetPath="TBD"
-                      assetPriority="med"
-                    />
                     <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-50">
                       <span>
                         {post.publishedAt
