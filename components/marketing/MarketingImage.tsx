@@ -54,24 +54,21 @@ const MarketingImage = ({
     assetPath ??
     (typeof src === "string" ? src : src ? "TBD" : "TBD");
   const resolvedPriority = assetPriority ?? (priority ? "high" : undefined);
+  const containerClasses = `mx-auto my-16 md:my-20 flex w-full justify-center ${containerClassName}`.trim();
+  const imageClasses = `relative w-full max-w-[85%] ${className}`.trim();
 
   return (
-    <div className={`relative w-full overflow-hidden ${containerClassName}`}>
-      <div className="flex w-full justify-center">
-        <div
-          className={`relative w-full ${className}`}
-          style={wrapperStyle}
-        >
-          <VisualPlaceholder
-            label={resolvedLabel}
-            page={page}
-            section={section}
-            assetPath={resolvedAssetPath}
-            priority={resolvedPriority}
-            aspect={aspectRatio}
-            className="w-full"
-          />
-        </div>
+    <div className={containerClasses}>
+      <div className={imageClasses} style={wrapperStyle}>
+        <VisualPlaceholder
+          label={resolvedLabel}
+          page={page}
+          section={section}
+          assetPath={resolvedAssetPath}
+          priority={resolvedPriority}
+          aspect={aspectRatio}
+          className="w-full"
+        />
       </div>
     </div>
   );

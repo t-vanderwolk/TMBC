@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const faqGroups = [
   {
@@ -132,7 +131,6 @@ export default function FAQPage() {
         }}
         priority
       />
-      <RibbonDivider />
       <MarketingContent>
         <div className="marketing-content space-y-16 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card mx-auto max-w-3xl rounded-[36px] bg-[var(--tmbc-ivory)]/90 px-8 py-20 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)]">
@@ -178,7 +176,6 @@ export default function FAQPage() {
             ))}
           </section>
 
-          <RibbonDivider />
 
           <section className="marketing-section marketing-card mx-auto max-w-3xl rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 py-16 text-center shadow-[0_25px_70px_rgba(199,166,199,0.25)]">
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">

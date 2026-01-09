@@ -6,12 +6,12 @@ const SECONDARY_BUTTON_CLASSES = "marketing-btn marketing-btn-secondary uppercas
 
 export default function HeroInviteForm() {
   return (
-    <div className="flex w-full max-w-md flex-col gap-5 rounded-[2.5rem] border border-[#D9C48E]/30 bg-white p-8 shadow-[0_25px_60px_rgba(62,47,53,0.18)]">
-      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#C8A1B4]">
+    <div className="marketing-card flex w-full max-w-md flex-col gap-5 text-[var(--tmbc-charcoal)]">
+      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-60">
         Concierge intake
       </p>
-      <h3 className="font-serif text-2xl sm:text-3xl text-[#3E2F35]">Your invite begins here</h3>
-      <p className="text-base text-[#3E2F35]/80">
+      <h3 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">Your invite begins here</h3>
+      <p className="text-base text-[var(--tmbc-charcoal)]/80">
         Share a few details and our intake curator will reply with bespoke next steps.
       </p>
       <div className="flex flex-col gap-3">

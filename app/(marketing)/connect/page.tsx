@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
+import connectExplained from "../../../assets/images/connectexplained.png";
 
 const connectMeaning = [
   {
@@ -80,33 +82,37 @@ export default function ConnectPage() {
           href: "/how-it-works",
         }}
       />
-      <RibbonDivider />
 
       <MarketingContent>
-        <section className="py-24 md:py-32 flex justify-center">
-          <div className="w-full max-w-[90%] md:max-w-[520px] flex justify-center">
-            <img
-              src="/assets/images/connectpreview.png"
-              alt="Taylor-Made Baby Co. connection circle preview showing guided rooms."
-              className="ui-preview-image w-full h-auto object-contain rounded-[28px] shadow-[0_30px_80px_rgba(0,0,0,0.08)]"
-            />
-          </div>
-        </section>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-            <div className="flex flex-col items-center gap-4 text-center">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                What “Connect” means here
-              </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                Connection without the noise.
+          <div className="flex flex-col items-center gap-4 text-center">
+            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+              What “Connect” means here
+            </p>
+            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
+              Connection without the noise.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                Our rooms are curated, moderated, and anchored by mentors so that the space never feels performative,
-                noisy, or pressure-filled.
-              </p>
+            <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              Our rooms are curated, moderated, and anchored by mentors so that the space never feels performative,
+              noisy, or pressure-filled.
+            </p>
+          </div>
+          <div className="mt-12 mb-24 flex justify-center">
+            <div className="w-full max-w-[520px]">
+              <Image
+                src={connectExplained}
+                alt="Connect preview showing community chat rooms, forums, and messaging"
+                width={1536}
+                height={1024}
+                className="h-auto w-full max-w-[85%] md:max-w-full object-contain"
+              />
             </div>
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
+          </div>
+          <p className="max-w-3xl mx-auto text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+            The diagram above maps how mentors keep the circle calm across forums, rooms, and intimate messaging.
+          </p>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
               {connectMeaning.map((meaning) => (
                 <div key={meaning.title} className="marketing-card bg-white/80 p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
@@ -126,6 +132,16 @@ export default function ConnectPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Mentors frame the rhythm so you don’t have to perform.
               </h2>
+            </div>
+            <div className="mt-8 flex w-full justify-center">
+              <div className="w-full max-w-[80%] md:max-w-[360px]">
+                <MobilePreviewImage
+                  src="/assets/images/connectpreview.png"
+                  alt="Taylor-Made Baby Co. connection circle preview showing guided rooms."
+                  width={360}
+                  height={720}
+                />
+              </div>
             </div>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {mentorCircles.map((circle) => (

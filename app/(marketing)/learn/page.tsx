@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 
 export default function LearnPage() {
@@ -27,7 +27,6 @@ export default function LearnPage() {
         }}
         />
       </div>
-      <RibbonDivider />
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
@@ -60,16 +59,13 @@ export default function LearnPage() {
               </p>
             </div>
             <div className="mt-4 flex w-full justify-center">
-              <div className="w-full max-w-[80%] md:max-w-[520px] flex justify-center">
-                <Image
+              <div className="w-full max-w-[80%] md:max-w-[360px] flex justify-center">
+                <MobilePreviewImage
                   src="/assets/images/academydashboardpreview.png"
                   alt="Taylor-Made Academy dashboard preview"
-                  width={520}
-                  height={900}
-                  sizes="(min-width: 1024px) 520px, 90vw"
+                  width={360}
+                  height={720}
                   priority
-                  className="h-auto object-contain rounded-[28px]"
-                  style={{ width: "auto", height: "auto", maxWidth: "100%" }}
                 />
               </div>
             </div>
@@ -100,6 +96,17 @@ export default function LearnPage() {
                   Nursery decisions involve the highest price points, long shipping timelines, and foundational safety choices.
                   This journey focuses on layout, safe sleep, lighting, and home readiness so those big, early decisions land thoughtfully and without pressure.
                 </p>
+                <div className="mt-6 flex w-full justify-center">
+                  <div className="w-full max-w-[80%] md:max-w-[360px]">
+                    <MobilePreviewImage
+                      src="/assets/images/nurserymodulepreview.png"
+                      alt="Nursery module preview"
+                      width={360}
+                      height={720}
+                      priority
+                    />
+                  </div>
+                </div>
               </div>
               <div className="flex flex-col gap-3 rounded-[24px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6">
                 <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
@@ -109,46 +116,33 @@ export default function LearnPage() {
                 <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                   Gear learning focuses on safety, compatibility, and real-world use—from car seats to travel systems. You’ll learn how products fit your routines before choosing what to buy, with mentor guidance built in.
                 </p>
+                <div className="mt-6 flex w-full justify-center">
+                  <div className="w-full max-w-[80%] md:max-w-[360px]">
+                    <MobilePreviewImage
+                      src="/assets/images/gearmodulepreview.png"
+                      alt="Gear module preview"
+                      width={360}
+                      height={720}
+                      priority
+                    />
+                  </div>
+                </div>
               </div>
               <div className="flex flex-col gap-3 rounded-[24px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6">
                 <h3 className="font-serif text-xl text-[var(--tmbc-charcoal)]">Postpartum learning comes last — intentionally</h3>
                 <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                   Postpartum modules prepare you for recovery, feeding strategies, and personal care as birth approaches. This journey centers you—helping you plan support, routines, and essentials for the fourth trimester.
                 </p>
-              </div>
-            </div>
-            <div className="flex w-full flex-col items-center gap-10 px-4 mt-12 md:flex-row md:justify-center md:gap-8">
-              <div className="flex w-full max-w-[80%] justify-center md:max-w-[360px]">
-                <Image
-                  src="/assets/images/nurserymodulepreview.png"
-                  alt="Nursery module preview"
-                  width={360}
-                  height={720}
-                  sizes="(min-width: 1024px) 360px, 90vw"
-                  priority
-                  className="w-full h-auto object-contain rounded-[28px]"
-                />
-              </div>
-              <div className="flex w-full max-w-[80%] justify-center md:max-w-[360px]">
-                <Image
-                  src="/assets/images/gearmodulepreview.png"
-                  alt="Gear module preview"
-                  width={360}
-                  height={720}
-                  sizes="(min-width: 1024px) 360px, 90vw"
-                  priority
-                  className="w-full h-auto object-contain rounded-[28px]"
-                />
-              </div>
-              <div className="flex w-full max-w-[80%] justify-center md:max-w-[360px]">
-                <Image
-                  src="/assets/images/postpartummodulepreview.png"
-                  alt="Postpartum module preview"
-                  width={360}
-                  height={720}
-                  sizes="(min-width: 1024px) 360px, 90vw"
-                  className="w-full h-auto object-contain rounded-[28px]"
-                />
+                <div className="mt-6 flex w-full justify-center">
+                  <div className="w-full max-w-[80%] md:max-w-[360px]">
+                    <MobilePreviewImage
+                      src="/assets/images/postpartummodulepreview.png"
+                      alt="Postpartum module preview"
+                      width={360}
+                      height={720}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -165,15 +159,14 @@ export default function LearnPage() {
                     WORKBOOK PREVIEW
                   </p>
                   <div className="flex w-full justify-center">
-                    <Image
-                      src="/assets/images/academyworkbookpreview.png"
-                      alt="Academy workbook preview"
-                      width={520}
-                      height={900}
-                      sizes="(min-width: 1024px) 520px, 90vw"
-                      className="h-auto object-contain rounded-[28px]"
-                      style={{ width: "auto", height: "auto", maxWidth: "100%" }}
-                    />
+                    <div className="w-full max-w-[80%] md:max-w-[360px]">
+                      <MobilePreviewImage
+                        src="/assets/images/academyworkbookpreview.png"
+                        alt="Academy workbook preview"
+                        width={360}
+                        height={720}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

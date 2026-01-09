@@ -1,6 +1,5 @@
 import Link from "next/link";
 import CTARibbon from "@/components/marketing/CTARibbon";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const pillars = [
   {
@@ -80,7 +79,6 @@ export default function ExperiencePage() {
       </section>
 
       <section>
-        <RibbonDivider />
       </section>
 
       <section className="space-y-6 rounded-[48px] border border-[var(--tmbc-mauve)]/20 bg-gradient-to-b from-white to-[var(--tmbc-blush)]/60 px-8 py-20 md:py-32 shadow-[0_25px_90px_rgba(199,166,199,0.25)] marketing-section">

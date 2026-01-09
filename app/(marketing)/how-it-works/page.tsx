@@ -1,7 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import inviteFlowGraphic from "../../../assets/images/inviteflow.png";
 
 const rhythmHighlights = [
   {
@@ -73,7 +74,6 @@ export default function HowItWorksPage() {
         priority
       />
 
-      <RibbonDivider />
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
@@ -89,6 +89,21 @@ export default function HowItWorksPage() {
                 Learning, planning, connecting, and reflecting live together. You can follow one, pause, and revisit the
                 next whenever you want.
               </p>
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                The invite process introduces you to mentors, the academy, your registry, and community rooms in that order.
+              </p>
+            </div>
+            <div className="mt-12 mb-20 flex justify-center">
+              <div className="w-full max-w-[1100px]">
+                <Image
+                  src={inviteFlowGraphic}
+                  alt="Taylor-Made Baby Co. invite and onboarding process"
+                  width={1536}
+                  height={1024}
+                  className="w-full h-auto"
+                  sizes="(max-width: 768px) 100vw, 1000px"
+                />
+              </div>
             </div>
             <div className="mt-12 grid gap-6 md:grid-cols-3">
               {rhythmHighlights.map((highlight) => (

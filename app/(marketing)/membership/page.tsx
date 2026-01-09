@@ -1,7 +1,7 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
+import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const membershipHighlights = [
   {
@@ -82,7 +82,6 @@ export default function MembershipPage() {
         }}
         priority
       />
-      <RibbonDivider />
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
@@ -97,6 +96,16 @@ export default function MembershipPage() {
                 Membership keeps you rooted in learning, planning at your pace, and connecting without comparison.
               </p>
             </div>
+            <div className="mt-8 flex w-full justify-center">
+              <div className="w-full max-w-[80%] md:max-w-[360px]">
+                <MobilePreviewImage
+                  src="/assets/images/dashboardpreview.png"
+                  alt="Taylor-Made Baby Co. member dashboard showing Academy progress, registry access, and community suggestions."
+                  width={360}
+                  height={720}
+                />
+              </div>
+            </div>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {membershipHighlights.map((highlight) => (
                 <div key={highlight.title} className="marketing-card bg-white/80 p-6">
@@ -110,16 +119,6 @@ export default function MembershipPage() {
               ))}
             </div>
           </section>
-          <section className="py-24 md:py-32 flex justify-center">
-            <div className="w-full max-w-[90%] md:max-w-[520px] flex justify-center">
-              <img
-                src="/assets/images/dashboardpreview.png"
-                alt="Taylor-Made Baby Co. member dashboard showing Academy progress, registry access, and community suggestions."
-                className="ui-preview-image w-full h-auto object-contain rounded-[28px] shadow-[0_30px_80px_rgba(0,0,0,0.08)]"
-              />
-            </div>
-          </section>
-
           <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
             <div className="flex flex-col gap-3">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -151,6 +150,13 @@ export default function MembershipPage() {
               <h2 className="font-serif text-2xl sm:text-3xl">
                 Growth happens at your pace.
               </h2>
+            </div>
+            <div className="mt-16 mb-24 flex justify-center">
+              <img
+                src="/assets/images/membertomentor.png"
+                alt="Taylor-Made Baby Co. member to mentor community lifecycle"
+                className="w-full max-w-[85%] rounded-2xl"
+              />
             </div>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {progression.map((step) => (

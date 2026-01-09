@@ -17,9 +17,9 @@ type EditorialSectionProps = {
 };
 
 const backgroundMap: Record<NonNullable<EditorialSectionProps["background"]>, string> = {
-  blush: "bg-[var(--tmbc-blush)]/40",
-  mauve: "bg-[var(--tmbc-mauve)]/20",
-  ivory: "bg-[var(--tmbc-ivory)]/80",
+  blush: "bg-[var(--tmbc-blush)]/20",
+  mauve: "bg-[var(--tmbc-mauve)]/15",
+  ivory: "bg-[var(--tmbc-ivory)]/90",
 };
 
 const EditorialSection = ({
@@ -32,21 +32,19 @@ const EditorialSection = ({
   ctaLabel,
   ctaHref,
 }: EditorialSectionProps) => {
-  const sectionClass = `${backgroundMap[background]} rounded-[40px] border border-[var(--tmbc-blush)]`;
+const sectionClass = `${backgroundMap[background]} rounded-[34px] border border-[rgba(62,47,53,0.12)]`;
 
   return (
-    <section
-      className={`${sectionClass} px-6 py-12 shadow-[0_25px_60px_rgba(199,166,199,0.25)] marketing-section`}
-    >
+    <section className={`${sectionClass} px-6 py-12 marketing-section`}>
       <div
         className={`grid gap-10 lg:grid-cols-[0.55fr,0.45fr] ${
           reverse ? "lg:grid-flow-col-dense" : ""
         } lg:items-center`}
       >
         <Reveal variant={reverse ? "slide-right" : "slide-left"}>
-          <div className="overflow-hidden rounded-[32px] bg-gradient-to-br from-[var(--tmbc-blush)]/80 to-[var(--tmbc-mauve)]/40 p-8 shadow-[0_25px_60px_rgba(199,166,199,0.35)]">
+        <div className="overflow-hidden rounded-[28px] border border-[rgba(62,47,53,0.12)] bg-white/90 p-6">
             {image ?? (
-              <div className="h-64 w-full rounded-[28px] bg-gradient-to-br from-white/80 via-[var(--tmbc-ivory)] to-[var(--tmbc-mauve)]">
+              <div className="h-64 w-full rounded-[24px] bg-[var(--tmbc-ivory)]/80">
                 {/* Placeholder imagery */}
               </div>
             )}
@@ -62,10 +60,10 @@ const EditorialSection = ({
           </div>
           <p className="text-lg leading-relaxed text-[var(--tmbc-charcoal)] text-opacity-80 md:text-xl">{copy}</p>
           {ctaLabel && ctaHref && (
-            <Link
-              href={ctaHref}
-              className="marketing-btn marketing-btn-secondary uppercase tracking-[0.3em] shadow-[0_20px_50px_rgba(199,166,199,0.25)]"
-            >
+          <Link
+            href={ctaHref}
+            className="marketing-btn marketing-btn-secondary uppercase tracking-[0.3em]"
+          >
               {ctaLabel}
             </Link>
           )}

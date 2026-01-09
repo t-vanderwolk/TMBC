@@ -14,9 +14,9 @@ type FeatureBlockProps = {
 const FeatureBlock = ({ icon, title, description, accent }: FeatureBlockProps) => {
   return (
     <Reveal variant="fade-up" className="h-full">
-      <article className="flex h-full flex-col gap-5 rounded-[32px] border border-[var(--tmbc-blush)] bg-white/80 p-6 shadow-[0_25px_65px_rgba(199,166,199,0.25)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_40px_100px_rgba(199,166,199,0.35)]">
+      <article className="flex h-full flex-col gap-5 rounded-[32px] border border-[rgba(62,47,53,0.12)] bg-white/95 p-6 transition-colors duration-200 hover:border-[var(--tmbc-mauve)]/30">
         <div className="flex items-center gap-3">
-          <span className="grid h-14 w-14 place-items-center rounded-full border border-[var(--tmbc-gold)] bg-[var(--tmbc-blush)]/90 shadow-[0_20px_45px_rgba(214,183,154,0.35)]">
+          <span className="grid h-14 w-14 place-items-center rounded-full border border-[rgba(62,47,53,0.15)] bg-[var(--tmbc-blush)]/40">
             {icon}
           </span>
           {accent && <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">{accent}</p>}

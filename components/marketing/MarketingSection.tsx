@@ -20,7 +20,7 @@ const sectionVariant = {
 const MarketingSection = ({ title, subtitle, children }: MarketingSectionProps) => {
   return (
     <motion.section
-      className="rounded-3xl border-l-4 border-[var(--tmbc-mauve)] bg-white/90 p-6 shadow-[0_30px_65px_rgba(199,166,199,0.2)] marketing-section"
+      className="marketing-section rounded-[34px] border-l-4 border-[var(--tmbc-mauve)]/40 bg-white/90 px-6 py-10"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.4 }}

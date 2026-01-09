@@ -1,7 +1,7 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
+import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const problemStatements = [
   "The questions ahead feel louder than the answers because every list demands urgency.",
@@ -68,7 +68,6 @@ export default function AboutPage() {
         }}
         priority
       />
-      <RibbonDivider />
 
       <MarketingContent>
         <div className="marketing-content space-y-20 md:space-y-24 text-[var(--tmbc-charcoal)]">
@@ -108,6 +107,17 @@ export default function AboutPage() {
               ))}
             </div>
           </section>
+
+          <div className="py-24 flex justify-center">
+            <div className="w-full max-w-[520px]">
+              <MobilePreviewImage
+                src="/assets/images/babybookpic.jpeg"
+                alt="Soft keepsake baby book resting beside dried flowers"
+                width={520}
+                height={780}
+              />
+            </div>
+          </div>
 
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
             <div className="flex flex-col items-center gap-3 text-center">
@@ -166,6 +176,10 @@ export default function AboutPage() {
               </Link>
             </div>
           </section>
+          {/* Placeholder: Atmospheric image reinforcing closing vision */}
+          <div className="py-24 flex justify-center">
+            <div className="w-full max-w-[520px] h-[320px] rounded-2xl bg-gradient-to-br from-white to-[var(--tmbc-ivory)]" />
+          </div>
         </div>
       </MarketingContent>
     </>

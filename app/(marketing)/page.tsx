@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 import InviteSection from "@/components/marketing/InviteSection";
+import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const noiseNotes = [
   "Every checklist shouts louder than the midnight spit-up clean-up, making your next decision feel urgent.",
@@ -30,11 +30,51 @@ const differenceHighlights = [
   "Ongoing support means someone calm is checking in while you juggle spit-up and exhaustion.",
 ];
 
-const rhythms = [
-  "Learn—clarify what your baby actually needs instead of doom-scrolling another parenting thread.",
-  "Plan—make quiet choices with a mentor after you've had time to register how the night actually went.",
-  "Connect—show up to rooms that feel like a trusted note instead of another noisy chat.",
-  "Reflect—keep keepsakes that read like letters, not a never-ending notification feed.",
+const systemStages = [
+  {
+    title: "Learn",
+    heading: "Clarify what matters before you plan anything for baby",
+    description:
+      "We slow the flood of opinions so you learn what decisions are actually coming instead of Googling with the baby on your hip.",
+    micro: "This stage keeps you ahead of the noise—no more midnight research rabbit holes.",
+    preview: {
+      src: "/assets/images/academydashboardpreview.png",
+      alt: "Taylor-Made Academy dashboard preview",
+    },
+  },
+  {
+    title: "Plan",
+    heading: "Co-create a calm plan after you understand the lay of the land",
+    description:
+      "Mentors help you pace the purchases and timelines so every choice is grounded in your household rhythm, not a trending checklist.",
+    micro: "Plan quietly with someone who knows how to coach you past decision fatigue.",
+    preview: {
+      src: "/assets/images/planpreview.png",
+      alt: "Planning workspace preview",
+    },
+  },
+  {
+    title: "Connect",
+    heading: "Step into moderated rooms that meet you where you are",
+    description:
+      "Connect with other parents while mentors keep the energy low and the conversation useful instead of performative.",
+    micro: "These sessions are distraction-free—no loud feeds, just thoughtful presence.",
+    preview: {
+      src: "/assets/images/connectpreview.png",
+      alt: "Community connection preview",
+    },
+  },
+  {
+    title: "Reflect",
+    heading: "Capture what you learned and keep it steady",
+    description:
+      "We collect reflections so mentors can see what worked, what felt weird, and what still needs attention before you move forward.",
+    micro: "Reflection feels like a letter, not another notification badge.",
+    preview: {
+      src: "/assets/images/reflectpreview.png",
+      alt: "Reflection & baby book preview",
+    },
+  },
 ];
 
 const partnerLogos = [
@@ -76,8 +116,15 @@ export default function HomePage() {
         }}
         priority
       />
-      <RibbonDivider />
-
+      <section className="py-24 flex justify-center">
+        <div className="w-full max-w-[520px] flex justify-center">
+          <img
+            src="/assets/images/invite-only.png"
+            alt="Invite-only access calming signal"
+            className="w-full rounded-2xl"
+          />
+        </div>
+      </section>
       <MarketingContent>
         <section className="marketing-section marketing-card bg-white/90 px-6 py-16 md:px-12 md:py-24 mt-16">
           <div className="max-w-5xl mx-auto grid gap-12 md:grid-cols-2">
@@ -108,10 +155,29 @@ export default function HomePage() {
               The TMBC flow keeps you oriented through babyhood so every choice lands with clarity.
             </p>
           </div>
-          <div className="mt-10 space-y-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-80 md:grid md:grid-cols-2 md:gap-6 md:space-y-0">
-            {rhythms.map((rhythm) => (
-              <div key={rhythm} className="marketing-card bg-white/80 p-6">
-                <p>{rhythm}</p>
+          <div className="mt-10 space-y-8">
+            {systemStages.map((stage, index) => (
+              <div key={stage.title} className="flex flex-col gap-3 rounded-[24px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6">
+                <div className="flex items-center justify-between">
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                    {stage.title}
+                  </p>
+                  <span className="text-xs font-mono text-[var(--tmbc-charcoal)] text-opacity-60">
+                    {`0${index + 1}`}
+                  </span>
+                </div>
+                <h3 className="font-serif text-xl text-[var(--tmbc-charcoal)]">{stage.heading}</h3>
+                <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">{stage.description}</p>
+                <p className="text-[0.7rem] text-[var(--tmbc-charcoal)] text-opacity-60">{stage.micro}</p>
+                {stage.preview && (
+                  <MobilePreviewImage
+                    src={stage.preview.src}
+                    alt={stage.preview.alt}
+                    width={240}
+                    height={520}
+                    containerClassName="mt-4 w-full max-w-[240px] self-center"
+                  />
+                )}
               </div>
             ))}
           </div>
@@ -132,6 +198,16 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+          <div className="py-24 flex justify-center">
+            <div className="w-full max-w-[520px]">
+              <img
+                src="/assets/images/baby-booties.jpeg"
+                alt="Small booties resting gently, offering a quiet pause"
+                className="w-full rounded-2xl"
+              />
+            </div>
+          </div>
 
         <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-16 md:py-24 mt-12">
           <div className="max-w-3xl mx-auto text-center space-y-4">

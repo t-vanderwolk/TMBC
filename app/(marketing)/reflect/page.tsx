@@ -1,7 +1,7 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const reflectClarifications = [
   {
@@ -53,18 +53,8 @@ export default function ReflectPage() {
           href: "/how-it-works",
         }}
       />
-      <RibbonDivider />
 
       <MarketingContent>
-        <section className="py-24 md:py-32 flex justify-center">
-          <div className="w-full max-w-[90%] md:max-w-[520px] flex justify-center">
-            <img
-              src="/assets/images/reflectpreview.png"
-              alt="Taylor-Made Baby Co. reflection journal preview showing keepsakes."
-              className="ui-preview-image w-full h-auto object-contain rounded-[28px] shadow-[0_30px_80px_rgba(0,0,0,0.08)]"
-            />
-          </div>
-        </section>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
             <div className="flex flex-col items-center gap-4 text-center">
@@ -78,6 +68,16 @@ export default function ReflectPage() {
                 It is not about habits, sharing, or productivity; it simply gives you a calm space to hold whatever
                 feels meaningful today.
               </p>
+            </div>
+            <div className="mt-8 flex w-full justify-center">
+              <div className="w-full max-w-[80%] md:max-w-[360px]">
+                <MobilePreviewImage
+                  src="/assets/images/reflectpreview.png"
+                  alt="Taylor-Made Baby Co. reflection journal preview showing keepsakes."
+                  width={360}
+                  height={720}
+                />
+              </div>
             </div>
             <div className="mt-12 grid gap-6 md:grid-cols-3">
               {reflectClarifications.map((clarification) => (
@@ -93,6 +93,14 @@ export default function ReflectPage() {
             </div>
           </section>
 
+          <div className="py-24 md:py-32 flex justify-center">
+            <img
+              src="/assets/images/reflection-book.jpeg"
+              alt="A softly lit baby journal open for reflection and memory keeping"
+              className="max-w-[520px] w-full rounded-2xl"
+            />
+          </div>
+
           <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
             <div className="flex flex-col gap-4 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -106,6 +114,11 @@ export default function ReflectPage() {
                 asking you to document everything.
               </p>
             </div>
+            <img
+              src="/assets/images/journaling.jpeg"
+              alt="A quiet moment of pregnancy journaling and reflection"
+              className="mx-auto mt-12 mb-24 w-full max-w-[520px] rounded-2xl"
+            />
             <div className="mt-10 space-y-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-75">
               <p>
                 Reflect lets you mark a feeling, a milestone, or a quiet moment without treating it as a performance.
@@ -159,6 +172,14 @@ export default function ReflectPage() {
               ))}
             </div>
           </section>
+
+          <div className="py-24 md:py-32 flex justify-center">
+            <img
+              src="/assets/images/sleepy-baby.jpeg"
+              alt="A peaceful sleeping baby, conveying calm and quiet presence"
+              className="max-w-[420px] w-full rounded-2xl"
+            />
+          </div>
 
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
             <div className="flex flex-col items-center gap-6 text-center">

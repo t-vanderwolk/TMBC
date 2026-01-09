@@ -3,7 +3,6 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const contactDetails = [
   {
@@ -29,7 +28,6 @@ export default function ContactPage() {
           className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
       />
-      <RibbonDivider />
       <MarketingContent>
         <div className="marketing-content space-y-16 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card mx-auto max-w-3xl rounded-[36px] bg-[var(--tmbc-ivory)]/90 px-8 py-20 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)]">

@@ -53,7 +53,7 @@ export default function InviteSection() {
   };
 
   return (
-    <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 text-[var(--tmbc-charcoal)]">
+    <section className="marketing-section marketing-card bg-white/80 px-8 pt-20 pb-16 text-[var(--tmbc-charcoal)] md:pt-24 md:pb-18">
       <div className="space-y-4 text-center">
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
           Returning with an invite?
@@ -73,7 +73,7 @@ export default function InviteSection() {
             if (inviteError) setInviteError("");
           }}
           placeholder="YOUR CODE"
-          className="w-full rounded-full border border-[var(--tmbc-mauve)]/40 bg-white px-4 py-3 text-sm text-[var(--tmbc-charcoal)] shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--tmbc-mauve)]/40"
+          className="marketing-input w-full"
         />
         <button
           type="submit"

@@ -67,13 +67,12 @@ export default function MarketingHero({
           -mr-[50vw]
           min-h-[85vh]
           md:min-h-[72vh]
-          py-24
-          md:py-32
-          flex
-          items-center
-          bg-[#FBF7F4]
-          px-0
-          mb-24 md:mb-28
+          pt-24
+          md:pt-32
+          pb-16
+          md:pb-20
+          mb-16
+          md:mb-20
         "
       >
         <div className="absolute inset-0">
@@ -91,12 +90,13 @@ export default function MarketingHero({
             />
           </picture>
         </div>
+        <div className="absolute inset-0 bg-[var(--tmbc-ivory)]/70" aria-hidden />
 
         <div className="relative z-10 flex w-full min-h-[85vh] flex-col items-center justify-center gap-12 px-6 pt-4 pb-8 text-center md:py-0 md:px-12">
-          <div className="hero-copy space-y-6 max-w-[90%] md:max-w-[560px]">
+          <div className="hero-copy space-y-6">
             <h1 className="hero-headline">{headline}</h1>
             <p className="hero-supporting mt-6">{supportingText}</p>
-            <div className="hero-cta hero-cta-group mt-10 flex md:mt-0 md:flex md:flex-row md:items-center md:gap-4">
+            <div className="hero-cta hero-cta-group">
               <Link className={primaryCta.className ?? DEFAULT_PRIMARY_CLASSES} href={primaryCta.href}>
                 {primaryCta.label}
               </Link>

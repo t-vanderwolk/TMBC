@@ -9,7 +9,7 @@ type MarketingContainerProps = {
 
 export function MarketingContainer({ children, className = "" }: MarketingContainerProps) {
   return (
-    <div className={`marketing-content space-y-24 md:space-y-32 ${className}`.trim()}>
+    <div className={`marketing-content space-y-20 md:space-y-28 ${className}`.trim()}>
       <MarketingContent>{children}</MarketingContent>
     </div>
   );

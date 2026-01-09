@@ -22,7 +22,7 @@ export default function MarketingFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="rounded-[32px] border border-[var(--tmbc-mauve)]/15 bg-[var(--tmbc-ivory)]/90 px-8 pb-14 pt-20 space-y-4 text-[var(--tmbc-charcoal)] sm:pb-16 sm:pt-20">
+    <footer className="rounded-[32px] border border-[var(--tmbc-mauve)]/15 bg-[var(--tmbc-ivory)]/90 px-8 pb-12 pt-16 space-y-4 text-[var(--tmbc-charcoal)] sm:pb-14 sm:pt-18">
       <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-5">
           <p className="font-serif text-lg text-[var(--tmbc-charcoal)]">Taylor-Made Baby Co.</p>

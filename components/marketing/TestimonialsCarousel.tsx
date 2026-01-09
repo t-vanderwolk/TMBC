@@ -39,15 +39,13 @@ const TestimonialsCarousel = () => {
   const dots = useMemo(
     () =>
       testimonials.map((_, idx) => (
-        <span
-          key={`dot-${idx}`}
-          className={`h-1.5 w-8 rounded-full transition-all duration-500 ${
-            idx === index
-              ? "bg-gradient-to-r from-[var(--tmbc-gold)] via-[var(--tmbc-ivory)] to-[var(--tmbc-blush)]"
-              : "bg-[var(--tmbc-charcoal)]/30"
-          }`}
-          aria-hidden
-        />
+      <span
+        key={`dot-${idx}`}
+        className={`h-1.5 w-8 rounded-full transition-all duration-300 ${
+          idx === index ? "bg-[var(--tmbc-charcoal)]" : "bg-[var(--tmbc-charcoal)]/30"
+        }`}
+        aria-hidden
+      />
       )),
     [index]
   );
@@ -59,9 +57,8 @@ const TestimonialsCarousel = () => {
 
   return (
     <Reveal variant="parallax">
-      <section className="relative overflow-hidden rounded-[48px] border border-[var(--tmbc-blush)] bg-gradient-to-br from-[var(--tmbc-blush)]/80 via-white/80 to-[var(--tmbc-mauve)]/60 p-8 shadow-[0_40px_100px_rgba(199,166,199,0.25)] transition duration-500 hover:scale-[1.005] marketing-section">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.7),_transparent_60%)] opacity-80" />
-        <div className="relative space-y-4 text-[var(--tmbc-charcoal)]">
+      <section className="marketing-section marketing-card transition duration-300">
+        <div className="space-y-4 text-[var(--tmbc-charcoal)]">
           <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Testimonials</p>
           <p
             key={current.quote}

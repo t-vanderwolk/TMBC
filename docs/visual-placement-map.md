@@ -10,7 +10,6 @@
 | / | Partner Ribbon | Landing - Divider ribbon for partner circle | 8/1, maxWidth 1100 | low | assets/images/ribbon-divider.jpeg |
 | /how-it-works | Hero Background | How It Works - Hero background: abstract watercolor editorial canvas | Background 800x533 (responsive fill) | high | assets/images/hero.png |
 | /how-it-works | Editorial Pause | How It Works - Editorial pause: light-filled nursery | 360x540 | med | assets/images/nurserytmbc.jpeg |
-| /how-it-works | Editorial Pause | How It Works - Atmospheric pause: guided journey moment | 360x540 | med | assets/images/howitworks.jpeg |
 | /how-it-works | Editorial Pause | How It Works - Editorial pause: symbols of invitation and guidance | 16/9, maxWidth 960 | med | assets/images/assets.jpeg |
 | /how-it-works | Diagram | How It Works - Diagram: invite-only journey flow | 16/9, maxWidth 720 | low | assets/images/diagram-membership-promise.png |
 | /learn | Hero Background | Learn - Hero background: abstract watercolor editorial canvas | Background 800x533 (responsive fill) | high | assets/images/hero.png |

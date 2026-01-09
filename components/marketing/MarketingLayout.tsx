@@ -1,12 +1,13 @@
 "use client";
 
+import { Children, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
 import Navbar from "@/components/Navbar";
 import MarketingFooter from "@/components/marketing/MarketingFooter";
 import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 
-export default function MarketingLayout({ children }: { children: React.ReactNode }) {
+export default function MarketingLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const hideFooterRoutes = ["/login", "/request-invite", "/thank-you"];
   const breakoutHeroRoutes = [
@@ -24,14 +25,17 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   const shouldHideFooter = hideFooterRoutes.includes(normalizedPathname);
   const shouldBreakoutHero = breakoutHeroRoutes.includes(normalizedPathname);
 
+  const childArray = Children.toArray(children) as ReactNode[];
+  const heroChild = shouldBreakoutHero ? childArray[0] : null;
+  const restChildren = shouldBreakoutHero ? childArray.slice(1) : childArray;
+
   return (
-    <div className="min-h-screen overflow-hidden bg-gradient-to-b from-[var(--tmbc-ivory)] via-[var(--tmbc-blush)]/60 to-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
+    <div className="min-h-screen overflow-hidden bg-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
       <Navbar />
       <main className="pb-20 sm:pb-24 lg:pb-28">
-        {shouldBreakoutHero ? (
-          children
-        ) : (
-          <MarketingContainer className="space-y-20">{children}</MarketingContainer>
+        {heroChild}
+        {restChildren.length > 0 && (
+          <MarketingContainer className="space-y-20 md:space-y-24">{restChildren}</MarketingContainer>
         )}
       </main>
       {!shouldHideFooter && (

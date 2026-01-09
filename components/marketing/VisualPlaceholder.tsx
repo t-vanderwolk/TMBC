@@ -46,10 +46,8 @@ const VisualPlaceholder = ({
     <div
       role="img"
       aria-label={label}
-      className={`relative mx-auto block w-full max-w-full overflow-hidden rounded-2xl border border-[var(--tmbc-mauve)]/30 bg-[var(--tmbc-ivory)]/80 text-[var(--tmbc-charcoal)] ${aspectClassName} ${className}`}
+      className={`relative mx-auto block w-full max-w-full overflow-hidden rounded-[20px] border border-[rgba(62,47,53,0.15)] bg-[var(--tmbc-ivory)]/85 text-[var(--tmbc-charcoal)] ${aspectClassName} ${className}`}
       style={{
-        backgroundImage:
-          "repeating-linear-gradient(135deg, rgba(199,166,199,0.18) 0px, rgba(199,166,199,0.18) 1px, transparent 1px, transparent 12px)",
         ...wrapperStyle,
       }}
     >

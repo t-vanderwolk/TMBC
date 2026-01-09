@@ -116,6 +116,10 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
     href: "/dashboard/admin/registry",
   },
   {
+    label: "Affiliates",
+    href: "/dashboard/admin/affiliates",
+  },
+  {
     label: "Analytics",
     href: "/dashboard/analytics",
   },

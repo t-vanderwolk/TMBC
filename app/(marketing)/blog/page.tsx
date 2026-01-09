@@ -1,7 +1,6 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -105,7 +104,6 @@ const BlogMarketingPage = async () => {
   return (
     <>
       {heroSection}
-      <RibbonDivider />
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section space-y-10 mb-24 md:mb-28">
