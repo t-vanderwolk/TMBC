@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Impact Site Verification */}
         <meta
           name="impact-site-verification"
-          value="8939278e-825b-4d43-bf0d-d22ce986e2ae"
+          content="8939278e-825b-4d43-bf0d-d22ce986e2ae"
         />
       </head>
       <body className="min-h-screen bg-tmIvory font-sans text-tmCharcoal">
