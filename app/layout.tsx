@@ -17,6 +17,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${greatVibes.variable} ${playfair.variable} ${nunito.variable}`}
     >
+      <head>
+        {/* Impact Site Verification */}
+        <meta
+          name="impact-site-verification"
+          value="8939278e-825b-4d43-bf0d-d22ce986e2ae"
+        />
+      </head>
       <body className="min-h-screen bg-tmIvory font-sans text-tmCharcoal">
         <main className="flex min-h-screen flex-col pb-16">
           {children}
