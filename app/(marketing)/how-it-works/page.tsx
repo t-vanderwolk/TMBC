@@ -64,7 +64,7 @@ export default function HowItWorksPage() {
             <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
               A returnable flow, not a one-way path.
             </h2>
-            <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
               Learning, planning, connecting, and reflecting live together. You can follow one, pause, and revisit the next whenever you want.
             </p>
           </div>
@@ -80,6 +80,15 @@ export default function HowItWorksPage() {
           </div>
         </section>
 
+        <div className="flex justify-center py-24 md:py-32">
+          <img
+            src="/assets/images/ExperienceDiagram.png"
+            alt="How the Taylor-Made Baby Co. experience works: Learn, Plan, Connect, Reflect"
+            className="w-full max-w-[520px]"
+            style={{ maxWidth: "min(520px, 90vw)" }}
+          />
+        </div>
+
         <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
           <div className="flex flex-col gap-4 items-center text-center">
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -88,7 +97,7 @@ export default function HowItWorksPage() {
             <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
               The experience stays guided and gentle.
             </h2>
-            <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
               Mentors orient you based on your questions so you can move forward with clarity.
             </p>
           </div>
@@ -114,6 +123,13 @@ export default function HowItWorksPage() {
             {inviteNotes.map((note) => (
               <p key={note}>{note}</p>
             ))}
+          </div>
+          <div className="mt-10 flex justify-center">
+            <img
+              src="/assets/images/inviteicons.png"
+              alt="Icons representing the Taylor-Made Baby Co. invite process"
+              className="max-w-[520px] w-full opacity-90"
+            />
           </div>
           <div className="mt-10 text-center">
             <Link

@@ -1,9 +1,11 @@
+import Image from "next/image";
 import { Suspense } from "react";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 import InviteSection from "@/components/marketing/InviteSection";
+import InviteCodeEntry from "@/components/marketing/InviteCodeEntry";
 
 const noiseNotes = [
   "Every checklist shouts louder than the midnight spit-up clean-up, making your next decision feel urgent.",
@@ -121,6 +123,7 @@ export default function HomePage() {
           A concierge-led baby planning membership with mentors, intentional community rooms, and ongoing access for your rhythm.
         </p>
       </div>
+      <InviteCodeEntry />
       <MarketingContent>
         <section className="marketing-section marketing-card bg-white/90 px-6 py-16 md:px-12 md:py-24 mt-16">
           <div className="max-w-5xl mx-auto text-center space-y-4">
@@ -130,7 +133,7 @@ export default function HomePage() {
             <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
               We slow the rhythm so you can notice what matters, not scramble for every next step.
             </h2>
-            <p className="max-w-3xl mx-auto text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
               Members get mentorship, calm community rooms, and the space to learn, plan, connect, and reflect without noise.
             </p>
           </div>
@@ -163,9 +166,19 @@ export default function HomePage() {
             <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
               Learn · Plan · Connect · Reflect
             </h2>
-            <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
               Each pillar waits for you to feel ready before the next begins, honoring your rhythm, not chasing tasks.
             </p>
+          </div>
+          <div className="mt-6 flex justify-center">
+            <Image
+              src="/assets/images/pillaricons.png"
+              alt="Taylor-Made Baby Co. learning and planning pillars"
+              width={720}
+              height={360}
+              className="mx-auto my-16 max-w-[85%]"
+              style={{ height: "auto" }}
+            />
           </div>
           <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {systemStages.map((stage) => (
@@ -206,7 +219,15 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28 mt-24 mb-12">
+        <section className="flex justify-center my-24 md:my-32">
+          <img
+            src="/assets/images/experience.png"
+            alt="Taylor-Made Baby Co. experience values: expert-built, mentor-led, personally matched"
+            className="w-full max-w-[1000px]"
+          />
+        </section>
+
+        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 pt-20 pb-16 md:pt-24 md:pb-20 mt-24 mb-12">
           <div className="max-w-3xl mx-auto space-y-4 text-center">
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
               Ready when baby lets you breathe
@@ -214,9 +235,16 @@ export default function HomePage() {
             <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
               Care that keeps pace with your parenting rhythm.
             </h2>
-            <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
               Request an invite when the baby schedule lets you breathe; we’ll keep leaning in while you juggle feedings.
             </p>
+            <section className="flex justify-center my-24 md:my-32">
+              <img
+                src="/assets/images/inviteflow.png"
+                alt="Invite-only onboarding process from request to mentorship and guided experience"
+                className="w-full max-w-[960px]"
+              />
+            </section>
             <div className="space-y-2">
               <Link
                 href="/request-invite"

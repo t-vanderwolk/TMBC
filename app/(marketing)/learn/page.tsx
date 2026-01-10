@@ -37,10 +37,10 @@ export default function LearnPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 This isn’t a course library or a checklist to finish.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 The Academy exists to give you clarity before decisions — so planning feels grounded, not rushed.
               </p>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Each journey unlocks only when the previous one is complete, keeping the focus on what matters most right
                 now.
               </p>
@@ -69,7 +69,7 @@ export default function LearnPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 The Academy is organized into three guided journeys
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Mentors keep you moving through Nursery, Gear, and Postpartum in order so each decision feels steady and
                 grounded in real-life timing.
               </p>
@@ -84,17 +84,6 @@ export default function LearnPage() {
                   Nursery decisions involve the highest price points, long shipping timelines, and foundational safety choices.
                   This journey focuses on layout, safe sleep, lighting, and home readiness so those big, early decisions land thoughtfully and without pressure.
                 </p>
-                <div className="mt-6 flex w-full justify-center">
-                  <div className="w-full max-w-[80%] md:max-w-[360px]">
-                    <MobilePreviewImage
-                      src="/assets/images/nurserymodulepreview.png"
-                      alt="Nursery module preview"
-                      width={360}
-                      height={720}
-                      priority
-                    />
-                  </div>
-                </div>
               </div>
               <div className="flex flex-col gap-3 rounded-[24px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6">
                 <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
@@ -104,32 +93,49 @@ export default function LearnPage() {
                 <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                   Gear learning focuses on safety, compatibility, and real-world use—from car seats to travel systems. You’ll learn how products fit your routines before choosing what to buy, with mentor guidance built in.
                 </p>
-                <div className="mt-6 flex w-full justify-center">
-                  <div className="w-full max-w-[80%] md:max-w-[360px]">
-                    <MobilePreviewImage
-                      src="/assets/images/gearmodulepreview.png"
-                      alt="Gear module preview"
-                      width={360}
-                      height={720}
-                      priority
-                    />
-                  </div>
-                </div>
               </div>
               <div className="flex flex-col gap-3 rounded-[24px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6">
                 <h3 className="font-serif text-xl text-[var(--tmbc-charcoal)] text-opacity-85">Postpartum learning comes last — intentionally</h3>
                 <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                   Postpartum modules prepare you for recovery, feeding strategies, and personal care as birth approaches. This journey centers you—helping you plan support, routines, and essentials for the fourth trimester.
                 </p>
-                <div className="mt-6 flex w-full justify-center">
-                  <div className="w-full max-w-[80%] md:max-w-[360px]">
-                    <MobilePreviewImage
-                      src="/assets/images/postpartummodulepreview.png"
-                      alt="Postpartum module preview"
-                      width={360}
-                      height={720}
-                    />
-                  </div>
+              </div>
+            </div>
+          </section>
+
+
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-24 mb-8">
+            <div className="space-y-5 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Interface previews
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
+                The workspace keeps you grounded
+              </h2>
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                The Academy dashboard and module progression views show you where you are, what unlocks next, and how mentors respond before you move forward.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-10 md:grid-cols-2">
+              <div className="flex justify-center">
+                <div className="w-full max-w-[360px]">
+                  <MobilePreviewImage
+                    src="/assets/images/academydashboardpreview.png"
+                    alt="Academy dashboard preview showing mentor notes and upcoming modules"
+                    width={360}
+                    height={720}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <div className="w-full max-w-[360px]">
+                  <MobilePreviewImage
+                    src="/assets/images/gearmodulepreview.png"
+                    alt="Module progression preview showing a guided journey and the next steps"
+                    width={360}
+                    height={720}
+                    priority
+                  />
                 </div>
               </div>
             </div>
@@ -156,6 +162,16 @@ export default function LearnPage() {
               <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 The goal isn’t completion. It’s clarity.
               </p>
+              <div className="mt-10 flex justify-center">
+                <div className="w-full max-w-[360px]">
+                  <MobilePreviewImage
+                    src="/assets/images/academyworkbookpreview.png"
+                    alt="Workbook preview showing reflection prompts and mentor notes"
+                    width={360}
+                    height={720}
+                  />
+                </div>
+              </div>
             </div>
           </section>
 
@@ -167,7 +183,7 @@ export default function LearnPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 Learning always comes before planning.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Once you understand your options, your mentor helps translate that clarity into a plan that fits your
                 life — not someone else’s checklist.
               </p>

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -49,6 +50,23 @@ const RequestInvitePage = () => {
           <p className="text-base text-[var(--tmbc-charcoal)] text-opacity-70">
             We keep TMBC invite-only so every member gets real, attentive support from a mentor. Share a few details and we'll reply with your next steps.
           </p>
+          <section className="flex justify-center my-24 md:my-32">
+            <img
+              src="/assets/images/inviteflow.png"
+              alt="Invite-only onboarding process from request to mentorship and guided experience"
+              className="w-full max-w-[960px]"
+            />
+          </section>
+          <div className="mt-6 flex justify-center">
+            <Image
+              src="/assets/images/inviteicons.png"
+              alt="How the Taylor-Made Baby Co. invitation process works"
+              width={640}
+              height={280}
+              className="mx-auto my-10 max-w-[85%]"
+              style={{ height: "auto" }}
+            />
+          </div>
           <form onSubmit={submit} className="marketing-form mt-6">
             <label>
               <span>Full name</span>

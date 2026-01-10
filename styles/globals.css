@@ -274,16 +274,23 @@
     }
   }
 
-  .marketing-section h2 {
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    color: rgba(62, 47, 53, 0.85);
-    max-width: 640px;
-  }
+.marketing-section h2 {
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: rgba(62, 47, 53, 0.85);
+  max-width: 640px;
+}
 
 .marketing-section h3 {
   color: rgba(62, 47, 53, 0.78);
   font-weight: 400;
+}
+
+.marketing-subtitle {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: min(640px, 100%);
 }
 
 .motion-hidden {

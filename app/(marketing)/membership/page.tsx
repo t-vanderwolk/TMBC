@@ -1,6 +1,7 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const membershipHighlights = [
   {
@@ -91,7 +92,7 @@ export default function MembershipPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 Belonging, rhythm, and continuous care.
               </h2>
-              <p className="max-w-3xl mx-auto text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Membership keeps you rooted in learning, planning at your pace, and connecting without comparison.
               </p>
             </div>
@@ -109,7 +110,7 @@ export default function MembershipPage() {
             </div>
           </section>
 
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-24 mb-8">
             <div className="text-center space-y-4">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 Mentor-guided access
@@ -117,7 +118,7 @@ export default function MembershipPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 The care shows up intentionally.
               </h2>
-              <p className="max-w-3xl mx-auto text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 You get a personal mentor, guided learning, shared circles, and space for reflection without noise.
               </p>
             </div>
@@ -141,6 +142,54 @@ export default function MembershipPage() {
                 {progression.map((step) => (
                   <p key={step.stage}>• {step.stage}: {step.description}</p>
                 ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
+            <div className="space-y-4 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Membership glimpses
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
+                The dashboard and progression keep the circle visible
+              </h2>
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                See how the dashboard orients you in ongoing care and how the member-to-mentor path keeps that care steady.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-10 md:grid-cols-2">
+              <div className="flex flex-col items-center space-y-3 text-center">
+                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                  Dashboard overview
+                </p>
+                <p className="max-w-[320px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                  A calm, editorial dashboard keeps your learning, planning, and circles in one quiet view.
+                </p>
+                <div className="w-full max-w-[360px]">
+                  <MobilePreviewImage
+                    src="/assets/images/dashboardpreview.png"
+                    alt="Membership dashboard preview showing learning, planning, and circle highlights"
+                    width={360}
+                    height={720}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col items-center space-y-3 text-center">
+                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                  Member → Mentor progression
+                </p>
+                <p className="max-w-[320px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                  The progression view shows how your mentor keeps decisions, reflections, and invitations aligned.
+                </p>
+                <div className="w-full max-w-[360px]">
+                  <MobilePreviewImage
+                    src="/assets/images/membertomentor.png"
+                    alt="Member to mentor progression preview showing decision notes and gentle prompts"
+                    width={360}
+                    height={720}
+                  />
+                </div>
               </div>
             </div>
           </section>

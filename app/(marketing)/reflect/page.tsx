@@ -64,7 +64,7 @@ export default function ReflectPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 A private keepsake, not a journaling checklist.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 It is not about habits, sharing, or productivity; it simply gives you a calm space to hold whatever
                 feels meaningful today.
               </p>
@@ -93,6 +93,21 @@ export default function ReflectPage() {
             </div>
           </section>
 
+          <section className="flex flex-col items-center my-28">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-[900px] w-full px-6">
+              <img
+                src="/assets/images/babybookpic.jpeg"
+                alt="A keepsake baby book and journal capturing early memories"
+                className="w-full rounded-lg"
+              />
+              <img
+                src="/assets/images/sleepy-baby.jpeg"
+                alt="A peaceful sleeping baby representing rest and early moments"
+                className="w-full rounded-lg"
+              />
+            </div>
+          </section>
+
           <div className="py-24 md:py-32 flex justify-center">
             <img
               src="/assets/images/reflection-book.jpeg"
@@ -109,7 +124,7 @@ export default function ReflectPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Keepsakes that breathe with the season.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Photos, thoughts, and notes gather over time, quietly layered so the story feels intentional without
                 asking you to document everything.
               </p>
@@ -139,7 +154,7 @@ export default function ReflectPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Ownership, discretion, and calm authority.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Your reflections stay optional, non-linear, and yours. No prompts, no reminders, no streaks — just space you
                 can enter when you choose.
               </p>
@@ -161,7 +176,7 @@ export default function ReflectPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Keepsakes surface in gentle ways.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 When you look back, the quiet entries reveal tone, nuance, and feeling without the pressure to explain
                 it all.
               </p>
@@ -189,7 +204,7 @@ export default function ReflectPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Reflection sits beside learning and planning.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 This private space threads through the broader journey — it’s a pause between mentor notes and
                 planning conversations, always there when you want to come back.
               </p>

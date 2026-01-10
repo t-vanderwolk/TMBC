@@ -182,7 +182,7 @@ export default function AboutPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Quiet conviction, long-term care.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 We keep showing up with thoughtful presence, steady pacing, and an open invitation to return whenever you
                 need it.
               </p>

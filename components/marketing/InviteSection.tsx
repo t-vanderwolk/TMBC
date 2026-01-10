@@ -53,7 +53,7 @@ export default function InviteSection() {
   };
 
   return (
-    <section className="marketing-section marketing-card bg-white/80 px-8 pt-20 pb-16 text-[var(--tmbc-charcoal)] md:pt-24 md:pb-18">
+    <section className="marketing-section marketing-card bg-white/80 px-8 pt-20 pb-16 text-[var(--tmbc-charcoal)] md:pt-24 md:pb-18 motion-hidden">
       <div className="space-y-4 text-center">
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
           Returning with an invite?

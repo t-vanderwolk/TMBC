@@ -1,9 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
-import connectExplained from "../../../assets/images/connectexplained.png";
 
 const connectMeaning = [
   {
@@ -71,32 +69,18 @@ export default function ConnectPage() {
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-            <div className="flex flex-col items-center gap-4 text-center">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                What “Connect” means here
-              </p>
+          <div className="flex flex-col items-center gap-4 text-center">
+            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+              What “Connect” means here
+            </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Connection without the noise.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Our rooms are curated, moderated, and anchored by mentors so that the space never feels performative,
                 noisy, or pressure-filled.
               </p>
             </div>
-            <div className="mt-12 mb-24 flex justify-center">
-              <div className="w-full max-w-[520px]">
-                <Image
-                  src={connectExplained}
-                  alt="Connect preview showing community chat rooms, forums, and messaging"
-                  width={1536}
-                  height={1024}
-                  className="h-auto w-full max-w-[85%] md:max-w-full object-contain"
-                />
-              </div>
-            </div>
-            <p className="max-w-3xl mx-auto text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              The diagram above maps how mentors keep the circle calm across forums, rooms, and intimate messaging.
-            </p>
             <div className="mt-14 rounded-[40px] border border-[var(--tmbc-charcoal)]/10 bg-white/90 p-8 shadow-[0_25px_60px_rgba(62,47,53,0.12)]">
               <div className="grid gap-6 md:gap-8 md:grid-cols-3">
                 {connectMeaning.map((meaning) => (
@@ -111,6 +95,31 @@ export default function ConnectPage() {
             </div>
           </section>
 
+          <section className="flex justify-center my-24 md:my-32">
+            <img
+              src="/assets/images/connectexplained.png"
+              alt="How Taylor-Made Baby Co. connects parents through chats, groups, and shared journeys"
+              className="w-full max-w-[1000px]"
+            />
+          </section>
+
+          <section className="max-w-3xl mx-auto text-center space-y-4 px-6 md:px-0">
+            <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
+              Shared quiet moments
+            </p>
+            <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              We keep the tone gentle, so you can listen, speak, and reflect alongside other parents without a spotlight.
+            </p>
+          </section>
+
+          <section className="flex justify-center my-24 md:my-32">
+            <img
+              src="/assets/images/girltalk.jpeg"
+              alt="Expecting parents connecting through conversation and shared experiences"
+              className="w-full max-w-[720px] rounded-2xl"
+            />
+          </section>
+
           <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
             <div className="flex flex-col gap-3">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -119,6 +128,9 @@ export default function ConnectPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Mentors frame the rhythm so you don’t have to perform.
               </h2>
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                The preview below shows how messaging, prompts, and circles stay calm under mentor guidance.
+              </p>
             </div>
             <div className="mt-8 flex w-full justify-center">
               <div className="w-full max-w-[80%] md:max-w-[360px]">
@@ -150,7 +162,7 @@ export default function ConnectPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Listen, observe, and answer when you’re ready.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 There is no feed to scroll, no trending threads, and no invite to overshare. This space is calm because
                 participation happens on your terms.
               </p>
@@ -172,7 +184,7 @@ export default function ConnectPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Connection stays calm beside learning and planning.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 The Connect pillar supports your learning and planning moments by offering a breathing room, not a
                 feed. When it feels right, request an invite and keep the circle gentle.
               </p>

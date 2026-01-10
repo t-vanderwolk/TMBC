@@ -1,6 +1,7 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const planningMeaning = [
   {
@@ -89,7 +90,7 @@ export default function PlanPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 Planning is a calm conversation, not a checklist race.
               </h2>
-              <p className="max-w-3xl mx-auto text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 We reframe registries, timelines, and logistics as steady decision points you revisit with a mentor who honors your season.
               </p>
             </div>
@@ -107,6 +108,42 @@ export default function PlanPage() {
             </div>
           </section>
 
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-24 mb-8">
+            <div className="space-y-4 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                Planning workspace
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
+                The system keeps the decisions visible without pressure.
+              </h2>
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                The registry planning view and mentor notes keep the workspace gentle, contextual, and ready when you are.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-10 md:grid-cols-2">
+              <div className="flex justify-center">
+                <div className="w-full max-w-[360px]">
+                  <MobilePreviewImage
+                    src="/assets/images/planpreview.png"
+                    alt="Registry planning view preview showing living list of items and timing guidance"
+                    width={360}
+                    height={720}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <div className="w-full max-w-[360px]">
+                  <MobilePreviewImage
+                    src="/assets/images/membertomentor.png"
+                    alt="Mentor notes preview showing decision support and context"
+                    width={360}
+                    height={720}
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
           <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
             <div className="flex flex-col gap-4 items-center text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -115,7 +152,7 @@ export default function PlanPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 Registries evolve with you.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Bring what you already have, revisit it slowly, and let mentors remind you that every update is optional. This is not a shopping sprint but a living plan you adjust when it feels right.
               </p>
             </div>
@@ -134,7 +171,7 @@ export default function PlanPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 Planning keeps pace with learning and reflection.
               </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Decisions stay calm because mentors keep watch, and the plan shifts as you learn and reflect. When you feel ready, request an invite and continue the rhythm.
               </p>
               <Link

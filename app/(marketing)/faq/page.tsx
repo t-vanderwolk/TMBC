@@ -138,7 +138,7 @@ export default function FAQPage() {
             <h1 className="mt-3 font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
               We anticipated your questions.
             </h1>
-            <p className="mt-4 max-w-3xl mx-auto text-base text-[var(--tmbc-charcoal)] text-opacity-80">
+            <p className="marketing-subtitle mt-4 mb-6 text-base text-[var(--tmbc-charcoal)] text-opacity-80">
               Here are the common curiosities we hear — answered simply, calmly, and honestly.
             </p>
           </section>
