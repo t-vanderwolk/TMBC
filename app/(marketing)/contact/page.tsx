@@ -7,7 +7,7 @@ import MarketingContent from "@/components/marketing/MarketingContent";
 const contactDetails = [
   {
     label: "General questions, partnerships, press",
-    headline: "taylor@taylormadebabyco.com",
+    headline: "registrywithtaylor@gmail.com",
     body: "General notes, clarity before requesting an invite, or a gentle hello.",
   },
 ];
