@@ -118,6 +118,19 @@ export default function HomePage() {
         }}
         priority
       />
+      {/* Impact verification */}
+      <div
+        data-impact-verification
+        style={{
+          fontSize: "12px",
+          color: "rgba(62, 47, 53, 0.6)",
+          lineHeight: 1.2,
+          paddingLeft: "1rem",
+          paddingRight: "1rem",
+        }}
+      >
+        Impact-Site-Verification: 8939278e-825b-4d43-bf0d-d22ce986e2ae
+      </div>
       <div className="px-6 text-center">
         <p className="mt-4 max-w-3xl mx-auto text-[0.8rem] text-[var(--tmbc-charcoal)] text-opacity-60">
           A concierge-led baby planning membership with mentors, intentional community rooms, and ongoing access for your rhythm.
