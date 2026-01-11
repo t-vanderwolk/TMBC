@@ -20,6 +20,10 @@ interface MarketingHeroProps {
   primaryCta: MarketingHeroCta;
   secondaryCta?: MarketingHeroCta;
   priority?: boolean;
+  motion?: boolean;
+  headlineClassName?: string;
+  supportingTextClassName?: string;
+  ctaGroupClassName?: string;
 }
 
 const DEFAULT_PRIMARY_CLASSES =
@@ -51,6 +55,10 @@ export default function MarketingHero({
   primaryCta,
   secondaryCta,
   priority = false,
+  motion = false,
+  headlineClassName = "",
+  supportingTextClassName = "",
+  ctaGroupClassName = "",
 }: MarketingHeroProps) {
   const pathname = usePathname();
   const normalizedPathname =
@@ -67,6 +75,11 @@ export default function MarketingHero({
   const contentHeightClasses =
     priority ? "min-h-[85vh] md:min-h-[72vh]" : "min-h-[70vh] md:min-h-[60vh]";
 
+  const motionClass = motion ? "motion-enabled" : "";
+  const headlineMotionClass = motion ? "tmbc-fade" : "";
+  const supportingMotionClass = motion ? "tmbc-fade tmbc-fade-delay-1" : "";
+  const ctaMotionClass = motion ? "tmbc-fade tmbc-fade-delay-2" : "";
+
   return (
     <>
       <section
@@ -78,6 +91,7 @@ export default function MarketingHero({
           text-[var(--tmbc-charcoal)]
           ${backgroundClasses}
           ${spacingClasses}`.trim()}
+        data-motion-enabled={motion}
       >
         <div className="absolute inset-0">
           <picture className="h-full w-full">
@@ -97,12 +111,18 @@ export default function MarketingHero({
         <div className="absolute inset-0 bg-[var(--tmbc-ivory)]/70" aria-hidden />
 
         <div
-          className={`relative z-10 flex w-full ${contentHeightClasses} flex-col items-center justify-center gap-12 px-6 pt-4 pb-8 text-center md:py-0 md:px-12`}
+          className={`relative z-10 flex w-full ${contentHeightClasses} flex-col items-center justify-center px-6 pt-4 pb-8 text-center md:py-0 md:px-12`}
         >
-          <div className="hero-copy space-y-6">
-            <h1 className="hero-headline">{headline}</h1>
-            <p className="hero-supporting mt-6">{supportingText}</p>
-            <div className="hero-cta hero-cta-group">
+          <div className={`hero-copy ${motionClass}`}>
+            <h1 className={`hero-headline ${headlineClassName} ${headlineMotionClass}`}>{headline}</h1>
+            <p
+              className={`hero-supporting mt-4 ${supportingTextClassName} ${supportingMotionClass}`}
+            >
+              {supportingText}
+            </p>
+            <div
+              className={`hero-cta hero-cta-group mt-8 flex flex-col gap-3 md:flex-row md:items-center md:gap-4 ${ctaGroupClassName} ${ctaMotionClass}`}
+            >
               <Link className={primaryCta.className ?? DEFAULT_PRIMARY_CLASSES} href={primaryCta.href}>
                 {primaryCta.label}
               </Link>

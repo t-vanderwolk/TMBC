@@ -6,6 +6,7 @@ import MarketingContent from "@/components/marketing/MarketingContent";
 import RibbonDivider from "@/components/marketing/RibbonDivider";
 import InviteSection from "@/components/marketing/InviteSection";
 import InviteCodeEntry from "@/components/marketing/InviteCodeEntry";
+import ImageFrame from "@/components/marketing/ImageFrame";
 
 const noiseNotes = [
   "Every checklist shouts louder than the midnight spit-up clean-up, making your next decision feel urgent.",
@@ -14,15 +15,15 @@ const noiseNotes = [
 ];
 
 const quietResponse = [
-  "Mentors ask before advising, so your rhythm decides what matters—not the loudest notification while baby slumbers on your lap.",
-  "We keep the care calm, private, and steady, even when you're juggling a million \"why is this so hard?\" moments in parenthood.",
-  "Intentional pacing lets each chapter land before the next one arrives, so nothing feels rushed while you're still changing a blowout.",
+  "Mentors ask before advising—your rhythm decides what matters.",
+  "A calm, private space to prep without performative noise.",
+  "Pacing that respects real life (including the surprise blowouts).",
 ];
 
 const whatThisIsntHighlights = [
-  "This is not a countdown, a sales pitch, or a guilt trip disguised as urgency.",
-  "You will not be pushed into every trending purchase because someone tagged it with \"parent hack.\"",
-  "There's no pressure to sprint—this flow waits until you can actually breathe between feedings.",
+  "Not a countdown, a sales pitch, or urgency disguised as help.",
+  "Not trend-chasing purchases labeled as “must-haves.”",
+  "Not pressure to sprint—this moves when you can breathe.",
 ];
 
 const differenceHighlights = [
@@ -38,7 +39,7 @@ const systemStages = [
     heading: "Clarify what matters before you plan anything for baby",
     description:
       "We slow the flood of opinions so you learn what decisions are actually coming instead of Googling with the baby on your hip.",
-    micro: "This stage keeps you ahead of the noise—no more midnight research rabbit holes.",
+    micro: "So you’re not researching at midnight.",
     preview: {
       src: "/assets/images/academydashboardpreview.png",
       alt: "Taylor-Made Academy dashboard preview",
@@ -49,7 +50,7 @@ const systemStages = [
     heading: "Co-create a calm plan after you understand the lay of the land",
     description:
       "Mentors help you pace the purchases and timelines so every choice is grounded in your household rhythm, not a trending checklist.",
-    micro: "Plan quietly with someone who knows how to coach you past decision fatigue.",
+    micro: "So decisions don’t pile up.",
     preview: {
       src: "/assets/images/planpreview.png",
       alt: "Planning workspace preview",
@@ -60,7 +61,7 @@ const systemStages = [
     heading: "Step into moderated rooms that meet you where you are",
     description:
       "Connect with other parents while mentors keep the energy low and the conversation useful instead of performative.",
-    micro: "These sessions are distraction-free—no loud feeds, just thoughtful presence.",
+    micro: "So you’re not doing this alone.",
     preview: {
       src: "/assets/images/connectpreview.png",
       alt: "Community connection preview",
@@ -71,7 +72,7 @@ const systemStages = [
     heading: "Capture what you learned and keep it steady",
     description:
       "We collect reflections so mentors can see what worked, what felt weird, and what still needs attention before you move forward.",
-    micro: "Reflection feels like a letter, not another notification badge.",
+    micro: "So this season doesn’t blur past.",
     preview: {
       src: "/assets/images/reflectpreview.png",
       alt: "Reflection & baby book preview",
@@ -104,7 +105,7 @@ export default function HomePage() {
         imageWidth={1536}
         imageHeight={1024}
         headline="Calmer prep for babyhood ahead"
-        supportingText="Mentors slow the rhythm so you can prep for parenthood without googling at 2 a.m. while the baby spits up on your shirt."
+        supportingText="Mentors slow the rhythm so you can prep with confidence—without midnight research spirals."
         primaryCta={{
           label: "Start preparing",
           href: "/request-invite",
@@ -117,20 +118,8 @@ export default function HomePage() {
           className: "text-[0.65rem] uppercase tracking-[0.35em] underline text-[var(--tmbc-charcoal)]/80",
         }}
         priority
+        motion
       />
-      {/* Impact verification */}
-      <div
-        data-impact-verification
-        style={{
-          fontSize: "12px",
-          color: "rgba(62, 47, 53, 0.6)",
-          lineHeight: 1.2,
-          paddingLeft: "1rem",
-          paddingRight: "1rem",
-        }}
-      >
-        Impact-Site-Verification: 8939278e-825b-4d43-bf0d-d22ce986e2ae
-      </div>
       <div className="px-6 text-center">
         <p className="mt-4 max-w-3xl mx-auto text-[0.8rem] text-[var(--tmbc-charcoal)] text-opacity-60">
           A concierge-led baby planning membership with mentors, intentional community rooms, and ongoing access for your rhythm.
@@ -138,7 +127,7 @@ export default function HomePage() {
       </div>
       <InviteCodeEntry />
       <MarketingContent>
-        <section className="marketing-section marketing-card bg-white/90 px-6 py-16 md:px-12 md:py-24 mt-16">
+        <section className="marketing-section marketing-card bg-white/90 px-6 py-16 md:px-12 md:py-24 border-y border-[var(--tmbc-charcoal)]/5 mt-16">
           <div className="max-w-5xl mx-auto text-center space-y-4">
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
               What this is · What this isn’t
@@ -150,13 +139,31 @@ export default function HomePage() {
               Members get mentorship, calm community rooms, and the space to learn, plan, connect, and reflect without noise.
             </p>
           </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 space-y-3 md:hidden">
+            {whatThisHighlights.map((block) => (
+              <details
+                key={block.title}
+                className="group rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/70 p-5"
+              >
+                <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
+                  {block.title}
+                </summary>
+                <ul className="mt-4 space-y-3 list-disc pl-4 text-sm text-[var(--tmbc-charcoal)]/80">
+                  {block.copy.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              </details>
+            ))}
+          </div>
+
+          <div className="mt-10 hidden gap-6 md:grid md:grid-cols-2">
             {whatThisHighlights.map((block) => (
               <div
                 key={block.title}
-                className="marketing-card bg-[var(--tmbc-ivory)]/70 p-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-80"
+                className="marketing-card bg-[var(--tmbc-ivory)]/70 p-6 text-sm text-[var(--tmbc-charcoal)]/80"
               >
-                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
                   {block.title}
                 </p>
                 <ul className="mt-4 space-y-3 list-disc pl-4">
@@ -182,16 +189,20 @@ export default function HomePage() {
             <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
               Each pillar waits for you to feel ready before the next begins, honoring your rhythm, not chasing tasks.
             </p>
+            <p className="mx-auto max-w-2xl text-sm text-[var(--tmbc-charcoal)]/70">
+              There’s a rhythm to this—and you don’t have to find it alone.
+            </p>
           </div>
           <div className="mt-6 flex justify-center">
-            <Image
-              src="/assets/images/pillaricons.png"
-              alt="Taylor-Made Baby Co. learning and planning pillars"
-              width={720}
-              height={360}
-              className="mx-auto my-16 max-w-[85%]"
-              style={{ height: "auto" }}
-            />
+            <ImageFrame className="max-w-[85%] my-16">
+              <Image
+                src="/assets/images/pillaricons.png"
+                alt="Taylor-Made Baby Co. learning and planning pillars"
+                width={720}
+                height={360}
+                className="w-full h-auto"
+              />
+            </ImageFrame>
           </div>
           <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {systemStages.map((stage) => (
@@ -216,7 +227,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="marketing-section marketing-card bg-white/80 px-8 py-24 mt-24">
+        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/60 px-8 py-24 mt-24">
           <div className="max-w-3xl mx-auto space-y-5 text-center">
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
               Why it feels loud
@@ -229,15 +240,21 @@ export default function HomePage() {
                 <li key={note}>{note}</li>
               ))}
             </ul>
+            <p className="pt-6 text-sm text-[var(--tmbc-charcoal)]/70">
+              TMBC meets you with calm structure—so the next step never feels urgent.
+            </p>
           </div>
         </section>
 
         <section className="flex justify-center my-24 md:my-32">
-          <img
-            src="/assets/images/experience.png"
-            alt="Taylor-Made Baby Co. experience values: expert-built, mentor-led, personally matched"
-            className="w-full max-w-[1000px]"
-          />
+          <ImageFrame className="max-w-[1000px]">
+            <img
+              src="/assets/images/experience.png"
+              alt="Taylor-Made Baby Co. experience values: expert-built, mentor-led, personally matched"
+              className="w-full rounded-[26px]"
+              loading="lazy"
+            />
+          </ImageFrame>
         </section>
 
         <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 pt-20 pb-16 md:pt-24 md:pb-20 mt-24 mb-12">
@@ -251,13 +268,16 @@ export default function HomePage() {
             <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
               Request an invite when the baby schedule lets you breathe; we’ll keep leaning in while you juggle feedings.
             </p>
-            <section className="flex justify-center my-24 md:my-32">
-              <img
-                src="/assets/images/inviteflow.png"
-                alt="Invite-only onboarding process from request to mentorship and guided experience"
-                className="w-full max-w-[960px]"
-              />
-            </section>
+            <div className="flex justify-center my-16 md:my-20">
+              <ImageFrame className="max-w-[960px] border-[var(--tmbc-mauve)]/30">
+                <img
+                  src="/assets/images/inviteflow.png"
+                  alt="Invite-only onboarding process from request to mentorship and guided experience"
+                  className="w-full rounded-[26px]"
+                  loading="lazy"
+                />
+              </ImageFrame>
+            </div>
             <div className="space-y-2">
               <Link
                 href="/request-invite"
@@ -272,6 +292,12 @@ export default function HomePage() {
                 Already have an invite? Enter it here.
               </Link>
             </div>
+            <p className="text-sm text-[var(--tmbc-charcoal)]/70">
+              What happens next: we review your request and match you with the right support.
+            </p>
+            <p className="text-sm text-[var(--tmbc-charcoal)]/60">
+              No rush. No pressure.
+            </p>
             <div className="mt-8 max-w-md mx-auto">
               <Suspense fallback={<div className="h-24" />}>
                 <InviteSection />

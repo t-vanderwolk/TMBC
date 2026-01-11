@@ -18,11 +18,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${greatVibes.variable} ${playfair.variable} ${nunito.variable}`}
     >
       <head>
-        {/* Impact Site Verification */}
-        <meta
-          name="impact-site-verification"
-          content="8939278e-825b-4d43-bf0d-d22ce986e2ae"
-        />
+        {/* FO Verification */}
+        <meta name="fo-verify" content="660bae52-3064-4bff-8322-959de3b4cbf6" />
       </head>
       <body className="min-h-screen bg-tmIvory font-sans text-tmCharcoal">
         <main className="flex min-h-screen flex-col pb-16">
