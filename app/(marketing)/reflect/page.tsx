@@ -1,6 +1,7 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import ImageFrame from "@/components/marketing/ImageFrame";
 import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const reflectClarifications = [
@@ -42,7 +43,7 @@ export default function ReflectPage() {
         imageWidth={1536}
         imageHeight={1024}
         headline="A quiet place you can return to."
-        supportingText="Reflect is a private, gentle keepsake practice — no feed, no sharing pressure, just room to capture what feels important when you feel ready."
+        supportingText="Reflect is a private keepsake space—no feed, no pressure, just room for what feels important."
         primaryCta={{
           label: "Request Your Invite",
           href: "/request-invite",
@@ -52,34 +53,47 @@ export default function ReflectPage() {
           label: "How It Works (softly)",
           href: "/how-it-works",
         }}
+        motion
       />
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-            <div className="flex flex-col items-center gap-4 text-center">
+            <div className="flex flex-col items-center gap-3 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 What reflect is (and isn’t)
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                A private keepsake, not a journaling checklist.
+                A private keepsake, not a journal checklist.
               </h2>
-              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                It is not about habits, sharing, or productivity; it simply gives you a calm space to hold whatever
-                feels meaningful today.
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                It is not about habits, sharing, or productivity; it simply gives you calm room for what feels meaningful today.
               </p>
             </div>
-            <div className="mt-8 flex w-full justify-center">
-              <div className="w-full max-w-[80%] md:max-w-[360px]">
+            <div className="mt-10 flex w-full justify-center">
+              <ImageFrame className="w-full max-w-[80%] md:max-w-[360px]">
                 <MobilePreviewImage
                   src="/assets/images/reflectpreview.png"
                   alt="Taylor-Made Baby Co. reflection journal preview showing keepsakes."
                   width={360}
                   height={720}
                 />
-              </div>
+              </ImageFrame>
             </div>
-            <div className="mt-14 grid gap-8 md:grid-cols-3">
+            <div className="mt-10 space-y-3 md:hidden">
+              {reflectClarifications.map((clarification) => (
+                <details
+                  key={clarification.title}
+                  className="group rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-white/90 p-5"
+                >
+                  <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
+                    {clarification.title}
+                  </summary>
+                  <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{clarification.description}</p>
+                </details>
+              ))}
+            </div>
+            <div className="mt-10 hidden gap-8 md:grid md:grid-cols-3">
               {reflectClarifications.map((clarification) => (
                 <div key={clarification.title} className="marketing-card bg-white/80 p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
@@ -93,27 +107,39 @@ export default function ReflectPage() {
             </div>
           </section>
 
-          <section className="flex flex-col items-center my-28">
+          <section className="flex flex-col items-center my-28 space-y-10">
+            <p className="max-w-3xl text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              The hands that hold the memories look like this: a keepsake book, a tender stillness, and the space to breathe between entries.
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-[900px] w-full px-6">
-              <img
-                src="/assets/images/babybookpic.jpeg"
-                alt="A keepsake baby book and journal capturing early memories"
-                className="w-full rounded-lg"
-              />
-              <img
-                src="/assets/images/sleepy-baby.jpeg"
-                alt="A peaceful sleeping baby representing rest and early moments"
-                className="w-full rounded-lg"
-              />
+              <ImageFrame className="w-full">
+                <img
+                  src="/assets/images/babybookpic.jpeg"
+                  alt="A keepsake baby book and journal capturing early memories"
+                  className="w-full rounded-[28px]"
+                  loading="lazy"
+                />
+              </ImageFrame>
+              <ImageFrame className="w-full">
+                <img
+                  src="/assets/images/sleepy-baby.jpeg"
+                  alt="A peaceful sleeping baby representing rest and early moments"
+                  className="w-full rounded-[28px]"
+                  loading="lazy"
+                />
+              </ImageFrame>
             </div>
           </section>
 
           <div className="py-24 md:py-32 flex justify-center">
-            <img
-              src="/assets/images/reflection-book.jpeg"
-              alt="A softly lit baby journal open for reflection and memory keeping"
-              className="max-w-[520px] w-full rounded-2xl"
-            />
+            <ImageFrame className="max-w-[520px]">
+              <img
+                src="/assets/images/reflection-book.jpeg"
+                alt="A softly lit baby journal open for reflection and memory keeping"
+                className="w-full rounded-[28px]"
+                loading="lazy"
+              />
+            </ImageFrame>
           </div>
 
           <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
@@ -124,24 +150,26 @@ export default function ReflectPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Keepsakes that breathe with the season.
               </h2>
-              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                Photos, thoughts, and notes gather over time, quietly layered so the story feels intentional without
-                asking you to document everything.
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70 mx-auto">
+                Photos, thoughts, and notes gather over time, quietly layered so the story feels intentional without asking you to document everything.
               </p>
             </div>
-            <img
-              src="/assets/images/journaling.jpeg"
-              alt="A quiet moment of pregnancy journaling and reflection"
-              className="mx-auto mt-12 mb-24 w-full max-w-[520px] rounded-2xl"
-            />
-            <div className="mt-10 space-y-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-75">
+            <div className="mt-10 flex justify-center">
+              <ImageFrame className="max-w-[520px]">
+                <img
+                  src="/assets/images/journaling.jpeg"
+                  alt="A quiet moment of pregnancy journaling and reflection"
+                  className="w-full rounded-[28px]"
+                  loading="lazy"
+                />
+              </ImageFrame>
+            </div>
+            <div className="mt-10 space-y-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-75">
               <p>
                 Reflect lets you mark a feeling, a milestone, or a quiet moment without treating it as a performance.
-                It simply keeps those memories with care.
               </p>
               <p>
-                The space is soft around you; nothing deletes the pause between entries, and nothing rushes you to the
-                next note.
+                The space is soft around you; nothing deletes the pause between entries, and nothing rushes you to the next note.
               </p>
             </div>
           </section>
@@ -189,11 +217,14 @@ export default function ReflectPage() {
           </section>
 
           <div className="py-24 md:py-32 flex justify-center">
-            <img
-              src="/assets/images/sleepy-baby.jpeg"
-              alt="A peaceful sleeping baby, conveying calm and quiet presence"
-              className="max-w-[420px] w-full rounded-2xl"
-            />
+            <ImageFrame className="max-w-[420px]">
+              <img
+                src="/assets/images/sleepy-baby.jpeg"
+                alt="A peaceful sleeping baby, conveying calm and quiet presence"
+                className="w-full rounded-[28px]"
+                loading="lazy"
+              />
+            </ImageFrame>
           </div>
 
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">

@@ -21,24 +21,25 @@ export default function ContactPage() {
         imageWidth={1536}
         imageHeight={1024}
         headline="We’re here — thoughtfully."
-        supportingText="Questions, notes, or something you’re unsure where to place? Reach out and we’ll respond with calmness."
+        supportingText="Questions, notes, or unclear threads? Reach out and we’ll respond with calm."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
           className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
+        motion
       />
       <MarketingContent>
         <div className="marketing-content space-y-16 text-[var(--tmbc-charcoal)]">
-          <section className="marketing-section marketing-card mx-auto max-w-3xl rounded-[36px] bg-[var(--tmbc-ivory)]/90 px-8 py-20 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)]">
+          <section className="marketing-section marketing-card mx-auto max-w-3xl rounded-[36px] bg-[var(--tmbc-ivory)]/90 px-8 py-20 text-center shadow-[0_20px_80px_rgba(199,166,199,0.25)]">
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
               Contact
             </p>
-            <p className="mt-4 max-w-3xl mx-auto text-base text-[var(--tmbc-charcoal)] text-opacity-80">
-              Questions, notes, or something you’re unsure where to place? Reach out and we’ll respond with care.
+            <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-80 max-w-3xl mx-auto">
+              Questions, notes, or threads you’re unsure where to place? Reach out and we’ll respond with calm.
             </p>
-            <p className="mt-6 text-xs text-[var(--tmbc-charcoal)] text-opacity-60">
-              We read every message. Replies may take a little time — care feels better than speed.
+            <p className="mt-4 text-xs text-[var(--tmbc-charcoal)] text-opacity-60">
+              We read every message. Replies may take a moment—care feels better than speed.
             </p>
           </section>
 

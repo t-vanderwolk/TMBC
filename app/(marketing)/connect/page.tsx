@@ -1,6 +1,7 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import ImageFrame from "@/components/marketing/ImageFrame";
 import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const connectMeaning = [
@@ -54,7 +55,7 @@ export default function ConnectPage() {
         imageWidth={1536}
         imageHeight={1024}
         headline="You’re not meant to do this alone."
-        supportingText="Connect is a mentor-led village of calm, moderated rooms where emotional safety is the first priority. You show up when you’re ready, and mentors keep the space from feeling like a feed."
+        supportingText="Connect is a mentor-led village of calm rooms that meet you when you’re ready."
         primaryCta={{
           label: "Request Your Invite",
           href: "/request-invite",
@@ -64,63 +65,74 @@ export default function ConnectPage() {
           label: "How It Works (quietly)",
           href: "/how-it-works",
         }}
+        motion
       />
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-          <div className="flex flex-col items-center gap-4 text-center">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              What “Connect” means here
-            </p>
+            <div className="flex flex-col items-center gap-3 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                What “Connect” means here
+              </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                Connection without the noise.
+                Connection without noise.
               </h2>
-              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                Our rooms are curated, moderated, and anchored by mentors so that the space never feels performative,
-                noisy, or pressure-filled.
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                Our rooms are curated, moderated, and anchored by mentors so the space feels like a breath, not a feed.
               </p>
             </div>
-            <div className="mt-14 rounded-[40px] border border-[var(--tmbc-charcoal)]/10 bg-white/90 p-8 shadow-[0_25px_60px_rgba(62,47,53,0.12)]">
-              <div className="grid gap-6 md:gap-8 md:grid-cols-3">
-                {connectMeaning.map((meaning) => (
-                  <div key={meaning.title} className="marketing-card bg-white/80 p-6">
-                    <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                      {meaning.title}
-                    </p>
-                    <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{meaning.description}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mt-12 space-y-4 md:hidden">
+              {connectMeaning.map((meaning) => (
+                <details
+                  key={meaning.title}
+                  className="group rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-white/90 p-5"
+                >
+                  <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
+                    {meaning.title}
+                  </summary>
+                  <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{meaning.description}</p>
+                </details>
+              ))}
+            </div>
+            <div className="mt-12 hidden gap-6 md:grid md:grid-cols-3">
+              {connectMeaning.map((meaning) => (
+                <div key={meaning.title} className="marketing-card bg-white/80 p-6">
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
+                    {meaning.title}
+                  </p>
+                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{meaning.description}</p>
+                </div>
+              ))}
             </div>
           </section>
 
-          <section className="flex justify-center my-24 md:my-32">
-            <img
-              src="/assets/images/connectexplained.png"
-              alt="How Taylor-Made Baby Co. connects parents through chats, groups, and shared journeys"
-              className="w-full max-w-[1000px]"
-            />
-          </section>
-
-          <section className="max-w-3xl mx-auto text-center space-y-4 px-6 md:px-0">
-            <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Shared quiet moments
+          <section className="flex flex-col items-center my-24 md:my-32 space-y-6">
+            <div className="max-w-3xl text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              Tiny anchors that explain the calm: showing how mentors open rooms, invite presence, and ease you into connection.
+            </div>
+            <ImageFrame className="max-w-[1000px]">
+              <img
+                src="/assets/images/connectexplained.png"
+                alt="How Taylor-Made Baby Co. connects parents through chats, groups, and shared journeys"
+                className="w-full rounded-[28px]"
+                loading="lazy"
+              />
+            </ImageFrame>
+            <p className="max-w-3xl text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              We keep the tone gentle so you can listen, speak, and reflect alongside other parents without a spotlight.
             </p>
-            <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-              We keep the tone gentle, so you can listen, speak, and reflect alongside other parents without a spotlight.
-            </p>
+            <ImageFrame className="max-w-[720px]">
+              <img
+                src="/assets/images/girltalk.jpeg"
+                alt="Expecting parents connecting through conversation and shared experiences"
+                className="w-full rounded-[26px]"
+                loading="lazy"
+              />
+            </ImageFrame>
           </section>
 
-          <section className="flex justify-center my-24 md:my-32">
-            <img
-              src="/assets/images/girltalk.jpeg"
-              alt="Expecting parents connecting through conversation and shared experiences"
-              className="w-full max-w-[720px] rounded-2xl"
-            />
-          </section>
-
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 border-y border-[var(--tmbc-charcoal)]/10">
             <div className="flex flex-col gap-3">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 Mentor-guided circles
@@ -128,21 +140,34 @@ export default function ConnectPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Mentors frame the rhythm so you don’t have to perform.
               </h2>
-              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 The preview below shows how messaging, prompts, and circles stay calm under mentor guidance.
               </p>
             </div>
             <div className="mt-8 flex w-full justify-center">
-              <div className="w-full max-w-[80%] md:max-w-[360px]">
+              <ImageFrame className="w-full max-w-[80%] md:max-w-[360px]">
                 <MobilePreviewImage
                   src="/assets/images/connectpreview.png"
                   alt="Taylor-Made Baby Co. connection circle preview showing guided rooms."
                   width={360}
                   height={720}
                 />
-              </div>
+              </ImageFrame>
             </div>
-            <div className="mt-12 grid gap-8 md:grid-cols-3">
+            <div className="mt-12 space-y-3 md:hidden">
+              {mentorCircles.map((circle) => (
+                <details
+                  key={circle.title}
+                  className="group rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/70 p-5"
+                >
+                  <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
+                    {circle.title}
+                  </summary>
+                  <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{circle.description}</p>
+                </details>
+              ))}
+            </div>
+            <div className="mt-12 hidden gap-6 md:grid md:grid-cols-3">
               {mentorCircles.map((circle) => (
                 <div key={circle.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
@@ -154,24 +179,22 @@ export default function ConnectPage() {
             </div>
           </section>
 
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-            <div className="flex flex-col gap-4">
+          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28 border-y border-[var(--tmbc-charcoal)]/5">
+            <div className="flex flex-col gap-3 text-center">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 A quiet kind of belonging
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Listen, observe, and answer when you’re ready.
               </h2>
-              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                There is no feed to scroll, no trending threads, and no invite to overshare. This space is calm because
-                participation happens on your terms.
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70 mx-auto">
+                There is no feed to scroll, no trending threads, and no invite to overshare. Participation happens on your terms
+                so the circle stays calm.
               </p>
             </div>
-            <ul className="mt-8 space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+            <ul className="mt-8 space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80 leading-relaxed">
               {quietBelonging.map((note) => (
-                <li key={note} className="leading-relaxed">
-                  • {note}
-                </li>
+                <li key={note}>• {note}</li>
               ))}
             </ul>
           </section>
@@ -187,6 +210,9 @@ export default function ConnectPage() {
               <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 The Connect pillar supports your learning and planning moments by offering a breathing room, not a
                 feed. When it feels right, request an invite and keep the circle gentle.
+              </p>
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                Mentors keep the room paced, no one rushes, and every invite is curated so the care stays steady.
               </p>
             <Link
               href="/request-invite"

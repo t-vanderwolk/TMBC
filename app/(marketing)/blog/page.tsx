@@ -54,7 +54,7 @@ const heroSupportingText = (
       Taylor-Made Journal
     </span>
     <span className="block mt-4">
-      Real conversations about baby prep, decisions, and life with a new child — without fear-based advice. (Or a 47-tab deep dive at midnight.)
+      Real conversations about baby prep and early parenthood—without fear-based advice.
     </span>
   </>
 );
@@ -73,6 +73,7 @@ const heroSection = (
       className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
     }}
     priority
+    motion
   />
 );
 

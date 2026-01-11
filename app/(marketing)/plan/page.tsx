@@ -1,63 +1,47 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import ImageFrame from "@/components/marketing/ImageFrame";
 import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
-const planningMeaning = [
+const planningSignals = [
   {
-    title: "Thinking through the details with a mentor",
-    description:
-      "You surface the questions first, then make gentle choices with someone who knows how to keep the pace steady.",
+    title: "Thinking through the details",
+    detail:
+      "You surface the questions first, then make gentle choices with someone who keeps the pace steady.",
   },
   {
     title: "De-stressing timelines",
-    description:
-      "No launch dates, no countdown timers — just signals about what feels right now and what can be parked until later.",
+    detail:
+      "No countdowns—just signals about what feels right now and what can wait a few breaths.",
   },
   {
     title: "Registry gently guided",
-    description:
-      "We treat registries as living plans, not purchases, so additions happen when you feel ready rather than when you feel rushed.",
+    detail:
+      "We treat registries as living plans, not purchases, and mentors help you update when you actually feel ready.",
   },
-];
-
-const decisionSupport = [
   {
     title: "Mentor notes",
-    description:
-      "Short, contextual reflections keep you aware of why a choice matters, not just what you should pick.",
+    detail:
+      "Short reflections keep you aware of why a choice matters, not just what someone wants you to pick.",
   },
   {
     title: "Paced conversations",
-    description:
-      "We revisit decisions together, truncate distractions, and let the next step reveal itself without pressure.",
+    detail:
+      "We revisit decisions together, remove distractions, and let the next step reveal itself without pressure.",
   },
   {
     title: "Confidence over completion",
-    description:
-      "The goal is peace of mind, not crossing off tasks — mentors help you hold the whole picture while you respond to this moment.",
+    detail:
+      "Peace of mind matters more than crossing a box—mentors help you hold the whole picture while you respond to this moment.",
   },
 ];
 
 const planFit = [
-  {
-    title: "You want clarity without rush",
-    description:
-      "You appreciate gentle prompts and follow-ups, not new dates every day.",
-  },
-  {
-    title: "You prefer conversation to shopping lists",
-    description:
-      "Registry updates happen in context, so you only adjust what still feels essential.",
-  },
-  {
-    title: "You trust mentors to guard the pace",
-    description:
-      "Planning stays calm because people are keeping tabs on the rhythm, not piling on more tasks.",
-  },
+  "You want clarity without rush.",
+  "You prefer conversation to shopping lists.",
+  "You trust mentors to guard the pace.",
 ];
-
-const planningSignals = [...planningMeaning, ...decisionSupport];
 
 export default function PlanPage() {
   return (
@@ -68,7 +52,7 @@ export default function PlanPage() {
         imageWidth={1536}
         imageHeight={1024}
         headline="Planning is steady clarity, not shopping."
-        supportingText="A mentor helps you see the next right step without glossing over the questions you still have. We hold the map gently while you choose when to move."
+        supportingText="We hold the map gently while you choose when to move."
         primaryCta={{
           label: "Request Your Invite",
           href: "/request-invite",
@@ -78,6 +62,7 @@ export default function PlanPage() {
           label: "How It Works (no rush)",
           href: "/how-it-works",
         }}
+        motion
       />
 
       <MarketingContent>
@@ -90,19 +75,30 @@ export default function PlanPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 Planning is a calm conversation, not a checklist race.
               </h2>
-              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70 mx-auto">
                 We reframe registries, timelines, and logistics as steady decision points you revisit with a mentor who honors your season.
               </p>
             </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <div className="mt-10 space-y-4 md:hidden">
+              {planningSignals.map((signal) => (
+                <details
+                  key={signal.title}
+                  className="group rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-white/90 p-5"
+                >
+                  <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
+                    {signal.title}
+                  </summary>
+                  <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{signal.detail}</p>
+                </details>
+              ))}
+            </div>
+            <div className="mt-10 hidden gap-6 md:grid md:grid-cols-3">
               {planningSignals.map((signal) => (
                 <div key={signal.title} className="marketing-card bg-white/80 p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
                     {signal.title}
                   </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-                    {signal.description}
-                  </p>
+                  <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{signal.detail}</p>
                 </div>
               ))}
             </div>
@@ -122,24 +118,24 @@ export default function PlanPage() {
             </div>
             <div className="mt-10 grid gap-10 md:grid-cols-2">
               <div className="flex justify-center">
-                <div className="w-full max-w-[360px]">
+                <ImageFrame className="w-full max-w-[360px]">
                   <MobilePreviewImage
                     src="/assets/images/planpreview.png"
                     alt="Registry planning view preview showing living list of items and timing guidance"
                     width={360}
                     height={720}
                   />
-                </div>
+                </ImageFrame>
               </div>
               <div className="flex justify-center">
-                <div className="w-full max-w-[360px]">
+                <ImageFrame className="w-full max-w-[360px]">
                   <MobilePreviewImage
                     src="/assets/images/membertomentor.png"
                     alt="Mentor notes preview showing decision support and context"
                     width={360}
                     height={720}
                   />
-                </div>
+                </ImageFrame>
               </div>
             </div>
           </section>
@@ -152,15 +148,17 @@ export default function PlanPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 Registries evolve with you.
               </h2>
-              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                Bring what you already have, revisit it slowly, and let mentors remind you that every update is optional. This is not a shopping sprint but a living plan you adjust when it feels right.
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+                Bring what you already have, revisit it slowly, and let mentors remind you that every update is optional. This isn’t a shopping sprint but a living plan you adjust when it feels right.
               </p>
             </div>
-            <div className="mt-8 grid gap-4 text-left text-sm text-[var(--tmbc-charcoal)] text-opacity-80 md:grid-cols-3">
-              {planFit.map((fit) => (
-                <p key={fit.title}>• {fit.description}</p>
+            <ul className="mt-8 space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              {planFit.map((line) => (
+                <li key={line} className="pl-4">
+                  • {line}
+                </li>
               ))}
-            </div>
+            </ul>
           </section>
 
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">

@@ -1,23 +1,21 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import ImageFrame from "@/components/marketing/ImageFrame";
 import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
 
 const membershipHighlights = [
   {
     title: "Belonging",
-    description:
-      "Mentor-led rhythms keep you steady, so the preparation feels like a circle of support rather than a race.",
+    description: "Mentor-led rhythms keep you steady so preparation feels like a circle, not a sprint.",
   },
   {
     title: "Rhythm",
-    description:
-      "Academy moments, planning check-ins, and small circles rotate through a calm cadence you can revisit when needed.",
+    description: "Academy moments, planning check-ins, and small circles rotate through a calm cadence.",
   },
   {
     title: "Continuity",
-    description:
-      "We build space to continue learning, connecting, and reflecting — even after a milestone passes.",
+    description: "We leave room to keep learning, connecting, and reflecting even after milestones pass.",
   },
 ];
 
@@ -55,7 +53,7 @@ const progression = [
   },
   {
     stage: "Mentor",
-    description: "When you’re ready, you guide others — still within the same calm, intentional circle.",
+    description: "When you’re ready, you guide others — still within the same calm circle.",
   },
 ];
 
@@ -74,13 +72,14 @@ export default function MembershipPage() {
         imageWidth={1536}
         imageHeight={1024}
         headline="Membership is a calm circle, not a checklist."
-        supportingText="It exists for people who want thoughtful mentor care, ongoing learning, and the chance to keep guiding others when they are ready."
+        supportingText="It exists for people who want thoughtful mentor care and ongoing quiet learning."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
           className: "marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]",
         }}
         priority
+        motion
       />
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
@@ -90,13 +89,26 @@ export default function MembershipPage() {
                 What membership gives you
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
-                Belonging, rhythm, and continuous care.
+                Belonging, rhythm, continuous care.
               </h2>
-              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70 mx-auto">
                 Membership keeps you rooted in learning, planning at your pace, and connecting without comparison.
               </p>
             </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="mt-10 space-y-4 md:hidden">
+              {membershipHighlights.map((highlight) => (
+                <details
+                  key={highlight.title}
+                  className="group rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-white/90 p-5"
+                >
+                  <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
+                    {highlight.title}
+                  </summary>
+                  <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{highlight.description}</p>
+                </details>
+              ))}
+            </div>
+            <div className="mt-10 hidden gap-6 md:grid md:grid-cols-3">
               {membershipHighlights.map((highlight) => (
                 <div key={highlight.title} className="marketing-card bg-white/80 p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
@@ -110,19 +122,32 @@ export default function MembershipPage() {
             </div>
           </section>
 
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-24 mb-8">
-            <div className="text-center space-y-4">
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-24 mb-8 border-y border-[var(--tmbc-charcoal)]/10">
+            <div className="text-center space-y-3">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 Mentor-guided access
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 The care shows up intentionally.
               </h2>
-              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="max-w-3xl mx-auto text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 You get a personal mentor, guided learning, shared circles, and space for reflection without noise.
               </p>
             </div>
-            <div className="mt-8 grid gap-6 md:grid-cols-2">
+            <div className="mt-8 space-y-4 md:hidden">
+              {supportSignals.map((signal) => (
+                <details
+                  key={signal.title}
+                  className="group rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/70 p-5"
+                >
+                  <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
+                    {signal.title}
+                  </summary>
+                  <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{signal.description}</p>
+                </details>
+              ))}
+            </div>
+            <div className="mt-8 hidden gap-6 md:grid md:grid-cols-2">
               {supportSignals.map((signal) => (
                 <div key={signal.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
@@ -154,7 +179,7 @@ export default function MembershipPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 The dashboard and progression keep the circle visible
               </h2>
-              <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70 mx-auto">
                 See how the dashboard orients you in ongoing care and how the member-to-mentor path keeps that care steady.
               </p>
             </div>
@@ -164,16 +189,16 @@ export default function MembershipPage() {
                   Dashboard overview
                 </p>
                 <p className="max-w-[320px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                  A calm, editorial dashboard keeps your learning, planning, and circles in one quiet view.
+                  A calm, editorial dashboard keeps learning, planning, and circles in one quiet view.
                 </p>
-                <div className="w-full max-w-[360px]">
+                <ImageFrame className="w-full max-w-[360px]">
                   <MobilePreviewImage
                     src="/assets/images/dashboardpreview.png"
                     alt="Membership dashboard preview showing learning, planning, and circle highlights"
                     width={360}
                     height={720}
                   />
-                </div>
+                </ImageFrame>
               </div>
               <div className="flex flex-col items-center space-y-3 text-center">
                 <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
@@ -182,14 +207,14 @@ export default function MembershipPage() {
                 <p className="max-w-[320px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                   The progression view shows how your mentor keeps decisions, reflections, and invitations aligned.
                 </p>
-                <div className="w-full max-w-[360px]">
+                <ImageFrame className="w-full max-w-[360px]">
                   <MobilePreviewImage
                     src="/assets/images/membertomentor.png"
                     alt="Member to mentor progression preview showing decision notes and gentle prompts"
                     width={360}
                     height={720}
                   />
-                </div>
+                </ImageFrame>
               </div>
             </div>
           </section>
@@ -200,13 +225,13 @@ export default function MembershipPage() {
                 Invite-only care
               </p>
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
-                We keep the village small for the support to stay personal.
+                We keep the village small so support stays personal.
               </h2>
-              <div className="space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              <ul className="space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
                 {inviteReasons.map((reason) => (
-                  <p key={reason}>• {reason}</p>
+                  <li key={reason}>• {reason}</li>
                 ))}
-              </div>
+              </ul>
               <Link
                 href="/request-invite"
                 className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"

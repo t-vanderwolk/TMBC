@@ -8,85 +8,73 @@ import MarketingHero from "@/components/marketing/MarketingHero";
 const faqGroups = [
   {
     title: "Getting started",
-    summary: "How the experience begins with calm guidance.",
+    summary: "Calm onboarding before you jump in.",
     items: [
       {
         question: "What is Taylor-Made Baby Co.?",
-        answer:
-          "Taylor-Made Baby Co. is an invite-only, mentor-led platform that helps you prepare for pregnancy and early parenthood with clarity and calm. We focus on learning what matters, planning intentionally, connecting with support, and reflecting along the way.",
+        answer: "An invite-only, mentor-led platform for preparing with clarity and calm.",
       },
       {
         question: "Is this an app or a service?",
-        answer:
-          "It’s both — thoughtfully combined. TMBC is a digital experience supported by real human mentors. You’ll learn through guided modules, plan with support, connect with others, and reflect privately — all in one place.",
+        answer: "It’s both: digital guides supported by real mentors, so learning, planning, and reflecting happen in one quiet place.",
       },
       {
         question: "Who is TMBC for?",
-        answer:
-          "TMBC is for parents who want guidance without overwhelm. If you value calm structure, human insight, and intentional pacing, you’ll likely feel at home here.",
+        answer: "Parents who want calm structure, human insight, and intentional pacing.",
       },
     ],
   },
   {
     title: "Invite-only & membership",
-    summary: "Intentional capacity and thoughtful review keep quality high.",
+    summary: "Capacity stays intentional.",
     items: [
       {
         question: "Why is TMBC invite-only?",
-        answer:
-          "Because the experience is mentor-led and intentionally small. Invite-only allows us to protect quality, pacing, and human support — for both members and mentors.",
+        answer: "We keep the circle small so mentors can protect quality, pacing, and thoughtful responses.",
       },
       {
         question: "How do I request an invite?",
-        answer:
-          "You can request an invite directly from the site. Every request is reviewed with care. If accepted, you’ll receive next steps by email.",
+        answer: "Submit a request on the site—every note is reviewed with care and the next steps arrive by email.",
       },
       {
         question: "Is there a waitlist?",
-        answer:
-          "Yes. Some requests are placed on a waitlist depending on mentor availability and cohort timing. Being on the waitlist simply means we’re growing thoughtfully.",
+        answer: "Yes—some requests pause while we balance mentor availability, which keeps growth steady.",
       },
     ],
   },
   {
     title: "Mentors & support",
-    summary: "Real people guide the journey with empathy.",
+    summary: "People guide the path.",
     items: [
       {
         question: "Who are the mentors?",
-        answer:
-          "Mentors are experienced parents, professionals, and guides who have completed the Taylor-Made Baby Academy and support others with empathy, knowledge, and lived experience.",
+        answer: "Experienced parents and professionals who’ve finished the Academy and support others with empathy.",
       },
       {
         question: "Will I be assigned a mentor?",
-        answer:
-          "Yes. Members are thoughtfully matched to a mentor based on context, needs, and availability. This is not automated — it’s intentional.",
+        answer: "Yes—matching is intentional, not automated, based on context and needs.",
       },
       {
         question: "Can members become mentors?",
-        answer:
-          "Yes. TMBC follows a Member → Mentor model. Some members choose to continue their journey by guiding others once they’re ready.",
+        answer: "Yes. The Member → Mentor path lets thoughtful members guide others when they’re ready.",
       },
     ],
   },
   {
     title: "Learning, planning & registry",
-    summary: "Calm clarity replaces frantic lists.",
+    summary: "Clarity replaces frantic lists.",
     items: [
       {
         question: "What does “Learn” mean inside TMBC?",
-        answer:
-          "Learning happens through calm, guided Academy modules — designed to meet you where you are, not overwhelm you with everything at once.",
+        answer: "Calm, guided Academy modules meet you where you are without overwhelming everything at once.",
       },
       {
         question: "Does TMBC replace baby registries?",
-        answer:
-          "No. TMBC supports registries — it doesn’t replace them. We help you plan intentionally, understand what matters, and build registries with context and guidance.",
+        answer: "No—we help you plan intentionally, understand what matters, and build registries with context.",
       },
       {
         question: "Are you affiliated with specific brands?",
-        answer:
-          "We work with select partners, but guidance is mentor-led and context-first. Recommendations are never one-size-fits-all.",
+        answer: "Mentor-led advice stays context-first; recommendations never feel one-size-fits-all.",
       },
     ],
   },
@@ -96,13 +84,11 @@ const faqGroups = [
     items: [
       {
         question: "Is my information private?",
-        answer:
-          "Yes. Your experience, reflections, and planning details are private by default. Sharing is always optional and intentional.",
+        answer: "Yes. Your entries and planning remain private unless you choose to share.",
       },
       {
-        question: "Is there pressure to keep up or finish everything?",
-        answer:
-          "No. TMBC is designed to move at your pace. There are no deadlines — only gentle next steps.",
+        question: "Is there pressure to finish everything?",
+        answer: "No. TMBC moves at your pace—no deadlines, only gentle next steps.",
       },
     ],
   },
@@ -123,23 +109,24 @@ export default function FAQPage() {
         imageWidth={1536}
         imageHeight={1024}
         headline="Questions are part of the journey."
-        supportingText="These answers were written with calm, mentor-led context so you can orient yourself before requesting an invite."
+        supportingText="Calm mentor-led answers to orient you before requesting an invite."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
           className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
         priority
+        motion
       />
       <MarketingContent>
         <div className="marketing-content space-y-16 text-[var(--tmbc-charcoal)]">
-          <section className="marketing-section marketing-card mx-auto max-w-3xl rounded-[36px] bg-[var(--tmbc-ivory)]/90 px-8 py-20 text-center shadow-[0_25px_90px_rgba(199,166,199,0.25)]">
+          <section className="marketing-section marketing-card mx-auto max-w-3xl rounded-[36px] bg-[var(--tmbc-ivory)]/90 px-8 py-20 text-center shadow-[0_20px_80px_rgba(199,166,199,0.25)]">
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">FAQ</p>
             <h1 className="mt-3 font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-              We anticipated your questions.
+              Questions we anticipate.
             </h1>
-            <p className="marketing-subtitle mt-4 mb-6 text-base text-[var(--tmbc-charcoal)] text-opacity-80">
-              Here are the common curiosities we hear — answered simply, calmly, and honestly.
+            <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-80">
+              Calm answers that respect your timing and curiosity.
             </p>
           </section>
 
