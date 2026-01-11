@@ -79,7 +79,7 @@ export default function LearnPage() {
           </section>
 
           <section className="marketing-section marketing-card bg-white/90 px-8 py-20 md:py-28">
-            <div className="flex flex-col items-center gap-10">
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] gap-10">
               <div className="space-y-5 text-center">
                 <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                   Interface preview
