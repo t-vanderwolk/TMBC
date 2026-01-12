@@ -1,9 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
 import { useParams } from "next/navigation";
 
+import { authedFetch } from "@/lib/authedFetch";
 import { useRequireRole } from "@/lib/auth/useRequireRole";
 import type { RegistryItemResponse } from "@/lib/services/server/registry.service";
 import PlanSectionShell from "@/components/plan/PlanSectionShell";
@@ -125,12 +133,11 @@ const postPlanSection = async (
   memberId: string,
   payload: { sectionKey: string; decisionState?: string | null; mentorNote?: string | null },
 ) => {
-  const response = await fetch(`/api/mentor/plan/${memberId}/sections`, {
-    method: "POST",
-    cache: "no-store",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+    const response = await authedFetch(`/api/mentor/plan/${memberId}/sections`, {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(payload),
+    });
   const data = await response.json();
   if (!response.ok) {
     throw new Error(data?.error || "Unable to update plan section.");
@@ -166,7 +173,7 @@ export default function MentorPlanPage() {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(`/api/mentor/plan/${memberId}`, { cache: "no-store" });
+      const response = await authedFetch(`/api/mentor/plan/${memberId}`, { cache: "no-store" });
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data?.error || "Unable to load member plan.");
@@ -251,10 +258,9 @@ export default function MentorPlanPage() {
     }
     try {
       setSaving(true);
-      const response = await fetch(`/api/mentor/plan/${memberId}/suggest`, {
+      const response = await authedFetch(`/api/mentor/plan/${memberId}/suggest`, {
         method: "POST",
         cache: "no-store",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
           brand,
@@ -288,12 +294,14 @@ export default function MentorPlanPage() {
     }
     try {
       setFormError("");
-      const response = await fetch(`/api/mentor/external-registries/${registryId}/notes`, {
-        method: "POST",
-        cache: "no-store",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ note }),
-      });
+      const response = await authedFetch(
+        `/api/mentor/external-registries/${registryId}/notes`,
+        {
+          method: "POST",
+          cache: "no-store",
+          body: JSON.stringify({ note }),
+        },
+      );
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data?.error || "Unable to save note.");

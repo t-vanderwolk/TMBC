@@ -6,13 +6,16 @@ import DashboardCard from "@/components/dashboard/ui/DashboardCard";
 import DashboardSection from "@/components/dashboard/ui/DashboardSection";
 import { EmptyState } from "@/components/dashboard/shared/EmptyState";
 import AdminStatCard from "@/components/dashboard/admin/AdminStatCard";
+import BlogControls from "@/components/dashboard/admin/BlogControls";
 import { getAdminStats } from "@/lib/services/server/admin.service";
 import { listInviteRequests } from "@/lib/services/server/inviteRequest.service";
+import { getAdminBlogControlSnapshot } from "@/lib/services/server/blogAdminControls.service";
 
 export default async function AdminDashboardPage() {
-  const [stats, inviteRequests] = await Promise.all([
+  const [stats, inviteRequests, blogSnapshot] = await Promise.all([
     getAdminStats(),
     listInviteRequests(),
+    getAdminBlogControlSnapshot(),
   ]);
 
   const pendingInviteCount = inviteRequests.filter((request) => request.status === "pending").length;
@@ -66,6 +69,14 @@ export default async function AdminDashboardPage() {
             </div>
           </div>
         </DashboardCard>
+      </DashboardSection>
+
+      <DashboardSection
+        eyebrow="Blog controls"
+        title="Blog activity snapshot"
+        description="Jump straight into mentor drafts, submissions, and publish-ready posts."
+      >
+        <BlogControls data={blogSnapshot} />
       </DashboardSection>
 
       <DashboardSection

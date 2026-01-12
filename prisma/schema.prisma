@@ -116,6 +116,7 @@ model BlogPost {
 
   status             BlogStatus @default(DRAFT)
   isAffiliate        Boolean    @default(true)
+  submittedAt        DateTime?
   publishedAt        DateTime?
 
   authorId           String

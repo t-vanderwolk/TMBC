@@ -1,7 +1,30 @@
 export type AffiliateNetwork = "CJ" | "IMPACT" | "AWIN" | "SHAREASALE" | "MYREGISTRY" | "DIRECT";
 export type AffiliatePosition = "INLINE" | "CALLOUT" | "END_CARD";
-export type AffiliatePartnerStatus = "ACTIVE" | "PAUSED";
+export type AffiliatePartnerStatus = "ACTIVE" | "AT_RISK" | "PAUSED";
+export type AffiliatePartnerRole = "Brand" | "Retailer" | "Infrastructure";
 export type AffiliatePartnerUsage = "BLOG" | "REGISTRY" | "BOTH" | "NONE";
+
+export type AffiliateVisibility = {
+  blogEligible: boolean;
+  registryEligible: boolean;
+  mentorVisible: boolean;
+};
+
+export type AffiliateBlogSettings = {
+  eligible: boolean;
+  defaultCta: "Shop" | "Explore" | "Learn More";
+  placement: "END_CARD";
+  primaryEligible: boolean;
+};
+
+export type AffiliateRegistrySettings = {
+  retailerTier?: "Tier-1" | "Tier-2";
+  priority?: number;
+  categoryExclusions: string[];
+  fallbackToBrandDirect: boolean;
+};
+
+export type AffiliateIds = Partial<Record<AffiliateNetwork, string>>;
 
 export type BlogPostSummary = {
   id: string;
@@ -15,11 +38,24 @@ export type AdminAffiliatePartner = {
   network: AffiliateNetwork;
   status: AffiliatePartnerStatus;
   usage: AffiliatePartnerUsage;
+  category: string | null;
+  role: AffiliatePartnerRole;
+  commissionRate: string | null;
+  visibility: AffiliateVisibility;
+  blogSettings: AffiliateBlogSettings;
+  registrySettings: AffiliateRegistrySettings;
+  affiliateIds: AffiliateIds;
+  defaultLink: string | null;
+  cookieWindow: number | null;
+  internalNotes: string | null;
   lastClickAt: string | null;
   note: string | null;
   blogLinkCount: number;
   activeLinkCount: number;
   pausedLinkCount: number;
+  clickCount: number;
+  hasBlogLink: boolean;
+  hasRegistryItem: boolean;
 };
 
 export type AdminBlogAffiliateLink = {

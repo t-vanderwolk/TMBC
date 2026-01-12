@@ -1,19 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
+import { authedFetch } from "@/lib/authedFetch";
 import { useRequireRole } from "@/lib/auth/useRequireRole";
+import StatusBadge from "@/components/blog-admin/StatusBadge";
 
 type MentorPost = {
   id: string;
   slug: string;
   title: string;
-  excerpt: string | null;
   status: "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED";
   updatedAt: string;
   publishedAt: string | null;
+  submittedAt: string | null;
+  isAffiliate: boolean;
 };
 
 const formatDate = (value: string | null) =>
@@ -21,42 +23,22 @@ const formatDate = (value: string | null) =>
     ? new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
     : "Not published";
 
-const slugify = (value: string) =>
-  value
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9-]+/g, "-")
-    .replace(/-{2,}/g, "-")
-    .replace(/^-|-$/g, "");
-
 export default function MentorBlogDashboard() {
   useRequireRole(["MENTOR", "ADMIN"]);
-  const router = useRouter();
   const [posts, setPosts] = useState<MentorPost[]>([]);
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-
-  const suggestedSlug = useMemo(() => slugify(title), [title]);
-
-  useEffect(() => {
-    if (!slug) {
-      setSlug(suggestedSlug);
-    }
-  }, [suggestedSlug, slug]);
 
   const loadPosts = async () => {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch("/api/mentor/blog", { cache: "no-store" });
-      const data = await response.json();
+      const response = await authedFetch("/api/mentor/blog", { cache: "no-store" });
+      const payload = await response.json();
       if (!response.ok) {
-        throw new Error(data?.error || "Unable to load drafts.");
+        throw new Error(payload?.error ?? "Unable to load drafts.");
       }
-      setPosts(data?.data ?? []);
+      setPosts(payload?.data ?? []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to load drafts.");
     } finally {
@@ -68,52 +50,21 @@ export default function MentorBlogDashboard() {
     void loadPosts();
   }, []);
 
-  const handleCreate = async (event: FormEvent) => {
-    event.preventDefault();
-    if (!title.trim() || !slug.trim()) {
-      setError("Add a title and slug before creating a draft.");
-      return;
-    }
-    try {
-      setSaving(true);
-      setError("");
-      const response = await fetch("/api/mentor/blog", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          slug,
-          excerpt: null,
-          heroImage: null,
-          tags: [],
-          content: [],
-          highlights: [],
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data?.error || "Unable to create draft.");
-      }
-      const id = data?.data?.id as string | undefined;
-      if (id) {
-        router.push(`/dashboard/mentor/blog/${id}`);
-      } else {
-        await loadPosts();
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to create draft.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
   return (
     <main className="space-y-6 px-4 pb-20 pt-6 text-[#3E2F35] sm:px-6">
       <header className="space-y-2 rounded-[28px] bg-[#FFF9F5] p-5 shadow-sm">
         <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Mentor blog</p>
-        <h1 className="font-serif text-3xl text-[#3E2F35]">Mentor drafts</h1>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 className="font-serif text-3xl text-[#3E2F35]">Draft workspace</h1>
+          <Link
+            href="/dashboard/mentor/blog/new"
+            className="rounded-full bg-[#C8A1B4] px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white"
+          >
+            New draft
+          </Link>
+        </div>
         <p className="text-sm text-[#3E2F35]/70">
-          Draft, submit, and iterate. Admins publish after review.
+          Keep your draft private until it&apos;s ready for admin review.
         </p>
       </header>
 
@@ -124,48 +75,16 @@ export default function MentorBlogDashboard() {
       ) : null}
 
       <section className="space-y-4 rounded-[28px] bg-white/95 p-5 shadow-sm">
-        <div className="space-y-1">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A]">
-            Start a new draft
-          </h2>
-          <p className="text-sm text-[#3E2F35]/70">Short, calm guidance goes furthest.</p>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#A4556A]">Your drafts</p>
+            <p className="text-sm text-[#3E2F35]/70">Tap a card to edit or submit for review.</p>
+          </div>
+          <p className="text-xs text-[#3E2F35]/60">
+            Total drafts: {posts.length}
+          </p>
         </div>
-        <form onSubmit={handleCreate} className="space-y-3">
-          <div className="space-y-2">
-            <label className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">Title</label>
-            <input
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              placeholder="A steady guide to choosing the stroller"
-              className="w-full rounded-2xl border border-[#E3C6D4] bg-white/90 p-3 text-sm text-[#3E2F35]"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">Slug</label>
-            <input
-              value={slug}
-              onChange={(event) => setSlug(event.target.value)}
-              placeholder="steady-stroller-guide"
-              className="w-full rounded-2xl border border-[#E3C6D4] bg-white/90 p-3 text-sm text-[#3E2F35]"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={saving}
-            className="rounded-full bg-[#C8A1B4] px-5 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-white disabled:opacity-60"
-          >
-            {saving ? "Creating..." : "Create draft"}
-          </button>
-        </form>
-      </section>
 
-      <section className="space-y-3 rounded-[28px] bg-white/95 p-5 shadow-sm">
-        <div className="space-y-1">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A]">
-            Drafts and reviews
-          </h2>
-          <p className="text-sm text-[#3E2F35]/70">Open a draft to refine, then submit for review.</p>
-        </div>
         {loading ? (
           <p className="text-sm text-[#3E2F35]/70">Loading drafts...</p>
         ) : posts.length ? (
@@ -173,22 +92,32 @@ export default function MentorBlogDashboard() {
             {posts.map((post) => (
               <div key={post.id} className="rounded-2xl bg-[#FFF9F5] p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
+                  <div className="space-y-1">
                     <p className="text-base font-semibold text-[#3E2F35]">{post.title}</p>
                     <p className="text-xs text-[#3E2F35]/60">{post.slug}</p>
-                    <p className="mt-2 text-xs text-[#3E2F35]/70">
-                      Status: {post.status.replace("_", " ").toLowerCase()}
+                    <p className="text-[0.65rem] text-[#3E2F35]/70">
+                      Updated {formatDate(post.updatedAt)}
                     </p>
-                    <p className="text-xs text-[#3E2F35]/60">Updated: {formatDate(post.updatedAt)}</p>
+                    <p className="text-[0.65rem] text-[#3E2F35]/70">
+                      {post.isAffiliate ? "Affiliate eligible" : "Non-affiliate draft"}
+                    </p>
+                    {post.submittedAt ? (
+                      <p className="text-[0.65rem] text-[#3E2F35]/70">
+                        Submitted {formatDate(post.submittedAt)}
+                      </p>
+                    ) : null}
                   </div>
                   <div className="space-y-2 text-right">
-                    <p className="text-xs text-[#3E2F35]/60">Published: {formatDate(post.publishedAt)}</p>
+                    <StatusBadge status={post.status} />
                     <Link
                       href={`/dashboard/mentor/blog/${post.id}`}
                       className="inline-flex items-center justify-center rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A]"
                     >
-                      Open draft
+                      Edit
                     </Link>
+                    <p className="text-[0.6rem] text-[#3E2F35]/60">
+                      Published: {formatDate(post.publishedAt)}
+                    </p>
                   </div>
                 </div>
               </div>

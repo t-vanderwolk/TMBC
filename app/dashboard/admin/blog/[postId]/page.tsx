@@ -2,59 +2,76 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
 
+import { authedFetch } from "@/lib/authedFetch";
 import { useRequireRole } from "@/lib/auth/useRequireRole";
-import BlogContentRenderer, { type BlogContentBlock } from "@/components/blog/BlogContentRenderer";
-import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
+import BlogEditorForm, {
+  type BlogContentBlock,
+  type BlogEditorFormPayload,
+} from "@/components/blog-admin/BlogEditorForm";
+import StatusBadge from "@/components/blog-admin/StatusBadge";
+import AuthorBadge from "@/components/blog-admin/AuthorBadge";
+import AnalyticsMiniCards from "@/components/blog-admin/AnalyticsMiniCards";
+import AffiliateLinksEditor, {
+  type AffiliateLinkSummary,
+} from "@/components/blog-admin/AffiliateLinksEditor";
 
-type AdminReviewPost = {
+type AdminPost = {
   id: string;
   title: string;
   slug: string;
   excerpt: string | null;
-  content: BlogContentBlock[];
   heroImage: string | null;
+  content: Array<{ type: string; [key: string]: unknown }>;
+  tags: string[];
   status: "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED";
+  isAffiliate: boolean;
+  publishedAt: string | null;
+  submittedAt: string | null;
   authorName: string;
   authorRoleSnapshot: "ADMIN" | "MENTOR";
-  highlights: Array<{
-    id: string;
-    productId: string | null;
-    brandName: string | null;
-    note: string;
-    product: {
-      id: string;
-      name: string;
-      brand: string | null;
-      category: string | null;
-      imageUrl: string | null;
-    } | null;
-  }>;
+  highlights: Array<{ id: string; note: string; productId: string | null; brandName: string | null }>;
+  affiliateLinks: AffiliateLinkSummary[];
 };
 
-export default function AdminBlogReviewDetail() {
+type AnalyticsPayload = {
+  views: number;
+  read75: number;
+  shares: number;
+  clicks: number;
+};
+
+const formatDate = (value: string | null) =>
+  value
+    ? new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+    : "Not available";
+
+export default function AdminBlogPostPage() {
   useRequireRole(["ADMIN"]);
   const params = useParams<{ postId: string }>();
   const postId = params?.postId ?? "";
 
-  const [post, setPost] = useState<AdminReviewPost | null>(null);
+  const [post, setPost] = useState<AdminPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [archiving, setArchiving] = useState(false);
+  const [returning, setReturning] = useState(false);
+  const [analytics, setAnalytics] = useState<AnalyticsPayload | null>(null);
   const [error, setError] = useState("");
 
   const loadPost = async () => {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(`/api/admin/blog/${postId}`, { cache: "no-store" });
+      const response = await authedFetch(`/api/admin/blog/${postId}`, { cache: "no-store" });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data?.error || "Unable to load blog draft.");
+        throw new Error(data?.error ?? "Unable to load post.");
       }
       setPost(data?.data ?? null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to load blog draft.");
+    } catch (loadError) {
+      setError(loadError instanceof Error ? loadError.message : "Unable to load post.");
     } finally {
       setLoading(false);
     }
@@ -65,39 +82,95 @@ export default function AdminBlogReviewDetail() {
     void loadPost();
   }, [postId]);
 
-  const handleAction = async (action: "publish" | "return") => {
-    setError("");
+  const loadAnalytics = async () => {
+    if (!postId) {
+      return;
+    }
     try {
-      setSaving(true);
-      const response = await fetch(`/api/admin/blog/${postId}/${action}`, { method: "POST" });
+      const response = await authedFetch(`/api/admin/blog/analytics?postId=${postId}`, { cache: "no-store" });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data?.error || "Unable to update draft.");
+        throw new Error(data?.error ?? "Unable to load analytics.");
       }
-      setPost(data?.data ?? post);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to update draft.");
+      const metrics = data?.data?.posts?.[0]?.metrics;
+      setAnalytics(metrics ?? null);
+    } catch {
+      setAnalytics(null);
+    }
+  };
+
+  useEffect(() => {
+    void loadAnalytics();
+  }, [postId]);
+
+  const handleSave = async (payload: BlogEditorFormPayload) => {
+    setSaving(true);
+    setError("");
+    try {
+      const response = await authedFetch(`/api/admin/blog/${postId}`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result?.error ?? "Unable to save post.");
+      }
+      await loadPost();
     } finally {
       setSaving(false);
     }
   };
 
+  const handleAction = async (action: "publish" | "archive" | "return") => {
+    setError("");
+    if (action === "publish") {
+      setPublishing(true);
+    } else if (action === "archive") {
+      setArchiving(true);
+    } else {
+      setReturning(true);
+    }
+
+    try {
+      const endpoint =
+        action === "publish"
+          ? `/api/admin/blog/${postId}/publish`
+          : action === "archive"
+          ? `/api/admin/blog/${postId}/archive`
+          : `/api/admin/blog/${postId}/return`;
+      const response = await authedFetch(endpoint, { method: "POST" });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result?.error ?? "Unable to update status.");
+      }
+      await loadPost();
+    } catch (statusError) {
+      setError(statusError instanceof Error ? statusError.message : "Unable to update status.");
+    } finally {
+      setPublishing(false);
+      setArchiving(false);
+      setReturning(false);
+    }
+  };
+
+  if (!postId) {
+    return <p className="text-sm text-[#3E2F35]/70">Post not found.</p>;
+  }
+
   return (
     <main className="space-y-6 px-4 pb-20 pt-6 text-[#3E2F35] sm:px-6">
       <header className="space-y-2 rounded-[28px] bg-[#FFF9F5] p-5 shadow-sm">
-        <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Blog review</p>
-        <h1 className="font-serif text-3xl text-[#3E2F35]">Approve mentor draft</h1>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Admin blog</p>
+            <h1 className="font-serif text-3xl text-[#3E2F35]">Review post</h1>
+          </div>
+          {post ? <StatusBadge status={post.status} /> : null}
+        </div>
         <p className="text-sm text-[#3E2F35]/70">
-          Confirm tone, highlights, and disclosure alignment before publishing.
+          Tip the tone, affiliate strategy, and status before the story goes live.
         </p>
       </header>
-
-      <div className="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.35em] text-[#A4556A]">
-        <span>Status: {post?.status.replace("_", " ").toLowerCase() ?? "loading"}</span>
-        <Link href="/dashboard/admin/blog" className="text-[#A4556A] hover:text-[#7C3B53]">
-          Back to review list
-        </Link>
-      </div>
 
       {error ? (
         <div className="rounded-[28px] border border-[#F0CCD7] bg-[#FFF4FA] px-5 py-3 text-sm text-[#8B4A61]">
@@ -105,50 +178,77 @@ export default function AdminBlogReviewDetail() {
         </div>
       ) : null}
 
-      {loading ? (
+      {loading || !post ? (
         <section className="rounded-[28px] bg-white/95 p-5 shadow-sm">
-          <p className="text-sm text-[#3E2F35]/70">Loading draft...</p>
+          <p className="text-sm text-[#3E2F35]/70">Loading post...</p>
         </section>
-      ) : null}
-
-      {!loading && post ? (
+      ) : (
         <>
-          <section className="space-y-4 rounded-[28px] bg-white/95 p-5 shadow-sm">
-            <div>
-              <h2 className="text-2xl font-serif text-[#3E2F35]">{post.title}</h2>
-              <p className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">{post.slug}</p>
-              <p className="text-sm text-[#3E2F35]/70">
-                {post.authorName} · {post.authorRoleSnapshot.toLowerCase()}
-              </p>
+          <div className="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.35em] text-[#A4556A]">
+            <span>Status: {post.status.replace("_", " ").toLowerCase()}</span>
+            <span>
+              Submitted: {formatDate(post.submittedAt)} · Published: {formatDate(post.publishedAt)}
+            </span>
+          </div>
+
+          <BlogEditorForm
+            initialValue={{
+              title: post.title,
+              slug: post.slug,
+              excerpt: post.excerpt,
+              heroImage: post.heroImage,
+              tags: post.tags,
+              content: post.content as BlogContentBlock[],
+              isAffiliate: post.isAffiliate,
+            }}
+            status={post.status}
+            onSubmit={handleSave}
+            saving={saving}
+            submitLabel="Save updates"
+          >
+            <div className="flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => void handleAction("publish")}
+                disabled={publishing || post.status === "PUBLISHED"}
+                className="rounded-full bg-[#2B7C6F] px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white disabled:opacity-60"
+              >
+                {publishing ? "Publishing..." : "Approve & publish"}
+              </button>
+              <button
+                type="button"
+                onClick={() => void handleAction("archive")}
+                disabled={archiving || post.status === "ARCHIVED"}
+                className="rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
+              >
+                {archiving ? "Archiving..." : "Archive"}
+              </button>
+              <button
+                type="button"
+                onClick={() => void handleAction("return")}
+                disabled={returning || post.status === "DRAFT"}
+                className="rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
+              >
+                {returning ? "Returning..." : "Return to draft"}
+              </button>
             </div>
-            {post.excerpt ? <p className="text-sm text-[#3E2F35]/80">{post.excerpt}</p> : null}
+          </BlogEditorForm>
+
+          <section className="space-y-3 rounded-[28px] border border-[#E3C6D4] bg-white/95 p-5 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-[0.55rem] uppercase tracking-[0.35em] text-[#A4556A]">Analytics</p>
+              <AuthorBadge authorName={post.authorName} authorRole={post.authorRoleSnapshot} />
+            </div>
+            {analytics ? (
+              <AnalyticsMiniCards metrics={analytics} />
+            ) : (
+              <p className="text-xs text-[#3E2F35]/60">Analytics will show once data is available.</p>
+            )}
           </section>
 
-          <section className="space-y-6 rounded-[28px] bg-white/95 p-5 shadow-sm">
-            <BlogContentRenderer blocks={post.content ?? []} />
-            <BlogHighlightSection highlights={post.highlights ?? []} />
-          </section>
-
-          <section className="flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={() => handleAction("publish")}
-              disabled={saving}
-              className="rounded-full bg-[#C8A1B4] px-5 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-white disabled:opacity-60"
-            >
-              {saving ? "Publishing..." : "Publish"}
-            </button>
-            <button
-              type="button"
-              onClick={() => handleAction("return")}
-              disabled={saving}
-              className="rounded-full border border-[#C8A1B4] px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
-            >
-              Return to draft
-            </button>
-          </section>
+          <AffiliateLinksEditor postId={post.id} initialLinks={post.affiliateLinks} />
         </>
-      ) : null}
+      )}
     </main>
   );
 }

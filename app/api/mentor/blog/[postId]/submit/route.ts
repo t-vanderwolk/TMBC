@@ -25,7 +25,7 @@ export async function POST(_request: Request, context: RouteContext) {
 
     const updated = await prisma.blogPost.update({
       where: { id: post.id },
-      data: { status: "IN_REVIEW" },
+      data: { status: "IN_REVIEW", submittedAt: new Date() },
     });
 
     return NextResponse.json({ data: updated });

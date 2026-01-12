@@ -7,12 +7,17 @@ type RouteContext = {
   params: { postId: string };
 };
 
+const requireAdmin = async () => {
+  const user = await getUserOrThrow();
+  if (user.role !== "ADMIN") {
+    throw new Error("Only admins can publish blog posts.");
+  }
+  return user;
+};
+
 export async function POST(_request: Request, context: RouteContext) {
   try {
-    const user = await getUserOrThrow();
-    if (user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Only admins can publish blog posts." }, { status: 403 });
-    }
+    await requireAdmin();
 
     const post = await prisma.blogPost.findUnique({ where: { id: context.params.postId } });
     if (!post) {

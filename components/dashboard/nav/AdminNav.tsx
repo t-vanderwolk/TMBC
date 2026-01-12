@@ -5,6 +5,7 @@ import Link from "next/link";
 const ADMIN_NAV = [
   { label: "Overview", href: "/dashboard/admin" },
   { label: "Blog", href: "/dashboard/admin/blog" },
+  { label: "Blog controls", href: "/dashboard/admin#blog-controls" },
   { label: "Invites", href: "/dashboard/admin/invites" },
   { label: "Members", href: "/dashboard/admin/members" },
   { label: "Mentors", href: "/dashboard/admin/mentors" },

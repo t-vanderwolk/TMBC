@@ -100,6 +100,10 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
     href: "/dashboard/admin",
   },
   {
+    label: "Blog controls",
+    href: "/dashboard/admin#blog-controls",
+  },
+  {
     label: "Waitlist",
     href: "/dashboard/admin/waitlist",
   },

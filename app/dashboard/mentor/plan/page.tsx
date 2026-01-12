@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { authedFetch } from "@/lib/authedFetch";
 import { useRequireRole } from "@/lib/auth/useRequireRole";
 
 type Mentee = {
@@ -24,7 +25,7 @@ export default function MentorPlanIndexPage() {
       setLoading(true);
       setError("");
       try {
-        const response = await fetch("/api/mentor/mentees", { cache: "no-store" });
+        const response = await authedFetch("/api/mentor/mentees", { cache: "no-store" });
         const data = await response.json();
         if (!response.ok) {
           throw new Error(data?.error || "Unable to load members.");

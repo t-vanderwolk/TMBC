@@ -1,0 +1,556 @@
+{
+  "partners": {
+    "Make-A-Fort, LLC": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "5%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": true,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Owlet Baby Care Inc.": {
+      "category": "Sleep",
+      "role": "BRAND",
+      "commissionRate": "6%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": true,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Bungle Nursery Cribs": {
+      "category": "Nursery",
+      "role": "BRAND",
+      "commissionRate": "4%",
+      "status": "AT_RISK",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "dadada Baby": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "5%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Bella Luna Toys": {
+      "category": "Toys",
+      "role": "BRAND",
+      "commissionRate": "4%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Inklings Baby": {
+      "category": "Registry",
+      "role": "BRAND",
+      "commissionRate": "6%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "MyRegistry.com": {
+      "category": "Infrastructure",
+      "role": "INFRASTRUCTURE",
+      "commissionRate": null,
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": false,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": false,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": "Infrastructure partner for registry routing"
+    },
+    "Petit from Poa": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "6%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Inglesina": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "5%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "The Uptown Baby": {
+      "category": "Retailer",
+      "role": "RETAILER",
+      "commissionRate": "3%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": true,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": "Tier-2",
+        "priority": 2,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "ERGO Baby Carrier, Inc.": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "5%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Albee Baby": {
+      "category": "Retailer",
+      "role": "RETAILER",
+      "commissionRate": "2%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": true,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": "Tier-1",
+        "priority": 1,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {
+        "CJ": "Advertiser 4488778 | PID 101548494"
+      },
+      "internalNotes": null
+    },
+    "BC Babycare": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "10%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Coco Moon Hawai‘i": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "3%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Colugo": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "8%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "SlumberPod": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "5%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Babeside": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "20%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Angelbliss": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "10%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Mustela USA": {
+      "category": "Skin Care",
+      "role": "BRAND",
+      "commissionRate": "8%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Kids2Shop": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "7%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Pish Posh Baby": {
+      "category": "Retailer",
+      "role": "RETAILER",
+      "commissionRate": "6%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": true,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": "Tier-2",
+        "priority": 3,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Happiest Baby": {
+      "category": "Gear",
+      "role": "BRAND",
+      "commissionRate": "$25 per SNOO rental",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": false,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": null,
+        "priority": null,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    }
+  }
+}

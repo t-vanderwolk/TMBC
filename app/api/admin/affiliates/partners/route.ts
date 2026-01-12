@@ -6,13 +6,17 @@ import { listAdminAffiliatePartners } from "@/lib/services/server/affiliateAdmin
 
 export const dynamic = "force-dynamic";
 
+const requireAdmin = async (request?: Request) => {
+  const user = await getUserOrThrow(request);
+  if (user.role !== Role.ADMIN) {
+    throw new Error("Unauthorized");
+  }
+  return user;
+};
+
 export async function GET(request: Request) {
   try {
-    const user = await getUserOrThrow(request);
-    if (user.role !== Role.ADMIN) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-    }
-
+    await requireAdmin(request);
     const partners = await listAdminAffiliatePartners();
     return NextResponse.json({ data: partners });
   } catch (error) {

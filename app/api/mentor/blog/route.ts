@@ -1,12 +1,17 @@
+import { Role } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { prisma } from "@/lib/prisma";
-import { upsertBlogHighlights, validateMentorBlogPayload } from "@/lib/services/server/mentorBlog.service";
+import {
+  upsertBlogHighlights,
+  validateBlogPayload,
+  ensureUniqueBlogSlug,
+} from "@/lib/services/server/blog.service";
 
 const requireMentor = async () => {
   const user = await getUserOrThrow();
-  if (user.role !== "MENTOR" && user.role !== "ADMIN") {
+  if (user.role !== Role.MENTOR && user.role !== Role.ADMIN) {
     throw new Error("Only mentors can manage blog drafts.");
   }
   return user;
@@ -26,6 +31,8 @@ export async function GET() {
         status: true,
         updatedAt: true,
         publishedAt: true,
+        submittedAt: true,
+        isAffiliate: true,
       },
     });
 
@@ -40,26 +47,22 @@ export async function POST(request: Request) {
   try {
     const user = await requireMentor();
     const payload = await request.json();
-    const validated = await validateMentorBlogPayload(payload);
+    const validated = await validateBlogPayload(payload);
 
-    const existing = await prisma.blogPost.findUnique({ where: { slug: validated.slug } });
-    if (existing) {
-      return NextResponse.json({ error: "Slug already exists." }, { status: 400 });
-    }
-
+    const slug = await ensureUniqueBlogSlug(validated.slug);
     const post = await prisma.blogPost.create({
       data: {
-        slug: validated.slug,
+        slug,
         title: validated.title,
         excerpt: validated.excerpt,
         heroImage: validated.heroImage,
         content: validated.content,
         tags: validated.tags,
         status: "DRAFT",
-        isAffiliate: true,
+        isAffiliate: validated.isAffiliate,
         authorId: user.id,
         authorName: user.name || user.email,
-        authorRoleSnapshot: user.role === "ADMIN" ? "ADMIN" : "MENTOR",
+        authorRoleSnapshot: user.role === Role.ADMIN ? "ADMIN" : "MENTOR",
       },
     });
 

@@ -1,20 +1,40 @@
 import { prisma } from "@/lib/prisma";
 import { decodeAffiliateDestination, encodeAffiliateDestination } from "@/lib/services/server/affiliateLinkMetadata";
-import { getAllPartnerNotes, setPartnerNote } from "@/lib/data/adminAffiliateNotes";
+import type { AffiliateMetadataEntry } from "@/lib/data/adminAffiliateMetadata";
+import {
+  listAffiliateMetadata,
+  updateAffiliateMetadata,
+} from "@/lib/data/adminAffiliateMetadata";
 import type {
   AffiliateAnalyticsRow,
   AffiliateNetwork,
   AffiliatePartnerStatus,
+  AffiliatePartnerRole,
   AffiliatePartnerUsage,
-  AffiliatePosition,
+  AffiliateIds,
+  AffiliateVisibility,
+  AffiliateBlogSettings,
+  AffiliateRegistrySettings,
   AdminAffiliatePartner,
   AdminBlogAffiliateLink,
   AdminBlogLinksPayload,
   BlogPostSummary,
 } from "@/types/adminAffiliates";
 
-type PartnerStatusUpdate = {
+type PartnerUpdatePayload = {
+  name?: string;
+  network?: AffiliateNetwork;
+  defaultLink?: string | null;
+  cookieWindow?: number | null;
+  commissionRate?: string | null;
   status?: AffiliatePartnerStatus;
+  category?: string | null;
+  role?: AffiliatePartnerRole;
+  visibility?: Partial<AffiliateVisibility>;
+  blogSettings?: Partial<AffiliateBlogSettings>;
+  registrySettings?: Partial<AffiliateRegistrySettings>;
+  affiliateIds?: AffiliateIds;
+  internalNotes?: string | null;
   note?: string | null;
 };
 
@@ -34,6 +54,8 @@ type BlogLinkUpdatePayload = {
   status?: AffiliatePartnerStatus;
   label?: string;
   position?: AffiliatePosition;
+  partnerName?: string;
+  network?: AffiliateNetwork;
 };
 
 const usageFor = (hasBlog: boolean, hasRegistry: boolean): AffiliatePartnerUsage => {
@@ -44,45 +66,71 @@ const usageFor = (hasBlog: boolean, hasRegistry: boolean): AffiliatePartnerUsage
 };
 
 export const listAdminAffiliatePartners = async (): Promise<AdminAffiliatePartner[]> => {
-  const [partners, blogLinks, registryCounts, partnerNotes] = await Promise.all([
+  const [partners, blogLinks, registryCounts, metadata] = await Promise.all([
     prisma.affiliatePartner.findMany(),
     prisma.blogAffiliateLink.findMany({ select: { id: true, partnerName: true, destinationUrl: true } }),
     prisma.registryItem.groupBy({
       by: ["affiliateId"],
       _count: { id: true },
     }),
-    getAllPartnerNotes(),
+    listAffiliateMetadata(),
   ]);
 
-  const linkStats = new Map<string, { links: number; active: number; paused: number }>();
-  const linkById = new Map<string, { partnerName: string; destinationUrl: string }>();
+  type PartnerStats = {
+    links: number;
+    active: number;
+    paused: number;
+    clickCount: number;
+    lastClickAt: Date | null;
+  };
+
+  const linkStats = new Map<string, PartnerStats>();
+  const linkLookup = new Map<string, string>();
+
+  const ensureStats = (partnerName: string) => {
+    const existing = linkStats.get(partnerName);
+    if (existing) return existing;
+    const next: PartnerStats = { links: 0, active: 0, paused: 0, clickCount: 0, lastClickAt: null };
+    linkStats.set(partnerName, next);
+    return next;
+  };
+
   for (const link of blogLinks) {
-    linkById.set(link.id, link);
+    linkLookup.set(link.id, link.partnerName);
     const key = link.partnerName;
     const decoded = decodeAffiliateDestination(link.destinationUrl);
     const status = decoded?.status ?? "ACTIVE";
-    const bucket = linkStats.get(key) ?? { links: 0, active: 0, paused: 0 };
-    bucket.links += 1;
+    const stats = ensureStats(key);
+    stats.links += 1;
     if (status === "ACTIVE") {
-      bucket.active += 1;
+      stats.active += 1;
     } else {
-      bucket.paused += 1;
+      stats.paused += 1;
     }
-    linkStats.set(key, bucket);
   }
 
-  const lastClickByPartner = new Map<string, Date>();
-  const events = await prisma.blogAffiliateEvent.findMany({
-    where: { affiliateLinkId: { in: Array.from(linkById.keys()) }, event: "CLICK" },
+  const clickCounts = await prisma.blogAffiliateEvent.groupBy({
+    by: ["affiliateLinkId"],
+    where: { affiliateLinkId: { in: Array.from(linkLookup.keys()) }, event: "CLICK" },
+    _count: { id: true },
+  });
+  for (const row of clickCounts) {
+    const partnerName = linkLookup.get(row.affiliateLinkId);
+    if (!partnerName) continue;
+    const stats = ensureStats(partnerName);
+    stats.clickCount += row._count.id;
+  }
+
+  const lastClicks = await prisma.blogAffiliateEvent.findMany({
+    where: { affiliateLinkId: { in: Array.from(linkLookup.keys()) }, event: "CLICK" },
     orderBy: { createdAt: "desc" },
     select: { affiliateLinkId: true, createdAt: true },
   });
-  for (const event of events) {
-    const link = linkById.get(event.affiliateLinkId);
-    if (!link) continue;
-    if (!lastClickByPartner.has(link.partnerName)) {
-      lastClickByPartner.set(link.partnerName, event.createdAt);
-    }
+  for (const event of lastClicks) {
+    const partnerName = linkLookup.get(event.affiliateLinkId);
+    if (!partnerName || linkStats.get(partnerName)?.lastClickAt) continue;
+    const stats = ensureStats(partnerName);
+    stats.lastClickAt = event.createdAt;
   }
 
   const registryMap = new Map<string, number>();
@@ -92,41 +140,111 @@ export const listAdminAffiliatePartners = async (): Promise<AdminAffiliatePartne
     }
   }
 
-  return partners.map((partner) => {
-    const key = partner.name;
-    const stats = linkStats.get(key) ?? { links: 0, active: 0, paused: 0 };
-    const hasBlogLinks = stats.links > 0;
-    const hasRegistry = Boolean(registryMap.get(partner.id));
-    const status = stats.active > 0 ? "ACTIVE" : "PAUSED";
-    const lastClick = lastClickByPartner.get(key) ?? null;
+  const formatPartner = (partner: typeof partners[number]): AdminAffiliatePartner => {
+    const stats = linkStats.get(partner.name) ?? {
+      links: 0,
+      active: 0,
+      paused: 0,
+      clickCount: 0,
+      lastClickAt: null,
+    };
+    const partnerMeta = metadata[partner.id];
+    const hasBlogLink = stats.links > 0;
+    const hasRegistryItem = Boolean(registryMap.get(partner.id));
+    const status: AffiliatePartnerStatus =
+      partnerMeta?.status ??
+      (stats.active > 0 ? "ACTIVE" : stats.links > 0 ? "AT_RISK" : "PAUSED");
+    const visibility: AffiliateVisibility = {
+      blogEligible: partnerMeta?.visibility?.blogEligible ?? hasBlogLink,
+      registryEligible: partnerMeta?.visibility?.registryEligible ?? hasRegistryItem,
+      mentorVisible: partnerMeta?.visibility?.mentorVisible ?? true,
+    };
+    const blogSettings: AffiliateBlogSettings = {
+      eligible: partnerMeta?.blogSettings?.eligible ?? hasBlogLink,
+      defaultCta: partnerMeta?.blogSettings?.defaultCta ?? "Shop",
+      placement: "END_CARD",
+      primaryEligible: partnerMeta?.blogSettings?.primaryEligible ?? true,
+    };
+    const registrySettings: AffiliateRegistrySettings = {
+      retailerTier: partnerMeta?.registrySettings?.retailerTier,
+      priority: partnerMeta?.registrySettings?.priority ?? undefined,
+      categoryExclusions: partnerMeta?.registrySettings?.categoryExclusions ?? [],
+      fallbackToBrandDirect: partnerMeta?.registrySettings?.fallbackToBrandDirect ?? false,
+    };
+    const usage = usageFor(hasBlogLink, hasRegistryItem);
+
     return {
       id: partner.id,
       name: partner.name,
       network: partner.network as AffiliateNetwork,
       status,
-      usage: usageFor(hasBlogLinks, hasRegistry),
-      lastClickAt: lastClick ? lastClick.toISOString() : null,
-      note: partnerNotes[partner.id] ?? null,
+      usage,
+      category: partnerMeta?.category ?? null,
+      role: partnerMeta?.role ?? "Brand",
+      commissionRate: partnerMeta?.commissionRate ?? null,
+      visibility,
+      blogSettings,
+      registrySettings,
+      affiliateIds: partnerMeta?.affiliateIds ?? {},
+      defaultLink: partner.defaultLink ?? null,
+      cookieWindow: partner.cookieDays ?? null,
+      internalNotes: partnerMeta?.internalNotes ?? null,
+      lastClickAt: stats.lastClickAt ? stats.lastClickAt.toISOString() : null,
+      note: partnerMeta?.internalNotes ?? null,
       blogLinkCount: stats.links,
       activeLinkCount: stats.active,
       pausedLinkCount: stats.paused,
+      clickCount: stats.clickCount,
+      hasBlogLink,
+      hasRegistryItem,
     };
-  });
+  };
+
+  return partners.map(formatPartner);
+};
+
+export const getAdminAffiliatePartnerById = async (
+  partnerId: string,
+): Promise<AdminAffiliatePartner | null> => {
+  const partners = await listAdminAffiliatePartners();
+  return partners.find((partner) => partner.id === partnerId) ?? null;
 };
 
 export const updateAdminAffiliatePartner = async (
   partnerId: string,
-  payload: PartnerStatusUpdate,
-): Promise<void> => {
+  payload: PartnerUpdatePayload,
+): Promise<AdminAffiliatePartner> => {
   const partner = await prisma.affiliatePartner.findUnique({ where: { id: partnerId } });
   if (!partner) {
     throw new Error("Partner not found");
   }
 
-  if (payload.status) {
+  const updates: Record<string, unknown> = {};
+  if (payload.name) {
+    updates.name = payload.name;
+  }
+  if (payload.network) {
+    updates.network = payload.network;
+  }
+  if (payload.defaultLink !== undefined) {
+    updates.defaultLink = payload.defaultLink;
+  }
+  if (payload.cookieWindow !== undefined) {
+    updates.cookieDays = payload.cookieWindow;
+  }
+  if (Object.keys(updates).length) {
+    await prisma.affiliatePartner.update({ where: { id: partnerId }, data: updates });
+  }
+
+  const currentPartner = await prisma.affiliatePartner.findUnique({ where: { id: partnerId } });
+  if (!currentPartner) {
+    throw new Error("Partner not found after update");
+  }
+
+  if (payload.status && payload.status !== "AT_RISK") {
     const links = await prisma.blogAffiliateLink.findMany({
-      where: { partnerName: partner.name },
-      select: { id: true, destinationUrl: true, blogPostId: true },
+      where: { partnerName: currentPartner.name },
+      select: { id: true, destinationUrl: true },
     });
     await Promise.all(
       links.map(async (link) => {
@@ -144,9 +262,28 @@ export const updateAdminAffiliatePartner = async (
     );
   }
 
-  if (payload.note !== undefined) {
-    await setPartnerNote(partner.id, payload.note);
+  const metadataUpdate: Partial<AffiliateMetadataEntry> = {
+    category: payload.category ?? undefined,
+    role: payload.role,
+    commissionRate: payload.commissionRate ?? undefined,
+    status: payload.status,
+    visibility: payload.visibility,
+    blogSettings: payload.blogSettings,
+    registrySettings: payload.registrySettings,
+    affiliateIds: payload.affiliateIds,
+  };
+  if (payload.internalNotes !== undefined) {
+    metadataUpdate.internalNotes = payload.internalNotes;
+  } else if (payload.note !== undefined) {
+    metadataUpdate.internalNotes = payload.note;
   }
+  await updateAffiliateMetadata(partnerId, metadataUpdate);
+
+  const refreshed = await getAdminAffiliatePartnerById(partnerId);
+  if (!refreshed) {
+    throw new Error("Unable to load partner after update");
+  }
+  return refreshed;
 };
 
 export const listAdminBlogAffiliateLinks = async (): Promise<AdminBlogLinksPayload> => {
@@ -263,6 +400,12 @@ export const updateAdminBlogAffiliateLink = async (id: string, payload: BlogLink
   if (payload.position) {
     updates.position = payload.position;
   }
+  if (payload.partnerName) {
+    updates.partnerName = payload.partnerName;
+  }
+  if (payload.network) {
+    updates.network = payload.network;
+  }
   if (typeof payload.isPrimary === "boolean") {
     if (payload.isPrimary) {
       await prisma.blogAffiliateLink.updateMany({
@@ -277,6 +420,43 @@ export const updateAdminBlogAffiliateLink = async (id: string, payload: BlogLink
     where: { id },
     data: updates,
   });
+};
+
+export const listAffiliateLinksForPost = async (blogPostId: string) => {
+  const links = await prisma.blogAffiliateLink.findMany({
+    where: { blogPostId },
+    orderBy: { createdAt: "asc" },
+  });
+
+  const clickCounts = await prisma.blogAffiliateEvent.groupBy({
+    by: ["affiliateLinkId"],
+    where: {
+      affiliateLinkId: { in: links.map((link) => link.id) },
+      event: "CLICK",
+    },
+    _count: { id: true },
+  });
+  const clickMap = new Map(clickCounts.map((row) => [row.affiliateLinkId, row._count.id]));
+
+  return links.map((link) => {
+    const decoded = decodeAffiliateDestination(link.destinationUrl);
+    return {
+      id: link.id,
+      partnerName: link.partnerName,
+      network: link.network as AffiliateNetwork,
+      label: link.label,
+      position: link.position as AffiliatePosition,
+      isPrimary: link.isPrimary,
+      status: decoded?.status ?? "ACTIVE",
+      destinationUrl: decoded?.url ?? "",
+      clickCount: clickMap.get(link.id) ?? 0,
+      createdAt: link.createdAt.toISOString(),
+    };
+  });
+};
+
+export const deleteAdminBlogAffiliateLink = async (id: string) => {
+  await prisma.blogAffiliateLink.delete({ where: { id } });
 };
 
 const weekKey = (date: Date): string => {
