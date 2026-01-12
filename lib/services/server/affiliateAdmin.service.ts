@@ -1,5 +1,9 @@
 import { prisma } from "@/lib/prisma";
-import { decodeAffiliateDestination, encodeAffiliateDestination } from "@/lib/services/server/affiliateLinkMetadata";
+import {
+  decodeAffiliateDestination,
+  encodeAffiliateDestination,
+  type AffiliateLinkStatus,
+} from "@/lib/services/server/affiliateLinkMetadata";
 import type { AffiliateMetadataEntry } from "@/lib/data/adminAffiliateMetadata";
 import {
   listAffiliateMetadata,
@@ -15,6 +19,7 @@ import type {
   AffiliateVisibility,
   AffiliateBlogSettings,
   AffiliateRegistrySettings,
+  AffiliatePosition,
   AdminAffiliatePartner,
   AdminBlogAffiliateLink,
   AdminBlogLinksPayload,
@@ -250,10 +255,10 @@ export const updateAdminAffiliatePartner = async (
       links.map(async (link) => {
         const decoded = decodeAffiliateDestination(link.destinationUrl);
         const baseUrl = decoded?.url ?? "";
-        const destination = encodeAffiliateDestination({
-          url: baseUrl,
-          status: payload.status!,
-        });
+      const destination = encodeAffiliateDestination({
+        url: baseUrl,
+        status: (payload.status === "PAUSED" ? "PAUSED" : "ACTIVE") as AffiliateLinkStatus,
+      });
         await prisma.blogAffiliateLink.update({
           where: { id: link.id },
           data: { destinationUrl: destination },
@@ -388,9 +393,9 @@ export const updateAdminBlogAffiliateLink = async (id: string, payload: BlogLink
   if (payload.destinationUrl) {
     destination.url = payload.destinationUrl;
   }
-  if (payload.status) {
-    destination.status = payload.status;
-  }
+    if (payload.status) {
+      destination.status = (payload.status === "PAUSED" ? "PAUSED" : "ACTIVE") as AffiliateLinkStatus;
+    }
 
   updates.destinationUrl = encodeAffiliateDestination(destination);
 

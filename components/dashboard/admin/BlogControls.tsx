@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { authedFetch } from "@/lib/authedFetch";
 import type { AdminBlogControlPost, AdminBlogControlSnapshot } from "@/lib/services/server/blogAdminControls.service";
+import { BlogStatus } from "@prisma/client";
 
 const statusStyles: Record<string, string> = {
   DRAFT: "bg-[#F3E9F2] text-[#6D2E4D]",
@@ -52,10 +53,10 @@ export default function BlogControls({ data }: BlogControlsProps) {
 
   const summaryCards = useMemo(
     () => [
-      { label: "Drafts", status: "DRAFT" },
-      { label: "Awaiting Review", status: "IN_REVIEW", highlighted: true },
-      { label: "Published", status: "PUBLISHED" },
-      { label: "Archived", status: "ARCHIVED" },
+      { label: "Drafts", status: BlogStatus.DRAFT },
+      { label: "Awaiting Review", status: BlogStatus.IN_REVIEW, highlighted: true },
+      { label: "Published", status: BlogStatus.PUBLISHED },
+      { label: "Archived", status: BlogStatus.ARCHIVED },
     ],
     [],
   );

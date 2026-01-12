@@ -3,6 +3,7 @@
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
 const seedAcademyModules = require("./seedAcademyModules");
+const seedAffiliates = require("./seedAffiliates");
 
 const prisma = new PrismaClient();
 const PASSWORD = "Karma";
@@ -104,6 +105,7 @@ async function main() {
 
   await seedAcademyModules();
   await seedDemoRegistryProduct();
+  await seedAffiliates();
 
   console.log("🎉 TMBC seed complete");
 }

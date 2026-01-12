@@ -87,7 +87,7 @@ export const updateAffiliateMetadata = async (
     registryEligible: updates.visibility?.registryEligible ?? current.visibility?.registryEligible,
     mentorVisible: updates.visibility?.mentorVisible ?? current.visibility?.mentorVisible,
   };
-  const blogSettings = {
+  const blogSettings: AffiliateMetadataBlogSettings = {
     eligible: updates.blogSettings?.eligible ?? current.blogSettings?.eligible,
     defaultCta: updates.blogSettings?.defaultCta ?? current.blogSettings?.defaultCta,
     placement: "END_CARD",
