@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { AUTH_COOKIE_NAMES, buildAuthCookieOptions } from "@/lib/utils/server/authCookies";
 
@@ -11,9 +11,9 @@ const getRedirectUrl = () => {
   return new URL("/login", url);
 };
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const response = NextResponse.redirect(getRedirectUrl());
-  const expiredOptions = buildAuthCookieOptions({ maxAge: 0 });
+  const expiredOptions = buildAuthCookieOptions(request, { maxAge: 0 });
   for (const name of AUTH_COOKIE_NAMES) {
     response.cookies.set(name, "", expiredOptions);
   }

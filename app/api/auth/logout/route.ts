@@ -1,11 +1,8 @@
 "use server";
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-import {
-  AUTH_COOKIE_NAMES,
-  buildAuthCookieOptions,
-} from "@/lib/utils/server/authCookies";
+import { AUTH_COOKIE_NAMES, buildAuthCookieOptions } from "@/lib/utils/server/authCookies";
 
 const COOKIE_NAMES_TO_CLEAR = [
   ...AUTH_COOKIE_NAMES,
@@ -16,15 +13,15 @@ const COOKIE_NAMES_TO_CLEAR = [
   "supabase-auth-token",
 ];
 
-const clearAuthCookies = (response: NextResponse) => {
-  const expired = buildAuthCookieOptions({ maxAge: 0 });
+const clearAuthCookies = (response: NextResponse, request?: NextRequest) => {
+  const expired = buildAuthCookieOptions(request, { maxAge: 0 });
   for (const cookieName of COOKIE_NAMES_TO_CLEAR) {
     response.cookies.set(cookieName, "", expired);
   }
 };
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   const response = NextResponse.json({ success: true });
-  clearAuthCookies(response);
+  clearAuthCookies(response, request);
   return response;
 }

@@ -5,8 +5,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { AuthService } from "@/lib/services/server/auth.service";
 
 import {
-  AUTH_COOKIE_MAX_AGE,
   AUTH_COOKIE_NAMES,
+  AUTH_COOKIE_MAX_AGE,
+  PRIMARY_AUTH_COOKIE,
   buildAuthCookieOptions,
 } from "@/lib/utils/server/authCookies";
 
@@ -38,10 +39,23 @@ export async function POST(request: NextRequest) {
       redirect: result.redirect,
     };
     const response = NextResponse.json(responsePayload);
-    const authCookieOptions = buildAuthCookieOptions({ maxAge: AUTH_COOKIE_MAX_AGE });
+    const authCookieOptions = buildAuthCookieOptions(request, { maxAge: AUTH_COOKIE_MAX_AGE });
+    const cookieNames = [
+      PRIMARY_AUTH_COOKIE,
+      ...AUTH_COOKIE_NAMES.filter((name) => name !== PRIMARY_AUTH_COOKIE),
+    ];
 
-    for (const name of AUTH_COOKIE_NAMES) {
+    for (const name of cookieNames) {
       response.cookies.set(name, result.token, authCookieOptions);
+    }
+
+    if (process.env.AUTH_DEBUG === "true") {
+      console.log("AUTH_DEBUG login", {
+        requestHost: request.nextUrl.hostname,
+        cookiesSet: cookieNames,
+        userRole: result.user?.role,
+        redirectTo: result.redirect,
+      });
     }
 
     return response;
