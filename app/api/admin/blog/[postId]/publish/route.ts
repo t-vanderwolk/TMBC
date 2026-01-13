@@ -10,9 +10,10 @@ type RouteContext = {
   params: { postId: string };
 };
 
+const blogAuthorRoleEnum = z.enum(["ADMIN", "MENTOR"]);
 const publishPayloadSchema = z.object({
   authorName: z.string().trim().min(1).optional(),
-  authorRoleSnapshot: z.nativeEnum(BlogAuthorRole).optional(),
+  authorRoleSnapshot: blogAuthorRoleEnum.optional(),
 });
 
 const parseJsonBody = async (request: Request) => {
