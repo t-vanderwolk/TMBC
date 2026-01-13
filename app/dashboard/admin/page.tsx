@@ -26,9 +26,16 @@ export default async function AdminDashboardPage() {
     getBlogReadiness(),
   ]);
 
-  const blogSnapshot = blogStatus.blogDbReady
-    ? await getAdminBlogControlSnapshot()
-    : createEmptyAdminBlogControlSnapshotPayload();
+  let blogSnapshot = createEmptyAdminBlogControlSnapshotPayload();
+
+  if (blogStatus.blogDbReady) {
+    try {
+      blogSnapshot = await getAdminBlogControlSnapshot();
+    } catch (error) {
+      console.error("[ADMIN_PAGE_BLOG_FATAL]", error);
+      blogSnapshot = createEmptyAdminBlogControlSnapshotPayload();
+    }
+  }
 
   const blogDbReady = blogSnapshot.blogDbReady;
 

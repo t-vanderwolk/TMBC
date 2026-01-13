@@ -62,3 +62,19 @@ export async function getBlogReadiness(): Promise<BlogReadinessStatus> {
     blogDbReady: Boolean(record?.exists),
   };
 }
+
+export function isPrismaBlogSchemaError(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  const message = error.message ?? "";
+
+  return (
+    message.includes("P2021") ||
+    message.includes("does not exist") ||
+    message.includes("P2022") ||
+    message.includes("column") ||
+    message.includes("BlogPost.")
+  );
+}

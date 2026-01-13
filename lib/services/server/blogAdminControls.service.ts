@@ -2,6 +2,7 @@ import { BlogStatus, type Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
+import { isPrismaBlogSchemaError } from "@/lib/blog/blogReadiness";
 
 export type AdminBlogControlPost = {
   id: string;
@@ -104,7 +105,7 @@ export async function getAdminBlogControlSnapshot(): Promise<AdminBlogControlSna
       blogDbReady: true,
     };
   } catch (error) {
-    if (handleMissingBlogTable(error)) {
+    if (handleMissingBlogTable(error) || isPrismaBlogSchemaError(error)) {
       return createEmptyAdminBlogControlSnapshotPayload();
     }
 
