@@ -22,13 +22,35 @@ export type AdminBlogControlSnapshotPayload = AdminBlogControlSnapshot & {
   blogDbReady: boolean;
 };
 
+const blogPostSnapshotSelect = {
+  id: true,
+  title: true,
+  status: true,
+  submittedAt: true,
+  authorName: true,
+  authorRoleSnapshot: true,
+  isAffiliate: true,
+  _count: {
+    select: {
+      affiliateLinks: true,
+    },
+  },
+} satisfies Prisma.BlogPostSelect;
+
+type BlogPostSnapshotRow = Prisma.BlogPostGetPayload<{
+  select: typeof blogPostSnapshotSelect;
+}>;
+
 const createEmptyCounts = () =>
   Object.values(BlogStatus).reduce((acc, status) => {
     acc[status] = 0;
     return acc;
   }, {} as Record<BlogStatus, number>);
 
-const buildSnapshot = (groups: { status: BlogStatus; _count: { id: number } }[], recentPosts: Awaited<ReturnType<typeof prisma.blogPost.findMany>>) => {
+const buildSnapshot = (
+  groups: { status: BlogStatus; _count: { id: number } }[],
+  recentPosts: BlogPostSnapshotRow[],
+) => {
   const counts = createEmptyCounts();
   groups.forEach((group) => {
     counts[group.status] = group._count.id;
@@ -74,20 +96,7 @@ export async function getAdminBlogControlSnapshot(): Promise<AdminBlogControlSna
           { submittedAt: "desc" },
           { updatedAt: "desc" },
         ],
-        select: {
-          id: true,
-          title: true,
-          status: true,
-          submittedAt: true,
-          authorName: true,
-          authorRoleSnapshot: true,
-          isAffiliate: true,
-          _count: {
-            select: {
-              affiliateLinks: true,
-            },
-          },
-        },
+        select: blogPostSnapshotSelect,
       }),
     ]);
 
