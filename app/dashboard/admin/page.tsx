@@ -18,6 +18,8 @@ export default async function AdminDashboardPage() {
     getAdminBlogControlSnapshot(),
   ]);
 
+  const blogDbReady = blogSnapshot.blogDbReady;
+
   const pendingInviteCount = inviteRequests.filter((request) => request.status === "pending").length;
 
   const cards = [
@@ -76,7 +78,18 @@ export default async function AdminDashboardPage() {
         title="Blog activity snapshot"
         description="Jump straight into mentor drafts, submissions, and publish-ready posts."
       >
-        <BlogControls data={blogSnapshot} />
+        <div className="space-y-4">
+          {!blogDbReady && (
+            <div className="space-y-2 rounded-[28px] border border-[#E3C6D4] bg-[#FFF8F7] p-5 shadow-sm">
+              <p className="text-lg font-semibold text-[#6D2E4D]">Blog database tables not ready</p>
+              <p className="text-sm text-[#3E2F35]/80">
+                The Blog tables (e.g., BlogAffiliateLink) are missing on the production database. Blog
+                controls are temporarily disabled until migrations are repaired.
+              </p>
+            </div>
+          )}
+          <BlogControls data={blogSnapshot} />
+        </div>
       </DashboardSection>
 
       <DashboardSection

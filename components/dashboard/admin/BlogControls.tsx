@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { authedFetch } from "@/lib/authedFetch";
-import type { AdminBlogControlPost, AdminBlogControlSnapshot } from "@/lib/services/server/blogAdminControls.service";
+import type { AdminBlogControlPost, AdminBlogControlSnapshotPayload } from "@/lib/services/server/blogAdminControls.service";
 import { BlogStatus } from "@prisma/client";
 
 const statusStyles: Record<string, string> = {
@@ -23,7 +23,7 @@ const statusLabels: Record<string, string> = {
 };
 
 type BlogControlsProps = {
-  data: AdminBlogControlSnapshot;
+  data: AdminBlogControlSnapshotPayload;
 };
 
 export default function BlogControls({ data }: BlogControlsProps) {
