@@ -1,6 +1,8 @@
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
-export const isMissingBlogTables = (error: unknown): boolean => {
+export const isMissingBlogTables = (
+  error: unknown,
+): error is Prisma.PrismaClientKnownRequestError => {
   if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
     return false;
   }
