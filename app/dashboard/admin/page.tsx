@@ -9,18 +9,26 @@ import AdminStatCard from "@/components/dashboard/admin/AdminStatCard";
 import BlogControls from "@/components/dashboard/admin/BlogControls";
 import { getAdminStats } from "@/lib/services/server/admin.service";
 import { listInviteRequests } from "@/lib/services/server/inviteRequest.service";
-import { getAdminBlogControlSnapshot } from "@/lib/services/server/blogAdminControls.service";
+import {
+  createEmptyAdminBlogControlSnapshotPayload,
+  getAdminBlogControlSnapshot,
+} from "@/lib/services/server/blogAdminControls.service";
 import {
   BLOG_DB_UNAVAILABLE_DETAILS,
   BLOG_DB_UNAVAILABLE_HEADING,
+  getBlogReadiness,
 } from "@/lib/blog/blogReadiness";
 
 export default async function AdminDashboardPage() {
-  const [stats, inviteRequests, blogSnapshot] = await Promise.all([
+  const [stats, inviteRequests, blogStatus] = await Promise.all([
     getAdminStats(),
     listInviteRequests(),
-    getAdminBlogControlSnapshot(),
+    getBlogReadiness(),
   ]);
+
+  const blogSnapshot = blogStatus.blogDbReady
+    ? await getAdminBlogControlSnapshot()
+    : createEmptyAdminBlogControlSnapshotPayload();
 
   const blogDbReady = blogSnapshot.blogDbReady;
 

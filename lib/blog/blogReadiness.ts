@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 export const isMissingBlogTables = (
   error: unknown,
@@ -36,3 +37,28 @@ export const BLOG_DB_UNAVAILABLE_DETAILS = [
 ];
 
 export const isBlogFeatureEnabled = () => process.env.BLOG_ENABLED === "true";
+
+const BLOG_TABLE_CHECK = "BlogPost";
+
+export type BlogReadinessStatus = {
+  blogDbReady: boolean;
+};
+
+export async function getBlogReadiness(): Promise<BlogReadinessStatus> {
+  if (!isBlogFeatureEnabled()) {
+    return { blogDbReady: false };
+  }
+
+  const [record] = (await prisma.$queryRaw<{ exists: boolean }[]>`
+    SELECT EXISTS (
+      SELECT 1
+      FROM pg_tables
+      WHERE schemaname = 'public'
+        AND tablename = ${BLOG_TABLE_CHECK}
+    ) AS exists;
+  `) ?? [];
+
+  return {
+    blogDbReady: Boolean(record?.exists),
+  };
+}

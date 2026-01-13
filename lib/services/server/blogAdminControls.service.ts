@@ -77,6 +77,11 @@ const buildEmptySnapshot = (): AdminBlogControlSnapshot => ({
   recentPosts: [],
 });
 
+export const createEmptyAdminBlogControlSnapshotPayload = (): AdminBlogControlSnapshotPayload => ({
+  ...buildEmptySnapshot(),
+  blogDbReady: false,
+});
+
 export async function getAdminBlogControlSnapshot(): Promise<AdminBlogControlSnapshotPayload> {
   try {
     const [groups, recentPosts] = await Promise.all([
@@ -100,10 +105,7 @@ export async function getAdminBlogControlSnapshot(): Promise<AdminBlogControlSna
     };
   } catch (error) {
     if (handleMissingBlogTable(error)) {
-      return {
-        ...buildEmptySnapshot(),
-        blogDbReady: false,
-      };
+      return createEmptyAdminBlogControlSnapshotPayload();
     }
 
     throw error;
