@@ -532,6 +532,156 @@
       },
       "affiliateIds": {},
       "internalNotes": null
+    },
+    "Silver Cross": {
+      "category": "Retailer",
+      "role": "RETAILER",
+      "commissionRate": "15%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": true,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": "Tier-1",
+        "priority": 1,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "BabyQuip": {
+      "category": "Services",
+      "role": "RETAILER",
+      "commissionRate": "10%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": true,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": "Tier-1",
+        "priority": 2,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "MacroBaby": {
+      "category": "Gear",
+      "role": "RETAILER",
+      "commissionRate": "7%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": true,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": "Tier-2",
+        "priority": 3,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Bebcare": {
+      "category": "Parent Care",
+      "role": "RETAILER",
+      "commissionRate": "15%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": true,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": "Tier-2",
+        "priority": 4,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "ANBbaby": {
+      "category": "Gear",
+      "role": "RETAILER",
+      "commissionRate": "5%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": true,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": "Tier-2",
+        "priority": 5,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
+    },
+    "Formuland": {
+      "category": "Gear",
+      "role": "RETAILER",
+      "commissionRate": "5%",
+      "status": "ACTIVE",
+      "visibility": {
+        "blogEligible": true,
+        "registryEligible": true,
+        "mentorVisible": true
+      },
+      "blogSettings": {
+        "eligible": true,
+        "defaultCta": "Shop",
+        "placement": "END_CARD",
+        "primaryEligible": true
+      },
+      "registrySettings": {
+        "retailerTier": "Tier-2",
+        "priority": 6,
+        "categoryExclusions": [],
+        "fallbackToBrandDirect": false
+      },
+      "affiliateIds": {},
+      "internalNotes": null
     }
   }
 }

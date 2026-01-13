@@ -23,6 +23,8 @@ import { emitRegistryAnalytics } from './analytics.service';
 import { ensureMyRegistryAccount, REGISTRY_SOURCE } from './myregistry/provision.service';
 import { recordPurchaseForWatch } from './priceIntelligence.service';
 import { listExternalRegistriesForMember, type ExternalRegistryDto } from './externalRegistry.service';
+import { resolveRegistryAffiliate } from '@/lib/registry/resolveRegistryAffiliate';
+import { DIRECT_FIRST } from '@/lib/registry/affiliatePriority';
 
 export type MentorNoteResponse = {
   id: string;
@@ -906,12 +908,6 @@ export type MentorProductSuggestionDto = {
   acceptedAt: string | null;
 };
 
-const normalizeText = (value?: string | null) =>
-  (value ?? '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, '')
-    .trim();
-
 const toRegistryStatus = (value?: string | null): RegistryItemStatus => {
   if (!value) {
     return RegistryItemStatus.ADDED;
@@ -1049,43 +1045,6 @@ const parseShippingAddressPayload = (payload: Record<string, unknown> | null | u
   return address;
 };
 
-const buildAffiliateMaps = (partners: AffiliatePartner[]) => {
-  const byId = new Map<string, AffiliatePartner>();
-  const byName = new Map<string, AffiliatePartner>();
-  partners.forEach((partner) => {
-    byId.set(partner.id, partner);
-    const normalized = normalizeText(partner.name);
-    if (normalized) {
-      byName.set(normalized, partner);
-    }
-  });
-  return { byId, byName };
-};
-
-const resolveAffiliatePartner = (
-  remote: RemoteRegistryItem,
-  byId: Map<string, AffiliatePartner>,
-  byName: Map<string, AffiliatePartner>,
-) => {
-  if (remote.affiliateId && byId.has(remote.affiliateId)) {
-    return byId.get(remote.affiliateId)!;
-  }
-
-  const brand = remote.brand ?? remote.merchant;
-  if (brand) {
-    const normalizedBrand = normalizeText(brand);
-    if (normalizedBrand && byName.has(normalizedBrand)) {
-      return byName.get(normalizedBrand)!;
-    }
-  }
-
-  if (byId.has(MY_REGISTRY_PARTNER_ID)) {
-    return byId.get(MY_REGISTRY_PARTNER_ID)!;
-  }
-
-  return null;
-};
-
 export const getMemberRegistryState = async (userId: string): Promise<RegistryDto | null> => {
   const registry = await prisma.registry.findUnique({
     where: { userId },
@@ -1144,8 +1103,6 @@ export const syncMemberRegistry = async (userId: string): Promise<RegistryDto> =
     // ignore shipping address failures
   }
 
-  const partners = await prisma.affiliatePartner.findMany();
-  const { byId, byName } = buildAffiliateMaps(partners);
   const existingItems = await prisma.registryItem.findMany({
     where: { registryId: registry.id },
     select: { id: true, status: true, myRegistryItemId: true, externalGiftId: true },
@@ -1163,7 +1120,11 @@ export const syncMemberRegistry = async (userId: string): Promise<RegistryDto> =
     const remoteId = remoteItem.id;
     if (!remoteId) continue;
     seenIds.add(remoteId);
-    const partner = resolveAffiliatePartner(remoteItem, byId, byName);
+    const brandName = remoteItem.brand ?? remoteItem.merchant ?? null;
+    const { affiliatePartner: partner, routingMode } = await resolveRegistryAffiliate({
+      prisma,
+      brandName,
+    });
     const productId = await ensureRemoteProduct(remoteItem);
     const upsertData = {
       userId,
@@ -1182,7 +1143,10 @@ export const syncMemberRegistry = async (userId: string): Promise<RegistryDto> =
       image: remoteItem.imageUrl ?? null,
       imageUrl: remoteItem.imageUrl ?? null,
       affiliateId: partner?.id ?? null,
-      affiliateLink: remoteItem.affiliateUrl ?? partner?.defaultLink ?? null,
+      affiliateLink:
+        routingMode === "AFFILIATE"
+          ? partner?.defaultLink ?? remoteItem.affiliateUrl ?? null
+          : null,
       source: REGISTRY_SOURCE,
       myRegistryId: remoteId,
       notes: remoteItem.notes ?? null,

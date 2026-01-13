@@ -5,9 +5,9 @@ const STATUS_STYLES: Record<
   { label: string; className: string }
 > = {
   DRAFT: { label: "Draft", className: "bg-[#F8EFF3] text-[#A4556A]" },
-  IN_REVIEW: { label: "In review", className: "bg-[#F2F0FF] text-[#6B4EAA]" },
+  IN_REVIEW: { label: "Submitted", className: "bg-[#F2F0FF] text-[#6B4EAA]" },
   PUBLISHED: { label: "Published", className: "bg-[#E6F6F2] text-[#1A6C54]" },
-  ARCHIVED: { label: "Archived", className: "bg-[#F4F3F4] text-[#5A5A66]" },
+  ARCHIVED: { label: "Approved", className: "bg-[#F4F3F4] text-[#5A5A66]" },
 };
 
 type StatusBadgeProps = {

@@ -8,6 +8,7 @@ import BlogContentRenderer, {
 } from "@/components/blog/BlogContentRenderer";
 import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
 import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
+import type { AffiliatePolicy } from "@/lib/blog/affiliatePolicy";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -24,6 +25,7 @@ type PublicAffiliateLink = {
   label: string;
   position: "INLINE" | "CALLOUT" | "END_CARD";
   isPrimary: boolean;
+  policy?: AffiliatePolicy;
 };
 
 type PublicBlogPost = {

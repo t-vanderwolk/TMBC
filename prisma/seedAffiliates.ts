@@ -5,7 +5,7 @@ import path from "path";
 
 type CanonicalAffiliate = {
   name: string;
-  network: "AWIN" | "CJ" | "IMPACT";
+  network: "AWIN" | "CJ" | "IMPACT" | "DIRECT";
   role: "BRAND" | "RETAILER" | "INFRASTRUCTURE";
   status: "ACTIVE" | "AT_RISK" | "PAUSED";
   commissionRate?: string | null;
@@ -217,6 +217,72 @@ const CANONICAL_AFFILIATES: CanonicalAffiliate[] = [
     status: "ACTIVE",
     commissionRate: "$25 per SNOO rental",
     categories: ["Gear"],
+  },
+  {
+    name: "Silver Cross",
+    network: "DIRECT",
+    role: "RETAILER",
+    status: "ACTIVE",
+    commissionRate: "15%",
+    categories: ["Retailer"],
+    registryEligible: true,
+    retailerTier: "Tier-1",
+    priority: 1,
+  },
+  {
+    name: "BabyQuip",
+    network: "DIRECT",
+    role: "RETAILER",
+    status: "ACTIVE",
+    commissionRate: "10%",
+    categories: ["Services"],
+    registryEligible: true,
+    retailerTier: "Tier-1",
+    priority: 2,
+  },
+  {
+    name: "MacroBaby",
+    network: "DIRECT",
+    role: "RETAILER",
+    status: "ACTIVE",
+    commissionRate: "7%",
+    categories: ["Gear"],
+    registryEligible: true,
+    retailerTier: "Tier-2",
+    priority: 3,
+  },
+  {
+    name: "Bebcare",
+    network: "DIRECT",
+    role: "RETAILER",
+    status: "ACTIVE",
+    commissionRate: "15%",
+    categories: ["Parent Care"],
+    registryEligible: true,
+    retailerTier: "Tier-2",
+    priority: 4,
+  },
+  {
+    name: "ANBbaby",
+    network: "DIRECT",
+    role: "RETAILER",
+    status: "ACTIVE",
+    commissionRate: "5%",
+    categories: ["Gear"],
+    registryEligible: true,
+    retailerTier: "Tier-2",
+    priority: 5,
+  },
+  {
+    name: "Formuland",
+    network: "DIRECT",
+    role: "RETAILER",
+    status: "ACTIVE",
+    commissionRate: "5%",
+    categories: ["Gear"],
+    registryEligible: true,
+    retailerTier: "Tier-2",
+    priority: 6,
   },
 ];
 

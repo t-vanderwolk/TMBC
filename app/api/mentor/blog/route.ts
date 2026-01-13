@@ -61,20 +61,20 @@ export async function POST(request: Request) {
 
     const slug = await ensureUniqueBlogSlug(validated.slug);
     const post = await prisma.blogPost.create({
-      data: {
-        slug,
-        title: validated.title,
-        excerpt: validated.excerpt,
-        heroImage: validated.heroImage,
-        content: validated.content,
-        tags: validated.tags,
-        status: "DRAFT",
-        isAffiliate: validated.isAffiliate,
-        authorId: user.id,
-        authorName: user.name || user.email,
-        authorRoleSnapshot: user.role === Role.ADMIN ? "ADMIN" : "MENTOR",
-      },
-    });
+    data: {
+      slug,
+      title: validated.title,
+      excerpt: validated.excerpt,
+      heroImage: validated.heroImage,
+      content: validated.content,
+      tags: validated.tags,
+      status: "DRAFT",
+      isAffiliate: validated.isAffiliate,
+      authorId: user.id,
+      authorName: user.name || user.email,
+      authorRoleSnapshot: "MENTOR",
+    },
+  });
 
     await upsertBlogHighlights(post.id, validated.highlights);
 

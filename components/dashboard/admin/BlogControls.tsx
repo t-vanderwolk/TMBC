@@ -17,9 +17,9 @@ const statusStyles: Record<string, string> = {
 
 const statusLabels: Record<string, string> = {
   DRAFT: "Draft",
-  IN_REVIEW: "In review",
+  IN_REVIEW: "Submitted",
   PUBLISHED: "Published",
-  ARCHIVED: "Archived",
+  ARCHIVED: "Approved",
 };
 
 type BlogControlsProps = {
@@ -58,10 +58,10 @@ export default function BlogControls({ data }: BlogControlsProps) {
 
   const summaryCards = useMemo(
     () => [
-      { label: "Drafts", status: BlogStatus.DRAFT },
-      { label: "Awaiting Review", status: BlogStatus.IN_REVIEW, highlighted: true },
-      { label: "Published", status: BlogStatus.PUBLISHED },
-      { label: "Archived", status: BlogStatus.ARCHIVED },
+  { label: "Drafts", status: BlogStatus.DRAFT },
+  { label: "Submitted", status: BlogStatus.IN_REVIEW, highlighted: true },
+  { label: "Published", status: BlogStatus.PUBLISHED },
+  { label: "Approved", status: BlogStatus.ARCHIVED },
     ],
     [],
   );
@@ -142,14 +142,14 @@ export default function BlogControls({ data }: BlogControlsProps) {
             <tbody className="divide-y divide-[#E5D4DB]">
               {data.recentPosts.map((post) => {
                 const canPublish =
-                  ((post.status === "IN_REVIEW") ||
+                  ((post.status === "ARCHIVED") ||
                     (post.status === "DRAFT" && post.authorRoleSnapshot === "ADMIN")) &&
                   post.isAffiliate &&
                   post.affiliateLinkCount > 0;
                 const publishHelper =
                   !post.isAffiliate || post.affiliateLinkCount === 0
                     ? "Add END_CARD affiliate links before publishing"
-                    : "Requires IN_REVIEW status";
+                    : "Requires approved status";
                 return (
                   <tr key={post.id} className="hover:bg-[#F9F6F7]">
                     <td className="px-3 py-3 text-[#3E2F35]">

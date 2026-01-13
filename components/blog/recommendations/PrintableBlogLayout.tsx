@@ -1,3 +1,4 @@
+import type { AffiliatePolicy } from "@/lib/blog/affiliatePolicy";
 import type { BlogContentBlock } from "@/components/blog/BlogContentRenderer";
 import BlogContentRenderer from "@/components/blog/BlogContentRenderer";
 import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
@@ -18,6 +19,7 @@ type PrintableBlogLayoutProps = {
       label: string;
       position: "INLINE" | "CALLOUT" | "END_CARD";
       isPrimary: boolean;
+      policy?: AffiliatePolicy;
     }>;
   };
 };

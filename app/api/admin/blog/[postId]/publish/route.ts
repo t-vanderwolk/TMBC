@@ -42,9 +42,13 @@ export async function POST(request: Request, context: RouteContext) {
     }
 
     const canPublish =
-      post.status === "IN_REVIEW" || (post.status === "DRAFT" && post.authorRoleSnapshot === "ADMIN");
+      post.status === "ARCHIVED" ||
+      (post.status === "DRAFT" && post.authorRoleSnapshot === "ADMIN");
     if (!canPublish) {
-      return NextResponse.json({ error: "Only submitted posts can be published." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Only approved drafts can be published from this panel." },
+        { status: 400 },
+      );
     }
 
     const payload = publishPayloadSchema.parse(await parseJsonBody(request));

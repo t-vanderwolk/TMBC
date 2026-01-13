@@ -1,4 +1,4 @@
-import { BlogStatus, Role } from "@prisma/client";
+import { Role } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
@@ -9,12 +9,11 @@ import {
   ensureUniqueBlogSlug,
 } from "@/lib/services/server/blog.service";
 import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
+import { canEditBlog } from "@/lib/blog/blogPermissions";
 
 type RouteContext = {
   params: { postId: string };
 };
-
-const mentorEditableStatuses: Set<BlogStatus> = new Set(["DRAFT", "IN_REVIEW"]);
 
 const requireMentor = async () => {
   const user = await getUserOrThrow();
@@ -42,7 +41,7 @@ export async function GET(_request: Request, context: RouteContext) {
       },
     });
 
-    if (!post || (post.authorId !== user.id && user.role !== Role.ADMIN)) {
+    if (!post || !canEditBlog(user, post)) {
       return NextResponse.json({ error: "Not found." }, { status: 404 });
     }
 
@@ -63,14 +62,8 @@ export async function PATCH(request: Request, context: RouteContext) {
   try {
     const user = await requireMentor();
     const post = await prisma.blogPost.findUnique({ where: { id: context.params.postId } });
-    if (!post || (post.authorId !== user.id && user.role !== Role.ADMIN)) {
+    if (!post || !canEditBlog(user, post)) {
       return NextResponse.json({ error: "Not found." }, { status: 404 });
-    }
-    if (user.role !== Role.ADMIN && !mentorEditableStatuses.has(post.status)) {
-      return NextResponse.json(
-        { error: "Mentor edits are limited to drafts or in-review posts." },
-        { status: 400 },
-      );
     }
 
     const payload = await request.json();

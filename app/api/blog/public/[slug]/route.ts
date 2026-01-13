@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
+import { blogAffiliatePolicy } from "@/lib/blog/affiliatePolicy";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -65,6 +66,13 @@ export async function GET(_request: Request, context: RouteContext) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
+    const affiliateLinks = post.affiliateLinks
+      .map((link) => ({
+        ...link,
+        policy: blogAffiliatePolicy(link.partnerName),
+      }))
+      .filter((link) => link.policy.allowed);
+
     void prisma.blogEngagementEvent
       .create({
         data: {
@@ -76,7 +84,7 @@ export async function GET(_request: Request, context: RouteContext) {
         console.warn("[blog engagement] failed to track view", error);
       });
 
-    return NextResponse.json(post);
+    return NextResponse.json({ ...post, affiliateLinks });
   } catch (error) {
     if (handleMissingBlogTable(error)) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });

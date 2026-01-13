@@ -1,3 +1,5 @@
+import type { AffiliatePolicy } from "@/lib/blog/affiliatePolicy";
+
 import Link from "next/link";
 
 type AffiliateLink = {
@@ -6,6 +8,7 @@ type AffiliateLink = {
   label: string;
   position: "INLINE" | "CALLOUT" | "END_CARD";
   isPrimary: boolean;
+  policy?: AffiliatePolicy;
 };
 
 export default function BlogAffiliateEndCard({ links }: { links: AffiliateLink[] }) {
@@ -26,6 +29,9 @@ export default function BlogAffiliateEndCard({ links }: { links: AffiliateLink[]
           <article key={link.id} className="space-y-3 rounded-3xl border border-tmBlush/50 bg-tmIvory/60 p-6">
             <p className="text-[0.6rem] uppercase tracking-[0.35em] text-tmCharcoal/60">{link.partnerName}</p>
             <p className="text-[0.55rem] uppercase tracking-[0.35em] text-tmCharcoal/60">Curated partner pick</p>
+            {link.policy?.mode === "education_only" ? (
+              <p className="text-[0.6rem] text-tmCharcoal/60">Education-only resource</p>
+            ) : null}
             <Link
               href={`/r/blog/${link.id}`}
               className="inline-flex items-center gap-2 rounded-full border border-tmMauve/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-tmCharcoal transition hover:border-tmDeepMauve hover:text-tmDeepMauve focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tmDeepMauve"

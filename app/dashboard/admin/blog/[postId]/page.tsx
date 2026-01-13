@@ -56,11 +56,10 @@ export default function AdminBlogPostPage() {
   const [post, setPost] = useState<AdminPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [publishing, setPublishing] = useState(false);
-  const [archiving, setArchiving] = useState(false);
-  const [returning, setReturning] = useState(false);
   const [analytics, setAnalytics] = useState<AnalyticsPayload | null>(null);
   const [error, setError] = useState("");
+  const [actionMessage, setActionMessage] = useState("");
+  const [busyAction, setBusyAction] = useState<string | null>(null);
   const [overrideAuthorName, setOverrideAuthorName] = useState("");
   const [overrideAuthorRole, setOverrideAuthorRole] = useState<BlogAuthorRole>("ADMIN");
 
@@ -131,45 +130,52 @@ export default function AdminBlogPostPage() {
     }
   };
 
-  const handleAction = async (action: "publish" | "archive" | "return") => {
-    setError("");
-    if (action === "publish" && !overrideAuthorName.trim()) {
-      setError("Please provide an author name before publishing.");
+  const runStatusAction = async (
+    endpoint: string,
+    actionLabel: string,
+    payload?: Record<string, unknown>,
+  ) => {
+    if (!postId) {
+      setActionMessage("Post not found.");
       return;
     }
-
-    setPublishing(action === "publish");
-    setArchiving(action === "archive");
-    setReturning(action === "return");
-
+    setActionMessage("");
+    setBusyAction(`${actionLabel}:${postId}`);
     try {
-      const endpoint =
-        action === "publish"
-          ? `/api/admin/blog/${postId}/publish`
-          : action === "archive"
-          ? `/api/admin/blog/${postId}/archive`
-          : `/api/admin/blog/${postId}/return`;
       const requestInit: RequestInit = { method: "POST" };
-      if (action === "publish") {
-        requestInit.body = JSON.stringify({
-          authorName: overrideAuthorName.trim(),
-          authorRoleSnapshot: overrideAuthorRole,
-        });
+      if (payload) {
+        requestInit.body = JSON.stringify(payload);
       }
-      const response = await authedFetch(endpoint, requestInit);
+      const response = await authedFetch(`/api/admin/blog/${postId}/${endpoint}`, requestInit);
       const result = await response.json();
       if (!response.ok) {
-        throw new Error(result?.error ?? "Unable to update status.");
+        throw new Error(result?.error ?? `Unable to ${actionLabel}.`);
       }
       await loadPost();
     } catch (statusError) {
-      setError(statusError instanceof Error ? statusError.message : "Unable to update status.");
+      setActionMessage(
+        statusError instanceof Error ? statusError.message : `Unable to ${actionLabel}.`,
+      );
     } finally {
-      setPublishing(false);
-      setArchiving(false);
-      setReturning(false);
+      setBusyAction(null);
     }
   };
+
+  const isActionBusy = (type: string) => busyAction === `${type}:${postId}`;
+
+  const handleApprove = () => void runStatusAction("approve", "approve");
+  const handleReject = () => void runStatusAction("reject", "reject");
+  const handlePublish = () => {
+    if (!overrideAuthorName.trim()) {
+      setActionMessage("Please provide an author name before publishing.");
+      return;
+    }
+    void runStatusAction("publish", "publish", {
+      authorName: overrideAuthorName.trim(),
+      authorRoleSnapshot: overrideAuthorRole,
+    });
+  };
+  const handleUnpublish = () => void runStatusAction("unpublish", "unpublish");
 
   if (!postId) {
     return <p className="text-sm text-[#3E2F35]/70">Post not found.</p>;
@@ -193,6 +199,11 @@ export default function AdminBlogPostPage() {
       {error ? (
         <div className="rounded-[28px] border border-[#F0CCD7] bg-[#FFF4FA] px-5 py-3 text-sm text-[#8B4A61]">
           {error}
+        </div>
+      ) : null}
+      {actionMessage ? (
+        <div className="rounded-[28px] border border-[#F0CCD7] bg-[#FFF4FA] px-5 py-3 text-sm text-[#8B4A61]">
+          {actionMessage}
         </div>
       ) : null}
 
@@ -240,7 +251,7 @@ export default function AdminBlogPostPage() {
                     <input
                       value={overrideAuthorName}
                       onChange={(event) => setOverrideAuthorName(event.target.value)}
-                      disabled={publishing}
+                      disabled={isActionBusy("publish")}
                       className="w-full rounded-xl border border-[#E3C6D4] px-3 py-2 text-sm text-[#3E2F35]"
                       placeholder="Author name"
                     />
@@ -252,7 +263,7 @@ export default function AdminBlogPostPage() {
                       onChange={(event) =>
                         setOverrideAuthorRole(event.target.value as BlogAuthorRole)
                       }
-                      disabled={publishing}
+                      disabled={isActionBusy("publish")}
                       className="w-full rounded-xl border border-[#E3C6D4] bg-white px-3 py-2 text-sm text-[#3E2F35]"
                     >
                       <option value="ADMIN">Admin</option>
@@ -262,30 +273,47 @@ export default function AdminBlogPostPage() {
                 </div>
               </div>
               <div className="flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() => void handleAction("publish")}
-                  disabled={publishing || post.status === "PUBLISHED"}
-                  className="rounded-full bg-[#2B7C6F] px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white disabled:opacity-60"
-                >
-                  {publishing ? "Publishing..." : "Approve & publish"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void handleAction("archive")}
-                  disabled={archiving || post.status === "ARCHIVED"}
-                  className="rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
-                >
-                  {archiving ? "Archiving..." : "Archive"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void handleAction("return")}
-                  disabled={returning || post.status === "DRAFT"}
-                  className="rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
-                >
-                  {returning ? "Returning..." : "Return to draft"}
-                </button>
+                {post.status === "IN_REVIEW" && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => void handleApprove()}
+                      disabled={isActionBusy("approve")}
+                      className="rounded-full bg-[#C29EB3] px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white disabled:opacity-60"
+                    >
+                      {isActionBusy("approve") ? "Approving..." : "Approve"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void handleReject()}
+                      disabled={isActionBusy("reject")}
+                      className="rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
+                    >
+                      {isActionBusy("reject") ? "Rejecting..." : "Reject"}
+                    </button>
+                  </>
+                )}
+                {(post.status === "ARCHIVED" ||
+                  (post.status === "DRAFT" && post.authorRoleSnapshot === "ADMIN")) && (
+                  <button
+                    type="button"
+                    onClick={() => void handlePublish()}
+                    disabled={isActionBusy("publish")}
+                    className="rounded-full bg-[#2B7C6F] px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white disabled:opacity-60"
+                  >
+                    {isActionBusy("publish") ? "Publishing..." : "Publish"}
+                  </button>
+                )}
+                {post.status === "PUBLISHED" && (
+                  <button
+                    type="button"
+                    onClick={() => void handleUnpublish()}
+                    disabled={isActionBusy("unpublish")}
+                    className="rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
+                  >
+                    {isActionBusy("unpublish") ? "Unpublishing..." : "Unpublish"}
+                  </button>
+                )}
               </div>
             </div>
           </BlogEditorForm>
