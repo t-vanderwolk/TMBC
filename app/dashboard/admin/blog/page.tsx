@@ -51,6 +51,7 @@ export default function AdminBlogReviewPage() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [blogDbReady, setBlogDbReady] = useState(true);
 
   const loadPosts = async () => {
     setLoading(true);
@@ -71,12 +72,14 @@ export default function AdminBlogReviewPage() {
       }
       const response = await authedFetch(`/api/admin/blog?${params.toString()}`, { cache: "no-store" });
       const payload = await response.json();
+      setBlogDbReady(payload?.meta?.blogDbReady ?? true);
       if (!response.ok) {
         throw new Error(payload?.error ?? "Unable to load posts.");
       }
       setPosts(payload?.data?.posts ?? []);
       setStats(payload?.data?.stats ?? { total: 0, statusCounts: {} });
     } catch (err) {
+      setBlogDbReady(false);
       setError(err instanceof Error ? err.message : "Unable to load posts.");
     } finally {
       setLoading(false);
@@ -157,6 +160,16 @@ export default function AdminBlogReviewPage() {
           ))}
         </div>
       </section>
+
+      {!blogDbReady ? (
+        <div className="space-y-2 rounded-[28px] border border-[#E3C6D4] bg-[#FFF8F7] p-5 shadow-sm">
+          <p className="text-lg font-semibold text-[#6D2E4D]">Blog database tables not ready</p>
+          <p className="text-sm text-[#3E2F35]/80">
+            The blog tables (e.g., BlogAffiliateLink) are missing on the production database.
+            Drafts and approvals are temporarily disabled until migrations are repaired.
+          </p>
+        </div>
+      ) : null}
 
       {error ? (
         <div className="rounded-[28px] border border-[#F0CCD7] bg-[#FFF4FA] px-5 py-3 text-sm text-[#8B4A61]">

@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { prisma } from "@/lib/prisma";
+import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
 
 const querySchema = z.object({
   postId: z.string().min(1).optional(),
@@ -140,6 +141,12 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ data: { posts: payload, totals } });
   } catch (error) {
+    if (handleMissingBlogTable(error)) {
+      return NextResponse.json(
+        { error: "Blog analytics are temporarily unavailable." },
+        { status: 503 },
+      );
+    }
     const message = error instanceof Error ? error.message : "Unable to load analytics.";
     return NextResponse.json({ error: message }, { status: 400 });
   }

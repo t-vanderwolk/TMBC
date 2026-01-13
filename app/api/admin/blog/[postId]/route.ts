@@ -11,6 +11,7 @@ import {
 import {
   listAffiliateLinksForPost,
 } from "@/lib/services/server/affiliateAdmin.service";
+import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
 
 type RouteContext = {
   params: { postId: string };
@@ -49,6 +50,12 @@ export async function GET(request: Request, context: RouteContext) {
     const affiliateLinks = await listAffiliateLinksForPost(post.id);
     return NextResponse.json({ data: { ...post, affiliateLinks } });
   } catch (error) {
+    if (handleMissingBlogTable(error)) {
+      return NextResponse.json(
+        { error: "Blog tables are temporarily unavailable." },
+        { status: 503 },
+      );
+    }
     const message = error instanceof Error ? error.message : "Unable to load blog post.";
     return NextResponse.json({ error: message }, { status: 400 });
   }
@@ -102,6 +109,12 @@ export async function PATCH(request: Request, context: RouteContext) {
 
     return NextResponse.json({ data: { ...refreshed, affiliateLinks } });
   } catch (error) {
+    if (handleMissingBlogTable(error)) {
+      return NextResponse.json(
+        { error: "Blog tables are temporarily unavailable." },
+        { status: 503 },
+      );
+    }
     const message = error instanceof Error ? error.message : "Unable to update blog post.";
     return NextResponse.json({ error: message }, { status: 400 });
   }

@@ -8,6 +8,7 @@ import {
   validateBlogPayload,
   ensureUniqueBlogSlug,
 } from "@/lib/services/server/blog.service";
+import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
 
 const requireMentor = async () => {
   const user = await getUserOrThrow();
@@ -36,8 +37,17 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({ data: posts });
+    return NextResponse.json({ data: posts, meta: { blogDbReady: true } });
   } catch (error) {
+    if (handleMissingBlogTable(error)) {
+      return NextResponse.json(
+        {
+          error: "Blog tables are temporarily unavailable.",
+          meta: { blogDbReady: false },
+        },
+        { status: 503 },
+      );
+    }
     const message = error instanceof Error ? error.message : "Unable to load mentor drafts.";
     return NextResponse.json({ error: message }, { status: 403 });
   }

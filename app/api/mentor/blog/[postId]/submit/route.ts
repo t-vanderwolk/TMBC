@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { prisma } from "@/lib/prisma";
+import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
 
 type RouteContext = {
   params: { postId: string };
@@ -30,6 +31,12 @@ export async function POST(_request: Request, context: RouteContext) {
 
     return NextResponse.json({ data: updated });
   } catch (error) {
+    if (handleMissingBlogTable(error)) {
+      return NextResponse.json(
+        { error: "Blog tables are temporarily unavailable." },
+        { status: 503 },
+      );
+    }
     const message = error instanceof Error ? error.message : "Unable to submit draft.";
     return NextResponse.json({ error: message }, { status: 400 });
   }

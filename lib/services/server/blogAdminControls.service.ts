@@ -1,6 +1,7 @@
 import { BlogStatus, type Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
 
 export type AdminBlogControlPost = {
   id: string;
@@ -71,13 +72,6 @@ const buildSnapshot = (
   };
 };
 
-const isBlogTableMissingError = (
-  error: unknown,
-): error is Prisma.PrismaClientKnownRequestError =>
-  typeof error === "object" &&
-  error !== null &&
-  (error as Prisma.PrismaClientKnownRequestError).code === "P2021";
-
 const buildEmptySnapshot = (): AdminBlogControlSnapshot => ({
   counts: createEmptyCounts(),
   recentPosts: [],
@@ -105,9 +99,7 @@ export async function getAdminBlogControlSnapshot(): Promise<AdminBlogControlSna
       blogDbReady: true,
     };
   } catch (error) {
-    if (isBlogTableMissingError(error)) {
-      const missingTable = typeof error.meta?.table === "string" ? error.meta.table : "unknown";
-      console.warn("BLOG_DB_NOT_READY", { missingTable, code: "P2021" });
+    if (handleMissingBlogTable(error)) {
       return {
         ...buildEmptySnapshot(),
         blogDbReady: false,

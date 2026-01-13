@@ -10,6 +10,7 @@ import {
   validateBlogPayload,
   ensureUniqueBlogSlug,
 } from "@/lib/services/server/blog.service";
+import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
 
 const requireAdmin = async (request?: Request) => {
   const user = await getUserOrThrow(request);
@@ -27,6 +28,12 @@ const filterSchema = z.object({
   isAffiliate: z.enum(["true", "false"]).optional(),
   search: z.string().min(1).optional(),
 });
+
+const createEmptyStatusCounts = () =>
+  Object.values(BlogStatus).reduce<Record<BlogStatus, number>>((acc, status) => {
+    acc[status] = 0;
+    return acc;
+  }, {} as Record<BlogStatus, number>);
 
 export async function GET(request: Request) {
   try {
@@ -83,10 +90,7 @@ export async function GET(request: Request) {
       _count: { id: true },
     });
 
-    const statusCounts = Object.values(BlogStatus).reduce<Record<BlogStatus, number>>((acc, status) => {
-      acc[status] = 0;
-      return acc;
-    }, {} as Record<BlogStatus, number>);
+    const statusCounts = createEmptyStatusCounts();
     statusAggregation.forEach((row) => {
       statusCounts[row.status] = row._count.id;
     });
@@ -99,8 +103,24 @@ export async function GET(request: Request) {
           statusCounts,
         },
       },
+      meta: { blogDbReady: true },
     });
   } catch (error) {
+    if (handleMissingBlogTable(error)) {
+      return NextResponse.json(
+        {
+          data: {
+            posts: [],
+            stats: {
+              total: 0,
+              statusCounts: createEmptyStatusCounts(),
+            },
+          },
+          meta: { blogDbReady: false },
+        },
+        { status: 503 },
+      );
+    }
     const message = error instanceof Error ? error.message : "Unable to load blog drafts.";
     return NextResponse.json({ error: message }, { status: 400 });
   }

@@ -8,6 +8,7 @@ import {
   validateBlogPayload,
   ensureUniqueBlogSlug,
 } from "@/lib/services/server/blog.service";
+import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
 
 type RouteContext = {
   params: { postId: string };
@@ -47,6 +48,12 @@ export async function GET(_request: Request, context: RouteContext) {
 
     return NextResponse.json({ data: post });
   } catch (error) {
+    if (handleMissingBlogTable(error)) {
+      return NextResponse.json(
+        { error: "Blog tables are temporarily unavailable." },
+        { status: 503 },
+      );
+    }
     const message = error instanceof Error ? error.message : "Unable to load blog draft.";
     return NextResponse.json({ error: message }, { status: 403 });
   }
@@ -87,6 +94,12 @@ export async function PATCH(request: Request, context: RouteContext) {
 
     return NextResponse.json({ data: updated });
   } catch (error) {
+    if (handleMissingBlogTable(error)) {
+      return NextResponse.json(
+        { error: "Blog tables are temporarily unavailable." },
+        { status: 503 },
+      );
+    }
     const message = error instanceof Error ? error.message : "Unable to update blog draft.";
     return NextResponse.json({ error: message }, { status: 400 });
   }

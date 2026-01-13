@@ -30,8 +30,13 @@ export default function BlogControls({ data }: BlogControlsProps) {
   const router = useRouter();
   const [publishingId, setPublishingId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const blogDbReady = data.blogDbReady;
 
   const handlePublish = async (post: AdminBlogControlPost) => {
+    if (!blogDbReady) {
+      setMessage("Blog tables are temporarily unavailable.");
+      return;
+    }
     if (!window.confirm("Publish this post?")) {
       return;
     }
@@ -99,6 +104,15 @@ export default function BlogControls({ data }: BlogControlsProps) {
           );
         })}
       </div>
+
+      {!blogDbReady ? (
+        <div className="space-y-2 rounded-[28px] border border-[#E3C6D4] bg-[#FFF8F7] p-5 shadow-sm">
+          <p className="text-sm font-semibold text-[#6D2E4D]">Blog database tables not ready</p>
+          <p className="text-sm text-[#3E2F35]/80">
+            Mentor drafts and affiliate links are unavailable until the blog tables are restored.
+          </p>
+        </div>
+      ) : null}
 
       <div className="space-y-3 rounded-[28px] border border-[#E3C6D4] bg-white/95 p-5 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -176,7 +190,7 @@ export default function BlogControls({ data }: BlogControlsProps) {
                         <button
                           type="button"
                           onClick={() => handlePublish(post)}
-                          disabled={!canPublish || publishingId === post.id}
+                          disabled={!canPublish || publishingId === post.id || !blogDbReady}
                           className="rounded-full bg-[#2B7C6F] px-4 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-white disabled:opacity-60"
                         >
                           {publishingId === post.id ? "Publishing…" : "Publish"}

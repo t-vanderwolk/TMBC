@@ -28,6 +28,7 @@ export default function MentorBlogDashboard() {
   const [posts, setPosts] = useState<MentorPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [blogDbReady, setBlogDbReady] = useState(true);
 
   const loadPosts = async () => {
     setLoading(true);
@@ -35,11 +36,13 @@ export default function MentorBlogDashboard() {
     try {
       const response = await authedFetch("/api/mentor/blog", { cache: "no-store" });
       const payload = await response.json();
+      setBlogDbReady(payload?.meta?.blogDbReady ?? true);
       if (!response.ok) {
         throw new Error(payload?.error ?? "Unable to load drafts.");
       }
       setPosts(payload?.data ?? []);
     } catch (err) {
+      setBlogDbReady(false);
       setError(err instanceof Error ? err.message : "Unable to load drafts.");
     } finally {
       setLoading(false);
@@ -67,6 +70,15 @@ export default function MentorBlogDashboard() {
           Keep your draft private until it&apos;s ready for admin review.
         </p>
       </header>
+
+      {!blogDbReady ? (
+        <div className="space-y-2 rounded-[28px] border border-[#E3C6D4] bg-[#FFF8F7] p-5 shadow-sm">
+          <p className="text-sm font-semibold text-[#6D2E4D]">Blog database tables not ready</p>
+          <p className="text-sm text-[#3E2F35]/80">
+            Drafting is unavailable until the blog tables (e.g., BlogAffiliateLink) are restored.
+          </p>
+        </div>
+      ) : null}
 
       {error ? (
         <div className="rounded-[28px] border border-[#F0CCD7] bg-[#FFF4FA] px-5 py-3 text-sm text-[#8B4A61]">

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
+import type { BlogAuthorRole } from "@prisma/client";
+
 import { authedFetch } from "@/lib/authedFetch";
 import { useRequireRole } from "@/lib/auth/useRequireRole";
 import BlogEditorForm, {
@@ -59,6 +61,8 @@ export default function AdminBlogPostPage() {
   const [returning, setReturning] = useState(false);
   const [analytics, setAnalytics] = useState<AnalyticsPayload | null>(null);
   const [error, setError] = useState("");
+  const [overrideAuthorName, setOverrideAuthorName] = useState("");
+  const [overrideAuthorRole, setOverrideAuthorRole] = useState<BlogAuthorRole>("ADMIN");
 
   const loadPost = async () => {
     setLoading(true);
@@ -81,6 +85,12 @@ export default function AdminBlogPostPage() {
     if (!postId) return;
     void loadPost();
   }, [postId]);
+
+  useEffect(() => {
+    if (!post) return;
+    setOverrideAuthorName(post.authorName);
+    setOverrideAuthorRole(post.authorRoleSnapshot);
+  }, [post]);
 
   const loadAnalytics = async () => {
     if (!postId) {
@@ -123,13 +133,14 @@ export default function AdminBlogPostPage() {
 
   const handleAction = async (action: "publish" | "archive" | "return") => {
     setError("");
-    if (action === "publish") {
-      setPublishing(true);
-    } else if (action === "archive") {
-      setArchiving(true);
-    } else {
-      setReturning(true);
+    if (action === "publish" && !overrideAuthorName.trim()) {
+      setError("Please provide an author name before publishing.");
+      return;
     }
+
+    setPublishing(action === "publish");
+    setArchiving(action === "archive");
+    setReturning(action === "return");
 
     try {
       const endpoint =
@@ -138,7 +149,14 @@ export default function AdminBlogPostPage() {
           : action === "archive"
           ? `/api/admin/blog/${postId}/archive`
           : `/api/admin/blog/${postId}/return`;
-      const response = await authedFetch(endpoint, { method: "POST" });
+      const requestInit: RequestInit = { method: "POST" };
+      if (action === "publish") {
+        requestInit.body = JSON.stringify({
+          authorName: overrideAuthorName.trim(),
+          authorRoleSnapshot: overrideAuthorRole,
+        });
+      }
+      const response = await authedFetch(endpoint, requestInit);
       const result = await response.json();
       if (!response.ok) {
         throw new Error(result?.error ?? "Unable to update status.");
@@ -206,31 +224,69 @@ export default function AdminBlogPostPage() {
             saving={saving}
             submitLabel="Save updates"
           >
-            <div className="flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => void handleAction("publish")}
-                disabled={publishing || post.status === "PUBLISHED"}
-                className="rounded-full bg-[#2B7C6F] px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white disabled:opacity-60"
-              >
-                {publishing ? "Publishing..." : "Approve & publish"}
-              </button>
-              <button
-                type="button"
-                onClick={() => void handleAction("archive")}
-                disabled={archiving || post.status === "ARCHIVED"}
-                className="rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
-              >
-                {archiving ? "Archiving..." : "Archive"}
-              </button>
-              <button
-                type="button"
-                onClick={() => void handleAction("return")}
-                disabled={returning || post.status === "DRAFT"}
-                className="rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
-              >
-                {returning ? "Returning..." : "Return to draft"}
-              </button>
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-[#E3C6D4] bg-white/90 p-4 shadow-sm">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <p className="text-[0.55rem] uppercase tracking-[0.35em] text-[#A4556A]">
+                    Author attribution
+                  </p>
+                  <p className="text-[0.65rem] text-[#3E2F35]/70">
+                    Admins may override the public name before publishing.
+                  </p>
+                </div>
+                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                  <label className="space-y-1 text-xs uppercase tracking-[0.35em] text-[#3E2F35]/70">
+                    <span className="text-[0.6rem] text-[#A4556A]">Name</span>
+                    <input
+                      value={overrideAuthorName}
+                      onChange={(event) => setOverrideAuthorName(event.target.value)}
+                      disabled={publishing}
+                      className="w-full rounded-xl border border-[#E3C6D4] px-3 py-2 text-sm text-[#3E2F35]"
+                      placeholder="Author name"
+                    />
+                  </label>
+                  <label className="space-y-1 text-xs uppercase tracking-[0.35em] text-[#3E2F35]/70">
+                    <span className="text-[0.6rem] text-[#A4556A]">Role</span>
+                    <select
+                      value={overrideAuthorRole}
+                      onChange={(event) =>
+                        setOverrideAuthorRole(event.target.value as BlogAuthorRole)
+                      }
+                      disabled={publishing}
+                      className="w-full rounded-xl border border-[#E3C6D4] bg-white px-3 py-2 text-sm text-[#3E2F35]"
+                    >
+                      <option value="ADMIN">Admin</option>
+                      <option value="MENTOR">Mentor</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => void handleAction("publish")}
+                  disabled={publishing || post.status === "PUBLISHED"}
+                  className="rounded-full bg-[#2B7C6F] px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white disabled:opacity-60"
+                >
+                  {publishing ? "Publishing..." : "Approve & publish"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void handleAction("archive")}
+                  disabled={archiving || post.status === "ARCHIVED"}
+                  className="rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
+                >
+                  {archiving ? "Archiving..." : "Archive"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void handleAction("return")}
+                  disabled={returning || post.status === "DRAFT"}
+                  className="rounded-full border border-[#C8A1B4] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
+                >
+                  {returning ? "Returning..." : "Return to draft"}
+                </button>
+              </div>
             </div>
           </BlogEditorForm>
 
