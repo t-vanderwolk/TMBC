@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 
-import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
+import { handleMissingBlogTable, isBlogFeatureEnabled } from "@/lib/blog/blogReadiness";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  if (!isBlogFeatureEnabled()) {
+    return NextResponse.json({ posts: [], unavailable: true });
+  }
+
   try {
     const posts = await prisma.blogPost.findMany({
       where: {
@@ -26,10 +30,10 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(posts);
+    return NextResponse.json({ posts, unavailable: false });
   } catch (error) {
     if (handleMissingBlogTable(error)) {
-      return NextResponse.json([], { status: 200 });
+      return NextResponse.json({ posts: [], unavailable: true });
     }
     throw error;
   }

@@ -7,6 +7,10 @@ import { authedFetch } from "@/lib/authedFetch";
 import { useRequireRole } from "@/lib/auth/useRequireRole";
 import StatusBadge from "@/components/blog-admin/StatusBadge";
 import AuthorBadge from "@/components/blog-admin/AuthorBadge";
+import {
+  BLOG_DB_UNAVAILABLE_DETAILS,
+  BLOG_DB_UNAVAILABLE_HEADING,
+} from "@/lib/blog/blogReadiness";
 
 type AdminBlogPost = {
   id: string;
@@ -242,10 +246,12 @@ export default function AdminBlogReviewPage() {
 
       {!blogDbReady && (
         <div className="space-y-2 rounded-[28px] border border-[#E3C6D4] bg-[#FFF8F7] p-5 shadow-sm">
-          <p className="text-lg font-semibold text-[#6D2E4D]">Blog database tables not ready</p>
-          <p className="text-sm text-[#3E2F35]/80">
-            The blog tables (e.g., BlogAffiliateLink) are missing on the production database. Drafts and approvals are temporarily disabled until migrations are repaired.
-          </p>
+          <p className="text-lg font-semibold text-[#6D2E4D]">{BLOG_DB_UNAVAILABLE_HEADING}</p>
+          {BLOG_DB_UNAVAILABLE_DETAILS.map((detail) => (
+            <p key={detail} className="text-sm text-[#3E2F35]/80">
+              {detail}
+            </p>
+          ))}
         </div>
       )}
 

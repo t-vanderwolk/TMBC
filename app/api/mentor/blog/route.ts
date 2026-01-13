@@ -8,7 +8,10 @@ import {
   validateBlogPayload,
   ensureUniqueBlogSlug,
 } from "@/lib/services/server/blog.service";
-import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
+import {
+  handleMissingBlogTable,
+  isBlogFeatureEnabled,
+} from "@/lib/blog/blogReadiness";
 
 const requireMentor = async () => {
   const user = await getUserOrThrow();
@@ -21,6 +24,15 @@ const requireMentor = async () => {
 export async function GET() {
   try {
     const user = await requireMentor();
+    if (!isBlogFeatureEnabled()) {
+      return NextResponse.json(
+        {
+          error: "Blog controls are temporarily disabled while database migrations are repaired.",
+          meta: { blogDbReady: false },
+        },
+        { status: 503 },
+      );
+    }
     const posts = await prisma.blogPost.findMany({
       where: { authorId: user.id },
       orderBy: { updatedAt: "desc" },
@@ -56,6 +68,14 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const user = await requireMentor();
+    if (!isBlogFeatureEnabled()) {
+      return NextResponse.json(
+        {
+          error: "Blog controls are temporarily disabled while database migrations are repaired.",
+        },
+        { status: 503 },
+      );
+    }
     const payload = await request.json();
     const validated = await validateBlogPayload(payload);
 

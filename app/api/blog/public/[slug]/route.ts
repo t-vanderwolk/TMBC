@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
+import { handleMissingBlogTable, isBlogFeatureEnabled } from "@/lib/blog/blogReadiness";
 import { blogAffiliatePolicy } from "@/lib/blog/affiliatePolicy";
 import { prisma } from "@/lib/prisma";
 
@@ -12,6 +12,13 @@ type RouteContext = {
 
 export async function GET(_request: Request, context: RouteContext) {
   const { slug } = context.params;
+
+  if (!isBlogFeatureEnabled()) {
+    return NextResponse.json(
+      { error: "Blog temporarily unavailable.", unavailable: true },
+      { status: 503 },
+    );
+  }
 
   try {
     const post = await prisma.blogPost.findFirst({
@@ -87,7 +94,10 @@ export async function GET(_request: Request, context: RouteContext) {
     return NextResponse.json({ ...post, affiliateLinks });
   } catch (error) {
     if (handleMissingBlogTable(error)) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Blog temporarily unavailable.", unavailable: true },
+        { status: 503 },
+      );
     }
     throw error;
   }

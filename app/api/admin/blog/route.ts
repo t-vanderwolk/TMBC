@@ -10,7 +10,10 @@ import {
   validateBlogPayload,
   ensureUniqueBlogSlug,
 } from "@/lib/services/server/blog.service";
-import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
+import {
+  handleMissingBlogTable,
+  isBlogFeatureEnabled,
+} from "@/lib/blog/blogReadiness";
 
 const requireAdmin = async (request?: Request) => {
   const user = await getUserOrThrow(request);
@@ -38,6 +41,21 @@ const createEmptyStatusCounts = () =>
 export async function GET(request: Request) {
   try {
     await requireAdmin(request);
+    if (!isBlogFeatureEnabled()) {
+      return NextResponse.json(
+        {
+          data: {
+            posts: [],
+            stats: {
+              total: 0,
+              statusCounts: createEmptyStatusCounts(),
+            },
+          },
+          meta: { blogDbReady: false },
+        },
+        { status: 503 },
+      );
+    }
     const { searchParams } = new URL(request.url);
     const filters = filterSchema.parse({
       status: searchParams.get("status") ?? undefined,
@@ -129,6 +147,15 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const user = await requireAdmin(request);
+    if (!isBlogFeatureEnabled()) {
+      return NextResponse.json(
+        {
+          error: "Blog controls are temporarily disabled while database migrations are repaired.",
+          meta: { blogDbReady: false },
+        },
+        { status: 503 },
+      );
+    }
     const payload = await request.json();
     const validated = await validateBlogPayload(payload);
 

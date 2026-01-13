@@ -8,6 +8,7 @@ import BlogContentRenderer, {
 } from "@/components/blog/BlogContentRenderer";
 import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
 import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
+import MarketingContent from "@/components/marketing/MarketingContent";
 import type { AffiliatePolicy } from "@/lib/blog/affiliatePolicy";
 
 const API_BASE_URL =
@@ -59,6 +60,11 @@ type Params = {
   slug: string;
 };
 
+type PublicBlogPostResult = {
+  post: PublicBlogPost | null;
+  unavailable: boolean;
+};
+
 const fetchPublicPosts = async () => {
   if (SHOULD_SKIP_PUBLIC_BLOG_FETCH) {
     return [] as Array<{ slug: string }>;
@@ -73,15 +79,16 @@ const fetchPublicPosts = async () => {
       return [] as Array<{ slug: string }>;
     }
 
-    return response.json();
+    const payload = await response.json();
+    return Array.isArray(payload?.posts) ? payload.posts : [];
   } catch {
     return [] as Array<{ slug: string }>;
   }
 };
 
-const fetchPublicPost = async (slug: string): Promise<PublicBlogPost | null> => {
+const fetchPublicPost = async (slug: string): Promise<PublicBlogPostResult> => {
   if (SHOULD_SKIP_PUBLIC_BLOG_FETCH) {
-    return null;
+    return { post: null, unavailable: false };
   }
 
   try {
@@ -89,17 +96,22 @@ const fetchPublicPost = async (slug: string): Promise<PublicBlogPost | null> => 
       next: { revalidate: 300 },
     });
 
+    if (response.status === 503) {
+      return { post: null, unavailable: true };
+    }
+
     if (response.status === 404) {
-      return null;
+      return { post: null, unavailable: false };
     }
 
     if (!response.ok) {
-      return null;
+      return { post: null, unavailable: false };
     }
 
-    return response.json();
+    const payload = await response.json();
+    return { post: payload, unavailable: Boolean(payload?.unavailable) };
   } catch {
-    return null;
+    return { post: null, unavailable: false };
   }
 };
 
@@ -135,7 +147,7 @@ export const generateStaticParams = async () => {
 };
 
 export const generateMetadata = async ({ params }: { params: Params }): Promise<Metadata> => {
-  const post = await fetchPublicPost(params.slug);
+  const { post } = await fetchPublicPost(params.slug);
   if (!post) return {};
 
   const url = `${siteUrl}/blog/${post.slug}`;
@@ -170,7 +182,19 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
 };
 
 const BlogArticlePage = async ({ params }: { params: Params }) => {
-  const post = await fetchPublicPost(params.slug);
+  const { post, unavailable } = await fetchPublicPost(params.slug);
+  if (unavailable) {
+    return (
+      <MarketingContent>
+        <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
+          <section className="marketing-section mb-24 md:mb-28 text-center text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+            <p>Our editorial library is being refreshed. Check back soon.</p>
+          </section>
+        </div>
+      </MarketingContent>
+    );
+  }
+
   if (!post) notFound();
 
   const contentBlocks = Array.isArray(post.content) ? post.content : [];

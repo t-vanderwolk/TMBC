@@ -4,7 +4,10 @@ import { z } from "zod";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { prisma } from "@/lib/prisma";
-import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
+import {
+  handleMissingBlogTable,
+  isBlogFeatureEnabled,
+} from "@/lib/blog/blogReadiness";
 
 const querySchema = z.object({
   postId: z.string().min(1),
@@ -13,6 +16,12 @@ const querySchema = z.object({
 export async function GET(request: Request) {
   try {
     const user = await getUserOrThrow(request);
+    if (!isBlogFeatureEnabled()) {
+      return NextResponse.json(
+        { error: "Blog analytics are temporarily unavailable." },
+        { status: 503 },
+      );
+    }
     if (user.role !== Role.MENTOR && user.role !== Role.ADMIN) {
       return NextResponse.json({ error: "Only mentors can access this analytics view." }, { status: 403 });
     }

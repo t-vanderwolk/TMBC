@@ -28,9 +28,14 @@ const formatAuthorRole = (role?: PublicBlogPost["authorRoleSnapshot"]) => {
   return "Staff";
 };
 
-const fetchPublicPosts = async (): Promise<PublicBlogPost[]> => {
+type PublicBlogFetchResult = {
+  posts: PublicBlogPost[];
+  unavailable: boolean;
+};
+
+const fetchPublicPosts = async (): Promise<PublicBlogFetchResult> => {
   if (SHOULD_SKIP_PUBLIC_BLOG_FETCH) {
-    return [];
+    return { posts: [], unavailable: false };
   }
 
   try {
@@ -38,13 +43,12 @@ const fetchPublicPosts = async (): Promise<PublicBlogPost[]> => {
       next: { revalidate: 300 },
     });
 
-    if (!response.ok) {
-      return [];
-    }
-
-    return response.json();
+    const payload = await response.json().catch(() => null);
+    const posts = Array.isArray(payload?.posts) ? payload.posts : [];
+    const unavailable = Boolean(payload?.unavailable) || response.status === 503;
+    return { posts, unavailable };
   } catch {
-    return [];
+    return { posts: [], unavailable: false };
   }
 };
 
@@ -78,8 +82,23 @@ const heroSection = (
 );
 
 const BlogMarketingPage = async () => {
-  const posts = await fetchPublicPosts();
+  const { posts, unavailable } = await fetchPublicPosts();
   const [featuredPost, ...otherPosts] = posts;
+
+  if (unavailable) {
+    return (
+      <>
+        {heroSection}
+        <MarketingContent>
+          <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
+            <section className="marketing-section mb-24 md:mb-28 text-center text-base text-[var(--tmbc-charcoal)] text-opacity-70">
+              <p>Our editorial library is being refreshed. Check back soon.</p>
+            </section>
+          </div>
+        </MarketingContent>
+      </>
+    );
+  }
 
   if (!featuredPost) {
     return (
