@@ -26,8 +26,6 @@ async function upsertUser({ email, name, role }) {
       name,
       role,
       password: hashedPassword,
-      emailVerified: true,
-      status: "ACTIVE",
       onboardingComplete: true,
       profileCompleted: true,
     },

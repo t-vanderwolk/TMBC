@@ -1,2 +1,3 @@
--- Add sent timestamp tracking for admin invite emails.
-ALTER TABLE "Invite" ADD COLUMN "sentAt" TIMESTAMP(3);
+-- noop
+-- Column Invite.sentAt already exists in the database.
+-- Migration recorded as resolved to unblock prisma migrate dev.

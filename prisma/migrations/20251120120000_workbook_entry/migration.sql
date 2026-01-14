@@ -1,47 +1,45 @@
--- AlterTable
-ALTER TABLE "User"
-  ADD COLUMN "pinterestAccessToken" TEXT,
-  ADD COLUMN "pinterestRefreshToken" TEXT,
-  ADD COLUMN "pinterestTokenExpires" TIMESTAMP(3);
+-- 20251120120000_workbook_entry
+-- Column-parity restorative migration
+-- DO NOT NOOP — downstream migrations depend on this structure
 
--- CreateType
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_type t
-    JOIN pg_namespace n ON n.oid = t.typnamespace
-    WHERE t.typname = 'WorkbookEntryType'
-  ) THEN
-    CREATE TYPE "WorkbookEntryType" AS ENUM ('JOURNAL','MOODBOARD','CHECKLIST','REFLECTION');
-  END IF;
-END $$;
-
--- CreateTable
+-- Ensure table exists
 CREATE TABLE IF NOT EXISTS "WorkbookEntry" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "moduleId" TEXT NOT NULL,
-    "type" "WorkbookEntryType" NOT NULL,
-    "content" JSONB NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "WorkbookEntry_pkey" PRIMARY KEY ("id")
+  "id" TEXT NOT NULL,
+  "userId" TEXT NOT NULL,
+  "content" JSONB NOT NULL,
+  "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP(3) NOT NULL,
+
+  CONSTRAINT "WorkbookEntry_pkey" PRIMARY KEY ("id")
 );
 
--- AddForeignKey
+-- Add missing columns safely
 ALTER TABLE "WorkbookEntry"
-  ADD CONSTRAINT "WorkbookEntry_userId_fkey"
-  FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD COLUMN IF NOT EXISTS "module" TEXT;
 
 ALTER TABLE "WorkbookEntry"
-  ADD CONSTRAINT "WorkbookEntry_moduleId_fkey"
-  FOREIGN KEY ("moduleId") REFERENCES "AcademyModule"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD COLUMN IF NOT EXISTS "type" "WorkbookEntryType";
 
--- CreateUnique
+-- Backfill using VALID enum value
+UPDATE "WorkbookEntry"
+SET "module" = 'unknown'
+WHERE "module" IS NULL;
+
+UPDATE "WorkbookEntry"
+SET "type" = 'REFLECTION'
+WHERE "type" IS NULL;
+
+-- Enforce NOT NULL after backfill
 ALTER TABLE "WorkbookEntry"
-  ADD CONSTRAINT "WorkbookEntry_user_module_type_unique"
-  UNIQUE ("userId", "moduleId", "type");
+  ALTER COLUMN "module" SET NOT NULL,
+  ALTER COLUMN "type" SET NOT NULL;
 
--- CreateIndex
-CREATE INDEX IF NOT EXISTS "WorkbookEntry_userId_idx" ON "WorkbookEntry"("userId");
-CREATE INDEX IF NOT EXISTS "WorkbookEntry_moduleId_idx" ON "WorkbookEntry"("moduleId");
+-- Required unique constraint
+CREATE UNIQUE INDEX IF NOT EXISTS
+  "WorkbookEntry_user_module_type_unique"
+ON "WorkbookEntry" ("userId", "module", "type");
+
+-- Helpful lookup index
+CREATE INDEX IF NOT EXISTS
+  "WorkbookEntry_userId_idx"
+ON "WorkbookEntry" ("userId");

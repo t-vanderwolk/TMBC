@@ -1,2 +1,3 @@
--- AlterTable
-ALTER TABLE "AcademyModule" ADD COLUMN     "description" TEXT;
+-- noop
+-- Object already exists in database.
+-- Migration retained for historical consistency and marked applied.

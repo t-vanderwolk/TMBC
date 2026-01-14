@@ -11,6 +11,7 @@
     "dev": "next dev",
     "prisma:validate": "prisma validate",
     "prisma:generate": "prisma generate",
+    "db:reconcile": "node scripts/prisma/reconcile-migrations.js",
     "typecheck": "tsc --noEmit",
     "build:preflight": "node scripts/prebuild.js",
     "build": "npm run build:preflight && next build",

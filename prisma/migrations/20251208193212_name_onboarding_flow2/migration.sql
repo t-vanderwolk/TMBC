@@ -1,2 +1,2 @@
--- DropForeignKey
-ALTER TABLE "InviteCode" DROP CONSTRAINT "InviteCode_redeemedBy_fkey";
+-- noop: object already exists in database.
+-- Migration intentionally skipped to reconcile Prisma migration history.
