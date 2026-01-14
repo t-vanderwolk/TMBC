@@ -165,6 +165,18 @@ export default function FAQPage() {
 
 
           <section className="marketing-section marketing-card mx-auto max-w-3xl rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 py-16 text-center shadow-[0_25px_70px_rgba(199,166,199,0.25)]">
+            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+              Registry placeholder
+            </p>
+            <h2 className="mt-3 font-serif text-2xl text-[var(--tmbc-charcoal)]">
+              TMBC uses MyRegistry for registry creation and fulfillment.
+            </h2>
+            <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              Integration will be available in a future update.
+            </p>
+          </section>
+
+          <section className="marketing-section marketing-card mx-auto max-w-3xl rounded-[32px] border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-ivory)]/90 px-8 py-16 text-center shadow-[0_25px_70px_rgba(199,166,199,0.25)]">
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
               Still wondering if TMBC is right for you? You’re always welcome to learn more or reach out with a question.
             </p>

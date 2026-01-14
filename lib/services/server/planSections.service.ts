@@ -47,10 +47,10 @@ export const upsertPlanSection = async ({
     create: {
       memberId,
       sectionKey,
-      decisionState: decisionState ?? null,
-      mentorNote: mentorNote ?? null,
-      memberNote: memberNote ?? null,
-      memberAcknowledgement: memberAcknowledgement ?? null,
+      decisionState: decisionState ?? undefined,
+      mentorNote: mentorNote ?? undefined,
+      memberNote: memberNote ?? undefined,
+      memberAcknowledgement: memberAcknowledgement ?? undefined,
       updatedByRole,
     },
   });

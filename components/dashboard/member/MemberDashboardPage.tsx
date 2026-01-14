@@ -11,6 +11,7 @@ import JourneySnapshotSection from '@/components/dashboard/member/dashboard/Jour
 import QuickAccessSection from '@/components/dashboard/member/dashboard/QuickAccessSection';
 import SuggestionsSection from '@/components/dashboard/member/dashboard/SuggestionsSection';
 import { HeroSkeleton, SectionSkeleton } from '@/components/dashboard/member/dashboard/Skeletons';
+import StatusCard from '@/components/dashboard/member/dashboard/StatusCard';
 
 const HERO_MICROCOPIES = [
   'Progress looks different for everyone — you’re exactly where you need to be.',
@@ -49,6 +50,12 @@ export default async function MemberDashboardPage() {
       <Suspense fallback={<HeroSkeleton />}>
         <HeroSection dataPromise={dashboardPromise} user={user} microcopy={microcopy} />
       </Suspense>
+
+      <StatusCard
+        title="Registry"
+        status="Not Activated"
+        note="MyRegistry integration coming soon"
+      />
 
       <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="space-y-6">

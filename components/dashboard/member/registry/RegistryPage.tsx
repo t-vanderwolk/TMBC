@@ -8,6 +8,7 @@ import type { RegistryDto, RegistryItemResponse } from "@/lib/services/server/re
 import PlanSectionShell from "@/components/plan/PlanSectionShell";
 import type { PlanDecisionState } from "@/lib/services/server/planSections.service";
 import { planSectionKeys } from "@/lib/plan/planSectionMap";
+import MyRegistryPlaceholder from "@/components/registry/MyRegistryPlaceholder";
 
 // TMBC Canon:
 // The Plan is a mentor-led registry builder.
@@ -471,6 +472,12 @@ export default function RegistryPage() {
         <p className="text-xs text-[#A4556A]/70">{statusLine}</p>
       </header>
 
+      <MyRegistryPlaceholder
+        title="Registry Activation"
+        description="You’ll be able to create or link a MyRegistry account here once registry activation is enabled."
+        status="coming-soon"
+      />
+
       <section className="rounded-[24px] border border-[#F3DFE9] bg-white/90 p-4 text-sm text-[#3E2F35]/70 shadow-sm">
         <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[#C8A1B4]">Review status</p>
         <p className="mt-2">
@@ -778,6 +785,15 @@ export default function RegistryPage() {
           "space-y-4 rounded-[28px] bg-white/95 p-5 shadow-sm",
         )}
       >
+        <div className="rounded-[24px] border border-[#E3C6D4] bg-[#FFF9F5]/80 p-4 text-sm text-[#3E2F35]/70">
+          <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">
+            Registry activation
+          </p>
+          <p className="mt-2 text-sm text-[#3E2F35]/70">
+            Registry activation will be available here once enabled.
+          </p>
+        </div>
+
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-2">
             <label className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">Provider</label>

@@ -2,6 +2,7 @@ import { getUserOrThrow } from "@/lib/auth/getUser";
 import { redirect } from "next/navigation";
 
 import HouseholdForm, { type HouseholdData } from "@/components/dashboard/member/settings/HouseholdForm";
+import IntegrationRow from "@/components/dashboard/member/settings/IntegrationRow";
 import OnboardingEditor from "@/components/dashboard/member/settings/OnboardingEditor";
 import ProfileForm from "@/components/dashboard/member/settings/ProfileForm";
 import SettingsTabs from "@/components/dashboard/member/settings/SettingsTabs";
@@ -59,6 +60,20 @@ export default async function MemberSettingsPage() {
 
       <section>
         <PinterestSyncCard />
+      </section>
+
+      <section id="integrations">
+        <div className="space-y-4">
+          <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Member · Integrations</p>
+          <h2 className="text-2xl font-serif text-[#3E2F35]">Integrations</h2>
+        </div>
+        <div className="mt-4">
+          <IntegrationRow
+            name="MyRegistry"
+            status="Not Connected"
+            note="Integration coming soon"
+          />
+        </div>
       </section>
     </div>
   );

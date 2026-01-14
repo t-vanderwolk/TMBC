@@ -64,15 +64,17 @@ model User {
   mentorTasksMentor         MentorTask[]              @relation("MentorTasksMentor")
   onboardingProfile         OnboardingProfile?
   planSections              PlanSection[]             @relation("MemberPlanSections")
+  reviewedPlanSections      PlanSection[]             @relation("PlanSectionReviewedBy")
   profile                   Profile?
   registry                  Registry?                 @relation("UserRegistry")
-  registryConflicts         RegistryConflict[]
-  registryItems             RegistryItem[]
-  timeCapsules              TimeCapsule[]
-  mentor                    User?                     @relation("Mentorship", fields: [mentorId], references: [id])
-  mentees                   User[]                    @relation("Mentorship")
-  workbookEntries           WorkbookEntry[]
-  conversations             Conversation[]            @relation("ConversationParticipants")
+
+  registryConflicts RegistryConflict[]
+  registryItems     RegistryItem[]
+  timeCapsules      TimeCapsule[]
+  mentor            User?              @relation("Mentorship", fields: [mentorId], references: [id])
+  mentees           User[]             @relation("Mentorship")
+  workbookEntries   WorkbookEntry[]
+  conversations     Conversation[]     @relation("ConversationParticipants")
 }
 
 model AffiliateEvent {
@@ -481,23 +483,6 @@ model ExternalRegistryNote {
 
   @@index([registryId])
   @@index([authorId])
-}
-
-model PlanSection {
-  id                    String   @id @default(cuid())
-  memberId              String
-  sectionKey            String
-  decisionState         String?
-  mentorNote            String?
-  memberNote            String?
-  memberAcknowledgement String?
-  updatedByRole         String?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-  member                User     @relation("MemberPlanSections", fields: [memberId], references: [id], onDelete: Cascade)
-
-  @@unique([memberId, sectionKey])
-  @@index([memberId])
 }
 
 model AcademyModule {
@@ -963,4 +948,36 @@ enum WorkbookSection {
   REFLECT
   APPLY
   INTEGRATE
+}
+
+/// ===============================
+/// PLAN COLLABORATION (CANONICAL)
+/// ===============================
+
+model PlanSection {
+  id         String @id @default(cuid())
+  memberId   String
+  sectionKey String
+
+  decisionState String @default("UNDECIDED")
+  readyState    String @default("NOT_READY")
+
+  memberNote            String?
+  mentorNote            String?
+  mentorSummary         String?
+  memberAcknowledgement String?
+  updatedByRole         String? @default("MEMBER")
+
+  reviewedAt   DateTime?
+  reviewedById String?
+  reviewedBy   User?     @relation("PlanSectionReviewedBy", fields: [reviewedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  member User @relation("MemberPlanSections", fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([memberId, sectionKey])
+  @@index([memberId])
+  @@index([reviewedById])
 }
