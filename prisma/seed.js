@@ -1,3 +1,5 @@
+
+
 /* prisma/seed.js */
 
 const { PrismaClient } = require("@prisma/client");
@@ -11,7 +13,10 @@ const PASSWORD = "Karma";
 /* ----------------------------- USERS ----------------------------- */
 
 async function upsertUser({ email, name, role }) {
-  const existing = await prisma.user.findUnique({ where: { email } });
+  const existing = await prisma.user.findUnique({
+    where: { email },
+    select: { id: true },
+  });
 
   if (existing) {
     console.log(`⏭️  ${role} already exists: ${email}`);
@@ -52,35 +57,29 @@ async function seedDemoRegistryProduct() {
     return;
   }
 
-  /**
-   * IMPORTANT:
-   * Use Prisma create() so:
-   * - id is auto-generated
-   * - defaults are applied
-   * - NOT NULL constraints are respected
-   */
-const product = await prisma.product.create({
-  data: {
-    name: "Traveler's Nesting Kit (demo)",
-    brand: "Taylor-Made",
-    category: "Nursery",
-    description: "A curated kit for responsive nesting on the go.",
-    notes: "DEMO: Mentor-picked for schema preview.",
-    imageUrl: "https://images.tmbc.com/demo/demo-product.jpg",
-  },
-  select: { id: true },
-});
+  const product = await prisma.product.create({
+    data: {
+      name: "Traveler's Nesting Kit (demo)",
+      brand: "Taylor-Made",
+      category: "Nursery",
+      description: "A curated kit for responsive nesting on the go.",
+      notes: "DEMO: Mentor-picked for schema preview.",
+      imageUrl: "https://images.tmbc.com/demo/demo-product.jpg",
+    },
+    select: { id: true },
+  });
 
- await prisma.affiliateLink.create({
-  data: {
-    productId: product.id,
-    retailerName: "MacroBaby Demo",
-    network: "CJ",
-    outboundUrl: "https://example.com/demo",
-    region: "US",
-    isPrimary: true,
-  },
-});
+  await prisma.affiliateLink.create({
+    data: {
+      productId: product.id,
+      retailerName: "MacroBaby Demo",
+      network: "CJ",
+      outboundUrl: "https://example.com/demo",
+      region: "US",
+      isPrimary: true,
+    },
+  });
+
   console.log("⚡️ Seeded demo registry product & affiliate link");
 }
 
