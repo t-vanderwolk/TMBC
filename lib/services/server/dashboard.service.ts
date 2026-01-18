@@ -45,6 +45,14 @@ export type CommunityStatus = {
   tone: 'calm' | 'warm' | 'steady';
 };
 
+export type ModuleBrief = {
+  id: string;
+  title: string;
+  completed?: boolean;
+  trackId: string;
+  stage: string;
+};
+
 export type JourneyProgress = {
   id: string;
   title: string;
@@ -82,6 +90,7 @@ export type DashboardOverview = {
   journeyProgress: JourneyProgress[];
   dueDateLabel?: string | null;
   babyStage?: string | null;
+  modules: ModuleBrief[];
 };
 
 export type DashboardData = DashboardOverview & {
@@ -257,6 +266,13 @@ export const getDashboardOverview = async (user?: DashboardUser) => {
   const journeyProgress = buildJourneyProgress(journeys, tracks, modules);
   const dueDateLabel = formatDueDateLabel(user?.dueDate);
   const babyStage = getBabyStageLabel(user?.dueDate);
+  const moduleSummaries: ModuleBrief[] = modules.map((module) => ({
+    id: module.id,
+    title: module.title,
+    completed: module.completed,
+    trackId: module.trackId,
+    stage: module.stage,
+  }));
 
   return {
     greeting: greetUser(user),
@@ -277,6 +293,7 @@ export const getDashboardOverview = async (user?: DashboardUser) => {
     journeyProgress,
     dueDateLabel,
     babyStage,
+    modules: moduleSummaries,
   };
 };
 

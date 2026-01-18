@@ -8,9 +8,9 @@ export default function PriceTimingPanel() {
       <p className="text-sm text-[#3E2F35]/70">
         Static reference copy only. This panel will eventually surface price history, protection cues, and timing signals.
       </p>
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">TODO: Connect to price history service</p>
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">TODO: Support retailer comparison</p>
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">TODO: Add price protection signals</p>
+      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">
+        Price history, retailer comparison, and protection signals are on deck.
+      </p>
     </section>
   );
 }

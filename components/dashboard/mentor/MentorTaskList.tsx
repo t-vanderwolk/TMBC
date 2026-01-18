@@ -26,9 +26,9 @@ const MentorTaskList = ({ tasks, compact }: MentorTaskListProps) => {
 
   if (!localTasks.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-tmBlush/40 bg-white/80 p-4 text-sm text-tmCharcoal/70">
-        <p className="font-semibold text-tmCharcoal">No mentor tasks yet</p>
-        <p className="mt-1 text-xs text-tmCharcoal/60">
+      <div className="rounded-2xl border border-member-border-soft bg-member-background-soft p-4 text-sm text-member-text-secondary">
+        <p className="font-semibold text-member-text-primary">No mentor tasks yet</p>
+        <p className="mt-1 text-xs text-member-text-secondary">
           This section will populate as mentee work requests come in.
         </p>
       </div>
@@ -40,27 +40,27 @@ const MentorTaskList = ({ tasks, compact }: MentorTaskListProps) => {
       {localTasks.map((task) => (
         <div
           key={task.id}
-          className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-tmBlush/30 bg-white/90 p-4 shadow-sm"
+          className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-member-border-soft bg-member-background-card p-4 shadow-sm"
         >
           <div>
-            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.4em] text-tmMauve">
-              <ClipboardList className="h-4 w-4 text-tmMauve" />
-              {task.type.replace(/_/g, ' ')}
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.4em] text-member-accent-secondary">
+              <ClipboardList className="h-4 w-4 text-member-accent-primary" />
+              {task.type.replace(/_/g, " ")}
             </div>
-            <p className="text-base font-semibold text-tmCharcoal">{task.title}</p>
+            <p className="text-base font-semibold text-member-text-primary">{task.title}</p>
             {!compact && (
-              <p className="text-sm text-tmCharcoal/70">
-                {task.description || 'No additional details for this task yet.'}
+              <p className="text-sm text-member-text-secondary">
+                {task.description || "No additional details for this task yet."}
               </p>
             )}
           </div>
           <button
             onClick={() => handleComplete(task.id)}
             disabled={task.completed}
-            className="inline-flex items-center gap-2 rounded-full border border-tmMauve px-4 py-2 text-sm font-semibold text-tmMauve disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-full border border-member-accent-secondary bg-member-background-card px-4 py-2 text-sm font-semibold text-member-accent-primary disabled:border-member-state-disabled disabled:text-member-text-muted disabled:bg-member-background-soft"
           >
             <CheckCircle2 className="h-4 w-4" />
-            {task.completed ? 'Completed' : 'Mark complete'}
+            {task.completed ? "Completed" : "Mark complete"}
           </button>
         </div>
       ))}

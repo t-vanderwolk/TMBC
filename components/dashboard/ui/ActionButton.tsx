@@ -13,12 +13,14 @@ type ActionButtonProps = {
 };
 
 const VARIANT_CLASSES: Record<NonNullable<ActionButtonProps["variant"]>, string> = {
-  primary: "bg-[#B98AA5] text-white border-transparent hover:bg-[#c89ebb]",
-  ghost: "border border-[#E3D0DA] bg-white/90 text-[#B98AA5] hover:border-[#C8A1B4]",
+  primary:
+    "bg-member-accent-primary text-member-text-inverse border-transparent hover:bg-member-accent-secondary disabled:bg-member-state-disabled disabled:text-member-text-muted",
+  ghost:
+    "border border-member-border-default bg-member-background-card text-member-accent-primary hover:border-member-accent-primary hover:text-member-accent-primary disabled:border-member-state-disabled disabled:text-member-text-muted",
 };
 
 const baseClasses =
-  "inline-flex justify-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B98AA5]";
+  "inline-flex justify-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-member-state-focus";
 
 export default function ActionButton({
   children,

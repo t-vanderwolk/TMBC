@@ -39,7 +39,7 @@ export default async function EventsAnnouncementsSection({ dataPromise }: Events
       title="Warm updates from the team"
       action={
         <ActionButton
-          href="/dashboard/member/events"
+          href="/dashboard/events"
           variant="ghost"
           className="sm:w-auto"
           fullWidth
@@ -75,7 +75,7 @@ export default async function EventsAnnouncementsSection({ dataPromise }: Events
         <div className="flex items-center justify-between gap-3">
           <p className="text-[0.65rem] uppercase tracking-[0.45em] text-[#C8A1B4]">Upcoming gatherings</p>
           <ActionButton
-            href="/dashboard/member/events"
+            href="/dashboard/events"
             variant="ghost"
             className="sm:w-auto"
             fullWidth
@@ -108,7 +108,7 @@ export default async function EventsAnnouncementsSection({ dataPromise }: Events
                     {event.rsvpCount} RSVP{event.rsvpCount === 1 ? '' : 's'}
                   </p>
                   <ActionButton
-                    href="/dashboard/member/events"
+                    href="/dashboard/events"
                     variant="ghost"
                     className="sm:w-auto"
                     fullWidth

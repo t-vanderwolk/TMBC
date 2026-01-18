@@ -67,7 +67,10 @@ export default function ModuleCard({
   }
 
   return (
-    <Link href={href} className={`block ${className}`}>
+    <Link
+      href={href}
+      className={`block focus-visible:outline-none focus-visible:ring-0 ${className}`}
+    >
       {card}
     </Link>
   );

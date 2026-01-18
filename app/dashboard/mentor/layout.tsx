@@ -4,6 +4,7 @@ export const revalidate = 0;
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 
+import MentorBottomNav from "@/components/dashboard/mentor/nav/MentorBottomNav";
 import { requireAuth } from "@/lib/auth/requireAuth";
 import { routeForRole } from "@/lib/auth/routeForRole";
 
@@ -23,5 +24,10 @@ export default async function MentorLayout({ children }: MentorLayoutProps) {
     redirect(routeForRole(user.role));
   }
 
-  return <>{children}</>;
+  return (
+    <div className="relative pb-[96px]">
+      {children}
+      <MentorBottomNav />
+    </div>
+  );
 }

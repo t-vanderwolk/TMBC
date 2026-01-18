@@ -1,4 +1,5 @@
-import type { Prisma } from "@prisma/client";
+import type { Prisma, PartnerRoleLabel } from "@prisma/client";
+import { saveProfile } from "@/lib/services/server/onboarding.service";
 import {
   getOnboardingProfile,
 } from "@/lib/services/server/onboarding.service";
@@ -21,6 +22,22 @@ export type ProfileUpdatePayload = {
   email: string;
 };
 
+export type MemberDetailsPayload = {
+  firstName?: string;
+  lastName?: string;
+  preferredName?: string;
+  city?: string;
+  state?: string;
+  dueDate?: string;
+  location?: string;
+};
+
+export type PartnerProfilePayload = {
+  name?: string;
+  roleLabel?: PartnerRoleLabel | null;
+  notes?: string;
+};
+
 /* ─────────────────────── Utilities ───────────────────────── */
 const EMPTY_RECOMMENDATIONS = { tags: [], categories: [] };
 
@@ -33,9 +50,20 @@ const baseProfileSelect = {
   updatedAt: true,
   firstName: true,
   lastName: true,
+  preferredName: true,
   state: true,
   inviteRequestId: true,
 } satisfies Prisma.ProfileSelect;
+
+const partnerProfileSelect = {
+  id: true,
+  userId: true,
+  name: true,
+  roleLabel: true,
+  notes: true,
+  updatedAt: true,
+  createdAt: true,
+} satisfies Prisma.PartnerProfileSelect;
 
 /**
  * Detects Prisma "missing column" errors (P2021) safely
@@ -79,6 +107,7 @@ export const getMemberSettingsData = async (userId: string) => {
   return {
     profile,
     onboardingProfile,
+    partnerProfile: await getPartnerProfile(userId),
   };
 };
 
@@ -127,6 +156,68 @@ export const updateMemberProfile = async (
   });
 
   await prisma.$transaction([userUpdate, profileUpdate]);
+};
+
+export const saveMemberDetails = async (userId: string, payload: MemberDetailsPayload) => {
+  const nameParts = [payload.firstName, payload.lastName].filter(Boolean);
+  const userName = nameParts.length ? nameParts.join(" ") : undefined;
+  const dueDateValue = payload.dueDate ? new Date(payload.dueDate) : undefined;
+
+  const profileUpsert = prisma.profile.upsert({
+    where: { userId },
+    create: {
+      userId,
+      firstName: payload.firstName ?? null,
+      lastName: payload.lastName ?? null,
+      preferredName: payload.preferredName ?? null,
+      city: payload.city ?? null,
+      state: payload.state ?? null,
+      dueDate: dueDateValue,
+    },
+    update: {
+      firstName: payload.firstName ?? undefined,
+      lastName: payload.lastName ?? undefined,
+      preferredName: payload.preferredName ?? undefined,
+      city: payload.city ?? undefined,
+      state: payload.state ?? undefined,
+      dueDate: dueDateValue ?? undefined,
+    },
+  });
+
+  await saveProfile({
+    userId,
+    name: userName,
+    dueDate: payload.dueDate,
+    location: payload.location,
+  });
+  await profileUpsert;
+};
+
+export const getPartnerProfile = async (userId: string) => {
+  return prisma.partnerProfile.findUnique({
+    where: { userId },
+    select: partnerProfileSelect,
+  });
+};
+
+export const updatePartnerProfile = async (
+  userId: string,
+  payload: PartnerProfilePayload,
+) => {
+  await prisma.partnerProfile.upsert({
+    where: { userId },
+    create: {
+      userId,
+      name: payload.name ?? null,
+      roleLabel: payload.roleLabel ?? null,
+      notes: payload.notes ?? null,
+    },
+    update: {
+      name: payload.name ?? null,
+      roleLabel: payload.roleLabel ?? null,
+      notes: payload.notes ?? null,
+    },
+  });
 };
 
 /* ─────────────── Onboarding Context Updates ─────────────── */

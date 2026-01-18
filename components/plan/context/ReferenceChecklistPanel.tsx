@@ -25,9 +25,9 @@ export default function ReferenceChecklistPanel() {
           </div>
         ))}
       </div>
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">TODO: Load reference checklist structure</p>
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">TODO: Persist per-item status</p>
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">TODO: Allow mentor notes per item</p>
+      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">
+        This checklist will reflect your curated categories once the reference structure lands.
+      </p>
     </section>
   );
 }

@@ -11,9 +11,9 @@ type MentorJournalShareBannerProps = {
 const MentorJournalShareBanner = ({ shares }: MentorJournalShareBannerProps) => {
   if (!shares.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-tmBlush/40 bg-white/80 p-4 text-sm text-tmCharcoal/70">
-        <p className="font-semibold text-tmCharcoal">No journal entries shared yet</p>
-        <p className="mt-1 text-xs text-tmCharcoal/60">
+      <div className="rounded-2xl border border-dashed border-member-border-soft bg-member-background-soft p-4 text-sm text-member-text-secondary">
+        <p className="font-semibold text-member-text-primary">No journal entries shared yet</p>
+        <p className="mt-1 text-xs text-member-text-secondary">
           This section will populate as mentees share reflections.
         </p>
       </div>
@@ -21,16 +21,16 @@ const MentorJournalShareBanner = ({ shares }: MentorJournalShareBannerProps) => 
   }
 
   return (
-    <div className="space-y-3 rounded-2xl border border-tmBlush/40 bg-white/90 p-4 shadow-sm">
-      <div className="flex items-center gap-2 text-xs uppercase tracking-[0.4em] text-tmMauve">
-        <Notebook className="h-4 w-4 text-tmMauve" />
+    <div className="space-y-3 rounded-2xl border border-member-border-soft bg-member-background-card p-4 shadow-sm">
+      <div className="flex items-center gap-2 text-xs uppercase tracking-[0.4em] text-member-accent-secondary">
+        <Notebook className="h-4 w-4 text-member-accent-primary" />
         Shared Journal Entries
       </div>
-      <ul className="space-y-2 text-sm text-tmCharcoal/80">
+      <ul className="space-y-2 text-sm text-member-text-secondary">
         {shares.map((share) => (
-          <li key={share.shareId} className="rounded-xl bg-tmIvory/70 p-3">
-            <p className="font-semibold text-tmCharcoal">{share.excerpt || 'Reflection'}</p>
-            <p className="text-xs text-tmCharcoal/60">
+          <li key={share.shareId} className="rounded-xl bg-member-background-soft p-3">
+            <p className="font-semibold text-member-text-primary">{share.excerpt || "Reflection"}</p>
+            <p className="text-xs text-member-text-secondary">
               Shared {new Date(share.sharedAt).toLocaleDateString()} · Entry {share.journalId}
             </p>
           </li>

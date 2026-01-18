@@ -18,8 +18,9 @@ export default function CoreEssentialsPanel() {
           </li>
         ))}
       </ul>
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">TODO: Link to mentor session summaries</p>
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">TODO: Drive registry readiness signals</p>
+      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">
+        Mentor session summaries and registry readiness cues will appear here as the workspace grows.
+      </p>
     </section>
   );
 }

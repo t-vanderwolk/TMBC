@@ -1,0 +1,35 @@
+{
+  "background": {
+    "page": "#FAF7F4",
+    "card": "#FFFFFF",
+    "soft": "#F4ECEA",
+    "muted": "#EEE6E3"
+  },
+  "text": {
+    "primary": "#3A2F2F",
+    "secondary": "#6B5F5F",
+    "muted": "#9B8F8F",
+    "inverse": "#FFFFFF"
+  },
+  "accent": {
+    "primary": "#C9A3B5",
+    "secondary": "#E6C7D2",
+    "subtle": "#EFE3E8"
+  },
+  "border": {
+    "default": "#E7DDDA",
+    "soft": "#F0E8E5"
+  },
+  "state": {
+    "focus": "#C9A3B5",
+    "hover": "#E6C7D2",
+    "active": "#B48CA0",
+    "disabled": "#E1D7D7"
+  },
+  "semantic": {
+    "success": "#7C9A92",
+    "info": "#8DA0B3",
+    "warning": "#C2A27A",
+    "error": "#B56A6A"
+  }
+}

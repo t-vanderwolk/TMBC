@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { BlogAuthorRole, BlogStatus } from "@prisma/client";
 import { z } from "zod";
 
 const normalizeSlug = (value: string) =>
@@ -79,6 +80,144 @@ export type BlogPayload = {
   highlights: HighlightInput[];
   isAffiliate: boolean;
 };
+
+const createBasePostData = async (payload: BlogPayload, excludeId?: string) => {
+  const slug = await ensureUniqueBlogSlug(payload.slug, excludeId);
+  return {
+    slug,
+    title: payload.title,
+    excerpt: payload.excerpt,
+    heroImage: payload.heroImage,
+    content: payload.content,
+    tags: payload.tags,
+    isAffiliate: payload.isAffiliate,
+  };
+};
+
+export async function createMentorDraft(authorId: string, authorName: string | null, payload: BlogPayload) {
+  const base = await createBasePostData(payload);
+  const post = await prisma.blogPost.create({
+    data: {
+      ...base,
+      status: BlogStatus.DRAFT,
+      authorId,
+      authorName: authorName ?? "",
+      authorRoleSnapshot: BlogAuthorRole.MENTOR,
+    },
+  });
+  await upsertBlogHighlights(post.id, payload.highlights);
+  return post;
+}
+
+export async function updateMentorDraft(postId: string, payload: BlogPayload) {
+  const post = await prisma.blogPost.findUnique({ where: { id: postId } });
+  if (!post) {
+    throw new Error("Draft not found.");
+  }
+  const mentorEditableStatuses = [BlogStatus.DRAFT, BlogStatus.REJECTED] as const;
+  if (!mentorEditableStatuses.includes(post.status as typeof mentorEditableStatuses[number])) {
+    throw new Error("Mentor drafts can only be updated while still a draft or after revisions.");
+  }
+  const base = await createBasePostData(payload, post.id);
+  const updated = await prisma.blogPost.update({
+    where: { id: post.id },
+    data: {
+      ...base,
+    },
+  });
+  await upsertBlogHighlights(updated.id, payload.highlights);
+  return updated;
+}
+
+export async function submitForReview(postId: string, mentorId: string) {
+  const post = await prisma.blogPost.findUnique({ where: { id: postId } });
+  if (!post || post.authorId !== mentorId) {
+    throw new Error("Draft not found.");
+  }
+  const submittableStatuses = [BlogStatus.DRAFT, BlogStatus.REJECTED] as const;
+  if (!submittableStatuses.includes(post.status as typeof submittableStatuses[number])) {
+    throw new Error("Only drafts may be submitted for review.");
+  }
+  return prisma.blogPost.update({
+    where: { id: post.id },
+    data: {
+      status: BlogStatus.IN_REVIEW,
+      submittedAt: new Date(),
+      rejectionNote: null,
+    },
+  });
+}
+
+export async function approvePost(postId: string, adminId: string) {
+  const post = await prisma.blogPost.findUnique({ where: { id: postId } });
+  if (!post) {
+    throw new Error("Post not found.");
+  }
+  if (post.status !== BlogStatus.IN_REVIEW) {
+    throw new Error("Only submitted posts can be approved.");
+  }
+  return prisma.blogPost.update({
+    where: { id: post.id },
+    data: {
+      status: BlogStatus.APPROVED,
+      reviewerId: adminId,
+      rejectionNote: null,
+    },
+  });
+}
+
+export async function rejectPost(postId: string, adminId: string, note: string) {
+  const post = await prisma.blogPost.findUnique({ where: { id: postId } });
+  if (!post) {
+    throw new Error("Post not found.");
+  }
+  if (post.status !== BlogStatus.IN_REVIEW) {
+    throw new Error("Only submitted posts can be rejected.");
+  }
+  return prisma.blogPost.update({
+    where: { id: post.id },
+    data: {
+      status: BlogStatus.REJECTED,
+      reviewerId: adminId,
+      rejectionNote: note.trim(),
+    },
+  });
+}
+
+export async function publishPost(
+  postId: string,
+  adminId: string,
+  overrides?: { authorName?: string; authorRoleSnapshot?: BlogAuthorRole },
+) {
+  const post = await prisma.blogPost.findUnique({ where: { id: postId } });
+  if (!post) {
+    throw new Error("Post not found.");
+  }
+  const allowedStatuses = [BlogStatus.APPROVED, BlogStatus.ARCHIVED] as const;
+  if (
+    !allowedStatuses.includes(post.status as typeof allowedStatuses[number]) &&
+    post.authorRoleSnapshot !== BlogAuthorRole.ADMIN
+  ) {
+    throw new Error("Only approved posts may be published.");
+  }
+  const normalizedAuthorName =
+    typeof overrides?.authorName === "string" && overrides.authorName.trim()
+      ? overrides.authorName.trim()
+      : post.authorName;
+  const normalizedAuthorRole =
+    overrides?.authorRoleSnapshot ?? post.authorRoleSnapshot;
+  return prisma.blogPost.update({
+    where: { id: post.id },
+    data: {
+      status: BlogStatus.PUBLISHED,
+      publishedAt: new Date(),
+      reviewerId: adminId,
+      submittedAt: post.submittedAt ?? new Date(),
+      authorName: normalizedAuthorName,
+      authorRoleSnapshot: normalizedAuthorRole,
+    },
+  });
+}
 
 export async function validateBlogPayload(payload: unknown): Promise<BlogPayload> {
   const parsed = blogPayloadSchema.parse(payload);

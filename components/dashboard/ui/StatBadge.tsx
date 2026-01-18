@@ -10,12 +10,14 @@ export default function StatBadge({ label, value, className = "" }: StatBadgePro
   return (
     <span
       className={`
-        inline-flex items-center gap-2 rounded-full border border-[#E3D0DA] bg-white/80 px-3 py-1 text-[0.65rem]
-        uppercase tracking-[0.35em] text-[#B98AA5]
+        inline-flex items-center gap-2 rounded-full border border-member-border-soft bg-member-background-card px-3 py-1 text-[0.65rem]
+        uppercase tracking-[0.35em] text-member-accent-primary
         ${className}
       `}
     >
-      {value && <span className="text-sm font-semibold text-[#3E2F35]">{value}</span>}
+      {value && (
+        <span className="text-sm font-semibold text-member-text-primary">{value}</span>
+      )}
       <span>{label}</span>
     </span>
   );

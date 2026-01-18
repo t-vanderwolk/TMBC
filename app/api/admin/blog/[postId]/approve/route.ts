@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
-import { prisma } from "@/lib/prisma";
 import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
+import { approvePost } from "@/lib/services/server/blog.service";
 
 type RouteContext = {
   params: { postId: string };
@@ -18,24 +18,9 @@ const requireAdmin = async () => {
 
 export async function POST(_request: Request, context: RouteContext) {
   try {
-    await requireAdmin();
+    const admin = await requireAdmin();
 
-    const post = await prisma.blogPost.findUnique({ where: { id: context.params.postId } });
-    if (!post) {
-      return NextResponse.json({ error: "Not found." }, { status: 404 });
-    }
-
-    if (post.status !== "IN_REVIEW") {
-      return NextResponse.json(
-        { error: "Only submitted posts can be approved." },
-        { status: 400 },
-      );
-    }
-
-    const updated = await prisma.blogPost.update({
-      where: { id: post.id },
-      data: { status: "ARCHIVED" },
-    });
+    const updated = await approvePost(context.params.postId, admin.id);
 
     return NextResponse.json({ data: updated });
   } catch (error) {

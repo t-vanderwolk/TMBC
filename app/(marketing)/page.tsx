@@ -257,6 +257,26 @@ export default function HomePage() {
           </ImageFrame>
         </section>
 
+          <section className="mt-12">
+            <div className="max-w-5xl mx-auto text-center">
+              <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">
+                Trusted by quiet prep partners
+              </p>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-6">
+                {partnerLogos.map((logo) => (
+                  <div key={logo.file} className="h-12 opacity-80">
+                    <img
+                      src={`/api/logos/${logo.file}`}
+                      alt={logo.alt}
+                      className="h-full object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
         <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 pt-20 pb-16 md:pt-24 md:pb-20 mt-24 mb-12">
           <div className="max-w-3xl mx-auto space-y-4 text-center">
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">

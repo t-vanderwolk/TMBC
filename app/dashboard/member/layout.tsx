@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 
 import { requireAuth } from "@/lib/auth/requireAuth";
 import { routeForRole } from "@/lib/auth/routeForRole";
+import MemberBottomNav from "@/components/dashboard/member/nav/MemberBottomNav";
 
 type MemberLayoutProps = {
   children: ReactNode;
@@ -18,5 +19,10 @@ export default async function MemberLayout({ children }: MemberLayoutProps) {
     redirect(routeForRole(user.role));
   }
 
-  return <>{children}</>;
+  return (
+    <div className="relative pb-[96px]">
+      {children}
+      <MemberBottomNav />
+    </div>
+  );
 }

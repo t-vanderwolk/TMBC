@@ -1,89 +1,155 @@
-import Link from "next/link";
+"use server";
 
-import SectionWrapper from "@/components/dashboard/member/ui/SectionWrapper";
-import PageHeader from "@/components/dashboard/member/ui/PageHeader";
-import { EmptyState } from "@/components/dashboard/shared/EmptyState";
-import { Role } from "@prisma/client";
+import { CommunityPostSourceType, Role } from "@prisma/client";
+
+import CommunityLayout from "@/components/community/CommunityLayout";
 import { getUserOrThrow } from "@/lib/auth/getUser";
-import { getCommunityRooms, type CommunityRoomSummary } from "@/lib/services/server/community.service";
+import {
+  CommunityPostDetail,
+  CommunityReplyDetail,
+  CommunityRoomDetail,
+  CommunityRoomSummary,
+  getCommunityRoom,
+  getCommunityRooms,
+} from "@/lib/services/server/community.service";
 
-const LOCALE_OPTIONS: Intl.DateTimeFormatOptions = {
-  month: "short",
-  day: "numeric",
-};
+const MOCK_ROOM_CONFIG: CommunityRoomSummary[] = [
+  {
+    id: "mock-nesting",
+    name: "Nesting reflections",
+    description: "Share slow, tactile thoughts as you prepare your space.",
+    moduleId: "module-nesting",
+    moduleTitle: "Nesting Essentials",
+    minRole: Role.MEMBER,
+    latestPostSnippet: "Today I finally set up the cozy nap corner. It feels like a quiet anchor.",
+    latestPostAuthor: "Avery",
+    latestPostAuthorRole: Role.MEMBER,
+    latestPostAt: new Date("2025-01-05T10:15:00Z").toISOString(),
+  },
+  {
+    id: "mock-weekly-check",
+    name: "Weekly check-ins",
+    description: "General questions and calm feedback loops from the community.",
+    moduleId: null,
+    moduleTitle: null,
+    minRole: Role.MEMBER,
+    latestPostSnippet: "That reminder to breathe before answering the doorbell really helped.",
+    latestPostAuthor: "Mentor Elise",
+    latestPostAuthorRole: Role.MENTOR,
+    latestPostAt: new Date("2025-01-04T19:45:00Z").toISOString(),
+  },
+];
 
-const renderMentorPresence = (room: CommunityRoomSummary) => {
-  if (room.latestPostAuthorRole && room.latestPostAuthorRole !== Role.MEMBER) {
-    return "Mentor presence · Seen earlier today";
-  }
-  return "Mentor presence · Member-led lounge";
-};
+const createMockReplies = (overrides?: Partial<CommunityReplyDetail>): CommunityReplyDetail[] => [
+  {
+    id: "mock-reply-1",
+    content: "Lean into that feeling — we hear you. Keep trusting the rhythm.",
+    createdAt: new Date("2025-01-05T10:20:00Z").toISOString(),
+    authorId: "mentor-elise",
+    authorName: "Mentor Elise",
+    authorRole: Role.MENTOR,
+    ...overrides,
+  },
+];
+
+const createMockPosts = (roomId: string): CommunityPostDetail[] => [
+  {
+    id: `${roomId}-post-1`,
+    roomId,
+    content:
+      "I made time to read quietly before the little one woke today. It felt like a small breath before a long week.",
+    createdAt: new Date("2025-01-05T10:00:00Z").toISOString(),
+    authorId: "user-hannah",
+    authorName: "Hannah",
+    authorRole: Role.MEMBER,
+    isAnnouncement: false,
+    isPinned: false,
+    pinnedAt: null,
+    sourceType: CommunityPostSourceType.COMMUNITY,
+    sourceSection: null,
+    sourcePrompt: null,
+    isAnonymous: false,
+    isMentorPrompt: false,
+    workbookEntryId: null,
+    replies: createMockReplies(),
+  },
+  {
+    id: `${roomId}-post-2`,
+    roomId,
+    content:
+      "Gentle reminder: if you need to pause, fold the laundry tomorrow. There’s deep strength in collecting yourself first.",
+    createdAt: new Date("2025-01-04T18:30:00Z").toISOString(),
+    authorId: "mentor-elise",
+    authorName: "Mentor Elise",
+    authorRole: Role.MENTOR,
+    isAnnouncement: false,
+    isPinned: true,
+    pinnedAt: new Date("2025-01-04T18:31:00Z").toISOString(),
+    sourceType: CommunityPostSourceType.COMMUNITY,
+    sourceSection: null,
+    sourcePrompt: null,
+    isAnonymous: false,
+    isMentorPrompt: true,
+    workbookEntryId: null,
+    replies: [],
+  },
+];
+
+const MOCK_ROOM_DETAILS: Record<string, CommunityRoomDetail> = Object.fromEntries(
+  MOCK_ROOM_CONFIG.map((room) => [
+    room.id,
+    {
+      id: room.id,
+      name: room.name,
+      description: room.description,
+      moduleId: room.moduleId,
+      moduleTitle: room.moduleTitle,
+      minRole: room.minRole,
+      posts: createMockPosts(room.id),
+    },
+  ]),
+);
 
 export default async function MemberCommunityHomePage() {
   const user = await getUserOrThrow();
   const rooms = await getCommunityRooms(user.role);
+  const isMockMode = rooms.length === 0;
+  const displayRooms = isMockMode ? MOCK_ROOM_CONFIG : rooms;
+  if (!isMockMode && rooms.length === 0) {
+    throw new Error("Unable to load community rooms.");
+  }
+  let initialRoom: CommunityRoomDetail;
+  if (isMockMode) {
+    const mockRoomId = MOCK_ROOM_CONFIG[0]?.id;
+    if (!mockRoomId) {
+      throw new Error("Mock community room configuration is invalid.");
+    }
+    const mockRoom = MOCK_ROOM_DETAILS[mockRoomId];
+    if (!mockRoom) {
+      throw new Error("Mock community room configuration is invalid.");
+    }
+    initialRoom = mockRoom;
+  } else {
+    const firstRoom = rooms[0];
+    if (!firstRoom) {
+      throw new Error("Unable to load community rooms.");
+    }
+    initialRoom = await getCommunityRoom(user.role, firstRoom.id);
+  }
 
   return (
     <main className="space-y-6 px-4 py-8 sm:px-6">
-      <PageHeader
-        title="Community"
-        subtitle="Thoughtful rooms"
-        description="Soft spaces curated for reflections, never a feed to scroll. Mentor-led posts help keep the tone calm."
-        cta={{ label: "Back to dashboard", href: "/dashboard/member" }}
+      {isMockMode && (
+        <section className="rounded-[2.25rem] border border-[#E3C6D4] bg-white/90 p-6 text-sm text-[#3E2F35]/70 shadow-sm">
+          <p>Community rooms are still being created. In the meantime, explore this calm preview of how conversations will feel.</p>
+        </section>
+      )}
+      <CommunityLayout
+        rooms={displayRooms}
+        initialRoom={initialRoom}
+        userRole={user.role}
+        mockRooms={isMockMode ? MOCK_ROOM_DETAILS : undefined}
       />
-
-      <SectionWrapper
-        title="Rooms to visit"
-        description="Add a reflection, peek at mentor notes, or just rest in the quiet."
-        action={{ label: "Start a conversation", href: "/dashboard/member/community", subtle: true }}
-      >
-        {rooms.length === 0 ? (
-          <EmptyState
-            title="The rooms are waiting"
-            description="Nothing new today — that’s okay. Rest is part of preparation."
-          />
-        ) : (
-          <div className="space-y-4">
-            {rooms.map((room) => (
-              <Link
-                key={room.id}
-                href={`/dashboard/member/community/${room.id}`}
-                className="block"
-              >
-                <article className="space-y-3 rounded-[28px] border border-[#E3C6D4] bg-white/90 p-4 shadow-sm transition hover:border-[#C8A1B4]">
-                  <div className="flex items-center justify-between">
-                    <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[#C8A1B4]">
-                      {room.moduleTitle ? `${room.moduleTitle} · Module` : "Community room"}
-                    </p>
-                    <span className="text-[0.6rem] uppercase tracking-[0.4em] text-[#3E2F35]/60">
-                      {room.minRole === Role.MEMBER ? "Members" : "Mentors"}
-                    </span>
-                  </div>
-                  <h2 className="text-lg font-semibold text-[#3E2F35]">{room.name}</h2>
-                  {room.description && (
-                    <p className="text-sm text-[#3E2F35]/70">{room.description}</p>
-                  )}
-                  <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[#3E2F35]/60">
-                    {renderMentorPresence(room)}
-                  </p>
-                  {room.latestPostSnippet && (
-                    <div className="rounded-2xl border border-[#F1D5DA] bg-[#FFF8F6] p-3 text-sm text-[#3E2F35]/80">
-                      <p className="font-semibold text-[#3E2F35]">Latest</p>
-                      <p className="text-sm leading-relaxed">{room.latestPostSnippet}</p>
-                      <p className="text-[0.65rem] tracking-[0.3em] text-[#3E2F35]/60">
-                        {room.latestPostAuthor || "Member"} ·{" "}
-                        {room.latestPostAt
-                          ? new Date(room.latestPostAt).toLocaleDateString(undefined, LOCALE_OPTIONS)
-                          : "moments ago"}
-                      </p>
-                    </div>
-                  )}
-                </article>
-              </Link>
-            ))}
-          </div>
-        )}
-      </SectionWrapper>
     </main>
   );
 }

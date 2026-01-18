@@ -2,7 +2,7 @@ import { BlogStatus, type BlogPost } from "@prisma/client";
 
 import type { SafeUser } from "@/lib/auth/getUser";
 
-const mentorEditableStatuses: BlogStatus[] = [BlogStatus.DRAFT, BlogStatus.IN_REVIEW];
+const mentorEditableStatuses: BlogStatus[] = [BlogStatus.DRAFT, BlogStatus.REJECTED];
 
 export function canEditBlog(user: SafeUser, post: BlogPost) {
   if (user.role === "ADMIN") {
@@ -15,7 +15,11 @@ export function canEditBlog(user: SafeUser, post: BlogPost) {
 }
 
 export function canSubmitForReview(user: SafeUser, post: BlogPost) {
-  return user.role === "MENTOR" && post.authorId === user.id && post.status === BlogStatus.DRAFT;
+  return (
+    user.role === "MENTOR" &&
+    post.authorId === user.id &&
+    (post.status === BlogStatus.DRAFT || post.status === BlogStatus.REJECTED)
+  );
 }
 
 export function canPublish(user: SafeUser) {

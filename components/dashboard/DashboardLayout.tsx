@@ -1,253 +1,129 @@
-"use client";
-
 import Link from "next/link";
-import { type ReactNode, useState } from "react";
-import { usePathname } from "next/navigation";
-import {
-  Compass,
-  Home,
-  BookOpen,
-  CalendarDays,
-  ClipboardCheck,
-  ClipboardList,
-  LifeBuoy,
-  MessageCircle,
-  Users,
-  BarChart3,
-} from "lucide-react";
-import type { LucideProps } from "lucide-react";
-import { useLogout } from "@/lib/auth/logout";
+import { type ReactNode } from "react";
 
 export type DashboardRole = "member" | "mentor" | "admin";
 
-type NavItem = {
-  label: string;
-  href: string;
-  icon?: React.ComponentType<LucideProps>;
-  disabled?: boolean;
+type DashboardLayoutProps = {
+  children: ReactNode;
 };
 
-const MEMBER_NAV_ITEMS: NavItem[] = [
-  {
-    label: "Home",
-    href: "/dashboard/member",
-    icon: Home,
-  },
-  {
-    label: "Plan",
-    href: "/dashboard/plan",
-    icon: ClipboardList,
-  },
-  {
-    label: "Learn",
-    href: "/dashboard/member/learn",
-    icon: BookOpen,
-  },
-  {
-    label: "Community",
-    href: "/dashboard/member/community",
-    icon: MessageCircle,
-  },
-  {
-    label: "Support",
-    href: "/dashboard/member/support",
-    icon: LifeBuoy,
-  },
-];
-
-const MENTOR_NAV_ITEMS: NavItem[] = [
-  {
-    label: "Mentor Home",
-    href: "/dashboard/mentor",
-    icon: Compass,
-  },
-  {
-    label: "Mentees",
-    href: "/dashboard/mentor/mentees",
-    icon: Users,
-  },
-  {
-    label: "Workspace",
-    href: "/dashboard/mentor/workspace",
-    icon: ClipboardCheck,
-    disabled: true,
-  },
-  {
-    label: "Mentor Circles",
-    href: "/dashboard/mentor/circles",
-    icon: CalendarDays,
-  },
-  {
-    label: "Messages",
-    href: "/dashboard/mentor/messages",
-    icon: MessageCircle,
-  },
-  {
-    label: "Content Studio",
-    href: "/dashboard/mentor/blog",
-    icon: BookOpen,
-  },
-  {
-    label: "Insights",
-    href: "/dashboard/mentor/insights",
-    icon: BarChart3,
-  },
-];
-
-const ADMIN_NAV_ITEMS: NavItem[] = [
-  {
-    label: "Home",
-    href: "/dashboard/admin",
-  },
-  {
-    label: "Blog controls",
-    href: "/dashboard/admin#blog-controls",
-  },
-  {
-    label: "Waitlist",
-    href: "/dashboard/admin/waitlist",
-  },
-  {
-    label: "Members",
-    href: "/dashboard/admin/users",
-  },
-  {
-    label: "Mentors",
-    href: "/dashboard/admin/mentors",
-  },
-  {
-    label: "Registry Intelligence",
-    href: "/dashboard/admin/registry",
-  },
-  {
-    label: "Affiliates",
-    href: "/dashboard/admin/affiliates",
-  },
-  {
-    label: "Analytics",
-    href: "/dashboard/analytics",
-  },
-  {
-    label: "Settings",
-    href: "/dashboard/admin/settings",
-  },
-];
-
-type DashboardNavProps = {
-  items: NavItem[];
-  showIcons?: boolean;
-  onLogout?: () => void;
-};
-
-// Navigation is portal-specific.
-// Avoid global abstractions.
-function PortalNavMenu({ items, onLogout }: DashboardNavProps) {
-  const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-  const activeItem =
-    items.find((item) => pathname === item.href || pathname?.startsWith(`${item.href}/`)) ??
-    items[0];
-
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className="relative w-full">
-      <button
-        type="button"
-        onClick={() => setOpen((prev) => !prev)}
-        className="flex w-full items-center justify-between rounded-2xl bg-transparent px-0 py-2 text-sm font-semibold text-[#3E2F35]"
-        aria-expanded={open}
-        aria-haspopup="menu"
-      >
-        <span className="flex-1 text-center text-sm font-semibold text-[#3E2F35]/80">
-          {activeItem?.label ?? "Menu"}
-        </span>
-        <span className="text-xl">☰</span>
-      </button>
-      {open && (
-        <div className="absolute left-0 right-0 top-full z-20 mt-2 rounded-2xl bg-white shadow-[0_20px_40px_rgba(62,47,53,0.12)]">
-          <nav className="py-2">
-            {items.map((item) => {
-              const isActive =
-                pathname === item.href || pathname?.startsWith(`${item.href}/`);
-              if (item.disabled) {
-                return (
-                  <div
-                    key={item.href}
-                    className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-[#3E2F35]/40"
-                    aria-disabled="true"
-                  >
-                    <span>{item.label}</span>
-                    <span className="text-xs uppercase tracking-[0.3em]">Select mentee</span>
-                  </div>
-                );
-              }
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={`flex items-center justify-between px-4 py-3 text-sm font-semibold ${
-                    isActive ? "bg-[#F6EEF2] text-[#3E2F35]" : "text-[#3E2F35]/80"
-                  }`}
-                  aria-current={isActive ? "page" : undefined}
-                >
-                  <span>{item.label}</span>
-                  {isActive ? <span className="text-xs uppercase tracking-[0.3em]">Current</span> : null}
-                </Link>
-              );
-            })}
-            {onLogout ? (
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  onLogout();
-                }}
-                className="flex w-full items-center justify-between px-4 py-3 text-sm font-semibold text-[#3E2F35]/80"
-              >
-                <span>Log out</span>
-              </button>
-            ) : null}
-          </nav>
-        </div>
-      )}
+    <div className="min-h-screen bg-member-background-page text-member-text-primary">
+      <main className="px-4 py-10 sm:px-6 md:py-12">
+        <div className="mx-auto w-full max-w-6xl">{children}</div>
+      </main>
     </div>
   );
 }
 
-export default function DashboardShell({
-  children,
-  role,
-}: {
+type SectionLayoutProps = {
   children: ReactNode;
-  role: DashboardRole;
-}) {
-  // TMBC UX Canon:
-  // Mobile-first. Calm. Contextual navigation.
-  // No top navbar.
-  // TODO: If a mobile bottom nav is introduced, use Home | Mentees | Workspace | Messages | More.
-  const navItems =
-    role === "mentor"
-      ? MENTOR_NAV_ITEMS
-      : role === "admin"
-        ? ADMIN_NAV_ITEMS
-        : MEMBER_NAV_ITEMS;
-  const logout = useLogout();
+};
+
+export function SectionLayout({ children }: SectionLayoutProps) {
+  return <div className="space-y-8">{children}</div>;
+}
+
+type DashboardHubLayoutProps = {
+  title: string;
+  subtitle?: string;
+  description: string;
+  heroCopy?: string;
+  statusLabel?: string;
+  statusDetail?: string;
+  children: ReactNode;
+};
+
+export function DashboardHubLayout({
+  title,
+  subtitle,
+  description,
+  heroCopy,
+  statusLabel,
+  statusDetail,
+  children,
+}: DashboardHubLayoutProps) {
+  return (
+    <div className="space-y-8">
+      <header className="space-y-4 rounded-[28px] border border-member-border-default/70 bg-member-background-card p-8 text-member-text-primary shadow-soft">
+        <p className="text-xs uppercase tracking-[0.45em] text-member-accent-secondary">
+          {subtitle ?? "Dashboard Hub"}
+        </p>
+        <h1 className="font-playfair text-4xl text-member-text-primary">{title}</h1>
+        <p className="text-sm text-member-text-secondary">{description}</p>
+        {heroCopy ? <p className="text-sm text-member-text-secondary">{heroCopy}</p> : null}
+        {statusLabel ? (
+          <div className="rounded-2xl border border-member-border-soft bg-member-background-soft px-4 py-3 text-[0.8rem] text-member-text-secondary">
+            <p className="font-semibold text-member-text-primary">{statusLabel}</p>
+            {statusDetail ? (
+              <p className="text-xs text-member-text-secondary">{statusDetail}</p>
+            ) : null}
+          </div>
+        ) : null}
+      </header>
+      {children}
+    </div>
+  );
+}
+
+type DashboardHubCardProps = {
+  title: string;
+  description: string;
+  href: string;
+  ctaLabel: string;
+  progress?: number;
+  status?: string;
+  statusSecondary?: string;
+};
+
+export function DashboardHubCard({
+  title,
+  description,
+  href,
+  ctaLabel,
+  progress,
+  status,
+  statusSecondary,
+}: DashboardHubCardProps) {
+  const normalizedProgress =
+    progress !== undefined ? Math.min(Math.max(progress, 0), 1) : undefined;
 
   return (
-    <div className="min-h-screen bg-ivory text-charcoal">
-      <main className="px-4 pb-12 pt-6 sm:px-6 md:pt-10">
-        <div className="mx-auto w-full max-w-6xl space-y-6">
-          {/* TMBC UX Canon:
-              No global top navbar.
-              Navigation is contextual and calm. */}
-          <section className="rounded-3xl bg-white/90 p-4 shadow-sm sm:p-6">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <PortalNavMenu items={navItems} onLogout={() => void logout()} />
-            </div>
-          </section>
-          <div className="mx-auto w-full max-w-6xl">{children}</div>
+    <article className="space-y-4 rounded-[28px] border border-member-border-default/60 bg-member-background-card p-6 text-member-text-primary shadow-none">
+      <header className="flex items-center justify-between gap-4">
+        <h2 className="text-2xl font-semibold text-member-text-primary">{title}</h2>
+        {status ? (
+          <span className="text-xs uppercase tracking-[0.35em] text-member-text-secondary/80">
+            {status}
+          </span>
+        ) : null}
+      </header>
+      <p className="text-sm text-member-text-secondary">{description}</p>
+      {normalizedProgress !== undefined ? (
+        <div className="space-y-1">
+          <div className="h-1.5 rounded-full bg-member-background-muted/50">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-member-accent-secondary to-member-accent-primary"
+              style={{ width: `${normalizedProgress * 100}%` }}
+            />
+          </div>
+          <p className="text-[0.65rem] uppercase tracking-[0.35em] text-member-text-secondary/80">
+            {Math.round(normalizedProgress * 100)}% complete
+          </p>
         </div>
-      </main>
-    </div>
+      ) : null}
+      <div className="flex items-center justify-between gap-4 text-xs text-member-text-secondary/70">
+        <Link
+          href={href}
+          className="font-semibold text-member-accent-primary hover:text-member-accent-primary/80 transition-colors"
+        >
+          {ctaLabel}
+        </Link>
+        {statusSecondary ? (
+          <span className="text-[0.7rem] text-member-text-secondary">{statusSecondary}</span>
+        ) : null}
+      </div>
+    </article>
   );
 }

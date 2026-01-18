@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
-import { prisma } from "@/lib/prisma";
 import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
+import { publishPost } from "@/lib/services/server/blog.service";
 
 type RouteContext = {
   params: { postId: string };
@@ -34,33 +34,11 @@ const requireAdmin = async () => {
 
 export async function POST(request: Request, context: RouteContext) {
   try {
-    await requireAdmin();
-
-    const post = await prisma.blogPost.findUnique({ where: { id: context.params.postId } });
-    if (!post) {
-      return NextResponse.json({ error: "Not found." }, { status: 404 });
-    }
-
-    const canPublish =
-      post.status === "ARCHIVED" ||
-      (post.status === "DRAFT" && post.authorRoleSnapshot === "ADMIN");
-    if (!canPublish) {
-      return NextResponse.json(
-        { error: "Only approved drafts can be published from this panel." },
-        { status: 400 },
-      );
-    }
-
+    const admin = await requireAdmin();
     const payload = publishPayloadSchema.parse(await parseJsonBody(request));
-
-    const updated = await prisma.blogPost.update({
-      where: { id: post.id },
-      data: {
-        status: "PUBLISHED",
-        publishedAt: new Date(),
-        authorName: payload.authorName ?? post.authorName,
-        authorRoleSnapshot: payload.authorRoleSnapshot ?? post.authorRoleSnapshot,
-      },
+    const updated = await publishPost(context.params.postId, admin.id, {
+      authorName: payload.authorName,
+      authorRoleSnapshot: payload.authorRoleSnapshot,
     });
 
     return NextResponse.json({ data: updated });

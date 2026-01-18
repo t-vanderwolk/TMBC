@@ -3,11 +3,7 @@ import { NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { prisma } from "@/lib/prisma";
-import {
-  upsertBlogHighlights,
-  validateBlogPayload,
-  ensureUniqueBlogSlug,
-} from "@/lib/services/server/blog.service";
+import { updateMentorDraft, validateBlogPayload } from "@/lib/services/server/blog.service";
 import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
 import { canEditBlog } from "@/lib/blog/blogPermissions";
 
@@ -68,22 +64,8 @@ export async function PATCH(request: Request, context: RouteContext) {
 
     const payload = await request.json();
     const validated = await validateBlogPayload(payload);
-    const slug = await ensureUniqueBlogSlug(validated.slug, post.id);
 
-    const updated = await prisma.blogPost.update({
-      where: { id: post.id },
-      data: {
-        slug,
-        title: validated.title,
-        excerpt: validated.excerpt,
-        heroImage: validated.heroImage,
-        content: validated.content,
-        tags: validated.tags,
-        isAffiliate: validated.isAffiliate,
-      },
-    });
-
-    await upsertBlogHighlights(updated.id, validated.highlights);
+    const updated = await updateMentorDraft(post.id, validated);
 
     return NextResponse.json({ data: updated });
   } catch (error) {

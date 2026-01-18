@@ -4,6 +4,7 @@ import { getUserOrThrow } from "@/lib/auth/getUser";
 import { prisma } from "@/lib/prisma";
 import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
 import { canSubmitForReview } from "@/lib/blog/blogPermissions";
+import { submitForReview } from "@/lib/services/server/blog.service";
 
 type RouteContext = {
   params: { postId: string };
@@ -25,10 +26,7 @@ export async function POST(_request: Request, context: RouteContext) {
       );
     }
 
-    const updated = await prisma.blogPost.update({
-      where: { id: post.id },
-      data: { status: "IN_REVIEW", submittedAt: new Date() },
-    });
+    const updated = await submitForReview(post.id, user.id);
 
     return NextResponse.json({ data: updated });
   } catch (error) {

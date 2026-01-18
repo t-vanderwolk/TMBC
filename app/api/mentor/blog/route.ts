@@ -3,11 +3,7 @@ import { NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { prisma } from "@/lib/prisma";
-import {
-  upsertBlogHighlights,
-  validateBlogPayload,
-  ensureUniqueBlogSlug,
-} from "@/lib/services/server/blog.service";
+import { createMentorDraft, validateBlogPayload } from "@/lib/services/server/blog.service";
 import {
   handleMissingBlogTable,
   isBlogFeatureEnabled,
@@ -42,6 +38,8 @@ export async function GET() {
         title: true,
         excerpt: true,
         status: true,
+        rejectionNote: true,
+        reviewerId: true,
         updatedAt: true,
         publishedAt: true,
         submittedAt: true,
@@ -79,24 +77,7 @@ export async function POST(request: Request) {
     const payload = await request.json();
     const validated = await validateBlogPayload(payload);
 
-    const slug = await ensureUniqueBlogSlug(validated.slug);
-    const post = await prisma.blogPost.create({
-    data: {
-      slug,
-      title: validated.title,
-      excerpt: validated.excerpt,
-      heroImage: validated.heroImage,
-      content: validated.content,
-      tags: validated.tags,
-      status: "DRAFT",
-      isAffiliate: validated.isAffiliate,
-      authorId: user.id,
-      authorName: user.name || user.email,
-      authorRoleSnapshot: "MENTOR",
-    },
-  });
-
-    await upsertBlogHighlights(post.id, validated.highlights);
+    const post = await createMentorDraft(user.id, user.name ?? user.email, validated);
 
     return NextResponse.json({ data: post });
   } catch (error) {

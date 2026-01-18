@@ -18,7 +18,7 @@ export default async function JourneySnapshotSection({ dataPromise }: JourneySna
       title="Progress across your TMBC paths"
       description="A calm view of how your Academy, Registry, and Community align."
       action={
-        <ActionButton href="/dashboard/member/learn" variant="ghost" className="sm:w-auto" fullWidth>
+        <ActionButton href="/dashboard/learn" variant="ghost" className="sm:w-auto" fullWidth>
           View academy
         </ActionButton>
       }
@@ -56,7 +56,7 @@ export default async function JourneySnapshotSection({ dataPromise }: JourneySna
           </div>
           <p className="text-xs text-[#3E2F35]/70">{data.registryStatus.detail}</p>
           <ActionButton
-            href="/dashboard/plan"
+            href="/dashboard/registry"
             variant="ghost"
             className="sm:w-auto"
             fullWidth
@@ -73,7 +73,7 @@ export default async function JourneySnapshotSection({ dataPromise }: JourneySna
             </div>
           </div>
           <p className="text-xs text-[#3E2F35]/70">{data.communityStatus.detail}</p>
-          <Link href="/dashboard/member/community" className="text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-[#B98AA5]">
+          <Link href="/dashboard/community" className="text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-[#B98AA5]">
             {data.communityStatus.prompt}
           </Link>
         </DashboardCard>

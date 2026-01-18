@@ -1,77 +1,115 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import PlanLayout from "@/components/plan/PlanLayout";
 import PlanSidebar from "@/components/plan/PlanSidebar";
-import PlanContent from "@/components/plan/PlanContent";
+import PlanContent, { type PlanContentSection } from "@/components/plan/PlanContent";
 import PlanContextPanel from "@/components/plan/PlanContextPanel";
+import MemberBottomNav from "@/components/dashboard/member/nav/MemberBottomNav";
+import { planSectionMap, type PlanSectionKey } from "@/lib/plan/planSectionMap";
+import type { PlanDecisionState } from "@/lib/services/server/planSections.service";
 
-const planSections = [
-  {
-    key: "travel",
-    title: "Travel & Mobility",
-    summary:
-      "Gentle reminders about bags, passes, and pacing for the journeys ahead.",
-  },
-  {
-    key: "sleep",
-    title: "Sleep & Safe Rest",
-    summary: "Space for calm sleep experiments, crib checks, and rhythm notes.",
-  },
-  {
-    key: "feeding",
-    title: "Feeding",
-    summary: "Track impressions, questions, and any mentor guidance about feeding.",
-  },
-  {
-    key: "diapering",
-    title: "Diapering",
-    summary: "Log textures, routines, and comfort cues in this lane.",
-  },
-  {
-    key: "nursery",
-    title: "Nursery Setup",
-    summary: "Mood, storage, lighting, and those thoughtful finishing touches.",
-  },
-  {
-    key: "health",
-    title: "Health & Safety",
-    summary: "Vendor-ready checklists, appointments, and reference notes.",
-  },
-  {
-    key: "play",
-    title: "Play & Development",
-    summary: "Soft prompts for early movement, books, and curiosity play.",
-  },
-];
+type ApiSection = {
+  id: string;
+  sectionKey: string;
+  decisionState?: PlanDecisionState | null;
+  memberNote?: string | null;
+  mentorNote?: string | null;
+  updatedAt?: string | null;
+  memberAcknowledgement?: string | null;
+};
+
+type LoadStatus = "idle" | "loading" | "success" | "error";
+
+const toLabel = (value: string) =>
+  value
+    .split(/[-_]/)
+    .map((fragment) => fragment.charAt(0).toUpperCase() + fragment.slice(1).toLowerCase())
+    .join(" ");
 
 export default function PlanPage() {
-  const [activeSectionKey, setActiveSectionKey] = useState(planSections[0]?.key ?? "travel");
-  const activeSection = useMemo(
-    () => planSections.find((section) => section.key === activeSectionKey) ?? planSections[0],
-    [activeSectionKey],
-  );
+  const [status, setStatus] = useState<LoadStatus>("idle");
+  const [sections, setSections] = useState<ApiSection[]>([]);
+  const [error, setError] = useState("");
+  const [activeSectionKey, setActiveSectionKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadSections = async () => {
+      setStatus("loading");
+      setError("");
+      try {
+        const response = await fetch("/api/plan/sections");
+        if (!response.ok) {
+          throw new Error("Unable to load plan sections.");
+        }
+        const payload = await response.json();
+        const loaded = Array.isArray(payload?.sections) ? payload.sections : [];
+        if (!isMounted) return;
+        setSections(loaded);
+        setStatus("success");
+      } catch (err) {
+        console.error("Plan sections load failed", err);
+        if (!isMounted) return;
+        setError("Your plan workspace is unavailable right now. Please try again later.");
+        setStatus("error");
+      }
+    };
+    void loadSections();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const displaySections: PlanContentSection[] = useMemo(() => {
+    return sections.map((section) => {
+      const meta = planSectionMap[section.sectionKey as PlanSectionKey];
+      return {
+        ...section,
+        title: meta?.title ?? toLabel(section.sectionKey),
+        summary: meta?.helper ?? "Your mentor can add context here once the section is ready.",
+      };
+    });
+  }, [sections]);
+
+  useEffect(() => {
+    if (!activeSectionKey && displaySections.length) {
+      const firstSection = displaySections[0];
+      if (firstSection) {
+        setActiveSectionKey(firstSection.sectionKey);
+      }
+    }
+  }, [displaySections, activeSectionKey]);
 
   return (
-    <main className="space-y-8 px-4 py-10 lg:px-10">
-      <header className="mb-6 rounded-[32px] border border-[#EAE2E8] bg-white/90 p-6 text-[#3E2F35] shadow-sm">
+    <div className="relative pb-[96px]">
+      <main className="space-y-8 px-4 py-10 lg:px-10">
+        <header className="mb-6 space-y-2 rounded-[32px] border border-[#EAE2E8] bg-white/90 p-6 text-[#3E2F35] shadow-sm">
         <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[#A4556A]">Plan workspace</p>
-        <h1 className="mt-3 text-3xl font-serif">Your plan, gently framed.</h1>
-        <p className="mt-2 text-sm text-[#3E2F35]/80">
-          This plan surface is entirely placeholder today — no logic, no APIs, just structure and future intent.
-          TODO: Tell the story of the plan workspace here when the experience is ready.
+        <h1 className="text-3xl font-serif">Your plan, gently framed.</h1>
+        <p className="text-sm text-[#3E2F35]/80">
+          Daily plan notes and decision states live here once your Academy paths activate. Move through the experience
+          to unlock the workspace and keep your mentor aligned.
         </p>
       </header>
       <PlanLayout>
         <PlanSidebar
-          sections={planSections}
+          sections={displaySections}
           activeKey={activeSectionKey}
           onSelect={(key) => setActiveSectionKey(key)}
         />
-        <PlanContent section={activeSection} />
+        <PlanContent
+          sections={displaySections}
+          expandedKey={activeSectionKey}
+          onToggle={(key) => setActiveSectionKey((prev) => (prev === key ? null : key))}
+          status={status}
+          errorMessage={error}
+        />
         <PlanContextPanel />
       </PlanLayout>
-    </main>
+      </main>
+      <MemberBottomNav />
+    </div>
   );
 }

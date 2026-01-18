@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 import type { BlogAuthorRole } from "@prisma/client";
+import type { BlogStatusLabel } from "@/types/blogStatus";
 
 import { authedFetch } from "@/lib/authedFetch";
 import { useRequireRole } from "@/lib/auth/useRequireRole";
@@ -26,7 +27,7 @@ type AdminPost = {
   heroImage: string | null;
   content: Array<{ type: string; [key: string]: unknown }>;
   tags: string[];
-  status: "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED";
+  status: BlogStatusLabel;
   isAffiliate: boolean;
   publishedAt: string | null;
   submittedAt: string | null;
@@ -34,6 +35,7 @@ type AdminPost = {
   authorRoleSnapshot: "ADMIN" | "MENTOR";
   highlights: Array<{ id: string; note: string; productId: string | null; brandName: string | null }>;
   affiliateLinks: AffiliateLinkSummary[];
+  rejectionNote?: string | null;
 };
 
 type AnalyticsPayload = {
@@ -164,7 +166,13 @@ export default function AdminBlogPostPage() {
   const isActionBusy = (type: string) => busyAction === `${type}:${postId}`;
 
   const handleApprove = () => void runStatusAction("approve", "approve");
-  const handleReject = () => void runStatusAction("reject", "reject");
+  const handleReject = () => {
+    const note = window.prompt("Add a note for the mentor before rejecting this draft.");
+    if (!note?.trim()) {
+      return;
+    }
+    void runStatusAction("reject", "reject", { note: note.trim() });
+  };
   const handlePublish = () => {
     if (!overrideAuthorName.trim()) {
       setActionMessage("Please provide an author name before publishing.");
@@ -293,8 +301,11 @@ export default function AdminBlogPostPage() {
                     </button>
                   </>
                 )}
-                {(post.status === "ARCHIVED" ||
-                  (post.status === "DRAFT" && post.authorRoleSnapshot === "ADMIN")) && (
+                {(
+                  post.status === "APPROVED" ||
+                  post.status === "ARCHIVED" ||
+                  (post.status === "DRAFT" && post.authorRoleSnapshot === "ADMIN")
+                ) && (
                   <button
                     type="button"
                     onClick={() => void handlePublish()}

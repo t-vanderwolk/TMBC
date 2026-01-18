@@ -25,8 +25,8 @@ export default function AdminTable<T extends Record<string, any>>({
 }: AdminTableProps<T>) {
   return (
     <div className={`overflow-x-auto ${className}`}>
-      <table className="min-w-full divide-y divide-[#E7D9E1] text-sm">
-        <thead className="text-[0.65rem] uppercase tracking-[0.45em] text-[#C8A1B4]">
+      <table className="min-w-full divide-y divide-member-border-default text-sm">
+        <thead className="text-[0.65rem] uppercase tracking-[0.45em] text-member-accent-secondary">
           <tr>
             {columns.map((column) => {
               const alignClass =
@@ -51,7 +51,7 @@ export default function AdminTable<T extends Record<string, any>>({
           {rows.map((row) => (
             <tr
               key={rowKey(row)}
-              className="bg-white transition hover:bg-[#F9F6F7]"
+              className="bg-member-background-card transition hover:bg-member-background-soft"
             >
               {columns.map((column) => {
                 const alignClass =
@@ -74,7 +74,7 @@ export default function AdminTable<T extends Record<string, any>>({
                 return (
                   <td
                     key={`${rowKey(row)}-${column.header}`}
-                    className={`px-3 py-3 text-[0.85rem] text-[#3E2F35] ${alignClass} ${column.className ?? ""}`}
+                    className={`px-3 py-3 text-[0.85rem] text-member-text-primary ${alignClass} ${column.className ?? ""}`}
                   >
                     {(typeof column.render === "function"
                       ? column.render(row)
@@ -88,7 +88,7 @@ export default function AdminTable<T extends Record<string, any>>({
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-3 py-6 text-center text-xs uppercase tracking-[0.4em] text-[#C8A1B4]"
+                className="px-3 py-6 text-center text-xs uppercase tracking-[0.4em] text-member-accent-secondary"
               >
                 No records found
               </td>

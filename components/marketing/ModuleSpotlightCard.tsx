@@ -16,7 +16,7 @@ export default function ModuleSpotlightCard() {
       </div>
       <button
         type="button"
-        className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]"
+        className="marketing-btn marketing-btn-secondary focus-visible:outline-none focus-visible:ring-0 uppercase tracking-[0.35em]"
       >
         Continue Module
       </button>

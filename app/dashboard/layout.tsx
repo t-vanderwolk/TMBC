@@ -3,7 +3,7 @@ export const revalidate = 0;
 
 import { ReactNode } from "react";
 
-import DashboardShell, { type DashboardRole } from "@/components/dashboard/DashboardLayout";
+import DashboardLayout, { SectionLayout, type DashboardRole } from "@/components/dashboard/DashboardLayout";
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { PUBLIC_LOGIN_ROUTE, routeForRole } from "@/lib/auth/routeForRole";
 import { headers } from "next/headers";
@@ -42,10 +42,9 @@ const normalizeRoleValue = (src?: string): DashboardRole => {
 };
 
 export default async function DashboardAppLayout({ children }: { children: ReactNode }) {
-  // Keep this layout name distinct from the client-side DashboardShell to avoid naming conflicts.
   // TMBC UX Canon:
   // Mobile-first. Calm. Contextual navigation.
-  // No top navbar.
+  // No top navbar; navigation lives in the hub or local section header.
   let user;
   try {
     user = await getUserOrThrow();
@@ -79,9 +78,12 @@ export default async function DashboardAppLayout({ children }: { children: React
     }
   }
 
+  const hubPath = routeForRole(role);
+  const isHubPath = primaryPath === hubPath;
+
   return (
-    <DashboardShell role={role}>
-      {children}
-    </DashboardShell>
+    <DashboardLayout>
+      {isHubPath ? children : <SectionLayout>{children}</SectionLayout>}
+    </DashboardLayout>
   );
 }

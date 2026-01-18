@@ -48,16 +48,16 @@ export default function PinterestSyncCard() {
   };
 
   return (
-    <section className="rounded-3xl border border-[#E3D0D7] bg-white/90 p-6 shadow-[0_30px_90px_rgba(189,147,189,0.25)]">
-      <h3 className="font-serif text-2xl text-[#3E2F35]">Pinterest sync</h3>
-      <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Inspiration boards</p>
+    <section className="rounded-3xl border border-member-border-soft bg-member-background-card p-6 shadow-[0_30px_90px_rgba(189,147,189,0.25)]">
+      <h3 className="font-serif text-2xl text-member-text-primary">Pinterest sync</h3>
+      <p className="text-xs uppercase tracking-[0.4em] text-member-accent-secondary">Inspiration boards</p>
       <div className="mt-4 space-y-2">
         {loading ? (
-          <p className="text-sm text-[#3E2F35]/70">Checking connection…</p>
+          <p className="text-sm text-member-text-secondary">Checking connection…</p>
         ) : connected ? (
-          <p className="text-sm text-[#C8A1B4]">Connected ✓</p>
+          <p className="text-sm text-member-accent-secondary">Connected ✓</p>
         ) : (
-          <p className="text-sm text-[#3E2F35]/70">
+          <p className="text-sm text-member-text-secondary">
             Connect Pinterest to bring board inspiration straight into your moodboards.
           </p>
         )}
@@ -65,13 +65,13 @@ export default function PinterestSyncCard() {
           <button
             type="button"
             onClick={handleConnect}
-            className="inline-flex items-center justify-center rounded-xl bg-[var(--tm-mauve)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white transition hover:bg-[var(--tm-mauve)]/90"
+            className="inline-flex items-center justify-center rounded-xl bg-member-accent-primary px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-member-text-inverse transition hover:bg-member-accent-secondary"
           >
             Connect Pinterest
           </button>
         )}
       </div>
-      {message && <p className="mt-3 text-xs text-[#3E2F35]/70">{message}</p>}
+      {message && <p className="mt-3 text-xs text-member-text-secondary">{message}</p>}
     </section>
   );
 }

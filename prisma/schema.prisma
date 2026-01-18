@@ -66,6 +66,7 @@ model User {
   planSections              PlanSection[]             @relation("MemberPlanSections")
   reviewedPlanSections      PlanSection[]             @relation("PlanSectionReviewedBy")
   profile                   Profile?
+  partnerProfile            PartnerProfile?
   registry                  Registry?                 @relation("UserRegistry")
 
   registryConflicts RegistryConflict[]
@@ -75,6 +76,9 @@ model User {
   mentees           User[]             @relation("Mentorship")
   workbookEntries   WorkbookEntry[]
   conversations     Conversation[]     @relation("ConversationParticipants")
+  journalEntries    JournalEntry[]
+  authoredBlogPosts BlogPost[] @relation("BlogAuthor")
+  reviewedBlogPosts BlogPost[] @relation("BlogReviewer")
 }
 
 model AffiliateEvent {
@@ -119,6 +123,10 @@ model BlogPost {
   authorId           String
   authorName         String
   authorRoleSnapshot BlogAuthorRole
+  reviewerId         String?
+  rejectionNote      String?
+  author             User                  @relation("BlogAuthor", fields: [authorId], references: [id])
+  reviewer           User?                 @relation("BlogReviewer", fields: [reviewerId], references: [id])
   tags               String[]
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
@@ -236,6 +244,24 @@ model Profile {
   imageUrl        String?
   inviteRequest   InviteRequest? @relation(fields: [inviteRequestId], references: [id])
   user            User           @relation(fields: [userId], references: [id])
+  preferredName   String?
+}
+
+enum PartnerRoleLabel {
+  PARTNER
+  SPOUSE
+  COPARENT
+}
+
+model PartnerProfile {
+  id        String           @id @default(cuid())
+  userId    String           @unique
+  name      String?
+  roleLabel PartnerRoleLabel?
+  notes     String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model OnboardingProfile {
@@ -673,6 +699,24 @@ model MentorTask {
   mentor      User     @relation("MentorTasksMentor", fields: [mentorId], references: [id])
 }
 
+model JournalEntry {
+  id          String            @id @default(cuid())
+  userId      String
+  type        JournalEntryType
+  title       String?
+  content     String
+  emotionTags String[]          @default([])
+  isPrivate   Boolean           @default(true)
+  sourceLabel String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  user   User          @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([type])
+}
+
 model JournalShare {
   id        String   @id @default(uuid())
   journalId String
@@ -869,7 +913,9 @@ enum AffiliateNetwork {
 enum BlogStatus {
   DRAFT
   IN_REVIEW
+  APPROVED
   PUBLISHED
+  REJECTED
   ARCHIVED
 }
 
@@ -948,6 +994,13 @@ enum WorkbookSection {
   REFLECT
   APPLY
   INTEGRATE
+}
+
+enum JournalEntryType {
+  MOMENT
+  LETTER
+  WISDOM
+  REFLECTION
 }
 
 /// ===============================

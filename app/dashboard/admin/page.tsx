@@ -1,12 +1,9 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 import ActionButton from "@/components/dashboard/ui/ActionButton";
 import DashboardCard from "@/components/dashboard/ui/DashboardCard";
-import DashboardSection from "@/components/dashboard/ui/DashboardSection";
 import { EmptyState } from "@/components/dashboard/shared/EmptyState";
 import AdminStatCard from "@/components/dashboard/admin/AdminStatCard";
 import BlogControls from "@/components/dashboard/admin/BlogControls";
+import { DashboardHubCard, DashboardHubLayout } from "@/components/dashboard/DashboardLayout";
 import { getAdminStats } from "@/lib/services/server/admin.service";
 import { listInviteRequests } from "@/lib/services/server/inviteRequest.service";
 import {
@@ -27,7 +24,6 @@ export default async function AdminDashboardPage() {
   ]);
 
   let blogSnapshot = createEmptyAdminBlogControlSnapshotPayload();
-
   if (blogStatus.blogDbReady) {
     try {
       blogSnapshot = await getAdminBlogControlSnapshot();
@@ -37,9 +33,44 @@ export default async function AdminDashboardPage() {
     }
   }
 
-  const blogDbReady = blogSnapshot.blogDbReady;
-
   const pendingInviteCount = inviteRequests.filter((request) => request.status === "pending").length;
+
+  const hubCards = [
+    {
+      title: "Members",
+      description: "Feel the platform pulse through member counts without losing calm.",
+      href: "/dashboard/admin/users",
+      ctaLabel: "Continue with members",
+      status: "Members",
+      statusSecondary: `${stats.totalMembers} active`,
+    },
+    {
+      title: "Mentors",
+      description: "Mentor partnerships are highlighted here so you can enter a room thoughtfully.",
+      href: "/dashboard/admin/mentors",
+      ctaLabel: "Continue with mentors",
+      status: "Mentors",
+      statusSecondary: `${stats.totalMentors} partners`,
+    },
+    {
+      title: "Content",
+      description: "Curate blog drafts, approvals, and the canon of guided stories.",
+      href: "/dashboard/admin/blog",
+      ctaLabel: "Continue with content",
+      status: blogStatus.blogDbReady ? "Content live" : "Content preview",
+      statusSecondary: blogStatus.blogDbReady
+        ? "Drafts and submissions available"
+        : "Tracking readiness soon",
+    },
+    {
+      title: "Analytics",
+      description: "A calm look at platform health, invite requests, and upcoming events.",
+      href: "/dashboard/admin/analytics",
+      ctaLabel: "Continue with analytics",
+      status: "Analytics",
+      statusSecondary: `${pendingInviteCount} invites pending · ${stats.activeEvents} events`,
+    },
+  ];
 
   const cards = [
     {
@@ -47,76 +78,44 @@ export default async function AdminDashboardPage() {
       value: pendingInviteCount,
       detail: "Families waiting for approval",
     },
-    { title: "Total members", value: stats.totalMembers, detail: "Active members" },
-    { title: "Total mentors", value: stats.totalMentors, detail: "Mentor partners" },
-    { title: "Upcoming events", value: stats.activeEvents, detail: "Events scheduled" },
+    { title: "New members today", value: stats.todaysSignups, detail: "Signups today" },
     { title: "Registry activity", value: stats.totalRegistryItems, detail: "Items tracked" },
-    { title: "Today's signups", value: stats.todaysSignups, detail: "New members today" },
   ];
 
   return (
-    <main className="space-y-10">
-      <DashboardSection
-        eyebrow="Admin · Overview"
-        title="Dashboard overview"
-        description="High-level platform health, pending reviews, and the latest system activity."
-        action={
-          <ActionButton
-            href="/dashboard/admin/waitlist"
-            variant="ghost"
-            className="sm:w-auto"
-            fullWidth
-          >
-            Invite requests
-          </ActionButton>
-        }
-      >
-        <DashboardCard className="space-y-3 p-6">
-          <p className="text-sm text-[#3E2F35]/70">
-            Platform health at a glance—pending reviews, member counts, and system rhythms.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <div>
-              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">Pending invites</p>
-              <p className="text-lg font-semibold text-[#3E2F35]">{pendingInviteCount}</p>
-            </div>
-            <div>
-              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">Members</p>
-              <p className="text-lg font-semibold text-[#3E2F35]">{stats.totalMembers}</p>
-            </div>
-            <div>
-              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">Mentors</p>
-              <p className="text-lg font-semibold text-[#3E2F35]">{stats.totalMentors}</p>
-            </div>
+    <DashboardHubLayout
+      title="Admin Atelier"
+      subtitle="Admin Hub"
+      description="Only this surface lists the portals across members, mentors, content, and analytics."
+      heroCopy="Operations remain calm here. You enter a room, tend to the signal, then leave it soft."
+    >
+      <div className="grid gap-6 lg:grid-cols-2">
+        {hubCards.map((card) => (
+          <DashboardHubCard key={card.title} {...card} />
+        ))}
+      </div>
+
+      <div className="space-y-6 rounded-[28px] border border-tmMauve/30 bg-white/90 p-6">
+        {!blogStatus.blogDbReady && (
+          <div className="space-y-2 rounded-[26px] border border-[#E3C6D4] bg-[#FFF8F7] p-5 shadow-sm">
+            <p className="text-lg font-semibold text-[#6D2E4D]">{BLOG_DB_UNAVAILABLE_HEADING}</p>
+            {BLOG_DB_UNAVAILABLE_DETAILS.map((detail) => (
+              <p key={detail} className="text-sm text-[#3E2F35]/80">
+                {detail}
+              </p>
+            ))}
           </div>
-        </DashboardCard>
-      </DashboardSection>
+        )}
+        <BlogControls data={blogSnapshot} />
+      </div>
 
-      <DashboardSection
-        eyebrow="Blog controls"
-        title="Blog activity snapshot"
-        description="Jump straight into mentor drafts, submissions, and publish-ready posts."
-      >
-        <div className="space-y-4">
-          {!blogDbReady && (
-            <div className="space-y-2 rounded-[28px] border border-[#E3C6D4] bg-[#FFF8F7] p-5 shadow-sm">
-              <p className="text-lg font-semibold text-[#6D2E4D]">{BLOG_DB_UNAVAILABLE_HEADING}</p>
-              {BLOG_DB_UNAVAILABLE_DETAILS.map((detail) => (
-                <p key={detail} className="text-sm text-[#3E2F35]/80">
-                  {detail}
-                </p>
-              ))}
-            </div>
-          )}
-          <BlogControls data={blogSnapshot} />
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">Platform health</p>
+          <ActionButton href="/dashboard/admin/waitlist" variant="ghost">
+            Review invites
+          </ActionButton>
         </div>
-      </DashboardSection>
-
-      <DashboardSection
-        eyebrow="Platform metrics"
-        title="Key health indicators"
-        description="Grouped cards keep the overview calm and readable."
-      >
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {cards.map((card) => (
             <AdminStatCard
@@ -127,29 +126,18 @@ export default async function AdminDashboardPage() {
             />
           ))}
         </div>
-      </DashboardSection>
+      </section>
 
-      <DashboardSection
-        eyebrow="System status"
-        title="Recent activity"
-        description="Logs and alerts funnel into calm insight."
-        action={
-          <ActionButton
-            href="/dashboard/admin/logs"
-            variant="ghost"
-            className="sm:w-auto"
-            fullWidth
-          >
-            View logs
-          </ActionButton>
-        }
-      >
+      <section className="space-y-4">
+        <p className="text-xs uppercase tracking-[0.4em] text-[#C8A1B4]">System status</p>
         <div className="space-y-4">
           {stats.systemActivity.length === 0 ? (
-            <EmptyState
-              title="Nothing new yet"
-              description="System looks healthy. Activity logs will appear here once operations run."
-            />
+            <DashboardCard className="space-y-2 p-4">
+              <EmptyState
+                title="Nothing new yet"
+                description="System looks healthy. Activity logs will appear here once operations run."
+              />
+            </DashboardCard>
           ) : (
             stats.systemActivity.map((activity) => (
               <DashboardCard key={activity.id} className="space-y-2 p-4">
@@ -161,7 +149,7 @@ export default async function AdminDashboardPage() {
             ))
           )}
         </div>
-      </DashboardSection>
-    </main>
+      </section>
+    </DashboardHubLayout>
   );
 }

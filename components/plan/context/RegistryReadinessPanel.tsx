@@ -8,9 +8,9 @@ export default function RegistryReadinessPanel() {
       <p className="text-sm text-[#3E2F35]/80">
         Readiness placeholders show when we will support MyRegistry activation and gentle nudges.
       </p>
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">TODO: Compute readiness score</p>
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">TODO: Integrate MyRegistry activation</p>
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">TODO: Prevent mentor execution</p>
+      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[#C8A1B4]">
+        Readiness scoring and MyRegistry activation copy will appear once integrations are live.
+      </p>
     </section>
   );
 }

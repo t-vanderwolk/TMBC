@@ -14,12 +14,12 @@ export default function AdminQuickActions() {
         <button
           key={action.label}
           type="button"
-          className="flex h-full flex-col gap-2 rounded-2xl border border-[var(--tmbc-mauve)] bg-white/80 px-6 py-5 text-left shadow-sm transition hover:border-[var(--tmbc-gold)]"
+          className="flex h-full flex-col gap-2 rounded-2xl border border-member-border-soft bg-member-background-card px-6 py-5 text-left shadow-sm transition hover:border-member-accent-secondary"
         >
-          <span className="text-sm font-semibold tracking-[0.3em] text-[var(--tmbc-charcoal)]">
+          <span className="text-sm font-semibold tracking-[0.3em] text-member-text-primary">
             {action.label}
           </span>
-          <span className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-gold)]/90">
+          <span className="text-xs uppercase tracking-[0.4em] text-member-accent-primary/90">
             {action.description}
           </span>
         </button>

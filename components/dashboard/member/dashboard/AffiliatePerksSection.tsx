@@ -15,8 +15,22 @@ const buildLogoText = (name: string) =>
     .slice(0, 2)
     .toUpperCase();
 
+const FALLBACK_PERKS = [
+  {
+    name: 'TMBC Concierge Call',
+    code: 'TMBC10',
+    notes: 'A structured conversation with your registry concierge.',
+  },
+  {
+    name: 'Nursery Mood Edit',
+    code: 'MUSE15',
+    notes: 'Recipe for a serene space with soft surface guidance.',
+  },
+];
+
 export default async function AffiliatePerksSection({ dataPromise }: AffiliatePerksSectionProps) {
   const data = await dataPromise;
+  const perks = data.affiliatePerks.length ? data.affiliatePerks : FALLBACK_PERKS;
 
   return (
     <DashboardSection
@@ -24,7 +38,7 @@ export default async function AffiliatePerksSection({ dataPromise }: AffiliatePe
       title="Curated offers for gentle prep"
       action={
         <ActionButton
-          href="/dashboard/plan"
+          href="/dashboard/registry"
           variant="ghost"
           className="sm:w-auto"
           fullWidth
@@ -34,7 +48,7 @@ export default async function AffiliatePerksSection({ dataPromise }: AffiliatePe
       }
     >
       <div className="space-y-3">
-        {data.affiliatePerks.map((perk) => (
+        {perks.map((perk) => (
           <DashboardCard
             key={perk.name}
             className="space-y-3 bg-[#FFF8F6]/70 p-4"

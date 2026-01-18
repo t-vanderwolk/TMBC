@@ -16,6 +16,28 @@
   --tm-gold: var(--tmbc-gold);
   --tm-charcoal: var(--tmbc-charcoal);
   --tm-dust: var(--tmbc-dust);
+
+  --member-bg-page: #FAF7F4;
+  --member-bg-card: #FFFFFF;
+  --member-bg-soft: #F4ECEA;
+  --member-bg-muted: #EEE6E3;
+
+  --member-text-primary: #3A2F2F;
+  --member-text-secondary: #6B5F5F;
+  --member-text-muted: #9B8F8F;
+  --member-text-inverse: #FFFFFF;
+
+  --member-border-default: #E7DDDA;
+  --member-border-soft: #F0E8E5;
+
+  --member-accent-primary: #C9A3B5;
+  --member-accent-secondary: #E6C7D2;
+  --member-accent-subtle: #EFE3E8;
+
+  --member-state-focus: #C9A3B5;
+  --member-state-hover: #E6C7D2;
+  --member-state-active: #B48CA0;
+  --member-state-disabled: #E1D7D7;
 }
 
 * {

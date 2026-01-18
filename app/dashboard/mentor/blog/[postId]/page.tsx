@@ -11,6 +11,7 @@ import BlogEditorForm, {
 } from "@/components/blog-admin/BlogEditorForm";
 import AnalyticsMiniCards from "@/components/blog-admin/AnalyticsMiniCards";
 import StatusBadge from "@/components/blog-admin/StatusBadge";
+import type { BlogStatusLabel } from "@/types/blogStatus";
 
 type MentorPost = {
   id: string;
@@ -20,11 +21,12 @@ type MentorPost = {
   heroImage: string | null;
   content: Array<{ type: string; [key: string]: unknown }>;
   tags: string[];
-  status: "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED";
+  status: BlogStatusLabel;
   isAffiliate: boolean;
   submittedAt: string | null;
   publishedAt: string | null;
   highlights: Array<{ id: string; note: string; productId: string | null; brandName: string | null }>;
+  rejectionNote?: string | null;
 };
 
 type AnalyticsPayload = {
@@ -145,6 +147,13 @@ export default function MentorBlogEditorPage() {
         </p>
       </header>
 
+      {post?.rejectionNote ? (
+        <div className="rounded-[28px] border border-[#E3C6D4] bg-[#FFF8F7] px-5 py-3 text-sm text-[#3E2F35]/80">
+          <p className="text-xs uppercase tracking-[0.35em] text-[#A4556A]">Revision requested</p>
+          <p>{post.rejectionNote}</p>
+        </div>
+      ) : null}
+
       {error ? (
         <div className="rounded-[28px] border border-[#F0CCD7] bg-[#FFF4FA] px-5 py-3 text-sm text-[#8B4A61]">
           {error}
@@ -170,13 +179,13 @@ export default function MentorBlogEditorPage() {
             status={post.status}
             onSubmit={handleSave}
             saving={saving}
-            disabled={post.status === "PUBLISHED"}
+            disabled={post.status !== "DRAFT" && post.status !== "REJECTED"}
             submitLabel="Save changes"
           >
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={submitting || post.status !== "DRAFT"}
+              disabled={submitting || (post.status !== "DRAFT" && post.status !== "REJECTED")}
               className="rounded-full border border-[#C8A1B4] px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-[#A4556A] disabled:opacity-60"
             >
               {submitting ? "Submitting..." : "Submit for review"}

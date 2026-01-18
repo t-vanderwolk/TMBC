@@ -134,23 +134,25 @@ export const getCommunityRooms = async (userRole: Role): Promise<CommunityRoomSu
     orderBy: { createdAt: 'desc' },
   });
 
-  return rooms
-    .filter((room) => hasAccess(userRole, room.minRole))
-    .map((room) => {
-      const latest = room.posts?.[0];
-      return {
-        id: room.id,
-        name: room.name,
-        description: room.description,
-        moduleId: room.moduleId,
-        moduleTitle: room.module?.title ?? null,
-        minRole: room.minRole,
-        latestPostSnippet: latest?.content ?? null,
-        latestPostAuthor: latest?.user?.name ?? null,
-        latestPostAuthorRole: latest?.user?.role ?? null,
-        latestPostAt: latest?.createdAt ? latest.createdAt.toISOString() : null,
-      };
-    });
+  const accessibleRooms = rooms.filter((room) => hasAccess(userRole, room.minRole));
+  const moduleRooms = accessibleRooms.filter((room) => Boolean(room.moduleId));
+  const generalRooms = accessibleRooms.filter((room) => !room.moduleId);
+
+  return [...moduleRooms, ...generalRooms].map((room) => {
+    const latest = room.posts?.[0];
+    return {
+      id: room.id,
+      name: room.name,
+      description: room.description,
+      moduleId: room.moduleId,
+      moduleTitle: room.module?.title ?? null,
+      minRole: room.minRole,
+      latestPostSnippet: latest?.content ?? null,
+      latestPostAuthor: latest?.user?.name ?? null,
+      latestPostAuthorRole: latest?.user?.role ?? null,
+      latestPostAt: latest?.createdAt ? latest.createdAt.toISOString() : null,
+    };
+  });
 };
 
 export const getCommunityRoom = async (userRole: Role, roomId: string): Promise<CommunityRoomDetail> => {
@@ -266,7 +268,7 @@ export const createCommunityPost = async (input: {
       pinnedAt: isPinned ? new Date() : undefined,
       sourceType,
       sourceSection,
-      isAnonymous: sourceType === CommunityPostSourceType.WORKBOOK ? isAnonymous : false,
+      isAnonymous,
       workbookEntryId,
       isMentorPrompt,
       sourcePrompt,

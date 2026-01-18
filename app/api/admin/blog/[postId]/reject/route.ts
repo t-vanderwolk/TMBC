@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
-import { prisma } from "@/lib/prisma";
 import { handleMissingBlogTable } from "@/lib/services/server/blogDatabaseGuard.service";
+import { rejectPost } from "@/lib/services/server/blog.service";
 
 type RouteContext = {
   params: { postId: string };
@@ -16,26 +16,15 @@ const requireAdmin = async () => {
   return user;
 };
 
-export async function POST(_request: Request, context: RouteContext) {
+export async function POST(request: Request, context: RouteContext) {
   try {
-    await requireAdmin();
-
-    const post = await prisma.blogPost.findUnique({ where: { id: context.params.postId } });
-    if (!post) {
-      return NextResponse.json({ error: "Not found." }, { status: 404 });
+    const admin = await requireAdmin();
+    const body = await request.json();
+    const note = typeof body?.note === "string" ? body.note.trim() : "";
+    if (!note) {
+      return NextResponse.json({ error: "Rejection note is required." }, { status: 400 });
     }
-
-    if (post.status !== "IN_REVIEW") {
-      return NextResponse.json(
-        { error: "Only submitted posts can be rejected." },
-        { status: 400 },
-      );
-    }
-
-    const updated = await prisma.blogPost.update({
-      where: { id: post.id },
-      data: { status: "DRAFT", submittedAt: null },
-    });
+    const updated = await rejectPost(context.params.postId, admin.id, note);
 
     return NextResponse.json({ data: updated });
   } catch (error) {

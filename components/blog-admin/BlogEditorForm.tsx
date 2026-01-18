@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState, type KeyboardEvent } from "react";
 
 import StatusBadge from "./StatusBadge";
+import type { BlogStatusLabel } from "@/types/blogStatus";
 
 export type BlogContentBlock =
   | { type: "paragraph"; text: string }
@@ -44,7 +45,7 @@ export type BlogEditorFormPayload = {
 
 type BlogEditorFormProps = {
   initialValue?: BlogFormInitial;
-  status?: "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED";
+  status?: BlogStatusLabel;
   onSubmit: (payload: BlogEditorFormPayload) => Promise<void>;
   submitLabel?: string;
   disabled?: boolean;

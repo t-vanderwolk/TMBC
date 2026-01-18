@@ -23,7 +23,14 @@ const requireAdmin = async (request?: Request) => {
   return user;
 };
 
-const blogStatusEnum = z.enum(["DRAFT", "IN_REVIEW", "PUBLISHED", "ARCHIVED"]);
+const blogStatusEnum = z.enum([
+  "DRAFT",
+  "IN_REVIEW",
+  "APPROVED",
+  "PUBLISHED",
+  "REJECTED",
+  "ARCHIVED",
+]);
 const blogAuthorRoleEnum = z.enum(["ADMIN", "MENTOR"]);
 const filterSchema = z.object({
   status: blogStatusEnum.optional(),
@@ -93,6 +100,7 @@ export async function GET(request: Request) {
         title: true,
         excerpt: true,
         status: true,
+        rejectionNote: true,
         updatedAt: true,
         publishedAt: true,
         submittedAt: true,

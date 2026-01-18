@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const memberColors = require('./styles/memberColorTokens.json');
+
 module.exports = {
   content: [
     './app/**/*.{ts,tsx}',
@@ -27,6 +29,7 @@ module.exports = {
           gold: '#C9A86A',
           charcoal: '#3B3738',
         },
+        member: memberColors,
       },
       fontFamily: {
         script: ['var(--font-great-vibes)', 'cursive'],

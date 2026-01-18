@@ -5,15 +5,15 @@ import type { ReactNode } from "react";
 type DashboardCardProps = {
   children: ReactNode;
   className?: string;
-  accent?: "soft";
+  variant?: "soft";
 };
 
-export default function DashboardCard({ children, className = "", accent }: DashboardCardProps) {
-  const accentClass = accent === "soft" ? "bg-[#FFF8F6]" : "bg-white/90";
+export default function DashboardCard({ children, className = "", variant }: DashboardCardProps) {
+  const variantClass = variant === "soft" ? "bg-[#FFF8F6]" : "bg-white/90";
   return (
     <div
       className={`
-        rounded-[28px] border border-[#E3C6D4] ${accentClass} p-6 shadow-[0_25px_60px_rgba(199,166,199,0.15)]
+        rounded-[2rem] border border-[#EAD4D8] ${variantClass} p-6 shadow-[0_25px_60px_rgba(84,35,52,0.12)]
         ${className}
       `}
     >
