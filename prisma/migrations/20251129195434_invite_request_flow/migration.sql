@@ -1,2 +1,0 @@
--- noop: InviteRequest_approvedBy_fkey does not exist in this environment.
--- Migration intentionally skipped to preserve migration history.

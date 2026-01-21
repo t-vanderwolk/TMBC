@@ -1,2 +1,0 @@
--- noop: RegistryItemBlogInfluence already exists
--- This migration is preserved for history but does not apply DDL

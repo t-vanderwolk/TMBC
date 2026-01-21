@@ -1,2 +1,0 @@
--- noop: mentorCollabRequestedAt already exists on User
--- migration preserved for history; schema already in desired state

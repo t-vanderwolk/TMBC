@@ -1,2 +1,0 @@
--- noop: object already exists in database.
--- Migration intentionally skipped to reconcile Prisma migration history.

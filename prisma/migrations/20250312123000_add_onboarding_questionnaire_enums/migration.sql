@@ -1,4 +1,0 @@
--- noop
--- Enum LivingSpaceType (and related onboarding questionnaire enums)
--- already exist in the database.
--- Migration recorded as applied to reconcile historical schema drift.

@@ -1,3 +1,0 @@
--- noop
--- This migration was already applied in the database.
--- Marked as resolved to allow Prisma migrate dev to continue.

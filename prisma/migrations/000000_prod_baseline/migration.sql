@@ -1,4 +1,0 @@
--- PRODUCTION BASELINE
--- This migration intentionally performs no actions.
--- It exists solely to baseline Prisma Migrate against an
--- already-existing production schema.

@@ -1,3 +1,0 @@
--- noop
--- Column Invite.sentAt already exists in the database.
--- Migration recorded as resolved to unblock prisma migrate dev.

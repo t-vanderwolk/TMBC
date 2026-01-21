@@ -1,2 +1,0 @@
--- noop: RegistryDecisionStatus enum already exists
--- migration preserved for history; schema already in desired state

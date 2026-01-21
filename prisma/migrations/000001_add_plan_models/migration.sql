@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "PartnerRoleLabel" AS ENUM ('PARTNER', 'SPOUSE', 'COPARENT');
+
+-- CreateEnum
 CREATE TYPE "AcademyJourney" AS ENUM ('gear', 'nursery', 'postpartum');
 
 -- CreateEnum
@@ -35,7 +38,7 @@ CREATE TYPE "RegistryStatus" AS ENUM ('ACTIVE', 'NEEDED', 'RESERVED', 'PURCHASED
 CREATE TYPE "AffiliateNetwork" AS ENUM ('AWIN', 'DIRECT', 'CJ', 'IMPACT', 'SHAREASALE', 'MYREGISTRY');
 
 -- CreateEnum
-CREATE TYPE "BlogStatus" AS ENUM ('DRAFT', 'IN_REVIEW', 'PUBLISHED', 'ARCHIVED');
+CREATE TYPE "BlogStatus" AS ENUM ('DRAFT', 'IN_REVIEW', 'PUBLISHED', 'ARCHIVED', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
 CREATE TYPE "BlogAuthorRole" AS ENUM ('ADMIN', 'MENTOR');
@@ -75,6 +78,9 @@ CREATE TYPE "CommunityPostSourceType" AS ENUM ('COMMUNITY', 'WORKBOOK', 'MENTOR_
 
 -- CreateEnum
 CREATE TYPE "WorkbookSection" AS ENUM ('REFLECT', 'APPLY', 'INTEGRATE');
+
+-- CreateEnum
+CREATE TYPE "JournalEntryType" AS ENUM ('MOMENT', 'LETTER', 'WISDOM', 'REFLECTION');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -154,6 +160,8 @@ CREATE TABLE "BlogPost" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "submittedAt" TIMESTAMP(3),
+    "rejectionNote" TEXT,
+    "reviewerId" TEXT,
 
     CONSTRAINT "BlogPost_pkey" PRIMARY KEY ("id")
 );
@@ -250,8 +258,22 @@ CREATE TABLE "Profile" (
     "lastName" TEXT,
     "state" TEXT,
     "imageUrl" TEXT,
+    "preferredName" TEXT,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PartnerProfile" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "name" TEXT,
+    "roleLabel" "PartnerRoleLabel",
+    "notes" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "PartnerProfile_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -487,22 +509,6 @@ CREATE TABLE "ExternalRegistryNote" (
 );
 
 -- CreateTable
-CREATE TABLE "PlanSection" (
-    "id" TEXT NOT NULL,
-    "memberId" TEXT NOT NULL,
-    "sectionKey" TEXT NOT NULL,
-    "decisionState" TEXT,
-    "mentorNote" TEXT,
-    "memberNote" TEXT,
-    "memberAcknowledgement" TEXT,
-    "updatedByRole" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "PlanSection_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "AcademyModule" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -685,6 +691,22 @@ CREATE TABLE "MentorTask" (
 );
 
 -- CreateTable
+CREATE TABLE "JournalEntry" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "type" "JournalEntryType" NOT NULL,
+    "title" TEXT,
+    "content" TEXT NOT NULL,
+    "emotionTags" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "isPrivate" BOOLEAN NOT NULL DEFAULT true,
+    "sourceLabel" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "JournalEntry_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "JournalShare" (
     "id" TEXT NOT NULL,
     "journalId" TEXT NOT NULL,
@@ -794,6 +816,26 @@ CREATE TABLE "WorkbookEntry" (
 );
 
 -- CreateTable
+CREATE TABLE "PlanSection" (
+    "id" TEXT NOT NULL,
+    "memberId" TEXT NOT NULL,
+    "sectionKey" TEXT NOT NULL,
+    "decisionState" TEXT NOT NULL DEFAULT 'UNDECIDED',
+    "memberNote" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "mentorSummary" TEXT,
+    "readyState" TEXT NOT NULL DEFAULT 'NOT_READY',
+    "reviewedAt" TIMESTAMP(3),
+    "reviewedById" TEXT,
+    "memberAcknowledgement" TEXT,
+    "mentorNote" TEXT,
+    "updatedByRole" TEXT DEFAULT 'MEMBER',
+
+    CONSTRAINT "PlanSection_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_ConversationParticipants" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
@@ -872,6 +914,9 @@ CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
 CREATE UNIQUE INDEX "Profile_inviteRequestId_key" ON "Profile"("inviteRequestId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "PartnerProfile_userId_key" ON "PartnerProfile"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "OnboardingProfile_userId_key" ON "OnboardingProfile"("userId");
 
 -- CreateIndex
@@ -941,12 +986,6 @@ CREATE INDEX "ExternalRegistryNote_registryId_idx" ON "ExternalRegistryNote"("re
 CREATE INDEX "ExternalRegistryNote_authorId_idx" ON "ExternalRegistryNote"("authorId");
 
 -- CreateIndex
-CREATE INDEX "PlanSection_memberId_idx" ON "PlanSection"("memberId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "PlanSection_memberId_sectionKey_key" ON "PlanSection"("memberId", "sectionKey");
-
--- CreateIndex
 CREATE UNIQUE INDEX "AcademyModule_slug_key" ON "AcademyModule"("slug");
 
 -- CreateIndex
@@ -983,6 +1022,12 @@ CREATE INDEX "CommunityReply_postId_idx" ON "CommunityReply"("postId");
 CREATE INDEX "CommunityReply_userId_idx" ON "CommunityReply"("userId");
 
 -- CreateIndex
+CREATE INDEX "JournalEntry_userId_idx" ON "JournalEntry"("userId");
+
+-- CreateIndex
+CREATE INDEX "JournalEntry_type_idx" ON "JournalEntry"("type");
+
+-- CreateIndex
 CREATE INDEX "TimeCapsule_userId_idx" ON "TimeCapsule"("userId");
 
 -- CreateIndex
@@ -1016,6 +1061,15 @@ CREATE INDEX "WorkbookEntry_moduleId_idx" ON "WorkbookEntry"("moduleId");
 CREATE UNIQUE INDEX "WorkbookEntry_userId_moduleId_type_key" ON "WorkbookEntry"("userId", "moduleId", "type");
 
 -- CreateIndex
+CREATE INDEX "PlanSection_memberId_idx" ON "PlanSection"("memberId");
+
+-- CreateIndex
+CREATE INDEX "PlanSection_reviewedById_idx" ON "PlanSection"("reviewedById");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PlanSection_memberId_sectionKey_key" ON "PlanSection"("memberId", "sectionKey");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_ConversationParticipants_AB_unique" ON "_ConversationParticipants"("A", "B");
 
 -- CreateIndex
@@ -1032,6 +1086,12 @@ ALTER TABLE "BlogAffiliateEvent" ADD CONSTRAINT "BlogAffiliateEvent_affiliateLin
 
 -- AddForeignKey
 ALTER TABLE "BlogAffiliateEvent" ADD CONSTRAINT "BlogAffiliateEvent_blogPostId_fkey" FOREIGN KEY ("blogPostId") REFERENCES "BlogPost"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "BlogPost" ADD CONSTRAINT "BlogPost_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "BlogPost" ADD CONSTRAINT "BlogPost_reviewerId_fkey" FOREIGN KEY ("reviewerId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "BlogAffiliateLink" ADD CONSTRAINT "BlogAffiliateLink_blogPostId_fkey" FOREIGN KEY ("blogPostId") REFERENCES "BlogPost"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -1062,6 +1122,9 @@ ALTER TABLE "Profile" ADD CONSTRAINT "Profile_inviteRequestId_fkey" FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PartnerProfile" ADD CONSTRAINT "PartnerProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "OnboardingProfile" ADD CONSTRAINT "OnboardingProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -1136,9 +1199,6 @@ ALTER TABLE "ExternalRegistryNote" ADD CONSTRAINT "ExternalRegistryNote_authorId
 ALTER TABLE "ExternalRegistryNote" ADD CONSTRAINT "ExternalRegistryNote_registryId_fkey" FOREIGN KEY ("registryId") REFERENCES "ExternalRegistry"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PlanSection" ADD CONSTRAINT "PlanSection_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "AcademyProgress" ADD CONSTRAINT "AcademyProgress_moduleId_fkey" FOREIGN KEY ("moduleId") REFERENCES "AcademyModule"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -1199,6 +1259,9 @@ ALTER TABLE "MentorTask" ADD CONSTRAINT "MentorTask_memberId_fkey" FOREIGN KEY (
 ALTER TABLE "MentorTask" ADD CONSTRAINT "MentorTask_mentorId_fkey" FOREIGN KEY ("mentorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "JournalEntry" ADD CONSTRAINT "JournalEntry_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "TimeCapsule" ADD CONSTRAINT "TimeCapsule_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -1224,6 +1287,12 @@ ALTER TABLE "WorkbookEntry" ADD CONSTRAINT "WorkbookEntry_moduleId_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "WorkbookEntry" ADD CONSTRAINT "WorkbookEntry_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PlanSection" ADD CONSTRAINT "PlanSection_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PlanSection" ADD CONSTRAINT "PlanSection_reviewedById_fkey" FOREIGN KEY ("reviewedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_ConversationParticipants" ADD CONSTRAINT "_ConversationParticipants_A_fkey" FOREIGN KEY ("A") REFERENCES "Conversation"("id") ON DELETE CASCADE ON UPDATE CASCADE;

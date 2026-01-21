@@ -1,2 +1,0 @@
--- noop: Profile table does not exist in this environment.
--- This migration is intentionally skipped to preserve migration history.
