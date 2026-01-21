@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Children, cloneElement, isValidElement, type ReactNode } from "react";
+import { Children, cloneElement, isValidElement, type ReactNode, type ReactElement } from "react";
 
 import Section from "@/components/marketing/Section";
 import ImageFrame from "@/components/marketing/ImageFrame";
@@ -58,8 +58,9 @@ export default function MarketingHero({
 
         if (isValidElement(child)) {
           if (typeof child.type === "string" && child.type === "p") {
-            return cloneElement(child, {
-              className: `${bodyParagraphClass} ${child.props.className ?? ""}`.trim(),
+            const paragraph = child as ReactElement;
+            return cloneElement(paragraph, {
+              className: `${bodyParagraphClass} ${paragraph.props.className ?? ""}`.trim(),
             });
           }
           return child;
