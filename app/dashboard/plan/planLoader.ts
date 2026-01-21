@@ -55,7 +55,7 @@ export async function planLoader(opts: PlanLoaderOptions): Promise<PlanWorkspace
 
     const planBudgetCategories = planBudget?.categories ?? [];
 
-    const mentorNotes = await prisma.planMentorNote.findMany({
+    const mentorNotesRaw = await prisma.planMentorNote.findMany({
       where: { registryId: registryKey },
       orderBy: { createdAt: "desc" },
     });
@@ -96,7 +96,10 @@ export async function planLoader(opts: PlanLoaderOptions): Promise<PlanWorkspace
         categories: planBudgetCategories,
       },
       comparisons: [],
-      mentorNotes,
+      mentorNotes: mentorNotesRaw.map((note) => ({
+        ...note,
+        createdAt: note.createdAt.toISOString(),
+      })),
       communitySignals,
     };
   } catch (error) {
