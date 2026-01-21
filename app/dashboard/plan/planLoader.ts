@@ -39,10 +39,10 @@ export async function planLoader(opts: PlanLoaderOptions): Promise<PlanWorkspace
   const emptyWorkspace = buildEmptyWorkspace(meta);
 
   const ensureTable = async (tableName: string) => {
-    const [row] = (await prisma.$queryRaw<{ exists: boolean }>(
+    const rows = (await prisma.$queryRaw<{ exists: boolean }[]>(
       Prisma.sql`SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = ${tableName}) AS exists`
-    )) ?? [{ exists: false }];
-
+    )) ?? [];
+    const row = rows[0] ?? { exists: false };
     return row.exists;
   };
 
