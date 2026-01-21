@@ -104,16 +104,15 @@ export default function FAQPage() {
   return (
     <>
       <MarketingHero
-        imageSrc="/assets/images/hero-marketing-signature.png"
+        imageSrc="/images/marketing/home-hero.png"
         imageAlt="Taylor-Made Baby Co. hero art"
         imageWidth={1536}
         imageHeight={1024}
         headline="Questions are part of the journey."
-        supportingText="Calm mentor-led answers to orient you before requesting an invite."
+        subheading="Calm mentor-led answers to orient you before requesting an invite."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
-          className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
         priority
         motion
@@ -180,12 +179,11 @@ export default function FAQPage() {
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
               Still wondering if TMBC is right for you? You’re always welcome to learn more or reach out with a question.
             </p>
-            <Link
-              href="/request-invite"
-              className="mt-6 inline-flex rounded-[28px] border border-[var(--tmbc-charcoal)] px-6 py-3 text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]"
-            >
-              Request an Invite
-            </Link>
+            <div className="mt-6 flex justify-center">
+              <Link href="/request-invite" className="mkt-btn-primary">
+                Request an Invite
+              </Link>
+            </div>
           </section>
         </div>
       </MarketingContent>

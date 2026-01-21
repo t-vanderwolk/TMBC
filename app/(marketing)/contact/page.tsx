@@ -16,16 +16,15 @@ export default function ContactPage() {
   return (
     <>
       <MarketingHero
-        imageSrc="/assets/images/hero-marketing-signature.png"
+        imageSrc="/images/marketing/home-hero.png"
         imageAlt="Taylor-Made Baby Co. hero art"
         imageWidth={1536}
         imageHeight={1024}
         headline="We’re here — thoughtfully."
-        supportingText="Questions, notes, or unclear threads? Reach out and we’ll respond with calm."
+        subheading="Questions, notes, or unclear threads? Reach out and we’ll respond with calm."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
-          className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
         motion
       />
@@ -66,7 +65,7 @@ export default function ContactPage() {
             <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
               When you’re ready, you can also{" "}
               <Link href="/request-invite" className="text-[var(--tmbc-charcoal)] underline">
-                request an invite
+                Request an Invite
               </Link>
               .
             </p>

@@ -19,6 +19,8 @@ export type StoredUser = {
 const SESSION_TOKEN_KEY = 'tm_token';
 const SESSION_USER_KEY = 'tm_user';
 const LEGACY_TOKEN_KEY = 'tmbc_token';
+const AUTH_COOKIE_DOMAIN = process.env.NEXT_PUBLIC_AUTH_COOKIE_DOMAIN?.trim();
+const COOKIE_DOMAIN_ATTRIBUTE = AUTH_COOKIE_DOMAIN ? `; domain=${AUTH_COOKIE_DOMAIN}` : '';
 
 const ensureClient = () => typeof window !== 'undefined';
 
@@ -78,7 +80,7 @@ export const saveSession = async ({
   if (!ensureClient()) return null;
   localStorage.setItem(SESSION_TOKEN_KEY, token);
   localStorage.setItem(LEGACY_TOKEN_KEY, token);
-  document.cookie = `tm_token=${token}; path=/`;
+  document.cookie = `tm_token=${token}; path=/${COOKIE_DOMAIN_ATTRIBUTE}`;
 
   if (user) {
     const normalizedUser: StoredUser = {
@@ -138,7 +140,7 @@ export const clearSession = () => {
   localStorage.removeItem(SESSION_TOKEN_KEY);
   localStorage.removeItem(SESSION_USER_KEY);
   localStorage.removeItem(LEGACY_TOKEN_KEY);
-  document.cookie = 'tm_token=; path=/; max-age=0';
+  document.cookie = `tm_token=; path=/; max-age=0${COOKIE_DOMAIN_ATTRIBUTE}`;
 };
 
 export const Auth = {

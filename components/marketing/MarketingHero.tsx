@@ -1,141 +1,127 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Children, cloneElement, isValidElement, type ReactNode } from "react";
 
-interface MarketingHeroCta {
+import Section from "@/components/marketing/Section";
+import ImageFrame from "@/components/marketing/ImageFrame";
+
+type MarketingHeroCta = {
   label: string;
   href: string;
   className?: string;
-}
+};
 
-interface MarketingHeroProps {
+type MarketingHeroProps = {
+  eyebrow?: string;
+  headline: ReactNode;
+  subheading: ReactNode;
+  body?: ReactNode;
+  microcopy?: ReactNode;
+  primaryCta: MarketingHeroCta;
+  secondaryCta?: MarketingHeroCta;
   imageSrc: string;
   imageAlt: string;
   imageWidth: number;
   imageHeight: number;
-  headline: string;
-  supportingText: ReactNode;
-  primaryCta: MarketingHeroCta;
-  secondaryCta?: MarketingHeroCta;
   priority?: boolean;
   motion?: boolean;
-  headlineClassName?: string;
-  supportingTextClassName?: string;
-  ctaGroupClassName?: string;
-}
-
-const DEFAULT_PRIMARY_CLASSES =
-  "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]";
-const DEFAULT_SECONDARY_CLASSES =
-  "text-[0.7rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 underline transition hover:text-[var(--tmbc-mauve)]";
-
-const MOBILE_HERO_SOURCES: Record<string, string> = {
-  "/": "/assets/images/hero-marketing-signature-mobile.png",
-  "/how-it-works": "/assets/images/hero-marketing-signature-mobile.png",
-  "/learn": "/assets/images/section-background-learning-flow-mobile.png",
-  "/plan": "/assets/images/section-background-soft-ribbon-mobile.png",
-  "/connect": "/assets/images/section-background-soft-ribbon-mobile.png",
-  "/reflect": "/assets/images/section-background-soft-ribbon-mobile.png",
-  "/membership": "/assets/images/section-background-soft-ribbon-mobile.png",
-  "/blog": "/assets/images/section-background-soft-ribbon-mobile.png",
-  "/about": "/assets/images/hero-marketing-signature-mobile.png",
-  "/contact": "/assets/images/hero-marketing-signature-mobile.png",
-  "/faq": "/assets/images/hero-marketing-signature-mobile.png",
+  className?: string;
 };
 
 export default function MarketingHero({
+  eyebrow,
+  headline,
+  subheading,
+  body,
+  microcopy,
+  primaryCta,
+  secondaryCta,
   imageSrc,
   imageAlt,
   imageWidth,
   imageHeight,
-  headline,
-  supportingText,
-  primaryCta,
-  secondaryCta,
-  priority = false,
-  motion = false,
-  headlineClassName = "",
-  supportingTextClassName = "",
-  ctaGroupClassName = "",
+  className = "",
 }: MarketingHeroProps) {
-  const pathname = usePathname();
-  const normalizedPathname =
-    pathname && pathname !== "/" ? pathname.replace(/\/$/, "") : pathname;
-  const mobileHeroSrc = normalizedPathname ? MOBILE_HERO_SOURCES[normalizedPathname] : undefined;
-  const backgroundClasses =
-    priority
-      ? "min-h-[85vh] md:min-h-[72vh] max-h-[92vh] md:max-h-[82vh]"
-      : "min-h-[70vh] md:min-h-[60vh] max-h-[80vh] md:max-h-[70vh]";
-  const spacingClasses =
-    priority
-      ? "pt-24 md:pt-32 pb-16 md:pb-20 mb-16 md:mb-20"
-      : "pt-20 md:pt-28 pb-14 md:pb-16 mb-12 md:mb-16";
-  const contentHeightClasses =
-    priority ? "min-h-[85vh] md:min-h-[72vh]" : "min-h-[70vh] md:min-h-[60vh]";
+  const bodyParagraphClass = "text-[16px] sm:text-[18px] leading-relaxed text-neutral-600";
+  const bodyContent = body ? (
+    <div className="mt-6 space-y-5">
+      {Children.map(body, (child, index) => {
+        if (typeof child === "string" || typeof child === "number") {
+          return (
+            <p key={`${index}-${child}`} className={bodyParagraphClass}>
+              {child}
+            </p>
+          );
+        }
 
-  const motionClass = motion ? "motion-enabled" : "";
-  const headlineMotionClass = motion ? "tmbc-fade" : "";
-  const supportingMotionClass = motion ? "tmbc-fade tmbc-fade-delay-1" : "";
-  const ctaMotionClass = motion ? "tmbc-fade tmbc-fade-delay-2" : "";
+        if (isValidElement(child)) {
+          if (typeof child.type === "string" && child.type === "p") {
+            return cloneElement(child, {
+              className: `${bodyParagraphClass} ${child.props.className ?? ""}`.trim(),
+            });
+          }
+          return child;
+        }
+
+        return child;
+      })}
+    </div>
+  ) : null;
 
   return (
-    <>
-      <section
-        className={`hero-motion relative overflow-hidden
-          w-screen left-1/2 right-1/2
-          -ml-[50vw]
-          -mr-[50vw]
-          bg-cover bg-center
-          text-[var(--tmbc-charcoal)]
-          ${backgroundClasses}
-          ${spacingClasses}`.trim()}
-        data-motion-enabled={motion}
-      >
-        <div className="absolute inset-0">
-          <picture className="h-full w-full">
-            {mobileHeroSrc && (
-              <source media="(max-width: 768px)" srcSet={mobileHeroSrc} />
-            )}
-            <img
-              src={imageSrc}
-              alt={imageAlt}
-              width={imageWidth}
-              height={imageHeight}
-              className="h-full w-full object-cover"
-              style={{ objectPosition: "top" }}
-            />
-          </picture>
-        </div>
-        <div className="absolute inset-0 bg-[var(--tmbc-ivory)]/70" aria-hidden />
-
-        <div
-          className={`relative z-10 flex w-full ${contentHeightClasses} flex-col items-center justify-center px-6 pt-4 pb-8 text-center md:py-0 md:px-12`}
-        >
-          <div className={`hero-copy ${motionClass}`}>
-            <h1 className={`hero-headline ${headlineClassName} ${headlineMotionClass}`}>{headline}</h1>
-            <p
-              className={`hero-supporting mt-4 ${supportingTextClassName} ${supportingMotionClass}`}
+    <Section className={`bg-[var(--tmbc-ivory)] ${className}`.trim()}>
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="max-w-[560px] space-y-6">
+          {eyebrow && (
+            <p className="text-[11px] tracking-[0.34em] uppercase text-neutral-500 mb-6">{eyebrow}</p>
+          )}
+          <h1 className="text-[48px] leading-[0.95] sm:text-[64px] sm:leading-[0.92] tracking-[-0.02em]">
+            {headline}
+          </h1>
+          <p className="mkt-h2">{subheading}</p>
+          {bodyContent}
+          <div className="mt-10 flex flex-col sm:flex-row gap-3">
+            <Link
+              href={primaryCta.href}
+              className={`mkt-btn-primary h-12 rounded-full px-6 text-sm font-semibold ${
+                primaryCta.className ?? ""
+              }`.trim()}
             >
-              {supportingText}
-            </p>
-            <div
-              className={`hero-cta hero-cta-group mt-8 flex flex-col gap-3 md:flex-row md:items-center md:gap-4 ${ctaGroupClassName} ${ctaMotionClass}`}
-            >
-              <Link className={primaryCta.className ?? DEFAULT_PRIMARY_CLASSES} href={primaryCta.href}>
-                {primaryCta.label}
+              {primaryCta.label}
+            </Link>
+            {secondaryCta && (
+              <Link
+                href={secondaryCta.href}
+                className={`mkt-link-secondary h-12 rounded-full px-6 text-sm font-semibold ${
+                  secondaryCta.className ?? ""
+                }`.trim()}
+              >
+                {secondaryCta.label}
               </Link>
-              {secondaryCta && (
-                <Link className={secondaryCta.className ?? DEFAULT_SECONDARY_CLASSES} href={secondaryCta.href}>
-                  {secondaryCta.label}
-                </Link>
-              )}
-            </div>
+            )}
           </div>
+          {microcopy && (
+            <p className="mt-8 text-[12px] tracking-[0.22em] uppercase text-neutral-500">{microcopy}</p>
+          )}
         </div>
-      </section>
-
-    </>
+        <div className="flex items-center justify-center">
+          <ImageFrame
+            className="w-full rounded-[32px] overflow-hidden bg-white/60 ring-1 ring-black/5 shadow-[0_20px_60px_rgba(0,0,0,0.06)]"
+          >
+            <div className="aspect-[16/10] sm:aspect-[4/5] w-full">
+              <Image
+                src={imageSrc}
+                alt={imageAlt}
+                width={imageWidth}
+                height={imageHeight}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </ImageFrame>
+        </div>
+      </div>
+    </Section>
   );
 }

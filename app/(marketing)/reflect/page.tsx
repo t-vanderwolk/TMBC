@@ -3,6 +3,8 @@ import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import ImageFrame from "@/components/marketing/ImageFrame";
 import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
+import PillarExplanation, { PILLAR_CONTENT } from "@/components/marketing/PillarExplanation";
+import Section from "@/components/marketing/Section";
 
 const reflectClarifications = [
   {
@@ -38,16 +40,15 @@ export default function ReflectPage() {
   return (
     <>
       <MarketingHero
-        imageSrc="/assets/images/section-background-soft-ribbon.png"
+        imageSrc="/images/marketing/reflect.jpeg"
         imageAlt="Editorial hero artwork for the Reflect pillar."
         imageWidth={1536}
         imageHeight={1024}
         headline="A quiet place you can return to."
-        supportingText="Reflect is a private keepsake space—no feed, no pressure, just room for what feels important."
+        subheading="Reflect is a private keepsake space—no feed, no pressure, just room for what feels important."
         primaryCta={{
-          label: "Request Your Invite",
+          label: "Request an Invite",
           href: "/request-invite",
-          className: "marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
         secondaryCta={{
           label: "How It Works (softly)",
@@ -55,6 +56,11 @@ export default function ReflectPage() {
         }}
         motion
       />
+      <Section>
+        <div className="mx-auto max-w-3xl">
+          <PillarExplanation {...PILLAR_CONTENT.reflect} />
+        </div>
+      </Section>
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
@@ -187,10 +193,10 @@ export default function ReflectPage() {
                 can enter when you choose.
               </p>
             </div>
-            <ul className="mt-8 space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+            <ul className="mkt-bullet-list">
               {privateDesign.map((item) => (
-                <li key={item} className="leading-relaxed">
-                  • {item}
+                <li key={item} className="mkt-bullet-item">
+                  {item}
                 </li>
               ))}
             </ul>
@@ -209,11 +215,13 @@ export default function ReflectPage() {
                 it all.
               </p>
             </div>
-            <div className="mt-8 space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+            <ul className="mkt-bullet-list">
               {futureValue.map((item) => (
-                <p key={item}>{item}</p>
+                <li key={item} className="mkt-bullet-item">
+                  {item}
+                </li>
               ))}
-            </div>
+            </ul>
           </section>
 
           <div className="py-24 md:py-32 flex justify-center">
@@ -239,11 +247,8 @@ export default function ReflectPage() {
                 This private space threads through the broader journey — it’s a pause between mentor notes and
                 planning conversations, always there when you want to come back.
               </p>
-              <Link
-                href="/request-invite"
-                className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
-              >
-                Return by invitation
+              <Link href="/request-invite" className="mkt-btn-primary">
+                Request an Invite
               </Link>
             </div>
           </section>

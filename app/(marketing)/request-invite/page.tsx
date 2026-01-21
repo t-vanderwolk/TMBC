@@ -113,8 +113,8 @@ const RequestInvitePage = () => {
               <input placeholder="Referral source" value={form.referral} onChange={updateField("referral")} />
             </label>
             {error && <p className="text-sm text-red-600">{error}</p>}
-            <button type="submit" className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]" disabled={loading}>
-              {loading ? "Sending..." : "Request Invite"}
+            <button type="submit" className="mkt-btn-primary uppercase tracking-[0.35em]" disabled={loading}>
+              {loading ? "Sending..." : "Request an Invite"}
             </button>
             <p className="text-xs text-[var(--tmbc-charcoal)] text-opacity-60">
               The invite stays in your inbox for as long as you need. No follow-up pressure.

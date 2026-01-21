@@ -3,6 +3,8 @@ import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import ImageFrame from "@/components/marketing/ImageFrame";
 import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
+import PillarExplanation, { PILLAR_CONTENT } from "@/components/marketing/PillarExplanation";
+import Section from "@/components/marketing/Section";
 
 const journeys = [
   {
@@ -23,20 +25,24 @@ export default function LearnPage() {
   return (
     <>
       <div className="learn-hero-target">
-        <MarketingHero
-          imageSrc="/assets/images/section-background-learning-flow.png"
+      <MarketingHero
+          imageSrc="/images/marketing/learn.jpeg"
           imageAlt="Educational hero artwork for the Learn pillar."
           imageWidth={1536}
           imageHeight={1024}
           headline="Learn what matters — in the right order."
-          supportingText="The Academy guides you through what matters before you plan, buy, or prepare."
+          subheading="The Academy guides you through what matters before you plan, buy, or prepare."
           primaryCta={{
-            label: "Request Your Invite",
+            label: "Request an Invite",
             href: "/request-invite",
-            className: "marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]",
           }}
           motion
-        />
+      />
+      <Section>
+        <div className="mx-auto max-w-3xl">
+          <PillarExplanation {...PILLAR_CONTENT.learn} />
+        </div>
+      </Section>
       </div>
 
       <MarketingContent>
@@ -126,11 +132,8 @@ export default function LearnPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
                 Orientation before commitment
               </h2>
-              <Link
-                href="/request-invite"
-                className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
-              >
-                Request an invite
+              <Link href="/request-invite" className="mkt-btn-primary">
+                Request an Invite
               </Link>
             </div>
           </section>

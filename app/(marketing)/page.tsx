@@ -1,83 +1,115 @@
 import Image from "next/image";
-import { Suspense } from "react";
 import Link from "next/link";
-import MarketingHero from "@/components/marketing/MarketingHero";
-import MarketingContent from "@/components/marketing/MarketingContent";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
-import InviteSection from "@/components/marketing/InviteSection";
-import InviteCodeEntry from "@/components/marketing/InviteCodeEntry";
-import ImageFrame from "@/components/marketing/ImageFrame";
+import QuotePanel from "@/components/marketing/QuotePanel";
+import TwoColCards from "@/components/marketing/TwoColCards";
+import PartnerLogos from "@/components/marketing/PartnerLogos";
+import FinalCTA from "@/components/marketing/FinalCTA";
+import homeHero from "@/assets/images/homehero2.png";
+
+const pillarOrder: Array<"learn" | "plan" | "connect" | "reflect"> = [
+  "learn",
+  "plan",
+  "connect",
+  "reflect",
+];
+
+const pillarDetails = {
+  learn: {
+    title: "Learn",
+    subheading: "Understanding comes before buying.",
+    body: [
+      "This is where everything starts. Expecting parents are calmly walked through the major categories of baby gear — strollers, car seats, carriers, nursery items, feeding, and more — in a clear, structured way.",
+      "The goal isn’t shopping. It’s understanding what each category is designed to do, how it fits into daily life, and which ones may or may not apply to your space, routines, and priorities. Once parents understand the landscape, decisions feel easier — and far more personal.",
+    ],
+  },
+  plan: {
+    title: "Plan",
+    subheading: "Thoughtful decisions, made together.",
+    body: [
+      "After parents clarify what matters to them, they work one-on-one with a mentor to build a thoughtful plan and decide which specific items belong on their registry.",
+      "This happens inside an interactive workspace that auto-saves, so nothing feels rushed or lost. Planning is collaborative, paced, and grounded in real-world use — not trends, pressure, or endless scrolling.",
+    ],
+  },
+  connect: {
+    title: "Connect",
+    subheading: "Learn alongside people in the same season.",
+    body: [
+      "Parents following the same learning path can connect inside the TMBC community — quiet, moderated chat rooms designed for focused conversation.",
+      "Instead of overwhelming feeds or open forums, this space is intentionally smaller and calmer. Parents ask questions, compare notes, and learn alongside others who are at the same stage, using the same framework.",
+    ],
+  },
+  reflect: {
+    title: "Reflect",
+    subheading: "A private record of this season.",
+    body: [
+      "Reflect is a personal time vault — a modern baby book designed to hold both milestones and in-between moments.",
+      "Parents can save ultrasound photos, names they’re considering, notes about this stage, screenshots of loved ones’ reactions, voice notes, and daily reflections. When they’re ready, they can seal the vault and preserve it as a finished chapter of this season.",
+    ],
+  },
+};
+
+const howItWorksSteps = [
+  {
+    number: "01",
+    title: "Learn",
+    description: "Calm education in plain language. No pressure to buy.",
+    preview: {
+      src: "/images/marketing/step-learn.png",
+      alt: "Academy dashboard showing calm baby planning content",
+    },
+  },
+  {
+    number: "02",
+    title: "Plan",
+    description: "One-on-one mentor guidance to build a thoughtful plan and registry.",
+    preview: {
+      src: "/images/marketing/step-plan.png",
+      alt: "Guided planning workspace with checklist preview",
+    },
+  },
+  {
+    number: "03",
+    title: "Connect",
+    description: "Ongoing support from real people.",
+    preview: {
+      src: "/images/marketing/step-connect.png",
+      alt: "Community connection preview",
+    },
+  },
+  {
+    number: "04",
+    title: "Reflect",
+    description: "Capture decisions, notes, and memories.",
+    preview: {
+      src: "/images/marketing/step-reflect.png",
+      alt: "Reflection and memory-keeping preview",
+    },
+  },
+];
+
+const whatWeDont = [
+  "We don't sell products.",
+  "We don't auto-generate registries.",
+  "We don't rush decisions.",
+];
+
+const twoColReceives = [
+  "Personalized baby-prep roadmap",
+  "One-on-one mentor guidance",
+  "Registry planning without pressure",
+  "Calm education",
+  "Ongoing support as needs evolve",
+];
+
+const whoThisIsFor = {
+  for: ["First-time parents", "Overwhelmed planners", "Families who want clarity"],
+  notFor: ["Quick shopping lists", "Automated recommendations", "Influencer-driven advice"],
+};
 
 const noiseNotes = [
   "Every checklist shouts louder than the midnight spit-up clean-up, making your next decision feel urgent.",
   "Feeds full of curated nurseries leave your inbox untouched and your sleep schedule in a different timezone.",
   "Decision fatigue settles in when every screen demands a \"complete\" tap while you're still wondering what day it is.",
-];
-
-const quietResponse = [
-  "Mentors ask before advising—your rhythm decides what matters.",
-  "A calm, private space to prep without performative noise.",
-  "Pacing that respects real life (including the surprise blowouts).",
-];
-
-const whatThisIsntHighlights = [
-  "Not a countdown, a sales pitch, or urgency disguised as help.",
-  "Not trend-chasing purchases labeled as “must-haves.”",
-  "Not pressure to sprint—this moves when you can breathe.",
-];
-
-const differenceHighlights = [
-  "Human mentors keep the care personal, not algorithmic.",
-  "Sequence over urgency—nothing moves until the previous chapter feels settled, even if baby just greeted you with a surprise blowout.",
-  "Advocacy over selling keeps your questions in focus.",
-  "Ongoing support means someone calm is checking in while you juggle spit-up and exhaustion.",
-];
-
-const systemStages = [
-  {
-    title: "Learn",
-    heading: "Clarify what matters before you plan anything for baby",
-    description:
-      "We slow the flood of opinions so you learn what decisions are actually coming instead of Googling with the baby on your hip.",
-    micro: "So you’re not researching at midnight.",
-    preview: {
-      src: "/assets/images/academydashboardpreview.png",
-      alt: "Taylor-Made Academy dashboard preview",
-    },
-  },
-  {
-    title: "Plan",
-    heading: "Co-create a calm plan after you understand the lay of the land",
-    description:
-      "Mentors help you pace the purchases and timelines so every choice is grounded in your household rhythm, not a trending checklist.",
-    micro: "So decisions don’t pile up.",
-    preview: {
-      src: "/assets/images/planpreview.png",
-      alt: "Planning workspace preview",
-    },
-  },
-  {
-    title: "Connect",
-    heading: "Step into moderated rooms that meet you where you are",
-    description:
-      "Connect with other parents while mentors keep the energy low and the conversation useful instead of performative.",
-    micro: "So you’re not doing this alone.",
-    preview: {
-      src: "/assets/images/connectpreview.png",
-      alt: "Community connection preview",
-    },
-  },
-  {
-    title: "Reflect",
-    heading: "Capture what you learned and keep it steady",
-    description:
-      "We collect reflections so mentors can see what worked, what felt weird, and what still needs attention before you move forward.",
-    micro: "So this season doesn’t blur past.",
-    preview: {
-      src: "/assets/images/reflectpreview.png",
-      alt: "Reflection & baby book preview",
-    },
-  },
 ];
 
 const partnerLogos = [
@@ -91,241 +123,187 @@ const partnerLogos = [
   { file: "tommee-tippee-logo.png", alt: "Tommee Tippee" },
 ];
 
-const whatThisHighlights = [
-  { title: "What this really is for parenthood", copy: quietResponse },
-  { title: "What this is not for parenthood", copy: whatThisIsntHighlights },
+const finalMicroBullets = [
+  "We review every request before making a match.",
+  "Mentor introductions happen by video or DM, never automation.",
+  "Support stays private and paced to your schedule.",
 ];
 
 export default function HomePage() {
+  const quoteText = noiseNotes.join(" ");
+
   return (
-    <>
-      <MarketingHero
-        imageSrc="/assets/images/hero-marketing-signature.png"
-        imageAlt="Taylor-Made Baby Co. marketing hero"
-        imageWidth={1536}
-        imageHeight={1024}
-        headline="Calmer prep for babyhood ahead"
-        supportingText="Mentors slow the rhythm so you can prep with confidence—without midnight research spirals."
-        primaryCta={{
-          label: "Start preparing",
-          href: "/request-invite",
-          className:
-            "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
-        }}
-        secondaryCta={{
-          label: "Learn how we guide you",
-          href: "/how-it-works",
-          className: "text-[0.65rem] uppercase tracking-[0.35em] underline text-[var(--tmbc-charcoal)]/80",
-        }}
-        priority
-        motion
-      />
-      <div className="px-6 text-center">
-        <p className="mt-4 max-w-3xl mx-auto text-[0.8rem] text-[var(--tmbc-charcoal)] text-opacity-60">
-          A concierge-led baby planning membership with mentors, intentional community rooms, and ongoing access for your rhythm.
-        </p>
-      </div>
-      <InviteCodeEntry />
-      <MarketingContent>
-        <section className="marketing-section marketing-card bg-white/90 px-6 py-16 md:px-12 md:py-24 border-y border-[var(--tmbc-charcoal)]/5 mt-16">
-          <div className="max-w-5xl mx-auto text-center space-y-4">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              What this is · What this isn’t
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              We slow the rhythm so you can notice what matters, not scramble for every next step.
-            </h2>
-            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              Members get mentorship, calm community rooms, and the space to learn, plan, connect, and reflect without noise.
-            </p>
-          </div>
-          <div className="mt-10 space-y-3 md:hidden">
-            {whatThisHighlights.map((block) => (
-              <details
-                key={block.title}
-                className="group rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/70 p-5"
-              >
-                <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
-                  {block.title}
-                </summary>
-                <ul className="mt-4 space-y-3 list-disc pl-4 text-sm text-[var(--tmbc-charcoal)]/80">
-                  {block.copy.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-              </details>
-            ))}
-          </div>
-
-          <div className="mt-10 hidden gap-6 md:grid md:grid-cols-2">
-            {whatThisHighlights.map((block) => (
-              <div
-                key={block.title}
-                className="marketing-card bg-[var(--tmbc-ivory)]/70 p-6 text-sm text-[var(--tmbc-charcoal)]/80"
-              >
-                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
-                  {block.title}
-                </p>
-                <ul className="mt-4 space-y-3 list-disc pl-4">
-                  {block.copy.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <RibbonDivider className="my-12 md:my-16" />
-
-        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-6 py-16 md:px-12 md:py-24 mt-24">
-          <div className="max-w-4xl mx-auto text-center space-y-5">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              The system in place
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              Learn · Plan · Connect · Reflect
-            </h2>
-            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              Each pillar waits for you to feel ready before the next begins, honoring your rhythm, not chasing tasks.
-            </p>
-            <p className="mx-auto max-w-2xl text-sm text-[var(--tmbc-charcoal)]/70">
-              There’s a rhythm to this—and you don’t have to find it alone.
-            </p>
-          </div>
-          <div className="mt-6 flex justify-center">
-            <ImageFrame className="max-w-[85%] my-16">
+    <main className="min-h-screen bg-[#fbf7f4] text-neutral-900">
+      <section className="relative -mt-6 sm:-mt-10 pt-8 sm:pt-10">
+        <div className="relative overflow-hidden">
+          <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden">
+            <div className="relative h-[520px] sm:h-[640px]">
               <Image
-                src="/assets/images/pillaricons.png"
-                alt="Taylor-Made Baby Co. learning and planning pillars"
-                width={720}
-                height={360}
-                className="w-full h-auto"
+                src={homeHero}
+                alt="Taylor-Made Baby Co. marketing hero"
+                fill
+                priority
+                sizes="100vw"
+                className="absolute inset-0 h-full w-full object-cover"
               />
-            </ImageFrame>
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/70 to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#fbf7f4] to-transparent" />
+            </div>
           </div>
-          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {systemStages.map((stage) => (
-              <div
-                key={stage.title}
-                className="marketing-card rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-6 text-sm text-[var(--tmbc-charcoal)]"
-              >
-                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  {stage.title}
-                </p>
-                <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">{stage.micro}</p>
+        </div>
+        <div className="absolute inset-0">
+          <div className="mx-auto flex h-full w-full max-w-6xl items-center px-4 sm:px-6 lg:px-8">
+            <div className="max-w-[44ch]">
+              <p className="text-[11px] tracking-[0.34em] uppercase text-neutral-500">
+                Calm, personal guidance for expecting parents
+              </p>
+              <h1 className="mt-3 text-[44px] sm:text-[64px] leading-[0.95] tracking-[-0.02em] text-neutral-900">
+                Baby prep, without the overwhelm.
+              </h1>
+              <p className="mt-6 text-[16px] sm:text-[18px] leading-relaxed text-neutral-700">
+                A calm, mentor-guided way to learn what baby gear actually does, plan what you truly need, and feel
+                supported every step of the way.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row items-start">
+                <Link
+                  href="/request-invite"
+                  className="flex h-11 items-center justify-center rounded-full bg-[var(--tmbc-charcoal)] px-6 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
+                >
+                  Request an Invite
+                </Link>
+                <Link
+                  href="/how-it-works"
+                  className="flex h-11 items-center justify-center rounded-full border border-neutral-300 bg-white/60 px-6 text-sm font-semibold text-neutral-900 transition hover:bg-white/80"
+                >
+                  Explore the Experience
+                </Link>
               </div>
-            ))}
+              <p className="mt-6 text-[15px] leading-relaxed text-neutral-500 italic max-w-prose">
+                No panic scrolling. Just the next calm step.
+              </p>
+              <p className="mt-6 text-[12px] tracking-[0.22em] uppercase text-neutral-500">
+                Invite-only baby planning for modern parents.
+              </p>
+            </div>
           </div>
-          <div className="mt-8 text-center">
-            <Link
-              href="/experience"
-              className="text-sm uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-80 underline"
-            >
-              See how the experience unfolds →
-            </Link>
+        </div>
+      </section>
+      <div className="h-14" />
+
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 lg:px-10">
+        <section className="py-16 sm:py-20">
+          <div className="grid gap-8 lg:grid-cols-2">
+            {pillarOrder.map((pillarKey) => {
+              const pillar = pillarDetails[pillarKey];
+              return (
+                <article
+                  key={pillarKey}
+                  className="rounded-3xl border border-neutral-200 bg-white/70 p-8 shadow-sm"
+                >
+                  <h3 className="text-2xl sm:text-3xl tracking-tight text-neutral-900">{pillar.title}</h3>
+                  <p className="mt-2 text-base sm:text-lg font-medium text-neutral-700">{pillar.subheading}</p>
+                  <div className="mt-4 space-y-4 text-base leading-relaxed text-neutral-600 max-w-prose">
+                    {pillar.body.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 
-        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/60 px-8 py-24 mt-24">
-          <div className="max-w-3xl mx-auto space-y-5 text-center">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Why it feels loud
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              The noise is louder than the baby cues.
+        <section className="py-16 sm:py-20">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-3xl sm:text-4xl leading-tight tracking-tight text-neutral-900">
+              Taylor-Made Baby Co. is a private baby-planning service.
             </h2>
-            <ul className="space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-              {noiseNotes.map((note) => (
-                <li key={note}>{note}</li>
+            <p className="mt-4 text-base sm:text-lg leading-relaxed text-neutral-600">
+              Think of it as a personal guide who helps you prepare for life with a baby — without endless Googling,
+              pressure, or guesswork.
+            </p>
+            <ul className="mt-6 space-y-3 text-base sm:text-lg text-neutral-700">
+              {whatWeDont.map((line) => (
+                <li key={line} className="flex gap-3 items-start">
+                  <span className="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-neutral-400" />
+                  <span>{line}</span>
+                </li>
               ))}
             </ul>
-            <p className="pt-6 text-sm text-[var(--tmbc-charcoal)]/70">
-              TMBC meets you with calm structure—so the next step never feels urgent.
-            </p>
           </div>
         </section>
 
-        <section className="flex justify-center my-24 md:my-32">
-          <ImageFrame className="max-w-[1000px]">
-            <img
-              src="/assets/images/experience.png"
-              alt="Taylor-Made Baby Co. experience values: expert-built, mentor-led, personally matched"
-              className="w-full rounded-[26px]"
-              loading="lazy"
-            />
-          </ImageFrame>
-        </section>
-
-          <section className="mt-12">
-            <div className="max-w-5xl mx-auto text-center">
-              <p className="text-[0.65rem] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">
-                Trusted by quiet prep partners
-              </p>
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-6">
-                {partnerLogos.map((logo) => (
-                  <div key={logo.file} className="h-12 opacity-80">
-                    <img
-                      src={`/api/logos/${logo.file}`}
-                      alt={logo.alt}
-                      className="h-full object-contain"
-                      loading="lazy"
-                    />
+        <section className="py-16 sm:py-20">
+          <div className="flex items-baseline justify-between">
+            <h2 className="text-3xl sm:text-4xl tracking-tight text-neutral-900">HOW IT WORKS</h2>
+          </div>
+          <div className="mt-2 h-px w-full bg-neutral-200/60" />
+          <div className="mt-10 grid items-stretch gap-6 md:grid-cols-2 lg:grid-cols-2 lg:gap-8">
+            {howItWorksSteps.map((step) => (
+              <article
+                key={step.number}
+                className="group flex h-full flex-col rounded-3xl border border-neutral-200 bg-white/70 p-6 sm:p-8 shadow-[0_18px_50px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-[0_24px_70px_rgba(0,0,0,0.08)]"
+              >
+                <div className="min-h-[168px] md:min-h-[176px]">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[11px] tracking-[0.34em] uppercase text-neutral-500">Step {step.number}</p>
+                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white/50 px-3 py-1 text-[11px] tracking-[0.22em] uppercase text-neutral-600">
+                      {step.title}
+                    </span>
                   </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 pt-20 pb-16 md:pt-24 md:pb-20 mt-24 mb-12">
-          <div className="max-w-3xl mx-auto space-y-4 text-center">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Ready when baby lets you breathe
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              Care that keeps pace with your parenting rhythm.
-            </h2>
-            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              Request an invite when the baby schedule lets you breathe; we’ll keep leaning in while you juggle feedings.
-            </p>
-            <div className="flex justify-center my-16 md:my-20">
-              <ImageFrame className="max-w-[960px] border-[var(--tmbc-mauve)]/30">
-                <img
-                  src="/assets/images/inviteflow.png"
-                  alt="Invite-only onboarding process from request to mentorship and guided experience"
-                  className="w-full rounded-[26px]"
-                  loading="lazy"
-                />
-              </ImageFrame>
-            </div>
-            <div className="space-y-2">
-              <Link
-                href="/request-invite"
-                className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
-              >
-                Plan calmly
-              </Link>
-              <Link
-                href="/request-invite?returning=true"
-                className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-70 underline"
-              >
-                Already have an invite? Enter it here.
-              </Link>
-            </div>
-            <p className="text-sm text-[var(--tmbc-charcoal)]/70">
-              What happens next: we review your request and match you with the right support.
-            </p>
-            <p className="text-sm text-[var(--tmbc-charcoal)]/60">
-              No rush. No pressure.
-            </p>
-            <div className="mt-8 max-w-md mx-auto">
-              <Suspense fallback={<div className="h-24" />}>
-                <InviteSection />
-              </Suspense>
-            </div>
+                  <h3 className="mt-4 text-lg font-semibold text-neutral-900">{step.title}</h3>
+                  <p className="mt-1 text-[12px] tracking-[0.18em] uppercase text-neutral-500">
+                    {step.number === "01"
+                      ? "Clarity before shopping."
+                      : step.number === "02"
+                      ? "Decisions with a human."
+                      : step.number === "03"
+                      ? "Support without the noise."
+                      : "Keep what matters."}
+                  </p>
+                  <p className="mt-2 min-h-[44px] text-[14px] leading-relaxed text-neutral-600">{step.description}</p>
+                </div>
+                <div className="mt-auto pt-6">
+                  <div className="rounded-2xl border border-neutral-200 bg-white/60 p-4">
+                    <div className="relative mx-auto w-full max-w-[320px]">
+                      <div className="relative aspect-[9/19] overflow-hidden rounded-xl bg-neutral-50">
+                        <img
+                          src={step.preview.src}
+                          alt={step.preview.alt}
+                          className="absolute inset-0 h-full w-full object-contain p-2 transition-transform duration-300 group-hover:scale-[1.02]"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
-      </MarketingContent>
-    </>
+
+        <section className="py-16 sm:py-20">
+          <TwoColCards receives={twoColReceives} who={whoThisIsFor} />
+        </section>
+
+        <section className="py-16 sm:py-20">
+          <QuotePanel quote={quoteText} closing="TMBC meets you with calm structure—so the next step never feels urgent." />
+        </section>
+
+        <section className="py-16 sm:py-20">
+          <PartnerLogos logos={partnerLogos} />
+        </section>
+
+        <section className="py-16 sm:py-20">
+          <FinalCTA
+            title="Care that keeps pace with your parenting rhythm."
+            subtitle="Request an invite when the baby schedule lets you breathe; we’ll keep leaning in while you juggle feedings."
+            bullets={finalMicroBullets}
+            ctaLabel="Request an Invite"
+            imageSrc="/images/marketing/invite-flow.png"
+            imageAlt="Invite-only onboarding process from request to mentorship and guided experience"
+          />
+        </section>
+      </div>
+    </main>
   );
 }

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -65,16 +64,15 @@ const heroSupportingText = (
 
 const heroSection = (
   <MarketingHero
-    imageSrc="/assets/images/section-background-soft-ribbon.png"
+    imageSrc="/images/marketing/home-hero.png"
     imageAlt="Soft ribbon background"
     imageWidth={1536}
     imageHeight={1024}
     headline="Clear thinking for pregnancy and early parenthood."
-    supportingText={heroSupportingText}
+    subheading={heroSupportingText}
     primaryCta={{
       label: "Request an Invite",
       href: "/request-invite",
-      className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
     }}
     priority
     motion
@@ -162,8 +160,6 @@ const BlogMarketingPage = async () => {
                 </div>
               </article>
             </section>
-
-          <RibbonDivider className="my-16 md:my-20" />
 
           <section className="marketing-section space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

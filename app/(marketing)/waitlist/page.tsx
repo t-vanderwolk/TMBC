@@ -15,17 +15,17 @@ const WaitlistPage = () => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="rounded-[28px] border border-[var(--tmbc-mauve)]/30 bg-white/70 p-6 text-left">
             <h2 className="text-2xl sm:text-3xl">What to expect</h2>
-            <ul className="mt-4 space-y-2 text-base text-[var(--tmbc-charcoal)] text-opacity-70">
-              <li>• Personalized review by TMBC concierge</li>
-              <li>• Invite shared via email when approved</li>
-              <li>• Mentors match you to the best cohort</li>
+            <ul className="mkt-bullet-list">
+              <li className="mkt-bullet-item">Personalized review by TMBC concierge</li>
+              <li className="mkt-bullet-item">Invite shared via email when approved</li>
+              <li className="mkt-bullet-item">Mentors match you to the best cohort</li>
             </ul>
           </div>
           <div className="rounded-[28px] border border-[var(--tmbc-mauve)]/30 bg-white/70 p-6 text-left">
             <h2 className="text-2xl sm:text-3xl">Need a code?</h2>
             <p className="mt-2 text-base text-[var(--tmbc-charcoal)] text-opacity-70">Already have a code? Validate it instantly.</p>
-            <Link href="/request-invite" className="marketing-btn marketing-btn-primary mt-4 uppercase tracking-[0.35em]">
-              Return to Invite Page
+            <Link href="/request-invite" className="mkt-btn-primary mt-4">
+              Request an Invite
             </Link>
           </div>
         </div>

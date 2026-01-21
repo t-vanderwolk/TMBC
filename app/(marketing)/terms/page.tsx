@@ -1,17 +1,16 @@
 import Link from "next/link";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const heroSection = (
   <MarketingHero
-    imageSrc="/assets/images/section-background-soft-ribbon.png"
+    imageSrc="/images/marketing/home-hero.png"
     imageAlt="Soft ribbon background"
     imageWidth={1536}
     imageHeight={1024}
     headline="Terms of use"
-    supportingText="Taylor-Made Baby Co. is built for families who value clarity. These terms keep the community safe while mentors and admins collaborate."
-    primaryCta={{ label: "Join the journal", href: "/blog" }}
+    subheading="Taylor-Made Baby Co. is built for families who value clarity. These terms keep the community safe while mentors and admins collaborate."
+    primaryCta={{ label: "Request an Invite", href: "/request-invite" }}
   />
 );
 
@@ -38,7 +37,6 @@ export default function TermsPage() {
               .
             </p>
           </section>
-          <RibbonDivider className="my-10" />
           <section className="marketing-section space-y-3">
             <h2 className="font-serif text-2xl text-[var(--tmbc-charcoal)]">Need help?</h2>
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-75">

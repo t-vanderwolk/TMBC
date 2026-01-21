@@ -11,6 +11,7 @@ type BaseCookieOptions = {
   httpOnly: true;
   sameSite: "lax";
   secure: boolean;
+  domain?: string;
 };
 
 const baseOptions = (isSecure: boolean): BaseCookieOptions => ({
@@ -20,6 +21,10 @@ const baseOptions = (isSecure: boolean): BaseCookieOptions => ({
   secure: isSecure,
 });
 
+const rawCookieDomain =
+  process.env.AUTH_COOKIE_DOMAIN ?? process.env.NEXT_PUBLIC_AUTH_COOKIE_DOMAIN;
+const COOKIE_DOMAIN = rawCookieDomain?.trim() || undefined;
+
 export const buildAuthCookieOptions = (
   request?: NextRequest,
   overrides?: { maxAge?: number },
@@ -28,6 +33,7 @@ export const buildAuthCookieOptions = (
     isProd || Boolean(request?.nextUrl.protocol === "https:");
   return {
     ...baseOptions(secure),
+    ...(COOKIE_DOMAIN ? { domain: COOKIE_DOMAIN } : {}),
     ...(overrides ?? {}),
   };
 };

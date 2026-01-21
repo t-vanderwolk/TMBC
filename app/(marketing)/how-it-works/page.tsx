@@ -55,16 +55,15 @@ export default function HowItWorksPage() {
   return (
     <>
       <MarketingHero
-        imageSrc="/assets/images/hero-marketing-signature.png"
+        imageSrc="/images/marketing/howitworks-hero.png"
         imageAlt="Taylor-Made Baby Co. hero art"
         imageWidth={1536}
         imageHeight={1024}
         headline="Baby prep, minus the spiral."
-        supportingText="We guide you into a calm rhythm you can revisit for clarity."
+        subheading="We guide you into a calm rhythm you can revisit for clarity."
         primaryCta={{
-          label: "Request Your Invite",
+          label: "Request an Invite",
           href: "/request-invite",
-          className: "marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
         secondaryCta={{
           label: "Explore the Experience",
@@ -74,147 +73,100 @@ export default function HowItWorksPage() {
         motion
       />
 
-
       <MarketingContent>
-        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-          <div className="flex flex-col items-center gap-4 text-center">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              The rhythm
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              A returnable flow, not a one-way path.
-            </h2>
-            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+        <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
+          <section className="space-y-6 text-center">
+            <p className="mkt-eyebrow">The rhythm</p>
+            <h2 className="mkt-h2">A returnable flow, not a one-way path.</h2>
+            <p className="mkt-body">
               Learning, planning, connecting, and reflecting live together. You can follow one, pause, and revisit the next whenever you want.
             </p>
-            <p className="mx-auto max-w-2xl text-sm text-[var(--tmbc-charcoal)]/70">
+            <p className="mkt-body">
               The rhythm is always gentle—just return when you need clarity and the flow will be there.
             </p>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {rhythmHighlights.map((highlight) => (
-              <div key={highlight.title} className="marketing-card bg-white/80 p-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                  {highlight.title}
-                </p>
-                <p className="mt-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{highlight.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+            <div className="grid gap-6 md:grid-cols-3">
+              {rhythmHighlights.map((highlight) => (
+                <div key={highlight.title} className="mkt-card px-6 py-8 text-left">
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                    {highlight.title}
+                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--tmbc-charcoal)]/80">
+                    {highlight.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
 
-        <div className="flex justify-center py-24 md:py-32">
-          <ImageFrame className="max-w-[520px]">
-            <img
-              src="/assets/images/ExperienceDiagram.png"
-              alt="How the Taylor-Made Baby Co. experience works: Learn, Plan, Connect, Reflect"
-              className="w-full rounded-[28px]"
-              loading="lazy"
-            />
-          </ImageFrame>
-        </div>
-
-        <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 border-y border-[var(--tmbc-charcoal)]/10">
-          <div className="flex flex-col gap-4 items-center text-center">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              What happens when you join
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              The experience stays guided and gentle.
-            </h2>
-            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              Mentors orient you based on your questions so you can move forward with clarity.
-            </p>
-          </div>
-          <div className="mt-10 space-y-3 md:hidden">
-            {whatHappens.map((what) => (
-              <details
-                key={what.title}
-                className="group rounded-[28px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/60 p-5"
-              >
-                <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
-                  {what.title}
-                </summary>
-                <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{what.copy}</p>
-              </details>
-            ))}
-          </div>
-
-          <div className="mt-10 hidden gap-6 md:grid md:grid-cols-3">
-            {whatHappens.map((what) => (
-              <div
-                key={what.title}
-                className="marketing-card bg-[var(--tmbc-ivory)]/70 p-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-80"
-              >
-                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  {what.title}
-                </p>
-                <p className="mt-3">{what.copy}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-          <div className="flex flex-col gap-4 items-center text-center">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Invite-only, explained calmly
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              Careful intake keeps the experience personal.
-            </h2>
-          </div>
-          <div className="mt-10 space-y-3 md:hidden">
-            {inviteNotes.map((note) => (
-              <details
-                key={note.title}
-                className="group rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-white/90 p-5"
-              >
-                <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
-                  {note.title}
-                </summary>
-                <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{note.copy}</p>
-              </details>
-            ))}
-          </div>
-          <div className="mt-10 hidden gap-6 md:grid md:grid-cols-3">
-            {inviteNotes.map((note) => (
-              <div
-                key={note.title}
-                className="marketing-card bg-white/80 p-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-80"
-              >
-                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
-                  {note.title}
-                </p>
-                <p className="mt-3">{note.copy}</p>
-              </div>
-            ))}
-          </div>
-          <p className="mt-6 text-sm text-[var(--tmbc-charcoal)]/70">
-            What happens next: we review your request, confirm the fit, and match you to steady support.
-          </p>
-          <p className="text-sm text-[var(--tmbc-charcoal)]/60">
-            No rush. No pressure.
-          </p>
-          <div className="mt-10 flex justify-center">
-            <ImageFrame className="max-w-[520px]">
+          <section className="flex justify-center">
+          <ImageFrame className="w-full max-w-[920px]">
+            <div className="aspect-[16/9] w-full">
               <img
-                src="/assets/images/inviteicons.png"
-                alt="Icons representing the Taylor-Made Baby Co. invite process"
-                className="w-full rounded-[26px] opacity-90"
-                loading="lazy"
+                src="/images/marketing/ecosystem-preview.png"
+                alt="How the Taylor-Made Baby Co. experience works: Learn, Plan, Connect, Reflect"
+                className="h-full w-full object-contain"
               />
-            </ImageFrame>
-          </div>
-          <div className="mt-10 text-center">
-            <Link
-              href="/request-invite"
-              className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
-            >
-              Request calm access
-            </Link>
-          </div>
-        </section>
+            </div>
+          </ImageFrame>
+          </section>
+
+          <section className="space-y-6">
+            <div className="space-y-4 text-center">
+              <p className="mkt-eyebrow">What happens when you join</p>
+              <h2 className="mkt-h2">The experience stays guided and gentle.</h2>
+              <p className="mkt-body">
+                Mentors orient you based on your questions so you can move forward with clarity.
+              </p>
+            </div>
+            <div className="grid gap-6 md:grid-cols-3">
+              {whatHappens.map((what) => (
+                <div key={what.title} className="mkt-card px-8 py-8">
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                    {what.title}
+                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--tmbc-charcoal)]/80">{what.copy}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="space-y-6">
+            <div className="space-y-4 text-center">
+              <p className="mkt-eyebrow">Invite-only, explained calmly</p>
+              <h2 className="mkt-h2">Careful intake keeps the experience personal.</h2>
+            </div>
+            <div className="flex justify-center">
+              <ImageFrame className="w-full max-w-[520px]">
+                <div className="aspect-[4/3] w-full">
+                  <img
+                    src="/images/marketing/invite-flow.png"
+                    alt="Icons representing the Taylor-Made Baby Co. invite process"
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+              </ImageFrame>
+            </div>
+            <div className="grid gap-6 md:grid-cols-3">
+              {inviteNotes.map((note) => (
+                <div key={note.title} className="mkt-card px-8 py-8 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
+                    {note.title}
+                  </p>
+                  <p className="mt-3 leading-relaxed">{note.copy}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mkt-body">
+              What happens next: we review your request, confirm the fit, and match you to steady support.
+            </p>
+            <p className="mkt-body text-[var(--tmbc-charcoal)]/60">No rush. No pressure.</p>
+            <div className="mt-6 flex justify-center">
+              <Link href="/request-invite" className="mkt-btn-primary">
+                Request an Invite
+              </Link>
+            </div>
+          </section>
+        </div>
       </MarketingContent>
     </>
   );

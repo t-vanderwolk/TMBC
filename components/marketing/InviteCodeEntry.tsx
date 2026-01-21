@@ -3,7 +3,12 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function InviteCodeEntry() {
+type InviteCodeEntryProps = {
+  className?: string;
+  rowClassName?: string;
+};
+
+export default function InviteCodeEntry({ className = "", rowClassName = "" }: InviteCodeEntryProps) {
   const router = useRouter();
   const [inviteCode, setInviteCode] = useState("");
   const [error, setError] = useState("");
@@ -42,30 +47,40 @@ export default function InviteCodeEntry() {
     }
   };
 
+  const defaultRowClasses = "mt-4 flex flex-col gap-3 sm:flex-row sm:items-center";
+  const rowClasses = `${defaultRowClasses} ${rowClassName}`.trim();
+
   return (
-    <div className="mx-auto mt-6 max-w-[360px] space-y-2 text-center text-[var(--tmbc-charcoal)] text-opacity-70">
-      <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+    <form
+      onSubmit={handleSubmit}
+      className={`flex w-full flex-col gap-3 text-[var(--tmbc-charcoal)] text-opacity-70 ${className}`.trim()}
+    >
+      <label
+        htmlFor="invite-code"
+        className="text-[11px] tracking-[0.34em] uppercase text-neutral-500"
+      >
         Have an invite code?
-      </p>
-      <form onSubmit={handleSubmit} className="space-y-3">
+      </label>
+      <div className={rowClasses}>
         <input
+          id="invite-code"
           value={inviteCode}
           onChange={(event) => {
             setInviteCode(event.target.value);
             if (error) setError("");
           }}
           placeholder="Enter invite code"
-          className="marketing-input w-full"
+          className="h-12 w-full rounded-full border border-neutral-200 bg-white/80 px-5 text-sm outline-none focus:ring-2 focus:ring-black/10 sm:max-w-sm"
         />
         <button
           type="submit"
-          className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] w-full"
+          className="h-12 rounded-full px-6 text-sm font-semibold border border-neutral-300 bg-white/60 hover:bg-white/80 transition"
           disabled={submitting}
         >
-          {submitting ? "Checking..." : "Enter"}
+          {submitting ? "Checking..." : "Unlock"}
         </button>
-      </form>
+      </div>
       {error && <p className="text-xs text-red-600">{error}</p>}
-    </div>
+    </form>
   );
 }

@@ -3,6 +3,8 @@ import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import ImageFrame from "@/components/marketing/ImageFrame";
 import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
+import PillarExplanation, { PILLAR_CONTENT } from "@/components/marketing/PillarExplanation";
+import Section from "@/components/marketing/Section";
 
 const planningSignals = [
   {
@@ -47,16 +49,15 @@ export default function PlanPage() {
   return (
     <>
       <MarketingHero
-        imageSrc="/assets/images/section-background-soft-ribbon.png"
+        imageSrc="/images/marketing/plan.jpeg"
         imageAlt="Editorial hero artwork for the Plan pillar."
         imageWidth={1536}
         imageHeight={1024}
         headline="Planning is steady clarity, not shopping."
-        supportingText="We hold the map gently while you choose when to move."
+        subheading="We hold the map gently while you choose when to move."
         primaryCta={{
-          label: "Request Your Invite",
+          label: "Request an Invite",
           href: "/request-invite",
-          className: "marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
         secondaryCta={{
           label: "How It Works (no rush)",
@@ -64,6 +65,11 @@ export default function PlanPage() {
         }}
         motion
       />
+      <Section>
+        <div className="mx-auto max-w-3xl">
+          <PillarExplanation {...PILLAR_CONTENT.plan} />
+        </div>
+      </Section>
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
@@ -152,10 +158,10 @@ export default function PlanPage() {
                 Bring what you already have, revisit it slowly, and let mentors remind you that every update is optional. This isn’t a shopping sprint but a living plan you adjust when it feels right.
               </p>
             </div>
-            <ul className="mt-8 space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+            <ul className="mkt-bullet-list">
               {planFit.map((line) => (
-                <li key={line} className="pl-4">
-                  • {line}
+                <li key={line} className="mkt-bullet-item">
+                  {line}
                 </li>
               ))}
             </ul>
@@ -172,11 +178,8 @@ export default function PlanPage() {
               <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Decisions stay calm because mentors keep watch, and the plan shifts as you learn and reflect. When you feel ready, request an invite and continue the rhythm.
               </p>
-              <Link
-                href="/request-invite"
-                className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
-              >
-                Continue the rhythm
+              <Link href="/request-invite" className="mkt-btn-primary">
+                Request an Invite
               </Link>
             </div>
           </section>

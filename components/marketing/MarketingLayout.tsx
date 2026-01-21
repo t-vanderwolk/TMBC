@@ -1,35 +1,18 @@
 "use client";
 
-import { Children, type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-import Navbar from "@/components/Navbar";
+import MarketingNav from "@/components/marketing/MarketingNav";
 import MarketingFooter from "@/components/marketing/MarketingFooter";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
-import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const hideFooterRoutes = ["/login", "/request-invite", "/thank-you"];
-  const breakoutHeroRoutes = [
-    "/",
-    "/how-it-works",
-    "/learn",
-    "/plan",
-    "/connect",
-    "/reflect",
-    "/membership",
-    "/blog",
-  ];
   const normalizedPathname =
     pathname && pathname !== "/" ? pathname.replace(/\/$/, "") : pathname;
-  const shouldHideFooter = hideFooterRoutes.includes(normalizedPathname);
-  const shouldBreakoutHero = breakoutHeroRoutes.includes(normalizedPathname);
+  const shouldHideFooter = hideFooterRoutes.includes(normalizedPathname ?? "");
 
-  const childArray = Children.toArray(children) as ReactNode[];
-  const heroChild = shouldBreakoutHero ? childArray[0] : null;
-  const restChildren = shouldBreakoutHero ? childArray.slice(1) : childArray;
- 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const targets = Array.from(
@@ -49,26 +32,24 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
       { threshold: 0.2 }
     );
     targets.forEach((target) => observer.observe(target));
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div className="min-h-screen overflow-hidden bg-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
-      <Navbar />
-      <main className="pb-20 sm:pb-24 lg:pb-28">
-        {heroChild}
-        {restChildren.length > 0 && (
-          <MarketingContainer className="space-y-20 md:space-y-24">{restChildren}</MarketingContainer>
-        )}
-        <RibbonDivider className="my-16 md:my-20" />
+    <div className="relative min-h-screen overflow-hidden bg-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[var(--tmbc-blush)]/30 to-transparent"
+        aria-hidden
+      />
+      <MarketingNav />
+      <main className="relative">
+        {children}
       </main>
       {!shouldHideFooter && (
-        <div className="pb-14 sm:pb-16">
-          <MarketingContainer>
+        <div className="relative bg-transparent">
+          <div className="mkt-container pt-16 pb-10">
             <MarketingFooter />
-          </MarketingContainer>
+          </div>
         </div>
       )}
     </div>

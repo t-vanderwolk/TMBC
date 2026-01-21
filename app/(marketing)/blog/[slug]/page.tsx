@@ -305,11 +305,8 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
                 <p className="text-xs uppercase tracking-[0.6em]">Need a steady guide?</p>
                 <h2 className="mt-3 text-3xl">If this raised questions for you, that's normal.</h2>
                 <p className="mt-2 text-sm text-white/85">That's what mentors are for.</p>
-                <Link
-                  href="/request-invite"
-                  className="marketing-btn marketing-btn-primary uppercase tracking-[0.35em]"
-                >
-                  Request Invite
+                <Link href="/request-invite" className="mkt-btn-primary">
+                  Request an Invite
                 </Link>
               </div>
               <div className="tm-print-footer tm-print-only">

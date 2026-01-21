@@ -2,7 +2,6 @@ import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
-import RibbonDivider from "@/components/marketing/RibbonDivider";
 
 const processSteps = [
   {
@@ -90,16 +89,15 @@ export default function ExperiencePage() {
   return (
     <>
       <MarketingHero
-        imageSrc="/assets/images/section-background-soft-ribbon.png"
+        imageSrc="/images/marketing/home-hero.png"
         imageAlt="Soft ribbon hero art for the Experience page."
         imageWidth={1536}
         imageHeight={1024}
         headline="How the Taylor-Made Baby Co. membership works"
-        supportingText="A calm, human-paced membership that maps mentors, community, and the experience into one steady rhythm."
+        subheading="A calm, human-paced membership that maps mentors, community, and the experience into one steady rhythm."
         primaryCta={{
-          label: "Request an invitation",
+          label: "Request an Invite",
           href: "/request-invite",
-          className: "marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
         priority
       />
@@ -128,8 +126,6 @@ export default function ExperiencePage() {
             ))}
           </div>
         </section>
-
-        <RibbonDivider className="my-12 md:my-16" />
 
         <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
           <div className="space-y-5">
@@ -206,12 +202,11 @@ export default function ExperiencePage() {
             <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
               There's no rush—request an invitation whenever the timing feels calm, and we’ll keep the membership quiet until you arrive.
             </p>
-            <Link
-              href="/request-invite"
-              className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
-            >
-              Request an invitation
-            </Link>
+            <div className="mt-6 flex justify-center">
+              <Link href="/request-invite" className="mkt-btn-primary">
+                Request an Invite
+              </Link>
+            </div>
           </div>
         </section>
       </MarketingContent>

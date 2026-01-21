@@ -67,16 +67,15 @@ export default function MembershipPage() {
   return (
     <>
       <MarketingHero
-        imageSrc="/assets/images/section-background-soft-ribbon.png"
+        imageSrc="/images/marketing/home-hero.png"
         imageAlt="Soft ribbon hero art for membership."
         imageWidth={1536}
         imageHeight={1024}
         headline="Membership is a calm circle, not a checklist."
-        supportingText="It exists for people who want thoughtful mentor care and ongoing quiet learning."
+        subheading="It exists for people who want thoughtful mentor care and ongoing quiet learning."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
-          className: "marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]",
         }}
         priority
         motion
@@ -159,15 +158,18 @@ export default function MembershipPage() {
                 </div>
               ))}
             </div>
-            <div className="mt-10 space-y-3 text-left text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
+            <div className="mt-10 text-left text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
               <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 Member → Mentor path
               </p>
-              <div className="grid gap-2 sm:grid-cols-3">
+              <ul className="mkt-bullet-list">
                 {progression.map((step) => (
-                  <p key={step.stage}>• {step.stage}: {step.description}</p>
+                  <li key={step.stage} className="mkt-bullet-item">
+                    <span className="font-semibold text-[var(--tmbc-charcoal)]">{step.stage}</span>:{" "}
+                    {step.description}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           </section>
 
@@ -227,15 +229,14 @@ export default function MembershipPage() {
               <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
                 We keep the village small so support stays personal.
               </h2>
-              <ul className="space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              <ul className="mkt-bullet-list">
                 {inviteReasons.map((reason) => (
-                  <li key={reason}>• {reason}</li>
+                  <li key={reason} className="mkt-bullet-item">
+                    {reason}
+                  </li>
                 ))}
               </ul>
-              <Link
-                href="/request-invite"
-                className="marketing-btn marketing-btn-primary marketing-btn-primary-soft uppercase tracking-[0.35em]"
-              >
+              <Link href="/request-invite" className="mkt-btn-primary">
                 Request an Invite
               </Link>
             </div>

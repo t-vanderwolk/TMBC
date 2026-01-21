@@ -3,6 +3,8 @@ import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import ImageFrame from "@/components/marketing/ImageFrame";
 import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
+import PillarExplanation, { PILLAR_CONTENT } from "@/components/marketing/PillarExplanation";
+import Section from "@/components/marketing/Section";
 
 const connectMeaning = [
   {
@@ -50,16 +52,15 @@ export default function ConnectPage() {
   return (
     <>
       <MarketingHero
-        imageSrc="/assets/images/section-background-soft-ribbon.png"
+        imageSrc="/images/marketing/connect.jpeg"
         imageAlt="Editorial hero artwork for the Connect pillar."
         imageWidth={1536}
         imageHeight={1024}
         headline="You’re not meant to do this alone."
-        supportingText="Connect is a mentor-led village of calm rooms that meet you when you’re ready."
+        subheading="Connect is a mentor-led village of calm rooms that meet you when you’re ready."
         primaryCta={{
-          label: "Request Your Invite",
+          label: "Request an Invite",
           href: "/request-invite",
-          className: "marketing-btn marketing-btn-primary-medium uppercase tracking-[0.35em]",
         }}
         secondaryCta={{
           label: "How It Works (quietly)",
@@ -67,6 +68,11 @@ export default function ConnectPage() {
         }}
         motion
       />
+      <Section>
+        <div className="mx-auto max-w-3xl">
+          <PillarExplanation {...PILLAR_CONTENT.connect} />
+        </div>
+      </Section>
 
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
@@ -192,9 +198,11 @@ export default function ConnectPage() {
                 so the circle stays calm.
               </p>
             </div>
-            <ul className="mt-8 space-y-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80 leading-relaxed">
+            <ul className="mkt-bullet-list">
               {quietBelonging.map((note) => (
-                <li key={note}>• {note}</li>
+                <li key={note} className="mkt-bullet-item leading-relaxed">
+                  {note}
+                </li>
               ))}
             </ul>
           </section>
@@ -214,11 +222,8 @@ export default function ConnectPage() {
               <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
                 Mentors keep the room paced, no one rushes, and every invite is curated so the care stays steady.
               </p>
-            <Link
-              href="/request-invite"
-              className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
-            >
-              Join by invitation
+            <Link href="/request-invite" className="mkt-btn-primary">
+              Request an Invite
             </Link>
             </div>
           </section>

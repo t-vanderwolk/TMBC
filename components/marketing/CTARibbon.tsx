@@ -19,17 +19,14 @@ const toneStyles: Record<NonNullable<CTARibbonProps["tone"]>, string> = {
 const CTARibbon = ({ headline, supportingText, buttonLabel, buttonHref, tone = "strong" }: CTARibbonProps) => {
   const variantClass = toneStyles[tone];
   return (
-    <section className={`marketing-card ${variantClass} text-center`}>
+    <section className={`mkt-card ${variantClass} text-center`}>
       <div className="space-y-5">
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
           Rest when it feels right
         </p>
         <p className="font-serif text-3xl leading-tight text-[var(--tmbc-charcoal)]">{headline}</p>
         <p className="mx-auto max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-75">{supportingText}</p>
-        <Link
-          href={buttonHref}
-          className="marketing-btn marketing-btn-primary marketing-btn-primary-medium uppercase tracking-[0.35em]"
-        >
+        <Link href={buttonHref} className="mkt-btn-primary">
           {buttonLabel}
         </Link>
       </div>
