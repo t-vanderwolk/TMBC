@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import ActionButton from "@/components/dashboard/ui/ActionButton";
+import LogoutButton from "@/components/auth/LogoutButton";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ??
@@ -178,6 +179,10 @@ export default async function MentorDashboard() {
           <ActionButton href="/dashboard/mentor/messages" variant="ghost">
             Continue to messages
           </ActionButton>
+          <LogoutButton
+            className="border-[#A4556A] text-[#A4556A] hover:border-[#7C3B53]"
+            wrapperClassName="flex-row items-center gap-0"
+          />
         </div>
       </section>
 

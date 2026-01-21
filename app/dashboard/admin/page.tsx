@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/dashboard/shared/EmptyState";
 import AdminStatCard from "@/components/dashboard/admin/AdminStatCard";
 import BlogControls from "@/components/dashboard/admin/BlogControls";
 import { DashboardHubCard, DashboardHubLayout } from "@/components/dashboard/DashboardLayout";
+import LogoutButton from "@/components/auth/LogoutButton";
 import { getAdminStats } from "@/lib/services/server/admin.service";
 import { listInviteRequests } from "@/lib/services/server/inviteRequest.service";
 import {
@@ -88,6 +89,12 @@ export default async function AdminDashboardPage() {
       subtitle="Admin Hub"
       description="Only this surface lists the portals across members, mentors, content, and analytics."
       heroCopy="Operations remain calm here. You enter a room, tend to the signal, then leave it soft."
+      actions={
+        <LogoutButton
+          className="border-[#3E2F35] text-[#3E2F35] hover:border-[#7C3B53]"
+          wrapperClassName="flex-row items-center gap-0"
+        />
+      }
     >
       <div className="grid gap-6 lg:grid-cols-2">
         {hubCards.map((card) => (

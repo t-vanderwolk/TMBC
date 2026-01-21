@@ -32,6 +32,7 @@ type DashboardHubLayoutProps = {
   heroCopy?: string;
   statusLabel?: string;
   statusDetail?: string;
+  actions?: ReactNode;
   children: ReactNode;
 };
 
@@ -42,6 +43,7 @@ export function DashboardHubLayout({
   heroCopy,
   statusLabel,
   statusDetail,
+  actions,
   children,
 }: DashboardHubLayoutProps) {
   return (
@@ -60,6 +62,9 @@ export function DashboardHubLayout({
               <p className="text-xs text-member-text-secondary">{statusDetail}</p>
             ) : null}
           </div>
+        ) : null}
+        {actions ? (
+          <div className="flex flex-wrap gap-3">{actions}</div>
         ) : null}
       </header>
       {children}
