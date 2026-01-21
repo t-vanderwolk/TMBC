@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import StatusBadge from "./StatusBadge";
 import { usePlanContext } from "../PlanContext";
 

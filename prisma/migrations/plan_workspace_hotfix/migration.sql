@@ -1,5 +1,3 @@
--- This is an empty migration.
-
 -- ===============================
 -- PLAN WORKSPACE HOTFIX (ADDITIVE)
 -- ===============================

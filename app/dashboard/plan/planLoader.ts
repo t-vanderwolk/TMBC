@@ -1,106 +1,106 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
-import { getUserOrThrow } from "@/lib/auth/getUser";
-import type { PlanWorkspaceData, PlanRole } from "@/types/plan";
+import type { PlanLoaderOptions, PlanWorkspaceData } from "@/types/plan";
 
-export async function planLoader(): Promise<PlanWorkspaceData> {
-  const user = await getUserOrThrow();
-  const memberId = user.id;
-  const role = (user.role ?? "MEMBER").toLowerCase() as PlanRole;
+const buildEmptyWorkspace = (meta: PlanWorkspaceData["meta"]): PlanWorkspaceData => ({
+  meta,
+  learn: [],
+  registry: {
+    sections: [],
+    items: [],
+  },
+  budget: {
+    total: null,
+    categories: [],
+  },
+  comparisons: [],
+  mentorNotes: [],
+  communitySignals: [],
+});
 
-  const meta = {
+export async function planLoader(opts: PlanLoaderOptions): Promise<PlanWorkspaceData> {
+  const { userId, role, registryId } = opts;
+  const registryKey = registryId ?? userId;
+  const meta: PlanWorkspaceData["meta"] = {
     role,
     canEdit: role === "member",
     canMentor: role === "mentor" || role === "admin",
     canReview: role === "mentor" || role === "admin",
     canMessage: role !== "admin",
     canViewCommunity: true,
+    registryId: registryId ?? null,
   };
 
-  const planSections = await prisma.planSection.findMany({
-    where: { memberId },
-    orderBy: { createdAt: "asc" },
-  });
-  const sectionIds = planSections.map((section) => section.id);
+  const emptyWorkspace = buildEmptyWorkspace(meta);
 
-  const planItems =
-    sectionIds.length > 0
-      ? await prisma.planRegistryItem.findMany({
-          where: { sectionId: { in: sectionIds } },
-        })
-      : [];
+  try {
+    const planSections = await prisma.planSection.findMany({
+      where: { memberId: userId },
+      orderBy: { createdAt: "asc" },
+    });
 
-  const planBudgetModel = (prisma as any).planBudget;
-  const planBudget =
-    planBudgetModel?.findUnique != null
-      ? await planBudgetModel.findUnique({
-          where: { registryId: memberId },
-        })
-      : null;
+    const sectionIds = planSections.map((section) => section.id);
+    const planItems =
+      sectionIds.length > 0
+        ? await prisma.planRegistryItem.findMany({
+            where: { sectionId: { in: sectionIds } },
+          })
+        : [];
 
-  const planBudgetCategoryModel = (prisma as any).planBudgetCategory;
-  const planBudgetCategories =
-    planBudget && planBudget.id && planBudgetCategoryModel?.findMany != null
-      ? await planBudgetCategoryModel.findMany({
-          where: { budgetId: planBudget.id },
-          orderBy: { createdAt: "asc" },
-        })
-      : [];
+    const planBudget = await prisma.planBudget.findUnique({
+      where: { registryId: registryKey },
+      include: { categories: true },
+    });
 
-  const planMentorNoteModel = (prisma as any).planMentorNote;
-  const mentorNotes =
-    planMentorNoteModel?.findMany != null
-      ? await planMentorNoteModel.findMany({
-          orderBy: { createdAt: "desc" },
-        })
-      : [];
+    const planBudgetCategories = planBudget?.categories ?? [];
 
-  const communitySignalModel = (prisma as any).communitySignal;
-  const communitySignals =
-    communitySignalModel?.findMany != null
-      ? await communitySignalModel.findMany({
-          where: { registryId: memberId },
-          orderBy: { createdAt: "desc" },
-          take: 20,
-        })
-      : [];
+    const mentorNotes = await prisma.planMentorNote.findMany({
+      where: { registryId: registryKey },
+      orderBy: { createdAt: "desc" },
+    });
 
-  const academyProgressModel = (prisma as any).academyProgress;
-  const academyProgress =
-    academyProgressModel?.findMany != null
-      ? await academyProgressModel.findMany({
-          where: { userId: memberId },
-          include: { module: true },
-        })
-      : [];
+    const communitySignals = await prisma.communitySignal.findMany({
+      where: { registryId: registryKey },
+      orderBy: { createdAt: "desc" },
+      take: 20,
+    });
 
-  const learn = academyProgress.map((progress: { module: { id: string; title: string; journey?: string | null }; completed: boolean }) => ({
-    moduleId: progress.module.id,
-    title: progress.module.title,
-    journey: progress.module.journey,
-    completed: progress.completed,
-    linkedRegistryItems: [],
-  }));
+    const academyProgress = await prisma.academyProgress.findMany({
+      where: { userId },
+      include: { module: true },
+    });
 
-  const sectionsWithItems = planSections.map((section) => ({
-    ...section,
-    items: planItems.filter((item) => item.sectionId === section.id),
-  }));
+    const learn = academyProgress.map((progress) => ({
+      moduleId: progress.module.id,
+      title: progress.module.title,
+      journey: progress.module.journey,
+      completed: Boolean(progress.completed),
+      linkedRegistryItems: [],
+    }));
 
-  return {
-    meta,
-    learn,
-    registry: {
-      sections: sectionsWithItems,
-      items: planItems,
-    },
-    budget: {
-      total: planBudget?.total ?? null,
-      categories: planBudgetCategories,
-    },
-    comparisons: [],
-    mentorNotes,
-    communitySignals,
-  };
+    const sectionsWithItems = planSections.map((section) => ({
+      ...section,
+      items: planItems.filter((item) => item.sectionId === section.id),
+    }));
+
+    return {
+      meta,
+      learn,
+      registry: {
+        sections: sectionsWithItems,
+        items: planItems,
+      },
+      budget: {
+        total: planBudget?.total ?? null,
+        categories: planBudgetCategories,
+      },
+      comparisons: [],
+      mentorNotes,
+      communitySignals,
+    };
+  } catch (error) {
+    console.error("planLoader: could not load workspace data", error);
+    return emptyWorkspace;
+  }
 }

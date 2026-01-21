@@ -12,6 +12,7 @@ import RegistryPanel from "./components/RegistryPanel";
 import PlanShell from "./PlanShell";
 import { PlanContextProvider } from "./PlanContext";
 import { planLoader } from "./planLoader";
+import { getUserOrThrow } from "@/lib/auth/getUser";
 import type { PlanRole } from "@/types/plan";
 
 type PlanWorkspaceProps = {
@@ -19,7 +20,15 @@ type PlanWorkspaceProps = {
 };
 
 export default async function PlanWorkspace({ role }: PlanWorkspaceProps) {
-  const planContext = await planLoader();
+  const user = await getUserOrThrow();
+  const normalizedRole = (user.role ?? "MEMBER").toLowerCase() as PlanRole;
+
+  const planContext = await planLoader({
+    userId: user.id,
+    role: normalizedRole,
+    registryId: user.myRegistryRegistryId ?? undefined,
+  });
+
   if (planContext.meta.role !== role) {
     redirect("/dashboard/plan");
   }
