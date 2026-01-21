@@ -1,7 +1,10 @@
 "use server";
 
-import PlanWorkspace from "../../plan/PlanWorkspace";
+import { redirect } from "next/navigation";
+import { routeForRole } from "@/lib/auth/routeForRole";
+import { requireAuth } from "@/lib/auth/requireAuth";
 
 export default async function MentorPlanEntry() {
-  return <PlanWorkspace role="mentor" />;
+  const user = await requireAuth();
+  redirect(routeForRole(user.role));
 }

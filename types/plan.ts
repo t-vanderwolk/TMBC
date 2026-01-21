@@ -1,8 +1,9 @@
 export type PlanRole = "member" | "mentor" | "admin";
 
 export interface PlanLoaderOptions {
-  userId: string;
-  role: PlanRole;
+  memberId: string;
+  viewerId: string;
+  role: "MEMBER" | "MENTOR" | "ADMIN";
   registryId?: string | null;
 }
 
@@ -15,6 +16,8 @@ export interface PlanWorkspaceData {
     canMessage: boolean;
     canViewCommunity: boolean;
     registryId?: string | null;
+    memberId: string;
+    viewerId: string;
   };
   learn: LearnModule[];
   registry: {

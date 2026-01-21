@@ -1,7 +1,8 @@
 import "server-only";
 
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import type { PlanLoaderOptions, PlanWorkspaceData } from "@/types/plan";
+import type { PlanLoaderOptions, PlanRole, PlanWorkspaceData } from "@/types/plan";
 
 const buildEmptyWorkspace = (meta: PlanWorkspaceData["meta"]): PlanWorkspaceData => ({
   meta,
@@ -20,23 +21,34 @@ const buildEmptyWorkspace = (meta: PlanWorkspaceData["meta"]): PlanWorkspaceData
 });
 
 export async function planLoader(opts: PlanLoaderOptions): Promise<PlanWorkspaceData> {
-  const { userId, role, registryId } = opts;
-  const registryKey = registryId ?? userId;
+  const { memberId, viewerId, role, registryId } = opts;
+  const normalizedRole = (role.toLowerCase() ?? "member") as PlanRole;
+  const registryKey = registryId ?? memberId;
   const meta: PlanWorkspaceData["meta"] = {
-    role,
-    canEdit: role === "member",
-    canMentor: role === "mentor" || role === "admin",
-    canReview: role === "mentor" || role === "admin",
-    canMessage: role !== "admin",
+    role: normalizedRole,
+    canEdit: normalizedRole === "member",
+    canMentor: normalizedRole === "mentor" || normalizedRole === "admin",
+    canReview: normalizedRole === "mentor" || normalizedRole === "admin",
+    canMessage: normalizedRole !== "admin",
     canViewCommunity: true,
-    registryId: registryId ?? null,
+    registryId: registryKey,
+    memberId,
+    viewerId,
   };
 
   const emptyWorkspace = buildEmptyWorkspace(meta);
 
+  const ensureTable = async (tableName: string) => {
+    const [row] = (await prisma.$queryRaw<{ exists: boolean }>(
+      Prisma.sql`SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = ${tableName}) AS exists`
+    )) ?? [{ exists: false }];
+
+    return row.exists;
+  };
+
   try {
     const planSections = await prisma.planSection.findMany({
-      where: { memberId: userId },
+      where: { memberId },
       orderBy: { createdAt: "asc" },
     });
 
@@ -48,26 +60,35 @@ export async function planLoader(opts: PlanLoaderOptions): Promise<PlanWorkspace
           })
         : [];
 
-    const planBudget = await prisma.planBudget.findUnique({
-      where: { registryId: registryKey },
-      include: { categories: true },
-    });
+    const hasBudgetTable = await ensureTable("PlanBudget");
+    const planBudget = hasBudgetTable
+      ? await prisma.planBudget.findUnique({
+          where: { registryId: registryKey },
+          include: { categories: true },
+        })
+      : null;
 
     const planBudgetCategories = planBudget?.categories ?? [];
 
-    const mentorNotesRaw = await prisma.planMentorNote.findMany({
-      where: { registryId: registryKey },
-      orderBy: { createdAt: "desc" },
-    });
+    const hasMentorNotes = await ensureTable("PlanMentorNote");
+    const mentorNotesRaw = hasMentorNotes
+      ? await prisma.planMentorNote.findMany({
+          where: { registryId: registryKey },
+          orderBy: { createdAt: "desc" },
+        })
+      : [];
 
-    const communitySignals = await prisma.communitySignal.findMany({
-      where: { registryId: registryKey },
-      orderBy: { createdAt: "desc" },
-      take: 20,
-    });
+    const hasCommunitySignals = await ensureTable("CommunitySignal");
+    const communitySignals = hasCommunitySignals
+      ? await prisma.communitySignal.findMany({
+          where: { registryId: registryKey },
+          orderBy: { createdAt: "desc" },
+          take: 20,
+        })
+      : [];
 
     const academyProgress = await prisma.academyProgress.findMany({
-      where: { userId },
+      where: { userId: memberId },
       include: { module: true },
     });
 

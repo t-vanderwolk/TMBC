@@ -1,7 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
-
 import BudgetPanel from "./components/BudgetPanel";
 import ComparePanel from "./components/ComparePanel";
 import CommunityInsightPanel from "./components/CommunityInsightPanel";
@@ -12,26 +10,21 @@ import RegistryPanel from "./components/RegistryPanel";
 import PlanShell from "./PlanShell";
 import { PlanContextProvider } from "./PlanContext";
 import { planLoader } from "./planLoader";
-import { getUserOrThrow } from "@/lib/auth/getUser";
-import type { PlanRole } from "@/types/plan";
 
-type PlanWorkspaceProps = {
-  role: PlanRole;
+export type PlanWorkspaceProps = {
+  mode: "member" | "mentor";
+  viewerId: string;
+  memberId: string;
 };
 
-export default async function PlanWorkspace({ role }: PlanWorkspaceProps) {
-  const user = await getUserOrThrow();
-  const normalizedRole = (user.role ?? "MEMBER").toLowerCase() as PlanRole;
+export default async function PlanWorkspace({ mode, viewerId, memberId }: PlanWorkspaceProps) {
+  const normalizedRole = mode === "mentor" ? "MENTOR" : "MEMBER";
 
   const planContext = await planLoader({
-    userId: user.id,
+    memberId,
+    viewerId,
     role: normalizedRole,
-    registryId: user.myRegistryRegistryId ?? undefined,
   });
-
-  if (planContext.meta.role !== role) {
-    redirect("/dashboard/plan");
-  }
 
   const isMemberRole = planContext.meta.role === "member";
 

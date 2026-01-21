@@ -1,7 +1,10 @@
 "use server";
 
-import PlanWorkspace from "../../plan/PlanWorkspace";
+import { requireAuth } from "@/lib/auth/requireAuth";
+import PlanWorkspace from "@/app/dashboard/plan/PlanWorkspace";
 
 export default async function MemberPlanEntry() {
-  return <PlanWorkspace role="member" />;
+  const user = await requireAuth();
+
+  return <PlanWorkspace mode="member" viewerId={user.id} memberId={user.id} />;
 }
