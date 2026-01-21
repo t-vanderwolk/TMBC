@@ -38,6 +38,8 @@ model User {
   mentorCollabEmail         String?
   academyProgress           AcademyProgress[]
   affiliateEvents           AffiliateEvent[]
+  authoredBlogPosts         BlogPost[]                @relation("BlogAuthor")
+  reviewedBlogPosts         BlogPost[]                @relation("BlogReviewer")
   memberChatMessages        ChatMessage[]             @relation("MemberChatMessages")
   mentorChatMessages        ChatMessage[]             @relation("MentorChatMessages")
   sentChatMessages          ChatMessage[]             @relation("ChatMessageSender")
@@ -53,6 +55,7 @@ model User {
   consumedInvite            Invite?                   @relation("ConsumedInvite")
   redeemedInvite            InviteCode?               @relation("RedeemedInvite")
   approvedInvites           InviteRequest[]           @relation("InviteApprover")
+  journalEntries            JournalEntry[]
   loginEvents               LoginEvent[]
   mentorFeedbackReceived    MentorFeedback[]          @relation("MentorFeedbackMember")
   mentorFeedbackAuthored    MentorFeedback[]          @relation("MentorFeedbackMentor")
@@ -63,22 +66,18 @@ model User {
   mentorTasksMember         MentorTask[]              @relation("MentorTasksMember")
   mentorTasksMentor         MentorTask[]              @relation("MentorTasksMentor")
   onboardingProfile         OnboardingProfile?
+  partnerProfile            PartnerProfile?
   planSections              PlanSection[]             @relation("MemberPlanSections")
   reviewedPlanSections      PlanSection[]             @relation("PlanSectionReviewedBy")
   profile                   Profile?
-  partnerProfile            PartnerProfile?
   registry                  Registry?                 @relation("UserRegistry")
-
-  registryConflicts RegistryConflict[]
-  registryItems     RegistryItem[]
-  timeCapsules      TimeCapsule[]
-  mentor            User?              @relation("Mentorship", fields: [mentorId], references: [id])
-  mentees           User[]             @relation("Mentorship")
-  workbookEntries   WorkbookEntry[]
-  conversations     Conversation[]     @relation("ConversationParticipants")
-  journalEntries    JournalEntry[]
-  authoredBlogPosts BlogPost[] @relation("BlogAuthor")
-  reviewedBlogPosts BlogPost[] @relation("BlogReviewer")
+  registryConflicts         RegistryConflict[]
+  registryItems             RegistryItem[]
+  timeCapsules              TimeCapsule[]
+  mentor                    User?                     @relation("Mentorship", fields: [mentorId], references: [id])
+  mentees                   User[]                    @relation("Mentorship")
+  workbookEntries           WorkbookEntry[]
+  conversations             Conversation[]            @relation("ConversationParticipants")
 }
 
 model AffiliateEvent {
@@ -123,19 +122,19 @@ model BlogPost {
   authorId           String
   authorName         String
   authorRoleSnapshot BlogAuthorRole
-  reviewerId         String?
-  rejectionNote      String?
-  author             User                  @relation("BlogAuthor", fields: [authorId], references: [id])
-  reviewer           User?                 @relation("BlogReviewer", fields: [reviewerId], references: [id])
   tags               String[]
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
   submittedAt        DateTime?
+  rejectionNote      String?
+  reviewerId         String?
   affiliateEvents    BlogAffiliateEvent[]
   affiliateLinks     BlogAffiliateLink[]
   engagementEvents   BlogEngagementEvent[]
   highlights         BlogHighlight[]
   highlightEvents    BlogHighlightEvent[]
+  author             User                  @relation("BlogAuthor", fields: [authorId], references: [id])
+  reviewer           User?                 @relation("BlogReviewer", fields: [reviewerId], references: [id])
 
   @@index([status, isAffiliate])
   @@index([publishedAt])
@@ -242,26 +241,20 @@ model Profile {
   lastName        String?
   state           String?
   imageUrl        String?
+  preferredName   String?
   inviteRequest   InviteRequest? @relation(fields: [inviteRequestId], references: [id])
   user            User           @relation(fields: [userId], references: [id])
-  preferredName   String?
-}
-
-enum PartnerRoleLabel {
-  PARTNER
-  SPOUSE
-  COPARENT
 }
 
 model PartnerProfile {
-  id        String           @id @default(cuid())
-  userId    String           @unique
+  id        String            @id @default(cuid())
+  userId    String            @unique
   name      String?
   roleLabel PartnerRoleLabel?
   notes     String?
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model OnboardingProfile {
@@ -700,18 +693,17 @@ model MentorTask {
 }
 
 model JournalEntry {
-  id          String            @id @default(cuid())
+  id          String           @id @default(cuid())
   userId      String
   type        JournalEntryType
   title       String?
   content     String
-  emotionTags String[]          @default([])
-  isPrivate   Boolean           @default(true)
+  emotionTags String[]         @default([])
+  isPrivate   Boolean          @default(true)
   sourceLabel String?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-
-  user   User          @relation(fields: [userId], references: [id])
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  user        User             @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([type])
@@ -825,6 +817,35 @@ model WorkbookEntry {
   @@index([moduleId])
 }
 
+model PlanSection {
+  id                    String    @id @default(cuid())
+  memberId              String
+  sectionKey            String
+  decisionState         String    @default("UNDECIDED")
+  memberNote            String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  mentorSummary         String?
+  readyState            String    @default("NOT_READY")
+  reviewedAt            DateTime?
+  reviewedById          String?
+  memberAcknowledgement String?
+  mentorNote            String?
+  updatedByRole         String?   @default("MEMBER")
+  member                User      @relation("MemberPlanSections", fields: [memberId], references: [id], onDelete: Cascade)
+  reviewedBy            User?     @relation("PlanSectionReviewedBy", fields: [reviewedById], references: [id])
+
+  @@unique([memberId, sectionKey])
+  @@index([memberId])
+  @@index([reviewedById])
+}
+
+enum PartnerRoleLabel {
+  PARTNER
+  SPOUSE
+  COPARENT
+}
+
 enum AcademyJourney {
   gear
   nursery
@@ -913,10 +934,10 @@ enum AffiliateNetwork {
 enum BlogStatus {
   DRAFT
   IN_REVIEW
-  APPROVED
   PUBLISHED
-  REJECTED
   ARCHIVED
+  APPROVED
+  REJECTED
 }
 
 enum BlogAuthorRole {
@@ -1001,36 +1022,4 @@ enum JournalEntryType {
   LETTER
   WISDOM
   REFLECTION
-}
-
-/// ===============================
-/// PLAN COLLABORATION (CANONICAL)
-/// ===============================
-
-model PlanSection {
-  id         String @id @default(cuid())
-  memberId   String
-  sectionKey String
-
-  decisionState String @default("UNDECIDED")
-  readyState    String @default("NOT_READY")
-
-  memberNote            String?
-  mentorNote            String?
-  mentorSummary         String?
-  memberAcknowledgement String?
-  updatedByRole         String? @default("MEMBER")
-
-  reviewedAt   DateTime?
-  reviewedById String?
-  reviewedBy   User?     @relation("PlanSectionReviewedBy", fields: [reviewedById], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  member User @relation("MemberPlanSections", fields: [memberId], references: [id], onDelete: Cascade)
-
-  @@unique([memberId, sectionKey])
-  @@index([memberId])
-  @@index([reviewedById])
 }
