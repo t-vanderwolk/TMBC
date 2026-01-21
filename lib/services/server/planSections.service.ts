@@ -16,6 +16,16 @@ export const listPlanSectionsForMember = async (memberId: string) => {
   return prisma.planSection.findMany({
     where: { memberId },
     orderBy: { updatedAt: "desc" },
+    select: {
+      id: true,
+      sectionKey: true,
+      decisionState: true,
+      mentorNote: true,
+      memberNote: true,
+      memberAcknowledgement: true,
+      updatedByRole: true,
+      updatedAt: true,
+    },
   });
 };
 
