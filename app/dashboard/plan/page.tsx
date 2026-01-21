@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import PlanLayout from "@/components/plan/PlanLayout";
 import PlanSidebar from "@/components/plan/PlanSidebar";
@@ -9,6 +9,7 @@ import PlanContextPanel from "@/components/plan/PlanContextPanel";
 import MemberBottomNav from "@/components/dashboard/member/nav/MemberBottomNav";
 import { planSectionMap, type PlanSectionKey } from "@/lib/plan/planSectionMap";
 import type { PlanDecisionState } from "@/lib/services/server/planSections.service";
+import { authedFetch } from "@/lib/authedFetch";
 
 type ApiSection = {
   id: string;
@@ -33,14 +34,25 @@ export default function PlanPage() {
   const [sections, setSections] = useState<ApiSection[]>([]);
   const [error, setError] = useState("");
   const [activeSectionKey, setActiveSectionKey] = useState<string | null>(null);
+  const loadAttemptRef = useRef(0);
+  const errorLoggedRef = useRef(false);
 
   useEffect(() => {
     let isMounted = true;
+    const MAX_ATTEMPTS = 1;
+    const abortController = new AbortController();
     const loadSections = async () => {
+      if (loadAttemptRef.current >= MAX_ATTEMPTS) {
+        return;
+      }
+      loadAttemptRef.current += 1;
       setStatus("loading");
       setError("");
       try {
-        const response = await fetch("/api/plan/sections");
+        const response = await authedFetch("/api/plan/sections", {
+          cache: "no-store",
+          signal: abortController.signal,
+        });
         if (!response.ok) {
           throw new Error("Unable to load plan sections.");
         }
@@ -50,7 +62,10 @@ export default function PlanPage() {
         setSections(loaded);
         setStatus("success");
       } catch (err) {
-        console.error("Plan sections load failed", err);
+        if (!errorLoggedRef.current) {
+          errorLoggedRef.current = true;
+          console.error("Plan sections load failed", err);
+        }
         if (!isMounted) return;
         setError("Your plan workspace is unavailable right now. Please try again later.");
         setStatus("error");
@@ -59,6 +74,7 @@ export default function PlanPage() {
     void loadSections();
     return () => {
       isMounted = false;
+      abortController.abort();
     };
   }, []);
 
