@@ -23,5 +23,6 @@ export async function authedFetch(input: RequestInfo, init: RequestInit = {}) {
   return fetch(input, {
     ...init,
     headers,
+    credentials: init.credentials ?? "include",
   });
 }

@@ -34,18 +34,12 @@ export default function PlanPage() {
   const [sections, setSections] = useState<ApiSection[]>([]);
   const [error, setError] = useState("");
   const [activeSectionKey, setActiveSectionKey] = useState<string | null>(null);
-  const loadAttemptRef = useRef(0);
   const errorLoggedRef = useRef(false);
 
   useEffect(() => {
     let isMounted = true;
-    const MAX_ATTEMPTS = 1;
     const abortController = new AbortController();
     const loadSections = async () => {
-      if (loadAttemptRef.current >= MAX_ATTEMPTS) {
-        return;
-      }
-      loadAttemptRef.current += 1;
       setStatus("loading");
       setError("");
       try {
@@ -62,6 +56,15 @@ export default function PlanPage() {
         setSections(loaded);
         setStatus("success");
       } catch (err) {
+        const isAbortError =
+          err instanceof DOMException ||
+          (err &&
+            typeof err === "object" &&
+            "name" in err &&
+            (err as { name?: string }).name === "AbortError");
+        if (isAbortError) {
+          return;
+        }
         if (!errorLoggedRef.current) {
           errorLoggedRef.current = true;
           console.error("Plan sections load failed", err);

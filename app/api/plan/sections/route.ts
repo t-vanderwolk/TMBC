@@ -9,9 +9,9 @@ const handleError = (error: unknown, fallback = "Unable to update plan section."
   return NextResponse.json({ error: message }, { status: 400 });
 };
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const user = await getUserOrThrow();
+    const user = await getUserOrThrow(request);
     if (user.role !== "MEMBER") {
       return NextResponse.json({ error: "Only members can access plan sections." }, { status: 403 });
     }
@@ -24,7 +24,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const user = await getUserOrThrow();
+    const user = await getUserOrThrow(request);
     if (user.role !== "MEMBER") {
       return NextResponse.json({ error: "Only members can update plan sections." }, { status: 403 });
     }
