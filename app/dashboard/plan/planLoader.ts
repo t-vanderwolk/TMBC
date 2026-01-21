@@ -6,8 +6,7 @@ import type { PlanWorkspaceData, PlanRole } from "@/types/plan";
 
 export async function planLoader(): Promise<PlanWorkspaceData> {
   const user = await getUserOrThrow();
-  const memberId =
-    user.role === "MENTOR" ? user.activeMemberId ?? user.id : user.id;
+  const memberId = user.id;
   const role = (user.role ?? "MEMBER").toLowerCase() as PlanRole;
 
   const meta = {
@@ -76,7 +75,7 @@ export async function planLoader(): Promise<PlanWorkspaceData> {
         })
       : [];
 
-  const learn = academyProgress.map((progress) => ({
+  const learn = academyProgress.map((progress: { module: { id: string; title: string; journey?: string | null }; completed: boolean }) => ({
     moduleId: progress.module.id,
     title: progress.module.title,
     journey: progress.module.journey,

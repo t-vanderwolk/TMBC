@@ -840,6 +840,68 @@ model PlanSection {
   @@index([reviewedById])
 }
 
+model PlanRegistrySection {
+  id         String               @id @default(cuid())
+  registryId String
+  title      String
+  sectionKey String?
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  items      PlanRegistryItem[]
+}
+
+model PlanRegistryItem {
+  id         String              @id @default(cuid())
+  sectionId  String
+  title      String
+  category   String
+  status     String
+  priceMin   Int?
+  priceMax   Int?
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+
+  section    PlanRegistrySection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+}
+
+model PlanBudget {
+  id             String             @id @default(cuid())
+  registryId     String             @unique
+  total          Int?
+  allocatedTotal Int                @default(0)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  categories     PlanBudgetCategory[]
+}
+
+model PlanBudgetCategory {
+  id        String    @id @default(cuid())
+  budgetId  String
+  category  String
+  allocated Int
+
+  budget    PlanBudget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+}
+
+model PlanMentorNote {
+  id          String   @id @default(cuid())
+  registryId  String
+  contextType String
+  contextId   String
+  content     String
+  authorRole  String
+  createdAt   DateTime @default(now())
+}
+
+model CommunitySignal {
+  id          String   @id @default(cuid())
+  registryId  String
+  topic       String
+  summary     String
+  sourceCount Int
+  createdAt   DateTime @default(now())
+}
+
 enum PartnerRoleLabel {
   PARTNER
   SPOUSE

@@ -55,11 +55,11 @@ export default function RegistryPanel() {
             </div>
             <div className="flex flex-col items-end gap-1">
               <StatusBadge label={item.status} variant={ITEM_VARIANTS[item.status] ?? "default"} />
-              {(item.priceMin !== undefined || item.priceMax !== undefined) && (
+              {(item.priceMin != null || item.priceMax != null) && (
                 <p className="text-[0.65rem] text-[#3E2F35]/60">
-                  {item.priceMin !== undefined ? `$${item.priceMin.toLocaleString()}` : "TBD"}
+                  {item.priceMin != null ? `$${item.priceMin.toLocaleString()}` : "TBD"}
                   {" – "}
-                  {item.priceMax !== undefined ? `$${item.priceMax.toLocaleString()}` : "TBD"}
+                  {item.priceMax != null ? `$${item.priceMax.toLocaleString()}` : "TBD"}
                 </p>
               )}
             </div>

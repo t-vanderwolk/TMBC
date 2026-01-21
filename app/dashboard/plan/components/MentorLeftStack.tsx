@@ -19,17 +19,20 @@ export default function MentorLeftStack() {
           <StatusBadge label="Modules" variant="success" />
         </div>
         <div className="space-y-3">
-          {learn.length ? (
-            learn.slice(0, 3).map((link) => (
-              <div key={link.moduleId} className="space-y-1">
-                <div className="flex items-center justify-between text-xs text-[#3E2F35]/80">
-                  <span>{link.title}</span>
-                  <span>{link.linkedRegistryItems.length} linked</span>
-                </div>
-                <StatusBadge label={link.status.replace("-", " ")} variant={link.status === "completed" ? "success" : "default"} />
+        {learn.length ? (
+          learn.slice(0, 3).map((link) => (
+            <div key={link.moduleId} className="space-y-1">
+              <div className="flex items-center justify-between text-xs text-[#3E2F35]/80">
+                <span>{link.title}</span>
+                <span>{link.linkedRegistryItems.length} linked</span>
               </div>
-            ))
-          ) : (
+              <StatusBadge
+                label={link.completed ? "Completed" : "In progress"}
+                variant={link.completed ? "success" : "default"}
+              />
+            </div>
+          ))
+        ) : (
             <p className="text-xs text-[#3E2F35]/70">Academy context warms up once the plan rests in registry choices.</p>
           )}
         </div>
