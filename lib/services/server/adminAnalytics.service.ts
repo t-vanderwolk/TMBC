@@ -556,7 +556,8 @@ export const getAdminAnalytics = async (options?: { rangeDays?: number }): Promi
     console.warn('admin analytics: unable to read affiliate events', error);
   }
 
-  const leadRevenue = leadRevenueEventCount * MYREGISTRY_CANON.payoutValue;
+  const leadRevenue =
+    leadRevenueEventCount * (MYREGISTRY_CANON.payoutValue ?? 0);
   const revenueBreakdown = {
     productAffiliate: productRevenue,
     eventService: 0,

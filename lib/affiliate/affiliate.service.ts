@@ -129,6 +129,6 @@ export function mapPartnerToOverride(
     name: partner.name,
     network: partner.network as AffiliateNetwork,
     allowedSurfaces: surfaces,
-    isPaused: partner.status === "PAUSED",
+    isPaused: false,
   };
 }

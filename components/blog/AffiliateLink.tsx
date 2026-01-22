@@ -2,16 +2,16 @@
 
 import type { ReactNode } from "react";
 
-import {
-  AffiliateSurface,
-  getAffiliateLink,
-} from "@/lib/constants/affiliateCanon";
+import type { AffiliateSurface } from "@/lib/constants/affiliateCanon";
+import { getAffiliateLink } from "@/lib/constants/affiliateCanon";
 import { trackAffiliateResolution } from "@/lib/affiliate/affiliateAnalytics";
+
+type SurfaceKey = "blog" | "registry" | "mentor";
 
 type AffiliateLinkProps = {
   affiliateId: string;
   destinationUrl: string;
-  surface?: AffiliateSurface;
+  surface?: SurfaceKey;
   context?: string;
   children: ReactNode;
   className?: string;
@@ -28,7 +28,7 @@ export function AffiliateLink({
   const resolution = getAffiliateLink({
     affiliateId,
     destinationUrl,
-    surface,
+    surface: surface as AffiliateSurface,
   });
 
   const shouldTrack = resolution.network !== "UNKNOWN";
@@ -40,7 +40,9 @@ export function AffiliateLink({
     trackAffiliateResolution({
       affiliateId: resolution.affiliateId,
       affiliateName: resolution.canonicalName ?? resolution.affiliateId,
-      network: resolution.network,
+      network: resolution.network as Parameters<
+        typeof trackAffiliateResolution
+      >[0]["network"],
       surface,
       context,
     });

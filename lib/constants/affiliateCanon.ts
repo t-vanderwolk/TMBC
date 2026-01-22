@@ -8,6 +8,7 @@ export type AffiliateNetwork =
   | "MYREGISTRY"
   | "SHAREASALE";
 export type PayoutModel = "percent_sale" | "fixed_sale" | "cpl" | "rental" | "mixed";
+export type AffiliateType = "product" | "service" | "lead";
 export type AffiliateSurface = "blog" | "registry" | "academy" | "mentor" | "mentorSuggestions";
 
 type AllowedSurfaces = Record<AffiliateSurface, boolean>;
@@ -23,7 +24,10 @@ export type AffiliateCanonEntry = {
   commissionMin?: number;
   commissionMax?: number;
   fixedCommission?: number;
+  payoutValue?: number;
   cookieLength?: number;
+  type?: AffiliateType;
+  merchantId?: string;
   notes?: string;
   restrictions?: {
     coupons?: boolean;
@@ -444,6 +448,9 @@ export const MYREGISTRY_CANON: AffiliateCanonEntry = {
   regions: insideUs,
   payoutModel: "cpl",
   fixedCommission: 1.5,
+  payoutValue: 1.5,
+  type: "lead",
+  merchantId: "88335",
   allowedSurfaces: {
     blog: false,
     registry: false,
