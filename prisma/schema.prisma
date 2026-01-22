@@ -628,6 +628,21 @@ model AdminSettings {
   updatedAt            DateTime @updatedAt
 }
 
+model AffiliateAdminMeta {
+  affiliateKey    String   @id
+  network         String?
+  programId       String?
+  tier            String?
+  enabled         Boolean  @default(true)
+  overrideBaseUrl String?
+  notes           String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("AffiliateAdminMeta")
+}
+
 model MentorFeedback {
   id             String         @id @default(uuid())
   mentorId       String
