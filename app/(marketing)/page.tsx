@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import homepageHero from "@/assets/images/homepagehero.png";
+import homepageHeroMobile from "@/assets/images/homepageheromobile.png";
 import inviteOnlyImage from "@/assets/images/inviteonly.png";
 import PillarImagePacemaker from "@/components/marketing/PillarImagePacemaker";
 import learnPillar from "@/assets/images/learnpillar.png";
@@ -152,16 +153,28 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-[#fef9f6] text-[#1F1C1A]">
-      <section className="relative w-screen min-h-[520px] lg:min-h-[680px] overflow-hidden py-20 lg:py-24">
+      <section className="relative w-screen min-h-[460px] sm:min-h-[520px] lg:min-h-[680px] overflow-hidden py-20 lg:py-24">
         <div className="absolute inset-0">
-          <Image
-            src={homepageHero}
-            alt="Taylor-Made Baby Co. marketing hero"
-            fill
-            priority
-            sizes="100vw"
-            className="object-fill object-right lg:object-[80%_50%]"
-          />
+          <div className="absolute inset-0 block md:hidden">
+            <Image
+              src={homepageHeroMobile}
+              alt="Taylor-Made Baby Co. mobile hero — calm baby planning invitation"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-right"
+            />
+          </div>
+          <div className="absolute inset-0 hidden md:block">
+            <Image
+              src={homepageHero}
+              alt="Taylor-Made Baby Co. marketing hero"
+              fill
+              priority
+              sizes="100vw"
+              className="object-fill object-right lg:object-[80%_50%]"
+            />
+          </div>
         </div>
         <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-center px-6 lg:px-12">
           <div className="max-w-xl space-y-8 pt-10">
