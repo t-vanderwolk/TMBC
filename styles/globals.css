@@ -4,7 +4,7 @@
 
 :root {
   --tmbc-blush: #F6E9E6;
-  --tmbc-mauve: #C7A7B7;
+  --tmbc-mauve: #f7c8d9;
   --tmbc-ivory: #FAF7F4;
   --tmbc-gold: #D4B579;
   --tmbc-charcoal: #3E2F35;
@@ -610,5 +610,43 @@
     left: 0;
     top: 0.12rem;
     color: rgba(62, 47, 53, 0.35);
+  }
+}
+
+.pillar-pacemaker {
+  position: relative;
+}
+
+.pillar-pacemaker::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.45) 45%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  pointer-events: none;
+}
+
+.pillar-pacemaker:hover::after {
+  opacity: 1;
+}
+
+@keyframes pillarFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.animate-pillarFloat {
+  animation: pillarFloat 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pillarFloat {
+    animation: none !important;
   }
 }

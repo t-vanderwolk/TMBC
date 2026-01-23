@@ -9,9 +9,11 @@ import MarketingFooter from "@/components/marketing/MarketingFooter";
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const hideFooterRoutes = ["/login", "/request-invite", "/thank-you"];
+  const heroGradientRoutes = ["/"];
   const normalizedPathname =
     pathname && pathname !== "/" ? pathname.replace(/\/$/, "") : pathname;
   const shouldHideFooter = hideFooterRoutes.includes(normalizedPathname ?? "");
+  const shouldHideHeroGradient = heroGradientRoutes.includes(normalizedPathname ?? "");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -37,10 +39,12 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
-      <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[var(--tmbc-blush)]/30 to-transparent"
-        aria-hidden
-      />
+      {!shouldHideHeroGradient && (
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[var(--tmbc-blush)]/30 to-transparent"
+          aria-hidden
+        />
+      )}
       <MarketingNav />
       <main className="relative">
         {children}

@@ -73,8 +73,8 @@ export default function MarketingHero({
 
   return (
     <Section className={`bg-[var(--tmbc-ivory)] ${className}`.trim()}>
-      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-        <div className="max-w-[560px] space-y-6">
+      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="order-2 lg:order-1 max-w-[560px] space-y-6">
           {eyebrow && (
             <p className="text-[11px] tracking-[0.34em] uppercase text-neutral-500 mb-6">{eyebrow}</p>
           )}
@@ -107,7 +107,7 @@ export default function MarketingHero({
             <p className="mt-8 text-[12px] tracking-[0.22em] uppercase text-neutral-500">{microcopy}</p>
           )}
         </div>
-        <div className="flex items-center justify-center">
+        <div className="order-1 lg:order-2 flex items-center justify-center">
           <ImageFrame
             className="w-full rounded-[32px] overflow-hidden bg-white/60 ring-1 ring-black/5 shadow-[0_20px_60px_rgba(0,0,0,0.06)]"
           >
@@ -117,7 +117,7 @@ export default function MarketingHero({
                 alt={imageAlt}
                 width={imageWidth}
                 height={imageHeight}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-contain"
               />
             </div>
           </ImageFrame>
