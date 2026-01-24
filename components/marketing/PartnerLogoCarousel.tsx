@@ -43,7 +43,7 @@ export default function PartnerLogoCarousel() {
   const repeatedLogos = useMemo(() => (logos.length ? [...logos, ...logos] : []), [logos]);
 
   return (
-    <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/80 px-8 text-center">
+    <section className="w-full overflow-hidden bg-[var(--tmbc-ivory)]/80 py-10 text-center">
       <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
         Calm partners we trust
       </p>

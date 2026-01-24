@@ -493,8 +493,9 @@
 }
 
 .partner-logo-carousel {
-  @apply mt-10 overflow-hidden rounded-[32px] bg-white/90 px-6 py-10;
-  border: 1px solid rgba(62, 47, 53, 0.1);
+  @apply w-full overflow-hidden py-10;
+  background-color: var(--tmbc-ivory);
+  opacity: 0.8;
 }
 
 .partner-logo-track {
@@ -509,6 +510,33 @@
 .partner-logo-track > div img {
   max-height: 3rem;
   opacity: 0.9;
+  filter: grayscale(100%);
+  transition: filter 0.4s ease, opacity 0.4s ease;
+}
+
+.partner-logo-track > div:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+.partner-logo-track.partner-logo-marquee {
+  animation: partner-marquee 40s linear infinite;
+  transform: translateX(0);
+}
+
+@keyframes partner-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-logo-track.partner-logo-marquee {
+    animation: none;
+  }
 }
 
   .ui-preview-image {
