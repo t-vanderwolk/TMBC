@@ -138,7 +138,7 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-[#fef9f6] text-[#1F1C1A]">
-      <section className="relative w-screen min-h-[460px] sm:min-h-[520px] lg:min-h-[680px] overflow-hidden pt-20 pb-20 sm:py-20 lg:py-24">
+      <section className="relative w-screen min-h-[460px] sm:min-h-[520px] lg:min-h-[680px] overflow-hidden pt-2 sm:pt-3 lg:pt-4 pb-16 sm:pb-20 lg:pb-24">
         <div className="absolute inset-0">
           <div className="absolute inset-0 block sm:hidden">
             <Image
@@ -161,61 +161,69 @@ export default function HomePage() {
             />
           </div>
         </div>
-        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8 lg:pt-16">
-          <div className="relative max-w-xl pt-0 sm:pt-8 md:pt-0 lg:pt-0 space-y-8">
-              <p className="text-[11px] tracking-[0.18em] uppercase text-neutral-600 opacity-80 mb-3 lg:mb-4">
-                Calm, personal guidance for expecting parents
-              </p>
-              <h1 className="font-playfair text-[40px] leading-[1.15] text-neutral-900 mb-4 lg:mb-6 max-w-[14ch] lg:text-[60px]">
-                Baby prep,
-                <br />
-                without the overwhelm.
+        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="relative max-w-[520px] space-y-6 lg:max-w-[540px] mt-8 lg:mt-12">
+            <p className="text-[11px] tracking-[0.34em] uppercase text-neutral-600 font-semibold">
+              Calm, personal guidance for expecting parents
+            </p>
+            {/* Editorial lock: Hero headline must remain Playfair Display */}
+            <div className="hero-editorial font-playfair font-[400] text-neutral-900">
+              <h1 className="text-[42px] lg:text-[56px] leading-[1.15] tracking-[-0.01em] mb-4 lg:mb-6 max-w-[19ch] sm:text-[52px]">
+                <span className="block">Baby prep,</span>
+                <span className="block lg:inline lg:whitespace-nowrap">without the</span>
+                <span className="block lg:inline lg:whitespace-nowrap"> overwhelm.</span>
               </h1>
-              <p className="max-w-md text-[15px] leading-relaxed text-neutral-700 lg:text-[17px]">
-                A calm, mentor-guided way to learn what baby gear actually does, plan what you truly need, and feel
-                supported every step of the way.
-              </p>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
+            </div>
+            <p className="max-w-lg text-[15px] leading-[1.7] text-neutral-600 lg:text-[17px] mt-5 lg:mt-7 -ml-1 sm:-ml-2 lg:ml-0">
+              A calm, mentor-guided way to learn what baby gear actually does, plan what you truly need, and feel
+              supported every step of the way.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
               <Link
                 href="/request-invite"
-                className="inline-flex w-full items-center justify-center rounded-full bg-[var(--tmbc-mauve)] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] text-[#3c1c21] transition hover:bg-[var(--tmbc-mauve)]/90 sm:w-auto"
+                className="inline-flex w-full items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] sm:w-auto"
               >
-                  Request an Invite
-                </Link>
-                <Link
-                  href="/how-it-works"
-                  className="inline-flex w-full items-center justify-center rounded-full border border-[var(--tmbc-mauve)] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] text-[#3c1c21] transition hover:border-[var(--tmbc-mauve)]/80 hover:text-[#3c1c21] sm:w-auto"
-                >
-                  Explore the Experience
-                </Link>
-              </div>
-              <div className="space-y-1 text-sm text-[#3f3433]">
-                <p className="italic">No panic scrolling. Just the next calm step.</p>
-                <p className="tracking-[0.22em] uppercase text-xs">Invite-only baby planning for modern parents.</p>
-              </div>
+                Request an Invite
+              </Link>
+              <Link
+                href="/how-it-works"
+                className="inline-flex w-full items-center justify-center rounded-full border !border-[#E7B6C7] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] text-[#3c1c21] transition hover:!border-[#E7B6C7]/80 hover:text-[#3c1c21] sm:w-auto"
+              >
+                Explore the Experience
+              </Link>
+            </div>
+            <div className="space-y-1 text-sm text-neutral-600">
+              <p className="italic">No panic scrolling. Just the next calm step.</p>
+              <p className="tracking-[0.22em] uppercase text-xs">Invite-only baby planning for modern parents.</p>
             </div>
           </div>
+        </div>
       </section>
       <div className={divider} />
-      <section className="py-28 sm:py-32">
+      {/* Declaration section — layout is intentionally centered and balanced. */}
+      {/* Do not re-anchor this content to the top or shrink the image. */}
+      {/* This section should feel calm, editorial, and evenly weighted. */}
+      <section className="py-20 lg:py-28">
         <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center px-4 sm:px-6">
-          <div className="relative z-10 max-w-xl">
-            <h2 className="font-playfair text-[38px] sm:text-[44px] leading-tight mb-6">Taylor-Made Baby Co. is a private baby-planning service.</h2>
-            <p className="text-neutral-600 leading-relaxed mb-6">
+          <div className="relative z-10 flex h-full flex-col justify-center space-y-5 lg:space-y-6 text-left mx-auto max-w-[560px] lg:ml-auto">
+            <h2 className="font-playfair font-[400] text-[38px] sm:text-[44px] text-neutral-900 leading-[1.2] tracking-[0.02em]">
+              Taylor-Made Baby Co. is a private baby-planning service.
+            </h2>
+            <p className="text-neutral-600 leading-[1.8]">
               Think of it as a personal guide that helps you prepare for life with a baby — without endless Googling, pressure, or guesswork.
             </p>
-            <p className="text-neutral-600 leading-relaxed mb-6">
+            <p className="text-neutral-600 leading-[1.8]">
               Taylor-Made Baby Co. is intentionally invite-only. Not to create barriers — but to protect the experience.
             </p>
-            <p className="text-neutral-600 leading-relaxed mb-6">
+            <p className="text-neutral-600 leading-[1.8]">
               We work with a limited number of families at a time so that guidance stays thoughtful, personal, and unrushed. Every member is supported by real mentors, real conversations, and real context — not algorithms or volume-based recommendations.
             </p>
-            <p className="text-neutral-600 leading-relaxed mb-4">
+            <p className="text-neutral-600 leading-[1.8]">
               Because of that:
             </p>
-            <ul className="space-y-3 text-neutral-600">
+            <ul className="mt-8 lg:mt-10 space-y-3 text-[14px] leading-[1.9] text-neutral-600">
               {whatWeDont.map((line) => (
-                <li key={line} className="flex gap-3 text-[15px] leading-relaxed text-neutral-700">
+                <li key={line} className="flex gap-3 text-[15px] leading-[1.9] text-neutral-700">
                   <span className="mt-2 h-2 w-2 rounded-full bg-neutral-300" />
                   {line}
                 </li>
@@ -228,34 +236,34 @@ export default function HomePage() {
               Clarity first. Always.
             </p>
           </div>
-            <div className="relative">
-              <div
-                className="relative aspect-[4/3] rounded-[32px] overflow-hidden bg-neutral-50 shadow-[0_12px_40px_rgba(0,0,0,0.04)] transition-transform duration-700 ease-out hover:scale-[1.015]"
-              >
-                <Image
-                  src={editorialNursery}
-                  alt="Calm, neutral nursery with soft textures, natural light, and intentional design details"
-                  fill
-                  sizes="(min-width: 1024px) 520px, 90vw"
-                  priority={false}
-                  unoptimized
-                  className="object-contain p-8"
-                />
-              </div>
+          <div className="relative flex h-full items-center justify-center px-4 sm:px-6 lg:px-8">
+            <div
+              className="relative w-full min-h-[520px] lg:min-h-[560px] rounded-[32px] overflow-hidden bg-neutral-50 shadow-[0_12px_40px_rgba(0,0,0,0.04)] transition-transform duration-700 ease-out hover:scale-[1.015]"
+            >
+              <Image
+                src={editorialNursery}
+                alt="Calm, neutral nursery with soft textures, natural light, and intentional design details"
+                fill
+                sizes="(min-width: 1024px) 520px, 90vw"
+                priority={false}
+                unoptimized
+                className="object-contain p-8"
+              />
             </div>
+          </div>
         </div>
       </section>
       <section className="py-24 sm:py-28">
         <div className="px-4 sm:px-6">
           <div className={container}>
-            <div className="mt-12 grid items-stretch gap-8 md:grid-cols-2 lg:grid-cols-2">
+            <div className="mt-12 grid grid-cols-1 gap-y-8 gap-x-8 md:grid-cols-2 lg:grid-cols-4">
               {pillarOrder.map((pillarKey) => {
                 const pillar = pillarDetails[pillarKey];
                 const pillarLink = `/${pillarKey}`;
                 return (
                   <article
                     key={pillarKey}
-                    className="rounded-3xl border border-neutral-200 bg-white/70 p-8 sm:p-10 shadow-[0_18px_50px_rgba(0,0,0,0.06)] flex h-full flex-col"
+                    className="rounded-3xl border border-neutral-200 bg-white/70 p-6 sm:p-8 shadow-[0_18px_50px_rgba(0,0,0,0.06)] flex h-full flex-col"
                   >
                     <div className="mb-6 overflow-hidden rounded-2xl border border-neutral-200 bg-white/60">
                       <div className="aspect-[16/10] relative">
@@ -268,7 +276,7 @@ export default function HomePage() {
                         />
                       </div>
                     </div>
-                    <h3 className="text-xl font-semibold text-neutral-900">{pillar.title}</h3>
+                    <h3 className="text-lg font-semibold text-neutral-900">{pillar.title}</h3>
                     <p className="mt-3 text-[15px] leading-relaxed text-neutral-600 max-w-prose">{pillar.body[0]}</p>
                     <Link
                       href={pillarLink}
@@ -328,7 +336,7 @@ export default function HomePage() {
             <div className="w-full max-w-[520px] rounded-[32px] overflow-hidden ring-1 ring-black/5 bg-white/60 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
               <div className="relative aspect-[16/10]">
                 <Image
-                  src="/images/marketing/invite-flow.png"
+                  src="/images/marketing/envelope.png"
                   alt="Invite-only onboarding process from request to mentorship and guided experience"
                   fill
                   sizes="(min-width: 1024px) 45vw, 100vw"

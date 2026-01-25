@@ -4,6 +4,8 @@
 
 :root {
   --tmbc-blush: #F6E9E6;
+  --tmbc-blush-primary: #D88FA8;
+  --tmbc-blush-primary-hover: #C97C97;
   --tmbc-mauve: #f7c8d9;
   --tmbc-ivory: #FAF7F4;
   --tmbc-gold: #D4B579;
@@ -38,6 +40,12 @@
   --member-state-hover: #E6C7D2;
   --member-state-active: #B48CA0;
   --member-state-disabled: #E1D7D7;
+}
+
+/* Editorial hero typography — scoped override to beat global span rules */
+.hero-editorial,
+.hero-editorial * {
+  font-family: var(--font-playfair), serif;
 }
 
 * {
@@ -610,7 +618,8 @@
   }
 
   .mkt-btn-primary {
-    @apply mkt-btn bg-[var(--tmbc-blush)] text-[var(--tmbc-charcoal)];
+    @apply mkt-btn bg-[var(--tmbc-blush-primary)] text-white;
+    transition: background-color 0.2s ease;
   }
 
   .mkt-btn-secondary {

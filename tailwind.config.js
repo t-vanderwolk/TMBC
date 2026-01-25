@@ -31,11 +31,12 @@ module.exports = {
         },
         member: memberColors,
       },
+      // Tailwind fonts map the Playfair variable so utility `font-playfair` resolves correctly.
       fontFamily: {
         script: ['var(--font-great-vibes)', 'cursive'],
         serif: ['var(--font-playfair)', 'serif'],
         sans: ['var(--font-nunito)', 'sans-serif'],
-        playfair: ['var(--font-playfair)', 'Playfair Display', 'serif'],
+        playfair: ['var(--font-playfair)', 'serif'],
       },
       boxShadow: {
         soft: '0 4px 14px rgba(0,0,0,0.07)',

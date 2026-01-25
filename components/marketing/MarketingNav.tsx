@@ -144,9 +144,9 @@ export default function MarketingNav() {
       }`}
     >
       <div className="flex w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="text-ellipsis whitespace-nowrap pr-6 sm:pr-10 lg:pr-12">
+          <Link href="/" className="text-ellipsis whitespace-nowrap pr-6 sm:pr-10 lg:pr-12">
           <p
-            className={`${greatVibes.className} text-3xl sm:text-4xl leading-none text-[var(--tmbc-mauve)]`}
+            className={`${greatVibes.className} text-3xl sm:text-4xl leading-none text-[var(--tmbc-blush-primary)]`}
           >
             Taylor-Made
           </p>
@@ -219,7 +219,7 @@ export default function MarketingNav() {
           </Link>
           <Link
             href="/request-invite"
-            className="flex h-10 items-center rounded-full px-5 text-[10px] tracking-[0.32em] uppercase bg-[var(--tmbc-mauve)] text-[#3c1c21] transition hover:bg-[#f9d7e0]"
+            className="flex h-10 items-center rounded-full px-5 text-[10px] tracking-[0.32em] uppercase bg-[var(--tmbc-blush-primary)] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)]"
           >
             Request an Invite
           </Link>
@@ -261,7 +261,7 @@ export default function MarketingNav() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="mkt-btn-primary w-full text-center"
+                    className="mkt-btn-primary w-full text-center bg-[var(--tmbc-blush-primary)] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)]"
                     onClick={() => setMenuOpen(false)}
                   >
                     {link.label}

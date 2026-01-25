@@ -139,7 +139,7 @@ export default function HowItWorksPage() {
               <ImageFrame className="w-full max-w-[520px]">
                 <div className="aspect-[4/3] w-full">
                   <img
-                    src="/images/marketing/invite-flow.png"
+                    src="/images/marketing/envelope.png"
                     alt="Icons representing the Taylor-Made Baby Co. invite process"
                     className="h-full w-full object-contain"
                   />

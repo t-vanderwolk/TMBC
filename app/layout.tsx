@@ -1,7 +1,15 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 
-import { greatVibes, nunito, playfair } from '@/lib/fonts';
+import { greatVibes, nunito } from '@/lib/fonts';
+import { Playfair_Display } from 'next/font/google';
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  display: 'swap',
+  weight: ['400'],
+});
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 
@@ -17,14 +25,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${greatVibes.variable} ${playfair.variable} ${nunito.variable}`}
     >
+      {/* Playfair Display is bundled here via next/font and exposed as --font-playfair */}
       <head>
         {/* FO Verification */}
         <meta name="fo-verify" content="660bae52-3064-4bff-8322-959de3b4cbf6" />
       </head>
       <body className="min-h-screen bg-tmIvory font-sans text-tmCharcoal">
-        <main className="flex min-h-screen flex-col pb-16">
-          {children}
-        </main>
+        <main className="flex min-h-screen flex-col pb-16">{children}</main>
       </body>
     </html>
   );

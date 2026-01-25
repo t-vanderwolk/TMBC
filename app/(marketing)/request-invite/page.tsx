@@ -56,9 +56,9 @@ const RequestInvitePage = () => {
           </p>
           <div className="flex justify-center my-24 md:my-32">
             <ImageFrame className="max-w-[960px]">
-              <img
-                src="/assets/images/inviteflow.png"
-                alt="Invite-only onboarding process from request to mentorship and guided experience"
+                <img
+                  src="/images/marketing/envelope.png"
+                  alt="Invite-only onboarding process from request to mentorship and guided experience"
                 className="w-full rounded-[26px]"
                 loading="lazy"
               />

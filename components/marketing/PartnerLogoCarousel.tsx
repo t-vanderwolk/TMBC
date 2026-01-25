@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type Logo = {
+  id: string;
   name: string;
   src: string;
   alt: string;
@@ -14,6 +15,14 @@ const formatAlt = (fileName: string) =>
     .replace(/[-_]/g, " ")
     .replace(/\b\w/g, (char) => char.toUpperCase());
 
+const createLogoId = (fileName: string) =>
+  fileName
+    .replace(/\.[^.]+$/, "")
+    .replace(/[^a-z0-9]+/gi, "-")
+    .toLowerCase();
+
+const SUPPORTED_IMAGE_EXTENSIONS = /\.(png|jpe?g|svg|webp|avif)$/i;
+
 export default function PartnerLogoCarousel() {
   const [logos, setLogos] = useState<Logo[]>([]);
 
@@ -24,11 +33,14 @@ export default function PartnerLogoCarousel() {
       .then((response) => response.json())
       .then((files: string[]) => {
         if (!isMounted) return;
-        const mapped = files.map((fileName) => ({
-          name: fileName,
-          src: `/api/logos/${encodeURIComponent(fileName)}`,
-          alt: formatAlt(fileName),
-        }));
+        const mapped = files
+          .filter((fileName) => SUPPORTED_IMAGE_EXTENSIONS.test(fileName))
+          .map((fileName) => ({
+            id: createLogoId(fileName),
+            name: fileName,
+            src: `/api/logos/${encodeURIComponent(fileName)}`,
+            alt: formatAlt(fileName),
+          }));
         setLogos(mapped);
       })
       .catch(() => {
@@ -40,18 +52,16 @@ export default function PartnerLogoCarousel() {
     };
   }, []);
 
-  const repeatedLogos = useMemo(() => (logos.length ? [...logos, ...logos] : []), [logos]);
-
   return (
     <section className="w-full overflow-hidden bg-[var(--tmbc-ivory)]/80 py-10 text-center">
       <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
         Calm partners we trust
       </p>
       <div className="partner-logo-carousel">
-        {repeatedLogos.length ? (
+        {logos.length ? (
           <div className="partner-logo-track partner-logo-marquee">
-            {repeatedLogos.map((logo, index) => (
-              <div key={`${logo.name}-${index}`} className="flex h-16 w-40 items-center justify-center">
+            {logos.map((logo) => (
+              <div key={logo.id} className="flex h-16 w-40 items-center justify-center">
                 <img
                   src={logo.src}
                   alt={logo.alt}
