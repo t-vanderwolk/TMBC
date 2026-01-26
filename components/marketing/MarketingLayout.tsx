@@ -39,12 +39,14 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
+      {/* Gradient overlay preserves the editorial wash without touching the nav/hero logic */}
       {!shouldHideHeroGradient && (
         <div
           className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[var(--tmbc-blush)]/30 to-transparent"
           aria-hidden
         />
       )}
+      {/* MarketingNav stays consistent across all marketing routes—this is the authoritative shell */}
       <MarketingNav />
       <main className="relative">
         {children}

@@ -3,6 +3,7 @@ import Link from "next/link";
 import homepageHero from "@/assets/images/homepagehero.png";
 import homepageHeroMobile from "@/assets/images/homepageheromobile.png";
 import editorialNursery from "@/assets/images/editorial-experience-hero-nursery.jpg";
+import aboutPageHero from "@/assets/images/aboutpagehero.png";
 import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
 import connectPillar from "@/assets/images/connectpillar.png";
@@ -136,6 +137,7 @@ const finalMicroBullets = [
 export default function HomePage() {
   const quoteText = noiseNotes.join(" ");
 
+  // Home stays the single source of editorial flow: hero → reassurance → journey diagram → pillars → CTA.
   return (
     <main className="min-h-screen bg-[#fef9f6] text-[#1F1C1A]">
       <section className="relative w-screen min-h-[460px] sm:min-h-[520px] lg:min-h-[680px] overflow-hidden pt-2 sm:pt-3 lg:pt-4 pb-16 sm:pb-20 lg:pb-24">
@@ -161,24 +163,26 @@ export default function HomePage() {
             />
           </div>
         </div>
-        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="relative max-w-[520px] space-y-6 lg:max-w-[540px] mt-8 lg:mt-12">
-            <p className="text-[11px] tracking-[0.34em] uppercase text-neutral-600 font-semibold">
+          <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+            {/* Mobile breathing room beneath the navbar */}
+            <div className="relative max-w-[520px] space-y-6 lg:max-w-[540px] pt-6 sm:pt-8 lg:pt-0">
+            <p className="text-[11px] tracking-[0.18em] uppercase text-neutral-600 font-semibold mb-3">
               Calm, personal guidance for expecting parents
             </p>
             {/* Editorial lock: Hero headline must remain Playfair Display */}
             <div className="hero-editorial font-playfair font-[400] text-neutral-900">
-              <h1 className="text-[42px] lg:text-[56px] leading-[1.15] tracking-[-0.01em] mb-4 lg:mb-6 max-w-[19ch] sm:text-[52px]">
+              <h1 className="text-[42px] lg:text-[56px] leading-[1.15] tracking-[-0.01em] mb-4 sm:mb-5 lg:mb-6 max-w-[19ch] sm:text-[52px]">
                 <span className="block">Baby prep,</span>
                 <span className="block lg:inline lg:whitespace-nowrap">without the</span>
                 <span className="block lg:inline lg:whitespace-nowrap"> overwhelm.</span>
               </h1>
             </div>
-            <p className="max-w-lg text-[15px] leading-[1.7] text-neutral-600 lg:text-[17px] mt-5 lg:mt-7 -ml-1 sm:-ml-2 lg:ml-0">
+            <p className="max-w-lg text-[15px] leading-[1.5] text-neutral-600 lg:text-[17px] mt-3 sm:mt-4 lg:mt-7 -ml-1 sm:-ml-2 lg:ml-0">
               A calm, mentor-guided way to learn what baby gear actually does, plan what you truly need, and feel
               supported every step of the way.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+            {/* CTAs stay visible on compact screens */}
+            <div className="mt-6 sm:mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 pb-8 sm:pb-10 lg:pb-0">
               <Link
                 href="/request-invite"
                 className="inline-flex w-full items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] sm:w-auto"
@@ -200,15 +204,72 @@ export default function HomePage() {
         </div>
       </section>
       <div className={divider} />
-      {/* Declaration section — layout is intentionally centered and balanced. */}
-      {/* Do not re-anchor this content to the top or shrink the image. */}
-      {/* This section should feel calm, editorial, and evenly weighted. */}
       <section className="py-20 lg:py-28">
         <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center px-4 sm:px-6">
           <div className="relative z-10 flex h-full flex-col justify-center space-y-5 lg:space-y-6 text-left mx-auto max-w-[560px] lg:ml-auto">
             <h2 className="font-playfair font-[400] text-[38px] sm:text-[44px] text-neutral-900 leading-[1.2] tracking-[0.02em]">
               Taylor-Made Baby Co. is a private baby-planning service.
             </h2>
+          </div>
+          <div className="relative flex h-full items-center justify-center px-4 sm:px-6 lg:px-8">
+            {/* Image height tracks the text block on compact screens */}
+            <div
+              className="relative w-full min-h-[500px] sm:min-h-[540px] lg:min-h-[560px] rounded-[32px] overflow-hidden bg-neutral-50 shadow-[0_12px_40px_rgba(0,0,0,0.04)] transition-transform duration-700 ease-out hover:scale-[1.015]"
+            >
+              <Image
+                src={editorialNursery}
+                alt="Calm, neutral nursery with soft textures, natural light, and intentional design details"
+                fill
+                sizes="(min-width: 1024px) 520px, 90vw"
+                priority={false}
+                unoptimized
+                className="object-contain p-8"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      {
+        // About page intentionally folded into Home for clarity and narrative continuity.
+        // This section replaces the standalone About page.
+        // Do not extract or split into a separate route.
+        (
+          <section className="py-12 sm:py-16 bg-[#f8f4ef]">
+            <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 gap-10 items-center lg:grid-cols-2">
+                <div className="flex flex-col items-center text-center max-w-[560px] mx-auto lg:items-start lg:text-left">
+                  <p className="text-[11px] tracking-[0.44em] uppercase text-neutral-600">WHY WE EXIST</p>
+                  <div className="hero-editorial font-playfair font-[400] text-neutral-900">
+                    <h2 className="text-[38px] sm:text-[44px] leading-[1.2] tracking-[0.02em]">
+                      Why Taylor-Made Baby Co. exists.
+                    </h2>
+                  </div>
+                  <p className="mt-6 text-[16px] sm:text-[18px] leading-[1.8] text-neutral-700 max-w-[560px]">
+                    We guide you through each season with calm clarity, mentor-led pacing, and intentional next steps.
+                  </p>
+                  <p className="mt-6 text-[15px] leading-[1.8] text-neutral-500 italic max-w-[560px]">
+                    Because Google at 2 a.m. is not a care plan.
+                  </p>
+                </div>
+                <div className="flex justify-center">
+                  <div className="relative w-full min-h-[420px] rounded-[32px] bg-[#fdfbf9] overflow-hidden lg:min-h-[560px]">
+                    <Image
+                      src={aboutPageHero}
+                      alt="Taylor-Made Baby Co. editorial still life — calming textures and intentional details"
+                      fill
+                      sizes="(min-width: 1024px) 520px, 90vw"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )
+      }
+      <section className="py-10 lg:py-12">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="space-y-6 text-neutral-600 leading-[1.8]">
             <p className="text-neutral-600 leading-[1.8]">
               Think of it as a personal guide that helps you prepare for life with a baby — without endless Googling, pressure, or guesswork.
             </p>
@@ -236,27 +297,13 @@ export default function HomePage() {
               Clarity first. Always.
             </p>
           </div>
-          <div className="relative flex h-full items-center justify-center px-4 sm:px-6 lg:px-8">
-            <div
-              className="relative w-full min-h-[520px] lg:min-h-[560px] rounded-[32px] overflow-hidden bg-neutral-50 shadow-[0_12px_40px_rgba(0,0,0,0.04)] transition-transform duration-700 ease-out hover:scale-[1.015]"
-            >
-              <Image
-                src={editorialNursery}
-                alt="Calm, neutral nursery with soft textures, natural light, and intentional design details"
-                fill
-                sizes="(min-width: 1024px) 520px, 90vw"
-                priority={false}
-                unoptimized
-                className="object-contain p-8"
-              />
-            </div>
-          </div>
         </div>
       </section>
       <section className="py-24 sm:py-28">
         <div className="px-4 sm:px-6">
           <div className={container}>
-            <div className="mt-12 grid grid-cols-1 gap-y-8 gap-x-8 md:grid-cols-2 lg:grid-cols-4">
+            {/* Maintain single-column rhythm on phones */}
+            <div className="mt-12 grid grid-cols-1 gap-y-6 gap-x-6 md:grid-cols-2 lg:grid-cols-4">
               {pillarOrder.map((pillarKey) => {
                 const pillar = pillarDetails[pillarKey];
                 const pillarLink = `/${pillarKey}`;

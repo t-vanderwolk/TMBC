@@ -33,6 +33,7 @@ export default function PartnerLogoCarousel() {
       .then((response) => response.json())
       .then((files: string[]) => {
         if (!isMounted) return;
+        // Logos are intentionally auto-loaded from assets/logos; add new files there only.
         const mapped = files
           .filter((fileName) => SUPPORTED_IMAGE_EXTENSIONS.test(fileName))
           .map((fileName) => ({
@@ -40,7 +41,8 @@ export default function PartnerLogoCarousel() {
             name: fileName,
             src: `/api/logos/${encodeURIComponent(fileName)}`,
             alt: formatAlt(fileName),
-          }));
+          }))
+          .sort((a, b) => a.id.localeCompare(b.id));
         setLogos(mapped);
       })
       .catch(() => {

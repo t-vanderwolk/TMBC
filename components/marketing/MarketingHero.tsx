@@ -42,6 +42,7 @@ export default function MarketingHero({
   imageAlt,
   imageWidth,
   imageHeight,
+  priority = false,
   className = "",
 }: MarketingHeroProps) {
   const bodyParagraphClass = "text-[16px] sm:text-[18px] leading-relaxed text-neutral-600";
@@ -71,19 +72,24 @@ export default function MarketingHero({
     </div>
   ) : null;
 
+  // Section wraps hero copy so layout/padding stays aligned with the rest of the marketing content.
   return (
     <Section className={`bg-[var(--tmbc-ivory)] ${className}`.trim()}>
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        <div className="order-2 lg:order-1 max-w-[560px] space-y-6">
+        {/* Mobile spacing refinement — do not affect desktop */}
+        <div className="order-2 lg:order-1 max-w-[560px] space-y-6 pt-6 sm:pt-8">
           {eyebrow && (
-            <p className="text-[11px] tracking-[0.34em] uppercase text-neutral-500 mb-6">{eyebrow}</p>
+            <p className="text-[11px] tracking-[0.18em] sm:tracking-[0.34em] uppercase text-neutral-500 mb-3">
+              {eyebrow}
+            </p>
           )}
-          <h1 className="text-[48px] leading-[0.95] sm:text-[64px] sm:leading-[0.92] tracking-[-0.02em]">
+          <h1 className="text-[48px] leading-[0.95] sm:text-[64px] sm:leading-[0.92] tracking-[-0.02em] mb-4 sm:mb-5">
             {headline}
           </h1>
-          <p className="mkt-h2">{subheading}</p>
+          <p className="mkt-h2 mt-3 sm:mt-4 leading-[1.5]">{subheading}</p>
           {bodyContent}
-          <div className="mt-10 flex flex-col sm:flex-row gap-3">
+          {/* CTA separation on tight screens */}
+          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 pb-8 sm:pb-10">
             <Link
               href={primaryCta.href}
               className={`mkt-btn-primary h-12 rounded-full px-6 text-sm font-semibold ${
@@ -118,6 +124,7 @@ export default function MarketingHero({
                 width={imageWidth}
                 height={imageHeight}
                 className="h-full w-full object-contain"
+                priority={priority}
               />
             </div>
           </ImageFrame>

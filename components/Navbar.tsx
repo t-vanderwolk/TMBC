@@ -15,7 +15,6 @@ type NavLink = {
 };
 
 const PRIMARY_NAV: NavLink[] = [
-  { label: "About", href: "/about" },
   { label: "How It Works", href: "/how-it-works" },
   { label: "Membership", href: "/membership" },
   { label: "Blog", href: "/blog" },
@@ -31,7 +30,6 @@ const EXPERIENCE_NAV_ITEMS: NavLink[] = [
 ];
 
 const MOBILE_NAV: NavLink[] = [
-  { label: "About", href: "/about" },
   { label: "How It Works", href: "/how-it-works" },
   { label: "Experience", href: "/learn", isLabel: true },
   ...EXPERIENCE_NAV_ITEMS,

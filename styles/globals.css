@@ -251,6 +251,24 @@
     color: rgba(62, 47, 53, 0.8);
   }
 
+  @media (max-width: 639px) {
+    /* Mobile spacing refinement — do not affect desktop */
+    .marketing-content p,
+    .marketing-content li,
+    .marketing-content span {
+      margin-top: 1rem;
+      line-height: 1.75;
+      max-width: 38ch;
+    }
+
+    .marketing-content h1,
+    .marketing-content h2,
+    .marketing-content h3 {
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+  }
+
   .hero-headline {
     font-family: var(--font-playfair), "Playfair Display", serif;
     font-size: clamp(2.5rem, 5vw, 3.5rem);
