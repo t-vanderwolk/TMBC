@@ -13,7 +13,7 @@ import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
 const container = "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8";
 const sectionY = "py-16 sm:py-20";
 const eyebrow = "text-[11px] tracking-[0.34em] uppercase text-neutral-500";
-const h2 = "mt-4 text-3xl sm:text-4xl leading-tight tracking-tight text-neutral-900";
+const h2 = "mt-4 text-3xl sm:text-4xl leading-tight tracking-tight text-neutral-900 font-playfair";
 const lead = "mt-6 text-[16px] sm:text-[18px] leading-relaxed text-neutral-700 max-w-prose";
 const card = "rounded-3xl border border-neutral-200 bg-white/70 shadow-[0_18px_50px_rgba(0,0,0,0.06)]";
 const cardPad = "p-8 sm:p-10";
@@ -83,8 +83,8 @@ const howItWorksSteps = [
     title: "Learn",
     description: "Calm education in plain language. No pressure to buy.",
     preview: {
-      src: "/images/marketing/step-learn.png",
-      alt: "Academy dashboard showing calm baby planning content",
+      src: "/assets/images/evelope.png",
+      alt: "A soft ivory envelope with a welcome card and private access code, representing an invitation to Taylor-Made Baby Co.",
     },
   },
   {
@@ -165,13 +165,13 @@ export default function HomePage() {
         </div>
           <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
             {/* Mobile breathing room beneath the navbar */}
-            <div className="relative max-w-[520px] space-y-6 lg:max-w-[540px] pt-6 sm:pt-8 lg:pt-0">
+            <div className="relative max-w-[640px] space-y-6 lg:max-w-[720px] pt-6 sm:pt-8 lg:pt-0">
             <p className="text-[11px] tracking-[0.18em] uppercase text-neutral-600 font-semibold mb-3">
               Calm, personal guidance for expecting parents
             </p>
-            {/* Editorial lock: Hero headline must remain Playfair Display */}
-            <div className="hero-editorial font-playfair font-[400] text-neutral-900">
-              <h1 className="text-[42px] lg:text-[56px] leading-[1.15] tracking-[-0.01em] mb-4 sm:mb-5 lg:mb-6 max-w-[19ch] sm:text-[52px]">
+            {/* Editorial lock: Hero headline must remain calm, Great Vibes script */}
+            <div className="hero-editorial font-[400] text-neutral-900">
+              <h1 className="text-[48px] lg:text-[64px] leading-[1.15] tracking-[-0.01em] mb-4 sm:mb-5 lg:mb-6 sm:text-[52px] max-w-[32ch] lg:max-w-[40ch]">
                 <span className="block">Baby prep,</span>
                 <span className="block lg:inline lg:whitespace-nowrap">without the</span>
                 <span className="block lg:inline lg:whitespace-nowrap"> overwhelm.</span>
@@ -237,9 +237,9 @@ export default function HomePage() {
           <section className="py-12 sm:py-16 bg-[#f8f4ef]">
             <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-1 gap-10 items-center lg:grid-cols-2">
-                <div className="flex flex-col items-center text-center max-w-[560px] mx-auto lg:items-start lg:text-left">
-                  <p className="text-[11px] tracking-[0.44em] uppercase text-neutral-600">WHY WE EXIST</p>
-                  <div className="hero-editorial font-playfair font-[400] text-neutral-900">
+                  <div className="flex flex-col items-center text-center max-w-[560px] mx-auto lg:items-start lg:text-left">
+                    <p className="text-[11px] tracking-[0.44em] uppercase text-neutral-600">WHY WE EXIST</p>
+                    <div className="hero-editorial font-[400] text-neutral-900">
                     <h2 className="text-[38px] sm:text-[44px] leading-[1.2] tracking-[0.02em]">
                       Why Taylor-Made Baby Co. exists.
                     </h2>

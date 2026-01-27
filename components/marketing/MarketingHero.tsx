@@ -1,3 +1,16 @@
+/**
+ * MARKETING HERO — SINGLE SOURCE OF TRUTH
+ *
+ * This is the ONLY marketing hero component.
+ * It owns:
+ * - Editorial spacing & rhythm
+ * - Typography hierarchy
+ * - Navbar adjacency behavior
+ * - Image containment rules (desktop/mobile)
+ *
+ * Do not recreate hero layouts elsewhere.
+ * Do not wrap this component.
+ */
 "use client";
 
 import Image from "next/image";
@@ -83,7 +96,9 @@ export default function MarketingHero({
               {eyebrow}
             </p>
           )}
-          <h1 className="text-[48px] leading-[0.95] sm:text-[64px] sm:leading-[0.92] tracking-[-0.02em] mb-4 sm:mb-5">
+          <h1
+            className="font-playfair text-[80px] leading-[1.05] sm:text-[110px] sm:leading-[1] tracking-[-0.02em] mb-4 sm:mb-5"
+          >
             {headline}
           </h1>
           <p className="mkt-h2 mt-3 sm:mt-4 leading-[1.5]">{subheading}</p>

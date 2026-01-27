@@ -1,170 +1,188 @@
+import Image from "next/image";
 import Link from "next/link";
-import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import ImageFrame from "@/components/marketing/ImageFrame";
+import howItWorksHero from "@/assets/images/howitworkshero.png";
+import editorialNursery from "@/assets/images/tmbcinvite.png";
+import connectpreview from "@/assets/images/connectpreview.png";
+import matchImage from "@/assets/images/match.png";
+import surveyImage from "@/assets/images/survey.png";
+import welcomeImage from "@/assets/images/welcome.png";
+import evelope from "@/assets/images/evelope.png";
 
-const rhythmHighlights = [
-  {
-    title: "Learn, plan, connect, reflect",
-    description:
-      "We treat these moments as a returning rhythm so you can revisit any pillar whenever clarity calls.",
-  },
-  {
-    title: "Guided presence",
-    description:
-      "Mentors keep the pace gentle while reminding you that each return feels fresh, not repetitive.",
-  },
-  {
-    title: "Steady breathing room",
-    description:
-      "No linear funnel — just a flow you step into and step away from as you need rest, input, or reflection.",
-  },
+const invitationBullets = [
+  "Protecting the intimate, invite-only experience for every family.",
+  "Keeping mentor availability intact so pacing never feels rushed.",
+  "Ensuring guidance stays thoughtful, human, and deeply personal.",
 ];
 
-const whatHappens = [
+const flowSteps = [
   {
-    title: "We listen first",
-    copy: "You share your current questions, and a mentor listens without judgement.",
+    eyebrow: "STEP 01",
+    title: "Request an invite",
+    copy: "Share where you are and we respond with a calm match—but only when you are ready.",
+    image: evelope,
+    alt: "A soft ivory envelope with a welcome card and private access code, representing an invitation to Taylor-Made Baby Co.",
   },
   {
-    title: "We highlight what matters next",
-    copy: "Conversations focus on the next small decision instead of touting an entire roadmap.",
+    eyebrow: "STEP 02",
+    title: "Tell Us About You",
+    copy: "A short, reassuring explanation that this step gathers thoughtful context to personalize mentorship and recommendations.",
+    image: surveyImage,
+    alt: "Illustration of a thoughtful onboarding questionnaire",
   },
   {
-    title: "We center your rhythm",
-    copy: "Every check-in leans into learning, planning, connecting, or reflecting—whichever feels most alive.",
-  },
-];
-
-const inviteNotes = [
-  {
-    title: "Healthy ratios",
-    copy: "Invite-only keeps mentor ratios healthy and conversations personal.",
+    eyebrow: "STEP 03",
+    title: "Get Matched With a Mentor",
+    copy: "Each family is thoughtfully paired with a mentor whose experience, lifestyle alignment, and expertise best support their needs.",
+    image: matchImage,
+    alt: "Illustration representing thoughtful mentor matching",
   },
   {
-    title: "Steady guidance",
-    copy: "We welcome members slowly so the care stays steady and attuned to your questions.",
-  },
-  {
-    title: "Intentional care",
-    copy: "This isn’t gatekeeping; it’s a way to keep the care intentional and calm.",
+    eyebrow: "STEP 04",
+    title: "Ongoing support",
+    copy: "Check-ins stay gentle, paced around your questions and countertop moments.",
+    image: welcomeImage,
+    alt: "Warm invitation still life representing ongoing support and welcome",
   },
 ];
 
 export default function HowItWorksPage() {
   return (
     <>
-      <MarketingHero
-        imageSrc="/images/marketing/howitworks-hero.png"
-        imageAlt="Taylor-Made Baby Co. hero art"
-        imageWidth={1536}
-        imageHeight={1024}
-        headline="Baby prep, minus the spiral."
-        subheading="We guide you into a calm rhythm you can revisit for clarity."
-        primaryCta={{
-          label: "Request an Invite",
-          href: "/request-invite",
-        }}
-        secondaryCta={{
-          label: "Explore the Experience",
-          href: "/experience",
-        }}
-        priority
-        motion
-      />
+      <section className="relative w-screen min-h-[520px] sm:min-h-[600px] lg:min-h-[680px] overflow-hidden pt-2 sm:pt-3 lg:pt-4 pb-16 sm:pb-20 lg:pb-24">
+        {/* Homepage hero parity—text, gradient, and CTA rhythm match the main hero treatment. */}
+        <div className="absolute inset-0">
+          <Image
+            src={howItWorksHero}
+            alt="Taylor-Made Baby Co. hero art"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+          <div
+            className="absolute inset-0 bg-gradient-to-b from-[var(--tmbc-blush)]/40 via-[var(--tmbc-ivory)]/40 to-transparent"
+            aria-hidden
+          />
+        </div>
+        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="relative max-w-[640px] space-y-6 pt-6 sm:pt-8 lg:pt-0">
+            <p className="text-[11px] tracking-[0.18em] uppercase text-neutral-600 font-semibold mb-3">
+              HOW IT WORKS
+            </p>
+            <div className="hero-editorial font-playfair font-[400] text-neutral-900">
+              <h1 className="text-[48px] lg:text-[64px] leading-[1.15] tracking-[-0.01em] mb-4 sm:mb-5 lg:mb-6 max-w-[24ch]">
+                A calm, guided path into Taylor-Made Baby Co.
+              </h1>
+            </div>
+            <p className="max-w-lg text-[15px] leading-[1.5] text-neutral-600 lg:text-[17px]">
+              We work with a limited number of families so every step feels personal, unhurried, and thoughtfully
+              supported.
+            </p>
+            <div className="mt-6 sm:mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 pb-8 sm:pb-10 lg:pb-0">
+              <Link
+                href="/request-invite"
+                className="inline-flex w-full items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] sm:w-auto"
+              >
+                Request an Invite
+              </Link>
+            </div>
+            <div>
+              <Link
+                href="/experience"
+                className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 transition hover:text-[var(--tmbc-charcoal)]"
+              >
+                See the steps →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-6">
+        <span className="h-px flex-1 bg-neutral-300" />
+        <p className="text-[11px] uppercase tracking-[0.5em] text-neutral-500">THE PROCESS</p>
+        <span className="h-px flex-1 bg-neutral-300" />
+      </div>
 
       <MarketingContent>
-        <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-          <section className="space-y-6 text-center">
-            <p className="mkt-eyebrow">The rhythm</p>
-            <h2 className="mkt-h2">A returnable flow, not a one-way path.</h2>
-            <p className="mkt-body">
-              Learning, planning, connecting, and reflecting live together. You can follow one, pause, and revisit the next whenever you want.
-            </p>
-            <p className="mkt-body">
-              The rhythm is always gentle—just return when you need clarity and the flow will be there.
-            </p>
-            <div className="grid gap-6 md:grid-cols-3">
-              {rhythmHighlights.map((highlight) => (
-                <div key={highlight.title} className="mkt-card px-6 py-8 text-left">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                    {highlight.title}
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-[var(--tmbc-charcoal)]/80">
-                    {highlight.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="flex justify-center">
-          <ImageFrame className="w-full max-w-[920px]">
-            <div className="aspect-[16/9] w-full">
-              <img
-                src="/images/marketing/ecosystem-preview.png"
-                alt="How the Taylor-Made Baby Co. experience works: Learn, Plan, Connect, Reflect"
-                className="h-full w-full object-contain"
-              />
-            </div>
-          </ImageFrame>
-          </section>
-
-          <section className="space-y-6">
-            <div className="space-y-4 text-center">
-              <p className="mkt-eyebrow">What happens when you join</p>
-              <h2 className="mkt-h2">The experience stays guided and gentle.</h2>
-              <p className="mkt-body">
-                Mentors orient you based on your questions so you can move forward with clarity.
+        <div className="space-y-16 px-4 sm:px-6">
+          <section className="grid gap-10 lg:grid-cols-2 lg:items-center">
+            <div className="space-y-5">
+              <h2 className="font-playfair text-[36px] leading-[1.2] tracking-[0.02em] text-neutral-900">
+                Why We Start With an Invitation
+              </h2>
+              <p className="text-[16px] leading-[1.7] text-neutral-600">
+                Invitations keep the experience intimate so we can keep focusing on the humans behind the questions.
               </p>
-            </div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {whatHappens.map((what) => (
-                <div key={what.title} className="mkt-card px-8 py-8">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                    {what.title}
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-[var(--tmbc-charcoal)]/80">{what.copy}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="space-y-6">
-            <div className="space-y-4 text-center">
-              <p className="mkt-eyebrow">Invite-only, explained calmly</p>
-              <h2 className="mkt-h2">Careful intake keeps the experience personal.</h2>
+              <ul className="space-y-3 text-[15px] leading-[1.7] text-neutral-700">
+                {invitationBullets.map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <span className="mt-1 h-2 w-2 rounded-full bg-neutral-300" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/request-invite"
+                className="inline-flex rounded-full bg-[var(--tmbc-blush-primary)] px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.35em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)]"
+              >
+                Request an Invite
+              </Link>
             </div>
             <div className="flex justify-center">
-              <ImageFrame className="w-full max-w-[520px]">
-                <div className="aspect-[4/3] w-full">
-                  <img
-                    src="/images/marketing/envelope.png"
-                    alt="Icons representing the Taylor-Made Baby Co. invite process"
-                    className="h-full w-full object-contain"
+              <ImageFrame className="w-full max-w-[520px] bg-transparent relative">
+                <div className="relative aspect-[4/3] w-full">
+                  <Image
+                    src={editorialNursery}
+                    alt="Taylor-Made Baby Co. invitation still life representing calm, intentional welcome"
+                    fill
+                    sizes="(min-width: 1024px) 44vw, 90vw"
+                    priority={false}
+                    className="h-full w-full object-cover"
                   />
                 </div>
               </ImageFrame>
             </div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {inviteNotes.map((note) => (
-                <div key={note.title} className="mkt-card px-8 py-8 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
-                    {note.title}
-                  </p>
-                  <p className="mt-3 leading-relaxed">{note.copy}</p>
+          </section>
+
+          <section className="space-y-12">
+            {flowSteps.map((step, index) => (
+              <div key={step.title} className="grid gap-8 lg:grid-cols-2 lg:items-center">
+                <div className={`space-y-4 ${index % 2 ? "lg:order-last" : ""}`}>
+                  <p className="text-[11px] uppercase tracking-[0.4em] text-neutral-500">{step.eyebrow}</p>
+                  <h3 className="font-playfair text-[32px] leading-[1.2] text-neutral-900">{step.title}</h3>
+                  <p className="text-[15px] leading-[1.7] text-neutral-600">{step.copy}</p>
                 </div>
-              ))}
-            </div>
-            <p className="mkt-body">
-              What happens next: we review your request, confirm the fit, and match you to steady support.
+                <div className={index % 2 ? "lg:order-first" : ""}>
+                  <ImageFrame className="w-full bg-transparent relative">
+                    <div className="relative aspect-[4/3] w-full">
+                      <Image
+                        src={step.image}
+                        alt={step.alt}
+                        fill
+                        sizes="(min-width: 1024px) 40vw, 92vw"
+                        priority={false}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                  </ImageFrame>
+                </div>
+              </div>
+            ))}
+          </section>
+
+          <section className="text-center space-y-6">
+            <p className="text-[15px] leading-[1.7] text-neutral-600">
+              No rush. No pressure. Just steady guidance that meets you where you are.
             </p>
-            <p className="mkt-body text-[var(--tmbc-charcoal)]/60">No rush. No pressure.</p>
-            <div className="mt-6 flex justify-center">
-              <Link href="/request-invite" className="mkt-btn-primary">
-                Request an Invite
-              </Link>
-            </div>
+            <Link
+              href="/request-invite"
+              className="inline-flex rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.35em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)]"
+            >
+              Request an Invite
+            </Link>
           </section>
         </div>
       </MarketingContent>
