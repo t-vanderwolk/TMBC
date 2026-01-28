@@ -1,9 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import homepageHero from "@/assets/images/homepagehero.png";
-import homepageHeroMobile from "@/assets/images/homepageheromobile.png";
 import editorialNursery from "@/assets/images/editorial-experience-hero-nursery.jpg";
-import aboutPageHero from "@/assets/images/aboutpagehero.png";
 import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
 import connectPillar from "@/assets/images/connectpillar.png";
@@ -11,12 +9,9 @@ import reflectPillar from "@/assets/images/reflectpillar.png";
 import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
 
 const container = "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8";
-const sectionY = "py-16 sm:py-20";
 const eyebrow = "text-[11px] tracking-[0.34em] uppercase text-neutral-500";
 const h2 = "mt-4 text-3xl sm:text-4xl leading-tight tracking-tight text-neutral-900 font-playfair";
 const lead = "mt-6 text-[16px] sm:text-[18px] leading-relaxed text-neutral-700 max-w-prose";
-const card = "rounded-3xl border border-neutral-200 bg-white/70 shadow-[0_18px_50px_rgba(0,0,0,0.06)]";
-const cardPad = "p-8 sm:p-10";
 const divider = "my-16 h-px w-full bg-neutral-200/60";
 
 const pillarOrder: Array<"learn" | "plan" | "connect" | "reflect"> = [
@@ -77,42 +72,21 @@ const pillarDetails = {
   },
 };
 
-const howItWorksSteps = [
+const stepDescriptions: Record<typeof pillarOrder[number], string> = {
+  learn:
+    "We gently explain what each gear category does so every parent knows why it matters before touching a registry.",
+  plan: "Mentors walk beside you in a shared workspace to build a registry that reflects your home, values, and routines.",
+  connect: "Small, moderated circles keep conversations rooted in the same season instead of noisy feeds.",
+  reflect:
+    "A private vault gathers decisions, notes, and photos so this season can be sealed with gratitude and calm.",
+};
+
+const stepBackgroundStyles = [
+  { backgroundColor: "var(--step-bg-blush)" },
+  { backgroundColor: "var(--step-bg-ivory)" },
+  { backgroundColor: "var(--step-bg-mauve)" },
   {
-    number: "01",
-    title: "Learn",
-    description: "Calm education in plain language. No pressure to buy.",
-    preview: {
-      src: "/assets/images/evelope.png",
-      alt: "A soft ivory envelope with a welcome card and private access code, representing an invitation to Taylor-Made Baby Co.",
-    },
-  },
-  {
-    number: "02",
-    title: "Plan",
-    description: "One-on-one mentor guidance to build a thoughtful plan and registry.",
-    preview: {
-      src: "/images/marketing/step-plan.png",
-      alt: "Guided planning workspace with checklist preview",
-    },
-  },
-  {
-    number: "03",
-    title: "Connect",
-    description: "Ongoing support from real people.",
-    preview: {
-      src: "/images/marketing/step-connect.png",
-      alt: "Community connection preview",
-    },
-  },
-  {
-    number: "04",
-    title: "Reflect",
-    description: "Capture decisions, notes, and memories.",
-    preview: {
-      src: "/images/marketing/step-reflect.png",
-      alt: "Reflection and memory-keeping preview",
-    },
+    background: "linear-gradient(180deg, var(--step-bg-ivory) 0%, rgba(252,250,246,0) 100%)",
   },
 ];
 
@@ -122,12 +96,6 @@ const whatWeDont = [
   "We don't rush decisions.",
 ];
 
-const noiseNotes = [
-  "Every checklist shouts louder than the midnight spit-up clean-up, making your next decision feel urgent.",
-  "Feeds full of curated nurseries leave your inbox untouched and your sleep schedule in a different timezone.",
-  "Decision fatigue settles in when every screen demands a \"complete\" tap while you're still wondering what day it is.",
-];
-
 const finalMicroBullets = [
   "We review every request before making a match.",
   "Mentor introductions happen by video or DM, never automation.",
@@ -135,49 +103,41 @@ const finalMicroBullets = [
 ];
 
 export default function HomePage() {
-  const quoteText = noiseNotes.join(" ");
 
   // Home stays the single source of editorial flow: hero → reassurance → journey diagram → pillars → CTA.
   return (
     <main className="min-h-screen bg-[#fef9f6] text-[#1F1C1A]">
-      <section className="relative w-screen min-h-[460px] sm:min-h-[520px] lg:min-h-[680px] overflow-hidden pt-2 sm:pt-3 lg:pt-4 pb-16 sm:pb-20 lg:pb-24">
+      <section
+        className="relative w-screen min-h-[460px] sm:min-h-[520px] lg:min-h-[680px] overflow-hidden pt-2 sm:pt-3 lg:pt-4 pb-16 sm:pb-20 lg:pb-24"
+        style={{ backgroundColor: "var(--step-bg-blush)" }}
+      >
         <div className="absolute inset-0">
-          <div className="absolute inset-0 block sm:hidden">
-            <Image
-              src={homepageHeroMobile}
-              alt="Taylor-Made Baby Co. mobile hero — calm baby planning invitation"
-              fill
-              priority
-              sizes="(max-width: 767px) 100vw, 100vw"
-              className="object-cover object-right"
-            />
-          </div>
-          <div className="absolute inset-0 hidden sm:block">
+          <div className="relative h-full w-full">
             <Image
               src={homepageHero}
               alt="Taylor-Made Baby Co. marketing hero"
               fill
               priority
               sizes="100vw"
-              className="object-fill object-right lg:object-[80%_50%]"
+              className="object-fill object-center"
             />
           </div>
         </div>
-          <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
-            {/* Mobile breathing room beneath the navbar */}
-            <div className="relative max-w-[640px] space-y-6 lg:max-w-[720px] pt-6 sm:pt-8 lg:pt-0">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+          {/* Mobile breathing room beneath the navbar */}
+          <div className="relative max-w-[640px] space-y-6 lg:max-w-[720px] pt-6 sm:pt-8 lg:pt-0">
             <p className="text-[11px] tracking-[0.18em] uppercase text-neutral-600 font-semibold mb-3">
               Calm, personal guidance for expecting parents
             </p>
             {/* Editorial lock: Hero headline must remain calm, Great Vibes script */}
             <div className="hero-editorial font-[400] text-neutral-900">
-              <h1 className="text-[48px] lg:text-[64px] leading-[1.15] tracking-[-0.01em] mb-4 sm:mb-5 lg:mb-6 sm:text-[52px] max-w-[32ch] lg:max-w-[40ch]">
+              <h1 className="text-[48px] lg:text-[64px] leading-[1.15] tracking-[-0.01em] mb-6 sm:text-[52px] max-w-[32ch] lg:max-w-[40ch]">
                 <span className="block">Baby prep,</span>
                 <span className="block lg:inline lg:whitespace-nowrap">without the</span>
                 <span className="block lg:inline lg:whitespace-nowrap"> overwhelm.</span>
               </h1>
             </div>
-            <p className="max-w-lg text-[15px] leading-[1.5] text-neutral-600 lg:text-[17px] mt-3 sm:mt-4 lg:mt-7 -ml-1 sm:-ml-2 lg:ml-0">
+            <p className="max-w-lg text-[15px] leading-[1.5] text-neutral-600 lg:text-[17px] mt-3 sm:mt-4 lg:mt-7 -ml-1 sm:-ml-2 lg:ml-0 mb-8">
               A calm, mentor-guided way to learn what baby gear actually does, plan what you truly need, and feel
               supported every step of the way.
             </p>
@@ -203,6 +163,14 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <div
+        aria-hidden="true"
+        className="h-40 w-full blur-[4px]"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(252,250,246,0) 0%, rgba(252,250,246,0.9) 70%, rgba(252,250,246,1) 100%)",
+        }}
+      />
       <div className={divider} />
       <section className="py-20 lg:py-28">
         <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center px-4 sm:px-6">
@@ -234,34 +202,24 @@ export default function HomePage() {
         // This section replaces the standalone About page.
         // Do not extract or split into a separate route.
         (
-          <section className="py-12 sm:py-16 bg-[#f8f4ef]">
+          <section
+            className="py-20 md:py-28"
+            style={{ backgroundColor: "var(--step-bg-ivory)" }}
+          >
             <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 gap-10 items-center lg:grid-cols-2">
-                  <div className="flex flex-col items-center text-center max-w-[560px] mx-auto lg:items-start lg:text-left">
-                    <p className="text-[11px] tracking-[0.44em] uppercase text-neutral-600">WHY WE EXIST</p>
-                    <div className="hero-editorial font-[400] text-neutral-900">
-                    <h2 className="text-[38px] sm:text-[44px] leading-[1.2] tracking-[0.02em]">
-                      Why Taylor-Made Baby Co. exists.
-                    </h2>
-                  </div>
-                  <p className="mt-6 text-[16px] sm:text-[18px] leading-[1.8] text-neutral-700 max-w-[560px]">
-                    We guide you through each season with calm clarity, mentor-led pacing, and intentional next steps.
-                  </p>
-                  <p className="mt-6 text-[15px] leading-[1.8] text-neutral-500 italic max-w-[560px]">
-                    Because Google at 2 a.m. is not a care plan.
-                  </p>
+              <div className="mx-auto flex max-w-[640px] flex-col items-center text-center space-y-6">
+                <p className="text-[11px] tracking-[0.44em] uppercase text-neutral-600">WHY WE EXIST</p>
+                <div className="hero-editorial font-[400] text-neutral-900">
+                  <h2 className="text-[38px] sm:text-[44px] leading-[1.2] tracking-[0.02em]">
+                    Why Taylor-Made Baby Co. exists.
+                  </h2>
                 </div>
-                <div className="flex justify-center">
-                  <div className="relative w-full min-h-[420px] rounded-[32px] bg-[#fdfbf9] overflow-hidden lg:min-h-[560px]">
-                    <Image
-                      src={aboutPageHero}
-                      alt="Taylor-Made Baby Co. editorial still life — calming textures and intentional details"
-                      fill
-                      sizes="(min-width: 1024px) 520px, 90vw"
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                </div>
+                <p className="text-[16px] sm:text-[18px] leading-[1.8] text-neutral-700">
+                  We guide you through each season with calm clarity, mentor-led pacing, and intentional next steps.
+                </p>
+                <p className="text-[15px] leading-[1.8] text-neutral-500 italic">
+                  Because Google at 2 a.m. is not a care plan.
+                </p>
               </div>
             </div>
           </section>
@@ -299,101 +257,107 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      <section className="py-24 sm:py-28">
+      <section aria-labelledby="process" className="mt-32">
         <div className="px-4 sm:px-6">
-          <div className={container}>
-            {/* Maintain single-column rhythm on phones */}
-            <div className="mt-12 grid grid-cols-1 gap-y-6 gap-x-6 md:grid-cols-2 lg:grid-cols-4">
-              {pillarOrder.map((pillarKey) => {
-                const pillar = pillarDetails[pillarKey];
-                const pillarLink = `/${pillarKey}`;
-                return (
-                  <article
-                    key={pillarKey}
-                    className="rounded-3xl border border-neutral-200 bg-white/70 p-6 sm:p-8 shadow-[0_18px_50px_rgba(0,0,0,0.06)] flex h-full flex-col"
-                  >
-                    <div className="mb-6 overflow-hidden rounded-2xl border border-neutral-200 bg-white/60">
-                      <div className="aspect-[16/10] relative">
+          <div className="mx-auto max-w-6xl space-y-6">
+            <h2 id="process" className="sr-only">
+              Process
+            </h2>
+            {pillarOrder.map((pillarKey, index) => {
+              const pillar = pillarDetails[pillarKey];
+              const stepStyle = stepBackgroundStyles[index];
+              return (
+                <section key={pillarKey} className="rounded-[32px]" style={stepStyle}>
+                  <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-4 sm:px-6 py-20 md:py-24 space-y-6 text-center">
+                    <p
+                      className="text-[11px] uppercase tracking-[0.4em]"
+                      style={{ color: "var(--tmbc-mauveGray)" }}
+                    >
+                      STEP 0{index + 1}
+                    </p>
+                    <h3 className="font-playfair font-[400] text-[32px] sm:text-[36px] leading-[1.2] text-neutral-900/90">
+                      {pillar.title}
+                    </h3>
+                    <p className="mx-auto max-w-3xl text-[16px] leading-[1.7] text-neutral-600">
+                      {stepDescriptions[pillarKey]}
+                    </p>
+                    <div className="mt-10 flex justify-center">
+                      <div className="w-full max-w-[480px]">
                         <Image
                           src={pillar.image.src}
                           alt={pillar.image.alt}
-                          fill
-                          sizes="(min-width: 1024px) 33vw, 100vw"
-                          className="h-full w-full object-cover"
+                          width={480}
+                          height={320}
+                          sizes="(min-width: 1024px) 480px, 90vw"
+                          className="rounded-[32px] object-cover"
+                          priority={index === 0}
                         />
                       </div>
                     </div>
-                    <h3 className="text-lg font-semibold text-neutral-900">{pillar.title}</h3>
-                    <p className="mt-3 text-[15px] leading-relaxed text-neutral-600 max-w-prose">{pillar.body[0]}</p>
-                    <Link
-                      href={pillarLink}
-                      className="mt-6 text-[12px] tracking-[0.22em] uppercase text-neutral-600 transition hover:text-neutral-900"
-                    >
-                      Explore {pillar.title} →
-                    </Link>
-                  </article>
-                );
-              })}
-            </div>
+                  </div>
+                </section>
+              );
+            })}
           </div>
         </div>
       </section>
-      <div className={divider} />
-      <PartnerLogoCarousel />
-      <div className={divider} />
-      <section className={sectionY}>
-        <div className={`${container} grid gap-12 lg:grid-cols-2 lg:items-center`}>
-          <div>
-            <p className={eyebrow}>Ready when baby lets you breathe</p>
-            <h2 className={h2}>Care that keeps pace with your parenting rhythm.</h2>
-            <p className={lead}>
-              Request an invite when the baby schedule lets you breathe; we’ll keep leaning in while you juggle feedings.
-            </p>
-            <ul className="mt-8 space-y-3 max-w-prose">
-              {finalMicroBullets.map((bullet) => (
-                <li key={bullet} className="flex gap-3 text-[15px] leading-relaxed text-neutral-600">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-400" />
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-10">
-              <Link
-                href="/request-invite"
-                className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-900 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800"
-              >
-                Request an Invite
-              </Link>
-            </div>
-            <div className="mt-10">
-              <p className="text-[12px] tracking-[0.22em] uppercase text-neutral-500">Have an invite code?</p>
-              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-                <input
-                  type="text"
-                  placeholder="Enter code"
-                  className="h-11 w-full rounded-full border border-neutral-300 bg-white/70 px-5 text-[15px] outline-none focus:ring-2 focus:ring-neutral-300"
-                />
-                <button className="h-11 rounded-full border border-neutral-300 bg-white/60 px-6 text-sm font-semibold text-neutral-900 hover:bg-white/80">
-                  Apply Code
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-center lg:justify-end">
-            <div className="w-full max-w-[520px] rounded-[32px] overflow-hidden ring-1 ring-black/5 bg-white/60 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
-              <div className="relative aspect-[16/10]">
-                <Image
-                  src="/images/marketing/envelope.png"
-                  alt="Invite-only onboarding process from request to mentorship and guided experience"
-                  fill
-                  sizes="(min-width: 1024px) 45vw, 100vw"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
+      <section
+        className="mt-32 pt-16 border-t border-neutral-200"
+        style={{ backgroundColor: "transparent" }}
+      >
+        <div className="mx-auto max-w-5xl">
+          <PartnerLogoCarousel />
         </div>
       </section>
+      <div className="mt-32 text-center">
+        <div className={divider} />
+        <section
+          className="py-24 md:py-32"
+          style={{
+            background:
+              "radial-gradient(circle at top center, rgba(243,214,223,0.25), transparent 65%)",
+          }}
+        >
+          <div className={container}>
+            <div className="space-y-10">
+              <p className={eyebrow}>Ready when baby lets you breathe</p>
+              <h2 className={h2}>Care that keeps pace with your parenting rhythm.</h2>
+              <p className={lead}>
+                Request an invite when the baby schedule lets you breathe; we’ll keep leaning in while you juggle feedings.
+              </p>
+              <ul className="mt-8 space-y-3 max-w-prose">
+                {finalMicroBullets.map((bullet) => (
+                  <li key={bullet} className="flex gap-3 text-[15px] leading-relaxed text-neutral-600">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-400" />
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-10">
+                <Link
+                  href="/request-invite"
+                  className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-900 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800"
+                >
+                  Request an Invite
+                </Link>
+              </div>
+              <div className="mt-10">
+                <p className="text-[12px] tracking-[0.22em] uppercase text-neutral-500">Have an invite code?</p>
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                  <input
+                    type="text"
+                    placeholder="Enter code"
+                    className="h-11 w-full rounded-full border border-neutral-300 bg-white/70 px-5 text-[15px] outline-none focus:ring-2 focus:ring-neutral-300"
+                  />
+                  <button className="h-11 rounded-full border border-neutral-300 bg-white/60 px-6 text-sm font-semibold text-neutral-900 hover:bg-white/80">
+                    Apply Code
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
   );
 }

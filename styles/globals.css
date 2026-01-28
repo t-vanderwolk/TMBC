@@ -40,6 +40,42 @@
   --member-state-hover: #E6C7D2;
   --member-state-active: #B48CA0;
   --member-state-disabled: #E1D7D7;
+
+  /* --- TMBC Bridge tokens (warm → cool harmony) --- */
+  --tmbc-mauveBridge: #C9A4C9;
+  --tmbc-mauveGray: #6F6573;
+  --tmbc-wash-warm: rgba(243, 214, 223, 0.22);
+  --tmbc-wash-cool: rgba(201, 164, 201, 0.14);
+  --tmbc-wash-ivory: rgba(252, 250, 246, 0.92);
+  --tmbc-blush-soft: rgba(243, 214, 223, 0.35);
+  --tmbc-blush-line: rgba(243, 214, 223, 0.7);
+  --tmbc-blush-text: #D8A8B7;
+  --step-bg-blush: rgba(243, 214, 223, 0.22);
+  --step-bg-ivory: rgba(252, 250, 246, 0.9);
+  --step-bg-mauve: rgba(201, 164, 201, 0.16);
+}
+
+.tmbc-bridge-warm {
+  background: linear-gradient(180deg, var(--tmbc-wash-ivory) 0%, var(--tmbc-wash-warm) 100%);
+}
+.tmbc-bridge-cool {
+  background: linear-gradient(180deg, var(--tmbc-wash-warm) 0%, var(--tmbc-wash-cool) 100%);
+}
+.tmbc-ivory-card {
+  background: rgba(252, 250, 246, 0.88);
+  border: 1px solid rgba(243, 214, 223, 0.45);
+  box-shadow: 0 10px 30px rgba(17, 12, 20, 0.06);
+  backdrop-filter: blur(2px);
+}
+.tmbc-divider-ribbon {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(243, 214, 223, 0) 0%,
+    rgba(243, 214, 223, 0.75) 20%,
+    rgba(201, 164, 201, 0.55) 80%,
+    rgba(201, 164, 201, 0) 100%
+  );
 }
 
 /* Editorial hero typography — scoped override to beat global span rules */
