@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
-import howItWorksHero from "@/assets/images/howitworkshero.png";
+import howItWorksHero from "@/assets/images/howitworks-hero.png";
 import evelope from "@/assets/images/evelope.png";
 import surveyImage from "@/assets/images/survey.png";
 import matchImage from "@/assets/images/match.png";
@@ -62,7 +62,7 @@ export default function HowItWorksPage() {
               fill
               priority
               sizes="(max-width: 767px) 100vw, 100vw"
-              className="object-cover object-right"
+              className="object-fill object-right"
             />
           </div>
           <div className="absolute inset-0 hidden sm:block">
@@ -199,6 +199,7 @@ export default function HowItWorksPage() {
                       background:
                         "linear-gradient(180deg, var(--step-bg-ivory) 0%, rgba(252,250,246,0) 100%)",
                     };
+              const stepCopySentences = step.copy.split(/(?<=\.)\s+/);
 
               return (
                 <Fragment key={step.title}>
@@ -210,6 +211,10 @@ export default function HowItWorksPage() {
                       <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
                         <div className={`space-y-4 ${index % 2 ? "lg:order-last lg:text-right" : ""}`}>
                           <div className="tmbc-ivory-card rounded-[32px] p-6 md:p-8">
+                            {/* Mobile-first markers keep each step clearly oriented before the headline. */}
+                            <p className="text-[11px] uppercase tracking-[0.4em] text-[var(--tmbc-mauveGray)]">
+                              STEP {index + 1} OF {processSteps.length}
+                            </p>
                             <p
                               className="text-[11px] uppercase tracking-[0.4em] relative"
                               style={{ color: "var(--tmbc-mauveGray)" }}
@@ -224,24 +229,47 @@ export default function HowItWorksPage() {
                             <h3 className="font-playfair font-[400] text-[32px] leading-[1.2] text-neutral-900/90">
                               {step.title}
                             </h3>
-                            <p className="text-[15px] leading-[1.7] text-neutral-600">{step.copy}</p>
+                            <div className="space-y-3 text-[15px] leading-[1.7] text-neutral-600">
+                              {/* Mobile readability guardrail: keep each sentence short and easy to scan. */}
+                              {stepCopySentences.map((sentence, sentenceIndex) => (
+                                <p key={`${step.title}-${sentenceIndex}`} className="m-0">
+                                  {sentence}
+                                </p>
+                              ))}
+                            </div>
                           </div>
                         </div>
                         <div className={`${index % 2 ? "lg:order-first" : ""}`}>
-                          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[32px]">
-                            <Image
-                              src={step.image}
-                              alt={step.alt}
-                              fill
-                              sizes="(min-width: 1024px) 40vw, 92vw"
-                              priority={false}
-                              className="h-full w-full object-cover"
-                            />
+                          <div className="py-6">
+                            <div
+                              className="relative aspect-[4/3] w-full overflow-hidden rounded-[32px] max-h-[45vh] sm:max-h-none"
+                              style={{ backgroundColor: "var(--tmbc-ivory)" }}
+                            >
+                              <Image
+                                src={step.image}
+                                alt={step.alt}
+                                fill
+                                sizes="(min-width: 1024px) 40vw, 92vw"
+                                priority={false}
+                                className="h-full w-full rounded-[32px] object-contain"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </section>
+                  {index === 1 && (
+                    <div className="lg:hidden mt-10 flex justify-center">
+                      {/* Mobile reminder keeps the invite action close after the second step without disrupting desktop rhythm. */}
+                      <Link
+                        href="/request-invite"
+                        className="flex items-center rounded-full border border-[var(--tmbc-mauve)] px-5 py-2 text-[12px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-mauve)]/70 hover:text-[var(--tmbc-charcoal)]"
+                      >
+                        Request an Invite
+                      </Link>
+                    </div>
+                  )}
                 </Fragment>
               );
             })}

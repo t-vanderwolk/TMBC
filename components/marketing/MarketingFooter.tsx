@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 const experienceLinks = [
-  { label: "Learn", href: "/learn" },
-  { label: "Plan", href: "/plan" },
-  { label: "Connect", href: "/connect" },
-  { label: "Reflect", href: "/reflect" },
+  { label: "Learn", href: "/experience#learn" },
+  { label: "Plan", href: "/experience#plan" },
+  { label: "Connect", href: "/experience#connect" },
+  { label: "Reflect", href: "/experience#reflect" },
 ];
 
 const companyLinks = [

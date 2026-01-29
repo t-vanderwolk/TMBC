@@ -125,7 +125,8 @@ export default function HomePage() {
         </div>
         <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
           {/* Mobile breathing room beneath the navbar */}
-          <div className="relative max-w-[640px] space-y-6 lg:max-w-[720px] pt-6 sm:pt-8 lg:pt-0">
+          <div className="relative max-w-[640px] space-y-6 lg:max-w-[720px] pt-4 sm:pt-8 lg:pt-0">
+            {/* Mobile-first padding keeps the CTA within the first screen while larger breakpoints retain ample breathing room. */}
             <p className="text-[11px] tracking-[0.18em] uppercase text-neutral-600 font-semibold mb-3">
               Calm, personal guidance for expecting parents
             </p>
@@ -142,7 +143,7 @@ export default function HomePage() {
               supported every step of the way.
             </p>
             {/* CTAs stay visible on compact screens */}
-            <div className="mt-6 sm:mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 pb-8 sm:pb-10 lg:pb-0">
+            <div className="mt-4 sm:mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 pb-8 sm:pb-10 lg:pb-0">
               <Link
                 href="/request-invite"
                 className="inline-flex w-full items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] sm:w-auto"
@@ -151,7 +152,13 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/how-it-works"
-                className="inline-flex w-full items-center justify-center rounded-full border !border-[#E7B6C7] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] text-[#3c1c21] transition hover:!border-[#E7B6C7]/80 hover:text-[#3c1c21] sm:w-auto"
+                className="hidden sm:inline-flex w-full items-center justify-center rounded-full border !border-[#E7B6C7] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] text-[#3c1c21] transition hover:!border-[#E7B6C7]/80 hover:text-[#3c1c21] sm:w-auto"
+              >
+                Explore the Experience
+              </Link>
+              <Link
+                href="/how-it-works"
+                className="mt-3 text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 transition hover:text-[var(--tmbc-charcoal)] sm:hidden"
               >
                 Explore the Experience
               </Link>
@@ -172,9 +179,11 @@ export default function HomePage() {
         }}
       />
       <div className={divider} />
-      <section className="py-20 lg:py-28">
+      <section className="py-10 sm:py-12 lg:py-28">
+        {/* Mobile spacing keeps the narrative sections comfortably separated without crowding the hero. */}
         <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center px-4 sm:px-6">
           <div className="relative z-10 flex h-full flex-col justify-center space-y-5 lg:space-y-6 text-left mx-auto max-w-[560px] lg:ml-auto">
+            <p className="text-[11px] tracking-[0.44em] uppercase text-neutral-500">OUR SERVICE</p>
             <h2 className="font-playfair font-[400] text-[38px] sm:text-[44px] text-neutral-900 leading-[1.2] tracking-[0.02em]">
               Taylor-Made Baby Co. is a private baby-planning service.
             </h2>
@@ -203,9 +212,10 @@ export default function HomePage() {
         // Do not extract or split into a separate route.
         (
           <section
-            className="py-20 md:py-28"
+            className="py-10 sm:py-12 md:py-28"
             style={{ backgroundColor: "var(--step-bg-ivory)" }}
           >
+            {/* Mobile-first padding keeps this philosophy block calm before the next major section. */}
             <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
               <div className="mx-auto flex max-w-[640px] flex-col items-center text-center space-y-6">
                 <p className="text-[11px] tracking-[0.44em] uppercase text-neutral-600">WHY WE EXIST</p>
@@ -225,7 +235,8 @@ export default function HomePage() {
           </section>
         )
       }
-      <section className="py-10 lg:py-12">
+      <section className="py-10 sm:py-12 lg:py-12">
+        {/* Small mobile padding ensures easy breathing room between narrative blocks. */}
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="space-y-6 text-neutral-600 leading-[1.8]">
             <p className="text-neutral-600 leading-[1.8]">

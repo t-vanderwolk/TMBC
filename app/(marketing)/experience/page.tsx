@@ -1,215 +1,218 @@
+import Image from "next/image";
+import type { StaticImageData } from "next/image";
 import Link from "next/link";
-import MarketingHero from "@/components/marketing/MarketingHero";
-import MarketingContent from "@/components/marketing/MarketingContent";
-import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
+import experienceHero from "@/assets/images/abouthomehero.png";
+import academyPreview from "@/assets/images/academypreview.png";
+import planPreview from "@/assets/images/planpreview.png";
+import connectPreview from "@/assets/images/connectpreview.png";
+import reflectPreview from "@/assets/images/reflectpreview.png";
 
-const processSteps = [
+type SectionPreview = {
+  src: StaticImageData;
+  alt: string;
+};
+
+type ExperienceSection = {
+  id: string;
+  label: string;
+  title: string;
+  body: string[];
+  preview: SectionPreview;
+};
+
+const experienceSections: ExperienceSection[] = [
   {
-    title: "Request an invitation",
-    description: "Tell us where you are in pregnancy or parenthood so mentors can meet you with context.",
+    id: "learn",
+    label: "LEARN",
+    title: "Education that keeps pace with what you already know.",
+    body: [
+      "The Academy delivers calm, guided modules that break each gear category into digestible context and mentor prompts.",
+      "You move forward when you feel ready, keeping confidence higher than convenience and questions closer than timelines.",
+    ],
+    preview: {
+      src: academyPreview,
+      alt: "Gentle Academy preview with calm learning modules",
+    },
   },
   {
-    title: "Get matched with your mentor",
-    description: "A human mentor learns your rhythm, priorities, and questions before sketching the next right move.",
+    id: "plan",
+    label: "PLAN",
+    title: "Registry decisions, grounded in your home and rhythm.",
+    body: [
+      "Mentors help you build a thoughtful registry without pressure, auto-generated lists, or noise.",
+      "Every recommendation is backed by conversation, real-world context, and a pace that protects your bandwidth.",
+    ],
+    preview: {
+      src: planPreview,
+      alt: "Calm planning preview showing registry guidance",
+    },
   },
   {
-    title: "Move through Learn · Plan · Connect · Reflect",
-    description: "Each pillar waits until you signal readiness, keeping the experience calm and steady.",
+    id: "connect",
+    label: "CONNECT",
+    title: "Human support and small circles for steady momentum.",
+    body: [
+      "A mentor pairing keeps the conversation as focused as you need, with optional small groups that welcome questions, reassurance, and shared pacing.",
+      "Community rooms stay intentional—no performance, just calm, moderated check-ins with folks moving through the same chapters.",
+    ],
+    preview: {
+      src: connectPreview,
+      alt: "Soft connect preview with gentle messaging circles",
+    },
   },
   {
-    title: "Continue with ongoing access",
-    description: "The care stays open so you can revisit signals, ask new questions, and lean into the circle when it feels right.",
+    id: "reflect",
+    label: "REFLECT",
+    title: "Meaning-making that honors how this season feels.",
+    body: [
+      "Journaling prompts, keepsake moments, and a private reflection vault capture what you value without obligation.",
+      "Mentors keep that journal warm with gratitude checks so every milestone lands in context, not chaos.",
+    ],
+    preview: {
+      src: reflectPreview,
+      alt: "Reflection preview showing curated keepsakes and notes",
+    },
   },
 ];
 
-const pillars = [
+const sectionBackgrounds = [
+  { backgroundColor: "var(--step-bg-blush)" },
+  { backgroundColor: "var(--step-bg-ivory)" },
+  { backgroundColor: "var(--step-bg-mauve)" },
   {
-    title: "Learn",
-    description: "We quiet the noise so the next decision feels clear, not frantic.",
-  },
-  {
-    title: "Plan",
-    description: "Mentors help you map the logistics without leaking stress into your calendar.",
-  },
-  {
-    title: "Connect",
-    description: "Community rooms stay moderated and gentle, with invitations instead of pressure.",
-  },
-  {
-    title: "Reflect",
-    description: "We capture what works so mentors can anchor the next chapter in what felt steady.",
+    background:
+      "linear-gradient(180deg, var(--step-bg-ivory) 0%, rgba(252,250,246,0) 100%)",
   },
 ];
 
-const pillarPreviews = [
-  {
-    title: "Learn",
-    heading: "Learn what matters right now",
-    description:
-      "The Academy dashboard keeps your active modules, mentor notes, and workbook cues in one quiet view so you can decide when to move forward.",
-    imageSrc: "/assets/images/academydashboardpreview.png",
-    imageAlt: "Academy dashboard preview showing mentor notes and the next modules you’ll unlock",
-    background: "bg-white/80",
-  },
-  {
-    title: "Plan",
-    heading: "Plan with steady context",
-    description:
-      "The planning workspace layers registry guidance, decision notes, and timelines so every choice arrives with the right support instead of pressure.",
-    imageSrc: "/assets/images/planpreview.png",
-    imageAlt: "Planning view preview with registry guidance and mentor reflections",
-    background: "bg-[var(--tmbc-ivory)]/90",
-  },
-  {
-    title: "Connect",
-    heading: "Connect in circles that breathe",
-    description:
-      "Messaging stays moderated and intentional—mentors prompt check-ins, keep tone calm, and let you respond when it feels right.",
-    imageSrc: "/assets/images/connectpreview.png",
-    imageAlt: "Connect preview showing gentle messaging and circle prompts",
-    background: "bg-white/80",
-  },
-  {
-    title: "Reflect",
-    heading: "Reflect on what settles you",
-    description:
-      "Reflection logs archive what has worked, what shifted, and how mentors respond so the next chapter starts with that calm context.",
-    imageSrc: "/assets/images/reflectpreview.png",
-    imageAlt: "Reflection preview showing workbook entries and mentor notes",
-    background: "bg-[var(--tmbc-ivory)]/90",
-  },
-];
+const gradientFade = Object.freeze({
+  background:
+    "linear-gradient(180deg, rgba(252,250,246,0) 0%, rgba(252,250,246,0.9) 70%, rgba(252,250,246,1) 100%)",
+});
 
-const reassurance = [
-  "Trusted by parents who need a calm pulse, not another checklist.",
-  "Mentors keep ratios small so every member feels seen.",
-];
+function PreviewImage({ preview }: { preview: SectionPreview }) {
+  return (
+    <div className="relative w-full max-w-[600px] h-full min-h-[420px]">
+      <div className="relative h-full w-full">
+        <Image
+          src={preview.src}
+          alt={preview.alt}
+          fill
+          sizes="(min-width: 1024px) 600px, 90vw"
+          className="rounded-[32px] object-contain"
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function ExperiencePage() {
   return (
-    <>
-      <MarketingHero
-        imageSrc="/images/marketing/home-hero.png"
-        imageAlt="Soft ribbon hero art for the Experience page."
-        imageWidth={1536}
-        imageHeight={1024}
-        headline="How the Taylor-Made Baby Co. membership works"
-        subheading="A calm, human-paced membership that maps mentors, community, and the experience into one steady rhythm."
-        primaryCta={{
-          label: "Request an Invite",
-          href: "/request-invite",
-        }}
-        priority
-      />
-
-      <MarketingContent>
-        <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
-          <div className="space-y-4 text-center">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Process snapshot
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              What happens after you raise your hand
-            </h2>
+    <main className="bg-[#fef9f6] text-[#1F1C1A]">
+      <section
+        className="relative w-screen min-h-[520px] sm:min-h-[600px] lg:min-h-[680px] overflow-hidden pt-2 sm:pt-3 lg:pt-4 pb-16 sm:pb-20 lg:pb-24"
+        style={{ backgroundColor: "var(--step-bg-blush)" }}
+      >
+        <div className="absolute inset-0">
+          <div className="relative h-full w-full">
+            <Image
+              src={experienceHero}
+              alt="Taylor-Made Baby Co. hero art"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-right lg:object-[80%_50%]"
+            />
           </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {processSteps.map((step) => (
-              <div
-                key={step.title}
-                className="rounded-[28px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/70 p-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-80"
+        </div>
+        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+          {/* Hero spacing mirrors home/how-it-works for editorial continuity. */}
+          <div className="relative max-w-[640px] space-y-6 lg:max-w-[720px] pt-6 sm:pt-8 lg:pt-0">
+            <p className="text-[11px] tracking-[0.18em] uppercase text-neutral-600 font-semibold mb-3">
+              THE EXPERIENCE
+            </p>
+            <h1 className="font-playfair text-[48px] lg:text-[64px] leading-[1.15] tracking-[-0.01em] mb-4 sm:mb-5 max-w-[32ch] lg:max-w-[40ch]">
+              A guided experience designed to support you—step by step.
+            </h1>
+            <p className="max-w-lg text-[15px] leading-[1.5] text-neutral-600 lg:text-[17px]">
+              Mentor-led pacing, calm next steps, and one intentional path through Learn · Plan · Connect · Reflect.
+            </p>
+            <div className="mt-6 sm:mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 pb-8 sm:pb-10 lg:pb-0">
+              <Link
+                href="/request-invite"
+                className="inline-flex w-full items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] sm:w-auto"
               >
-                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  {step.title}
-                </p>
-                <p className="mt-3 leading-relaxed">{step.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-          <div className="space-y-5">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Learn · Plan · Connect · Reflect
-            </p>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              One continuous experience shaped with care
-            </h2>
-            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              The pillars stay connected so you can move between learning, planning, community, and reflection without losing context.
-            </p>
-          </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-2">
-              <div className="space-y-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-                {pillars.map((pillar) => (
-                  <div key={pillar.title} className="rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 p-5 shadow-[0_12px_30px_rgba(62,47,53,0.12)]">
-                    <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                      {pillar.title}
-                    </p>
-                    <p className="mt-2 leading-relaxed text-base text-[var(--tmbc-charcoal)] text-opacity-80">
-                      {pillar.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <div className="mt-16 space-y-20">
-            {pillarPreviews.map((preview) => (
-              <section
-                key={preview.title}
-                className={`marketing-section marketing-card ${preview.background} px-8 py-20 md:py-28`}
-              >
-                <div className="space-y-3 text-center">
-                  <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                    {preview.title}
-                  </p>
-                  <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-                    {preview.heading}
-                  </h2>
-                  <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                    {preview.description}
-                  </p>
-                </div>
-                <div className="mt-10 flex justify-center">
-                  <div className="w-full max-w-[360px]">
-                    <MobilePreviewImage
-                      src={preview.imageSrc}
-                      alt={preview.imageAlt}
-                      width={360}
-                      height={720}
-                    />
-                  </div>
-                </div>
-              </section>
-            ))}
-          </div>
-
-        <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
-          <div className="space-y-3 text-center text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-            {reassurance.map((line) => (
-              <p key={line}>{line}</p>
-            ))}
-          </div>
-        </section>
-
-        <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-          <div className="space-y-4 text-center">
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)]">
-              Ready when you are
-            </h2>
-            <p className="marketing-subtitle mt-3 mb-6 text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              There's no rush—request an invitation whenever the timing feels calm, and we’ll keep the membership quiet until you arrive.
-            </p>
-            <div className="mt-6 flex justify-center">
-              <Link href="/request-invite" className="mkt-btn-primary">
                 Request an Invite
+              </Link>
+              <Link
+                href="#learn"
+                className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 transition hover:text-[var(--tmbc-charcoal)]"
+              >
+                See the experience ↓
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+      <div className="h-40 w-full" aria-hidden style={gradientFade} />
+
+      {experienceSections.map((section, index) => (
+        <section
+          key={section.id}
+          id={section.id}
+          style={sectionBackgrounds[index]}
+          className="relative py-28 min-h-[520px]"
+        >
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="grid items-stretch gap-16 md:grid-cols-2">
+              <div className="max-w-xl space-y-5">
+                <p className="text-[11px] uppercase tracking-[0.4em] text-[var(--tmbc-mauveGray)]">
+                  {section.label}
+                </p>
+                <h2 className="font-playfair text-[32px] sm:text-[36px] leading-[1.2] text-neutral-900/95">
+                  {section.title}
+                </h2>
+                <div className="space-y-3 text-[17px] leading-[1.9] text-neutral-600">
+                  {section.body.map((paragraph) => (
+                    <p key={paragraph} className="m-0">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </div>
+              <div className="flex justify-center h-full">
+                <PreviewImage preview={section.preview} />
+              </div>
+            </div>
+          </div>
         </section>
-      </MarketingContent>
-    </>
+      ))}
+
+      <section
+        className="py-20 sm:py-24"
+        style={{
+          background:
+            "radial-gradient(circle at top center, rgba(243,214,223,0.2), transparent 65%)",
+        }}
+      >
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center space-y-8">
+          <p className="text-[11px] uppercase tracking-[0.4em] text-neutral-500">INVITE-ONLY</p>
+          <h2 className="font-playfair text-[32px] sm:text-[38px] leading-[1.2] text-neutral-900">
+            Join a calm, mentor-led experience exactly when you are ready.
+          </h2>
+          <p className="text-[16px] leading-[1.7] text-neutral-600">
+            We stay intentionally small so you receive thoughtful pacing, real mentors, and steady next steps.
+          </p>
+          <div className="flex flex-col items-center gap-3">
+            <Link
+              href="/request-invite"
+              className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-900 px-6 text-[12px] uppercase tracking-[0.4em] text-white transition hover:bg-neutral-800"
+            >
+              Request an Invite
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

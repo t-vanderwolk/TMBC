@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { greatVibes } from "@/lib/fonts";
@@ -11,10 +11,10 @@ type NavLink = {
   label: string;
   href: string;
   variant?: "primary" | "text";
-  isLabel?: boolean;
 };
 
 const PRIMARY_NAV: NavLink[] = [
+  { label: "Experience", href: "/experience" },
   { label: "How It Works", href: "/how-it-works" },
   { label: "Membership", href: "/membership" },
   { label: "Blog", href: "/blog" },
@@ -22,17 +22,9 @@ const PRIMARY_NAV: NavLink[] = [
   { label: "Contact", href: "/contact" },
 ];
 
-const EXPERIENCE_NAV_ITEMS: NavLink[] = [
-  { label: "Learn", href: "/learn" },
-  { label: "Plan", href: "/plan" },
-  { label: "Connect", href: "/connect" },
-  { label: "Reflect", href: "/reflect" },
-];
-
 const MOBILE_NAV: NavLink[] = [
+  { label: "Experience", href: "/experience" },
   { label: "How It Works", href: "/how-it-works" },
-  { label: "Experience", href: "#", isLabel: true },
-  ...EXPERIENCE_NAV_ITEMS,
   { label: "Membership", href: "/membership" },
   { label: "Blog", href: "/blog" },
   { label: "FAQ", href: "/faq" },
@@ -100,38 +92,6 @@ export default function MarketingNav() {
   const isActive = (href: string) =>
     pathname === href || (href !== "/" && pathname?.startsWith(`${href}/`));
 
-  const [experienceOpen, setExperienceOpen] = useState(false);
-
-  const experienceActive = EXPERIENCE_NAV_ITEMS.some((item) => isActive(item.href));
-  const experienceListRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!experienceOpen) return undefined;
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        experienceListRef.current &&
-        !experienceListRef.current.contains(event.target as Node)
-      ) {
-        setExperienceOpen(false);
-      }
-    };
-    const handleKeydown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setExperienceOpen(false);
-      }
-    };
-    window.addEventListener("mousedown", handleClickOutside);
-    window.addEventListener("keydown", handleKeydown);
-    return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("keydown", handleKeydown);
-    };
-  }, [experienceOpen]);
-
-  useEffect(() => {
-    setExperienceOpen(false);
-  }, [pathname]);
-
   return (
     <nav
       className={`sticky top-0 z-50 border-b border-neutral-200/60 bg-[#fbf7f4]/70 supports-[backdrop-filter]:backdrop-blur supports-[backdrop-filter]:bg-[#fbf7f4]/60 py-2 sm:py-3.5 transition-shadow duration-200 ${
@@ -139,7 +99,7 @@ export default function MarketingNav() {
       }`}
     >
       <div className="flex w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="text-ellipsis whitespace-nowrap pr-6 sm:pr-10 lg:pr-12">
+        <Link href="/" className="text-ellipsis whitespace-nowrap pr-6 sm:pr-10 lg:pr-12">
           <p
             className={`${greatVibes.className} text-3xl sm:text-4xl leading-none text-[var(--tmbc-blush-primary)]`}
           >
@@ -152,52 +112,7 @@ export default function MarketingNav() {
 
         <div className="hidden lg:flex items-center gap-8">
           <ul className="flex items-center gap-7">
-            {PRIMARY_NAV.slice(0, 2).map((link) => (
-              <li key={link.href}>
-                <DesktopLink href={link.href} label={link.label} isActive={isActive} />
-              </li>
-            ))}
-            <li className="relative">
-              <button
-                type="button"
-                className={`flex h-10 items-center gap-2 rounded-full px-3 text-[12px] tracking-[0.28em] uppercase transition-colors duration-200 ${
-                  experienceActive
-                    ? `text-neutral-900 bg-white/60 border border-neutral-200 shadow-sm ${activeUnderline}`
-                    : "text-neutral-600 hover:text-neutral-900 hover:bg-white/40"
-                }`}
-                aria-haspopup="menu"
-                aria-expanded={experienceOpen}
-                aria-controls="experience-menu"
-                onClick={() => setExperienceOpen((prev) => !prev)}
-              >
-                <span>Experience</span>
-                <span className="text-[10px] leading-none">▾</span>
-              </button>
-              <div
-                id="experience-menu"
-                ref={experienceListRef}
-                className={`absolute left-1/2 top-full z-10 w-max -translate-x-1/2 mt-3 flex-col gap-2 rounded-2xl border border-neutral-200/60 bg-white/80 p-4 text-[10px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] backdrop-blur-xl transition-all duration-200 shadow-[0_16px_45px_rgba(0,0,0,0.12)] ${
-                  experienceOpen
-                    ? "visible opacity-100 translate-y-0"
-                    : "invisible opacity-0 -translate-y-1 pointer-events-none"
-                }`}
-                role="menu"
-              >
-                {EXPERIENCE_NAV_ITEMS.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-[11px] uppercase tracking-[0.32em] text-[var(--tmbc-charcoal)]/70 transition hover:text-[var(--tmbc-charcoal)]"
-                    onClick={() => setExperienceOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </li>
-          </ul>
-          <ul className="flex items-center gap-6 text-[12px] tracking-[0.28em] uppercase">
-            {PRIMARY_NAV.slice(2).map((link) => (
+            {PRIMARY_NAV.map((link) => (
               <li key={link.href}>
                 <DesktopLink href={link.href} label={link.label} isActive={isActive} />
               </li>
@@ -219,12 +134,14 @@ export default function MarketingNav() {
             Request an Invite
           </Link>
         </div>
-        <div className="flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.32em] lg:hidden">
-          {EXPERIENCE_NAV_ITEMS.map((link) => (
-            <Link key={link.href} href={link.href} className="mkt-link-secondary">
-              {link.label}
-            </Link>
-          ))}
+        <div className="lg:hidden flex items-center gap-3">
+          {/* Mobile-first decluttering keeps just the CTA + menu in view before the overlay opens. */}
+          <Link
+            href="/request-invite"
+            className="flex h-10 items-center rounded-full px-4 text-[10px] tracking-[0.32em] uppercase bg-[var(--tmbc-blush-primary)] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)]"
+          >
+            Request an Invite
+          </Link>
         </div>
 
         <button
@@ -245,14 +162,7 @@ export default function MarketingNav() {
           <div className="border-t border-neutral-200/60 px-4 sm:px-6 lg:px-8 py-6">
             <nav className="flex flex-col gap-3 text-[0.75rem] uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] text-opacity-80">
               {MOBILE_NAV.map((link) =>
-                link.isLabel ? (
-                  <div
-                    key={link.label}
-                    className="text-xs uppercase tracking-[0.45em] text-[var(--tmbc-charcoal)] text-opacity-60"
-                  >
-                    {link.label}
-                  </div>
-                ) : link.variant === "primary" ? (
+                link.variant === "primary" ? (
                   <Link
                     key={link.href}
                     href={link.href}
