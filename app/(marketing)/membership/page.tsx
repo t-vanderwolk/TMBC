@@ -1,308 +1,231 @@
 import Image from "next/image";
-import Link from "next/link";
 import Button from "@/components/ui/Button";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import ImageFrame from "@/components/marketing/ImageFrame";
-import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
-import mentorPairing from "@/assets/images/membertomentor.png";
-import membershipHero from "@/assets/images/membershiphero.png";
 import { HERO } from "@/app/(marketing)/heroStyles";
+import membershipHero from "@/assets/images/membershiphero.png";
 
-const membershipHighlights = [
+const includeCards = [
   {
-    title: "Belonging",
-    description: "Mentor-led rhythms keep you steady so preparation feels like a circle, not a sprint.",
+    title: "Personal mentor support",
+    copy: "A steady companion who listens, remembers, and keeps your planning calm.",
   },
   {
-    title: "Rhythm",
-    description: "Academy moments, planning check-ins, and small circles rotate through a calm cadence.",
+    title: "Bespoke baby planning",
+    copy: "Custom rhythms, check-ins, and gentle nudges that honor your pace.",
   },
   {
-    title: "Continuity",
-    description: "We leave room to keep learning, connecting, and reflecting even after milestones pass.",
+    title: "Calm registry guidance",
+    copy: "Softly curated recommendations so you can build a thoughtful list without the noise.",
+  },
+  {
+    title: "Ongoing reflection & support",
+    copy: "Quarterly reviews, reflective prompts, and space to return as your story evolves.",
   },
 ];
 
-const supportSignals = [
-  {
-    title: "Personal mentor",
-    description:
-      "A real human meets you where you are, keeps the conversation grounded, and remembers the details that matter.",
-  },
-  {
-    title: "Guided learning",
-    description:
-      "Modules surface clarity, not overwhelm, so planning feels like a conversation about your next calm step.",
-  },
-  {
-    title: "Shared circles",
-    description:
-      "Small group connections, curated events, and thoughtful follow-ups keep the village gentle instead of noisy.",
-  },
-  {
-    title: "Private reflection",
-    description:
-      "We leave room to reflect quietly, write what feels true, and return whenever the story needs reshaping.",
-  },
-];
-
-const progression = [
-  {
-    stage: "Member",
-    description: "You begin with learning, planning quietly, and leaning into mentors who listen.",
-  },
-  {
-    stage: "Experienced Member",
-    description: "Confidence grows, reflections deepen, and you share insight when it feels right.",
-  },
-  {
-    stage: "Mentor",
-    description: "When you’re ready, you guide others — still within the same calm circle.",
-  },
+const pricingNotes = [
+  "Simple, transparent membership with no hidden layers.",
+  "No upsells or product pushing—your mentor focuses on you.",
+  "We never earn commission or rely on affiliate recommendations.",
+  "Exact pricing is shared after your invite request.",
 ];
 
 const inviteReasons = [
-  "Keeps mentor ratios healthy so each member feels seen.",
-  "Preserves the pacing and tone the village relies on.",
-  "Ensures every request is reviewed with care.",
+  "Keeps the experience gentle by honoring a small mentor-to-member ratio.",
+  "Lets us plan thoughtful, individual attention rather than one-size fits all.",
+  "Ensures invites are shared with care and a personal introduction.",
 ];
 
-const mentorParagraphs = [
-  "No algorithms. No crowds. Mentors are matched to your story, values, and what you are already carrying.",
-  "Introductions happen over a call or written note so the relationship stays warm, confidential, and human.",
+const betaHighlights = [
+  {
+    title: "What Beta Membership Includes",
+    points: [
+      "Full membership experience while we refine the journey together.",
+      "No cost during the beta so you can focus on the care, not the fee.",
+      "No obligation when the beta concludes—stay or step back with grace.",
+      "Opportunity to share how the experience feels so we can keep improving.",
+    ],
+  },
+  {
+    title: "From Member to Mentor",
+    points: [
+      "Optional, invitation-based pathway when alignment feels right.",
+      "Selection cares for readiness, communication, and shared values.",
+      "Training, support, and clear scope keep mentorship grounded and calm.",
+    ],
+  },
+  {
+    title: "What Mentors Receive",
+    points: [
+      "Paid mentorship opportunities with flexible, remote participation.",
+      "Dedicated training, resources, and ongoing support from TMBC.",
+      "Continued connection to a community of thoughtful mentors.",
+    ],
+  },
 ];
+
+function MembershipHero() {
+  return (
+    <section className="relative overflow-hidden bg-[var(--tmbc-ivory)]">
+      <div className="absolute inset-0">
+        <Image
+          src={membershipHero}
+          alt="Soft editorial still life with a ribbon, key, and TMBC blocks"
+          fill
+          priority
+          sizes="100vw"
+          className="object-fill"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent" aria-hidden="true" />
+      </div>
+      <div className="relative mx-auto flex h-full max-w-5xl flex-col gap-4 px-6 py-16 md:px-10 lg:px-16">
+        <p className={HERO.eyebrow}>Membership</p>
+        <h1 className={HERO.heading}>Membership, thoughtfully designed.</h1>
+        <p className={HERO.body}>Personal guidance, calm planning, and ongoing support — before and after baby arrives.</p>
+        <div className={HERO.ctaGroup}>
+          <Button href="/request-invite" variant="primary">
+            Request an Invite
+          </Button>
+        </div>
+        <p className="text-sm text-[var(--tmbc-charcoal)]/80">
+          A warm, private conversation starts the membership process.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function IncludesGrid() {
+  return (
+    <section aria-labelledby="membership-includes" className="space-y-6 pt-12 lg:pt-16">
+      <div className="space-y-2">
+        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Calm, editorial care</p>
+        <h2 id="membership-includes" className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">
+          What Membership Includes
+        </h2>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {includeCards.map((card) => (
+          <article
+            key={card.title}
+            className="relative overflow-hidden rounded-[26px] border border-[var(--member-border-soft)] bg-white/90 p-6 shadow-[0_15px_45px_rgba(62,47,53,0.08)]"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--member-border-default)] bg-[var(--member-accent-subtle)] text-sm text-[var(--tmbc-charcoal)]/60">
+              <span aria-hidden="true">✶</span>
+            </div>
+            <h3 className="mt-5 font-playfair text-xl tracking-[-0.01em] text-[var(--tmbc-charcoal)]">{card.title}</h3>
+            <p className="mt-3 mkt-body text-[var(--tmbc-charcoal)] text-opacity-70">{card.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function InvitationSection() {
+  return (
+    <section aria-labelledby="membership-invitation" className="space-y-8 pt-16 lg:pt-20">
+      <div className="space-y-2">
+        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Invitation, thoughtfully paced</p>
+        <h2 id="membership-invitation" className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">
+          Membership & Invitation
+        </h2>
+        <p className="max-w-3xl mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
+          Thoughtful access, by design. Invite-only membership keeps the community calm, personal, and made for people
+          who value care over noise.
+        </p>
+      </div>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <article className="rounded-[26px] border border-[var(--member-border-soft)] bg-white/90 p-6 shadow-[0_15px_40px_rgba(62,47,53,0.1)]">
+          <h3 className="font-playfair text-2xl tracking-[-0.02em] text-[var(--tmbc-charcoal)]">How Pricing Works</h3>
+          <ul className="mt-4 space-y-3">
+            {pricingNotes.map((note) => (
+              <li key={note} className="flex gap-3">
+                <span className="mt-1 h-2 w-2 rounded-full bg-[var(--member-accent-primary)]" aria-hidden="true" />
+                <span className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">{note}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+        <article className="rounded-[26px] border border-[var(--member-border-soft)] bg-white/90 p-6 shadow-[0_15px_40px_rgba(62,47,53,0.1)]">
+          <h3 className="font-playfair text-2xl tracking-[-0.02em] text-[var(--tmbc-charcoal)]">Why Invite-Only?</h3>
+          <ul className="mt-4 space-y-3">
+            {inviteReasons.map((reason) => (
+              <li key={reason} className="flex gap-3">
+                <span className="mt-1 h-2 w-2 rounded-full bg-[var(--member-accent-primary)]" aria-hidden="true" />
+                <span className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">{reason}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+function BetaMentorPathway() {
+  return (
+    <section aria-labelledby="beta-pathway" className="space-y-10 pt-16 lg:pt-20">
+      <div className="space-y-2">
+        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Beta care with depth</p>
+        <h2 id="beta-pathway" className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">
+          Beta Membership & Mentor Pathway
+        </h2>
+        <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">Growing with intention.</p>
+        <p className="max-w-3xl mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
+          Beta testing fees are waived while we co-create the experience—there is no obligation afterward.
+        </p>
+      </div>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {betaHighlights.map((section) => (
+          <article
+            key={section.title}
+            className="flex flex-col rounded-[24px] border border-[var(--member-border-soft)] bg-white/90 p-6 shadow-[0_15px_45px_rgba(62,47,53,0.1)]"
+          >
+            <h3 className="font-playfair text-xl tracking-[-0.02em] text-[var(--tmbc-charcoal)]">{section.title}</h3>
+            <ul className="mt-4 space-y-3">
+              {section.points.map((point) => (
+                <li key={point} className="flex gap-3">
+                  <span className="mt-1 h-2 w-2 rounded-full bg-[var(--member-accent-primary)]" aria-hidden="true" />
+                  <span className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">{point}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+      <p className="max-w-3xl mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
+        This model allows TMBC to grow sustainably without relying on product commissions and reinvests in mentor support
+        and our members’ experience.
+      </p>
+    </section>
+  );
+}
+
+function FinalCTA() {
+  return (
+    <section className="mt-16 rounded-[32px] border border-[var(--member-border-soft)] bg-white/90 px-6 py-10 text-center shadow-[0_25px_60px_rgba(62,47,53,0.2)]">
+      <h2 className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">You don’t need to do this alone.</h2>
+      <p className="mt-3 mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
+        Requesting an invite is simply the start of a conversation.
+      </p>
+      <Button href="/request-invite" variant="primary" className="mt-6">
+        Request an Invite
+      </Button>
+    </section>
+  );
+}
 
 export default function MembershipPage() {
   return (
-    <>
-      <section
-        className="relative w-screen min-h-[520px] md:min-h-[560px] lg:min-h-[640px] overflow-hidden bg-[#FAF7F5]"
-      >
-        <div className="absolute inset-0">
-          <Image
-            src={membershipHero}
-            alt="Taylor-Made Baby Co. lifetime membership still life"
-            fill
-            priority
-            sizes="100vw"
-            className="object-fill object-right"
-          />
-        </div>
-        <div className="relative z-10 mx-auto flex h-full max-w-5xl flex-col gap-6 px-6 py-20 md:px-10 lg:px-16">
-          <div className="space-y-8 max-w-3xl">
-            <p className={HERO.eyebrow}>Membership</p>
-            <h1 className={HERO.heading}>Membership is a calm circle, not a checklist.</h1>
-            <p className={HERO.body}>
-              It exists for people who want thoughtful mentor care and ongoing quiet learning.
-            </p>
-            <div className={HERO.ctaGroup}>
-              <Button href="/request-invite" variant="primary">
-                Request an Invite
-              </Button>
-              <Link href="#mentor-path" className={HERO.secondaryLink}>
-                Learn about the mentor path →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div className="bg-[var(--member-bg-page)]">
+      <MembershipHero />
       <MarketingContent>
-        <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
-          <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
-            <div className="text-center space-y-4">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                What membership gives you
-              </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
-                Belonging, rhythm, continuous care.
-              </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70 mx-auto">
-                Membership keeps you rooted in learning, planning at your pace, and connecting without comparison.
-              </p>
-            </div>
-            <div className="mt-10 space-y-4 md:hidden">
-              {membershipHighlights.map((highlight) => (
-                <details
-                  key={highlight.title}
-                  className="group rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-white/90 p-5"
-                >
-                  <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
-                    {highlight.title}
-                  </summary>
-                  <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{highlight.description}</p>
-                </details>
-              ))}
-            </div>
-            <div className="mt-10 hidden gap-6 md:grid md:grid-cols-3">
-              {membershipHighlights.map((highlight) => (
-                <div key={highlight.title} className="marketing-card bg-white/80 p-6">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {highlight.title}
-                  </p>
-                  <p className="mt-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-                    {highlight.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-24 mb-8 border-y border-[var(--tmbc-charcoal)]/10" id="mentor-path">
-            <div className="text-center space-y-3">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                Mentor-guided access
-              </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
-                The care shows up intentionally.
-              </h2>
-              <p className="max-w-3xl mx-auto text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                You get a personal mentor, guided learning, shared circles, and space for reflection without noise.
-              </p>
-            </div>
-            <div className="mt-8 space-y-4 md:hidden">
-              {supportSignals.map((signal) => (
-                <details
-                  key={signal.title}
-                  className="group rounded-[26px] border border-[var(--tmbc-charcoal)]/10 bg-[var(--tmbc-ivory)]/70 p-5"
-                >
-                  <summary className="cursor-pointer list-none text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
-                    {signal.title}
-                  </summary>
-                  <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{signal.description}</p>
-                </details>
-              ))}
-            </div>
-            <div className="mt-8 hidden gap-6 md:grid md:grid-cols-2">
-              {supportSignals.map((signal) => (
-                <div key={signal.title} className="marketing-card bg-[var(--tmbc-ivory)]/80 p-6">
-                  <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                    {signal.title}
-                  </p>
-                  <p className="mt-2 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-                    {signal.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-10 text-left text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                Member → Mentor path
-              </p>
-              <ul className="mkt-bullet-list">
-                {progression.map((step) => (
-                  <li key={step.stage} className="mkt-bullet-item">
-                    <span className="font-semibold text-[var(--tmbc-charcoal)]">{step.stage}</span>:{" "}
-                    {step.description}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-
-          <section className="marketing-section marketing-card bg-[#fff4f1] px-8 py-20 md:py-28">
-            <div className="grid items-center gap-10 lg:grid-cols-2">
-              <div className="space-y-6">
-                <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  Mentor-led support
-                </p>
-                <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
-                  People who keep care calm, confidential, and clear.
-                </h2>
-                <div className="space-y-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-                  {mentorParagraphs.map((paragraph) => (
-                    <p key={paragraph} className="m-0">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-                <p className="text-[13px] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/70">
-                  No algorithms. No pressure.
-                </p>
-              </div>
-              <div className="flex justify-center">
-                <div className="relative h-[420px] w-full max-w-[520px] overflow-hidden rounded-[32px] bg-neutral-50 shadow-[0_18px_45px_rgba(0,0,0,0.08)]">
-                  <Image
-                    src={mentorPairing}
-                    alt="Mentor and parent having a calm conversation"
-                    fill
-                    sizes="(min-width: 1024px) 520px, 90vw"
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
-            <div className="space-y-4 text-center">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                Membership glimpses
-              </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
-                The dashboard and progression keep the circle visible
-              </h2>
-              <p className="max-w-3xl text-sm text-[var(--tmbc-charcoal)] text-opacity-70 mx-auto">
-                See how the dashboard orients you in ongoing care and how the member-to-mentor path keeps that care steady.
-              </p>
-            </div>
-            <div className="mt-10 grid gap-10 md:grid-cols-2">
-              <div className="flex flex-col items-center space-y-3 text-center">
-                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                  Dashboard overview
-                </p>
-                <p className="max-w-[320px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                  A calm, editorial dashboard keeps learning, planning, and circles in one quiet view.
-                </p>
-                <ImageFrame className="w-full max-w-[360px]">
-                  <MobilePreviewImage
-                    src="/assets/images/dashboardpreview.png"
-                    alt="Membership dashboard preview showing learning, planning, and circle highlights"
-                    width={360}
-                    height={720}
-                  />
-                </ImageFrame>
-              </div>
-              <div className="flex flex-col items-center space-y-3 text-center">
-                <p className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-50">
-                  Member → Mentor progression
-                </p>
-                <p className="max-w-[320px] text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-                  The progression view shows how your mentor keeps decisions, reflections, and invitations aligned.
-                </p>
-                <ImageFrame className="w-full max-w-[360px]">
-                  <MobilePreviewImage
-                    src="/assets/images/membertomentor.png"
-                    alt="Member to mentor progression preview showing decision notes and gentle prompts"
-                    width={360}
-                    height={720}
-                  />
-                </ImageFrame>
-              </div>
-            </div>
-          </section>
-
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28">
-            <div className="flex flex-col gap-4 text-center">
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                Invite-only care
-              </p>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
-                We keep the village small so support stays personal.
-              </h2>
-              <ul className="mkt-bullet-list">
-                {inviteReasons.map((reason) => (
-                  <li key={reason} className="mkt-bullet-item">
-                    {reason}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/request-invite" className="mkt-btn-primary">
-                Request an Invite
-              </Link>
-            </div>
-          </section>
-        </div>
+        <IncludesGrid />
+        <InvitationSection />
+        <BetaMentorPathway />
+        <FinalCTA />
       </MarketingContent>
-    </>
+    </div>
   );
 }
