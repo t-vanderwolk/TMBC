@@ -9,6 +9,7 @@ import BlogContentRenderer, {
 import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
 import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
 import MarketingContent from "@/components/marketing/MarketingContent";
+import SectionDivider from "@/components/marketing/SectionDivider";
 import type { AffiliatePolicy } from "@/lib/blog/affiliatePolicy";
 
 const API_BASE_URL =
@@ -212,7 +213,8 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
 
   return (
     <>
-      <article className="marketing-section bg-tmIvory/80">
+      <SectionDivider />
+      <article className="marketing-section marketing-section-wash">
         <div className="mx-auto space-y-12 px-4 sm:px-6 lg:px-8 max-w-6xl">
         <div className="relative overflow-hidden rounded-[40px] border border-tmMauve/40 bg-white/90 p-10 shadow-editorial">
           <div className="relative mt-8 max-w-3xl space-y-4">

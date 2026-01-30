@@ -1,15 +1,15 @@
 import Link from "next/link";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
+import SectionDivider from "@/components/marketing/SectionDivider";
 
 const heroSection = (
   <MarketingHero
+    eyebrow="Terms"
     imageSrc="/images/marketing/home-hero.png"
     imageAlt="Soft ribbon background"
-    imageWidth={1536}
-    imageHeight={1024}
     headline="Terms of use"
-    subheading="Taylor-Made Baby Co. is built for families who value clarity. These terms keep the community safe while mentors and admins collaborate."
+    lead="Taylor-Made Baby Co. is built for families who value clarity. These terms keep the community safe while mentors and admins collaborate."
     primaryCta={{ label: "Request an Invite", href: "/request-invite" }}
   />
 );
@@ -37,6 +37,7 @@ export default function TermsPage() {
               .
             </p>
           </section>
+          <SectionDivider />
           <section className="marketing-section space-y-3">
             <h2 className="font-serif text-2xl text-[var(--tmbc-charcoal)]">Need help?</h2>
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-75">

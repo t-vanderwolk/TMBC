@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Button from "@/components/ui/Button";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import { HERO } from "@/app/(marketing)/heroStyles";
+import MarketingHero from "@/components/marketing/MarketingHero";
+import SectionDivider from "@/components/marketing/SectionDivider";
 import membershipHero from "@/assets/images/membershiphero.png";
 
 const includeCards = [
@@ -64,40 +64,9 @@ const betaHighlights = [
   },
 ];
 
-function MembershipHero() {
-  return (
-    <section className="relative overflow-hidden bg-[var(--tmbc-ivory)]">
-      <div className="absolute inset-0">
-        <Image
-          src={membershipHero}
-          alt="Soft editorial still life with a ribbon, key, and TMBC blocks"
-          fill
-          priority
-          sizes="100vw"
-          className="object-fill"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent" aria-hidden="true" />
-      </div>
-      <div className="relative mx-auto flex h-full max-w-5xl flex-col gap-4 px-6 py-16 md:px-10 lg:px-16">
-        <p className={HERO.eyebrow}>Membership</p>
-        <h1 className={HERO.heading}>Membership, thoughtfully designed.</h1>
-        <p className={HERO.body}>Personal guidance, calm planning, and ongoing support — before and after baby arrives.</p>
-        <div className={HERO.ctaGroup}>
-          <Button href="/request-invite" variant="primary">
-            Request an Invite
-          </Button>
-        </div>
-        <p className="text-sm text-[var(--tmbc-charcoal)]/80">
-          A warm, private conversation starts the membership process.
-        </p>
-      </div>
-    </section>
-  );
-}
-
 function IncludesGrid() {
   return (
-    <section aria-labelledby="membership-includes" className="space-y-6 pt-12 lg:pt-16">
+    <section aria-labelledby="membership-includes" className="marketing-section space-y-6">
       <div className="space-y-2">
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Calm, editorial care</p>
         <h2 id="membership-includes" className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">
@@ -124,7 +93,7 @@ function IncludesGrid() {
 
 function InvitationSection() {
   return (
-    <section aria-labelledby="membership-invitation" className="space-y-8 pt-16 lg:pt-20">
+    <section aria-labelledby="membership-invitation" className="marketing-section marketing-section-wash space-y-8">
       <div className="space-y-2">
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Invitation, thoughtfully paced</p>
         <h2 id="membership-invitation" className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">
@@ -165,7 +134,7 @@ function InvitationSection() {
 
 function BetaMentorPathway() {
   return (
-    <section aria-labelledby="beta-pathway" className="space-y-10 pt-16 lg:pt-20">
+    <section aria-labelledby="beta-pathway" className="marketing-section space-y-10">
       <div className="space-y-2">
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Beta care with depth</p>
         <h2 id="beta-pathway" className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">
@@ -204,7 +173,7 @@ function BetaMentorPathway() {
 
 function FinalCTA() {
   return (
-    <section className="mt-16 rounded-[32px] border border-[var(--member-border-soft)] bg-white/90 px-6 py-10 text-center shadow-[0_25px_60px_rgba(62,47,53,0.2)]">
+    <section className="marketing-section marketing-section-wash marketing-section-lush mt-16 rounded-[32px] border border-[var(--member-border-soft)] px-6 py-10 text-center shadow-[0_25px_60px_rgba(62,47,53,0.2)]">
       <h2 className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">You don’t need to do this alone.</h2>
       <p className="mt-3 mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
         Requesting an invite is simply the start of a conversation.
@@ -218,12 +187,31 @@ function FinalCTA() {
 
 export default function MembershipPage() {
   return (
-    <div className="bg-[var(--member-bg-page)]">
-      <MembershipHero />
+    <div className="bg-[var(--tmbc-ivory)]">
+      <MarketingHero
+        eyebrow="Membership"
+        headline="Membership, thoughtfully designed."
+        lead="Personal guidance, calm planning, and ongoing support—before and after baby arrives."
+        primaryCta={{
+          label: "Request an Invite",
+          href: "/request-invite",
+        }}
+        secondaryCta={{
+          label: "Explore membership includes",
+          href: "#membership-includes",
+        }}
+        imageSrc={membershipHero}
+        imageAlt="Soft editorial still life with a ribbon, key, and TMBC blocks"
+        priority
+      />
+      <SectionDivider />
       <MarketingContent>
         <IncludesGrid />
+        <SectionDivider />
         <InvitationSection />
+        <SectionDivider />
         <BetaMentorPathway />
+        <SectionDivider />
         <FinalCTA />
       </MarketingContent>
     </div>

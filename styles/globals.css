@@ -50,6 +50,7 @@
   --tmbc-blush-soft: rgba(243, 214, 223, 0.35);
   --tmbc-blush-line: rgba(243, 214, 223, 0.7);
   --tmbc-blush-text: #D8A8B7;
+  --tmbc-wash: rgba(243, 214, 223, 0.3);
   --step-bg-blush: rgba(243, 214, 223, 0.22);
   --step-bg-ivory: rgba(252, 250, 246, 0.9);
   --step-bg-mauve: rgba(201, 164, 201, 0.16);
@@ -354,6 +355,18 @@
 
   .marketing-section {
     margin-top: 4.75rem;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+    background-color: var(--tmbc-ivory);
+  }
+
+  .marketing-section-wash {
+    background-color: var(--tmbc-wash);
+  }
+
+  .marketing-section-lush {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
   }
 
   @media (max-width: 767px) {

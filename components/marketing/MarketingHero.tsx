@@ -1,23 +1,15 @@
 /**
  * MARKETING HERO — SINGLE SOURCE OF TRUTH
  *
- * This is the ONLY marketing hero component.
- * It owns:
- * - Editorial spacing & rhythm
- * - Typography hierarchy
- * - Navbar adjacency behavior
- * - Image containment rules (desktop/mobile)
+ * This component defines the canonical marketing hero.
+ * Deviations require explicit design review.
  *
- * Do not recreate hero layouts elsewhere.
- * Do not wrap this component.
+ * It owns the editorial spacing, typography, CTA rhythm, and hero image locks.
  */
 
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-
-import Section from "@/components/marketing/Section";
-import ImageFrame from "@/components/marketing/ImageFrame";
 
 type MarketingHeroCta = {
   label: string;
@@ -28,97 +20,76 @@ type MarketingHeroCta = {
 type MarketingHeroProps = {
   eyebrow?: string;
   headline: ReactNode;
-  subheading: ReactNode;
-  body?: ReactNode;
-  microcopy?: ReactNode;
+  lead: ReactNode;
   primaryCta: MarketingHeroCta;
   secondaryCta?: MarketingHeroCta;
-  imageSrc: string;
+  imageSrc: string | StaticImageData;
   imageAlt: string;
-  imageWidth: number;
-  imageHeight: number;
+  imageSizes?: string;
   priority?: boolean;
-  motion?: boolean;
   className?: string;
 };
 
 export default function MarketingHero({
   eyebrow,
   headline,
-  subheading,
-  body,
-  microcopy,
+  lead,
   primaryCta,
   secondaryCta,
   imageSrc,
   imageAlt,
-  imageWidth,
-  imageHeight,
+  imageSizes,
   priority = false,
   className = "",
 }: MarketingHeroProps) {
-  const bodyContent = body ? (
-    <div className="mt-6 space-y-5 text-[16px] sm:text-[18px] leading-relaxed text-neutral-600">
-      {body}
-    </div>
-  ) : null;
-
   // This component is intentionally presentation-only to remain Turbopack-safe.
   return (
-    <Section className={`bg-[var(--tmbc-ivory)] ${className}`.trim()}>
-      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        <div className="order-2 lg:order-1 max-w-[560px] space-y-6 pt-6 sm:pt-8">
-          {eyebrow && (
-            <p className="text-[11px] tracking-[0.18em] sm:tracking-[0.34em] uppercase text-neutral-500 mb-3">
-              {eyebrow}
-            </p>
-          )}
-          <h1
-            className="font-playfair text-[80px] leading-[1.05] sm:text-[110px] sm:leading-[1] tracking-[-0.02em] mb-4 sm:mb-5"
+    <section
+      className={`relative overflow-hidden bg-[var(--tmbc-ivory)] pt-24 pb-20 md:pt-28 md:pb-24 lg:pt-32 lg:pb-28 min-h-[70vh] ${className}`.trim()}
+    >
+      <div className="absolute inset-0">
+        <Image
+          src={imageSrc}
+          alt={imageAlt}
+          fill
+          sizes={imageSizes ?? "100vw"}
+          className="h-full w-full object-fill object-right"
+          priority={priority}
+        />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent" aria-hidden="true" />
+      <div className="relative z-10 max-w-[640px] px-6 text-left">
+        {eyebrow && (
+          <p className="text-[11px] uppercase tracking-[0.36em] text-[var(--tmbc-charcoal)] text-opacity-60">
+            {eyebrow}
+          </p>
+        )}
+        <h1 className="font-playfair text-[64px] leading-[1.05] tracking-[-0.02em] text-[var(--tmbc-charcoal)] sm:text-[72px]">
+          {headline}
+        </h1>
+        <p className="text-lg leading-[1.6] text-[var(--tmbc-charcoal)] text-opacity-70">
+          {lead}
+        </p>
+        <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
+          <Link
+            href={primaryCta.href}
+            className={`mkt-btn mkt-btn-primary uppercase tracking-[0.35em] ${primaryCta.className ?? ""}`.trim()}
           >
-            {headline}
-          </h1>
-          <p className="mkt-h2 mt-3 sm:mt-4 leading-[1.5]">{subheading}</p>
-          {bodyContent}
-          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 pb-8 sm:pb-10">
+            {primaryCta.label}
+          </Link>
+          {secondaryCta && (
             <Link
-              href={primaryCta.href}
-              className={`mkt-btn-primary h-12 rounded-full px-6 text-sm font-semibold ${
-                primaryCta.className ?? ""
+              href={secondaryCta.href}
+              className={`text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-80 transition hover:text-[var(--tmbc-mauve)] flex items-center gap-1 ${
+                secondaryCta.className ?? ""
               }`.trim()}
             >
-              {primaryCta.label}
+              <span>{secondaryCta.label}</span>
+              <span aria-hidden>→</span>
             </Link>
-            {secondaryCta && (
-              <Link
-                href={secondaryCta.href}
-                className={`mkt-link-secondary h-12 rounded-full px-6 text-sm font-semibold ${
-                  secondaryCta.className ?? ""
-                }`.trim()}
-              >
-                {secondaryCta.label}
-              </Link>
-            )}
-          </div>
-          {microcopy && (
-            <p className="mt-8 text-[12px] tracking-[0.22em] uppercase text-neutral-500">{microcopy}</p>
           )}
         </div>
-        <div className="order-1 lg:order-2 flex items-center justify-center">
-          <ImageFrame className="w-full rounded-[32px] overflow-hidden bg-white/60 ring-1 ring-black/5 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
-            <div className="aspect-[16/10] sm:aspect-[4/5] w-full">
-              <Image
-                src={imageSrc}
-                alt={imageAlt}
-                width={imageWidth}
-                height={imageHeight}
-                className="h-full w-full object-contain"
-                priority={priority}
-              />
-            </div>
-          </ImageFrame>
-        </div>
       </div>
-    </Section>
+    </section>
   );
 }

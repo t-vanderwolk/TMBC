@@ -1,15 +1,15 @@
 import Link from "next/link";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
+import SectionDivider from "@/components/marketing/SectionDivider";
 
 const heroSection = (
   <MarketingHero
+    eyebrow="Privacy"
     imageSrc="/images/marketing/home-hero.png"
     imageAlt="Soft ribbon background"
-    imageWidth={1536}
-    imageHeight={1024}
     headline="Privacy policy"
-    subheading="Our commitment to parents is grounded in transparency. Here’s how we collect, use, and safeguard the information you share."
+    lead="Our commitment to parents is grounded in transparency. Here’s how we collect, use, and safeguard the information you share."
     primaryCta={{ label: "Request an Invite", href: "/request-invite" }}
   />
 );
@@ -37,6 +37,7 @@ export default function PrivacyPage() {
               .
             </p>
           </section>
+          <SectionDivider />
           <section className="marketing-section space-y-3">
             <h2 className="font-serif text-2xl text-[var(--tmbc-charcoal)]">Quick links</h2>
             <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
 import Button from "@/components/ui/Button";
-import { HERO } from "@/app/(marketing)/heroStyles";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import howItWorksHero from "@/assets/images/howitworksheroupdated.png";
 import evelope from "@/assets/images/evelope.png";
 import surveyImage from "@/assets/images/survey.png";
@@ -55,39 +55,22 @@ const processSteps = [
 export default function HowItWorksPage() {
   return (
     <>
-      <section className="relative min-h-[520px] md:min-h-[560px] lg:min-h-[640px] overflow-hidden bg-[#FAF7F5]">
-        <div className="absolute inset-0">
-          <Image
-            src={howItWorksHero}
-            alt="Taylor-Made Baby Co. hero art"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-right-bottom"
-          />
-          <div
-            className="absolute inset-0 bg-gradient-to-b from-[var(--tmbc-blush)]/40 via-[var(--tmbc-ivory)]/40 to-transparent"
-            aria-hidden
-          />
-        </div>
-        <div className="relative z-10 mx-auto flex h-full max-w-5xl flex-col gap-4 px-6 py-16 md:px-10 lg:px-16">
-          <p className={HERO.eyebrow}>How It Works</p>
-          <h1 className={HERO.heading}>
-            A calm, guided path into Taylor-Made Baby Co.
-          </h1>
-          <p className={HERO.body}>
-            A welcoming invite, thoughtful guidance, and steady support—never a rush or a forced decision.
-          </p>
-          <div className={HERO.ctaGroup}>
-            <Button href="/request-invite" variant="primary">
-              Request an Invite
-            </Button>
-            <Link href="#process" className={HERO.secondaryLink}>
-              See the steps →
-            </Link>
-          </div>
-        </div>
-      </section>
+      <MarketingHero
+        eyebrow="How It Works"
+        headline="A calm, guided path into Taylor-Made Baby Co."
+        lead="A welcoming invite, thoughtful guidance, and steady support—never a rush or a forced decision."
+        primaryCta={{
+          label: "Request an Invite",
+          href: "/request-invite",
+        }}
+        secondaryCta={{
+          label: "See the steps",
+          href: "#process",
+        }}
+        imageSrc={howItWorksHero}
+        imageAlt="Taylor-Made Baby Co. hero art"
+        priority
+      />
       <div
         aria-hidden="true"
         className="h-40 w-full blur-[4px]"
@@ -97,7 +80,7 @@ export default function HowItWorksPage() {
         }}
       />
 
-      <section className="bg-transparent">
+      <section className="marketing-section">
         <div className="mx-auto max-w-6xl px-6 py-24">
           <div className="tmbc-divider-ribbon mb-10" aria-hidden />
           <div className="mb-10 flex justify-center" aria-hidden="true">
@@ -153,7 +136,7 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="tmbc-bridge-cool">
+      <section className="marketing-section marketing-section-wash marketing-section-lush">
         <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
           <div className="tmbc-divider-ribbon mb-10" aria-hidden />
           <div className="space-y-20">
@@ -254,7 +237,7 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-<section className="py-20 sm:py-24 mt-16 sm:mt-20 mb-16 sm:mb-20">
+      <section className="marketing-section">
   <div className="mx-auto max-w-xl text-center">
           <Image
             src={tmbcSeal}
@@ -274,13 +257,7 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <section
-        className="py-20 sm:py-24 mt-12 sm:mt-16"
-        style={{
-          background:
-            "radial-gradient(circle at top center, rgba(243,214,223,0.25), transparent 65%)",
-        }}
-      >
+      <section className="marketing-section marketing-section-wash marketing-section-lush">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 text-center space-y-8">
           <p className="text-[11px] uppercase tracking-[0.35em] text-neutral-500">CALM START</p>
           <h2 className="font-playfair text-[36px] leading-[1.2] text-neutral-900">

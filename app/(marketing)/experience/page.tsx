@@ -1,13 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Fragment } from "react";
 import Button from "@/components/ui/Button";
+import MarketingHero from "@/components/marketing/MarketingHero";
+import SectionDivider from "@/components/marketing/SectionDivider";
 import experienceHero from "@/assets/images/experienceherobunny.png";
 import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
 import connectPillar from "@/assets/images/connectpillar.png";
 import reflectPillar from "@/assets/images/reflectpillar.png";
 import livingRoomSofa from "@/assets/images/living-room-sofa.jpeg";
-import { HERO } from "@/app/(marketing)/heroStyles";
 
 export const metadata = {
   title: "Taylor-Made Baby Co. - Concierge birth & baby planning",
@@ -111,43 +113,22 @@ const pillarSpacing = "py-10 sm:py-12";
 export default function ExperiencePage() {
   return (
     <main className="bg-[#fef9f6] text-[#1F1C1A]">
-      <section
-        className="relative min-h-[540px] md:min-h-[590px] lg:min-h-[660px] overflow-hidden bg-[#FAF7F5]"
-      >
-        <div className="absolute inset-0">
-          <Image
-            src={experienceHero}
-            alt="Taylor-Made Baby Co. hero art"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-right"
-          />
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-gradient-to-r from-white/25 via-white/10 to-transparent"
-          />
-        </div>
-        <div className="relative z-10 mx-auto flex h-full max-w-5xl flex-col gap-6 px-6 py-20 md:px-10 lg:px-16">
-          <div className="space-y-8">
-            <p className={HERO.eyebrow}>THE EXPERIENCE</p>
-            <h1 className={HERO.heading}>
-              A calm, mentor-led path that feels designed for the family you already are.
-            </h1>
-            <p className={HERO.body}>
-              Intentional guidance, quiet clarity, and thoughtful pacing make every step feel steady, personal, and confident.
-            </p>
-            <div className={HERO.ctaGroup}>
-              <Button href="/request-invite" variant="primary">
-                Request an Invite
-              </Button>
-              <Link href="/how-it-works" className={HERO.secondaryLink}>
-                See how it works →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <MarketingHero
+        eyebrow="THE EXPERIENCE"
+        headline="A calm, mentor-led path that feels designed for the family you already are."
+        lead="Intentional guidance, quiet clarity, and thoughtful pacing make every step feel steady, personal, and confident."
+        primaryCta={{
+          label: "Request an Invite",
+          href: "/request-invite",
+        }}
+        secondaryCta={{
+          label: "See how it works",
+          href: "/how-it-works",
+        }}
+        imageSrc={experienceHero}
+        imageAlt="Taylor-Made Baby Co. hero art"
+        priority
+      />
 
       <div
         className="h-52 w-full"
@@ -158,53 +139,59 @@ export default function ExperiencePage() {
         }}
       />
 
-      <section className="space-y-12 py-16 sm:py-20">
+      <SectionDivider className="mx-auto max-w-6xl" />
+
+      <section className="marketing-section space-y-12">
         {pillarHighlights.map((pillar, index) => {
           const textFirst = index % 2 === 0;
           return (
-            <section
-              key={pillar.id}
-              className={`border-t border-[var(--tmbc-charcoal)]/10 first:border-t-0 ${pillarTones[pillar.id] ?? "bg-transparent"}`}
-            >
-              <div className={`mx-auto max-w-7xl px-6 ${pillarSpacing}`}>
-                <div className="grid gap-10 items-center lg:grid-cols-2">
-                  <div className={`space-y-4 ${textFirst ? "lg:order-1" : "lg:order-2"}`}>
-                    <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-mauveGray)]">
-                      {pillar.title}
-                    </p>
-                    <h3 className="font-playfair text-[32px] leading-[1.2] text-neutral-900">
-                      {pillar.title}
-                    </h3>
-                    <p className="text-[15px] leading-[1.65] text-neutral-600">{pillar.thesis}</p>
-                    <p className="text-[15px] leading-[1.65] text-neutral-600">
-                      {pillar.paragraph}
-                    </p>
-                    <ul className="space-y-3 text-[14px] leading-[1.7] text-neutral-600">
-                      {pillar.bullets.map((bullet) => (
-                        <li key={bullet} className="flex gap-3">
-                          <span aria-hidden className="mt-1 inline-flex h-2 w-2 rounded-full bg-[var(--tmbc-mauve)]" />
-                          <span>{bullet}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="text-[15px] leading-[1.6] text-neutral-600">{pillar.why}</p>
-                  </div>
-                  <div className={`flex justify-center ${textFirst ? "lg:order-2" : "lg:order-1"}`}>
-                    <div className="relative w-full max-w-[420px] overflow-hidden rounded-[32px] border border-transparent bg-neutral-50 shadow-[0_12px_40px_rgba(0,0,0,0.05)]">
-                      <div className="relative w-full" style={{ paddingTop: "75%" }}>
-                        <Image
-                          src={pillar.image.src}
-                          alt={pillar.image.alt}
-                          fill
-                          sizes="(min-width: 1024px) 400px, 90vw"
-                          className="object-cover"
-                        />
+            <Fragment key={pillar.id}>
+              <section
+                className={`border-t border-[var(--tmbc-charcoal)]/10 first:border-t-0 ${pillarTones[pillar.id] ?? "bg-transparent"}`}
+              >
+                <div className={`mx-auto max-w-7xl px-6 ${pillarSpacing}`}>
+                  <div className="grid gap-10 items-center lg:grid-cols-2">
+                    <div className={`space-y-4 ${textFirst ? "lg:order-1" : "lg:order-2"}`}>
+                      <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-mauveGray)]">
+                        {pillar.title}
+                      </p>
+                      <h3 className="font-playfair text-[32px] leading-[1.2] text-neutral-900">
+                        {pillar.title}
+                      </h3>
+                      <p className="text-[15px] leading-[1.65] text-neutral-600">{pillar.thesis}</p>
+                      <p className="text-[15px] leading-[1.65] text-neutral-600">
+                        {pillar.paragraph}
+                      </p>
+                      <ul className="space-y-3 text-[14px] leading-[1.7] text-neutral-600">
+                        {pillar.bullets.map((bullet) => (
+                          <li key={bullet} className="flex gap-3">
+                            <span aria-hidden className="mt-1 inline-flex h-2 w-2 rounded-full bg-[var(--tmbc-mauve)]" />
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="text-[15px] leading-[1.6] text-neutral-600">{pillar.why}</p>
+                    </div>
+                    <div className={`flex justify-center ${textFirst ? "lg:order-2" : "lg:order-1"}`}>
+                      <div className="relative w-full max-w-[420px] overflow-hidden rounded-[32px] border border-transparent bg-neutral-50 shadow-[0_12px_40px_rgba(0,0,0,0.05)]">
+                        <div className="relative w-full" style={{ paddingTop: "75%" }}>
+                          <Image
+                            src={pillar.image.src}
+                            alt={pillar.image.alt}
+                            fill
+                            sizes="(min-width: 1024px) 400px, 90vw"
+                            className="object-cover"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
+              {index < pillarHighlights.length - 1 && (
+                <SectionDivider className="mx-auto max-w-6xl" />
+              )}
+            </Fragment>
           );
         })}
       </section>
@@ -249,8 +236,9 @@ export default function ExperiencePage() {
           </div>
         </div>
       </section>
+      <SectionDivider className="mx-auto max-w-6xl" />
 
-      <section className="py-16 sm:py-20 bg-[#FAF7F5]">
+      <section className="marketing-section marketing-section-wash marketing-section-lush">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center space-y-5">
           <p className="text-[11px] uppercase tracking-[0.4em] text-neutral-500">Invite-only</p>
           <h2 className="font-playfair text-[32px] sm:text-[38px] leading-[1.2] text-neutral-900">

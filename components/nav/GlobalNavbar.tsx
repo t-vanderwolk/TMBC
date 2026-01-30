@@ -20,6 +20,7 @@ export default function GlobalNavbar() {
   const router = useRouter();
   const [unread, setUnread] = useState({ messages: 0, community: 0, invites: 0 });
   const [openDropdown, setOpenDropdown] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const user = useCurrentUser();
 
@@ -36,13 +37,21 @@ export default function GlobalNavbar() {
 
   const role = user?.role?.toUpperCase() ?? null;
 
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [mobileMenuOpen]);
+
   return (
     <nav className="w-full border-b border-[#EAD4D8]/60 bg-white/70 backdrop-blur-md sticky top-0 z-50">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="font-serif text-xl text-[#3E2F35] hover:text-[#C8A1B4] transition">
           Taylor-Made Baby Co.
         </Link>
-        <div className="flex items-center gap-6 text-sm">
+        <div className="hidden items-center gap-6 text-sm md:flex">
           {!user && (
             <>
               <Link href="/how-it-works" className="text-[#3E2F35]/70 hover:text-[#C8A1B4]">
@@ -123,7 +132,76 @@ export default function GlobalNavbar() {
             </>
           )}
         </div>
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(true)}
+          className="rounded-full border border-[#C8A1B4]/60 p-2 text-[#3E2F35] transition hover:border-[#C8A1B4] md:hidden"
+        >
+          <span className="sr-only">Open navigation</span>
+          <div className="space-y-1">
+            <span className="block h-0.5 w-6 bg-current" />
+            <span className="block h-0.5 w-6 bg-current" />
+            <span className="block h-0.5 w-6 bg-current" />
+          </div>
+        </button>
       </div>
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-white/95 p-6">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="font-serif text-xl text-[#3E2F35]">
+              Taylor-Made Baby Co.
+            </Link>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(false)}
+              className="rounded-full border border-[#C8A1B4]/60 p-2 text-[#3E2F35]"
+            >
+              <span className="sr-only">Close navigation</span>
+              <span className="block h-0.5 w-5 bg-current rotate-45" />
+              <span className="block h-0.5 w-5 bg-current -rotate-45 -mt-0.5" />
+            </button>
+          </div>
+          <div className="mt-8 flex flex-col gap-4 text-lg text-[#3E2F35]">
+            {!user && (
+              <>
+                <Link onClick={() => setMobileMenuOpen(false)} href="/how-it-works">
+                  How it works
+                </Link>
+                <Link onClick={() => setMobileMenuOpen(false)} href="/membership">
+                  Membership
+                </Link>
+                <Link
+                  onClick={() => setMobileMenuOpen(false)}
+                  href="/request-invite"
+                  className="rounded-full bg-[#C8A1B4] px-5 py-2 text-white text-sm uppercase tracking-[0.35em]"
+                >
+                  Request an Invite
+                </Link>
+              </>
+            )}
+            {user && (
+              <>
+                <Link onClick={() => setMobileMenuOpen(false)} href="/dashboard">
+                  Dashboard
+                </Link>
+                <Link onClick={() => setMobileMenuOpen(false)} href="/dashboard/member/messages">
+                  Messages
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    handleLogout();
+                  }}
+                  className="text-sm uppercase tracking-[0.35em]"
+                >
+                  Logout
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
