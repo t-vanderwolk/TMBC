@@ -1,8 +1,12 @@
+import Image from "next/image";
 import Link from "next/link";
-import MarketingHero from "@/components/marketing/MarketingHero";
+import Button from "@/components/ui/Button";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import ImageFrame from "@/components/marketing/ImageFrame";
 import MobilePreviewImage from "@/components/marketing/MobilePreviewImage";
+import mentorPairing from "@/assets/images/membertomentor.png";
+import membershipHero from "@/assets/images/membershiphero.png";
+import { HERO } from "@/app/(marketing)/heroStyles";
 
 const membershipHighlights = [
   {
@@ -63,23 +67,45 @@ const inviteReasons = [
   "Ensures every request is reviewed with care.",
 ];
 
+const mentorParagraphs = [
+  "No algorithms. No crowds. Mentors are matched to your story, values, and what you are already carrying.",
+  "Introductions happen over a call or written note so the relationship stays warm, confidential, and human.",
+];
+
 export default function MembershipPage() {
   return (
     <>
-      <MarketingHero
-        imageSrc="/images/marketing/home-hero.png"
-        imageAlt="Soft ribbon hero art for membership."
-        imageWidth={1536}
-        imageHeight={1024}
-        headline="Membership is a calm circle, not a checklist."
-        subheading="It exists for people who want thoughtful mentor care and ongoing quiet learning."
-        primaryCta={{
-          label: "Request an Invite",
-          href: "/request-invite",
-        }}
-        priority
-        motion
-      />
+      <section
+        className="relative w-screen min-h-[520px] md:min-h-[560px] lg:min-h-[640px] overflow-hidden bg-[#FAF7F5]"
+      >
+        <div className="absolute inset-0">
+          <Image
+            src={membershipHero}
+            alt="Taylor-Made Baby Co. lifetime membership still life"
+            fill
+            priority
+            sizes="100vw"
+            className="object-fill object-right"
+          />
+        </div>
+        <div className="relative z-10 mx-auto flex h-full max-w-5xl flex-col gap-6 px-6 py-20 md:px-10 lg:px-16">
+          <div className="space-y-8 max-w-3xl">
+            <p className={HERO.eyebrow}>Membership</p>
+            <h1 className={HERO.heading}>Membership is a calm circle, not a checklist.</h1>
+            <p className={HERO.body}>
+              It exists for people who want thoughtful mentor care and ongoing quiet learning.
+            </p>
+            <div className={HERO.ctaGroup}>
+              <Button href="/request-invite" variant="primary">
+                Request an Invite
+              </Button>
+              <Link href="#mentor-path" className={HERO.secondaryLink}>
+                Learn about the mentor path →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
       <MarketingContent>
         <div className="marketing-content space-y-24 md:space-y-32 text-[var(--tmbc-charcoal)]">
           <section className="marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8 py-20 md:py-28">
@@ -121,7 +147,7 @@ export default function MembershipPage() {
             </div>
           </section>
 
-          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-24 mb-8 border-y border-[var(--tmbc-charcoal)]/10">
+          <section className="marketing-section marketing-card bg-white/80 px-8 py-20 md:py-28 mt-24 mb-8 border-y border-[var(--tmbc-charcoal)]/10" id="mentor-path">
             <div className="text-center space-y-3">
               <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                 Mentor-guided access
@@ -170,6 +196,40 @@ export default function MembershipPage() {
                   </li>
                 ))}
               </ul>
+            </div>
+          </section>
+
+          <section className="marketing-section marketing-card bg-[#fff4f1] px-8 py-20 md:py-28">
+            <div className="grid items-center gap-10 lg:grid-cols-2">
+              <div className="space-y-6">
+                <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                  Mentor-led support
+                </p>
+                <h2 className="font-serif text-2xl sm:text-3xl text-[var(--tmbc-charcoal)] text-opacity-80">
+                  People who keep care calm, confidential, and clear.
+                </h2>
+                <div className="space-y-4 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+                  {mentorParagraphs.map((paragraph) => (
+                    <p key={paragraph} className="m-0">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+                <p className="text-[13px] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/70">
+                  No algorithms. No pressure.
+                </p>
+              </div>
+              <div className="flex justify-center">
+                <div className="relative h-[420px] w-full max-w-[520px] overflow-hidden rounded-[32px] bg-neutral-50 shadow-[0_18px_45px_rgba(0,0,0,0.08)]">
+                  <Image
+                    src={mentorPairing}
+                    alt="Mentor and parent having a calm conversation"
+                    fill
+                    sizes="(min-width: 1024px) 520px, 90vw"
+                    className="object-cover"
+                  />
+                </div>
+              </div>
             </div>
           </section>
 

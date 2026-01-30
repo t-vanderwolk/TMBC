@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
-import howItWorksHero from "@/assets/images/howitworks-hero.png";
+import Button from "@/components/ui/Button";
+import { HERO } from "@/app/(marketing)/heroStyles";
+import howItWorksHero from "@/assets/images/howitworksheroupdated.png";
 import evelope from "@/assets/images/evelope.png";
 import surveyImage from "@/assets/images/survey.png";
 import matchImage from "@/assets/images/match.png";
@@ -53,62 +55,36 @@ const processSteps = [
 export default function HowItWorksPage() {
   return (
     <>
-      <section className="relative w-screen min-h-[520px] sm:min-h-[600px] lg:min-h-[680px] overflow-hidden pt-2 sm:pt-3 lg:pt-4 pb-16 sm:pb-20 lg:pb-24">
+      <section className="relative min-h-[520px] md:min-h-[560px] lg:min-h-[640px] overflow-hidden bg-[#FAF7F5]">
         <div className="absolute inset-0">
-          <div className="absolute inset-0 block sm:hidden">
-            <Image
-              src={howItWorksHero}
-              alt="Taylor-Made Baby Co. hero art"
-              fill
-              priority
-              sizes="(max-width: 767px) 100vw, 100vw"
-              className="object-fill object-right"
-            />
-          </div>
-          <div className="absolute inset-0 hidden sm:block">
-            <Image
-              src={howItWorksHero}
-              alt="Taylor-Made Baby Co. hero art"
-              fill
-              priority
-              sizes="100vw"
-              className="object-fill object-right lg:object-[80%_50%]"
-            />
-          </div>
+          <Image
+            src={howItWorksHero}
+            alt="Taylor-Made Baby Co. hero art"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-right-bottom"
+          />
           <div
             className="absolute inset-0 bg-gradient-to-b from-[var(--tmbc-blush)]/40 via-[var(--tmbc-ivory)]/40 to-transparent"
             aria-hidden
           />
         </div>
-        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="relative max-w-[640px] space-y-8 pt-6 sm:pt-8 lg:pt-0 text-center lg:text-left">
-            <p className="text-[11px] tracking-[0.18em] uppercase text-neutral-600 font-semibold">
-              HOW IT WORKS
-            </p>
-            <div className="hero-editorial font-playfair font-[400] text-neutral-900">
-              <h1 className="text-[48px] lg:text-[64px] leading-[1.15] tracking-[-0.01em] mb-6 sm:mb-6 lg:mb-6 max-w-[24ch] mx-auto lg:mx-0">
-                A calm, guided path into Taylor-Made Baby Co.
-              </h1>
-            </div>
-            <p className="max-w-lg text-[15px] leading-[1.7] text-neutral-500 lg:text-[17px] mx-auto lg:mx-0 mb-8">
-              A welcoming invite, thoughtful guidance, and steady support—never a rush or a forced decision.
-            </p>
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 justify-center lg:justify-start">
-              <Link
-                href="/request-invite"
-                className="inline-flex w-full items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] sm:w-auto"
-              >
-                Request an Invite
-              </Link>
-            </div>
-            <div className="text-sm">
-              <Link
-                href="/experience"
-                className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 transition hover:text-[var(--tmbc-charcoal)]"
-              >
-                See the steps →
-              </Link>
-            </div>
+        <div className="relative z-10 mx-auto flex h-full max-w-5xl flex-col gap-4 px-6 py-16 md:px-10 lg:px-16">
+          <p className={HERO.eyebrow}>How It Works</p>
+          <h1 className={HERO.heading}>
+            A calm, guided path into Taylor-Made Baby Co.
+          </h1>
+          <p className={HERO.body}>
+            A welcoming invite, thoughtful guidance, and steady support—never a rush or a forced decision.
+          </p>
+          <div className={HERO.ctaGroup}>
+            <Button href="/request-invite" variant="primary">
+              Request an Invite
+            </Button>
+            <Link href="#process" className={HERO.secondaryLink}>
+              See the steps →
+            </Link>
           </div>
         </div>
       </section>
@@ -157,6 +133,7 @@ export default function HowItWorksPage() {
                     src={invitationStill}
                     alt="Taylor-Made Baby Co. invitation still life representing calm, intentional welcome"
                     fill
+                    sizes="(min-width: 1024px) 420px, 90vw"
                     className="object-cover"
                     priority={false}
                   />

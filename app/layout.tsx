@@ -1,15 +1,7 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 
-import { greatVibes, nunito } from '@/lib/fonts';
-import { Playfair_Display } from 'next/font/google';
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-playfair',
-  display: 'swap',
-  weight: ['400'],
-});
+import { greatVibes, nunito, playfair } from '@/lib/fonts';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 

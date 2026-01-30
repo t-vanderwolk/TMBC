@@ -54,6 +54,10 @@ export default function PartnerLogoCarousel() {
     };
   }, []);
 
+  const repeatedLogos = logos.length
+    ? [...logos, ...logos.map((logo) => ({ ...logo, id: `${logo.id}-repeat` }))]
+    : [];
+
   return (
     <section className="w-full overflow-hidden bg-[var(--tmbc-ivory)]/80 py-10 text-center">
       <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
