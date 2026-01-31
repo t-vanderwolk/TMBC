@@ -72,6 +72,9 @@ export default function PartnerLogoCarousel() {
 
     while (added < logos.length && attempts < maxAttempts) {
       const candidate = logos[repeatIndex % logos.length];
+      if (!candidate) {
+        break;
+      }
       const previousLogo = result[result.length - 1];
       const previousBaseId = previousLogo ? getBaseId(previousLogo.id) : "";
 
@@ -91,7 +94,7 @@ export default function PartnerLogoCarousel() {
       // Fallback: fill remaining slots even if duplicates might touch.
       const remaining = logos.length - added;
       for (let i = 0; i < remaining; i++) {
-        const candidate = logos[(repeatIndex + i) % logos.length];
+        const candidate = logos[(repeatIndex + i) % logos.length]!;
         result.push({ ...candidate, id: `${candidate.id}-repeat-fallback-${i}` });
       }
     }
