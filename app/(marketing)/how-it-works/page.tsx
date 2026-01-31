@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Fragment } from "react";
 import Button from "@/components/ui/Button";
 import MarketingHero from "@/components/marketing/MarketingHero";
+import FadeInSection from "@/components/marketing/FadeInSection";
 import howItWorksHero from "@/assets/images/howitworksheroupdated.png";
 import evelope from "@/assets/images/evelope.png";
 import surveyImage from "@/assets/images/survey.png";
@@ -52,6 +53,12 @@ const processSteps = [
   },
 ];
 
+/**
+ * Mobile spacing rule:
+ * Marketing sections should breathe on mobile.
+ * Prefer py-20+ over dense stacking.
+ */
+
 export default function HowItWorksPage() {
   return (
     <>
@@ -80,8 +87,9 @@ export default function HowItWorksPage() {
         }}
       />
 
-      <section className="marketing-section">
-        <div className="mx-auto max-w-6xl px-6 py-24">
+      <FadeInSection delay={80}>
+        <section className="marketing-section">
+          <div className="mx-auto max-w-6xl px-6 py-24">
           <div className="tmbc-divider-ribbon mb-10" aria-hidden />
           <div className="mb-10 flex justify-center" aria-hidden="true">
             <div
@@ -135,8 +143,10 @@ export default function HowItWorksPage() {
           </div>
         </div>
       </section>
+      </FadeInSection>
 
-      <section className="marketing-section marketing-section-wash marketing-section-lush">
+      <FadeInSection delay={160}>
+        <section className="marketing-section marketing-section-wash marketing-section-lush">
         <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
           <div className="tmbc-divider-ribbon mb-10" aria-hidden />
           <div className="space-y-20">
@@ -172,9 +182,6 @@ export default function HowItWorksPage() {
                         <div className={`space-y-4 ${index % 2 ? "lg:order-last lg:text-right" : ""}`}>
                           <div className="tmbc-ivory-card rounded-[32px] p-6 md:p-8">
                             {/* Mobile-first markers keep each step clearly oriented before the headline. */}
-                            <p className="text-[11px] uppercase tracking-[0.4em] text-[var(--tmbc-mauveGray)]">
-                              STEP {index + 1} OF {processSteps.length}
-                            </p>
                             <p
                               className="text-[11px] uppercase tracking-[0.4em] relative"
                               style={{ color: "var(--tmbc-mauveGray)" }}
@@ -236,9 +243,11 @@ export default function HowItWorksPage() {
           </div>
         </div>
       </section>
+      </FadeInSection>
 
-      <section className="marketing-section">
-  <div className="mx-auto max-w-xl text-center">
+      <FadeInSection delay={240}>
+        <section className="marketing-section">
+          <div className="mx-auto max-w-xl text-center">
           <Image
             src={tmbcSeal}
             alt="Baby Approved — Taylor-Made Baby Co."
@@ -254,11 +263,13 @@ export default function HowItWorksPage() {
           <p className="mt-2 text-sm italic text-muted-foreground">
             Calm guidance. Thoughtful standards. Always baby-first.
           </p>
-        </div>
-      </section>
+          </div>
+        </section>
+      </FadeInSection>
 
-      <section className="marketing-section marketing-section-wash marketing-section-lush">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 text-center space-y-8">
+      <FadeInSection delay={320}>
+        <section className="marketing-section marketing-section-wash marketing-section-lush">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 text-center space-y-8">
           <p className="text-[11px] uppercase tracking-[0.35em] text-neutral-500">CALM START</p>
           <h2 className="font-playfair text-[36px] leading-[1.2] text-neutral-900">
             Guidance that stays present with you, whatever this season looks like.
@@ -280,8 +291,9 @@ export default function HowItWorksPage() {
               Already have a code?
             </Link>
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </FadeInSection>
     </>
   );
 }

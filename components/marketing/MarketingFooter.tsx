@@ -1,16 +1,9 @@
 import Link from "next/link";
-
-const experienceLinks = [
-  { label: "Learn", href: "/experience#learn" },
-  { label: "Plan", href: "/experience#plan" },
-  { label: "Connect", href: "/experience#connect" },
-  { label: "Reflect", href: "/experience#reflect" },
-];
+import { MARKETING_PRIMARY_NAV } from "@/components/marketing/MarketingNav";
 
 const companyLinks = [
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
-  { label: "Blog", href: "/blog" },
 ];
 
 const supportLinks = [{ label: "Log In", href: "/login" }];
@@ -22,7 +15,12 @@ export default function MarketingFooter() {
     <footer className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 px-10 pb-12 pt-16 shadow-[0_18px_60px_rgba(62,47,53,0.08)]">
       <div className="grid gap-12 lg:grid-cols-4">
         <div className="space-y-3">
-          <p className="mkt-h2">Taylor-Made Baby Co.</p>
+          <div>
+            <p className="text-3xl leading-none text-[var(--tmbc-blush-primary)] font-script">Taylor-Made</p>
+            <p className="mt-0 text-[11px] sm:text-[12px] tracking-[0.22em] uppercase text-neutral-600 leading-none">
+              Baby Co.
+            </p>
+          </div>
           <p className="mkt-body">
             Thoughtful guidance for modern parenthood. You don&apos;t have to figure this out alone.
           </p>
@@ -30,10 +28,10 @@ export default function MarketingFooter() {
 
           <div className="flex flex-col gap-3">
             <p className="text-[11px] uppercase tracking-[0.32em] text-[var(--tmbc-charcoal)]/55">
-              Experience
+              Explore
             </p>
             <div className="flex flex-col gap-2">
-              {experienceLinks.map((link) => (
+              {MARKETING_PRIMARY_NAV.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}

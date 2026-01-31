@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import Button from "@/components/ui/Button";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import SectionDivider from "@/components/marketing/SectionDivider";
+import FadeInSection from "@/components/marketing/FadeInSection";
 import experienceHero from "@/assets/images/experienceherobunny.png";
 import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
@@ -110,6 +111,12 @@ const pillarTones: Record<string, string> = {
 
 const pillarSpacing = "py-10 sm:py-12";
 
+/**
+ * Mobile spacing rule:
+ * Marketing sections should breathe on mobile.
+ * Prefer py-20+ over dense stacking.
+ */
+
 export default function ExperiencePage() {
   return (
     <main className="bg-[#fef9f6] text-[#1F1C1A]">
@@ -141,8 +148,9 @@ export default function ExperiencePage() {
 
       <SectionDivider className="mx-auto max-w-6xl" />
 
-      <section className="marketing-section space-y-12">
-        {pillarHighlights.map((pillar, index) => {
+      <FadeInSection delay={80}>
+        <section className="marketing-section space-y-12">
+          {pillarHighlights.map((pillar, index) => {
           const textFirst = index % 2 === 0;
           return (
             <Fragment key={pillar.id}>
@@ -194,9 +202,11 @@ export default function ExperiencePage() {
             </Fragment>
           );
         })}
-      </section>
+        </section>
+      </FadeInSection>
 
-      <section className="py-20 lg:py-24">
+      <FadeInSection delay={200}>
+        <section className="py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid items-center gap-10 lg:grid-cols-2">
             <div className="space-y-5 order-2 lg:order-1">
@@ -235,10 +245,12 @@ export default function ExperiencePage() {
             </div>
           </div>
         </div>
-      </section>
+        </section>
+      </FadeInSection>
       <SectionDivider className="mx-auto max-w-6xl" />
 
-      <section className="marketing-section marketing-section-wash marketing-section-lush">
+      <FadeInSection delay={320}>
+        <section className="marketing-section marketing-section-wash marketing-section-lush">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center space-y-5">
           <p className="text-[11px] uppercase tracking-[0.4em] text-neutral-500">Invite-only</p>
           <h2 className="font-playfair text-[32px] sm:text-[38px] leading-[1.2] text-neutral-900">
@@ -256,7 +268,8 @@ export default function ExperiencePage() {
             </p>
           </div>
         </div>
-      </section>
+        </section>
+      </FadeInSection>
     </main>
   );
 }

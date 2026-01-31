@@ -628,6 +628,13 @@
   }
 }
 
+/* Marketing motion tuning */
+@media (max-width: 640px) {
+  .motion-safe\:transition-all {
+    transition-duration: 500ms;
+  }
+}
+
   .ui-preview-image {
     @apply rounded-[20px] border border-[rgba(62,47,53,0.15)];
     box-shadow: none;

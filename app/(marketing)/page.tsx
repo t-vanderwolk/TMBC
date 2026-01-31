@@ -3,6 +3,8 @@ import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import SectionDivider from "@/components/marketing/SectionDivider";
+import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
+import FadeInSection from "@/components/marketing/FadeInSection";
 import Button from "@/components/ui/Button";
 import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
@@ -80,7 +82,10 @@ function PillarHighlightsSection() {
           </div>
           <div className="grid gap-6 lg:grid-cols-4">
             {pillarHighlights.map((pillar, index) => (
-              <article key={pillar.title} className="flex flex-col overflow-hidden rounded-[28px] border border-[var(--tmbc-ivory)]/70 bg-white/90 shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+              <article
+                key={pillar.title}
+                className="flex flex-col overflow-hidden rounded-[28px] border border-[rgba(243,214,223,0.56)] bg-white/90 shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
+              >
                 <div className="relative h-48 w-full">
                   <Image
                     src={pillar.image}
@@ -170,6 +175,9 @@ function FinalCTA() {
 export default function HomePage() {
   return (
     <main className="bg-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
+      {/* Mobile spacing rule:
+          Marketing sections should breathe on mobile.
+          Prefer py-20+ over dense stacking. */}
       <MarketingHero
         eyebrow="Invitation-only · Mentor-led"
         headline={
@@ -193,13 +201,25 @@ export default function HomePage() {
         priority
       />
       <SectionDivider />
-      <ReassuranceBand />
+      <FadeInSection delay={80}>
+        <ReassuranceBand />
+      </FadeInSection>
       <SectionDivider />
-      <PillarHighlightsSection />
+      <FadeInSection delay={160}>
+        <PillarHighlightsSection />
+      </FadeInSection>
       <SectionDivider />
-      <TrustSection />
+      <FadeInSection delay={240}>
+        <TrustSection />
+      </FadeInSection>
       <SectionDivider />
-      <FinalCTA />
+      <FadeInSection delay={320}>
+        <PartnerLogoCarousel />
+      </FadeInSection>
+      <SectionDivider />
+      <FadeInSection delay={400}>
+        <FinalCTA />
+      </FadeInSection>
     </main>
   );
 }

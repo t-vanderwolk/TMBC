@@ -54,19 +54,60 @@ export default function PartnerLogoCarousel() {
     };
   }, []);
 
-  const repeatedLogos = logos.length
-    ? [...logos, ...logos.map((logo) => ({ ...logo, id: `${logo.id}-repeat` }))]
-    : [];
+  const getBaseId = (logoId: string) => logoId.replace(/-repeat$/, "");
+
+  const repeatedLogos = (() => {
+    if (!logos.length) {
+      return [];
+    }
+    if (logos.length === 1) {
+      return logos;
+    }
+
+    const result: Logo[] = [...logos];
+    let repeatIndex = 1;
+    let added = 0;
+    let attempts = 0;
+    const maxAttempts = logos.length * 10;
+
+    while (added < logos.length && attempts < maxAttempts) {
+      const candidate = logos[repeatIndex % logos.length];
+      const previousLogo = result[result.length - 1];
+      const previousBaseId = previousLogo ? getBaseId(previousLogo.id) : "";
+
+      if (candidate.id === previousBaseId) {
+        repeatIndex++;
+        attempts++;
+        continue;
+      }
+
+      result.push({ ...candidate, id: `${candidate.id}-repeat-${repeatIndex}` });
+      added++;
+      repeatIndex++;
+      attempts = 0;
+    }
+
+    if (added < logos.length) {
+      // Fallback: fill remaining slots even if duplicates might touch.
+      const remaining = logos.length - added;
+      for (let i = 0; i < remaining; i++) {
+        const candidate = logos[(repeatIndex + i) % logos.length];
+        result.push({ ...candidate, id: `${candidate.id}-repeat-fallback-${i}` });
+      }
+    }
+
+    return result;
+  })();
 
   return (
-    <section className="w-full overflow-hidden bg-[var(--tmbc-ivory)]/80 py-10 text-center">
-      <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-        Calm partners we trust
-      </p>
-      <div className="partner-logo-carousel">
-        {logos.length ? (
-          <div className="partner-logo-track partner-logo-marquee">
-            {logos.map((logo) => (
+      <section className="w-full overflow-hidden bg-[var(--tmbc-ivory)]/80 py-10 text-center">
+        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
+          Calm partners we trust
+        </p>
+        <div className="partner-logo-carousel">
+          {logos.length ? (
+            <div className="partner-logo-track partner-logo-marquee">
+            {repeatedLogos.map((logo) => (
               <div key={logo.id} className="flex h-16 w-40 items-center justify-center">
                 <img
                   src={logo.src}

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const PRIMARY_NAV = [
+export const MARKETING_PRIMARY_NAV = [
   { label: "How It Works", href: "/how-it-works" },
   { label: "Experience", href: "/experience" },
   { label: "Membership", href: "/membership" },
@@ -28,7 +28,7 @@ export default function MarketingNav() {
 
         <div className="hidden lg:flex items-center gap-8">
           <ul className="flex items-center gap-7">
-            {PRIMARY_NAV.map((link) => (
+            {MARKETING_PRIMARY_NAV.map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className={baseNavText}>
                   {link.label}
@@ -55,7 +55,7 @@ export default function MarketingNav() {
 
         <div className="lg:hidden mt-3 w-full">
           <div className="grid grid-cols-2 gap-3 text-[0.7rem] uppercase tracking-[0.28em] text-[var(--tmbc-charcoal)]">
-            {PRIMARY_NAV.map((link) => (
+            {MARKETING_PRIMARY_NAV.map((link) => (
               <Link
                 key={`mobile-${link.href}`}
                 href={link.href}
