@@ -105,7 +105,7 @@ export default function FAQPage() {
 
   return (
     <>
-      {/* Hero must render instantly: never wrap in FadeInSection */}
+      {/* Hero must render instantly and avoid additional entrance wrappers. */}
       <MarketingHero
         eyebrow="FAQ"
         imageSrc={homeHeroImage}

@@ -12,9 +12,10 @@ export default function MarketingNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const toggleMobile = () => setMobileOpen((prev) => !prev);
+  const closeMobile = () => setMobileOpen(false);
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-neutral-200/60 bg-[#fbf7f4]/70 supports-[backdrop-filter]:backdrop-blur supports-[backdrop-filter]:bg-[#fbf7f4]/60 py-2 sm:py-3.5">
+    <nav className="relative sticky top-0 z-50 border-b border-neutral-200/60 bg-[#fbf7f4]/70 supports-[backdrop-filter]:backdrop-blur supports-[backdrop-filter]:bg-[#fbf7f4]/60 py-2 sm:py-3.5">
       <div className="flex w-full flex-wrap items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="text-ellipsis whitespace-nowrap pr-6 sm:pr-10 lg:pr-12">
           <div className="text-3xl sm:text-4xl leading-none text-[var(--tmbc-blush-primary)] font-script">
@@ -37,10 +38,10 @@ export default function MarketingNav() {
           </ul>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="hidden items-center gap-3 lg:flex">
           <Link
             href="/login"
-            className="text-[12px] tracking-[0.28em] rounded-full border border-[var(--tmbc-mauve)] px-4 py-2 hover:bg-[var(--tmbc-mauve)]/10 transition-colors duration-200"
+            className="text-[12px] tracking-[0.28em] rounded-full border border-[var(--tmbc-mauve)] px-4 py-2 transition-colors duration-200 hover:bg-[var(--tmbc-mauve)]/10"
           >
             Login
           </Link>
@@ -56,29 +57,87 @@ export default function MarketingNav() {
           type="button"
           aria-controls="marketing-mobile-menu"
           aria-expanded={mobileOpen}
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
           onClick={toggleMobile}
-          className="lg:hidden inline-flex items-center justify-center rounded-full border border-[var(--tmbc-charcoal)]/30 px-4 py-2 text-xs uppercase tracking-[0.28em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-charcoal)]/60"
+          className="lg:hidden inline-flex h-10 w-10 flex-col items-center justify-center gap-1 rounded-full border border-[var(--tmbc-charcoal)]/30 transition hover:border-[var(--tmbc-charcoal)]/60"
         >
-          {mobileOpen ? "Close" : "Menu"}
+          <span className="sr-only">{mobileOpen ? "Close menu" : "Open menu"}</span>
+          <span
+            aria-hidden
+            className={[
+              "block h-0.5 w-5 rounded-full bg-[var(--tmbc-charcoal)] transition-all duration-200",
+              mobileOpen ? "translate-y-0 rotate-45" : "-translate-y-1.5",
+            ].join(" ")}
+          />
+          <span
+            aria-hidden
+            className={[
+              "block h-0.5 w-5 rounded-full bg-[var(--tmbc-charcoal)] transition-all duration-200",
+              mobileOpen ? "opacity-0" : "opacity-100",
+            ].join(" ")}
+          />
+          <span
+            aria-hidden
+            className={[
+              "block h-0.5 w-5 rounded-full bg-[var(--tmbc-charcoal)] transition-all duration-200",
+              mobileOpen ? "translate-y-0 -rotate-45" : "translate-y-1.5",
+            ].join(" ")}
+          />
         </button>
+      </div>
+
+      {mobileOpen && (
         <div
           id="marketing-mobile-menu"
-          className={`lg:hidden mt-3 w-full ${mobileOpen ? "block" : "hidden"}`}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Marketing navigation"
+          className="lg:hidden w-full border-t border-neutral-200 bg-white shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
         >
-          <div className="grid grid-cols-2 gap-3 text-[0.7rem] uppercase tracking-[0.28em] text-[var(--tmbc-charcoal)]">
-            {MARKETING_PRIMARY_NAV.map((link) => (
-              <Link
-                key={`mobile-${link.href}`}
-                href={link.href}
-                className="border border-neutral-200/70 rounded-[28px] px-4 py-2 text-center text-[var(--tmbc-charcoal)] text-opacity-70"
-                onClick={() => setMobileOpen(false)}
+          <div className="w-full max-w-md px-6 py-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/70">Navigation</p>
+              </div>
+              <button
+                type="button"
+                onClick={closeMobile}
+                className="text-[12px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70 transition hover:text-[var(--tmbc-charcoal)]"
               >
-                {link.label}
+                Close
+              </button>
+            </div>
+            <div className="mt-6 grid gap-3 text-[0.8rem] uppercase tracking-[0.28em] text-[var(--tmbc-charcoal)]">
+              {MARKETING_PRIMARY_NAV.map((link) => (
+                <Link
+                  key={`mobile-${link.href}`}
+                  href={link.href}
+                  className="rounded-[28px] border border-neutral-200/70 px-4 py-3 text-center text-[var(--tmbc-charcoal)] text-opacity-80 transition hover:text-opacity-100"
+                  onClick={closeMobile}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            <div className="mt-6 flex flex-col gap-2 text-sm">
+              <Link
+                href="/login"
+                className="rounded-full border border-[var(--tmbc-mauve)] px-4 py-2 text-center uppercase tracking-[0.32em] text-[var(--tmbc-charcoal)] text-opacity-80 transition hover:text-[var(--tmbc-charcoal)]/100"
+                onClick={closeMobile}
+              >
+                Login
               </Link>
-            ))}
+              <Link
+                href="/request-invite"
+                className="rounded-full bg-[var(--tmbc-blush-primary)] px-5 py-3 text-center text-[0.7rem] font-semibold uppercase tracking-[0.4em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)]"
+                onClick={closeMobile}
+              >
+                Request an Invite
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 }

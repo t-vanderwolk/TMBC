@@ -17,7 +17,7 @@ const contactDetails = [
 export default function ContactPage() {
   return (
     <>
-      {/* Hero must render instantly: never wrap in FadeInSection */}
+      {/* Hero must render instantly and avoid additional entrance wrappers. */}
       <MarketingHero
         eyebrow="Contact"
         imageSrc={homeHeroImage}

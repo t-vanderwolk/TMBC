@@ -4,7 +4,6 @@ import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import SectionDivider from "@/components/marketing/SectionDivider";
 import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
-import FadeInSection from "@/components/motion/FadeInSection";
 import Button from "@/components/ui/Button";
 import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
@@ -181,11 +180,11 @@ function FinalCTA() {
 
 export default function HomePage() {
   return (
-    <main className="bg-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
+    <div className="bg-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
       {/* Mobile spacing rule:
           Marketing sections should breathe on mobile.
           Prefer py-20+ over dense stacking. */}
-      {/* Hero must render instantly: never wrap in FadeInSection */}
+      {/* Hero must render instantly and avoid additional entrance wrappers. */}
       <MarketingHero
         eyebrow="Invitation-only · Mentor-led"
         headline={
@@ -209,33 +208,23 @@ export default function HomePage() {
         priority
       />
       <SectionDivider />
-      <FadeInSection delayMs={80}>
-        <ReassuranceBand />
-      </FadeInSection>
+      <ReassuranceBand />
       <SectionDivider />
-      <FadeInSection delayMs={160}>
-        <PillarHighlightsSection />
-      </FadeInSection>
+      <PillarHighlightsSection />
       <SectionDivider />
-      <FadeInSection delayMs={240}>
-        <TrustSection />
-      </FadeInSection>
+      <TrustSection />
       <SectionDivider />
-      <FadeInSection delayMs={320}>
-        <section className="marketing-section section-blush section-transition py-28 sm:py-32 pb-36">
-          <MarketingContent>
-            <PartnerLogoCarousel />
-          </MarketingContent>
-        </section>
-      </FadeInSection>
+      <section className="marketing-section section-blush section-transition py-28 sm:py-32 pb-36">
+        <MarketingContent>
+          <PartnerLogoCarousel />
+        </MarketingContent>
+      </section>
       <SectionDivider />
-      <FadeInSection delayMs={400}>
-        <section className="marketing-section section-ivory py-28 sm:py-32">
-          <MarketingContent>
-            <FinalCTA />
-          </MarketingContent>
-        </section>
-      </FadeInSection>
-    </main>
+      <section className="marketing-section section-ivory py-28 sm:py-32">
+        <MarketingContent>
+          <FinalCTA />
+        </MarketingContent>
+      </section>
+    </div>
   );
 }

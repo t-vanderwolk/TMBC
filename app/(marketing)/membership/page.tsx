@@ -195,7 +195,7 @@ function FinalCTA() {
 export default function MembershipPage() {
   return (
     <div className="bg-[var(--tmbc-ivory)]">
-      {/* Hero must render instantly: never wrap in FadeInSection */}
+      {/* Hero must render instantly and avoid additional entrance wrappers. */}
       <MarketingHero
         eyebrow="Membership"
         headline="Membership, thoughtfully designed."

@@ -18,7 +18,7 @@ const heroSection = (
 export default function TermsPage() {
   return (
     <>
-      {/* Hero must render instantly: never wrap in FadeInSection */}
+      {/* Hero must render instantly and avoid additional entrance wrappers. */}
       {heroSection}
       <MarketingContent>
         <div className="marketing-content space-y-10 text-[var(--tmbc-charcoal)]">

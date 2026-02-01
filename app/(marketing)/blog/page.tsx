@@ -61,7 +61,7 @@ const formatDate = (value?: string | null) => {
 
 const marketingHeroBlock = (
   <>
-    {/* Hero must render instantly: never wrap in FadeInSection */}
+    {/* Hero must render instantly and avoid additional entrance wrappers. */}
     <MarketingHero
       eyebrow="Journal"
       headline="Thoughtful guidance, shared gently."
