@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MARKETING_PRIMARY_NAV } from "@/components/marketing/MarketingNav";
+import { MARKETING_PRIMARY_NAV } from "@/components/marketing/marketing-links";
 
 const companyLinks = [
   { label: "FAQ", href: "/faq" },
@@ -12,7 +12,7 @@ export default function MarketingFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="rounded-[32px] border border-[var(--tmbc-charcoal)]/10 bg-white/80 px-10 pb-12 pt-16 shadow-[0_18px_60px_rgba(62,47,53,0.08)]">
+    <footer className="rounded-[32px] border border-[var(--member-border-soft)] bg-[var(--member-bg-card)] px-10 pb-12 pt-16 shadow-[0_18px_60px_rgba(62,47,53,0.08)]">
       <div className="grid gap-12 lg:grid-cols-4">
         <div className="space-y-3">
           <div>
@@ -27,7 +27,7 @@ export default function MarketingFooter() {
         </div>
 
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-[0.32em] text-[var(--tmbc-charcoal)]/55">
+            <p className="text-[11px] uppercase tracking-[0.32em] text-[var(--member-text-secondary)]/55">
               Explore
             </p>
             <div className="flex flex-col gap-2">
@@ -35,7 +35,7 @@ export default function MarketingFooter() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-[var(--tmbc-charcoal)]/70 transition hover:text-[var(--tmbc-charcoal)]"
+                  className="text-sm text-[var(--member-text-secondary)]/70 transition hover:text-[var(--member-text-primary)]"
                 >
                   {link.label}
                 </Link>
@@ -44,7 +44,7 @@ export default function MarketingFooter() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-[0.32em] text-[var(--tmbc-charcoal)]/55">
+            <p className="text-[11px] uppercase tracking-[0.32em] text-[var(--member-text-secondary)]/55">
               Company
             </p>
             <div className="flex flex-col gap-2">
@@ -52,7 +52,7 @@ export default function MarketingFooter() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-[var(--tmbc-charcoal)]/70 transition hover:text-[var(--tmbc-charcoal)]"
+                className="text-sm text-[var(--member-text-secondary)]/70 transition hover:text-[var(--member-text-primary)]"
                 >
                   {link.label}
                 </Link>
@@ -61,7 +61,7 @@ export default function MarketingFooter() {
           </div>
 
         <div>
-          <p className="text-[11px] uppercase tracking-[0.32em] text-[var(--tmbc-charcoal)]/55">
+          <p className="text-[11px] uppercase tracking-[0.32em] text-[var(--member-text-secondary)]/55">
             Support
           </p>
           <div className="mt-3 space-y-2">
@@ -69,7 +69,7 @@ export default function MarketingFooter() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm text-[var(--tmbc-charcoal)]/70 transition hover:text-[var(--tmbc-charcoal)]"
+                className="text-sm text-[var(--member-text-secondary)]/70 transition hover:text-[var(--member-text-primary)]"
               >
                 {link.label}
               </Link>
@@ -78,14 +78,14 @@ export default function MarketingFooter() {
         </div>
       </div>
 
-      <div className="mt-10 border-t border-[var(--tmbc-charcoal)]/10 pt-6 text-xs uppercase tracking-[0.32em] text-[var(--tmbc-charcoal)]/55">
+            <div className="mt-10 border-t border-[var(--member-border-soft)] pt-6 text-xs uppercase tracking-[0.32em] text-[var(--member-text-secondary)]/55">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <span>© {year} Taylor-Made Baby Co.</span>
-          <div className="flex flex-wrap gap-6 text-sm text-[var(--tmbc-charcoal)]/70">
-            <Link href="/privacy" className="transition hover:text-[var(--tmbc-charcoal)]">
+          <div className="flex flex-wrap gap-6 text-sm text-[var(--member-text-secondary)]/70">
+            <Link href="/privacy" className="transition hover:text-[var(--member-text-primary)]">
               Privacy
             </Link>
-            <Link href="/terms" className="transition hover:text-[var(--tmbc-charcoal)]">
+            <Link href="/terms" className="transition hover:text-[var(--member-text-primary)]">
               Terms
             </Link>
           </div>

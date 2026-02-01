@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-import type { AcademyModule } from '../../app/dashboard/member/learn/modules';
+import type { AcademyModule } from "@/app/(dashboard)/dashboard/member/learn/modules";
 import ProgressStars from '@/components/academy/ProgressStars';
 import { moduleProgressSteps, useModuleProgress } from '@/hooks/useModuleProgress';
 import ModuleProgressRing from '@/components/academy/ModuleProgressRing';

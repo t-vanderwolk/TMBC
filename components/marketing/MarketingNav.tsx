@@ -1,19 +1,18 @@
-import Link from "next/link";
+"use client";
 
-export const MARKETING_PRIMARY_NAV = [
-  { label: "How It Works", href: "/how-it-works" },
-  { label: "Experience", href: "/experience" },
-  { label: "Membership", href: "/membership" },
-  { label: "Blog", href: "/blog" },
-  { label: "FAQ", href: "/faq" },
-  { label: "Contact", href: "/contact" },
-];
+import Link from "next/link";
+import { useState } from "react";
+import { MARKETING_PRIMARY_NAV } from "@/components/marketing/marketing-links";
 
 const baseNavText =
   "relative text-[12px] uppercase tracking-[0.28em] text-neutral-600 transition-colors duration-200 hover:text-neutral-900";
 
 export default function MarketingNav() {
   // This component is intentionally presentation-only to remain Turbopack-safe.
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const toggleMobile = () => setMobileOpen((prev) => !prev);
+
   return (
     <nav className="sticky top-0 z-50 border-b border-neutral-200/60 bg-[#fbf7f4]/70 supports-[backdrop-filter]:backdrop-blur supports-[backdrop-filter]:bg-[#fbf7f4]/60 py-2 sm:py-3.5">
       <div className="flex w-full flex-wrap items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
@@ -53,13 +52,26 @@ export default function MarketingNav() {
           </Link>
         </div>
 
-        <div className="lg:hidden mt-3 w-full">
+        <button
+          type="button"
+          aria-controls="marketing-mobile-menu"
+          aria-expanded={mobileOpen}
+          onClick={toggleMobile}
+          className="lg:hidden inline-flex items-center justify-center rounded-full border border-[var(--tmbc-charcoal)]/30 px-4 py-2 text-xs uppercase tracking-[0.28em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-charcoal)]/60"
+        >
+          {mobileOpen ? "Close" : "Menu"}
+        </button>
+        <div
+          id="marketing-mobile-menu"
+          className={`lg:hidden mt-3 w-full ${mobileOpen ? "block" : "hidden"}`}
+        >
           <div className="grid grid-cols-2 gap-3 text-[0.7rem] uppercase tracking-[0.28em] text-[var(--tmbc-charcoal)]">
             {MARKETING_PRIMARY_NAV.map((link) => (
               <Link
                 key={`mobile-${link.href}`}
                 href={link.href}
                 className="border border-neutral-200/70 rounded-[28px] px-4 py-2 text-center text-[var(--tmbc-charcoal)] text-opacity-70"
+                onClick={() => setMobileOpen(false)}
               >
                 {link.label}
               </Link>

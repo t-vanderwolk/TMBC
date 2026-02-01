@@ -23,6 +23,13 @@ const createLogoId = (fileName: string) =>
 
 const SUPPORTED_IMAGE_EXTENSIONS = /\.(png|jpe?g|svg|webp|avif)$/i;
 
+/**
+ * TMBC Partner Logo Rules:
+ * - Logos are NEVER manually recolored.
+ * - Idle state uses blush-tinted grayscale via CSS filters.
+ * - Full brand color is revealed on hover/focus only.
+ * - Keep motion slow and subtle to preserve editorial calm.
+ */
 export default function PartnerLogoCarousel() {
   const [logos, setLogos] = useState<Logo[]>([]);
 
@@ -103,21 +110,24 @@ export default function PartnerLogoCarousel() {
   })();
 
   return (
-      <section className="w-full overflow-hidden bg-[var(--tmbc-ivory)]/80 py-10 text-center">
-        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-          Calm partners we trust
-        </p>
-        <div className="partner-logo-carousel">
-          {logos.length ? (
-            <div className="partner-logo-track partner-logo-marquee">
-            {repeatedLogos.map((logo) => (
-              <div key={logo.id} className="flex h-16 w-40 items-center justify-center">
+    <div className="space-y-6 text-center">
+      <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
+        Calm partners we trust
+      </p>
+      <div className="partner-logo-carousel">
+        {logos.length ? (
+          <div className="partner-logo-track partner-logo-marquee">
+            {repeatedLogos.map((logo, index) => (
+              <div
+                key={`${logo.id}-${index}`}
+                className="group flex h-16 items-center justify-center px-3 sm:px-4"
+              >
                 <img
                   src={logo.src}
                   alt={logo.alt}
                   loading="lazy"
                   decoding="async"
-                  className="h-full w-auto object-contain"
+                  className="max-h-10 w-auto transition-all duration-500 ease-out opacity-70 grayscale brightness-110 sepia-[0.25] hue-rotate-[-10deg] group-hover:grayscale-0 group-hover:opacity-100 group-hover:brightness-100 group-hover:sepia-0 group-hover:hue-rotate-0 focus-visible:grayscale-0 focus-visible:opacity-100 focus-visible:brightness-100 focus-visible:sepia-0 focus-visible:hue-rotate-0"
                 />
               </div>
             ))}
@@ -128,6 +138,6 @@ export default function PartnerLogoCarousel() {
           </div>
         )}
       </div>
-    </section>
+    </div>
   );
 }

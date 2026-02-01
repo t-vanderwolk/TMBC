@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { CommunityReplyDetail } from "@/lib/services/server/community.service";
-import { createCommunityReplyAction } from "@/app/dashboard/member/community/actions";
+import { createCommunityReplyAction } from "@/app/(dashboard)/dashboard/member/community/actions";
 
 type CommunityReplyThreadProps = {
   postId: string;

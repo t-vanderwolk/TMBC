@@ -4,13 +4,22 @@ import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import SectionDivider from "@/components/marketing/SectionDivider";
 import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
-import FadeInSection from "@/components/marketing/FadeInSection";
+import FadeInSection from "@/components/motion/FadeInSection";
 import Button from "@/components/ui/Button";
 import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
 import connectPillar from "@/assets/images/connectpillar.png";
 import reflectPillar from "@/assets/images/reflectpillar.png";
 import homepageHero from "@/assets/images/homepagehero.png";
+
+/**
+ * TMBC Homepage Background Rules:
+ * - Ivory is the default.
+ * - Blush is used sparingly for sectional cadence.
+ * - Never place blush directly under the hero.
+ * - Never stack blush sections back-to-back.
+ * - Apply .section-transition only on the blush section that resolves back to ivory.
+ */
 
 const pillarHighlights = [
   {
@@ -55,9 +64,9 @@ const reassuranceLines = [
 
 function ReassuranceBand() {
   return (
-    <section className="marketing-section marketing-section-wash">
+    <section className="marketing-section section-ivory py-28 sm:py-32">
       <MarketingContent>
-        <div className="space-y-4 max-w-[640px] text-[var(--tmbc-charcoal)] text-opacity-80">
+        <div className="marketing-text-panel max-w-[640px] space-y-4 text-[var(--tmbc-charcoal)] text-opacity-80">
           {reassuranceLines.map((line) => (
             <p key={line} className="mkt-body">
               {line}
@@ -71,13 +80,13 @@ function ReassuranceBand() {
 
 function PillarHighlightsSection() {
   return (
-    <section className="marketing-section">
+    <section className="marketing-section section-ivory py-28 sm:py-32">
       <MarketingContent>
         <div className="space-y-6">
           <div className="space-y-4">
             <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">Pillars that shape the experience</p>
-            <h2 className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">
-              Learn · Plan · Connect · Reflect—four calm visuals inline to mirror the How It Works imagery.
+            <h2 className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)] tracking-[0.02em] leading-[1.2]">
+              Learn · Plan · Connect · Reflect—
             </h2>
           </div>
           <div className="grid gap-6 lg:grid-cols-4">
@@ -112,12 +121,12 @@ function PillarHighlightsSection() {
 
 function TrustSection() {
   return (
-    <section className="marketing-section">
+    <section className="marketing-section section-blush py-28 sm:py-32">
       <MarketingContent>
         <div className="space-y-10">
-          <div className="space-y-4 max-w-[680px]">
+          <div className="marketing-text-panel max-w-[680px] space-y-4">
             <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">How we keep care calm</p>
-            <h2 className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">
+            <h2 className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)] tracking-[0.02em] leading-[1.2]">
               You arrive when you’re ready; we keep the space gentle, patient, and always on your timeline.
             </h2>
             <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
@@ -152,23 +161,21 @@ function TrustSection() {
 
 function FinalCTA() {
   return (
-    <section className="marketing-section marketing-section-wash marketing-section-lush">
-      <MarketingContent>
-        <div className="flex flex-col items-start gap-6">
-          <h2 className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">
-            Ready when you are—no rush, just thoughtful care.
-          </h2>
-          <div className="flex flex-wrap items-center gap-4">
-            <Button href="/request-invite" variant="primary">
-              Request an Invite
-            </Button>
-            <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-              We’ll keep the conversation calm while you decide the next gentle step.
-            </p>
-          </div>
+    <div className="mt-16 rounded-[32px] border border-[var(--member-border-soft)] bg-white/90 px-6 py-10 shadow-[0_25px_60px_rgba(62,47,53,0.2)]">
+      <div className="flex flex-col items-start gap-6">
+        <h2 className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)] tracking-[0.02em] leading-[1.2]">
+          Ready when you are—no rush, just thoughtful care.
+        </h2>
+        <div className="flex flex-wrap items-center gap-4">
+          <Button href="/request-invite" variant="primary">
+            Request an Invite
+          </Button>
+          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+            We’ll keep the conversation calm while you decide the next gentle step.
+          </p>
         </div>
-      </MarketingContent>
-    </section>
+      </div>
+    </div>
   );
 }
 
@@ -178,13 +185,14 @@ export default function HomePage() {
       {/* Mobile spacing rule:
           Marketing sections should breathe on mobile.
           Prefer py-20+ over dense stacking. */}
+      {/* Hero must render instantly: never wrap in FadeInSection */}
       <MarketingHero
         eyebrow="Invitation-only · Mentor-led"
         headline={
           <>
             Baby prep,
-            <br />
-            without the overwhelm.
+            <br className="hidden lg:block" />
+            with someone who's actually done it before.
           </>
         }
         lead="A calm, guided approach to preparing for baby—without pressure or guesswork."
@@ -201,24 +209,32 @@ export default function HomePage() {
         priority
       />
       <SectionDivider />
-      <FadeInSection delay={80}>
+      <FadeInSection delayMs={80}>
         <ReassuranceBand />
       </FadeInSection>
       <SectionDivider />
-      <FadeInSection delay={160}>
+      <FadeInSection delayMs={160}>
         <PillarHighlightsSection />
       </FadeInSection>
       <SectionDivider />
-      <FadeInSection delay={240}>
+      <FadeInSection delayMs={240}>
         <TrustSection />
       </FadeInSection>
       <SectionDivider />
-      <FadeInSection delay={320}>
-        <PartnerLogoCarousel />
+      <FadeInSection delayMs={320}>
+        <section className="marketing-section section-blush section-transition py-28 sm:py-32 pb-36">
+          <MarketingContent>
+            <PartnerLogoCarousel />
+          </MarketingContent>
+        </section>
       </FadeInSection>
       <SectionDivider />
-      <FadeInSection delay={400}>
-        <FinalCTA />
+      <FadeInSection delayMs={400}>
+        <section className="marketing-section section-ivory py-28 sm:py-32">
+          <MarketingContent>
+            <FinalCTA />
+          </MarketingContent>
+        </section>
       </FadeInSection>
     </main>
   );

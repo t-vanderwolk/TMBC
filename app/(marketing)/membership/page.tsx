@@ -3,6 +3,13 @@ import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import SectionDivider from "@/components/marketing/SectionDivider";
 import membershipHero from "@/assets/images/membershiphero.png";
+/**
+ * TMBC Transition Rules:
+ * - Blush sections may end with a gradient fade into ivory via .section-transition.
+ * - Apply the transition only on the final blush block before an ivory section.
+ * - Never use transitions under the hero or between ivory bands.
+ * - Do not stack multiple transitions back-to-back.
+ */
 
 const includeCards = [
   {
@@ -188,6 +195,7 @@ function FinalCTA() {
 export default function MembershipPage() {
   return (
     <div className="bg-[var(--tmbc-ivory)]">
+      {/* Hero must render instantly: never wrap in FadeInSection */}
       <MarketingHero
         eyebrow="Membership"
         headline="Membership, thoughtfully designed."

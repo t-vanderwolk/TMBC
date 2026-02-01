@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
-import { regenerateRecommendations } from "@/app/dashboard/settings/actions";
+import { regenerateRecommendations } from "@/app/(dashboard)/dashboard/settings/actions";
 
 type RegenerateButtonProps = {
   lastUpdated?: string | null;

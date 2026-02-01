@@ -3,7 +3,7 @@ import { Children, Fragment, isValidElement, type ReactNode } from "react";
 import MarketingNav from "@/components/marketing/MarketingNav";
 import MarketingFooter from "@/components/marketing/MarketingFooter";
 import MarketingHero from "@/components/marketing/MarketingHero";
-import FadeInSection from "@/components/marketing/FadeInSection";
+import FadeInSection from "@/components/motion/FadeInSection";
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   // Motion guardrail:
@@ -29,10 +29,10 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
     }
 
     fadeOrder += 1;
-    const delay = fadeOrder * 80;
+    const delayMs = fadeOrder * 80;
 
     return (
-      <FadeInSection key={node.key ?? `fade-${fadeOrder}`} delay={delay}>
+      <FadeInSection key={node.key ?? `fade-${fadeOrder}`} delayMs={delayMs}>
         {node}
       </FadeInSection>
     );
@@ -41,7 +41,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
   const wrappedChildren = Children.map(children, wrapNodes);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
+    <div className="marketing-glow relative min-h-screen overflow-hidden bg-[var(--member-bg-page)] text-[var(--member-text-primary)]">
       <MarketingNav />
       <main className="relative">{wrappedChildren}</main>
       <div className="relative bg-transparent">

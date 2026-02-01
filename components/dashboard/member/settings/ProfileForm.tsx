@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { updateProfileInfo, uploadProfileImage } from "@/app/dashboard/settings/actions";
+import { updateProfileInfo, uploadProfileImage } from "@/app/(dashboard)/dashboard/settings/actions";
 
 type ProfileFormProps = {
   user: {

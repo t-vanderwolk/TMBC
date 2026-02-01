@@ -60,16 +60,19 @@ const formatDate = (value?: string | null) => {
 };
 
 const marketingHeroBlock = (
-  <MarketingHero
-    eyebrow="Journal"
-    headline="Thoughtful guidance, shared gently."
-    lead="Reflections, planning support, and calm perspectives for modern parents."
-    primaryCta={{ label: "Request an Invite", href: "/request-invite" }}
-    secondaryCta={{ label: "Learn about membership", href: "/membership" }}
-    imageSrc={blogHero}
-    imageAlt="Soft editorial collage for the blog"
-    priority
-  />
+  <>
+    {/* Hero must render instantly: never wrap in FadeInSection */}
+    <MarketingHero
+      eyebrow="Journal"
+      headline="Thoughtful guidance, shared gently."
+      lead="Reflections, planning support, and calm perspectives for modern parents."
+      primaryCta={{ label: "Request an Invite", href: "/request-invite" }}
+      secondaryCta={{ label: "Learn about membership", href: "/membership" }}
+      imageSrc={blogHero}
+      imageAlt="Soft editorial collage for the blog"
+      priority
+    />
+  </>
 );
 
 function FeaturedPost({ post }: { post: PublicBlogPost }) {

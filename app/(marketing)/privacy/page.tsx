@@ -2,11 +2,12 @@ import Link from "next/link";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import SectionDivider from "@/components/marketing/SectionDivider";
+import homeHeroImage from "@/assets/images/home-hero.png";
 
 const heroSection = (
   <MarketingHero
     eyebrow="Privacy"
-    imageSrc="/images/marketing/home-hero.png"
+    imageSrc={homeHeroImage}
     imageAlt="Soft ribbon background"
     headline="Privacy policy"
     lead="Our commitment to parents is grounded in transparency. Here’s how we collect, use, and safeguard the information you share."
@@ -17,6 +18,7 @@ const heroSection = (
 export default function PrivacyPage() {
   return (
     <>
+      {/* Hero must render instantly: never wrap in FadeInSection */}
       {heroSection}
       <MarketingContent>
         <div className="marketing-content space-y-10 text-[var(--tmbc-charcoal)]">

@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import type { AcademyModule } from '../../app/dashboard/member/learn/modules';
+import type { AcademyModule } from "@/app/(dashboard)/dashboard/member/learn/modules";
 import { useEncouragementBubble } from '@/components/academy/EncouragementBubble';
 import { useModuleProgress } from '@/hooks/useModuleProgress';
 import { usePinterest } from '../../hooks/usePinterest';

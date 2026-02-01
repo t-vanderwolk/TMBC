@@ -2,8 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
 import Button from "@/components/ui/Button";
+/**
+ * TMBC Transition Rules:
+ * - Blush sections may end with a gradient fade into ivory via .section-transition.
+ * - Apply the transition only on the final blush block before an ivory section.
+ * - Never use transitions under the hero or between ivory bands.
+ * - Do not stack multiple transitions back-to-back.
+ */
 import MarketingHero from "@/components/marketing/MarketingHero";
-import FadeInSection from "@/components/marketing/FadeInSection";
+import FadeInSection from "@/components/motion/FadeInSection";
 import howItWorksHero from "@/assets/images/howitworksheroupdated.png";
 import evelope from "@/assets/images/evelope.png";
 import surveyImage from "@/assets/images/survey.png";
@@ -62,6 +69,7 @@ const processSteps = [
 export default function HowItWorksPage() {
   return (
     <>
+      {/* Hero must render instantly: never wrap in FadeInSection */}
       <MarketingHero
         eyebrow="How It Works"
         headline="A calm, guided path into Taylor-Made Baby Co."
@@ -87,7 +95,7 @@ export default function HowItWorksPage() {
         }}
       />
 
-      <FadeInSection delay={80}>
+      <FadeInSection delayMs={80}>
         <section className="marketing-section">
           <div className="mx-auto max-w-6xl px-6 py-24">
           <div className="tmbc-divider-ribbon mb-10" aria-hidden />
@@ -145,7 +153,7 @@ export default function HowItWorksPage() {
       </section>
       </FadeInSection>
 
-      <FadeInSection delay={160}>
+      <FadeInSection delayMs={160}>
         <section className="marketing-section marketing-section-wash marketing-section-lush">
         <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
           <div className="tmbc-divider-ribbon mb-10" aria-hidden />
@@ -245,7 +253,7 @@ export default function HowItWorksPage() {
       </section>
       </FadeInSection>
 
-      <FadeInSection delay={240}>
+      <FadeInSection delayMs={240}>
         <section className="marketing-section">
           <div className="mx-auto max-w-xl text-center">
           <Image
@@ -267,7 +275,7 @@ export default function HowItWorksPage() {
         </section>
       </FadeInSection>
 
-      <FadeInSection delay={320}>
+      <FadeInSection delayMs={320}>
         <section className="marketing-section marketing-section-wash marketing-section-lush">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 text-center space-y-8">
           <p className="text-[11px] uppercase tracking-[0.35em] text-neutral-500">CALM START</p>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { Role } from "@prisma/client";
 import type { CommunityPostDetail } from "@/lib/services/server/community.service";
-import { createCommunityPostAction } from "@/app/dashboard/member/community/actions";
+import { createCommunityPostAction } from "@/app/(dashboard)/dashboard/member/community/actions";
 
 type CreatePostComposerProps = {
   roomId: string;

@@ -2,9 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
 import Button from "@/components/ui/Button";
+/**
+ * TMBC Transition Rules:
+ * - Blush sections may end with a gradient fade into ivory via .section-transition.
+ * - Apply the transition only on the final blush block before an ivory section.
+ * - Never use transitions under the hero or between ivory bands.
+ * - Do not stack multiple transitions back-to-back.
+ */
 import MarketingHero from "@/components/marketing/MarketingHero";
 import SectionDivider from "@/components/marketing/SectionDivider";
-import FadeInSection from "@/components/marketing/FadeInSection";
+import FadeInSection from "@/components/motion/FadeInSection";
 import experienceHero from "@/assets/images/experienceherobunny.png";
 import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
@@ -120,6 +127,7 @@ const pillarSpacing = "py-10 sm:py-12";
 export default function ExperiencePage() {
   return (
     <main className="bg-[#fef9f6] text-[#1F1C1A]">
+      {/* Hero must render instantly: never wrap in FadeInSection */}
       <MarketingHero
         eyebrow="THE EXPERIENCE"
         headline="A calm, mentor-led path that feels designed for the family you already are."
@@ -148,7 +156,7 @@ export default function ExperiencePage() {
 
       <SectionDivider className="mx-auto max-w-6xl" />
 
-      <FadeInSection delay={80}>
+      <FadeInSection delayMs={80}>
         <section className="marketing-section space-y-12">
           {pillarHighlights.map((pillar, index) => {
           const textFirst = index % 2 === 0;
@@ -205,7 +213,7 @@ export default function ExperiencePage() {
         </section>
       </FadeInSection>
 
-      <FadeInSection delay={200}>
+      <FadeInSection delayMs={200}>
         <section className="py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid items-center gap-10 lg:grid-cols-2">
@@ -249,7 +257,7 @@ export default function ExperiencePage() {
       </FadeInSection>
       <SectionDivider className="mx-auto max-w-6xl" />
 
-      <FadeInSection delay={320}>
+      <FadeInSection delayMs={320}>
         <section className="marketing-section marketing-section-wash marketing-section-lush">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center space-y-5">
           <p className="text-[11px] uppercase tracking-[0.4em] text-neutral-500">Invite-only</p>

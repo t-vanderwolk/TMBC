@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { academyModules } from '@/app/dashboard/member/learn/modules';
+import { academyModules } from "@/app/(dashboard)/dashboard/member/learn/modules";
 
 type ModuleRoadmapProps = {
   currentId?: string;

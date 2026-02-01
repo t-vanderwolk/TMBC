@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 
 import ImageFrame from "@/components/marketing/ImageFrame";
 import { onboardingApi } from "@/lib/api";
+import inviteEnvelopeImage from "@/assets/images/envelope.png";
+import inviteIconsImage from "@/assets/images/inviteicons.png";
 
 const RequestInvitePage = () => {
   const router = useRouter();
@@ -56,24 +58,25 @@ const RequestInvitePage = () => {
           </p>
           <div className="flex justify-center my-24 md:my-32">
             <ImageFrame className="max-w-[960px]">
-                <img
-                  src="/images/marketing/envelope.png"
+                <Image
+                  src={inviteEnvelopeImage}
                   alt="Invite-only onboarding process from request to mentorship and guided experience"
-                className="w-full rounded-[26px]"
-                loading="lazy"
-              />
+                  className="w-full rounded-[26px]"
+                  width={inviteEnvelopeImage.width}
+                  height={inviteEnvelopeImage.height}
+                />
             </ImageFrame>
           </div>
           <div className="mt-6 flex justify-center">
-            <ImageFrame className="max-w-[520px] border-[var(--tmbc-mauve)]/30">
-              <Image
-                src="/assets/images/inviteicons.png"
-                alt="How the Taylor-Made Baby Co. invitation process works"
-                width={640}
-                height={280}
-                className="w-full h-auto"
-              />
-            </ImageFrame>
+          <ImageFrame className="max-w-[520px] border-[var(--tmbc-mauve)]/30">
+            <Image
+              src={inviteIconsImage}
+              alt="How the Taylor-Made Baby Co. invitation process works"
+              width={inviteIconsImage.width}
+              height={inviteIconsImage.height}
+              className="w-full h-auto"
+            />
+          </ImageFrame>
           </div>
           <form onSubmit={submit} className="marketing-form mt-6 space-y-4">
             <label>

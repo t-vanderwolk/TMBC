@@ -8,7 +8,7 @@ import ChatComposer from "./ChatComposer";
 import MessageBubble from "./MessageBubble";
 import { useChatPolling } from "@/hooks/useChatPolling";
 import type { ChatConversationResponse, ChatMessagePayload, RoleType } from "@/types/chat";
-import MentorNotesDrawer from "@/app/dashboard/chat/components/MentorNotesDrawer";
+import MentorNotesDrawer from "@/app/(dashboard)/dashboard/chat/components/MentorNotesDrawer";
 
 type ChatThreadProps = {
   conversationId?: string;

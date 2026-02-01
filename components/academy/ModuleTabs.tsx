@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { AcademyModule } from '../../app/dashboard/member/learn/modules';
+import type { AcademyModule } from "@/app/(dashboard)/dashboard/member/learn/modules";
 import LectureCarousel from './LectureCarousel';
 import { useEasterEgg } from '@/hooks/useEasterEgg';
 

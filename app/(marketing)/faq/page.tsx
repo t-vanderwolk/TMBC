@@ -5,6 +5,7 @@ import Link from "next/link";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import SectionDivider from "@/components/marketing/SectionDivider";
+import homeHeroImage from "@/assets/images/home-hero.png";
 
 const faqGroups = [
   {
@@ -104,9 +105,10 @@ export default function FAQPage() {
 
   return (
     <>
+      {/* Hero must render instantly: never wrap in FadeInSection */}
       <MarketingHero
         eyebrow="FAQ"
-        imageSrc="/images/marketing/home-hero.png"
+        imageSrc={homeHeroImage}
         imageAlt="Taylor-Made Baby Co. hero art"
         headline="Questions are part of the journey."
         lead="Calm mentor-led answers to orient you before requesting an invite."

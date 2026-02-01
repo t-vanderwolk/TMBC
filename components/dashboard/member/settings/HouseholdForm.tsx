@@ -2,7 +2,7 @@
 
 import React, { FormEvent, useState } from "react";
 
-import { updateHouseholdDetails } from "@/app/dashboard/settings/actions";
+import { updateHouseholdDetails } from "@/app/(dashboard)/dashboard/settings/actions";
 
 export type HouseholdData = {
   partnerName?: string | null;

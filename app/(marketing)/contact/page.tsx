@@ -4,6 +4,7 @@ import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import SectionDivider from "@/components/marketing/SectionDivider";
+import homeHeroImage from "@/assets/images/home-hero.png";
 
 const contactDetails = [
   {
@@ -16,9 +17,10 @@ const contactDetails = [
 export default function ContactPage() {
   return (
     <>
+      {/* Hero must render instantly: never wrap in FadeInSection */}
       <MarketingHero
         eyebrow="Contact"
-        imageSrc="/images/marketing/home-hero.png"
+        imageSrc={homeHeroImage}
         imageAlt="Taylor-Made Baby Co. hero art"
         headline="We’re here — thoughtfully."
         lead="Questions, notes, or unclear threads? Reach out and we’ll respond with calm."

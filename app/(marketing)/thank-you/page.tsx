@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Route } from "next";
-import PageSection from "@/components/PageSection";
+import PageSection from "@/components/marketing/PageSection";
 
 const PRIMARY_BUTTON_CLASSES = "marketing-btn marketing-btn-primary uppercase tracking-[0.35em]";
 const SECONDARY_BUTTON_CLASSES = "marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]";

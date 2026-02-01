@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
-import type { AcademyModule, JourneyId } from '@/app/dashboard/member/learn/modules';
-import { journeyMeta } from '@/app/dashboard/member/learn/modules';
+import type { AcademyModule, JourneyId } from "@/app/(dashboard)/dashboard/member/learn/modules";
+import { journeyMeta } from "@/app/(dashboard)/dashboard/member/learn/modules";
 
 type JourneyTabsEditorialProps = {
   journeys: JourneyId[];
