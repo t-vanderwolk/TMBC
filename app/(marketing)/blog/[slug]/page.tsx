@@ -9,7 +9,11 @@ import BlogContentRenderer, {
 import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
 import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
 import MarketingContent from "@/components/marketing/MarketingContent";
-import SectionDivider from "@/components/marketing/SectionDivider";
+import { MarketingHeading } from "@/components/marketing/Typography";
+
+// Marketing background cadence is intentional.
+// Do not reorder or recolor section backgrounds.
+// Pattern: white → ivory → white → blush
 import type { AffiliatePolicy } from "@/lib/blog/affiliatePolicy";
 
 const API_BASE_URL =
@@ -213,37 +217,41 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
 
   return (
     <>
-      <SectionDivider />
-      <article className="marketing-section marketing-section-wash">
-        <div className="mx-auto space-y-12 px-4 sm:px-6 lg:px-8 max-w-6xl">
-        <div className="relative overflow-hidden rounded-[40px] border border-tmMauve/40 bg-white/90 p-10 shadow-editorial">
-          <div className="relative mt-8 max-w-3xl space-y-4">
-            <div className="absolute -right-2 -top-6 hidden text-[140px] font-playfair uppercase tracking-[0.2em] text-tmGold/20 lg:block">
-              Journal
-            </div>
-            <p className="text-xs uppercase tracking-[0.6em] text-tmCharcoal/60">Taylor-Made Journal</p>
-            <h1 className="font-playfair text-3xl sm:text-4xl md:text-5xl text-tmCharcoal">{post.title}</h1>
-            {post.excerpt && <p className="text-base italic text-tmCharcoal/70">{post.excerpt}</p>}
-            <p className="text-xs uppercase tracking-[0.45em] text-tmCharcoal/60">
-              Calm context from mentors who've been here.
-            </p>
-            <div className="flex flex-wrap gap-3 text-[0.65rem] uppercase tracking-[0.4em] text-tmCharcoal/65">
-              {post.tags.map((tag) => (
-                <span key={tag} className="rounded-full border border-tmMauve/40 px-3 py-1 text-[0.55rem] font-semibold text-tmCharcoal">
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.35em] text-tmCharcoal/60">
-              <span>{publishedLabel}</span>
-              <span>•</span>
-              <span>{post.authorName}</span>
-              <span>•</span>
-              <span>{formatAuthorRole(post.authorRoleSnapshot)}</span>
+      <section className="bg-[--tmbc-bg-white] py-20">
+        <MarketingContent>
+          <div className="relative overflow-hidden rounded-[40px] border border-tmMauve/40 bg-white/90 p-10 shadow-editorial">
+            <div className="relative mt-8 max-w-3xl space-y-4">
+              <div className="absolute -right-2 -top-6 hidden text-[140px] font-playfair uppercase tracking-[0.2em] text-tmGold/20 lg:block">
+                Journal
+              </div>
+              <p className="text-xs uppercase tracking-[0.6em] text-tmCharcoal/60">Taylor-Made Journal</p>
+              <MarketingHeading level="h1" className="text-tmCharcoal">
+                {post.title}
+              </MarketingHeading>
+              {post.excerpt && <p className="text-base italic text-tmCharcoal/70">{post.excerpt}</p>}
+              <p className="text-xs uppercase tracking-[0.45em] text-tmCharcoal/60">
+                Calm context from mentors who've been here.
+              </p>
+              <div className="flex flex-wrap gap-3 text-[0.65rem] uppercase tracking-[0.4em] text-tmCharcoal/65">
+                {post.tags.map((tag) => (
+                  <span key={tag} className="rounded-full border border-tmMauve/40 px-3 py-1 text-[0.55rem] font-semibold text-tmCharcoal">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.35em] text-tmCharcoal/60">
+                <span>{publishedLabel}</span>
+                <span>•</span>
+                <span>{post.authorName}</span>
+                <span>•</span>
+                <span>{formatAuthorRole(post.authorRoleSnapshot)}</span>
+              </div>
             </div>
           </div>
-        </div>
-
+        </MarketingContent>
+      </section>
+      <section className="bg-[--tmbc-bg-white] py-20">
+        <MarketingContent>
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,240px)_1fr]">
             <aside className="tm-print-hide space-y-6 rounded-3xl border border-tmMauve/40 bg-white/90 p-6 shadow-soft">
               <div>
@@ -286,7 +294,6 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
                 </div>
               </div>
             </aside>
-
             <div className="tm-print-wrapper space-y-8 rounded-[32px] border border-tmMauve/30 bg-white/95 p-8 shadow-soft">
               <div className="tm-print-brand-mark tm-print-only">
                 <p className="text-[0.7rem] uppercase tracking-[0.4em] text-tmCharcoal/60">Taylor-Made Baby Co.</p>
@@ -296,39 +303,51 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
               <p className="subtle-note">
                 Every family is different. Your mentor can help you decide what actually fits your life.
               </p>
-              <BlogHighlightSection highlights={post.highlights ?? []} />
-              <BlogAffiliateEndCard links={post.affiliateLinks} />
-              <div className="rounded-3xl border-l-4 border-tmGold/60 bg-tmIvory/80 px-6 py-6">
-                <p className="font-playfair text-2xl uppercase tracking-[0.3em] text-tmCharcoal">
-                  "Mentor-led planning turns preparation into something steady and kind."
-                </p>
-              </div>
-              <div className="tm-print-hide rounded-3xl border border-tmGold/40 bg-gradient-to-r from-tmMauve/70 via-tmBlush/70 to-tmIvory p-8 text-white shadow-editorial">
-                <p className="text-xs uppercase tracking-[0.6em]">Need a steady guide?</p>
-                <h2 className="mt-3 text-3xl">If this raised questions for you, that's normal.</h2>
-                <p className="mt-2 text-sm text-white/85">That's what mentors are for.</p>
-                <Link href="/request-invite" className="mkt-btn-primary">
-                  Request an Invite
-                </Link>
-              </div>
-              <div className="tm-print-footer tm-print-only">
-                <p className="mt-6 text-[0.75rem] uppercase tracking-[0.4em] text-tmCharcoal/60">
-                  Prepared with care by Taylor-Made Baby Co.
-                </p>
-              </div>
             </div>
           </div>
-
-          <div className="tm-print-hide border-t border-tmMauve/30 pt-6 text-base text-tmCharcoal/70">
-            <Link href="/blog" className="inline-flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.5em] text-tmCharcoal">
-              ← Back to Journal
-            </Link>
-            <p className="mt-2 max-w-3xl leading-relaxed text-base">
-              If you want a mentor to walk through this with you, we're here.
-            </p>
+        </MarketingContent>
+      </section>
+      <section className="bg-[--tmbc-bg-ivory] py-20">
+        <MarketingContent>
+          <div className="space-y-8">
+            <BlogHighlightSection highlights={post.highlights ?? []} />
+            <BlogAffiliateEndCard links={post.affiliateLinks} />
+            <div className="rounded-3xl border-l-4 border-tmGold/60 bg-tmIvory/80 px-6 py-6">
+              <p className="font-playfair text-2xl uppercase tracking-[0.3em] text-tmCharcoal">
+                "Mentor-led planning turns preparation into something steady and kind."
+              </p>
+            </div>
           </div>
-        </div>
-      </article>
+        </MarketingContent>
+      </section>
+      <section className="bg-[--tmbc-bg-blush] py-20">
+        <MarketingContent>
+          <div className="space-y-6">
+            <div className="rounded-3xl border border-tmGold/40 bg-[var(--tmbc-blush)]/80 p-8 text-[var(--tmbc-charcoal)] shadow-editorial">
+              <p className="text-xs uppercase tracking-[0.6em] text-[var(--tmbc-charcoal)]">Need a steady guide?</p>
+              <MarketingHeading level="h2" className="mt-3 text-[var(--tmbc-charcoal)]">
+                If this raised questions for you, that's normal.
+              </MarketingHeading>
+              <p className="mt-2 text-sm text-[var(--tmbc-charcoal)]/85">That's what mentors are for.</p>
+              <Link href="/request-invite" className="mkt-btn-primary">
+                Request an Invite
+              </Link>
+            </div>
+            <div className="tm-print-hide border-t border-tmMauve/30 pt-6 text-base text-tmCharcoal/70">
+              <Link href="/blog" className="inline-flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.5em] text-tmCharcoal">
+                ← Back to Journal
+              </Link>
+              <p className="mt-2 max-w-3xl leading-relaxed text-base">
+                If you want a mentor to walk through this with you, we're here.
+                <br />
+                <Link href="/contact" className="text-[0.65rem] uppercase tracking-[0.35em] text-tmCharcoal underline">
+                  Share where to send calm updates
+                </Link>
+              </p>
+            </div>
+          </div>
+        </MarketingContent>
+      </section>
     </>
   );
 };

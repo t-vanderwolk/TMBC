@@ -1,7 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment } from "react";
+import MarketingContent from "@/components/marketing/MarketingContent";
+import { MarketingHeading } from "@/components/marketing/Typography";
 import Button from "@/components/ui/Button";
+
+// Marketing background cadence is intentional.
+// Do not reorder or recolor section backgrounds.
+// Pattern: white → ivory → white → blush
 /**
  * TMBC Transition Rules:
  * - Blush sections may end with a gradient fade into ivory via .section-transition.
@@ -10,7 +15,6 @@ import Button from "@/components/ui/Button";
  * - Do not stack multiple transitions back-to-back.
  */
 import MarketingHero from "@/components/marketing/MarketingHero";
-import SectionDivider from "@/components/marketing/SectionDivider";
 import experienceHero from "@/assets/images/experienceherobunny.png";
 import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
@@ -108,14 +112,12 @@ const lifeBullets = [
   "We meet you where you are, and we only move forward when you feel ready.",
 ];
 
-const pillarTones: Record<string, string> = {
-  learn: "bg-[var(--step-bg-ivory)]/80",
-  plan: "bg-[var(--step-bg-blush)]/60",
-  connect: "bg-[var(--step-bg-mauve)]/50",
-  reflect: "bg-[var(--step-bg-ivory)]/70",
-};
-
-const pillarSpacing = "py-10 sm:py-12";
+const pillarBackgrounds = [
+  "bg-[--tmbc-bg-white]",
+  "bg-[--tmbc-bg-ivory]",
+  "bg-[--tmbc-bg-white]",
+  "bg-[--tmbc-bg-blush]",
+];
 
 /**
  * Mobile spacing rule:
@@ -125,7 +127,7 @@ const pillarSpacing = "py-10 sm:py-12";
 
 export default function ExperiencePage() {
   return (
-    <div className="bg-[#fef9f6] text-[#1F1C1A]">
+    <div className="bg-[--tmbc-bg-ivory] text-[var(--tmbc-charcoal)]">
       {/* Hero must render instantly and avoid additional entrance wrappers. */}
       <MarketingHero
         eyebrow="THE EXPERIENCE"
@@ -144,90 +146,80 @@ export default function ExperiencePage() {
         priority
       />
 
-      <div
-        className="h-52 w-full"
-        aria-hidden
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(254,249,246,0) 0%, rgba(254,249,246,0.8) 65%, rgba(254,249,246,1) 100%)",
-        }}
-      />
-
-      <SectionDivider className="mx-auto max-w-6xl" />
-
-      <section className="marketing-section space-y-12">
-          {pillarHighlights.map((pillar, index) => {
-          const textFirst = index % 2 === 0;
-          return (
-            <Fragment key={pillar.id}>
-              <section
-                className={`border-t border-[var(--tmbc-charcoal)]/10 first:border-t-0 ${pillarTones[pillar.id] ?? "bg-transparent"}`}
-              >
-                <div className={`mx-auto max-w-7xl px-6 ${pillarSpacing}`}>
-                  <div className="grid gap-10 items-center lg:grid-cols-2">
-                    <div className={`space-y-4 ${textFirst ? "lg:order-1" : "lg:order-2"}`}>
-                      <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-mauveGray)]">
-                        {pillar.title}
-                      </p>
-                      <h3 className="font-playfair text-[32px] leading-[1.2] text-neutral-900">
-                        {pillar.title}
-                      </h3>
-                      <p className="text-[15px] leading-[1.65] text-neutral-600">{pillar.thesis}</p>
-                      <p className="text-[15px] leading-[1.65] text-neutral-600">
-                        {pillar.paragraph}
-                      </p>
-                      <ul className="space-y-3 text-[14px] leading-[1.7] text-neutral-600">
-                        {pillar.bullets.map((bullet) => (
-                          <li key={bullet} className="flex gap-3">
-                            <span aria-hidden className="mt-1 inline-flex h-2 w-2 rounded-full bg-[var(--tmbc-mauve)]" />
-                            <span>{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <p className="text-[15px] leading-[1.6] text-neutral-600">{pillar.why}</p>
-                    </div>
-                    <div className={`flex justify-center ${textFirst ? "lg:order-2" : "lg:order-1"}`}>
-                      <div className="relative w-full max-w-[420px] overflow-hidden rounded-[32px] border border-transparent bg-neutral-50 shadow-[0_12px_40px_rgba(0,0,0,0.05)]">
-                        <div className="relative w-full" style={{ paddingTop: "75%" }}>
-                          <Image
-                            src={pillar.image.src}
-                            alt={pillar.image.alt}
-                            fill
-                            sizes="(min-width: 1024px) 400px, 90vw"
-                            className="object-cover"
-                          />
-                        </div>
-                      </div>
+      {pillarHighlights.map((pillar, index) => {
+        const textFirst = index % 2 === 0;
+        return (
+          <section key={pillar.id} className={`${pillarBackgrounds[index]} py-20`}>
+            <MarketingContent>
+              <div className="grid gap-10 items-center lg:grid-cols-2">
+                <div className={`space-y-5 ${textFirst ? "" : "lg:order-last text-right"}`}>
+                  <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-mauve)]/90">
+                    {pillar.title}
+                  </p>
+                  <MarketingHeading level="h3" className="text-[var(--tmbc-charcoal)]">
+                    {pillar.headline}
+                  </MarketingHeading>
+                  <p className="text-[15px] leading-[1.65] text-[var(--tmbc-charcoal)]">{pillar.thesis}</p>
+                  <p className="text-[15px] leading-[1.65] text-[var(--tmbc-charcoal)]">
+                    {pillar.paragraph}
+                  </p>
+                  <ul className="space-y-3 text-[14px] leading-[1.7] text-[var(--tmbc-charcoal)]">
+                    {pillar.bullets.map((bullet) => (
+                      <li key={bullet} className="flex gap-3">
+                        <span aria-hidden className="mt-1 inline-flex h-2 w-2 rounded-full bg-[var(--tmbc-mauve)]" />
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-[15px] leading-[1.6] text-[var(--tmbc-charcoal)]">{pillar.why}</p>
+                </div>
+                <div className={`flex justify-center ${textFirst ? "" : "lg:order-first"}`}>
+                  <div className="relative w-full max-w-[420px] overflow-hidden rounded-[32px] border border-[rgba(0,0,0,0.04)] bg-white shadow-[0_20px_35px_rgba(0,0,0,0.08)]">
+                    <div className="relative aspect-[4/3] w-full">
+                      <Image
+                        src={pillar.image.src}
+                        alt={pillar.image.alt}
+                        fill
+                        sizes="(min-width: 1024px) 420px, 90vw"
+                        className="object-cover"
+                      />
                     </div>
                   </div>
                 </div>
-              </section>
-              {index < pillarHighlights.length - 1 && (
-                <SectionDivider className="mx-auto max-w-6xl" />
+              </div>
+              {index === 1 && (
+                <div className="lg:hidden mt-6 flex justify-center">
+                  <Link
+                    href="/request-invite"
+                    className="flex items-center rounded-full border border-[var(--tmbc-mauve)] px-5 py-2 text-[12px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-mauve)]/70 hover:text-[var(--tmbc-charcoal)]"
+                  >
+                    Request an Invite
+                  </Link>
+                </div>
               )}
-            </Fragment>
-          );
-        })}
-        </section>
+            </MarketingContent>
+          </section>
+        );
+      })}
 
-      <section className="py-20 lg:py-24">
-        <div className="mx-auto max-w-7xl px-6">
+      <section className="bg-[--tmbc-bg-white] py-20">
+        <MarketingContent>
           <div className="grid items-center gap-10 lg:grid-cols-2">
             <div className="space-y-5 order-2 lg:order-1">
-              <p className="text-[11px] uppercase tracking-[0.35em] text-neutral-500">
+              <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
                 What life inside TMBC feels like
               </p>
-              <h2 className="font-playfair text-[32px] sm:text-[36px] leading-[1.2] text-neutral-900">
+              <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
                 Calm companionship for every chapter you are writing.
-              </h2>
-              <div className="space-y-3 text-[15px] leading-[1.65] text-neutral-600">
+              </MarketingHeading>
+              <div className="space-y-3 text-[15px] leading-[1.65] text-[var(--tmbc-charcoal)]">
                 {lifeParagraphs.map((paragraph) => (
                   <p key={paragraph} className="m-0">
                     {paragraph}
                   </p>
                 ))}
               </div>
-              <ul className="space-y-2 text-[14px] leading-[1.6] text-neutral-600">
+              <ul className="space-y-2 text-[14px] leading-[1.6] text-[var(--tmbc-charcoal)]">
                 {lifeBullets.map((bullet) => (
                   <li key={bullet} className="flex gap-3">
                     <span aria-hidden className="mt-1 inline-flex h-2 w-2 rounded-full bg-[var(--tmbc-mauve)]" />
@@ -248,28 +240,30 @@ export default function ExperiencePage() {
               </div>
             </div>
           </div>
-        </div>
-        </section>
-      <SectionDivider className="mx-auto max-w-6xl" />
-      <section className="marketing-section marketing-section-wash marketing-section-lush">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center space-y-5">
-          <p className="text-[11px] uppercase tracking-[0.4em] text-neutral-500">Invite-only</p>
-          <h2 className="font-playfair text-[32px] sm:text-[38px] leading-[1.2] text-neutral-900">
-            When you are ready, the door stays open—quiet, calm, and attentive.
-          </h2>
-          <p className="text-[16px] leading-[1.65] text-neutral-600">
-            We stay intentionally small so every mentor conversation is thoughtful, responsive, and paced exactly to you.
-          </p>
-          <div className="flex flex-col items-center gap-4">
-            <Button href="/request-invite" variant="secondary">
-              Request an Invite
-            </Button>
-            <p className="text-[12px] leading-[1.4] text-neutral-600">
-              We thoughtfully review each request and respond within two business days.
+        </MarketingContent>
+      </section>
+
+      <section className="bg-[--tmbc-bg-ivory] py-20">
+        <MarketingContent>
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center space-y-5">
+            <p className="text-[11px] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/70">Invite-only</p>
+            <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
+              When you are ready, the door stays open—quiet, calm, and attentive.
+            </MarketingHeading>
+            <p className="text-[16px] leading-[1.65] text-[var(--tmbc-charcoal)]/80">
+              We stay intentionally small so every mentor conversation is thoughtful, responsive, and paced exactly to you.
             </p>
+            <div className="flex flex-col items-center gap-4">
+              <Button href="/request-invite" variant="secondary">
+                Request an Invite
+              </Button>
+              <p className="text-[12px] leading-[1.4] text-[var(--tmbc-charcoal)]">
+                We thoughtfully review each request and respond within two business days.
+              </p>
+            </div>
           </div>
-        </div>
-        </section>
+        </MarketingContent>
+      </section>
     </div>
   );
 }

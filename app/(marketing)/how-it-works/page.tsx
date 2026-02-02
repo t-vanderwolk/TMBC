@@ -1,7 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
-import Button from "@/components/ui/Button";
+import MarketingContent from "@/components/marketing/MarketingContent";
+import { MarketingHeading } from "@/components/marketing/Typography";
+
+// Marketing background cadence is intentional.
+// Do not reorder or recolor section backgrounds.
+// Pattern: white → ivory → white → blush
 /**
  * TMBC Transition Rules:
  * - Blush sections may end with a gradient fade into ivory via .section-transition.
@@ -85,39 +90,20 @@ export default function HowItWorksPage() {
         imageAlt="Taylor-Made Baby Co. hero art"
         priority
       />
-      <div
-        aria-hidden="true"
-        className="h-40 w-full blur-[4px]"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(252,250,246,0) 0%, rgba(252,250,246,0.85) 65%, rgba(252,250,246,1) 100%)",
-        }}
-      />
-
-        <section className="marketing-section">
-          <div className="mx-auto max-w-6xl px-6 py-24">
-          <div className="tmbc-divider-ribbon mb-10" aria-hidden />
-          <div className="mb-10 flex justify-center" aria-hidden="true">
-            <div
-              className="h-px w-32"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgba(243,214,223,0) 0%, rgba(243,214,223,0.8) 50%, rgba(243,214,223,0) 100%)",
-              }}
-            />
-          </div>
+      <section className="bg-[--tmbc-bg-white] py-20">
+        <div className="mx-auto max-w-6xl px-6">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
             <div className="space-y-6">
-              <h2 className="font-playfair text-[36px] leading-[1.2] tracking-[0.02em] text-neutral-900">
+              <MarketingHeading level="h2" className="tracking-[0.02em] text-neutral-900">
                 Why we start with an invitation
-              </h2>
+              </MarketingHeading>
               <p className="text-[16px] leading-[1.7] text-neutral-600 max-w-2xl">
                 Invitations keep the landing space calm while we stay present for the people behind every request.
               </p>
-              <ul className="space-y-3 text-[15px] leading-[1.7] text-neutral-700 relative">
+              <ul className="space-y-3 text-[15px] leading-[1.7] text-neutral-700">
                 {invitationPoints.map((point) => (
-                  <li key={point} className="flex gap-3 marker:text-[var(--tmbc-blush-text)]">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-[rgba(243,214,223,0.9)]" />
+                  <li key={point} className="flex gap-3">
+                    <span className="mt-1 h-2 w-2 rounded-full bg-[var(--tmbc-blush)]/70" />
                     {point}
                   </li>
                 ))}
@@ -138,100 +124,58 @@ export default function HowItWorksPage() {
               </div>
             </div>
           </div>
-          <div className="my-16 flex justify-center" aria-hidden="true">
-            <div
-              className="h-px w-48"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgba(243,214,223,0) 0%, rgba(243,214,223,0.8) 50%, rgba(243,214,223,0) 100%)",
-              }}
-            />
-          </div>
         </div>
       </section>
 
-        <section className="marketing-section marketing-section-wash marketing-section-lush">
-        <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
-          <div className="tmbc-divider-ribbon mb-10" aria-hidden />
-          <div className="space-y-20">
+      <section className="bg-[--tmbc-bg-ivory] py-20">
+        <MarketingContent>
+          <div className="space-y-10">
             <div className="flex items-center gap-3">
-              <span className="h-px flex-1 bg-[rgba(243,214,223,0.5)]" />
-              <p className="text-[11px] uppercase tracking-[0.5em]" style={{ color: "var(--tmbc-mauveGray)" }}>
-                THE PROCESS
-              </p>
-              <span className="h-px flex-1 bg-[rgba(243,214,223,0.5)]" />
+              <span className="h-px flex-1 bg-[var(--tmbc-charcoal)]/10" aria-hidden="true" />
+              <p className="text-[11px] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/70">THE PROCESS</p>
+              <span className="h-px flex-1 bg-[var(--tmbc-charcoal)]/10" aria-hidden="true" />
             </div>
             {processSteps.map((step, index) => {
-              const stepStyle =
-                index === 0
-                  ? { backgroundColor: "var(--step-bg-blush)" }
-                  : index === 1
-                  ? { backgroundColor: "var(--step-bg-ivory)" }
-                  : index === 2
-                  ? { backgroundColor: "var(--step-bg-mauve)" }
-                  : {
-                      background:
-                        "linear-gradient(180deg, var(--step-bg-ivory) 0%, rgba(252,250,246,0) 100%)",
-                    };
+              const textFirst = index % 2 === 0;
               const stepCopySentences = step.copy.split(/(?<=\.)\s+/);
 
               return (
                 <Fragment key={step.title}>
-                  <section
-                    className="step py-16 md:py-24 rounded-[32px]"
-                    style={stepStyle}
-                  >
-                    <div className="space-y-12">
-                      <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
-                        <div className={`space-y-4 ${index % 2 ? "lg:order-last lg:text-right" : ""}`}>
-                          <div className="tmbc-ivory-card rounded-[32px] p-6 md:p-8">
-                            {/* Mobile-first markers keep each step clearly oriented before the headline. */}
-                            <p
-                              className="text-[11px] uppercase tracking-[0.4em] relative"
-                              style={{ color: "var(--tmbc-mauveGray)" }}
-                            >
-                              <span
-                                aria-hidden="true"
-                                className="absolute -left-6 top-1/2 h-px w-4 -translate-y-1/2"
-                                style={{ backgroundColor: "var(--tmbc-blush-line)" }}
-                              />
-                              {step.eyebrow}
-                            </p>
-                            <h3 className="font-playfair font-[400] text-[32px] leading-[1.2] text-neutral-900/90">
-                              {step.title}
-                            </h3>
-                            <div className="space-y-3 text-[15px] leading-[1.7] text-neutral-600">
-                              {/* Mobile readability guardrail: keep each sentence short and easy to scan. */}
-                              {stepCopySentences.map((sentence, sentenceIndex) => (
-                                <p key={`${step.title}-${sentenceIndex}`} className="m-0">
-                                  {sentence}
-                                </p>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                        <div className={`${index % 2 ? "lg:order-first" : ""}`}>
-                          <div className="py-6">
-                            <div
-                              className="relative aspect-[4/3] w-full overflow-hidden rounded-[32px] max-h-[45vh] sm:max-h-none"
-                              style={{ backgroundColor: "var(--tmbc-ivory)" }}
-                            >
-                              <Image
-                                src={step.image}
-                                alt={step.alt}
-                                fill
-                                sizes="(min-width: 1024px) 40vw, 92vw"
-                                priority={false}
-                                className="h-full w-full rounded-[32px] object-contain"
-                              />
-                            </div>
+                  <article className="space-y-10 rounded-[32px] border border-[rgba(62,47,53,0.08)] bg-white/90 p-10 shadow-[0_20px_35px_rgba(62,47,53,0.08)]">
+                    <div className="grid gap-10 items-center lg:grid-cols-2">
+                      <div className={`space-y-6 ${textFirst ? "" : "lg:order-last text-right"}`}>
+                        <div className="rounded-[28px] border border-[rgba(62,47,53,0.08)] bg-white/70 p-6">
+                          <p className="text-[11px] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">
+                            {step.eyebrow}
+                          </p>
+                          <MarketingHeading level="h3" className="text-neutral-900/90">
+                            {step.title}
+                          </MarketingHeading>
+                          <div className="space-y-3 text-[15px] leading-[1.7] text-neutral-600">
+                            {stepCopySentences.map((sentence, sentenceIndex) => (
+                              <p key={`${step.title}-${sentenceIndex}`} className="m-0">
+                                {sentence}
+                              </p>
+                            ))}
                           </div>
                         </div>
                       </div>
+                      <div className={`flex justify-center ${textFirst ? "" : "lg:order-first"}`}>
+                        <div className="relative aspect-[4/3] w-full max-w-[420px] overflow-hidden rounded-[32px] border border-[rgba(62,47,53,0.08)] bg-white">
+                          <Image
+                            src={step.image}
+                            alt={step.alt}
+                            fill
+                            sizes="(min-width: 1024px) 40vw, 92vw"
+                            priority={false}
+                            className="h-full w-full rounded-[32px] object-contain"
+                          />
+                        </div>
+                      </div>
                     </div>
-                  </section>
+                  </article>
                   {index === 1 && (
-                    <div className="lg:hidden mt-10 flex justify-center">
+                    <div className="lg:hidden mt-6 flex justify-center">
                       {/* Mobile reminder keeps the invite action close after the second step without disrupting desktop rhythm. */}
                       <Link
                         href="/request-invite"
@@ -245,54 +189,58 @@ export default function HowItWorksPage() {
               );
             })}
           </div>
-        </div>
+        </MarketingContent>
       </section>
 
-      <section className="marketing-section">
+      <section className="bg-[--tmbc-bg-white] py-20">
+        <MarketingContent>
           <div className="mx-auto max-w-xl text-center">
-          <Image
-            src={tmbcSeal}
-            alt="Baby Approved — Taylor-Made Baby Co."
-            width={160}
-            height={160}
-            className="mx-auto opacity-90 w-auto h-auto"
-            priority={false}
-            unoptimized
-          />
-          <p className="mt-6 text-sm tracking-wide text-muted-foreground">
-            Every recommendation inside Taylor-Made Baby Co. is reviewed for safety, practicality, and real-life use.
-          </p>
-          <p className="mt-2 text-sm italic text-muted-foreground">
-            Calm guidance. Thoughtful standards. Always baby-first.
-          </p>
+            <Image
+              src={tmbcSeal}
+              alt="Baby Approved — Taylor-Made Baby Co."
+              width={160}
+              height={160}
+              className="mx-auto opacity-90 w-auto h-auto"
+              priority={false}
+              unoptimized
+            />
+            <p className="mt-6 text-sm tracking-wide text-muted-foreground">
+              Every recommendation inside Taylor-Made Baby Co. is reviewed for safety, practicality, and real-life use.
+            </p>
+            <p className="mt-2 text-sm italic text-muted-foreground">
+              Calm guidance. Thoughtful standards. Always baby-first.
+            </p>
           </div>
-        </section>
+        </MarketingContent>
+      </section>
 
-      <section className="marketing-section marketing-section-wash marketing-section-lush">
+      <section className="bg-[--tmbc-bg-blush] py-20">
+        <MarketingContent>
           <div className="mx-auto max-w-3xl px-4 sm:px-6 text-center space-y-8">
-          <p className="text-[11px] uppercase tracking-[0.35em] text-neutral-500">CALM START</p>
-          <h2 className="font-playfair text-[36px] leading-[1.2] text-neutral-900">
-            Guidance that stays present with you, whatever this season looks like.
-          </h2>
-          <p className="text-[15px] leading-[1.7] text-neutral-600">
-            Request an invite when the time feels right; we’ll stay ready with thoughtful mentors and steady next steps.
-          </p>
-          <div className="flex flex-col items-center gap-3">
-            <Link
-              href="/request-invite"
-              className="inline-flex items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3 text-[14px] font-semibold tracking-[0.35em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] shadow-[0_20px_45px_rgba(0,0,0,0.18)]"
-            >
-              Request an Invite
-            </Link>
-            <Link
-              href="/request-invite"
-              className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 transition hover:text-[var(--tmbc-charcoal)]"
-            >
-              Already have a code?
-            </Link>
+            <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">CALM START</p>
+            <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
+              Guidance that stays present with you, whatever this season looks like.
+            </MarketingHeading>
+            <p className="text-[15px] leading-[1.7] text-[var(--tmbc-charcoal)]/80">
+              Request an invite when the time feels right; we’ll stay ready with thoughtful mentors and steady next steps.
+            </p>
+            <div className="flex flex-col items-center gap-3">
+              <Link
+                href="/request-invite"
+                className="inline-flex items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3 text-[14px] font-semibold tracking-[0.35em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] shadow-[0_20px_45px_rgba(0,0,0,0.18)]"
+              >
+                Request an Invite
+              </Link>
+              <Link
+                href="/request-invite"
+                className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 transition hover:text-[var(--tmbc-charcoal)]"
+              >
+                Already have a code?
+              </Link>
+            </div>
           </div>
-          </div>
-        </section>
+        </MarketingContent>
+      </section>
     </>
   );
 }

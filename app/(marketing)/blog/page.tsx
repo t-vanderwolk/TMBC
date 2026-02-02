@@ -2,7 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
-import SectionDivider from "@/components/marketing/SectionDivider";
+import { MarketingHeading } from "@/components/marketing/Typography";
+
+// Marketing background cadence is intentional.
+// Do not reorder or recolor section backgrounds.
+// Pattern: white → ivory → white → blush
 import blogHero from "@/assets/images/blogpagehero.png";
 
 const API_BASE_URL =
@@ -96,7 +100,9 @@ function FeaturedPost({ post }: { post: PublicBlogPost }) {
           <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">
             {primaryCategory} · {formatDate(post.publishedAt)}
           </p>
-          <h2 className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)]">{post.title}</h2>
+          <MarketingHeading level="h2">
+            {post.title}
+          </MarketingHeading>
           <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">{post.excerpt ?? ""}</p>
           <Link
             href={`/blog/${post.slug}`}
@@ -160,9 +166,9 @@ function PostGrid({ posts }: { posts: PublicBlogPost[] }) {
               <span>•</span>
               <span>{formatDate(post.publishedAt)}</span>
             </div>
-            <h3 className="mkt-h2 font-playfair text-[var(--tmbc-charcoal)] text-[22px] leading-[1.4]">
+            <MarketingHeading level="h3" className="text-[var(--tmbc-charcoal)]">
               {post.title}
-            </h3>
+            </MarketingHeading>
             <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-75">{post.excerpt ?? ""}</p>
           </div>
           <Link
@@ -211,14 +217,15 @@ export default async function BlogMarketingPage() {
     return (
       <>
         {marketingHeroBlock}
-        <SectionDivider />
-        <MarketingContent>
-          <section className="marketing-section marketing-section-wash text-center">
-            <p className="mkt-body text-[var(--tmbc-charcoal)]/80">
-              Our editorial library is being refreshed. Check back soon for calm stories and reflections.
-            </p>
-          </section>
-        </MarketingContent>
+        <section className="bg-[--tmbc-bg-white] py-20">
+          <MarketingContent>
+            <div className="text-center">
+              <p className="mkt-body text-[var(--tmbc-charcoal)]/80">
+                Our editorial library is being refreshed. Check back soon for calm stories and reflections.
+              </p>
+            </div>
+          </MarketingContent>
+        </section>
       </>
     );
   }
@@ -226,26 +233,27 @@ export default async function BlogMarketingPage() {
   return (
     <>
       {marketingHeroBlock}
-      <SectionDivider />
-      <MarketingContent>
-        <section className="marketing-section">
+      <section className="bg-[--tmbc-bg-white] py-20">
+        <MarketingContent>
           <FeaturedPost post={featuredPost} />
-        </section>
-        <SectionDivider />
-        <section className="marketing-section marketing-section-wash">
+        </MarketingContent>
+      </section>
+      <section className="bg-[--tmbc-bg-ivory] py-20">
+        <MarketingContent>
           <CategoryFilter />
           <div className="mt-10">
             <PostGrid posts={otherPosts} />
           </div>
-        </section>
-        <SectionDivider />
-        <section className="marketing-section">
+        </MarketingContent>
+      </section>
+      <section className="bg-[--tmbc-bg-blush] py-20">
+        <MarketingContent>
           <div className="space-y-8">
             <BlogCallout />
             <Pagination />
           </div>
-        </section>
-      </MarketingContent>
+        </MarketingContent>
+      </section>
     </>
   );
 }

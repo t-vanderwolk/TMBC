@@ -4,7 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
-import SectionDivider from "@/components/marketing/SectionDivider";
+import { MarketingHeading } from "@/components/marketing/Typography";
+
+// Marketing background cadence is intentional.
+// Do not reorder or recolor section backgrounds.
+// Pattern: white → ivory → white → blush
 import homeHeroImage from "@/assets/images/home-hero.png";
 
 const faqGroups = [
@@ -119,28 +123,32 @@ export default function FAQPage() {
         priority
       />
       <MarketingContent>
-        <div className="marketing-content space-y-16 text-[var(--tmbc-charcoal)]">
-          <section className="marketing-section marketing-card mx-auto max-w-3xl rounded-[36px] px-8 py-20 text-center shadow-[0_20px_80px_rgba(199,166,199,0.25)]">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">FAQ</p>
-            <h1 className="mt-3 font-serif text-3xl sm:text-4xl text-[var(--tmbc-charcoal)]">
-              Questions we anticipate.
-            </h1>
-            <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-80">
+        <section className="bg-[--tmbc-bg-white] py-20">
+          <div className="marketing-card mx-auto max-w-3xl rounded-[36px] px-8 py-20 text-center shadow-[0_20px_80px_rgba(199,166,199,0.25)]">
+            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+              FAQ
+            </p>
+            <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-80 max-w-3xl mx-auto">
               Calm answers that respect your timing and curiosity.
             </p>
-          </section>
-          <SectionDivider />
-
-          <section className="space-y-12">
+            <p className="mt-4 text-xs text-[var(--tmbc-charcoal)] text-opacity-60">
+              We read every message. Replies may take a moment—care feels better than speed.
+            </p>
+          </div>
+        </section>
+        <section className="bg-[--tmbc-bg-ivory] py-20">
+          <div className="space-y-12 mx-auto max-w-6xl px-6">
             {faqGroups.map((group) => (
               <article
                 key={group.title}
-                className="marketing-card mx-auto max-w-3xl space-y-6 rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 px-8 py-10 shadow-[0_25px_80px_rgba(199,166,199,0.2)]"
+                className="marketing-card space-y-6 rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 px-8 py-10 shadow-[0_25px_80px_rgba(199,166,199,0.2)]"
               >
                 <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
                   {group.title}
                 </p>
-                <h2 className="font-serif text-2xl text-[var(--tmbc-charcoal)]">{group.summary}</h2>
+            <MarketingHeading level="h2">
+              {group.summary}
+            </MarketingHeading>
                 <div className="space-y-4">
                   {group.items.map((item) => (
                     <div
@@ -162,24 +170,23 @@ export default function FAQPage() {
                 </div>
               </article>
             ))}
-          </section>
-          <SectionDivider />
-
-
-          <section className="marketing-section marketing-card mx-auto max-w-3xl rounded-[32px] border border-[var(--tmbc-mauve)]/20 px-8 py-16 text-center shadow-[0_25px_70px_rgba(199,166,199,0.25)]">
+          </div>
+        </section>
+        <section className="bg-[--tmbc-bg-white] py-20">
+          <div className="marketing-card mx-auto max-w-3xl rounded-[32px] border border-[var(--tmbc-mauve)]/20 px-8 py-16 text-center shadow-[0_25px_70px_rgba(199,166,199,0.25)]">
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
               Registry placeholder
             </p>
-            <h2 className="mt-3 font-serif text-2xl text-[var(--tmbc-charcoal)]">
+            <MarketingHeading level="h2" className="mt-3 text-[var(--tmbc-charcoal)]">
               TMBC uses MyRegistry for registry creation and fulfillment.
-            </h2>
+            </MarketingHeading>
             <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
               Integration will be available in a future update.
             </p>
-          </section>
-          <SectionDivider />
-
-          <section className="marketing-section marketing-card marketing-section-wash marketing-section-lush mx-auto max-w-3xl rounded-[32px] border border-[var(--tmbc-mauve)]/20 px-8 py-16 text-center shadow-[0_25px_70px_rgba(199,166,199,0.25)]">
+          </div>
+        </section>
+        <section className="bg-[--tmbc-bg-blush] py-20">
+          <div className="marketing-card mx-auto max-w-3xl rounded-[32px] border border-[var(--tmbc-mauve)]/20 px-8 py-16 text-center shadow-[0_25px_70px_rgba(199,166,199,0.25)]">
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
               Still wondering if TMBC is right for you? You’re always welcome to learn more or reach out with a question.
             </p>
@@ -188,9 +195,10 @@ export default function FAQPage() {
                 Request an Invite
               </Link>
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
       </MarketingContent>
+
     </>
   );
 }

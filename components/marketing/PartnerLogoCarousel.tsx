@@ -50,7 +50,8 @@ export default function PartnerLogoCarousel() {
             alt: formatAlt(fileName),
           }))
           .sort((a, b) => a.id.localeCompare(b.id));
-        setLogos(mapped);
+        const MAX_VISIBLE_LOGOS = 10;
+        setLogos(mapped.slice(0, MAX_VISIBLE_LOGOS));
       })
       .catch(() => {
         /* ignore */
@@ -111,8 +112,12 @@ export default function PartnerLogoCarousel() {
 
   return (
     <div className="space-y-6 text-center">
+      {/* Logos now read as shared values, not boastful badges. */}
       <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">
-        Calm partners we trust
+        Only Partnered With the Best
+      </p>
+      <p className="text-[0.7rem] tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
+        Because trust matters more than logos.
       </p>
       <div className="partner-logo-carousel">
         {logos.length ? (

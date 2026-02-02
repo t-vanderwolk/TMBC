@@ -1,11 +1,6 @@
 import Link from "next/link";
 import { MARKETING_PRIMARY_NAV } from "@/components/marketing/marketing-links";
 
-const companyLinks = [
-  { label: "FAQ", href: "/faq" },
-  { label: "Contact", href: "/contact" },
-];
-
 const supportLinks = [{ label: "Log In", href: "/login" }];
 
 export default function MarketingFooter() {
@@ -58,7 +53,7 @@ export default function MarketingFooter() {
         <div className="space-y-3">
           <p className="text-[11px] uppercase tracking-[0.32em] text-[var(--member-text-secondary)]/55">Company & Support</p>
           <div className="flex flex-wrap gap-3 text-sm text-[var(--member-text-secondary)]/80">
-            {[...companyLinks, ...supportLinks].map((link) => (
+            {supportLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -71,7 +66,13 @@ export default function MarketingFooter() {
         </div>
       </div>
 
-      <div className="mt-10 border-t border-[var(--member-border-soft)] pt-6 text-xs uppercase tracking-[0.32em] text-[var(--member-text-secondary)]/55">
+      <div className="mt-10 border-t border-[var(--member-border-soft)] pt-6 text-[var(--member-text-secondary)]/60">
+        <p className="mb-2 text-[0.7rem] text-[var(--member-text-secondary)]/60">
+          We close each day with the quiet promise that thoughtful care stays calm, human, and still yours.
+        </p>
+        <p className="mb-4 text-[0.65rem] text-[var(--member-text-secondary)]/50">
+          The calm promise stays even when requests pause—care is patient practice, not a sprint.
+        </p>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <span>© {year} Taylor-Made Baby Co.</span>
           <div className="flex flex-wrap gap-6 text-sm text-[var(--member-text-secondary)]/70">

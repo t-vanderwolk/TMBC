@@ -1,8 +1,12 @@
 import Link from "next/link";
 import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
-import SectionDivider from "@/components/marketing/SectionDivider";
+import { MarketingHeading } from "@/components/marketing/Typography";
 import homeHeroImage from "@/assets/images/home-hero.png";
+
+// Marketing background cadence is intentional.
+// Do not reorder or recolor section backgrounds.
+// Pattern: white → ivory → white → blush
 
 const heroSection = (
   <MarketingHero
@@ -20,9 +24,9 @@ export default function PrivacyPage() {
     <>
       {/* Hero must render instantly and avoid additional entrance wrappers. */}
       {heroSection}
-      <MarketingContent>
-        <div className="marketing-content space-y-10 text-[var(--tmbc-charcoal)]">
-          <section className="marketing-section space-y-4 text-[var(--tmbc-charcoal)] text-opacity-80">
+      <section className="bg-[--tmbc-bg-white] py-20">
+        <MarketingContent>
+          <div className="marketing-content mx-auto max-w-4xl space-y-4 text-[var(--tmbc-charcoal)] text-opacity-80">
             <p className="text-sm">
               We collect only what helps us tailor the Taylor-Made Baby experience—account information, preferences,
               and interactions that help mentors and thoughtful parents collaborate safely.
@@ -38,10 +42,15 @@ export default function PrivacyPage() {
               </Link>
               .
             </p>
-          </section>
-          <SectionDivider />
-          <section className="marketing-section space-y-3">
-            <h2 className="font-serif text-2xl text-[var(--tmbc-charcoal)]">Quick links</h2>
+          </div>
+        </MarketingContent>
+      </section>
+      <section className="bg-[--tmbc-bg-ivory] py-20">
+        <MarketingContent>
+          <div className="marketing-content mx-auto max-w-3xl space-y-3">
+            <MarketingHeading level="h2">
+              Quick links
+            </MarketingHeading>
             <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">
               <Link href="/blog" className="text-[var(--tmbc-mauve)]">
                 Journal
@@ -50,9 +59,30 @@ export default function PrivacyPage() {
                 Request an Invite
               </Link>
             </div>
-          </section>
-        </div>
-      </MarketingContent>
+          </div>
+        </MarketingContent>
+      </section>
+      <section className="bg-[--tmbc-bg-white] py-20">
+        <MarketingContent>
+          <div className="marketing-content mx-auto max-w-3xl text-center space-y-3">
+            <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              Questions about privacy? Reach out anytime—we keep the conversation calm.
+            </p>
+            <Link href="/contact" className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] underline">
+              Contact support
+            </Link>
+          </div>
+        </MarketingContent>
+      </section>
+      <section className="bg-[--tmbc-bg-blush] py-16">
+        <MarketingContent>
+          <div className="marketing-content mx-auto max-w-3xl text-center">
+            <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
+              Privacy is ongoing work; we keep updates gentle and transparent.
+            </p>
+          </div>
+        </MarketingContent>
+      </section>
     </>
   );
 }

@@ -10,6 +10,7 @@
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { MarketingBody, MarketingHeading, MarketingSupport } from "./Typography";
 
 type MarketingHeroCta = {
   label: string;
@@ -28,6 +29,15 @@ type MarketingHeroProps = {
   imageSizes?: string;
   priority?: boolean;
   className?: string;
+  textContainerClassName?: string;
+  headlineClassName?: string;
+  leadClassName?: string;
+  ctaContainerClassName?: string;
+  microSubhead?: ReactNode;
+  microSubheadClassName?: string;
+  postLeadMicroLine?: ReactNode;
+  postLeadMicroLineClassName?: string;
+  imageClassName?: string;
 };
 
 export default function MarketingHero({
@@ -41,53 +51,62 @@ export default function MarketingHero({
   imageSizes,
   priority = false,
   className = "",
+  textContainerClassName = "max-w-[640px] px-6 md:px-8",
+  headlineClassName = "",
+  leadClassName = "",
+  ctaContainerClassName = "mt-6 md:mt-8",
+  microSubhead,
+  microSubheadClassName = "",
+  postLeadMicroLine,
+  postLeadMicroLineClassName = "",
+  imageClassName = "",
 }: MarketingHeroProps) {
-  // This component is intentionally presentation-only to remain Turbopack-safe.
   return (
     <section
-      className={`relative overflow-hidden bg-[var(--tmbc-ivory)] pt-24 pb-20 md:pt-28 md:pb-24 lg:pt-32 lg:pb-28 min-h-[70vh] ${className}`.trim()}
+      className={`relative overflow-hidden bg-[var(--tmbc-ivory)] pt-28 md:pt-32 pb-24 md:pb-28 min-h-[70vh] flex items-center ${className}`.trim()}
     >
-      <div className="absolute inset-0">
-        <Image
-          src={imageSrc}
-          alt={imageAlt}
-          fill
-          sizes={imageSizes ?? "100vw"}
-          className="h-full w-full object-fill object-right"
-          priority={priority}
-        />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent" aria-hidden="true" />
-      <div className="relative z-10 max-w-[640px] px-6 text-left">
-        {eyebrow && (
-          <p className="text-[11px] uppercase tracking-[0.36em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            {eyebrow}
-          </p>
-        )}
-        <h1 className="font-playfair text-[64px] leading-[1.05] tracking-[-0.02em] text-[var(--tmbc-charcoal)] sm:text-[72px]">
-          {headline}
-        </h1>
-        <p className="text-lg leading-[1.6] text-[var(--tmbc-charcoal)] text-opacity-70">
-          {lead}
-        </p>
-        <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
-          <Link
-            href={primaryCta.href}
-            className={`mkt-btn mkt-btn-primary uppercase tracking-[0.35em] ${primaryCta.className ?? ""}`.trim()}
-          >
-            {primaryCta.label}
-          </Link>
-          {secondaryCta && (
-            <Link
-              href={secondaryCta.href}
-              className={`text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-80 transition hover:text-[var(--tmbc-mauve)] flex items-center gap-1 ${
-                secondaryCta.className ?? ""
-              }`.trim()}
-            >
-              <span>{secondaryCta.label}</span>
-              <span aria-hidden>→</span>
-            </Link>
-          )}
+      <Image
+        src={imageSrc}
+        alt={imageAlt}
+        fill
+        sizes={imageSizes ?? "100vw"}
+        className={`absolute inset-0 h-full w-full object-fill object-right ${imageClassName}`.trim()}
+        priority={priority}
+      />
+      <div className="relative z-10 w-full">
+        <div className="mkt-container">
+          <div className={`relative z-10 text-left ${textContainerClassName}`.trim()}>
+            {eyebrow && (
+              <p className="text-[11px] uppercase tracking-[0.36em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                {eyebrow}
+              </p>
+            )}
+            <MarketingHeading level="h1" className={headlineClassName}>
+              {headline}
+            </MarketingHeading>
+            {microSubhead && <MarketingSupport className={microSubheadClassName}>{microSubhead}</MarketingSupport>}
+            <MarketingBody className={leadClassName}>{lead}</MarketingBody>
+            {postLeadMicroLine && <MarketingSupport className={postLeadMicroLineClassName}>{postLeadMicroLine}</MarketingSupport>}
+            <div className={`flex flex-col md:flex-row md:items-center gap-4 md:gap-6 ${ctaContainerClassName}`.trim()}>
+              <Link
+                href={primaryCta.href}
+                className={`mkt-btn mkt-btn-primary uppercase tracking-[0.35em] ${primaryCta.className ?? ""}`.trim()}
+              >
+                {primaryCta.label}
+              </Link>
+              {secondaryCta && (
+                <Link
+                  href={secondaryCta.href}
+                  className={`text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-80 transition hover:text-[var(--tmbc-mauve)] flex items-center gap-1 ${
+                    secondaryCta.className ?? ""
+                  }`.trim()}
+                >
+                  <span>{secondaryCta.label}</span>
+                  <span aria-hidden>→</span>
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </section>
