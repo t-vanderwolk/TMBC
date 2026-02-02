@@ -1,5 +1,4 @@
 import Button from "@/components/ui/Button";
-import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { MarketingHeading } from "@/components/marketing/Typography";
 
@@ -7,6 +6,7 @@ import { MarketingHeading } from "@/components/marketing/Typography";
 // Do not reorder or recolor section backgrounds.
 // Pattern: white → ivory → white → blush
 import membershipHero from "@/assets/images/membershiphero.png";
+import { SectionBand, textCage, cardBase, dividerRhythm } from "@/components/marketing/MarketingCadence";
 /**
  * TMBC Transition Rules:
  * - Blush sections may end with a gradient fade into ivory via .section-transition.
@@ -78,48 +78,48 @@ const betaHighlights = [
 
 function IncludesGrid() {
   return (
-    <section aria-labelledby="membership-includes" className="marketing-section bg-[--tmbc-bg-white] py-20">
-      <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Calm, editorial care</p>
-          <MarketingHeading level="h2" id="membership-includes" className="tracking-[0.02em]">
-            What Membership Includes
-          </MarketingHeading>
+    <SectionBand bg="white">
+      <div className={`${textCage("intro")} space-y-2`}>
+        <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Calm, editorial care</p>
+        <MarketingHeading level="h2" id="membership-includes" className="tracking-[0.02em]">
+          What Membership Includes
+        </MarketingHeading>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {includeCards.map((card) => (
           <article
             key={card.title}
-            className="relative overflow-hidden rounded-[26px] border border-[var(--member-border-soft)] bg-white/90 p-6 shadow-[0_15px_45px_rgba(62,47,53,0.08)]"
+            className={`${cardBase("relative overflow-hidden p-6 md:p-8")} border border-[var(--member-border-soft)]`}
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--member-border-default)] bg-[var(--member-accent-subtle)] text-sm text-[var(--tmbc-charcoal)]/60">
               <span aria-hidden="true">✶</span>
             </div>
-                  <MarketingHeading level="h3" className="mt-5 text-[var(--tmbc-charcoal)]">
-                    {card.title}
-                  </MarketingHeading>
+            <MarketingHeading level="h3" className="mt-5 text-[var(--tmbc-charcoal)]">
+              {card.title}
+            </MarketingHeading>
             <p className="mt-3 mkt-body text-[var(--tmbc-charcoal)] text-opacity-70">{card.copy}</p>
           </article>
         ))}
       </div>
-    </section>
+    </SectionBand>
   );
 }
 
 function InvitationSection() {
   return (
-    <section aria-labelledby="membership-invitation" className="marketing-section bg-[--tmbc-bg-ivory] py-20 space-y-8">
-      <div className="space-y-2">
+    <SectionBand bg="ivory">
+      <div className={`${textCage("intro")} space-y-2`}>
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Invitation, thoughtfully paced</p>
         <MarketingHeading level="h2" id="membership-invitation">
           Membership & Invitation
         </MarketingHeading>
-        <p className="max-w-3xl mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
+        <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
           Thoughtful access, by design. Invite-only membership keeps the community calm, personal, and made for people
           who value care over noise.
         </p>
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
-        <article className="rounded-[26px] border border-[var(--member-border-soft)] bg-white/90 p-6 shadow-[0_15px_40px_rgba(62,47,53,0.1)]">
+        <article className={`${cardBase("p-6 md:p-8")} border border-[var(--member-border-soft)]`}>
           <MarketingHeading level="h3" className="text-[var(--tmbc-charcoal)]">
             How Pricing Works
           </MarketingHeading>
@@ -132,7 +132,7 @@ function InvitationSection() {
             ))}
           </ul>
         </article>
-        <article className="rounded-[26px] border border-[var(--member-border-soft)] bg-white/90 p-6 shadow-[0_15px_40px_rgba(62,47,53,0.1)]">
+        <article className={`${cardBase("p-6 md:p-8")} border border-[var(--member-border-soft)]`}>
           <MarketingHeading level="h3" className="text-[var(--tmbc-charcoal)]">
             Why Invite-Only?
           </MarketingHeading>
@@ -146,20 +146,20 @@ function InvitationSection() {
           </ul>
         </article>
       </div>
-    </section>
+    </SectionBand>
   );
 }
 
 function BetaMentorPathway() {
   return (
     <div aria-labelledby="beta-pathway" className="space-y-10">
-      <div className="space-y-2">
+      <div className={`${textCage("intro")} space-y-2`}>
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Beta care with depth</p>
         <MarketingHeading level="h2" id="beta-pathway">
           Beta Membership & Mentor Pathway
         </MarketingHeading>
         <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">Growing with intention.</p>
-        <p className="max-w-3xl mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
+        <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
           Beta testing fees are waived while we co-create the experience—there is no obligation afterward.
         </p>
       </div>
@@ -167,7 +167,7 @@ function BetaMentorPathway() {
         {betaHighlights.map((section) => (
           <article
             key={section.title}
-            className="flex flex-col rounded-[24px] border border-[var(--member-border-soft)] bg-white/90 p-6 shadow-[0_15px_45px_rgba(62,47,53,0.1)]"
+            className={`${cardBase("flex flex-col p-6")} border border-[var(--member-border-soft)]`}
           >
             <MarketingHeading level="h3" className="text-[var(--tmbc-charcoal)]">
               {section.title}
@@ -183,7 +183,7 @@ function BetaMentorPathway() {
           </article>
         ))}
       </div>
-      <p className="max-w-3xl mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
+      <p className={`${textCage("standard")} mkt-body text-[var(--tmbc-charcoal)] text-opacity-80`}>
         This model keeps TMBC focused on mentor support and member care while being transparent about the limited
         affiliate relationships that sustain the experience.
       </p>
@@ -194,14 +194,14 @@ function BetaMentorPathway() {
 function TransparencyDisclosure() {
   return (
     <div aria-labelledby="transparency-disclosure" className="space-y-6">
-      <div className="space-y-2">
+      <div className={`${textCage("intro")} space-y-2`}>
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">Clarity & care</p>
         <MarketingHeading level="h2" id="transparency-disclosure">
           Transparency & Affiliate Disclosure
         </MarketingHeading>
       </div>
-      <div className="space-y-4">
-        <p className="max-w-3xl mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
+      <div className={`${textCage("standard")} space-y-4`}>
+        <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
           We keep our conversations open about how TMBC and mentors are supported so you can trust every recommendation.
         </p>
         <ul className="space-y-3">
@@ -237,10 +237,8 @@ function TransparencyDisclosure() {
 
 function FinalCTA() {
   return (
-    <div className="mt-16 rounded-[32px] border border-[var(--member-border-soft)] bg-white/90 px-6 py-10 text-center shadow-[0_25px_60px_rgba(62,47,53,0.2)]">
-      <MarketingHeading level="h2">
-        You don’t need to do this alone.
-      </MarketingHeading>
+    <div className="rounded-[32px] border border-[var(--member-border-soft)] bg-white/90 px-6 py-10 text-center shadow-[0_25px_60px_rgba(62,47,53,0.2)]">
+      <MarketingHeading level="h2">You don’t need to do this alone.</MarketingHeading>
       <p className="mt-3 mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
         Requesting an invite is simply the start of a conversation.
       </p>
@@ -273,17 +271,18 @@ export default function MembershipPage() {
       />
       <IncludesGrid />
       <InvitationSection />
-      <section className="bg-[--tmbc-bg-white] py-20">
-        <MarketingContent>
+      <SectionBand bg="blush">
+        <div className="space-y-10">
           <BetaMentorPathway />
+          <div className={`${dividerRhythm()} w-20 mx-auto`} aria-hidden="true" />
           <TransparencyDisclosure />
-        </MarketingContent>
-      </section>
-      <section className="bg-[--tmbc-bg-blush] py-20">
-        <MarketingContent>
+        </div>
+      </SectionBand>
+      <SectionBand bg="white">
+        <div className={textCage("intro")}>
           <FinalCTA />
-        </MarketingContent>
-      </section>
+        </div>
+      </SectionBand>
     </div>
   );
 }

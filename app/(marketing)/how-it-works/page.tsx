@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
-import MarketingContent from "@/components/marketing/MarketingContent";
 import { MarketingHeading } from "@/components/marketing/Typography";
 
 // Marketing background cadence is intentional.
@@ -22,6 +21,7 @@ import matchImage from "@/assets/images/match.png";
 import welcomeImage from "@/assets/images/welcome.png";
 import invitationStill from "@/assets/images/tmbcinvite.png";
 import tmbcSeal from "@/assets/images/tmbc-seal.png";
+import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
 
 const invitationPoints = [
   "Protects the invitation-only nature of the experience.",
@@ -90,157 +90,155 @@ export default function HowItWorksPage() {
         imageAlt="Taylor-Made Baby Co. hero art"
         priority
       />
-      <section className="bg-[--tmbc-bg-white] py-20">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
-            <div className="space-y-6">
+      <SectionBand bg="white">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
+          <div className="space-y-6">
+            <div className={`${textCage("standard")} space-y-6`}>
               <MarketingHeading level="h2" className="tracking-[0.02em] text-neutral-900">
                 Why we start with an invitation
               </MarketingHeading>
-              <p className="text-[16px] leading-[1.7] text-neutral-600 max-w-2xl">
+              <p className="text-[16px] leading-[1.7] text-neutral-600">
                 Invitations keep the landing space calm while we stay present for the people behind every request.
               </p>
-              <ul className="space-y-3 text-[15px] leading-[1.7] text-neutral-700">
-                {invitationPoints.map((point) => (
-                  <li key={point} className="flex gap-3">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-[var(--tmbc-blush)]/70" />
-                    {point}
-                  </li>
-                ))}
-              </ul>
             </div>
-            <div className="flex justify-center">
-              <div className="relative mx-auto w-full max-w-md">
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl">
-                  <Image
-                    src={invitationStill}
-                    alt="Taylor-Made Baby Co. invitation still life representing calm, intentional welcome"
-                    fill
-                    sizes="(min-width: 1024px) 420px, 90vw"
-                    className="object-cover"
-                    priority={false}
-                  />
-                </div>
+            <ul className={`${textCage("standard")} space-y-3 text-[15px] leading-[1.7] text-neutral-700`}>
+              {invitationPoints.map((point) => (
+                <li key={point} className="flex gap-3">
+                  <span className="mt-1 h-2 w-2 rounded-full bg-[var(--tmbc-blush)]/70" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex justify-center">
+            <div className="relative mx-auto w-full max-w-md">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl">
+                <Image
+                  src={invitationStill}
+                  alt="Taylor-Made Baby Co. invitation still life representing calm, intentional welcome"
+                  fill
+                  sizes="(min-width: 1024px) 420px, 90vw"
+                  className="object-cover"
+                  priority={false}
+                />
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </SectionBand>
 
-      <section className="bg-[--tmbc-bg-ivory] py-20">
-        <MarketingContent>
-          <div className="space-y-10">
-            <div className="flex items-center gap-3">
-              <span className="h-px flex-1 bg-[var(--tmbc-charcoal)]/10" aria-hidden="true" />
-              <p className="text-[11px] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/70">THE PROCESS</p>
-              <span className="h-px flex-1 bg-[var(--tmbc-charcoal)]/10" aria-hidden="true" />
-            </div>
-            {processSteps.map((step, index) => {
-              const textFirst = index % 2 === 0;
-              const stepCopySentences = step.copy.split(/(?<=\.)\s+/);
+      <SectionBand bg="ivory">
+        <div className="space-y-10">
+          <div className="flex items-center gap-3">
+            <span className="h-px flex-1 bg-[var(--tmbc-charcoal)]/10" aria-hidden="true" />
+            <p className="text-[11px] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/70">THE PROCESS</p>
+            <span className="h-px flex-1 bg-[var(--tmbc-charcoal)]/10" aria-hidden="true" />
+          </div>
+          {processSteps.map((step, index) => {
+            const textFirst = index % 2 === 0;
+            const stepCopySentences = step.copy.split(/(?<=\.)\s+/);
 
-              return (
-                <Fragment key={step.title}>
-                  <article className="space-y-10 rounded-[32px] border border-[rgba(62,47,53,0.08)] bg-white/90 p-10 shadow-[0_20px_35px_rgba(62,47,53,0.08)]">
-                    <div className="grid gap-10 items-center lg:grid-cols-2">
-                      <div className={`space-y-6 ${textFirst ? "" : "lg:order-last text-right"}`}>
-                        <div className="rounded-[28px] border border-[rgba(62,47,53,0.08)] bg-white/70 p-6">
-                          <p className="text-[11px] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">
-                            {step.eyebrow}
-                          </p>
-                          <MarketingHeading level="h3" className="text-neutral-900/90">
-                            {step.title}
-                          </MarketingHeading>
-                          <div className="space-y-3 text-[15px] leading-[1.7] text-neutral-600">
-                            {stepCopySentences.map((sentence, sentenceIndex) => (
-                              <p key={`${step.title}-${sentenceIndex}`} className="m-0">
-                                {sentence}
-                              </p>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <div className={`flex justify-center ${textFirst ? "" : "lg:order-first"}`}>
-                        <div className="relative aspect-[4/3] w-full max-w-[420px] overflow-hidden rounded-[32px] border border-[rgba(62,47,53,0.08)] bg-white">
-                          <Image
-                            src={step.image}
-                            alt={step.alt}
-                            fill
-                            sizes="(min-width: 1024px) 40vw, 92vw"
-                            priority={false}
-                            className="h-full w-full rounded-[32px] object-contain"
-                          />
+            return (
+              <Fragment key={step.title}>
+                <article
+                  className={`${cardBase(
+                    "space-y-10 border border-[rgba(62,47,53,0.08)] bg-white/90 p-10 shadow-[0_20px_35px_rgba(62,47,53,0.08)]"
+                  )}`}
+                >
+                  <div className="grid gap-10 items-center lg:grid-cols-2">
+                    <div className={`space-y-6 ${textFirst ? "" : "lg:order-last text-right"}`}>
+                      <div className="rounded-[28px] border border-[rgba(62,47,53,0.08)] bg-white/70 p-6">
+                        <p className="text-[11px] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">
+                          {step.eyebrow}
+                        </p>
+                        <MarketingHeading level="h3" className="text-neutral-900/90">
+                          {step.title}
+                        </MarketingHeading>
+                        <div className="space-y-3 text-[15px] leading-[1.7] text-neutral-600">
+                          {stepCopySentences.map((sentence, sentenceIndex) => (
+                            <p key={`${step.title}-${sentenceIndex}`} className="m-0">
+                              {sentence}
+                            </p>
+                          ))}
                         </div>
                       </div>
                     </div>
-                  </article>
-                  {index === 1 && (
-                    <div className="lg:hidden mt-6 flex justify-center">
-                      {/* Mobile reminder keeps the invite action close after the second step without disrupting desktop rhythm. */}
-                      <Link
-                        href="/request-invite"
-                        className="flex items-center rounded-full border border-[var(--tmbc-mauve)] px-5 py-2 text-[12px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-mauve)]/70 hover:text-[var(--tmbc-charcoal)]"
-                      >
-                        Request an Invite
-                      </Link>
+                    <div className={`flex justify-center ${textFirst ? "" : "lg:order-first"}`}>
+                      <div className="relative aspect-[4/3] w-full max-w-[420px] overflow-hidden rounded-[32px] border border-[rgba(62,47,53,0.08)] bg-white">
+                        <Image
+                          src={step.image}
+                          alt={step.alt}
+                          fill
+                          sizes="(min-width: 1024px) 40vw, 92vw"
+                          priority={false}
+                          className="h-full w-full rounded-[32px] object-contain"
+                        />
+                      </div>
                     </div>
-                  )}
-                </Fragment>
-              );
-            })}
-          </div>
-        </MarketingContent>
-      </section>
+                  </div>
+                </article>
+                {index === 1 && (
+                  <div className="lg:hidden mt-6 flex justify-center">
+                    {/* Mobile reminder keeps the invite action close after the second step without disrupting desktop rhythm. */}
+                    <Link
+                      href="/request-invite"
+                      className="flex items-center rounded-full border border-[var(--tmbc-mauve)] px-5 py-2 text-[12px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-mauve)]/70 hover:text-[var(--tmbc-charcoal)]"
+                    >
+                      Request an Invite
+                    </Link>
+                  </div>
+                )}
+              </Fragment>
+            );
+          })}
+        </div>
+      </SectionBand>
 
-      <section className="bg-[--tmbc-bg-white] py-20">
-        <MarketingContent>
-          <div className="mx-auto max-w-xl text-center">
-            <Image
-              src={tmbcSeal}
-              alt="Baby Approved — Taylor-Made Baby Co."
-              width={160}
-              height={160}
-              className="mx-auto opacity-90 w-auto h-auto"
-              priority={false}
-              unoptimized
-            />
-            <p className="mt-6 text-sm tracking-wide text-muted-foreground">
-              Every recommendation inside Taylor-Made Baby Co. is reviewed for safety, practicality, and real-life use.
-            </p>
-            <p className="mt-2 text-sm italic text-muted-foreground">
-              Calm guidance. Thoughtful standards. Always baby-first.
-            </p>
-          </div>
-        </MarketingContent>
-      </section>
+      <SectionBand bg="blush">
+        <div className={`${textCage("intro")} text-center`}>
+          <Image
+            src={tmbcSeal}
+            alt="Baby Approved — Taylor-Made Baby Co."
+            width={160}
+            height={160}
+            className="mx-auto opacity-90 w-auto h-auto"
+            priority={false}
+            unoptimized
+          />
+          <p className="mt-6 text-sm tracking-wide text-muted-foreground">
+            Every recommendation inside Taylor-Made Baby Co. is reviewed for safety, practicality, and real-life use.
+          </p>
+          <p className="mt-2 text-sm italic text-muted-foreground">
+            Calm guidance. Thoughtful standards. Always baby-first.
+          </p>
+        </div>
+      </SectionBand>
 
-      <section className="bg-[--tmbc-bg-blush] py-20">
-        <MarketingContent>
-          <div className="mx-auto max-w-3xl px-4 sm:px-6 text-center space-y-8">
-            <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">CALM START</p>
-            <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
-              Guidance that stays present with you, whatever this season looks like.
-            </MarketingHeading>
-            <p className="text-[15px] leading-[1.7] text-[var(--tmbc-charcoal)]/80">
-              Request an invite when the time feels right; we’ll stay ready with thoughtful mentors and steady next steps.
-            </p>
-            <div className="flex flex-col items-center gap-3">
-              <Link
-                href="/request-invite"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3 text-[14px] font-semibold tracking-[0.35em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] shadow-[0_20px_45px_rgba(0,0,0,0.18)]"
-              >
-                Request an Invite
-              </Link>
-              <Link
-                href="/request-invite"
-                className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 transition hover:text-[var(--tmbc-charcoal)]"
-              >
-                Already have a code?
-              </Link>
-            </div>
+      <SectionBand bg="white">
+        <div className={`${textCage("intro")} text-center space-y-8`}>
+          <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">CALM START</p>
+          <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
+            Guidance that stays present with you, whatever this season looks like.
+          </MarketingHeading>
+          <p className="text-[15px] leading-[1.7] text-[var(--tmbc-charcoal)]/80">
+            Request an invite when the time feels right; we’ll stay ready with thoughtful mentors and steady next steps.
+          </p>
+          <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-center">
+            <Link
+              href="/request-invite"
+              className="inline-flex items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3 text-[14px] font-semibold tracking-[0.35em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] shadow-[0_20px_45px_rgba(0,0,0,0.18)]"
+            >
+              Request an Invite
+            </Link>
+            <Link
+              href="/request-invite"
+              className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 transition hover:underline underline-offset-4"
+            >
+              Already have a code?
+            </Link>
           </div>
-        </MarketingContent>
-      </section>
+        </div>
+      </SectionBand>
     </>
   );
 }

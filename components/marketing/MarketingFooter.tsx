@@ -67,6 +67,9 @@ export default function MarketingFooter() {
       </div>
 
       <div className="mt-10 border-t border-[var(--member-border-soft)] pt-6 text-[var(--member-text-secondary)]/60">
+        <p className="mb-2 text-[0.8rem] text-[var(--member-text-secondary)]/60">
+          Guidance, the way it should feel.
+        </p>
         <p className="mb-2 text-[0.7rem] text-[var(--member-text-secondary)]/60">
           We close each day with the quiet promise that thoughtful care stays calm, human, and still yours.
         </p>

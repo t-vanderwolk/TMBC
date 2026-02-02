@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { MarketingHeading } from "@/components/marketing/Typography";
 
@@ -10,6 +9,7 @@ import { MarketingHeading } from "@/components/marketing/Typography";
 // Do not reorder or recolor section backgrounds.
 // Pattern: white → ivory → white → blush
 import homeHeroImage from "@/assets/images/home-hero.png";
+import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
 
 const faqGroups = [
   {
@@ -122,58 +122,58 @@ export default function FAQPage() {
         }}
         priority
       />
-      <MarketingContent>
-        <section className="bg-[--tmbc-bg-white] py-20">
-          <div className="marketing-card mx-auto max-w-3xl rounded-[36px] px-8 py-20 text-center shadow-[0_20px_80px_rgba(199,166,199,0.25)]">
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              FAQ
-            </p>
-            <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-80 max-w-3xl mx-auto">
+      <SectionBand bg="white">
+        <div className="mx-auto max-w-3xl">
+          <div className={`${cardBase("text-center px-8 py-20")} shadow-[0_20px_80px_rgba(199,166,199,0.25)]`}>
+            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">FAQ</p>
+            <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-80">
               Calm answers that respect your timing and curiosity.
             </p>
             <p className="mt-4 text-xs text-[var(--tmbc-charcoal)] text-opacity-60">
               We read every message. Replies may take a moment—care feels better than speed.
             </p>
           </div>
-        </section>
-        <section className="bg-[--tmbc-bg-ivory] py-20">
-          <div className="space-y-12 mx-auto max-w-6xl px-6">
-            {faqGroups.map((group) => (
-              <article
-                key={group.title}
-                className="marketing-card space-y-6 rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 px-8 py-10 shadow-[0_25px_80px_rgba(199,166,199,0.2)]"
-              >
-                <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                  {group.title}
-                </p>
-            <MarketingHeading level="h2">
-              {group.summary}
-            </MarketingHeading>
-                <div className="space-y-4">
-                  {group.items.map((item) => (
-                    <div
-                      key={item.question}
-                      className="rounded-[20px] border border-[var(--tmbc-mauve)]/30 bg-[var(--tmbc-ivory)]/70 p-4"
+        </div>
+      </SectionBand>
+      <SectionBand bg="ivory">
+        <div className="space-y-12 mx-auto max-w-6xl px-6">
+          {faqGroups.map((group) => (
+            <article
+              key={group.title}
+              className={`${cardBase("space-y-6 px-8 py-10")} border border-[var(--tmbc-mauve)]/30 bg-white/90`}
+            >
+              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+                {group.title}
+              </p>
+              <MarketingHeading level="h2">{group.summary}</MarketingHeading>
+              <div className="space-y-4">
+                {group.items.map((item) => (
+                  <div
+                    key={item.question}
+                    className="rounded-[20px] border border-[var(--tmbc-mauve)]/30 bg-[var(--tmbc-ivory)]/70 p-4"
+                  >
+                    <button
+                      type="button"
+                      className="w-full text-left text-sm font-semibold tracking-[0.02em] text-[var(--tmbc-charcoal)]"
+                      onClick={() => handleToggle(item.question)}
                     >
-                      <button
-                        type="button"
-                        className="w-full text-left text-sm font-semibold tracking-[0.02em] text-[var(--tmbc-charcoal)]"
-                        onClick={() => handleToggle(item.question)}
-                      >
-                        {item.question}
-                      </button>
-                      {openItem === item.question && (
-                        <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{item.answer}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-        <section className="bg-[--tmbc-bg-white] py-20">
-          <div className="marketing-card mx-auto max-w-3xl rounded-[32px] border border-[var(--tmbc-mauve)]/20 px-8 py-16 text-center shadow-[0_25px_70px_rgba(199,166,199,0.25)]">
+                      {item.question}
+                    </button>
+                    {openItem === item.question && (
+                      <p className="mt-3 text-sm text-[var(--tmbc-charcoal)] text-opacity-80">{item.answer}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </SectionBand>
+      <SectionBand bg="blush">
+        <div className="mx-auto max-w-3xl">
+          <div
+            className={`${cardBase("text-center px-8 py-16")} border border-[var(--tmbc-mauve)]/20 text-[var(--tmbc-charcoal)]`}
+          >
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
               Registry placeholder
             </p>
@@ -184,9 +184,11 @@ export default function FAQPage() {
               Integration will be available in a future update.
             </p>
           </div>
-        </section>
-        <section className="bg-[--tmbc-bg-blush] py-20">
-          <div className="marketing-card mx-auto max-w-3xl rounded-[32px] border border-[var(--tmbc-mauve)]/20 px-8 py-16 text-center shadow-[0_25px_70px_rgba(199,166,199,0.25)]">
+        </div>
+      </SectionBand>
+      <SectionBand bg="white">
+        <div className="mx-auto max-w-3xl">
+          <div className={`${cardBase("text-center px-8 py-16")} border border-[var(--tmbc-mauve)]/20`}>
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
               Still wondering if TMBC is right for you? You’re always welcome to learn more or reach out with a question.
             </p>
@@ -196,8 +198,8 @@ export default function FAQPage() {
               </Link>
             </div>
           </div>
-        </section>
-      </MarketingContent>
+        </div>
+      </SectionBand>
 
     </>
   );

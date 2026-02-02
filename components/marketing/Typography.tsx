@@ -32,7 +32,7 @@ type MarketingTextProps = {
 export function MarketingBody({ as = "p", className = "", children, ...rest }: MarketingTextProps) {
   const Tag = as;
   return (
-    <Tag className={`marketing-body-copy ${className}`.trim()} {...rest}>
+    <Tag className={`marketing-body-copy ${className}`.trim()} {...(rest as any)}>
       {children}
     </Tag>
   );
@@ -41,7 +41,7 @@ export function MarketingBody({ as = "p", className = "", children, ...rest }: M
 export function MarketingSupport({ as = "p", className = "", children, ...rest }: MarketingTextProps) {
   const Tag = as;
   return (
-    <Tag className={`marketing-support-copy ${className}`.trim()} {...rest}>
+    <Tag className={`marketing-support-copy ${className}`.trim()} {...(rest as any)}>
       {children}
     </Tag>
   );

@@ -1,5 +1,10 @@
 import { type ReactNode } from "react";
 
+// MARKETING EDITORIAL RESTRAINT
+// Fewer CTAs > louder CTAs
+// One visual leader per section
+// Calm spacing > clever tricks
+// Trust is built through restraint
 import MarketingNav from "@/components/marketing/MarketingNav";
 import MarketingFooter from "@/components/marketing/MarketingFooter";
 

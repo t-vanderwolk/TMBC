@@ -15,7 +15,7 @@ export default function MarketingNav() {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <nav className="relative sticky top-0 z-50 border-b border-neutral-200/60 bg-[#fbf7f4]/70 supports-[backdrop-filter]:backdrop-blur supports-[backdrop-filter]:bg-[#fbf7f4]/60 py-1 sm:py-2.5">
+    <nav className="relative sticky top-0 z-50 border-b border-black/5 bg-[#fbf7f4]/70 supports-[backdrop-filter]:backdrop-blur supports-[backdrop-filter]:bg-[#fbf7f4]/60 py-0.5 sm:py-2">
       <div className="flex w-full flex-wrap items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="text-ellipsis whitespace-nowrap pr-6 sm:pr-10 lg:pr-12">
           <div className="text-3xl sm:text-4xl leading-none text-[var(--tmbc-blush-primary)] font-script">
@@ -30,7 +30,7 @@ export default function MarketingNav() {
           <ul className="flex items-center gap-7">
             {MARKETING_PRIMARY_NAV.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className={baseNavText}>
+                <Link href={link.href} className={`${baseNavText} tracking-[0.22em]`}>
                   {link.label}
                 </Link>
               </li>
@@ -47,7 +47,7 @@ export default function MarketingNav() {
           </Link>
           <Link
             href="/request-invite"
-            className="inline-flex items-center rounded-full border border-[var(--tmbc-mauve)] bg-[var(--tmbc-ivory)]/90 px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-blush)]/80 hover:bg-[var(--tmbc-blush)]/30"
+            className="inline-flex items-center rounded-full bg-[var(--tmbc-blush)]/30 px-5 py-2 text-[0.75rem] font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-mauve)] transition hover:bg-[var(--tmbc-blush)]/50"
           >
             Request an Invite
           </Link>
@@ -127,13 +127,13 @@ export default function MarketingNav() {
               >
                 Login
               </Link>
-          <Link
-            href="/request-invite"
-            className="rounded-full border border-[var(--tmbc-mauve)] bg-[var(--tmbc-ivory)]/90 px-4 py-2 text-center text-[0.7rem] font-semibold uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-blush)]/80 hover:bg-[var(--tmbc-blush)]/30"
-            onClick={closeMobile}
-          >
-            Request an Invite
-          </Link>
+              <Link
+                href="/request-invite"
+                className="rounded-full bg-[var(--tmbc-blush)]/30 px-5 py-2 text-center text-[0.75rem] font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-mauve)] transition hover:bg-[var(--tmbc-blush)]/50"
+                onClick={closeMobile}
+              >
+                Request an Invite
+              </Link>
             </div>
           </div>
         </div>

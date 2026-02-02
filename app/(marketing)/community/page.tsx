@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Button from "@/components/ui/Button";
 import { MarketingHeading } from "@/components/marketing/Typography";
 
 // Marketing background cadence is intentional.
@@ -42,9 +43,9 @@ export default function CommunityPage() {
           We built a village that feels like a salon, not a feed. Invite-only rooms, lovely accents, and mentors who show up with real answers.
         </p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4 text-[0.65rem] uppercase tracking-[0.35em]">
-          <Link href="/request-invite" className="mkt-btn-primary">
+          <Button href="/request-invite" variant="secondary">
             Request an Invite
-          </Link>
+          </Button>
           <Link href="/experience" className="mkt-btn-secondary">
             Explore Experience
           </Link>

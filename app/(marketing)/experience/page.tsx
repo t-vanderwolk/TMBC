@@ -1,6 +1,6 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import MarketingContent from "@/components/marketing/MarketingContent";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import Button from "@/components/ui/Button";
 
@@ -21,6 +21,7 @@ import planPillar from "@/assets/images/planpillar.png";
 import connectPillar from "@/assets/images/connectpillar.png";
 import reflectPillar from "@/assets/images/reflectpillar.png";
 import livingRoomSofa from "@/assets/images/living-room-sofa.jpeg";
+import { SectionBand, textCage, dividerRhythm, cadenceBgByIndex } from "@/components/marketing/MarketingCadence";
 
 export const metadata = {
   title: "Taylor-Made Baby Co. - Concierge birth & baby planning",
@@ -112,13 +113,6 @@ const lifeBullets = [
   "We meet you where you are, and we only move forward when you feel ready.",
 ];
 
-const pillarBackgrounds = [
-  "bg-[--tmbc-bg-white]",
-  "bg-[--tmbc-bg-ivory]",
-  "bg-[--tmbc-bg-white]",
-  "bg-[--tmbc-bg-blush]",
-];
-
 /**
  * Mobile spacing rule:
  * Marketing sections should breathe on mobile.
@@ -149,21 +143,22 @@ export default function ExperiencePage() {
       {pillarHighlights.map((pillar, index) => {
         const textFirst = index % 2 === 0;
         return (
-          <section key={pillar.id} className={`${pillarBackgrounds[index]} py-20`}>
-            <MarketingContent>
+          <Fragment key={pillar.id}>
+            <SectionBand bg={cadenceBgByIndex(index)}>
               <div className="grid gap-10 items-center lg:grid-cols-2">
-                <div className={`space-y-5 ${textFirst ? "" : "lg:order-last text-right"}`}>
-                  <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-mauve)]/90">
-                    {pillar.title}
-                  </p>
-                  <MarketingHeading level="h3" className="text-[var(--tmbc-charcoal)]">
-                    {pillar.headline}
-                  </MarketingHeading>
-                  <p className="text-[15px] leading-[1.65] text-[var(--tmbc-charcoal)]">{pillar.thesis}</p>
-                  <p className="text-[15px] leading-[1.65] text-[var(--tmbc-charcoal)]">
-                    {pillar.paragraph}
-                  </p>
-                  <ul className="space-y-3 text-[14px] leading-[1.7] text-[var(--tmbc-charcoal)]">
+                <div className={`space-y-5 ${textFirst ? "" : "lg:order-last lg:text-right"}`}>
+                  <div className={textCage("standard")}>
+                    <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
+                      {pillar.title}
+                    </MarketingHeading>
+                    <MarketingHeading level="h3" className="text-[var(--tmbc-charcoal)]">
+                      {pillar.thesis}
+                    </MarketingHeading>
+                    <p className="text-[15px] leading-[1.65] text-[var(--tmbc-charcoal)]">
+                      {pillar.paragraph}
+                    </p>
+                  </div>
+                  <ul className={`${textCage("standard")} space-y-3 text-[14px] leading-[1.7] text-[var(--tmbc-charcoal)]`}>
                     {pillar.bullets.map((bullet) => (
                       <li key={bullet} className="flex gap-3">
                         <span aria-hidden className="mt-1 inline-flex h-2 w-2 rounded-full bg-[var(--tmbc-mauve)]" />
@@ -171,7 +166,9 @@ export default function ExperiencePage() {
                       </li>
                     ))}
                   </ul>
-                  <p className="text-[15px] leading-[1.6] text-[var(--tmbc-charcoal)]">{pillar.why}</p>
+                  <p className={`${textCage("standard")} text-[15px] leading-[1.6] text-[var(--tmbc-charcoal)]`}>
+                    {pillar.why}
+                  </p>
                 </div>
                 <div className={`flex justify-center ${textFirst ? "" : "lg:order-first"}`}>
                   <div className="relative w-full max-w-[420px] overflow-hidden rounded-[32px] border border-[rgba(0,0,0,0.04)] bg-white shadow-[0_20px_35px_rgba(0,0,0,0.08)]">
@@ -197,73 +194,74 @@ export default function ExperiencePage() {
                   </Link>
                 </div>
               )}
-            </MarketingContent>
-          </section>
+            </SectionBand>
+            {index < pillarHighlights.length - 1 && (
+              <div className={`${dividerRhythm()} w-20 mx-auto`} aria-hidden="true" />
+            )}
+          </Fragment>
         );
       })}
 
-      <section className="bg-[--tmbc-bg-white] py-20">
-        <MarketingContent>
-          <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div className="space-y-5 order-2 lg:order-1">
+      <SectionBand bg={cadenceBgByIndex(pillarHighlights.length)}>
+        <div className="grid items-center gap-10 lg:grid-cols-2">
+          <div className="space-y-5 order-2 lg:order-1">
+            <div className={textCage("standard")}>
               <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">
                 What life inside TMBC feels like
               </p>
               <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
                 Calm companionship for every chapter you are writing.
               </MarketingHeading>
-              <div className="space-y-3 text-[15px] leading-[1.65] text-[var(--tmbc-charcoal)]">
-                {lifeParagraphs.map((paragraph) => (
-                  <p key={paragraph} className="m-0">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-              <ul className="space-y-2 text-[14px] leading-[1.6] text-[var(--tmbc-charcoal)]">
-                {lifeBullets.map((bullet) => (
-                  <li key={bullet} className="flex gap-3">
-                    <span aria-hidden className="mt-1 inline-flex h-2 w-2 rounded-full bg-[var(--tmbc-mauve)]" />
-                    <span>{bullet}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
-            <div className="order-1 lg:order-2">
-              <div className="relative h-[420px] w-full overflow-hidden rounded-[32px] bg-neutral-50 shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
-                <Image
-                  src={livingRoomSofa}
-                  alt="Calm living room with soft light and textures"
-                  fill
-                  sizes="(min-width: 1024px) 520px, 90vw"
-                  className="object-cover"
-                />
-              </div>
+            <div className={`${textCage("standard")} space-y-3 text-[15px] leading-[1.65] text-[var(--tmbc-charcoal)]`}>
+              {lifeParagraphs.map((paragraph) => (
+                <p key={paragraph} className="m-0">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <ul className={`${textCage("standard")} space-y-2 text-[14px] leading-[1.6] text-[var(--tmbc-charcoal)]`}>
+              {lifeBullets.map((bullet) => (
+                <li key={bullet} className="flex gap-3">
+                  <span aria-hidden className="mt-1 inline-flex h-2 w-2 rounded-full bg-[var(--tmbc-mauve)]" />
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="order-1 lg:order-2">
+            <div className="relative h-[420px] w-full overflow-hidden rounded-[32px] bg-neutral-50 shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
+              <Image
+                src={livingRoomSofa}
+                alt="Calm living room with soft light and textures"
+                fill
+                sizes="(min-width: 1024px) 520px, 90vw"
+                className="object-cover"
+              />
             </div>
           </div>
-        </MarketingContent>
-      </section>
+        </div>
+      </SectionBand>
 
-      <section className="bg-[--tmbc-bg-ivory] py-20">
-        <MarketingContent>
-          <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center space-y-5">
-            <p className="text-[11px] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/70">Invite-only</p>
-            <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
-              When you are ready, the door stays open—quiet, calm, and attentive.
-            </MarketingHeading>
-            <p className="text-[16px] leading-[1.65] text-[var(--tmbc-charcoal)]/80">
-              We stay intentionally small so every mentor conversation is thoughtful, responsive, and paced exactly to you.
+      <SectionBand bg={cadenceBgByIndex(pillarHighlights.length + 1)}>
+        <div className={`${textCage("intro")} text-center space-y-5`}>
+          <p className="text-[11px] uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/70">Invite-only</p>
+          <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
+            When you are ready, the door stays open—quiet, calm, and attentive.
+          </MarketingHeading>
+          <p className="text-[16px] leading-[1.65] text-[var(--tmbc-charcoal)]/80">
+            We stay intentionally small so every mentor conversation is thoughtful, responsive, and paced exactly to you.
+          </p>
+          <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-center">
+            <Button href="/request-invite" variant="secondary">
+              Request an Invite
+            </Button>
+            <p className="text-[12px] leading-[1.4] text-[var(--tmbc-charcoal)]">
+              We thoughtfully review each request and respond within two business days.
             </p>
-            <div className="flex flex-col items-center gap-4">
-              <Button href="/request-invite" variant="secondary">
-                Request an Invite
-              </Button>
-              <p className="text-[12px] leading-[1.4] text-[var(--tmbc-charcoal)]">
-                We thoughtfully review each request and respond within two business days.
-              </p>
-            </div>
           </div>
-        </MarketingContent>
-      </section>
+        </div>
+      </SectionBand>
     </div>
   );
 }

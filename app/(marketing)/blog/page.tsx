@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import MarketingContent from "@/components/marketing/MarketingContent";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { MarketingHeading } from "@/components/marketing/Typography";
+import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
 
 // Marketing background cadence is intentional.
 // Do not reorder or recolor section backgrounds.
@@ -147,7 +147,7 @@ function PostGrid({ posts }: { posts: PublicBlogPost[] }) {
       {posts.map((post) => (
         <article
           key={post.slug}
-          className="flex flex-col gap-5 rounded-[26px] border border-[var(--tmbc-ivory)]/80 bg-white/50 p-6"
+          className={`${cardBase("flex flex-col gap-5 p-6")} border border-[var(--tmbc-ivory)]/80 bg-white/50`}
         >
           <div className="relative h-48 w-full overflow-hidden rounded-[20px] bg-[var(--tmbc-ivory)]">
             {post.heroImage && (
@@ -185,7 +185,9 @@ function PostGrid({ posts }: { posts: PublicBlogPost[] }) {
 
 function BlogCallout() {
   return (
-    <div className="rounded-[28px] bg-white/70 px-6 py-8 text-center text-sm uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/70">
+    <div
+      className={`${cardBase("px-6 py-8")} text-center text-sm uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/70`}
+    >
       You don’t have to navigate this alone.
       <div className="mt-2 text-[0.75rem] tracking-[0.4em]">
         <Link href="/membership" className="text-[var(--tmbc-charcoal)] hover:text-[var(--tmbc-mauve)]">
@@ -217,15 +219,13 @@ export default async function BlogMarketingPage() {
     return (
       <>
         {marketingHeroBlock}
-        <section className="bg-[--tmbc-bg-white] py-20">
-          <MarketingContent>
-            <div className="text-center">
-              <p className="mkt-body text-[var(--tmbc-charcoal)]/80">
-                Our editorial library is being refreshed. Check back soon for calm stories and reflections.
-              </p>
-            </div>
-          </MarketingContent>
-        </section>
+        <SectionBand bg="white">
+          <div className={`${textCage("intro")} text-center`}>
+            <p className="mkt-body text-[var(--tmbc-charcoal)]/80">
+              Our editorial library is being refreshed. Check back soon for calm stories and reflections.
+            </p>
+          </div>
+        </SectionBand>
       </>
     );
   }
@@ -233,27 +233,23 @@ export default async function BlogMarketingPage() {
   return (
     <>
       {marketingHeroBlock}
-      <section className="bg-[--tmbc-bg-white] py-20">
-        <MarketingContent>
-          <FeaturedPost post={featuredPost} />
-        </MarketingContent>
-      </section>
-      <section className="bg-[--tmbc-bg-ivory] py-20">
-        <MarketingContent>
+      <SectionBand bg="white">
+        <FeaturedPost post={featuredPost} />
+      </SectionBand>
+      <SectionBand bg="ivory">
+        <div className={`${textCage("standard")}`}>
           <CategoryFilter />
           <div className="mt-10">
             <PostGrid posts={otherPosts} />
           </div>
-        </MarketingContent>
-      </section>
-      <section className="bg-[--tmbc-bg-blush] py-20">
-        <MarketingContent>
-          <div className="space-y-8">
-            <BlogCallout />
-            <Pagination />
-          </div>
-        </MarketingContent>
-      </section>
+        </div>
+      </SectionBand>
+      <SectionBand bg="blush">
+        <div className="space-y-8">
+          <BlogCallout />
+          <Pagination />
+        </div>
+      </SectionBand>
     </>
   );
 }

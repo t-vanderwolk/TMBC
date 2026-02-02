@@ -4,8 +4,13 @@
 
 :root {
   --tmbc-blush: #F6E9E6;
+  --tmbc-blush-wash: #fde8ef; /* soft blush band */
   --tmbc-blush-primary: #D88FA8;
   --tmbc-blush-primary-hover: #C97C97;
+  --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-duration-hero: 600ms;
+  --motion-duration-card: 450ms;
+  --motion-duration-micro: 300ms;
   --tmbc-mauve: #f7c8d9;
   --tmbc-ivory: #FAF7F4;
   --tmbc-gold: #D4B579;
@@ -269,6 +274,13 @@
       font-size: 2rem;
     }
   }
+
+  /* MARKETING EDITORIAL RESTRAINT
+     Fewer CTAs > louder CTAs
+     One visual leader per section
+     Calm spacing > clever tricks
+     Trust is built through restraint
+  */
 
   .marketing-body-copy {
     font-family: var(--font-nunito), "Nunito", sans-serif;
@@ -679,53 +691,6 @@
   @apply text-[0.65rem] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60;
 }
 
-.partner-logo-carousel {
-  @apply w-full overflow-hidden py-20 sm:py-24 lg:py-28;
-  background-color: var(--tmbc-ivory);
-  opacity: 0.8;
-}
-
-.partner-logo-track {
-  @apply flex items-center gap-10 whitespace-nowrap;
-  min-width: max-content;
-}
-
-.partner-logo-track > div {
-  flex: 0 0 auto;
-}
-
-.partner-logo-track > div img {
-  max-height: 3rem;
-  opacity: 0.9;
-  filter: grayscale(100%);
-  transition: filter 0.4s ease, opacity 0.4s ease;
-}
-
-.partner-logo-track > div:hover img {
-  filter: grayscale(0%);
-  opacity: 1;
-}
-
-.partner-logo-track.partner-logo-marquee {
-  animation: partner-marquee 40s linear infinite;
-  transform: translateX(0);
-}
-
-@keyframes partner-marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .partner-logo-track.partner-logo-marquee {
-    animation: none;
-  }
-}
-
 /* Marketing motion tuning */
 @media (max-width: 640px) {
   .motion-safe\:transition-all {
@@ -806,6 +771,14 @@
   .mkt-btn-primary {
     @apply mkt-btn bg-[var(--tmbc-blush-primary)] text-white;
     transition: background-color 0.2s ease;
+  }
+
+  .marketing-section {
+    @apply py-20 md:py-24 lg:py-28;
+  }
+
+  .marketing-card-panel {
+    @apply rounded-2xl bg-white px-6 py-6 shadow-[0_8px_24px_rgba(0,0,0,0.05)];
   }
 
   .mkt-btn-secondary {
