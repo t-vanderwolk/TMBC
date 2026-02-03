@@ -3,6 +3,12 @@ import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
+
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
 import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 const API_BASE_URL =
@@ -139,10 +145,7 @@ function PostGrid({ posts }: { posts: PublicBlogPost[] }) {
   return (
     <div className="grid gap-8 lg:grid-cols-2">
       {posts.map((post) => (
-        <article
-          key={post.slug}
-          className={`${cardBase("flex flex-col gap-5 p-6")} border border-[var(--tmbc-ivory)]/80 bg-white/50`}
-        >
+        <article key={post.slug} className={cardBase("flex flex-col gap-5")}>
           <div className="relative h-48 w-full overflow-hidden rounded-[20px] bg-[var(--tmbc-ivory)]">
             {post.heroImage && (
               <Image
@@ -180,7 +183,7 @@ function PostGrid({ posts }: { posts: PublicBlogPost[] }) {
 function BlogCallout() {
   return (
     <div
-      className={`${cardBase("px-6 py-8")} text-center text-sm uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/70`}
+      className={cardBase("text-center text-sm uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/70")}
     >
       You don’t have to navigate this alone.
       <div className="mt-2 text-[0.75rem] tracking-[0.4em]">

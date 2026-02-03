@@ -2,6 +2,12 @@ import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import { SectionBand, textCage } from "@/components/marketing/MarketingCadence";
+
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
 import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 // Marketing background cadence is intentional.

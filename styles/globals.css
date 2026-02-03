@@ -321,19 +321,6 @@
     @apply max-w-6xl mx-auto px-6;
   }
 
-  .marketing-card {
-    border-radius: 28px;
-    border: 1px solid rgba(62, 47, 53, 0.08);
-    background: rgba(255, 255, 255, 0.95);
-    padding: 1.75rem;
-    box-shadow: none;
-    transition: border-color 0.3s ease;
-  }
-
-  .marketing-card:hover {
-    border-color: rgba(62, 47, 53, 0.15);
-  }
-
   .marketing-cta {
     border-radius: 32px;
     border: 1px solid rgba(62, 47, 53, 0.12);
@@ -485,11 +472,6 @@
       padding-right: 1.25rem !important;
     }
 
-    .marketing-section .marketing-card {
-      padding-left: 1.35rem !important;
-      padding-right: 1.35rem !important;
-    }
-
     .marketing-section + .marketing-section {
       margin-top: 5rem;
     }
@@ -594,23 +576,12 @@
   @apply rounded-[48px] border border-[rgba(62, 47, 53, 0.12)] bg-white/90 p-8;
 }
 
-.marketing-card {
-  @apply mkt-card;
-  transition: box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.marketing-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 25px 35px rgba(0, 0, 0, 0.08);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .motion-hidden,
   .motion-visible,
   .hero-motion .hero-headline,
   .hero-motion .hero-supporting,
-  .hero-motion .hero-cta-group,
-  .marketing-card {
+  .hero-motion .hero-cta-group {
     transition: none;
     animation: none;
   }
@@ -777,8 +748,36 @@
     @apply py-20 md:py-24 lg:py-28;
   }
 
-  .marketing-card-panel {
-    @apply rounded-2xl bg-white px-6 py-6 shadow-[0_8px_24px_rgba(0,0,0,0.05)];
+  /* ─────────────────────────────────────────────
+     MARKETING CARDS / PANELS — CANONICAL SYSTEM
+     ───────────────────────────────────────────── */
+
+  .marketing-card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+
+  .marketing-card-padding {
+    padding: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .marketing-card-padding {
+      padding: 2.5rem;
+    }
+  }
+
+  .marketing-panel {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .marketing-proof {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
   }
 
   .mkt-btn-secondary {

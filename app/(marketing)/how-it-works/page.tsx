@@ -21,6 +21,12 @@ import welcomeImage from "@/assets/images/welcome.png";
 import invitationStill from "@/assets/images/tmbcinvite.png";
 import tmbcSeal from "@/assets/images/tmbc-seal.png";
 import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
+
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
 import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 const invitationPoints = [
@@ -138,11 +144,7 @@ export default function HowItWorksPage() {
 
             return (
               <Fragment key={step.title}>
-                <article
-                  className={`${cardBase(
-                    "space-y-10 border border-[rgba(62,47,53,0.08)] bg-white/90 p-10 shadow-[0_20px_35px_rgba(62,47,53,0.08)]"
-                  )}`}
-                >
+                <article className={cardBase("space-y-10")}>
                   <div className="grid gap-10 items-center lg:grid-cols-2">
                     <div className={`space-y-6 ${textFirst ? "" : "lg:order-last text-right"}`}>
                       <div className="rounded-[28px] border border-[rgba(62,47,53,0.08)] bg-white/70 p-6">

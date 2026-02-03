@@ -4,6 +4,11 @@
 // Do not reorder or recolor section backgrounds.
 // Pattern: white → ivory → white → blush
 
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
 import Link from "next/link";
 import { FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -93,7 +98,7 @@ function SignupForm() {
 
   return (
     <section className="marketing-section">
-      <div className="mx-auto max-w-[90%] md:max-w-xl rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-8 shadow-[0_25px_60px_rgba(199,166,199,0.25)] text-[var(--tmbc-charcoal)]">
+      <div className="marketing-card marketing-card-padding mx-auto max-w-[90%] md:max-w-xl space-y-4 text-[var(--tmbc-charcoal)]">
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60">Sign up</p>
         <MarketingHeading level="h1" className="mt-2">
           Create your TMBC + MyRegistry account

@@ -4,6 +4,11 @@
 // Do not reorder or recolor section backgrounds.
 // Pattern: white → ivory → white → blush
 
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
 import { FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -39,7 +44,7 @@ const VerifyContent = () => {
   return (
     <div className="space-y-10 text-[var(--tmbc-charcoal)]">
       <section className="marketing-section">
-        <div className="mx-auto max-w-[90%] md:max-w-md rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-8 shadow-[0_25px_60px_rgba(199,166,199,0.25)]">
+        <div className="marketing-card marketing-card-padding mx-auto max-w-[90%] md:max-w-md space-y-4 text-[var(--tmbc-charcoal)]">
           <MarketingHeading level="h1">
             Verify Your Invitation
           </MarketingHeading>

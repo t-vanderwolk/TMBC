@@ -33,7 +33,7 @@ export function textCage(kind: "standard" | "intro" | "narrow" = "standard"): st
 }
 
 export function cardBase(extra = ""): string {
-  return `rounded-2xl bg-white shadow-[0_8px_24px_rgba(0,0,0,0.05)] ${extra}`.trim();
+  return `marketing-card marketing-card-padding ${extra}`.trim();
 }
 
 export function dividerRhythm(extra = ""): string {

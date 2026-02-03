@@ -7,6 +7,12 @@ import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 // Do not reorder or recolor section backgrounds.
 // Pattern: white → ivory → white → blush
 import { SectionBand, textCage, cardBase, dividerRhythm } from "@/components/marketing/MarketingCadence";
+
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
 /**
  * TMBC Transition Rules:
  * - Blush sections may end with a gradient fade into ivory via .section-transition.
@@ -87,10 +93,7 @@ function IncludesGrid() {
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {includeCards.map((card) => (
-          <article
-            key={card.title}
-            className={`${cardBase("relative overflow-hidden p-6 md:p-8")} border border-[var(--member-border-soft)]`}
-          >
+          <article key={card.title} className={cardBase("relative overflow-hidden")}>
             <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--member-border-default)] bg-[var(--member-accent-subtle)] text-sm text-[var(--tmbc-charcoal)]/60">
               <span aria-hidden="true">✶</span>
             </div>
@@ -119,7 +122,7 @@ function InvitationSection() {
         </p>
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
-        <article className={`${cardBase("p-6 md:p-8")} border border-[var(--member-border-soft)]`}>
+        <article className={cardBase("space-y-4")}>
           <MarketingHeading level="h3" className="text-[var(--tmbc-charcoal)]">
             How Pricing Works
           </MarketingHeading>
@@ -132,7 +135,7 @@ function InvitationSection() {
             ))}
           </ul>
         </article>
-        <article className={`${cardBase("p-6 md:p-8")} border border-[var(--member-border-soft)]`}>
+        <article className={cardBase("space-y-4")}>
           <MarketingHeading level="h3" className="text-[var(--tmbc-charcoal)]">
             Why Invite-Only?
           </MarketingHeading>
@@ -165,10 +168,7 @@ function BetaMentorPathway() {
       </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {betaHighlights.map((section) => (
-          <article
-            key={section.title}
-            className={`${cardBase("flex flex-col p-6")} border border-[var(--member-border-soft)]`}
-          >
+          <article key={section.title} className={cardBase("flex flex-col")}>
             <MarketingHeading level="h3" className="text-[var(--tmbc-charcoal)]">
               {section.title}
             </MarketingHeading>

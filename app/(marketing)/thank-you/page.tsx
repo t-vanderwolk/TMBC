@@ -1,11 +1,16 @@
 import Link from "next/link";
 import type { Route } from "next";
-import PageSection from "@/components/marketing/PageSection";
+import { PageSection } from "@/components/marketing/PageSection";
 import { MarketingHeading } from "@/components/marketing/Typography";
 
 // Marketing background cadence is intentional.
 // Do not reorder or recolor section backgrounds.
 // Pattern: white → ivory → white → blush
+
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
 
 const PRIMARY_BUTTON_CLASSES = "marketing-btn marketing-btn-primary uppercase tracking-[0.35em]";
 const SECONDARY_BUTTON_CLASSES = "marketing-btn marketing-btn-secondary uppercase tracking-[0.35em]";

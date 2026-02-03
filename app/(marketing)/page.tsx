@@ -7,6 +7,12 @@ import { MarketingHeading } from "@/components/marketing/Typography";
 import Button from "@/components/ui/Button";
 import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 import { SectionBand, textCage, cardBase, dividerRhythm } from "@/components/marketing/MarketingCadence";
+
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
 // Marketing background cadence is intentional.
 // Do not reorder or recolor section backgrounds.
 // Pattern: white → ivory → white → blush
@@ -76,11 +82,8 @@ function PillarHighlightsSection() {
           </MarketingHeading>
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-          {pillarHighlights.map((pillar, index) => (
-            <article
-              key={pillar.title}
-              className={`${cardBase("flex flex-col overflow-hidden p-8 md:p-10")} ${index % 2 === 1 ? "md:translate-y-3" : ""}`}
-            >
+          {pillarHighlights.map((pillar) => (
+            <article key={pillar.title} className={cardBase("flex flex-col overflow-hidden")}>
               <div className="relative h-48 w-full overflow-hidden">
                 <Image
                   src={pillar.image}
@@ -126,7 +129,7 @@ function WhyInviteOnlySection() {
               </p>
             </div>
           </div>
-          <div className="relative mx-auto w-full max-w-[420px] md:max-w-[460px] rounded-2xl bg-white/70 shadow-[0_12px_32px_rgba(0,0,0,0.06)] ring-1 ring-black/5 p-8 md:p-10 backdrop-blur-[2px] lg:ml-6 xl:ml-10 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/40 before:to-transparent before:pointer-events-none">
+          <div className="marketing-panel relative mx-auto w-full max-w-[420px] md:max-w-[460px] p-8 md:p-10 backdrop-blur-[2px] lg:ml-6 xl:ml-10 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/40 before:to-transparent before:pointer-events-none">
             <Image
               src={ribbonKeyImage}
               alt="Invitation-only access"
@@ -224,7 +227,7 @@ function TrustSection() {
   return (
     <SectionBand bg="ivory" className="py-16 md:py-24 lg:py-28">
       <div className="space-y-10">
-        <div className={`${cardBase("mx-auto max-w-[640px] p-8 md:p-10")} text-center md:text-left space-y-6`}>
+        <div className={cardBase("mx-auto max-w-[640px] space-y-6 text-center md:text-left")}>
           <p className="text-xs tracking-wide uppercase text-[var(--tmbc-mauve)]/80">How we keep care calm</p>
           <MarketingHeading level="h2" className="tracking-[0.02em]">
             You arrive when you’re ready; we keep the space gentle, patient, and always on your timeline.
@@ -234,7 +237,7 @@ function TrustSection() {
           </p>
         </div>
         <div className={`${dividerRhythm()} w-24 mx-auto`} aria-hidden="true" />
-        <article className={`${cardBase("mx-auto max-w-[720px] p-8 md:p-10 w-full")} space-y-6 text-center md:text-left`}>
+        <article className={cardBase("mx-auto max-w-[720px] w-full space-y-6 text-center md:text-left")}>
           <p className="text-xs tracking-wide uppercase text-[var(--tmbc-mauve)] text-[var(--tmbc-mauve)]/80">
             Journal spotlight
           </p>
@@ -259,8 +262,8 @@ function TrustSection() {
 
 function FinalCTA() {
   return (
-    <div className="flex justify-center">
-      <div className={`${cardBase("max-w-[720px] p-8 md:p-10 text-left")} mx-auto`}>
+      <div className="flex justify-center">
+        <div className={`${cardBase("max-w-[720px] text-left")} mx-auto`}>
         <div className="space-y-8 text-left">
           <MarketingHeading level="h2" className="tracking-[0.35em] max-w-[640px]">
             Ready when you are—no rush, just thoughtful care.
@@ -291,9 +294,14 @@ export default function HomePage() {
           Do not add animation, parallax, or custom spacing here.
           Changes should be made in the shared hero system only.
         */}
+      {/* Hero copy intent:
+          - Calm authority, not defensive
+          - Mentor-led empathy without over-explaining
+          - Headline states credibility; subtitle carries emotional reassurance
+        */}
       <MarketingHero
         eyebrow="Invitation-only · Mentor-led"
-        headline="Baby prep, with someone who's actually done it."
+        headline="Baby prep, with someone who’s already done it"
         lead="A calm, guided approach to preparing for baby—without pressure or guesswork."
         primaryCta={{
           label: "Request an Invite",

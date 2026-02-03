@@ -16,6 +16,12 @@ import { MarketingHeading } from "@/components/marketing/Typography";
 import type { AffiliatePolicy } from "@/lib/blog/affiliatePolicy";
 import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
 
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
+
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -250,7 +256,7 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
       </SectionBand>
       <SectionBand bg="ivory">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,240px)_1fr]">
-          <aside className={`${cardBase("space-y-6 p-6")} tm-print-hide border border-tmMauve/40`}>
+          <aside className={`${cardBase("space-y-6")} tm-print-hide`}>
             <div>
               <p className="text-xs uppercase tracking-[0.5em] text-tmCharcoal/70">Table of Contents</p>
               <ul className="mt-4 space-y-3 text-sm text-tmCharcoal/80">
@@ -291,7 +297,7 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
               </div>
             </div>
           </aside>
-          <div className={`${cardBase("space-y-8 p-8")} tm-print-wrapper border border-tmMauve/30`}>
+          <div className={`${cardBase("space-y-8")} tm-print-wrapper`}>
             <div className="tm-print-brand-mark tm-print-only">
               <p className="text-[0.7rem] uppercase tracking-[0.4em] text-tmCharcoal/60">Taylor-Made Baby Co.</p>
               <div className="tm-print-divider" />
@@ -316,7 +322,7 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
       </SectionBand>
       <SectionBand bg="white">
         <div className="space-y-6">
-          <div className={`${cardBase("px-8 py-8")} text-[var(--tmbc-charcoal)]`}>
+          <div className={cardBase("space-y-4 text-[var(--tmbc-charcoal)]")}>
             <p className="text-xs uppercase tracking-[0.6em] text-[var(--tmbc-charcoal)]">Need a steady guide?</p>
             <MarketingHeading level="h2" className="mt-3 text-[var(--tmbc-charcoal)]">
               If this raised questions for you, that's normal.

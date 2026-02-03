@@ -21,6 +21,12 @@ import connectPillar from "@/assets/images/connectpillar.png";
 import reflectPillar from "@/assets/images/reflectpillar.png";
 import livingRoomSofa from "@/assets/images/living-room-sofa.jpeg";
 import { SectionBand, textCage, dividerRhythm, cadenceBgByIndex } from "@/components/marketing/MarketingCadence";
+
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
 import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 export const metadata = {

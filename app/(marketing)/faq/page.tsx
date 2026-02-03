@@ -11,6 +11,12 @@ import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 // Pattern: white → ivory → white → blush
 import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
 
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
+
 const faqGroups = [
   {
     title: "Getting started",
@@ -122,7 +128,7 @@ export default function FAQPage() {
       />
       <SectionBand bg="white">
         <div className="mx-auto max-w-3xl">
-          <div className={`${cardBase("text-center px-8 py-20")} shadow-[0_20px_80px_rgba(199,166,199,0.25)]`}>
+          <div className={cardBase("space-y-4 text-center")}>
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">FAQ</p>
             <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-80">
               Calm answers that respect your timing and curiosity.
@@ -136,13 +142,10 @@ export default function FAQPage() {
       <SectionBand bg="ivory">
         <div className="space-y-12 mx-auto max-w-6xl px-6">
           {faqGroups.map((group) => (
-            <article
-              key={group.title}
-              className={`${cardBase("space-y-6 px-8 py-10")} border border-[var(--tmbc-mauve)]/30 bg-white/90`}
-            >
-              <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                {group.title}
-              </p>
+          <article key={group.title} className={cardBase("space-y-6")}>
+            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+              {group.title}
+            </p>
               <MarketingHeading level="h2">{group.summary}</MarketingHeading>
               <div className="space-y-4">
                 {group.items.map((item) => (
@@ -168,13 +171,11 @@ export default function FAQPage() {
         </div>
       </SectionBand>
       <SectionBand bg="blush">
-        <div className="mx-auto max-w-3xl">
-          <div
-            className={`${cardBase("text-center px-8 py-16")} border border-[var(--tmbc-mauve)]/20 text-[var(--tmbc-charcoal)]`}
-          >
-            <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Registry placeholder
-            </p>
+      <div className="mx-auto max-w-3xl">
+        <div className={cardBase("space-y-4 text-center text-[var(--tmbc-charcoal)]")}>
+          <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
+            Registry placeholder
+          </p>
             <MarketingHeading level="h2" className="mt-3 text-[var(--tmbc-charcoal)]">
               TMBC uses MyRegistry for registry creation and fulfillment.
             </MarketingHeading>
@@ -185,8 +186,8 @@ export default function FAQPage() {
         </div>
       </SectionBand>
       <SectionBand bg="white">
-        <div className="mx-auto max-w-3xl">
-          <div className={`${cardBase("text-center px-8 py-16")} border border-[var(--tmbc-mauve)]/20`}>
+      <div className="mx-auto max-w-3xl">
+        <div className={cardBase("text-center")}>
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
               Still wondering if TMBC is right for you? You’re always welcome to learn more or reach out with a question.
             </p>

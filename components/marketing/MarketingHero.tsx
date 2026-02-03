@@ -44,6 +44,11 @@ type MarketingHeroProps = {
   heroImage: StaticImageData;
 };
 
+// MarketingHero guardrails:
+// - Canonical hero height across all marketing pages
+// - Single ribbon background (CSS only)
+// - Centered hero text + CTA cluster
+// - Editorial max-width preserved
 export default function MarketingHero({
   eyebrow,
   headline,
@@ -51,10 +56,10 @@ export default function MarketingHero({
   primaryCta,
   secondaryCta,
   className = "",
-  textContainerClassName = "max-w-[640px] px-6 md:px-8",
+  textContainerClassName = "max-w-[640px]",
   headlineClassName = "",
   leadClassName = "",
-  ctaContainerClassName = "mt-6 md:mt-8",
+  ctaContainerClassName = "mt-10 md:flex-row md:items-center md:gap-6",
   microSubhead,
   microSubheadClassName = "",
   postLeadMicroLine,
@@ -102,39 +107,39 @@ export default function MarketingHero({
           style={backgroundImageStyle}
         />
       </div>
-      <div className="relative z-10 w-full">
-        <div className="mkt-container">
-          <div className={`relative z-10 text-left ${textContainerClassName}`.trim()}>
-            {eyebrow && (
-              <p className="text-[11px] uppercase tracking-[0.36em] text-[var(--tmbc-charcoal)] text-opacity-60">
-                {eyebrow}
-              </p>
-            )}
-            <MarketingHeading level="h1" className={headlineClassName}>
-              {headline}
-            </MarketingHeading>
-            {microSubhead && <MarketingSupport className={microSubheadClassName}>{microSubhead}</MarketingSupport>}
-            <MarketingBody className={leadClassName}>{lead}</MarketingBody>
-            {postLeadMicroLine && <MarketingSupport className={postLeadMicroLineClassName}>{postLeadMicroLine}</MarketingSupport>}
-            <div className={`flex flex-col md:flex-row md:items-center gap-4 md:gap-6 ${ctaContainerClassName}`.trim()}>
+      <div className="relative z-10 w-full px-6 md:px-10">
+        <div
+          className={`mx-auto max-w-3xl text-center flex flex-col items-center ${textContainerClassName}`.trim()}
+        >
+          {eyebrow && (
+            <p className="mb-4 text-xs tracking-[0.18em] uppercase text-muted-foreground text-center">
+              {eyebrow}
+            </p>
+          )}
+          <MarketingHeading level="h1" className={headlineClassName}>
+            {headline}
+          </MarketingHeading>
+          {microSubhead && <MarketingSupport className={microSubheadClassName}>{microSubhead}</MarketingSupport>}
+          <MarketingBody className={`${leadClassName} text-center`.trim()}>{lead}</MarketingBody>
+          {postLeadMicroLine && <MarketingSupport className={postLeadMicroLineClassName}>{postLeadMicroLine}</MarketingSupport>}
+          <div className={`flex flex-col items-center gap-6 ${ctaContainerClassName}`.trim()}>
+            <Link
+              href={primaryCta.href}
+              className={`mkt-btn mkt-btn-primary uppercase tracking-[0.35em] ${primaryCta.className ?? ""}`.trim()}
+            >
+              {primaryCta.label}
+            </Link>
+            {secondaryCta && (
               <Link
-                href={primaryCta.href}
-                className={`mkt-btn mkt-btn-primary uppercase tracking-[0.35em] ${primaryCta.className ?? ""}`.trim()}
+                href={secondaryCta.href}
+                className={`text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-80 transition hover:text-[var(--tmbc-mauve)] flex items-center gap-1 ${
+                  secondaryCta.className ?? ""
+                }`.trim()}
               >
-                {primaryCta.label}
+                <span>{secondaryCta.label}</span>
+                <span aria-hidden>→</span>
               </Link>
-              {secondaryCta && (
-                <Link
-                  href={secondaryCta.href}
-                  className={`text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-80 transition hover:text-[var(--tmbc-mauve)] flex items-center gap-1 ${
-                    secondaryCta.className ?? ""
-                  }`.trim()}
-                >
-                  <span>{secondaryCta.label}</span>
-                  <span aria-hidden>→</span>
-                </Link>
-              )}
-            </div>
+            )}
           </div>
         </div>
       </div>

@@ -4,6 +4,11 @@
 // Do not reorder or recolor section backgrounds.
 // Pattern: white → ivory → white → blush
 
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
 import Image from "next/image";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -74,7 +79,7 @@ const RequestInvitePage = () => {
         heroImage={HERO_IMAGE_REGISTRY.heroMarketingSignature}
       />
       <section id="request-invite-form" className="bg-[--tmbc-bg-ivory] py-16">
-        <div className="mx-auto max-w-[90%] md:max-w-lg rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 px-8 py-10 shadow-[0_25px_60px_rgba(199,166,199,0.25)]">
+        <div className="marketing-card marketing-card-padding mx-auto max-w-[90%] md:max-w-lg space-y-4 text-[var(--tmbc-charcoal)]">
           <form onSubmit={submit} className="marketing-form mt-6 space-y-4">
             <label>
               <span>Full name</span>

@@ -8,6 +8,12 @@ import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import { SectionBand, cardBase, textCage } from "@/components/marketing/MarketingCadence";
+
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
 import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 const contactDetails = [
@@ -35,7 +41,7 @@ export default function ContactPage() {
 
       <SectionBand bg="white">
         <div className="mx-auto max-w-3xl">
-          <div className={`${cardBase("text-center px-8 py-20")} shadow-[0_20px_80px_rgba(199,166,199,0.25)]`}>
+          <div className={cardBase("space-y-4 text-center")}>
             <p className="text-xs uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">Contact</p>
             <p className="mt-4 text-base text-[var(--tmbc-charcoal)] text-opacity-80">
               Questions, notes, or threads you’re unsure where to place? Reach out and we’ll respond with calm.
@@ -49,7 +55,7 @@ export default function ContactPage() {
 
       <SectionBand bg="ivory">
         <div className="mx-auto max-w-6xl px-6 text-left">
-          <div className={`${cardBase("space-y-6 px-8 py-10")} border border-[var(--tmbc-mauve)]/30 bg-white/90`}>
+          <div className={cardBase("space-y-6")}>
             {contactDetails.map((detail) => (
               <div key={detail.label}>
                 <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
@@ -67,9 +73,7 @@ export default function ContactPage() {
 
       <SectionBand bg="blush">
         <div className={`${textCage("standard")} mx-auto`}>
-          <div
-            className={`${cardBase("text-center px-8 py-16")} border border-[var(--tmbc-mauve)]/20 bg-[var(--tmbc-blush)]/80`}
-          >
+          <div className={cardBase("text-center text-[var(--tmbc-charcoal)]")}>
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
               Still wondering if this is right for you? You’re always welcome to learn more or use the emails above to
               reach out.
@@ -80,7 +84,7 @@ export default function ContactPage() {
 
       <SectionBand bg="white">
         <div className="mx-auto max-w-2xl">
-          <div className={`${cardBase("text-center px-8 py-16")} border border-[var(--tmbc-mauve)]/20`}>
+          <div className={cardBase("text-center")}>
             <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
               When you’re ready, you can also{" "}
               <Link href="/request-invite" className="text-[var(--tmbc-charcoal)] underline">

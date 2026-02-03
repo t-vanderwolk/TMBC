@@ -7,10 +7,15 @@
 import Link from 'next/link';
 import { MarketingHeading } from "@/components/marketing/Typography";
 
+// Marketing visual guardrails:
+// - All cards/panels use canonical marketing-card / marketing-panel styles
+// - No borders, transforms, or hover animations
+// - Elevation is soft and consistent across pages
+
 const WaitlistPage = () => {
   return (
     <section className="marketing-section">
-      <div className="mx-auto max-w-[90%] md:max-w-3xl rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 p-8 shadow-[0_25px_60px_rgba(199,166,199,0.25)] text-[var(--tmbc-charcoal)]">
+      <div className="marketing-card marketing-card-padding mx-auto max-w-[90%] md:max-w-3xl space-y-6 text-[var(--tmbc-charcoal)]">
         <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-70">Waitlist</p>
         <MarketingHeading level="h1" className="mt-2">
           We review every request with care.
@@ -20,7 +25,7 @@ const WaitlistPage = () => {
           team reviews waitlist submissions weekly and replies via email if a spot opens up in your cohort.
         </p>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="rounded-[28px] border border-[var(--tmbc-mauve)]/30 bg-white/70 p-6 text-left">
+          <div className="marketing-panel marketing-card-padding text-left space-y-4">
             <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
               What to expect
             </MarketingHeading>
@@ -30,7 +35,7 @@ const WaitlistPage = () => {
               <li className="mkt-bullet-item">Mentors match you to the best cohort</li>
             </ul>
           </div>
-          <div className="rounded-[28px] border border-[var(--tmbc-mauve)]/30 bg-white/70 p-6 text-left">
+          <div className="marketing-panel marketing-card-padding text-left space-y-4">
             <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
               Need a code?
             </MarketingHeading>
