@@ -11,6 +11,8 @@ import { SectionBand, textCage, cardBase } from "@/components/marketing/Marketin
 
 import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
+export const dynamic = "force-dynamic";
+
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -208,6 +210,38 @@ function Pagination() {
   );
 }
 
+const artOfRegistryPreview = {
+  title: "The Art of the Registry",
+  excerpt:
+    "How to prepare for baby without overbuying — or feeling like you’re doing it wrong.",
+  tag: "Registry",
+  slug: "the-art-of-the-registry",
+  author: "TMBC",
+  publishedAt: "October 28, 2024",
+};
+
+function EvergreenPreviewCard() {
+  return (
+    <section className={cardBase("space-y-4 bg-white/90 border-tmMauve/40")}>
+      <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)]/60">
+        <span>{artOfRegistryPreview.tag}</span>
+        <span>·</span>
+        <span>{artOfRegistryPreview.author}</span>
+        <span>·</span>
+        <span>{artOfRegistryPreview.publishedAt}</span>
+      </div>
+      <MarketingHeading level="h2">{artOfRegistryPreview.title}</MarketingHeading>
+      <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">{artOfRegistryPreview.excerpt}</p>
+      <Link
+        href={`/blog/${artOfRegistryPreview.slug}`}
+        className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] transition hover:text-[var(--tmbc-mauve)]"
+      >
+        Read the full story
+      </Link>
+    </section>
+  );
+}
+
 export default async function BlogMarketingPage() {
   const { posts, unavailable } = await fetchPublicPosts();
   const [featuredPost, ...otherPosts] = posts;
@@ -217,11 +251,7 @@ export default async function BlogMarketingPage() {
       <>
         {marketingHeroBlock}
         <SectionBand bg="white">
-          <div className={`${textCage("intro")} text-center`}>
-            <p className="mkt-body text-[var(--tmbc-charcoal)]/80">
-              Our editorial library is being refreshed. Check back soon for calm stories and reflections.
-            </p>
-          </div>
+          <EvergreenPreviewCard />
         </SectionBand>
       </>
     );
@@ -230,6 +260,9 @@ export default async function BlogMarketingPage() {
   return (
     <>
       {marketingHeroBlock}
+      <SectionBand bg="white">
+        <EvergreenPreviewCard />
+      </SectionBand>
       <SectionBand bg="white">
         <FeaturedPost post={featuredPost} />
       </SectionBand>

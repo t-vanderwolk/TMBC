@@ -119,6 +119,45 @@ const lifeBullets = [
   "We meet you where you are, and we only move forward when you feel ready.",
 ];
 
+/*
+Why We Exist placement rules:
+	•	Never on homepage
+	•	Experience page only
+	•	Philosophy > features
+	•	No CTAs, no imagery, no urgency
+	•	Editorial rhythm only
+*/
+function WhyWeExistSection() {
+  const coreBeliefs = [
+    "Early planning deserves someone who notices the quiet excitement and keeps it steady.",
+    "Our mentors set the pace, not the platform, so every conversation feels grounded in experience.",
+    "We protect the gentle space for questions so clarity can arrive before any decision feels urgent.",
+  ];
+
+  return (
+    <SectionBand bg="ivory" className="py-16 md:py-20 lg:py-24">
+      <div className="mx-auto max-w-4xl space-y-6 text-left">
+        <MarketingHeading level="h2" className="text-[var(--tmbc-text-primary)]">
+          Why We Exist
+        </MarketingHeading>
+        <div className="space-y-4 text-[var(--tmbc-text-secondary)] leading-[1.6] max-w-[46ch]">
+          <p className="mkt-body text-[var(--tmbc-text-secondary)] text-opacity-80 leading-[1.6]">
+            Those slow, early hours—scrolling through yet another careful checklist while the house stays still—feel like a murmured question asking whether the next decision will be kinder.
+          </p>
+          {coreBeliefs.map((belief) => (
+            <p key={belief} className="text-[1rem] text-[var(--tmbc-text-secondary)] text-opacity-80 leading-[1.6]">
+              {belief}
+            </p>
+          ))}
+          <p className="text-sm text-[var(--tmbc-text-secondary)] text-opacity-70 leading-[1.6]">
+            Most parents just need someone to say, “You can skip that,” so we stay small and keep the care calm.
+          </p>
+        </div>
+      </div>
+    </SectionBand>
+  );
+}
+
 /**
  * Mobile spacing rule:
  * Marketing sections should breathe on mobile.
@@ -143,6 +182,8 @@ export default function ExperiencePage() {
         }}
         heroImage={HERO_IMAGE_REGISTRY.rightRibbonHero}
       />
+
+      <WhyWeExistSection />
 
       {pillarHighlights.map((pillar, index) => {
         const textFirst = index % 2 === 0;

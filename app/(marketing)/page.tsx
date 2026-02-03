@@ -1,12 +1,12 @@
 import Image from "next/image";
-import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
 import SectionDivider from "@/components/marketing/SectionDivider";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import Button from "@/components/ui/Button";
 import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
-import { SectionBand, textCage, cardBase, dividerRhythm } from "@/components/marketing/MarketingCadence";
+import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
+import { JournalSpotlight } from "@/components/marketing/JournalSpotlight";
 
 // Marketing visual guardrails:
 // - All cards/panels use canonical marketing-card / marketing-panel styles
@@ -20,7 +20,7 @@ import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
 import connectPillar from "@/assets/images/connectpillar.png";
 import reflectPillar from "@/assets/images/reflectpillar.png";
-import ribbonKeyImage from "@/assets/images/ribbon-key.png";
+import inviteNarrativeBg from "@/assets/images/inviteonlynarritive.png";
 import { ILLUSTRATIONS } from "@/lib/images";
 
 /**
@@ -110,36 +110,110 @@ function PillarHighlightsSection() {
 }
 
 function WhyInviteOnlySection() {
+  // InviteNarrativeSection guardrails:
+  // - Background image via CSS only (no next/image)
+  // - Single background asset (no stacking)
+  // - Left-aligned editorial text only
+  // - Soft opacity layer behind text for readability
+  // - No CTAs or hero duplication
   return (
-    <SectionBand bg="ivory" className="py-20 md:py-24 lg:py-28">
-        <div className="grid gap-10 md:gap-12 lg:gap-16 lg:grid-cols-2 lg:items-center">
-          <div className="space-y-5">
-            <h2 className="font-serif text-3xl md:text-4xl tracking-tight text-[var(--tmbc-text-primary)]">
-              Why Taylor-Made Is Invite-Only
-            </h2>
-            <div className="space-y-5 md:space-y-6 text-[var(--tmbc-text-secondary)] leading-relaxed">
-              <p className="text-base md:text-lg max-w-[42ch]">
-                Because support works best when it’s personal — not scaled, rushed, or automated.
-              </p>
-              <p className="text-base md:text-lg max-w-[42ch]">
-                We intentionally limit access so every member is thoughtfully matched, properly supported, and guided by a real mentor — not an algorithm.
-              </p>
-              <p className="text-base md:text-lg max-w-[42ch]">
-                Invite-only allows us to move at a human pace: fewer people, better care, and space for real questions without pressure to “keep up.” No feeds. No ranking. No noise.
-              </p>
+    <section className="relative py-24">
+      <div className="mx-auto max-w-7xl px-6 md:px-10">
+        <div className="hidden lg:block">
+          <div
+            className="relative overflow-hidden rounded-2xl bg-[var(--tmbc-ivory)] bg-no-repeat bg-[length:cover] md:bg-[length:contain] bg-[position:center_top] md:bg-[position:right_center]"
+            style={{ backgroundImage: `url(${inviteNarrativeBg.src})` }}
+          >
+            <div
+              className="absolute inset-0 bg-[var(--tmbc-ivory)]/58 opacity-[0.18] md:opacity-[0.2] lg:opacity-[0.16]"
+              aria-hidden="true"
+            />
+            <div className="relative z-10 grid grid-cols-12 gap-8 px-6 py-12 md:py-14 lg:py-16">
+              <div className="col-span-12 md:col-span-6 md:col-start-3">
+                <div className="space-y-6 max-w-[56ch] rounded-2xl bg-gradient-to-r from-white/45 via-white/40 to-white/0 bg-white/42 p-5 md:p-6 backdrop-blur-[1px] text-left">
+                  <MarketingHeading level="h2" className="font-serif text-3xl md:text-4xl tracking-tight text-[var(--tmbc-text-primary)]">
+                    Why Taylor-Made Is Invite-Only
+                  </MarketingHeading>
+                  <div className="text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+                    Why access is curated
+                  </div>
+                  <div className="space-y-6 leading-[1.7] text-[var(--tmbc-text-secondary)]">
+                    <p>
+                      Because support works best when it’s personal — not scaled, rushed, or automated.
+                    </p>
+                    <p>
+                      We intentionally limit access so every member is thoughtfully matched, properly supported, and guided by a real mentor — not an algorithm.
+                    </p>
+                  </div>
+                  <div className="mt-4 text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+                    Mentors guard the pace
+                  </div>
+                  <p className="leading-[1.7] text-[var(--tmbc-text-secondary)]">
+                    Invite-only allows us to move at a human pace: fewer people, better care, and space for real questions without pressure to “keep up.” No feeds. No ranking. No noise.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="marketing-panel relative mx-auto w-full max-w-[420px] md:max-w-[460px] p-8 md:p-10 backdrop-blur-[2px] lg:ml-6 xl:ml-10 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/40 before:to-transparent before:pointer-events-none">
+        </div>
+        <div className="space-y-8 lg:hidden">
+          <div className="rounded-2xl bg-[var(--tmbc-ivory)]/80 p-10 text-left">
+            <MarketingHeading level="h2" className="font-serif text-3xl tracking-tight text-[var(--tmbc-text-primary)]">
+              Why Taylor-Made Is Invite-Only
+            </MarketingHeading>
+            <div className="text-[11px] tracking-[0.16em] uppercase text-muted-foreground mt-3">
+              WHY ACCESS IS CURATED
+            </div>
+            <div className="mt-6 space-y-4 text-[var(--tmbc-text-secondary)] leading-[1.7] max-w-[38ch]">
+              <p>Because support works best when it’s personal — not scaled, rushed, or automated.</p>
+              <p>
+                We intentionally limit access so every member is thoughtfully matched, properly supported, and guided by a real mentor — not an algorithm.
+              </p>
+            </div>
+            <div className="mt-8 text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+              MENTORS GUARD THE PACE
+            </div>
+            <div className="mt-4 space-y-2 text-[var(--tmbc-text-secondary)] leading-[1.6]">
+              <p>Invite-only allows us to move at a human pace.</p>
+              <p>Fewer people. Better care.</p>
+              <p>Space for real questions — without pressure to keep up.</p>
+            </div>
+            <div className="mt-6 space-y-1 text-[var(--tmbc-text-secondary)] leading-[1.6]">
+              <p>No feeds.</p>
+              <p>No ranking.</p>
+              <p>No noise.</p>
+            </div>
+          </div>
+          <div className="-mt-4 overflow-hidden rounded-2xl">
             <Image
-              src={ribbonKeyImage}
-              alt="Invitation-only access"
-              width={520}
-              height={520}
-              className="mx-auto w-full max-w-[320px] object-contain"
+              src={inviteNarrativeBg}
+              alt="Ribbon and key illustration"
+              width={1200}
+              height={800}
+              className="h-full w-full object-cover"
               priority
             />
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function ExperienceIllustrationSection() {
+  return (
+    <SectionBand bg="white" className="relative py-16 md:py-24 lg:py-28">
+      <div className="relative w-full max-w-5xl mx-auto">
+        <div className="absolute inset-0 pointer-events-none rounded-[46px] bg-[var(--tmbc-ivory)]/20" aria-hidden="true" />
+        <Image
+          src={ILLUSTRATIONS.EXPERIENCE}
+          alt="Taylor-Made Baby Co. experience flow"
+          width={ILLUSTRATIONS.EXPERIENCE.width}
+          height={ILLUSTRATIONS.EXPERIENCE.height}
+          className="relative z-10 mx-auto h-auto w-full rounded-[42px] object-cover"
+          priority
+        />
+      </div>
     </SectionBand>
   );
 }
@@ -179,55 +253,11 @@ function InviteFlowSection() {
   );
 }
 
-function WhyWeExistSection() {
-  const coreBeliefs = [
-    "Early planning deserves someone who notices the quiet excitement and keeps it steady.",
-    "Our mentors set the pace, not the platform, so every conversation feels grounded in experience.",
-    "We protect the gentle space for questions so clarity can arrive before any decision feels urgent.",
-  ];
-
-  return (
-    <SectionBand bg="blush" className="py-16 md:py-24 lg:py-28">
-      <div className="grid gap-8 md:grid-cols-2">
-        <div className="max-w-full md:max-w-[720px] leading-relaxed space-y-6 text-left">
-          <MarketingHeading level="h2" className="text-left">
-            Why We Exist
-          </MarketingHeading>
-          <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80 leading-relaxed">
-            Those slow, early hours—scrolling through yet another careful checklist while the house stays still—feel like a murmured question asking whether the next decision will be kinder.
-          </p>
-          <div className="space-y-4">
-            {coreBeliefs.map((belief) => (
-              <p key={belief} className="text-base text-[var(--tmbc-charcoal)] text-opacity-80 leading-relaxed">
-                {belief}
-              </p>
-            ))}
-          </div>
-          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-70">
-            Most parents just need someone to say, “You can skip that,” so we stay small and keep the care calm.
-          </p>
-        </div>
-        <div className="flex items-center justify-center">
-          <Image
-            src={ILLUSTRATIONS.BLOCKS}
-            alt="Taylor-Made Baby Co. wooden blocks representing intentional foundations"
-            width={520}
-            height={720}
-            className="rounded-2xl object-contain"
-            priority
-            style={{ width: "100%", height: "auto" }}
-          />
-        </div>
-      </div>
-    </SectionBand>
-  );
-}
-
 function TrustSection() {
   return (
     <SectionBand bg="ivory" className="py-16 md:py-24 lg:py-28">
-      <div className="space-y-10">
-        <div className={cardBase("mx-auto max-w-[640px] space-y-6 text-center md:text-left")}>
+      <div className="mx-auto max-w-[840px]">
+        <div className={cardBase("mx-auto max-w-[720px] w-full space-y-6 text-center md:text-left")}>
           <p className="text-xs tracking-wide uppercase text-[var(--tmbc-mauve)]/80">How we keep care calm</p>
           <MarketingHeading level="h2" className="tracking-[0.02em]">
             You arrive when you’re ready; we keep the space gentle, patient, and always on your timeline.
@@ -236,25 +266,6 @@ function TrustSection() {
             No hard launches, no rushed timelines—only thoughtful, mentor-led pacing so you feel supported while being invited to take the next calm step when the moment is right.
           </p>
         </div>
-        <div className={`${dividerRhythm()} w-24 mx-auto`} aria-hidden="true" />
-        <article className={cardBase("mx-auto max-w-[720px] w-full space-y-6 text-center md:text-left")}>
-          <p className="text-xs tracking-wide uppercase text-[var(--tmbc-mauve)] text-[var(--tmbc-mauve)]/80">
-            Journal spotlight
-          </p>
-          <MarketingHeading level="h3">Thoughtful guidance, shared gently.</MarketingHeading>
-          <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-75 leading-relaxed">
-            Reflections, planning support, and calm perspectives for modern parents—arrive when you are ready and explore the journal whenever curiosity calls.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-5 text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]">
-            <Link href="/blog" className="text-[var(--tmbc-charcoal)] transition hover:text-[var(--tmbc-mauve)]">
-              Read more
-            </Link>
-            <span className="h-px w-8 bg-[var(--tmbc-charcoal)]/30" aria-hidden />
-            <Link href="/blog" className="text-[0.75rem] tracking-[0.5em] text-[var(--tmbc-charcoal)] text-opacity-60">
-              Explore the journal
-            </Link>
-          </div>
-        </article>
       </div>
     </SectionBand>
   );
@@ -321,27 +332,19 @@ export default function HomePage() {
       />
       {/* FLOW RULE: Experience invitation imagery must stay above partner proof and below the hero. */}
       <InviteFlowSection />
+      <div className="my-20 md:my-24">
+        <SectionDivider />
+      </div>
       <WhyInviteOnlySection />
-      <WhyWeExistSection />
       <PillarHighlightsSection />
       <TrustSection />
+      <JournalSpotlight />
+      <ExperienceIllustrationSection />
       <div className="my-20 md:my-24">
         <SectionDivider />
       </div>
       <SectionBand bg="white" className="border-t border-black/5 py-20 md:py-24">
         <PartnerLogoCarousel />
-      </SectionBand>
-      <SectionBand bg="blush" className="relative py-16 md:py-24 lg:py-28">
-        <div className="w-full max-w-[900px] mx-auto">
-          <Image
-            src={ILLUSTRATIONS.EXPERIENCE}
-            alt="The Taylor-Made Baby Co. experience flow"
-            width={880}
-            height={220}
-            className="w-full rounded-xl object-contain"
-            priority
-          />
-        </div>
       </SectionBand>
       <SectionBand bg="ivory" className="py-24 md:py-28">
         <FinalCTA />
