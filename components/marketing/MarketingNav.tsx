@@ -47,7 +47,7 @@ export default function MarketingNav() {
           </Link>
           <Link
             href="/request-invite"
-            className="inline-flex items-center rounded-full bg-[var(--tmbc-blush)]/30 px-5 py-2 text-[0.75rem] font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-mauve)] transition hover:bg-[var(--tmbc-blush)]/50"
+            className="inline-flex items-center rounded-full bg-[var(--tmbc-blush)]/30 px-5 py-2 text-[0.75rem] font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-blush-primary)] transition hover:bg-[var(--tmbc-blush)]/50"
           >
             Request an Invite
           </Link>
@@ -129,7 +129,7 @@ export default function MarketingNav() {
               </Link>
               <Link
                 href="/request-invite"
-                className="rounded-full bg-[var(--tmbc-blush)]/30 px-5 py-2 text-center text-[0.75rem] font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-mauve)] transition hover:bg-[var(--tmbc-blush)]/50"
+                className="rounded-full bg-[var(--tmbc-blush)]/30 px-5 py-2 text-center text-[0.75rem] font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-blush-primary)] transition hover:bg-[var(--tmbc-blush)]/50"
                 onClick={closeMobile}
               >
                 Request an Invite

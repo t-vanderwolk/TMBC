@@ -1,11 +1,11 @@
 import Button from "@/components/ui/Button";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { MarketingHeading } from "@/components/marketing/Typography";
+import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 // Marketing background cadence is intentional.
 // Do not reorder or recolor section backgrounds.
 // Pattern: white → ivory → white → blush
-import membershipHero from "@/assets/images/membershiphero.png";
 import { SectionBand, textCage, cardBase, dividerRhythm } from "@/components/marketing/MarketingCadence";
 /**
  * TMBC Transition Rules:
@@ -265,9 +265,7 @@ export default function MembershipPage() {
           label: "Explore membership includes",
           href: "#membership-includes",
         }}
-        imageSrc={membershipHero}
-        imageAlt="Soft editorial still life with a ribbon, key, and TMBC blocks"
-        priority
+        heroImage={HERO_IMAGE_REGISTRY.upperLowerRibbonHero}
       />
       <IncludesGrid />
       <InvitationSection />

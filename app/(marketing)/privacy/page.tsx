@@ -1,8 +1,8 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { MarketingHeading } from "@/components/marketing/Typography";
-import homeHeroImage from "@/assets/images/home-hero.png";
 import { SectionBand, textCage } from "@/components/marketing/MarketingCadence";
+import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 // Marketing background cadence is intentional.
 // Do not reorder or recolor section backgrounds.
@@ -11,11 +11,10 @@ import { SectionBand, textCage } from "@/components/marketing/MarketingCadence";
 const heroSection = (
   <MarketingHero
     eyebrow="Privacy"
-    imageSrc={homeHeroImage}
-    imageAlt="Soft ribbon background"
     headline="Privacy policy"
     lead="Our commitment to parents is grounded in transparency. Here’s how we collect, use, and safeguard the information you share."
     primaryCta={{ label: "Request an Invite", href: "/request-invite" }}
+    heroImage={HERO_IMAGE_REGISTRY.heroMarketingSignature}
   />
 );
 

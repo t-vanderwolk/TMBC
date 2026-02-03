@@ -3,6 +3,16 @@ import '../styles/globals.css';
 
 import { greatVibes, nunito, playfair } from '@/lib/fonts';
 
+/**
+ * TMBC ASSET RULE
+ *
+ * Do not import images from anywhere except `/assets/images`
+ * Do not create new image folders
+ * Do not duplicate assets per page
+ *
+ * All visual consistency depends on this rule.
+ */
+
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 
 export const metadata: Metadata = {

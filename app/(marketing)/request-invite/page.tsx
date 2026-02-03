@@ -8,11 +8,13 @@ import Image from "next/image";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import MarketingHero from "@/components/marketing/MarketingHero";
 import ImageFrame from "@/components/marketing/ImageFrame";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import { onboardingApi } from "@/lib/api";
 import inviteEnvelopeImage from "@/assets/images/envelope.png";
-import inviteIconsImage from "@/assets/images/inviteicons.png";
+import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
+import { ILLUSTRATIONS } from "@/lib/images";
 
 const RequestInvitePage = () => {
   const router = useRouter();
@@ -51,21 +53,27 @@ const RequestInvitePage = () => {
 
   return (
     <div className="text-[var(--tmbc-charcoal)]">
-      <section className="bg-[--tmbc-bg-white] py-16">
-        <div className="mx-auto max-w-[90%] md:max-w-lg space-y-4 px-6 text-center">
-          <p className="text-xs uppercase tracking-[0.32em] text-[var(--tmbc-charcoal)] text-opacity-60">Invite request</p>
-          <MarketingHeading level="h1" className="mt-2">
-            Request an Invitation
-          </MarketingHeading>
-          <p className="text-sm text-[var(--tmbc-charcoal)] text-opacity-80">
-            TMBC stays invite-only to make sure mentoring is personal. Share a few details and we’ll respond with quiet next steps.
-          </p>
-          <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-60">
-            Orientation, review, and matching happen before the invite lands.
-          </p>
-        </div>
-      </section>
-      <section className="bg-[--tmbc-bg-ivory] py-16">
+      <MarketingHero
+        eyebrow="Invite request"
+        headline="Request an Invitation"
+        lead="TMBC stays invite-only to make sure mentoring is personal. Share a few details and we’ll respond with quiet next steps."
+        postLeadMicroLine="Orientation, review, and matching happen before the invite lands."
+        primaryCta={{
+          label: "Request an Invite",
+          href: "#request-invite-form",
+        }}
+        secondaryCta={{
+          label: "See how it works",
+          href: "/how-it-works",
+        }}
+        className="bg-[--tmbc-bg-ivory]"
+        textContainerClassName="mx-auto max-w-[90%] md:max-w-lg px-6 text-center space-y-6"
+        headlineClassName="mt-2"
+        leadClassName="text-sm text-[var(--tmbc-charcoal)] text-opacity-80"
+        postLeadMicroLineClassName="text-xs uppercase tracking-[0.35em] text-opacity-60"
+        heroImage={HERO_IMAGE_REGISTRY.heroMarketingSignature}
+      />
+      <section id="request-invite-form" className="bg-[--tmbc-bg-ivory] py-16">
         <div className="mx-auto max-w-[90%] md:max-w-lg rounded-[32px] border border-[var(--tmbc-mauve)]/30 bg-white/90 px-8 py-10 shadow-[0_25px_60px_rgba(199,166,199,0.25)]">
           <form onSubmit={submit} className="marketing-form mt-6 space-y-4">
             <label>
@@ -130,10 +138,10 @@ const RequestInvitePage = () => {
           <div className="flex justify-center w-full">
             <ImageFrame className="max-w-[520px] border-[var(--tmbc-mauve)]/30">
               <Image
-                src={inviteIconsImage}
+                src={ILLUSTRATIONS.INVITE_ICONS}
                 alt="How the Taylor-Made Baby Co. invitation process works"
-                width={inviteIconsImage.width}
-                height={inviteIconsImage.height}
+                width={ILLUSTRATIONS.INVITE_ICONS.width}
+                height={ILLUSTRATIONS.INVITE_ICONS.height}
                 className="w-full h-auto"
               />
             </ImageFrame>

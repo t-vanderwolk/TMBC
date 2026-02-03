@@ -3,11 +3,7 @@ import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
-
-// Marketing background cadence is intentional.
-// Do not reorder or recolor section backgrounds.
-// Pattern: white → ivory → white → blush
-import blogHero from "@/assets/images/blogpagehero.png";
+import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -72,9 +68,7 @@ const marketingHeroBlock = (
       lead="Reflections, planning support, and calm perspectives for modern parents."
       primaryCta={{ label: "Request an Invite", href: "/request-invite" }}
       secondaryCta={{ label: "Learn about membership", href: "/membership" }}
-      imageSrc={blogHero}
-      imageAlt="Soft editorial collage for the blog"
-      priority
+      heroImage={HERO_IMAGE_REGISTRY.horizontalRibbon}
     />
   </>
 );

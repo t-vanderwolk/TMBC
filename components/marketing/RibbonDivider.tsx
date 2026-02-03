@@ -1,4 +1,4 @@
-import dividerRibbon from "../../assets/images/divider-ribbon-horizontal.png";
+import dividerRibbon from "@/assets/images/ribbons/divider-ribbon-horizontal.png";
 
 type RibbonDividerProps = {
   className?: string;

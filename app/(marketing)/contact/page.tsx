@@ -7,8 +7,8 @@
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { MarketingHeading } from "@/components/marketing/Typography";
-import homeHeroImage from "@/assets/images/home-hero.png";
 import { SectionBand, cardBase, textCage } from "@/components/marketing/MarketingCadence";
+import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 const contactDetails = [
   {
@@ -24,14 +24,13 @@ export default function ContactPage() {
       {/* Hero must render instantly and avoid additional entrance wrappers. */}
       <MarketingHero
         eyebrow="Contact"
-        imageSrc={homeHeroImage}
-        imageAlt="Taylor-Made Baby Co. hero art"
         headline="We’re here — thoughtfully."
         lead="Questions, notes, or unclear threads? Reach out and we’ll respond with calm."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
         }}
+        heroImage={HERO_IMAGE_REGISTRY.horizontalRibbon}
       />
 
       <SectionBand bg="white">

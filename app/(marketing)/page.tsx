@@ -5,7 +5,7 @@ import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
 import SectionDivider from "@/components/marketing/SectionDivider";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import Button from "@/components/ui/Button";
-import experienceImage from "@/assets/images/experience.png";
+import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 import { SectionBand, textCage, cardBase, dividerRhythm } from "@/components/marketing/MarketingCadence";
 // Marketing background cadence is intentional.
 // Do not reorder or recolor section backgrounds.
@@ -14,10 +14,8 @@ import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
 import connectPillar from "@/assets/images/connectpillar.png";
 import reflectPillar from "@/assets/images/reflectpillar.png";
-import homepageHero from "@/assets/images/homepagehero.png";
-import inviteIcons from "@/assets/images/inviteicons.png";
 import ribbonKeyImage from "@/assets/images/ribbon-key.png";
-import tmbcBlocksImage from "@/assets/images/tmbc-blocks.png";
+import { ILLUSTRATIONS } from "@/lib/images";
 
 /**
  * TMBC Homepage Background Rules:
@@ -27,6 +25,9 @@ import tmbcBlocksImage from "@/assets/images/tmbc-blocks.png";
  * - Never stack blush sections back-to-back.
  * - Apply .section-transition only on the blush section that resolves back to ivory.
  */
+
+// Hero ribbon: heroes/home-hero.png
+// Do not replace or duplicate per TMBC hero rules
 
 const pillarHighlights = [
   {
@@ -107,40 +108,35 @@ function PillarHighlightsSection() {
 
 function WhyInviteOnlySection() {
   return (
-    <SectionBand bg="ivory" className="py-16 md:py-24 lg:py-28">
-      <div className="grid gap-8 md:grid-cols-2 items-start">
-        <div className="max-w-full md:max-w-[720px] leading-relaxed space-y-6">
-          <MarketingHeading level="h2" className="mb-0 tracking-[0.02em]">
-            Why Taylor-Made Is Invite-Only
-          </MarketingHeading>
-          <p className="text-base md:text-lg text-[var(--tmbc-charcoal)] text-opacity-80">
-            Because support works best when it’s personal — not scaled, rushed, or automated.
-          </p>
-          <div className="space-y-5 text-sm md:text-base">
-            <p>
-              We intentionally limit access so every member is thoughtfully matched, properly supported, and guided by a real mentor — not an algorithm.
-            </p>
-            <p>
-              Invite-only allows us to move at a human pace: fewer people, better care, and space for real questions without pressure to “keep up.”
-            </p>
-            <p>
-              No feeds. No ranking. No noise.
-              <br />
-              Just steady guidance, when you actually need it.
-            </p>
+    <SectionBand bg="ivory" className="py-20 md:py-24 lg:py-28">
+        <div className="grid gap-10 md:gap-12 lg:gap-16 lg:grid-cols-2 lg:items-center">
+          <div className="space-y-5">
+            <h2 className="font-serif text-3xl md:text-4xl tracking-tight text-[var(--tmbc-text-primary)]">
+              Why Taylor-Made Is Invite-Only
+            </h2>
+            <div className="space-y-5 md:space-y-6 text-[var(--tmbc-text-secondary)] leading-relaxed">
+              <p className="text-base md:text-lg max-w-[42ch]">
+                Because support works best when it’s personal — not scaled, rushed, or automated.
+              </p>
+              <p className="text-base md:text-lg max-w-[42ch]">
+                We intentionally limit access so every member is thoughtfully matched, properly supported, and guided by a real mentor — not an algorithm.
+              </p>
+              <p className="text-base md:text-lg max-w-[42ch]">
+                Invite-only allows us to move at a human pace: fewer people, better care, and space for real questions without pressure to “keep up.” No feeds. No ranking. No noise.
+              </p>
+            </div>
+          </div>
+          <div className="relative mx-auto w-full max-w-[420px] md:max-w-[460px] rounded-2xl bg-white/70 shadow-[0_12px_32px_rgba(0,0,0,0.06)] ring-1 ring-black/5 p-8 md:p-10 backdrop-blur-[2px] lg:ml-6 xl:ml-10 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/40 before:to-transparent before:pointer-events-none">
+            <Image
+              src={ribbonKeyImage}
+              alt="Invitation-only access"
+              width={520}
+              height={520}
+              className="mx-auto w-full max-w-[320px] object-contain"
+              priority
+            />
           </div>
         </div>
-        <div className="flex items-center justify-center">
-          <Image
-            src={ribbonKeyImage}
-            alt="A ribbon-tied key representing intentional, invite-only access"
-            width={520}
-            height={520}
-            className="rounded-2xl object-contain"
-            priority
-          />
-        </div>
-      </div>
     </SectionBand>
   );
 }
@@ -167,8 +163,10 @@ function InviteFlowSection() {
         <div className="relative w-full max-w-5xl mx-auto mt-12">
           <div className="absolute inset-0 pointer-events-none rounded-[46px] bg-[var(--tmbc-ivory)]/20" aria-hidden="true" />
           <Image
-            src={inviteIcons}
+            src={ILLUSTRATIONS.INVITE_ICONS}
             alt="Invite flow: Request invite, concierge intake, mentor match, start experience"
+            width={ILLUSTRATIONS.INVITE_ICONS.width}
+            height={ILLUSTRATIONS.INVITE_ICONS.height}
             className="relative z-10 mx-auto h-auto w-full rounded-[42px]"
             priority
           />
@@ -208,12 +206,13 @@ function WhyWeExistSection() {
         </div>
         <div className="flex items-center justify-center">
           <Image
-            src={tmbcBlocksImage}
+            src={ILLUSTRATIONS.BLOCKS}
             alt="Taylor-Made Baby Co. wooden blocks representing intentional foundations"
             width={520}
             height={720}
             className="rounded-2xl object-contain"
             priority
+            style={{ width: "100%", height: "auto" }}
           />
         </div>
       </div>
@@ -294,13 +293,7 @@ export default function HomePage() {
         */}
       <MarketingHero
         eyebrow="Invitation-only · Mentor-led"
-        headline={
-          <>
-            Baby prep,
-            <br className="hidden lg:block" />
-            with someone who's actually done it before.
-          </>
-        }
+        headline="Baby prep, with someone who's actually done it."
         lead="A calm, guided approach to preparing for baby—without pressure or guesswork."
         primaryCta={{
           label: "Request an Invite",
@@ -311,15 +304,12 @@ export default function HomePage() {
           href: "/how-it-works",
           className: "mt-2 md:mt-0",
         }}
-        imageSrc={homepageHero}
-        imageAlt="Taylor-Made Baby Co. marketing hero"
-        priority
         className="pt-24 pb-20 md:pt-32 md:pb-28"
         textContainerClassName="max-w-full md:max-w-[720px] px-6 md:px-8 p-6 space-y-6 md:space-y-8 leading-relaxed"
         headlineClassName="hero-line-clamp leading-snug"
         leadClassName="mt-6"
         ctaContainerClassName="mt-8 flex flex-col gap-6 sm:flex-row sm:gap-5"
-        imageClassName="object-cover object-center scale-100"
+        heroImage={HERO_IMAGE_REGISTRY.heroMarketingSignature}
       />
       {/* FLOW RULE: Experience invitation imagery must stay above partner proof and below the hero. */}
       <InviteFlowSection />
@@ -330,10 +320,13 @@ export default function HomePage() {
       <div className="my-20 md:my-24">
         <SectionDivider />
       </div>
+      <SectionBand bg="white" className="border-t border-black/5 py-20 md:py-24">
+        <PartnerLogoCarousel />
+      </SectionBand>
       <SectionBand bg="blush" className="relative py-16 md:py-24 lg:py-28">
         <div className="w-full max-w-[900px] mx-auto">
           <Image
-            src={experienceImage}
+            src={ILLUSTRATIONS.EXPERIENCE}
             alt="The Taylor-Made Baby Co. experience flow"
             width={880}
             height={220}
@@ -341,9 +334,6 @@ export default function HomePage() {
             priority
           />
         </div>
-      </SectionBand>
-      <SectionBand bg="white" className="border-t border-black/5 py-20 md:py-24">
-        <PartnerLogoCarousel />
       </SectionBand>
       <SectionBand bg="ivory" className="py-24 md:py-28">
         <FinalCTA />

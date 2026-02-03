@@ -4,11 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { MarketingHeading } from "@/components/marketing/Typography";
+import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 // Marketing background cadence is intentional.
 // Do not reorder or recolor section backgrounds.
 // Pattern: white → ivory → white → blush
-import homeHeroImage from "@/assets/images/home-hero.png";
 import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
 
 const faqGroups = [
@@ -112,15 +112,13 @@ export default function FAQPage() {
       {/* Hero must render instantly and avoid additional entrance wrappers. */}
       <MarketingHero
         eyebrow="FAQ"
-        imageSrc={homeHeroImage}
-        imageAlt="Taylor-Made Baby Co. hero art"
         headline="Questions are part of the journey."
         lead="Calm mentor-led answers to orient you before requesting an invite."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
         }}
-        priority
+        heroImage={HERO_IMAGE_REGISTRY.rightRibbonHero}
       />
       <SectionBand bg="white">
         <div className="mx-auto max-w-3xl">

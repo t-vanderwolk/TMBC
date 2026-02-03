@@ -15,13 +15,13 @@ import Button from "@/components/ui/Button";
  * - Do not stack multiple transitions back-to-back.
  */
 import MarketingHero from "@/components/marketing/MarketingHero";
-import experienceHero from "@/assets/images/experienceherobunny.png";
 import learnPillar from "@/assets/images/learnpillar.png";
 import planPillar from "@/assets/images/planpillar.png";
 import connectPillar from "@/assets/images/connectpillar.png";
 import reflectPillar from "@/assets/images/reflectpillar.png";
 import livingRoomSofa from "@/assets/images/living-room-sofa.jpeg";
 import { SectionBand, textCage, dividerRhythm, cadenceBgByIndex } from "@/components/marketing/MarketingCadence";
+import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 export const metadata = {
   title: "Taylor-Made Baby Co. - Concierge birth & baby planning",
@@ -135,9 +135,7 @@ export default function ExperiencePage() {
           label: "See how it works",
           href: "/how-it-works",
         }}
-        imageSrc={experienceHero}
-        imageAlt="Taylor-Made Baby Co. hero art"
-        priority
+        heroImage={HERO_IMAGE_REGISTRY.rightRibbonHero}
       />
 
       {pillarHighlights.map((pillar, index) => {

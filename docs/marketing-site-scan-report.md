@@ -23,6 +23,8 @@
 
 *Marketing layout bootstraps every route above with `components/marketing/MarketingLayout`, which wraps `Navbar`, a subtle gradient background, and (unless explicitly hidden) `MarketingFooter` within `MarketingContainer` spacing.*
 
+> **Hero image registry:** All marketing hero backgrounds must reference the centralized constants exported from `lib/heroImages.ts` (`heroMarketingSignature`, `horizontalRibbon`, `rightRibbonHero`, `upperLowerRibbonHero`) rather than hardcoding `/assets/images/heroes/*` paths; any legacy mentions below are retained for historical context only.
+
 ### /
 **File(s):** `app/(marketing)/page.tsx`
 **Purpose (inferred):** Anchor landing page that narrates each pillar, surfaces the invite-code gate, and funnels everyone toward `Request an Invite` or `How it Works` before gifting additional context.
@@ -37,7 +39,7 @@
   - Heading text: “A new way to prep for baby - and parenthood.”
   - Subhead text: “Think less spiraling, more steady steps. We help you learn, plan, connect, and reflect — with a real human mentor…” (exact supportingText string).  
   - CTA(s): Primary “Request an Invite” (`marketing-btn-primary` with uppercase `tracking-[0.35em]`), secondary “How it works (without the overwhelm)”.  
-  - Hero image (desktop): `/assets/images/hero-marketing-signature.png` rendered via `<img>` with `width={1536}`/`height={1024}` and `object-cover`.  
+  - Hero image (desktop): `heroMarketingSignature` (lib/heroImages.ts, resolves to `/assets/images/heroes/hero-marketing-signature.png`) rendered via `<img>` with `width={1536}`/`height={1024}` and `object-cover`.  
   - Max width / spacing: hero section spans `w-screen` via negative margins, uses `py-24 md:py-32`, background `#FBF7F4`, and hero copy zones are padded with `px-6 md:px-12`.
 - **Sections below fold (ordered):**
   - Invite-only reminder → `marketing-section marketing-card bg-[var(--tmbc-ivory)]/90 px-8` with uppercase labels, a `marketing-form` inside `space-y-3`, and responsive `md:flex-row` inputs.  
@@ -58,7 +60,7 @@
   2. Invite-code card retains full width (`max-w-[90%]`) and vertical stacking; form inputs span `w-full h-14`.  
   3. Remaining sections (feature stories, carousel, philosophy grids) follow as single-column stacks due to the default `grid-cols-1` and `space-y-*` wrappers.
 - **Hero behavior:**
-  - Does image swap to mobile portrait? Yes; `MarketingHero` adds a `<source media="(max-width: 768px)" srcSet="/assets/images/hero-marketing-signature-mobile.png" />` before the desktop `<img>`.  
+  - Does image swap to mobile portrait? Yes; `MarketingHero` adds a `<source media="(max-width: 768px)" srcSet="/assets/images/heroes/hero-marketing-signature-mobile.png" />` before the desktop `<img>`, which is the mobile adaption of the `heroMarketingSignature` art (see `lib/heroImages.ts`).  
   - Typography changes: copy maintains the same `hero-headline` / `hero-supporting` classes but shrinks to single column text; `max-w-[90%]` ensures the serif headline stays centered.  
   - CTA stacking: container is `flex` with `gap-4` but at mobile width the `Link`s render full-width since `marketing-btn` defaults to `w-full` and `sm:w-auto`.
 - **Sections below fold:**
@@ -88,7 +90,7 @@
   - Heading text: “Why Taylor-Made Baby Co.”
   - Subhead text: “We guide you through each season with calm clarity, mentor-led pacing, and intentional next steps.”
   - CTA(s): Primary “Request Your Invite”, secondary “How it works (gently)”.
-  - Hero image (desktop): `/assets/images/hero-marketing-signature.png`.  
+  - Hero image (desktop): `heroMarketingSignature` (lib/heroImages.ts).  
   - Max width / spacing: hero copy uses `max-w-[90%] md:max-w-[560px]`, `px-6 md:px-12`, `py-24 md:py-32`, while the background stretches `w-screen` via negative margins.
 - **Sections below fold (ordered):**
   - “About” introduction card → `space-y-3 rounded-[48px] border bg-white/80 px-10 py-20 md:py-32` with `font-serif` heading and tone-setting paragraph.  
@@ -108,7 +110,7 @@
   2. Intro card and editorial grids collapse `md:grid-cols-2` into single-column stacks because no `md:` rules apply.  
   3. Subsequent grids turn into full-width cards (`grid-cols-1`) with `space-y-6` spacing and `px-8` padding.
 - **Hero behavior:**
-  - Does image swap to mobile portrait? Yes; `<source media="(max-width: 768px)" srcSet="/assets/images/hero-marketing-signature-mobile.png" />` provides a compressed background before the desktop `<img>`.  
+  - Does image swap to mobile portrait? Yes; `<source media="(max-width: 768px)" srcSet="/assets/images/heroes/hero-marketing-signature-mobile.png" />` provides a compressed background before the desktop `<img>` and aligns with `heroMarketingSignature`.  
   - Typography stays serif but the `max-w-[90%]` wrapper keeps lines short.  
   - CTA stacking uses the same `marketing-btn` defaults (`w-full sm:w-auto`) so buttons remain full-width on a 390px device.
 - **Sections below fold:**
@@ -137,7 +139,7 @@
   - Heading text: “Clear thinking for pregnancy and early parenthood.”
   - Subhead text: `heroSupportingText` (text block with “Taylor-Made Journal” label and body about real conversations).  
   - CTA(s): Primary “Request an Invite”, secondary “How the journal works”.  
-  - Hero image (desktop): `/assets/images/section-background-soft-ribbon.png`.  
+  - Hero image (desktop): `/assets/images/ribbons/section-background-soft-ribbon.png`.  
   - Max width / spacing: hero uses `w-screen`, `py-24 md:py-32`, and the copy sits in `max-w-[90%] md:max-w-[560px]`; `MarketingContent` adds `px-4 md:px-10 lg:px-16`.
 - **Sections below fold (ordered):**
   - Featured story → `article mx-auto grid grid-cols-1 gap-6 overflow-hidden rounded-2xl border border-[var(--tmbc-ivory)]/60 bg-tmIvory` with `sm:grid-cols-[1.1fr_0.9fr]`.  
@@ -153,7 +155,7 @@
   2. Featured card stacks (image on top, copy below).  
   3. Grid of other posts also becomes single column with wide cards.
 - **Hero behavior:**
-  - Does image swap to mobile portrait? Yes; `MarketingHero` adds `<source media="(max-width: 768px)" srcSet="/assets/images/section-background-soft-ribbon-mobile.png" />`.  
+  - Does image swap to mobile portrait? Yes; `MarketingHero` adds `<source media="(max-width: 768px)" srcSet="/assets/images/ribbons/section-background-soft-ribbon-mobile.png" />`.  
   - Typography: `font-playfair` titles shrink to 2xl/3xl but remain legible inside `max-w` wrappers.  
   - CTA stacking: buttons appear stacked because the hero’s internal `flex` defaults to column on small screens.
 - **Sections below fold:**
@@ -266,7 +268,7 @@
   - Heading text: “You’re not meant to do this alone.”
   - Subhead text: “A supportive community of parents, mentors, and professionals…” etc.  
   - CTA(s): Primary “Request Your Invite”, secondary “How It Works (quietly)”.  
-  - Hero image (desktop): `/assets/images/section-background-soft-ribbon.png`.  
+  - Hero image (desktop): `/assets/images/ribbons/section-background-soft-ribbon.png`.  
   - Max width / spacing: hero copy uses `max-w-[90%] md:max-w-[560px]`, `px-6 md:px-12`, and the `picture` background stretches via `w-screen`.
 - **Sections below fold (ordered):**
   - “Connect” intro card → `marketing-card mb-24` with uppercase label and quiet supporting sentence.  
@@ -282,7 +284,7 @@
   2. Intro card remains full width via `px-8`.  
   3. The `md:grid-cols-3` grid collapses to a single column due to the absence of `lg` breakpoints, so each benefit card spans the width.
 - **Hero behavior:**
-  - Does image swap to mobile portrait? Yes; `/connect` appears in `MarketingHero`’s `MOBILE_HERO_SOURCES`, so a `<source media="(max-width: 768px)" srcSet="/assets/images/section-background-soft-ribbon-mobile.png" />` serves the mobile hero.  
+  - Does image swap to mobile portrait? Yes; `/connect` appears in `MarketingHero`’s `MOBILE_HERO_SOURCES`, so a `<source media="(max-width: 768px)" srcSet="/assets/images/ribbons/section-background-soft-ribbon-mobile.png" />` serves the mobile hero.  
   - Typography remains `font-serif`, and the hero’s `space-y-6` ensures vertical breathing.  
   - CTA stacking defaults to column because `marketing-btn` applied width to small screens.
 - **Sections below fold:**
@@ -353,7 +355,7 @@
   - Heading text: “Baby prep, minus the spiral.”
   - Subhead text: “We guide you through pregnancy and early parenting in the right order…”  
   - CTA(s): Primary “Request Your Invite”, secondary “The Experience”.  
-  - Hero image (desktop): `/assets/images/hero-marketing-signature.png`.  
+  - Hero image (desktop): `heroMarketingSignature` (lib/heroImages.ts).  
   - Max width / spacing: hero copy uses `max-w-[90%] md:max-w-[560px]`, `px-6 md:px-12`, `py-24 md:py-32`, and `picture` backgrounds stretch to `w-screen`.
 - **Sections below fold (ordered):**
   - “How it works” grid → `marketing-card bg-[var(--tmbc-ivory)]/90 px-8 text-center` with uppercase badge.  
@@ -368,7 +370,7 @@
   2. Badge card shrinks with `px-8`.  
   3. Steps and expectation grids stack because `md:grid-cols-*` do not apply.
 - **Hero behavior:**
-  - Does image swap to mobile portrait? Yes; `/how-it-works` is mapped to the signature hero mobile image.  
+  - Does image swap to mobile portrait? Yes; `/how-it-works` is mapped to the mobile adaptation of `heroMarketingSignature` (lib/heroImages.ts).
   - Typography stays `font-serif` and the hero `flex` container centers copy; `max-w-[90%]` keeps line lengths short.  
   - CTAs stack via `marketing-btn` default `w-full` on small screens.
 - **Sections below fold:**
@@ -396,7 +398,7 @@
   - Heading text: “Learn what matters for pregnancy and baby.”
   - Subhead text: “Clear, practical guidance … without the pressure to master everything at once.”
   - CTA(s): Primary “Request Your Invite”, secondary “How It Works (gently)”.  
-  - Hero image (desktop): `/assets/images/section-background-learning-flow.png`.  
+  - Hero image (desktop): `/assets/images/ribbons/section-background-learning-flow.png`.  
   - Max width / spacing: hero uses `max-w-[90%] md:max-w-[560px]`, `py-24 md:py-32`, and `px-6 md:px-12` with full-width background.
 - **Sections below fold (ordered):**
   - “Learn” intro card → `bg-[var(--tmbc-ivory)]/90 px-8 text-center`, calling itself a gentle divider.  
@@ -412,7 +414,7 @@
   2. Module spotlight card spans the width, and the `Image` preview uses `w-full`.  
   3. Divider card and benefits stack in single column with `space-y-6`.
 - **Hero behavior:**
-  - Does image swap to mobile portrait? Yes; `/learn` gets `/assets/images/section-background-learning-flow-mobile.png` via `MarketingHero`.  
+  - Does image swap to mobile portrait? Yes; `/learn` gets `/assets/images/ribbons/section-background-learning-flow-mobile.png` via `MarketingHero`.  
   - Typography uses `max-w-[90%]` wrappers; `marketing-btn` ensures CTAs are full-width.  
   - Module spotlight’s `button` stretches full width since `bg-[#C8A1B4]` button uses `w-full`.
 - **Sections below fold:**
@@ -470,7 +472,7 @@
   - Heading text: “Start as a member. Grow into a mentor.”
   - Subhead text: “Membership gives you guided baby prep…”  
   - CTA(s): Primary “Request an Invite” (soft variant), secondary “How mentorship works”.  
-  - Hero image (desktop): `/assets/images/section-background-soft-ribbon.png`.  
+  - Hero image (desktop): `/assets/images/ribbons/section-background-soft-ribbon.png`.  
   - Max width / spacing: hero copy sits inside `max-w-[90%] md:max-w-[560px]`, `px-6 md:px-12`, `py-24 md:py-32`.
 - **Sections below fold (ordered):**
   - Membership intro divider → `marketing-card mb-24` with `tracking-[0.5em]` label and descriptive text.  
@@ -481,7 +483,7 @@
 
 #### Mobile (≤390px)
 - **Above the fold structure:**
-  1. Hero collapses to single-column, CTAs stack, and the `MarketingHero` mobile swap (`/assets/images/section-background-soft-ribbon-mobile.png`).  
+  1. Hero collapses to single-column, CTAs stack, and the `MarketingHero` mobile swap (`/assets/images/ribbons/section-background-soft-ribbon-mobile.png`).  
   2. Intro card uses `px-8` for spacing.  
   3. Mentor/platform grid becomes a single column due to `md:grid-cols-2` collapsing.
 - **Hero behavior:**
@@ -514,7 +516,7 @@
   - Heading text: “Plan for baby — with someone in your corner.”
   - Subhead text: “From registries to real-life logistics…”  
   - CTA(s): Primary “Request Your Invite”, secondary “How It Works (no rush)”.  
-  - Hero image (desktop): `/assets/images/section-background-soft-ribbon.png`.  
+  - Hero image (desktop): `/assets/images/ribbons/section-background-soft-ribbon.png`.  
   - Max width / spacing: hero copy uses `max-w-[90%] md:max-w-[560px]`, `px-6 md:px-12`, `py-24 md:py-32`.
 - **Sections below fold (ordered):**
   - Divider card → `marketing-card bg-[var(--tmbc-ivory)]/90 px-8` with micro copy.  
@@ -555,7 +557,7 @@
   - Heading text: “A quiet place for the early days.”
   - Subhead text: “Capture thoughts, moments, and memories…”  
   - CTA(s): Primary “Request Your Invite”, secondary “How It Works (softly)”.  
-  - Hero image (desktop): `/assets/images/section-background-soft-ribbon.png`.  
+  - Hero image (desktop): `/assets/images/ribbons/section-background-soft-ribbon.png`.  
   - Max width / spacing: Hero copy sits inside `max-w-[90%] md:max-w-[560px]`, `px-6 md:px-12`, while the background uses `py-24 md:py-32` and `w-screen`. 
 - **Sections below fold (ordered):**
   - Reflect divider → `marketing-card bg-[var(--tmbc-ivory)]/90 px-8` with text.  
@@ -770,10 +772,10 @@
 ## Hero system audit
 - `MarketingHero` is treated as the authoritative hero when `MarketingLayout.shouldBreakoutHero` returns true; it stretches via negative margins, stays at `min-h-[85vh]`, and anchors every hero page listed below.  
 - Desktop hero + mobile swap list:
-  - `/` → hero image `/assets/images/hero-marketing-signature.png` and mobile portrait `/assets/images/hero-marketing-signature-mobile.png`.  
+  - `/` → hero image `/assets/images/heroes/hero-marketing-signature.png` and mobile portrait `/assets/images/heroes/hero-marketing-signature-mobile.png`.  
   - `/about` → same image pair as `/`.  
-  - `/how-it-works` → desktop `/assets/images/hero-marketing-signature.png`, mobile `/assets/images/hero-marketing-signature-mobile.png`.  
-  - `/learn` → desktop `/assets/images/section-background-learning-flow.png`, mobile `/assets/images/section-background-learning-flow-mobile.png`.  
-  - `/plan`, `/connect`, `/reflect`, `/membership`, and `/blog` → all use `/assets/images/section-background-soft-ribbon.png` on desktop and `/assets/images/section-background-soft-ribbon-mobile.png` on mobile per `MOBILE_HERO_SOURCES`.  
+  - `/how-it-works` → desktop `/assets/images/heroes/hero-marketing-signature.png`, mobile `/assets/images/heroes/hero-marketing-signature-mobile.png`.  
+  - `/learn` → desktop `/assets/images/ribbons/section-background-learning-flow.png`, mobile `/assets/images/ribbons/section-background-learning-flow-mobile.png`.  
+  - `/plan`, `/connect`, `/reflect`, `/membership`, and `/blog` → all use `/assets/images/ribbons/section-background-soft-ribbon.png` on desktop and `/assets/images/ribbons/section-background-soft-ribbon-mobile.png` on mobile per `MOBILE_HERO_SOURCES`.  
 - Routes without `MarketingHero` (`/experience`, `/community`, `/login`, `/request-invite`, `/signup`, `/thank-you`, `/verify`, `/verify-invite`, `/waitlist`, `/blog/[slug]`) use stacked cards or forms; they therefore rely on in-layout cards and CTARibbon blocks for hierarchy and offer no mobile hero swap.  
 - The mobile swap logic is centralized in `MarketingHero.tsx` (via the `<picture>` element), so any missing entry in `MOBILE_HERO_SOURCES` would mean the desktop background persists on mobile for that route; the current map covers every route that uses `MarketingHero`.

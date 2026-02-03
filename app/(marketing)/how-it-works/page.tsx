@@ -14,7 +14,6 @@ import { MarketingHeading } from "@/components/marketing/Typography";
  * - Do not stack multiple transitions back-to-back.
  */
 import MarketingHero from "@/components/marketing/MarketingHero";
-import howItWorksHero from "@/assets/images/howitworksheroupdated.png";
 import evelope from "@/assets/images/evelope.png";
 import surveyImage from "@/assets/images/survey.png";
 import matchImage from "@/assets/images/match.png";
@@ -22,6 +21,7 @@ import welcomeImage from "@/assets/images/welcome.png";
 import invitationStill from "@/assets/images/tmbcinvite.png";
 import tmbcSeal from "@/assets/images/tmbc-seal.png";
 import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
+import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 
 const invitationPoints = [
   "Protects the invitation-only nature of the experience.",
@@ -86,9 +86,7 @@ export default function HowItWorksPage() {
           label: "See the steps",
           href: "#process",
         }}
-        imageSrc={howItWorksHero}
-        imageAlt="Taylor-Made Baby Co. hero art"
-        priority
+        heroImage={HERO_IMAGE_REGISTRY.horizontalRibbon}
       />
       <SectionBand bg="white">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
