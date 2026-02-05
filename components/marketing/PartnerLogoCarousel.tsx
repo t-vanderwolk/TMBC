@@ -32,6 +32,7 @@ const SUPPORTED_IMAGE_EXTENSIONS = /\.(png|jpe?g|svg|webp|avif)$/i;
  */
 export default function PartnerLogoCarousel() {
   const [logos, setLogos] = useState<Logo[]>([]);
+  const [isCompactView, setIsCompactView] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -61,25 +62,56 @@ export default function PartnerLogoCarousel() {
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const query = window.matchMedia("(max-width: 639px)");
+    const handleChange = (event: MediaQueryListEvent | MediaQueryList) => {
+      setIsCompactView(event.matches);
+    };
+    handleChange(query);
+    if (query.addEventListener) {
+      query.addEventListener("change", handleChange);
+    } else {
+      query.addListener(handleChange);
+    }
+    return () => {
+      if (query.removeEventListener) {
+        query.removeEventListener("change", handleChange);
+      } else {
+        query.removeListener(handleChange);
+      }
+    };
+  }, []);
+
+  const visibleLogos = isCompactView ? logos.slice(0, 6) : logos;
+
   return (
-    <div className="space-y-6 text-center">
+    <div className="py-12 sm:py-16 space-y-6 text-center">
       <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60 mx-auto">
         Only Partnered With the Best
       </p>
+      <p className="mb-6 text-sm text-muted-foreground text-center">
+        Only partnered with brands our mentors actually trust.
+      </p>
       {logos.length ? (
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-          {logos.map((logo) => (
-            <div key={logo.id} className="flex h-16 items-center justify-center">
-              <img
-                src={logo.src}
-                alt={logo.alt}
-                loading="lazy"
-                decoding="async"
-                className="max-h-10 w-auto opacity-70 grayscale transition duration-300 hover:grayscale-0 hover:opacity-100"
-              />
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+            {visibleLogos.map((logo) => (
+              <div key={logo.id} className="flex h-16 items-center justify-center">
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="max-h-10 w-auto opacity-60 grayscale transition-all duration-300 motion-safe:hover:opacity-100 motion-safe:hover:grayscale-0"
+                />
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-xs text-muted-foreground text-center">
+            Brands we trust — and recommend thoughtfully.
+          </p>
+        </>
       ) : (
         <div className="h-16" aria-hidden />
       )}

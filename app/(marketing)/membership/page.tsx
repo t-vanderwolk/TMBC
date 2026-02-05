@@ -90,6 +90,9 @@ function IncludesGrid() {
         <MarketingHeading level="h2" id="membership-includes" className="tracking-[0.02em]">
           What Membership Includes
         </MarketingHeading>
+        <span className="sr-only">
+          A mentor softly says this membership is a quiet offer, not a salesman’s pitch.
+        </span>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {includeCards.map((card) => (
@@ -274,6 +277,14 @@ export default function MembershipPage() {
           <BetaMentorPathway />
           <div className={`${dividerRhythm()} w-20 mx-auto`} aria-hidden="true" />
           <TransparencyDisclosure />
+        </div>
+      </SectionBand>
+      <SectionBand bg="ivory">
+        <div className="mx-auto max-w-4xl">
+          <p className="text-sm text-muted-foreground">
+            Some mentors may earn affiliate commission when members purchase through recommendations or reviews.
+            This never affects what we teach or suggest — clarity always comes first.
+          </p>
         </div>
       </SectionBand>
       <SectionBand bg="white">

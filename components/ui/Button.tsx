@@ -25,7 +25,7 @@ export default function Button({
   ...linkProps
 }: ButtonProps) {
   const classes = [
-    "inline-flex items-center justify-center rounded-full px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] transition",
+    "inline-flex items-center justify-center rounded-full min-h-[48px] px-6 py-3.5 text-[14px] font-semibold tracking-[0.3em] transition",
     VARIANTS[variant],
     className,
   ]

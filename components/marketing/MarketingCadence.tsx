@@ -22,7 +22,7 @@ export function bgClass(bg: Bg): string {
 }
 
 export function sectionWrap(bg: Bg): string {
-  return `${bgClass(bg)} py-20 md:py-24 lg:py-28`;
+  return `${bgClass(bg)} py-16 sm:py-20 md:py-24 lg:py-28`;
 }
 
 export function textCage(kind: "standard" | "intro" | "narrow" = "standard"): string {
@@ -33,7 +33,7 @@ export function textCage(kind: "standard" | "intro" | "narrow" = "standard"): st
 }
 
 export function cardBase(extra = ""): string {
-  return `marketing-card marketing-card-padding ${extra}`.trim();
+  return `marketing-card marketing-card-padding rounded-2xl touch-manipulation ${extra}`.trim();
 }
 
 export function dividerRhythm(extra = ""): string {
@@ -44,11 +44,12 @@ export function SectionBand(props: {
   bg: Bg;
   children: React.ReactNode;
   className?: string;
+  id?: string;
 }): JSX.Element {
-  const { bg, children, className } = props;
+  const { bg, children, className, id } = props;
   return (
-    <section className={`${sectionWrap(bg)} ${className ?? ""}`.trim()}>
-      <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">{children}</div>
+    <section id={id} className={`${sectionWrap(bg)} ${className ?? ""}`.trim()}>
+      <div className="mx-auto w-full max-w-7xl px-6 md:px-10 space-y-6 sm:space-y-8">{children}</div>
     </section>
   );
 }

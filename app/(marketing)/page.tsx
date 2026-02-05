@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
 import SectionDivider from "@/components/marketing/SectionDivider";
@@ -83,7 +84,12 @@ function PillarHighlightsSection() {
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {pillarHighlights.map((pillar) => (
-            <article key={pillar.title} className={cardBase("flex flex-col overflow-hidden")}>
+            <article
+              key={pillar.title}
+              className={cardBase(
+                "flex flex-col overflow-hidden transition-all duration-300 ease-out motion-safe:hover:-translate-y-[2px] motion-safe:hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)]"
+              )}
+            >
               <div className="relative h-48 w-full overflow-hidden">
                 <Image
                   src={pillar.image}
@@ -117,7 +123,7 @@ function WhyInviteOnlySection() {
   // - Soft opacity layer behind text for readability
   // - No CTAs or hero duplication
   return (
-    <section className="relative py-24">
+    <section className="relative mt-8 pt-10 pb-24 md:mt-20 md:pt-20 md:pb-24">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="hidden lg:block">
           <div
@@ -144,6 +150,9 @@ function WhyInviteOnlySection() {
                     <p>
                       We intentionally limit access so every member is thoughtfully matched, properly supported, and guided by a real mentor — not an algorithm.
                     </p>
+                    <span className="sr-only">
+                      A mentor gently notes, “You can slow down whenever you need to.”
+                    </span>
                   </div>
                   <div className="mt-4 text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
                     Mentors guard the pace
@@ -157,42 +166,47 @@ function WhyInviteOnlySection() {
           </div>
         </div>
         <div className="space-y-8 lg:hidden">
-          <div className="rounded-2xl bg-[var(--tmbc-ivory)]/80 p-10 text-left">
-            <MarketingHeading level="h2" className="font-serif text-3xl tracking-tight text-[var(--tmbc-text-primary)]">
-              Why Taylor-Made Is Invite-Only
-            </MarketingHeading>
-            <div className="text-[11px] tracking-[0.16em] uppercase text-muted-foreground mt-3">
-              WHY ACCESS IS CURATED
-            </div>
-            <div className="mt-6 space-y-4 text-[var(--tmbc-text-secondary)] leading-[1.7] max-w-[38ch]">
-              <p>Because support works best when it’s personal — not scaled, rushed, or automated.</p>
-              <p>
-                We intentionally limit access so every member is thoughtfully matched, properly supported, and guided by a real mentor — not an algorithm.
-              </p>
-            </div>
-            <div className="mt-8 text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
-              MENTORS GUARD THE PACE
-            </div>
-            <div className="mt-4 space-y-2 text-[var(--tmbc-text-secondary)] leading-[1.6]">
-              <p>Invite-only allows us to move at a human pace.</p>
-              <p>Fewer people. Better care.</p>
-              <p>Space for real questions — without pressure to keep up.</p>
-            </div>
-            <div className="mt-6 space-y-1 text-[var(--tmbc-text-secondary)] leading-[1.6]">
-              <p>No feeds.</p>
-              <p>No ranking.</p>
-              <p>No noise.</p>
-            </div>
-          </div>
-          <div className="-mt-4 overflow-hidden rounded-2xl">
-            <Image
-              src={inviteNarrativeBg}
-              alt="Ribbon and key illustration"
-              width={1200}
-              height={800}
-              className="h-full w-full object-cover"
-              priority
+          <div className="relative overflow-hidden rounded-2xl bg-[var(--tmbc-ivory)]/80 p-10 text-left">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[length:cover] bg-no-repeat"
+              style={{
+                backgroundImage: `url(${inviteNarrativeBg.src})`,
+                backgroundPosition: "65% center",
+              }}
             />
+            <div aria-hidden="true" className="absolute inset-0 bg-[var(--tmbc-ivory)]/70" />
+            <div className="relative z-10 space-y-6">
+              <div className="mb-3 text-[11px] tracking-[0.28em] uppercase text-muted-foreground md:hidden">
+                WHY ACCESS IS CURATED
+              </div>
+              <MarketingHeading level="h2" className="font-serif text-3xl tracking-tight text-[var(--tmbc-text-primary)]">
+                Why Taylor-Made Is Invite-Only
+              </MarketingHeading>
+              <div className="md:hidden my-4 h-px w-16 bg-[var(--tmbc-charcoal)]/20" />
+              <div className="mt-6 space-y-4 text-[var(--tmbc-text-secondary)] leading-[1.7] max-w-[38ch]">
+                <p>Because support works best when it’s personal — not scaled, rushed, or automated.</p>
+                <p>
+                  We intentionally limit access so every member is thoughtfully matched, properly supported, and guided by a real mentor — not an algorithm.
+                </p>
+                <span className="sr-only">
+                  A mentor whispers, “You are allowed to set the pace that feels right.”
+                </span>
+              </div>
+              <div className="mt-8 text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+                MENTORS GUARD THE PACE
+              </div>
+              <div className="mt-4 space-y-2 text-[var(--tmbc-text-secondary)] leading-[1.6]">
+                <p>Invite-only allows us to move at a human pace.</p>
+                <p>Fewer people. Better care.</p>
+                <p>Space for real questions — without pressure to keep up.</p>
+              </div>
+              <div className="mt-6 space-y-1 text-[var(--tmbc-text-secondary)] leading-[1.6]">
+                <p>No feeds.</p>
+                <p>No ranking.</p>
+                <p>No noise.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -255,19 +269,28 @@ function InviteFlowSection() {
 
 function TrustSection() {
   return (
-    <SectionBand bg="ivory" className="py-16 md:py-24 lg:py-28">
-      <div className="mx-auto max-w-[840px]">
-        <div className={cardBase("mx-auto max-w-[720px] w-full space-y-6 text-center md:text-left")}>
-          <p className="text-xs tracking-wide uppercase text-[var(--tmbc-mauve)]/80">How we keep care calm</p>
-          <MarketingHeading level="h2" className="tracking-[0.02em]">
-            You arrive when you’re ready; we keep the space gentle, patient, and always on your timeline.
-          </MarketingHeading>
-          <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80 leading-relaxed">
-            No hard launches, no rushed timelines—only thoughtful, mentor-led pacing so you feel supported while being invited to take the next calm step when the moment is right.
-          </p>
+    <section
+      aria-label="TMBC pacing philosophy"
+      className="bg-[#faf7f5] py-24 md:py-32"
+    >
+      <div className="mx-auto max-w-[680px] px-6 md:px-0 text-left space-y-6">
+        <div className="mb-6 text-[11px] tracking-[0.28em] uppercase text-muted-foreground">
+          How we keep care calm
         </div>
+        <h2 className="font-serif text-[32px] leading-[1.15] md:text-[40px] text-foreground">
+          You arrive when you’re ready;<br />
+          we keep the space gentle,<br />
+          patient, and always<br />
+          on your timeline.
+        </h2>
+        <div className="mt-8 mb-8 h-px w-16 bg-muted-foreground/30" />
+        <p className="text-[16px] leading-relaxed text-muted-foreground max-w-[56ch]">
+          No hard launches, no rushed timelines—only thoughtful,
+          mentor-led pacing so you feel supported while being
+          invited to take the next calm step when the moment is right.
+        </p>
       </div>
-    </SectionBand>
+    </section>
   );
 }
 
@@ -328,11 +351,24 @@ export default function HomePage() {
         headlineClassName="hero-line-clamp leading-snug"
         leadClassName="mt-6"
         ctaContainerClassName="mt-8 flex flex-col gap-6 sm:flex-row sm:gap-5"
+        primaryAction={
+          <Button href="/request-invite" variant="primary" className="px-8 py-3 uppercase tracking-[0.35em]">
+            Request an Invite
+          </Button>
+        }
+        secondaryAction={
+          <Link
+            href="/how-it-works"
+            className="text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] underline"
+          >
+            See how it works
+          </Link>
+        }
         heroImage={HERO_IMAGE_REGISTRY.heroMarketingSignature}
       />
       {/* FLOW RULE: Experience invitation imagery must stay above partner proof and below the hero. */}
       <InviteFlowSection />
-      <div className="my-20 md:my-24">
+      <div className="my-10 md:my-24">
         <SectionDivider />
       </div>
       <WhyInviteOnlySection />

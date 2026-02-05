@@ -66,28 +66,31 @@ export default function MarketingFooter() {
         </div>
       </div>
 
-      <div className="mt-10 border-t border-[var(--member-border-soft)] pt-6 text-[var(--member-text-secondary)]/60">
-        <p className="mb-2 text-[0.8rem] text-[var(--member-text-secondary)]/60">
-          Guidance, the way it should feel.
-        </p>
-        <p className="mb-2 text-[0.7rem] text-[var(--member-text-secondary)]/60">
-          We close each day with the quiet promise that thoughtful care stays calm, human, and still yours.
-        </p>
-        <p className="mb-4 text-[0.65rem] text-[var(--member-text-secondary)]/50">
-          The calm promise stays even when requests pause—care is patient practice, not a sprint.
-        </p>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <span>© {year} Taylor-Made Baby Co.</span>
-          <div className="flex flex-wrap gap-6 text-sm text-[var(--member-text-secondary)]/70">
-            <Link href="/privacy" className="transition hover:text-[var(--member-text-primary)]">
-              Privacy
-            </Link>
-            <Link href="/terms" className="transition hover:text-[var(--member-text-primary)]">
-              Terms
-            </Link>
+        <div className="mt-10 border-t border-[var(--member-border-soft)] pt-6 text-[var(--member-text-secondary)]/60">
+          <p className="mb-2 text-[0.8rem] text-[var(--member-text-secondary)]/60">
+            Guidance, the way it should feel.
+          </p>
+          <p className="mb-2 text-[0.7rem] text-[var(--member-text-secondary)]/60">
+            We close each day with the quiet promise that thoughtful care stays calm, human, and still yours.
+          </p>
+          <p className="mb-4 text-[0.65rem] text-[var(--member-text-secondary)]/50">
+            The calm promise stays even when requests pause—care is patient practice, not a sprint.
+          </p>
+          <p className="text-sm text-muted-foreground italic">
+            Built slowly. Chosen carefully. Passed forward.
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <span>© {year} Taylor-Made Baby Co.</span>
+            <div className="flex flex-wrap gap-6 text-sm text-[var(--member-text-secondary)]/70">
+              <Link href="/privacy" className="transition hover:text-[var(--member-text-primary)]">
+                Privacy
+              </Link>
+              <Link href="/terms" className="transition hover:text-[var(--member-text-primary)]">
+                Terms
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
     </footer>
   );
 }

@@ -117,7 +117,11 @@ const RequestInvitePage = () => {
               <span>Referral source</span>
               <input placeholder="Referral source" value={form.referral} onChange={updateField('referral')} />
             </label>
-            {error && <p className="text-sm text-red-600">{error}</p>}
+            {error && (
+              <p role="alert" aria-live="polite" className="mt-4 text-sm text-red-600">
+                {error}
+              </p>
+            )}
             <button type="submit" className="mkt-btn-primary uppercase tracking-[0.35em]" disabled={loading}>
               {loading ? 'Sending...' : 'Request an Invite'}
             </button>

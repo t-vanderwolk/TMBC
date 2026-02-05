@@ -9,6 +9,7 @@ import BlogContentRenderer, {
 import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
 import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
 import { MarketingHeading } from "@/components/marketing/Typography";
+import { TmbcSeal } from "@/components/marketing/TmbcSeal";
 
 // Marketing background cadence is intentional.
 // Do not reorder or recolor section backgrounds.
@@ -346,6 +347,9 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
           </div>
         </div>
       </SectionBand>
+      <div className="mt-24">
+        <TmbcSeal />
+      </div>
     </>
   );
 };

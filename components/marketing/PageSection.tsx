@@ -16,8 +16,8 @@ const toneMap: Record<Tone, string> = {
 
 export function PageSection({ children, tone = "white", className = "" }: PageSectionProps) {
   return (
-    <section className={`${toneMap[tone]} py-20 md:py-24 lg:py-28 ${className}`}>
-      <div className="mx-auto px-6 md:px-10">{children}</div>
+    <section className={`${toneMap[tone]} py-16 sm:py-20 md:py-24 lg:py-28 ${className}`}>
+      <div className="mx-auto w-full max-w-7xl px-6 md:px-10 space-y-6 sm:space-y-8">{children}</div>
     </section>
   );
 }

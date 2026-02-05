@@ -88,7 +88,7 @@ function FeaturedPost({ post }: { post: PublicBlogPost }) {
     <section className="space-y-6 lg:space-y-0">
       <div className="grid gap-8 lg:grid-cols-[1.05fr_1fr]">
         <div className="relative h-72 w-full overflow-hidden rounded-[28px] border border-[var(--tmbc-ivory)] bg-white/60">
-          {post.heroImage && (
+          {post.heroImage ? (
             <Image
               src={post.heroImage}
               alt={post.title}
@@ -96,6 +96,8 @@ function FeaturedPost({ post }: { post: PublicBlogPost }) {
               sizes="(min-width: 1024px) 520px, 100vw"
               className="object-cover"
             />
+          ) : (
+            <div aria-hidden className="absolute inset-0 bg-[var(--tmbc-ivory)]" />
           )}
         </div>
         <div className="space-y-5">
@@ -121,16 +123,16 @@ function FeaturedPost({ post }: { post: PublicBlogPost }) {
 function CategoryFilter() {
   return (
     <div className="flex flex-wrap gap-4 border-y border-[var(--tmbc-ivory)]/80 py-6 text-sm uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)]/70">
-      {categories.map((category) => (
-        <button
-          key={category}
-          type="button"
-          className="transition hover:text-[var(--tmbc-charcoal)]"
-          aria-pressed={category === "All"}
-        >
-          {category}
-        </button>
-      ))}
+      <div className="flex flex-wrap gap-2">
+        {categories.map((category) => (
+          <span
+            key={category}
+            className="rounded-full bg-[var(--tmbc-ivory)]/75 px-3 py-1 text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70"
+          >
+            {category}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
@@ -149,7 +151,7 @@ function PostGrid({ posts }: { posts: PublicBlogPost[] }) {
       {posts.map((post) => (
         <article key={post.slug} className={cardBase("flex flex-col gap-5")}>
           <div className="relative h-48 w-full overflow-hidden rounded-[20px] bg-[var(--tmbc-ivory)]">
-            {post.heroImage && (
+            {post.heroImage ? (
               <Image
                 src={post.heroImage}
                 alt={post.title}
@@ -157,6 +159,8 @@ function PostGrid({ posts }: { posts: PublicBlogPost[] }) {
                 sizes="(min-width: 1024px) 480px, 100vw"
                 className="object-cover"
               />
+            ) : (
+              <div aria-hidden className="absolute inset-0 bg-[var(--tmbc-ivory)]" />
             )}
           </div>
           <div className="space-y-3">
@@ -193,19 +197,6 @@ function BlogCallout() {
           Learn about Membership
         </Link>
       </div>
-    </div>
-  );
-}
-
-function Pagination() {
-  return (
-    <div className="mt-12 flex justify-center">
-      <Link
-        href="/blog?page=2"
-        className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] transition hover:text-[var(--tmbc-mauve)]"
-      >
-        Load more
-      </Link>
     </div>
   );
 }
@@ -253,6 +244,11 @@ export default async function BlogMarketingPage() {
         <SectionBand bg="white">
           <EvergreenPreviewCard />
         </SectionBand>
+        <SectionBand bg="ivory">
+          <div className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">
+            New conversations arrive modestly—check back soon.
+          </div>
+        </SectionBand>
       </>
     );
   }
@@ -277,7 +273,6 @@ export default async function BlogMarketingPage() {
       <SectionBand bg="blush">
         <div className="space-y-8">
           <BlogCallout />
-          <Pagination />
         </div>
       </SectionBand>
     </>

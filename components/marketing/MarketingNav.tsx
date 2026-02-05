@@ -59,7 +59,7 @@ export default function MarketingNav() {
           aria-expanded={mobileOpen}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           onClick={toggleMobile}
-          className="lg:hidden inline-flex h-10 w-10 flex-col items-center justify-center gap-1 rounded-full border border-[var(--tmbc-charcoal)]/30 transition hover:border-[var(--tmbc-charcoal)]/60"
+          className="lg:hidden inline-flex h-12 w-12 min-h-[48px] flex-col items-center justify-center gap-1 rounded-full border border-[var(--tmbc-charcoal)]/30 transition hover:border-[var(--tmbc-charcoal)]/60"
         >
           <span className="sr-only">{mobileOpen ? "Close menu" : "Open menu"}</span>
           <span
@@ -102,7 +102,7 @@ export default function MarketingNav() {
               <button
                 type="button"
                 onClick={closeMobile}
-                className="text-[12px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70 transition hover:text-[var(--tmbc-charcoal)]"
+                className="min-h-[48px] inline-flex items-center justify-center px-3 text-[12px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70 transition hover:text-[var(--tmbc-charcoal)]"
               >
                 Close
               </button>

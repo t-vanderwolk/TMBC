@@ -74,7 +74,7 @@ export default function InviteCodeEntry({ className = "", rowClassName = "" }: I
         />
         <button
           type="submit"
-          className="h-12 rounded-full px-6 text-sm font-semibold border border-neutral-300 bg-white/60 hover:bg-white/80 transition"
+          className="min-h-[48px] h-12 rounded-full px-6 text-sm font-semibold border border-neutral-300 bg-white/60 hover:bg-white/80 transition"
           disabled={submitting}
         >
           {submitting ? "Checking..." : "Unlock"}

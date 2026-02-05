@@ -216,7 +216,7 @@ export default function ExperiencePage() {
                   </p>
                 </div>
                 <div className={`flex justify-center ${textFirst ? "" : "lg:order-first"}`}>
-                  <div className="relative w-full max-w-[420px] overflow-hidden rounded-[32px] border border-[rgba(0,0,0,0.04)] bg-white shadow-[0_20px_35px_rgba(0,0,0,0.08)]">
+                  <div className="relative w-full max-w-[420px] overflow-hidden rounded-[32px] border border-[rgba(0,0,0,0.04)] bg-white shadow-[0_20px_35px_rgba(0,0,0,0.08)] transition-all duration-300 ease-out motion-safe:hover:-translate-y-[2px] motion-safe:hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)]">
                     <div className="relative aspect-[4/3] w-full">
                       <Image
                         src={pillar.image.src}
@@ -264,6 +264,9 @@ export default function ExperiencePage() {
                   {paragraph}
                 </p>
               ))}
+              <span className="sr-only">
+                A mentor quietly notes that every tiny step toward calm matters.
+              </span>
             </div>
             <ul className={`${textCage("standard")} space-y-2 text-[14px] leading-[1.6] text-[var(--tmbc-charcoal)]`}>
               {lifeBullets.map((bullet) => (

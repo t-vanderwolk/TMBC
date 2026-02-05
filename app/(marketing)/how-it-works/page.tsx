@@ -131,7 +131,7 @@ export default function HowItWorksPage() {
         </div>
       </SectionBand>
 
-      <SectionBand bg="ivory">
+      <SectionBand bg="ivory" id="process">
         <div className="space-y-10">
           <div className="flex items-center gap-3">
             <span className="h-px flex-1 bg-[var(--tmbc-charcoal)]/10" aria-hidden="true" />

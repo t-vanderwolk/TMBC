@@ -77,7 +77,7 @@ export default function InviteSection() {
         />
         <button
           type="submit"
-          className="marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] w-full md:w-auto"
+          className="min-h-[48px] marketing-btn marketing-btn-secondary uppercase tracking-[0.35em] w-full md:w-auto"
           disabled={inviteSubmitting}
         >
           {inviteSubmitting ? "Checking..." : "Submit code"}

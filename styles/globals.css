@@ -246,12 +246,19 @@
 
   .marketing-heading-h2 {
     font-family: var(--font-playfair), serif;
-    font-size: 1.875rem;
-    line-height: 1.2;
+    font-size: 1.5rem;
+    line-height: 1.25;
     letter-spacing: 0.01em;
     margin: 5rem 0 1.5rem 0;
     max-width: 14ch;
     color: var(--tmbc-text-primary);
+  }
+
+  @media (min-width: 640px) {
+    .marketing-heading-h2 {
+      font-size: 1.875rem;
+      line-height: 1.25;
+    }
   }
 
   @media (min-width: 768px) {
@@ -285,10 +292,16 @@
   .marketing-body-copy {
     font-family: var(--font-nunito), "Nunito", sans-serif;
     font-size: 1rem;
-    line-height: 1.7;
+    line-height: 1.75;
     color: var(--tmbc-text-primary);
     margin: 0 0 1rem 0;
     max-width: 65ch;
+  }
+
+  @media (min-width: 640px) {
+    .marketing-body-copy {
+      line-height: 1.625;
+    }
   }
 
   @media (min-width: 768px) {
@@ -647,9 +660,9 @@
 }
 
 .marketing-body a {
+  @apply inline-block py-2 -my-2;
   transition: opacity 0.4s ease;
 }
-
 .marketing-body a:hover {
   opacity: 0.8;
 }
@@ -754,30 +767,33 @@
 
   .marketing-card {
     background-color: #ffffff;
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    touch-action: manipulation;
   }
 
   .marketing-card-padding {
-    padding: 2rem;
+    @apply p-6;
   }
 
-  @media (min-width: 768px) {
+  @screen sm {
     .marketing-card-padding {
-      padding: 2.5rem;
+      @apply p-8;
     }
   }
 
   .marketing-panel {
     background-color: #ffffff;
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    touch-action: manipulation;
   }
 
   .marketing-proof {
     background-color: #ffffff;
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+    touch-action: manipulation;
   }
 
   .mkt-btn-secondary {
@@ -873,5 +889,9 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-pillarFloat {
     animation: none !important;
+  }
+  * {
+    animation: none !important;
+    transition: none !important;
   }
 }

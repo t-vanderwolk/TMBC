@@ -19,7 +19,7 @@ export default function BlogPrintButton({ slug }: BlogPrintButtonProps) {
     <button
       type="button"
       onClick={handleDownloadPdf}
-      className="tm-print-hide inline-flex items-center gap-2 rounded-full border border-tmMauve/50 bg-white px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-tmCharcoal transition hover:border-tmDeepMauve hover:text-tmDeepMauve"
+      className="tm-print-hide inline-flex items-center gap-2 rounded-full border border-tmMauve/50 bg-white px-4 py-2 min-h-[48px] text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-tmCharcoal transition hover:border-tmDeepMauve hover:text-tmDeepMauve"
       aria-label="Download this blog post as a PDF"
     >
       <span>Download as PDF</span>

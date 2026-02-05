@@ -1,61 +1,29 @@
 // JournalSpotlight guardrails:
-// - This section intentionally features a curated evergreen post
-// - Do NOT auto-swap to latest content
-// - Homepage spotlight is editorial, not chronological
-
+// - This section intentionally references a curated evergreen post
+// - Headline copy should stay intentional and unchanged
 import Link from "next/link";
 
 export function JournalSpotlight() {
   return (
-    <section className="py-20 md:py-24 lg:py-28 bg-white">
-      <div className="mx-auto max-w-3xl px-6 md:px-10 text-left">
-        <p className="mb-3 text-xs uppercase tracking-[0.18em] text-muted-foreground">
-          From the Journal
-        </p>
-
-        <h2 className="text-3xl md:text-4xl leading-tight">
+    <section className="bg-[#faf2f5] py-24 md:py-32">
+      <div className="mx-auto max-w-[680px] px-6 md:px-0 text-left space-y-6">
+        <div className="mb-6 text-[11px] tracking-[0.28em] uppercase text-muted-foreground">
+          From the journal
+        </div>
+        <h2 className="font-serif text-[34px] leading-tight text-foreground md:text-[40px] mb-4">
           The Art of the Registry
         </h2>
-
-        <p className="mt-3 text-lg text-muted-foreground max-w-[46ch]">
-          How to prepare for baby without overbuying — or losing your mind in aisle seven.
+        <p className="text-[16px] md:text-[17px] leading-relaxed text-muted-foreground max-w-[60ch] mb-10">
+          How to prepare for baby without overbuying — and without
+          losing yourself in the process.
         </p>
-
-        <p className="mt-6 text-base leading-relaxed text-muted-foreground max-w-[52ch]">
-          There’s a quiet skill to preparing for a baby that no one really teaches you.
-          Knowing what you actually need. What can wait. And what looks helpful but never leaves the box.
-        </p>
-
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground max-w-[52ch]">
-          Inside our Journal, we walk through the art of building a registry with intention —
-          learning what products do, planning alongside a trusted mentor, connecting with other parents
-          asking the same questions, and reflecting as you go so the whole experience becomes something
-          worth keeping.
-        </p>
-
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground max-w-[52ch]">
-          This is baby prep without the panic scrolling. And without buying everything.
-        </p>
-
-        <div className="mt-8 flex flex-col gap-4">
-          <Link
-            href="/blog/the-art-of-the-registry"
-            className="inline-flex w-fit items-center justify-center rounded-full bg-mauve px-6 py-3 text-white transition hover:opacity-90"
-          >
-            Read the journal
-          </Link>
-
-          <Link
-            href="/experience"
-            className="inline-flex w-fit items-center text-sm underline underline-offset-4 text-muted-foreground hover:text-foreground"
-          >
-            Explore the Taylor-Made experience →
-          </Link>
-        </div>
-
-        <p className="mt-8 text-sm text-muted-foreground italic">
-          Written by mentors who’ve been exactly where you are.
-        </p>
+        <Link
+          href="/blog/the-art-of-the-registry"
+          className="inline-flex items-center gap-2 text-[13px] uppercase tracking-widest text-foreground hover:opacity-70 transition"
+        >
+          <span>Read the journal</span>
+          <span aria-hidden>→</span>
+        </Link>
       </div>
     </section>
   );

@@ -8,6 +8,12 @@ import { type ReactNode } from "react";
 import MarketingNav from "@/components/marketing/MarketingNav";
 import MarketingFooter from "@/components/marketing/MarketingFooter";
 
+// Mobile rhythm guardrails:
+// - ≥16px vertical spacing between text blocks
+// - ≥48px tap targets for CTAs
+// - No stacked CTAs without spacing
+// - Calm > density
+
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
     <div className="marketing-glow relative min-h-screen overflow-hidden bg-[var(--member-bg-page)] text-[var(--member-text-primary)]">
