@@ -7,8 +7,9 @@ import SectionDivider from "@/components/marketing/SectionDivider";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import Button from "@/components/ui/Button";
 import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
-import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
+import { SectionBand, cardBase } from "@/components/marketing/MarketingCadence";
 import { JournalSpotlight } from "@/components/marketing/JournalSpotlight";
+import PillarHighlightsSection from "@/components/marketing/PillarHighlightsSection";
 
 // Marketing visual guardrails:
 // - All cards/panels use canonical marketing-card / marketing-panel styles
@@ -18,16 +19,30 @@ import { JournalSpotlight } from "@/components/marketing/JournalSpotlight";
 // Marketing background cadence is intentional.
 // Do not reorder or recolor section backgrounds.
 // Pattern: white → ivory → white → blush
-import learnPillar from "@/assets/images/learnpillar.png";
-import planPillar from "@/assets/images/planpillar.png";
-import connectPillar from "@/assets/images/connectpillar.png";
-import reflectPillar from "@/assets/images/reflectpillar.png";
 import inviteNarrativeBg from "@/assets/images/inviteonlynarritive.png";
-import { ILLUSTRATIONS } from "@/lib/images";
 import requestInviteIcon from "@/assets/logos/requestinviteicon.png";
 import conciergeIntakeIcon from "@/assets/logos/conciergeintakelogo.png";
 import matchIcon from "@/assets/logos/matchicon.png";
 import startExperienceIcon from "@/assets/logos/startexperienceicon.png";
+import expertIcon from "@/assets/logos/experticon.png";
+import partnerIcon from "@/assets/logos/partnericon.png";
+import mentorLedIcon from "@/assets/logos/mentorledicon.png";
+import personallyMatchedIcon from "@/assets/logos/personallymatachedicon.png";
+import silverCrossLogo from "@/assets/logos/silver-cross-logo-1.webp";
+import albeeLogo from "@/assets/logos/albeebabylogo2.png";
+import macroBabyLogo from "@/assets/logos/macrologo.png";
+import babyQuipLogo from "@/assets/logos/baby-quip-logo.png";
+import dadadadaLogo from "@/assets/logos/dadadadalogo.png";
+import ergoBabyLogo from "@/assets/logos/ergobabylogo.png";
+import earthMamaLogo from "@/assets/logos/earthmama.png";
+import happiestBabyLogo from "@/assets/logos/happiestbaby-logo.png";
+import inglesinaLogo from "@/assets/logos/inglesinalogo.png";
+import kyteBabyLogo from "@/assets/logos/kytebaby-logo.png";
+import momCozyLogo from "@/assets/logos/momcozy.png";
+import newtonBabyLogo from "@/assets/logos/newtonbaby-logo.png";
+import owletLogo from "@/assets/logos/owlet-logo.png";
+import tommeeTippeeLogo from "@/assets/logos/tommee-tippee-logo.png";
+import waybLogo from "@/assets/logos/wayblogo.png";
 
 /**
  * TMBC Homepage Background Rules:
@@ -46,83 +61,172 @@ import startExperienceIcon from "@/assets/logos/startexperienceicon.png";
 // - Learn → Plan → Connect → Reflect always in this order
 // - Reflect = virtual baby book / keepsake (not journaling fluff)
 // - Calm, mentor-led, non-salesy tone
-const pillarHighlights = [
+const experienceHighlights = [
   {
-    title: "Learn",
-    headline: "Insightful lessons steer you toward choices that feel steady and thoughtful.",
-    copy:
-      "Understand what you’re being told to buy — and why.\n\nLearn what baby gear actually does, when it’s typically used, and what truly matters for your life.\nNo pressure. No brand bias. Just calm, clear explanations so you can make confident choices.",
-    image: learnPillar,
-    alt: "Illustrated open book with soft colors representing careful learning",
+    icon: expertIcon,
+    label: "Expert care",
   },
   {
-    title: "Plan",
-    headline: "Deliberate planning gives you a registry that matches your life.",
-    copy:
-      "Build your registry with intention — not panic.\n\nPlan as you learn, alongside a trusted mentor who’s been exactly where you are.\nDecide what you need now, what can wait, what to skip entirely — and what actually fits your home, lifestyle, and values.",
-    image: planPillar,
-    alt: "Notebook and ribbon representing deliberate planning",
+    icon: personallyMatchedIcon,
+    label: "Personally matched",
   },
   {
-    title: "Connect",
-    headline: "Connection happens slowly, gently, without comparison.",
-    copy:
-      "You’re not the only one asking these questions.\n\nConnect with other parents in the same season and mentors who guide the conversation.\nShare questions, trade perspective, and get clarity — without the chaos of crowdsourced advice.",
-    image: connectPillar,
-    alt: "Soft conversation bubbles illustrating intentional connection",
+    icon: partnerIcon,
+    label: "Partner support",
   },
   {
-    title: "Reflect",
-    headline: "Reflection keeps your season tangible and meaningful.",
-    copy:
-      "Turn this season into a keepsake you’ll treasure later.\n\nReflect as you prepare and create a virtual baby book along the way.\nCapture what you learned, the choices you made, and how you felt — so one day, you can look back on this season with clarity and care.",
-    image: reflectPillar,
-    alt: "Ribboned journal symbolizing reflection and keepsakes",
+    icon: mentorLedIcon,
+    label: "Mentor-led guidance",
   },
 ];
 
+const partnerLogos = [
+  { id: "silver-cross", name: "silver-cross", src: silverCrossLogo, alt: "Silver Cross" },
+  { id: "albee", name: "albee", src: albeeLogo, alt: "Albee" },
+  { id: "macro-baby", name: "macro-baby", src: macroBabyLogo, alt: "MacroBaby" },
+  { id: "baby-quip", name: "baby-quip", src: babyQuipLogo, alt: "Baby Quip" },
+  { id: "dadadada", name: "dadadada", src: dadadadaLogo, alt: "Dadadada" },
+  { id: "ergobaby", name: "ergobaby", src: ergoBabyLogo, alt: "Ergobaby" },
+  { id: "earth-mama", name: "earth-mama", src: earthMamaLogo, alt: "Earth Mama" },
+  { id: "happiest-baby", name: "happiest-baby", src: happiestBabyLogo, alt: "Happiest Baby" },
+  { id: "inglesina", name: "inglesina", src: inglesinaLogo, alt: "Inglesina" },
+  { id: "kyte-baby", name: "kyte-baby", src: kyteBabyLogo, alt: "Kyte Baby" },
+  { id: "momcozy", name: "momcozy", src: momCozyLogo, alt: "MomCozy" },
+  { id: "newton-baby", name: "newton-baby", src: newtonBabyLogo, alt: "Newton Baby" },
+  { id: "owlet", name: "owlet", src: owletLogo, alt: "Owlet" },
+  { id: "tommee-tippee", name: "tommee-tippee", src: tommeeTippeeLogo, alt: "Tommee Tippee" },
+  { id: "wayb", name: "wayb", src: waybLogo, alt: "Wayb" },
+];
 
-function PillarHighlightsSection() {
-
+function ExperienceIllustrationSection() {
   return (
-    <SectionBand bg="white" className="py-16 md:py-24 lg:py-28">
-      <div className="space-y-10">
-        <div className="max-w-full md:max-w-[720px] leading-relaxed space-y-3">
-          <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">Pillars that shape the experience</p>
-          <MarketingHeading level="h2" className="tracking-[0.02em]">
-            Learn · Plan · Connect · Reflect—
-          </MarketingHeading>
-        </div>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-          {pillarHighlights.map((pillar) => (
-            <article
-              key={pillar.title}
-              className={cardBase(
-                "flex flex-col overflow-hidden transition-all duration-300 ease-out motion-safe:hover:-translate-y-[2px] motion-safe:hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)]"
-              )}
-            >
-              <div className="relative h-48 w-full overflow-hidden">
-                <Image
-                  src={pillar.image}
-                  alt={pillar.alt}
-                  fill
-                  sizes="(min-width: 1024px) 25vw, 90vw"
-                  className="object-cover scale-110"
-                  priority={pillar.title === "Learn"}
-                />
-              </div>
-              <div className="space-y-3 px-6 py-6 text-[var(--tmbc-charcoal)]">
-                <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">{pillar.title}</p>
-                <MarketingHeading level="h3">{pillar.headline}</MarketingHeading>
-                <p className="text-sm leading-[1.6] text-[var(--tmbc-charcoal)] text-opacity-80 max-w-[280px] mx-auto">
-                  {pillar.copy}
-                </p>
-              </div>
-            </article>
-          ))}
+    <SectionBand bg="white" className="py-16 md:py-20 lg:py-24">
+      <div className="mx-auto max-w-5xl px-6">
+        <p className="mb-3 text-xs uppercase tracking-[0.22em] text-neutral-500">
+          WHY PARENTS LOVE TMBC
+        </p>
+        <h2 className="text-center font-serif text-4xl mb-6 max-w-4xl mx-auto text-[var(--tmbc-charcoal)]">
+          What makes the Taylor-Made experience different
+        </h2>
+        <div className="rounded-[36px] bg-gradient-to-br from-[var(--tmbc-ivory)] via-[var(--tmbc-blush-soft)] to-[var(--tmbc-blush-soft)] px-6 py-12 md:py-16">
+          <div className="flex flex-col items-center gap-6 text-center md:flex-row md:gap-0 md:text-center">
+            {experienceHighlights.map((highlight, index) => (
+              <Fragment key={highlight.label}>
+                <div className="flex flex-col items-center gap-1 px-3 md:flex-1">
+                  <div className="flex items-end justify-center h-[76px] md:h-[88px] lg:scale-[0.92] lg:[transform-origin:center_bottom]">
+                    <Image
+                      src={highlight.icon}
+                      alt={highlight.label}
+                      width={64}
+                      height={64}
+                      priority
+                      unoptimized
+                      style={{ width: "auto", height: "auto" }}
+                      className="mx-auto h-auto max-w-[58px] md:max-w-[68px] lg:max-w-[78px] object-contain opacity-95 pointer-events-none"
+                    />
+                  </div>
+                  <p className="font-serif italic text-[0.85rem] leading-[1.5] tracking-[0.04em] text-[var(--tmbc-charcoal)]/90">
+                    {highlight.label}
+                  </p>
+                </div>
+                {index < experienceHighlights.length - 1 && (
+                  <div className="hidden md:flex md:items-center md:px-4">
+                    <span className="text-[28px] leading-none text-[var(--tmbc-charcoal)]/30" aria-hidden="true">
+                      →
+                    </span>
+                  </div>
+                )}
+              </Fragment>
+            ))}
+          </div>
         </div>
       </div>
     </SectionBand>
+  );
+}
+
+function InviteFlowSection() {
+  const inviteSteps = [
+    {
+      icon: requestInviteIcon,
+      alt: "Request an invite",
+      label: "Request Invite",
+    },
+    {
+      icon: conciergeIntakeIcon,
+      alt: "Concierge intake",
+      label: "Concierge Intake",
+    },
+    {
+      icon: matchIcon,
+      alt: "Mentor match",
+      label: "Match",
+    },
+    {
+      icon: startExperienceIcon,
+      alt: "Start experience",
+      label: "Start Experience",
+    },
+  ];
+
+  const iconWidthClass = (label: string) => {
+    switch (label) {
+      case "Request Invite":
+        return "max-w-[58px] md:max-w-[66px]";
+      case "Match":
+        return "max-w-[64px] md:max-w-[74px]";
+      case "Start Experience":
+        return "max-w-[56px] md:max-w-[66px]";
+      default:
+        return "max-w-[58px] md:max-w-[68px]";
+    }
+  };
+
+  return (
+    <section className="relative py-20">
+      <div className="mx-auto max-w-6xl px-5">
+        <h2 className="mb-12 text-center text-3xl md:text-4xl font-serif">
+          How the Taylor-Made experience begins
+        </h2>
+        <div className="rounded-[36px] bg-gradient-to-br from-[var(--tmbc-ivory)] via-[var(--tmbc-blush-soft)] to-[var(--tmbc-blush-soft)] px-6 py-12">
+          <div className="flex flex-col items-center gap-6 text-center md:flex-row md:items-center md:gap-0 md:text-center">
+            {inviteSteps.map((step, index) => (
+              <Fragment key={step.label}>
+                <div className="flex flex-col items-center gap-1 px-3 md:flex-1">
+                  <div className="flex items-end justify-center h-[76px] md:h-[88px] lg:scale-[0.92] lg:[transform-origin:center_bottom]">
+                    <Image
+                      src={step.icon}
+                      alt={step.alt}
+                      width={64}
+                      height={64}
+                      priority
+                      unoptimized
+                      style={{ width: "auto", height: "auto" }}
+                      className={`mx-auto h-auto object-contain opacity-90 pointer-events-none ${iconWidthClass(
+                        step.label
+                      )}`}
+                    />
+                  </div>
+                  <p className="font-serif italic text-[0.85rem] leading-[1.5] tracking-[0.04em] text-[var(--tmbc-charcoal)]/90">
+                    {step.label}
+                  </p>
+                </div>
+                {index < inviteSteps.length - 1 && (
+                  <div className="hidden md:flex md:items-center md:px-4">
+                    <span
+                      className="text-[28px] leading-none text-[var(--tmbc-charcoal)]/30"
+                      aria-hidden="true"
+                    >
+                      →
+                    </span>
+                  </div>
+                )}
+              </Fragment>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -225,150 +329,34 @@ function WhyInviteOnlySection() {
   );
 }
 
-function ExperienceIllustrationSection() {
-  return (
-    <SectionBand bg="white" className="relative py-16 md:py-24 lg:py-28">
-      <div className="relative w-full max-w-5xl mx-auto">
-        <div className="absolute inset-0 pointer-events-none rounded-[46px] bg-[var(--tmbc-ivory)]/20" aria-hidden="true" />
-        <Image
-          src={ILLUSTRATIONS.EXPERIENCE}
-          alt="Taylor-Made Baby Co. experience flow"
-          width={ILLUSTRATIONS.EXPERIENCE.width}
-          height={ILLUSTRATIONS.EXPERIENCE.height}
-          className="relative z-10 mx-auto h-auto w-full rounded-[42px] object-cover"
-          priority
-        />
-      </div>
-    </SectionBand>
-  );
-}
-
-function InviteFlowSection() {
-  const inviteSteps = [
-    {
-      icon: requestInviteIcon,
-      alt: "Request an invite",
-      label: "Request Invite",
-    },
-    {
-      icon: conciergeIntakeIcon,
-      alt: "Concierge intake",
-      label: "Concierge Intake",
-    },
-    {
-      icon: matchIcon,
-      alt: "Mentor match",
-      label: "Match",
-    },
-    {
-      icon: startExperienceIcon,
-      alt: "Start experience",
-      label: "Start Experience",
-    },
+function TrustSection() {
+  const promiseLines = [
+    "We believe baby prep should feel calm, supported, and intentional — not rushed or overwhelming.",
+    "Understand first — before you buy anything.",
+    "Decide intentionally, with guidance from someone who’s been there.",
+    "Stay connected with parents who are right where you are.",
+    "And turn the process into something worth keeping.",
+    "That’s the Taylor-Made promise.",
   ];
 
-  const iconWidthClass = (label: string) => {
-    switch (label) {
-      case "Request Invite":
-        return "w-[54px] md:w-[66px]";
-      case "Match":
-        return "w-[64px] md:w-[74px]";
-      case "Start Experience":
-        return "w-[44px] md:w-[56px]";
-      default:
-        return "w-12 md:w-16";
-    }
-  };
-
-  return (
-    <section className="relative py-20">
-      <div className="mx-auto max-w-6xl px-5">
-        <div className="rounded-[36px] bg-gradient-to-br from-[var(--tmbc-ivory)] via-[var(--tmbc-blush-soft)] to-[var(--tmbc-blush-soft)] px-6 py-12">
-          <div className="flex flex-col items-center gap-6 text-center md:flex-row md:items-center md:gap-0 md:text-center">
-            {inviteSteps.map((step, index) => (
-              <Fragment key={step.label}>
-                <div className="flex flex-col items-center gap-1 px-3 md:flex-1">
-                  <div className="flex items-end justify-center h-[76px] md:h-[88px] lg:scale-[0.92] lg:[transform-origin:center_bottom]">
-                    <Image
-                      src={step.icon}
-                      alt={step.alt}
-                      width={64}
-                      height={64}
-                      priority
-                      unoptimized
-                      style={{ height: "auto" }}
-                      className={`mx-auto h-auto object-contain ${iconWidthClass(
-                        step.label
-                      )}`}
-                    />
-                  </div>
-                  <p className="font-serif italic text-[0.85rem] leading-[1.5] tracking-[0.04em] text-[var(--tmbc-charcoal)]/90">
-                    {step.label}
-                  </p>
-                </div>
-                {index < inviteSteps.length - 1 && (
-                  <div className="hidden md:flex md:items-center md:px-4">
-                    <span
-                      className="h-2 w-2 rounded-full bg-[var(--tmbc-charcoal)]/15"
-                      aria-hidden="true"
-                    />
-                  </div>
-                )}
-              </Fragment>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function TrustSection() {
   return (
     <section
       aria-label="TMBC pacing philosophy"
       className="bg-[#faf7f5] py-24 md:py-32"
     >
       <div className="mx-auto max-w-[680px] px-6 md:px-0 text-left space-y-6">
-        <div className="mb-6 text-[11px] tracking-[0.28em] uppercase text-muted-foreground">
-          How we keep care calm
-        </div>
         <h2 className="font-serif text-[32px] leading-[1.15] md:text-[40px] text-foreground">
-          You arrive when you’re ready;<br />
-          we keep the space gentle,<br />
-          patient, and always<br />
-          on your timeline.
+          The Taylor-Made Promise
         </h2>
-        <div className="mt-8 mb-8 h-px w-16 bg-muted-foreground/30" />
-        <p className="text-[16px] leading-relaxed text-muted-foreground max-w-[56ch]">
-          No hard launches, no rushed timelines—only thoughtful,
-          mentor-led pacing so you feel supported while being
-          invited to take the next calm step when the moment is right.
-        </p>
+        <div className="space-y-3 text-[16px] leading-relaxed text-muted-foreground max-w-[46ch]">
+          {promiseLines.map((line) => (
+            <span key={line} className="block">
+              {line}
+            </span>
+          ))}
+        </div>
       </div>
     </section>
-  );
-}
-
-function FinalCTA() {
-  return (
-      <div className="flex justify-center">
-        <div className={`${cardBase("max-w-[720px] text-left")} mx-auto`}>
-        <div className="space-y-8 text-left">
-          <MarketingHeading level="h2" className="tracking-[0.35em] max-w-[640px]">
-            Ready when you are—no rush, just thoughtful care.
-          </MarketingHeading>
-          <div className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-center sm:gap-5">
-            <Button href="/request-invite" variant="primary" className="px-8 py-3">
-              Request an Invite
-            </Button>
-            <p className="text-sm tracking-[0.25em] text-[var(--tmbc-charcoal)]/60">
-              We’ll keep the conversation calm while you decide the next gentle step.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -465,19 +453,20 @@ export default function HomePage() {
       <WhyInviteOnlySection />
       <PillarHighlightsSection />
       <TrustSection />
-      <div className="mb-8 md:mb-20">
-        <JournalSpotlight />
-      </div>
-      <ExperienceIllustrationSection />
       <div className="my-20 md:my-24">
         <SectionDivider />
       </div>
       <SectionBand bg="white" className="border-t border-black/5 py-20 md:py-24">
-        <PartnerLogoCarousel />
+        <PartnerLogoCarousel logos={partnerLogos} />
+        <div className="mx-auto mt-6 md:mt-8 flex max-w-6xl px-6">
+          <p className="text-xs md:text-sm text-muted-foreground max-w-3xl text-left">
+            Some of the brands featured here are affiliate partners. That simply means we may earn a small commission if you choose to purchase through links we recommend — at no additional cost to you. We only partner with brands our mentors trust and would suggest regardless of affiliation.
+          </p>
+        </div>
       </SectionBand>
-      <SectionBand bg="ivory" className="py-24 md:py-28">
-        <FinalCTA />
-      </SectionBand>
+      <div className="mx-auto mt-10 max-w-6xl px-6">
+        <JournalSpotlight />
+      </div>
     </div>
   );
 }

@@ -5,26 +5,26 @@ import Link from "next/link";
 
 export function JournalSpotlight() {
   return (
-    <section className="bg-[var(--tmbc-blush)] rounded-3xl px-6 py-10 md:px-12 md:py-16">
-      <div className="mx-auto max-w-[680px] text-left space-y-6">
-        <div className="mb-6 text-[11px] tracking-[0.28em] uppercase text-muted-foreground">
-          From the journal
-        </div>
-        <h2 className="font-serif text-[34px] leading-tight text-foreground md:text-[40px] mb-4">
-          The Art of the Registry
-        </h2>
-        <p className="text-[16px] md:text-[17px] leading-relaxed text-muted-foreground max-w-[60ch] mb-10">
-          How to prepare for baby without overbuying — and without
-          losing yourself in the process.
-        </p>
-        <Link
-          href="/blog/the-art-of-the-registry"
-          className="inline-flex items-center gap-2 text-[13px] uppercase tracking-widest text-foreground hover:opacity-70 transition"
-        >
-          <span>Read the journal</span>
-          <span aria-hidden>→</span>
-        </Link>
+    <div className="space-y-6 text-left">
+      <div className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground">
+        FROM OUR JOURNAL
       </div>
-    </section>
+      <h3 className="font-serif text-[34px] leading-[1.1] text-[var(--tmbc-charcoal)]">
+        The Art of the Registry
+      </h3>
+      <div className="space-y-2 text-[16px] leading-relaxed text-muted-foreground">
+        <p>A closer look at how calm, intentional baby prep actually unfolds.</p>
+        <p>What different gear really does.</p>
+        <p>How to decide what matters.</p>
+        <p>And how to prepare without overbuying or losing yourself in the process.</p>
+      </div>
+      <Link
+        href="/blog/the-art-of-the-registry"
+        className="inline-flex items-center gap-2 rounded-full bg-[var(--tmbc-blush-soft)]/60 px-6 py-3 text-[13px] uppercase tracking-widest text-[var(--tmbc-charcoal)] transition hover:bg-[var(--tmbc-blush-soft)]/80"
+      >
+        <span>Read full article</span>
+        <span aria-hidden>→</span>
+      </Link>
+    </div>
   );
 }

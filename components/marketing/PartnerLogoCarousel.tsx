@@ -5,8 +5,12 @@ import { useEffect, useState } from "react";
 type Logo = {
   id: string;
   name: string;
-  src: string;
+  src: string | { src: string };
   alt: string;
+};
+
+type PartnerLogoCarouselProps = {
+  logos?: Logo[];
 };
 
 const formatAlt = (fileName: string) =>
@@ -26,15 +30,17 @@ const SUPPORTED_IMAGE_EXTENSIONS = /\.(png|jpe?g|svg|webp|avif)$/i;
 /**
  * TMBC Partner Logo Rules:
  * - Logos are NEVER manually recolored.
- * - Idle state uses blush-tinted grayscale via CSS filters.
- * - Full brand color is revealed on hover/focus only.
- * - Keep motion slow and subtle to preserve editorial calm.
+ * - Logos stay at rest; no motion or blur.
+ * - Keep presentation calm, editorial, and centered.
  */
-export default function PartnerLogoCarousel() {
+export default function PartnerLogoCarousel({ logos: overrideLogos }: PartnerLogoCarouselProps) {
   const [logos, setLogos] = useState<Logo[]>([]);
-  const [isCompactView, setIsCompactView] = useState(false);
 
   useEffect(() => {
+    if (overrideLogos) {
+      return;
+    }
+
     let isMounted = true;
 
     fetch("/api/logos")
@@ -50,8 +56,7 @@ export default function PartnerLogoCarousel() {
             alt: formatAlt(fileName),
           }))
           .sort((a, b) => a.id.localeCompare(b.id));
-        const MAX_VISIBLE_LOGOS = 10;
-        setLogos(mapped.slice(0, MAX_VISIBLE_LOGOS));
+        setLogos(mapped);
       })
       .catch(() => {
         /* ignore */
@@ -60,57 +65,34 @@ export default function PartnerLogoCarousel() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [overrideLogos]);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const query = window.matchMedia("(max-width: 639px)");
-    const handleChange = (event: MediaQueryListEvent | MediaQueryList) => {
-      setIsCompactView(event.matches);
-    };
-    handleChange(query);
-    if (query.addEventListener) {
-      query.addEventListener("change", handleChange);
-    } else {
-      query.addListener(handleChange);
-    }
-    return () => {
-      if (query.removeEventListener) {
-        query.removeEventListener("change", handleChange);
-      } else {
-        query.removeListener(handleChange);
-      }
-    };
-  }, []);
-
-  const visibleLogos = isCompactView ? logos.slice(0, 6) : logos;
+  const sourceLogos = overrideLogos ?? logos;
+  const hasLogos = sourceLogos.length > 0;
 
   return (
-    <div className="py-12 sm:py-16 space-y-6 text-center">
-      <p className="text-xs uppercase tracking-[0.4em] text-[var(--tmbc-charcoal)] text-opacity-60 mx-auto">
-        Only Partnered With the Best
+    <div className="py-16 space-y-6 text-center">
+      <p className="text-[0.7rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70 mx-auto">
+        Only Partnered With The Best
       </p>
-      <p className="mb-6 text-sm text-muted-foreground text-center">
-        Only partnered with brands our mentors actually trust.
-      </p>
-      {logos.length ? (
+      {hasLogos ? (
         <>
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-            {visibleLogos.map((logo) => (
-              <div key={logo.id} className="flex h-16 items-center justify-center">
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  loading="lazy"
-                  decoding="async"
-                  className="max-h-10 w-auto opacity-60 grayscale transition-all duration-300 motion-safe:hover:opacity-100 motion-safe:hover:grayscale-0"
-                />
-              </div>
-            ))}
+          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 px-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {sourceLogos.map((logo) => {
+              const src = typeof logo.src === "string" ? logo.src : logo.src.src;
+              return (
+                <div key={logo.id} className="flex items-center justify-center h-[56px] md:h-[64px]">
+                  <img
+                    src={src}
+                    alt={logo.alt}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-auto object-contain opacity-90"
+                  />
+                </div>
+              );
+            })}
           </div>
-          <p className="mt-4 text-xs text-muted-foreground text-center">
-            Brands we trust — and recommend thoughtfully.
-          </p>
         </>
       ) : (
         <div className="h-16" aria-hidden />
