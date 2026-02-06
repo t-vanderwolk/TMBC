@@ -5,8 +5,8 @@ import Link from "next/link";
 
 export function JournalSpotlight() {
   return (
-    <section className="bg-[#faf2f5] py-24 md:py-32">
-      <div className="mx-auto max-w-[680px] px-6 md:px-0 text-left space-y-6">
+    <section className="bg-[var(--tmbc-blush)] rounded-3xl px-6 py-10 md:px-12 md:py-16">
+      <div className="mx-auto max-w-[680px] text-left space-y-6">
         <div className="mb-6 text-[11px] tracking-[0.28em] uppercase text-muted-foreground">
           From the journal
         </div>

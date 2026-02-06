@@ -33,13 +33,18 @@ export const metadata = {
   title: "Taylor-Made Baby Co. - Concierge birth & baby planning",
 };
 
+// TMBC Pillar Copy Guardrails:
+// - Clear, human language (no jargon)
+// - Learn → Plan → Connect → Reflect always in this order
+// - Reflect = virtual baby book / keepsake (not journaling fluff)
+// - Calm, mentor-led, non-salesy tone
 const pillarHighlights = [
   {
     id: "learn",
     title: "Learn",
     thesis: "This is where clarity begins.",
     paragraph:
-      "The first pillar gives you the room to understand categories, tradeoffs, and safety considerations before anything feels urgent. You move through conversations at your own pace, asking questions and pulling in stories about how decisions have played out in real homes. When you’re ready, you step toward the registry with context instead of pressure.",
+      "Understand what you’re being told to buy — and why.\n\nLearn what baby gear actually does, when it’s typically used, and what truly matters for your life.\nNo pressure. No brand bias. Just calm, clear explanations so you can make confident choices.",
     bullets: [
       "Quiet guided lessons that describe what each gear category is designed to do and why it matters for your routines.",
       "Mentor prompts that help you notice tradeoffs—space, timing, baby safety—so you can say yes to what fits and no to what doesn’t.",
@@ -57,7 +62,7 @@ const pillarHighlights = [
     title: "Plan",
     thesis: "The plan pillar is how thoughtful decisions take shape.",
     paragraph:
-      "Here you and your mentor translate understanding into a registry that reflects your life—your home, habits, values, and support network. Rather than following trends, you weigh needs, space, and the people who will help you welcome the baby.",
+      "Build your registry with intention — not panic.\n\nPlan as you learn, alongside a trusted mentor who’s been exactly where you are.\nDecide what you need now, what can wait, what to skip entirely — and what actually fits your home, lifestyle, and values.",
     bullets: [
       "One-on-one conversations that spotlight what your lifestyle truly needs and what can be passed on.",
       "Registry sessions paced over weeks so you never feel like you are catching up.",
@@ -75,7 +80,7 @@ const pillarHighlights = [
     title: "Connect",
     thesis: "This is where you learn alongside humans who understand the same season.",
     paragraph:
-      "Connection means a mentor who listens, a small circle that is moderated for calm, and a place where questions stay private. You are invited to share, listen, and gain reassurance without comparisons, performance, or extra noise.",
+      "You’re not the only one asking these questions.\n\nConnect with other parents in the same season and mentors who guide the conversation.\nShare questions, trade perspective, and get clarity — without the chaos of crowdsourced advice.",
     bullets: [
       "Pairings with mentors who track how you are feeling and hold steady without rushing.",
       "Small, intentional gatherings where questions are encouraged and empathy is the tone.",
@@ -93,7 +98,7 @@ const pillarHighlights = [
     title: "Reflect",
     thesis: "Reflect turns attention inward so you can carry this season forward with intention.",
     paragraph:
-      "It’s an invitation to journal, capture keepsakes, and pause—especially when life accelerates. Mentors keep you tethered to gratitude and meaning, reminding you that slowing down now protects the story you want to tell later.",
+      "Turn this season into a keepsake you’ll treasure later.\n\nReflect as you prepare and create a virtual baby book along the way.\nCapture what you learned, the choices you made, and how you felt — so one day, you can look back on this season with clarity and care.",
     bullets: [
       "Gentle prompts that surface how parenting is reshaping your identity and relationships.",
       "Digital keepsake spaces for notes, snapshots, and small details that you want to remember without pressure to be “perfect.”",

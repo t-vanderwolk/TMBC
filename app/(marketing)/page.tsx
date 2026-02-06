@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Fragment } from "react";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
 import SectionDivider from "@/components/marketing/SectionDivider";
@@ -23,6 +24,10 @@ import connectPillar from "@/assets/images/connectpillar.png";
 import reflectPillar from "@/assets/images/reflectpillar.png";
 import inviteNarrativeBg from "@/assets/images/inviteonlynarritive.png";
 import { ILLUSTRATIONS } from "@/lib/images";
+import requestInviteIcon from "@/assets/logos/requestinviteicon.png";
+import conciergeIntakeIcon from "@/assets/logos/conciergeintakelogo.png";
+import matchIcon from "@/assets/logos/matchicon.png";
+import startExperienceIcon from "@/assets/logos/startexperienceicon.png";
 
 /**
  * TMBC Homepage Background Rules:
@@ -36,12 +41,17 @@ import { ILLUSTRATIONS } from "@/lib/images";
 // Hero ribbon: heroes/home-hero.png
 // Do not replace or duplicate per TMBC hero rules
 
+// TMBC Pillar Copy Guardrails:
+// - Clear, human language (no jargon)
+// - Learn → Plan → Connect → Reflect always in this order
+// - Reflect = virtual baby book / keepsake (not journaling fluff)
+// - Calm, mentor-led, non-salesy tone
 const pillarHighlights = [
   {
     title: "Learn",
     headline: "Insightful lessons steer you toward choices that feel steady and thoughtful.",
     copy:
-      "Quiet guided sessions and mentor prompts surface trade-offs, safety cues, and your instincts before anything feels urgent—so every appointment feels calm instead of checklist-driven.",
+      "Understand what you’re being told to buy — and why.\n\nLearn what baby gear actually does, when it’s typically used, and what truly matters for your life.\nNo pressure. No brand bias. Just calm, clear explanations so you can make confident choices.",
     image: learnPillar,
     alt: "Illustrated open book with soft colors representing careful learning",
   },
@@ -49,7 +59,7 @@ const pillarHighlights = [
     title: "Plan",
     headline: "Deliberate planning gives you a registry that matches your life.",
     copy:
-      "One-on-one conversations place your home, habits, and support network first so the plan stays practical, intentional, and free from pressure.",
+      "Build your registry with intention — not panic.\n\nPlan as you learn, alongside a trusted mentor who’s been exactly where you are.\nDecide what you need now, what can wait, what to skip entirely — and what actually fits your home, lifestyle, and values.",
     image: planPillar,
     alt: "Notebook and ribbon representing deliberate planning",
   },
@@ -57,7 +67,7 @@ const pillarHighlights = [
     title: "Connect",
     headline: "Connection happens slowly, gently, without comparison.",
     copy:
-      "Mentors pair you with a circle that listens, shares stories, and keeps the pacing private so questions stay honest and human.",
+      "You’re not the only one asking these questions.\n\nConnect with other parents in the same season and mentors who guide the conversation.\nShare questions, trade perspective, and get clarity — without the chaos of crowdsourced advice.",
     image: connectPillar,
     alt: "Soft conversation bubbles illustrating intentional connection",
   },
@@ -65,7 +75,7 @@ const pillarHighlights = [
     title: "Reflect",
     headline: "Reflection keeps your season tangible and meaningful.",
     copy:
-      "Prompted journaling, keepsake spaces, and mentor check-ins help you notice what matters without adding busyness.",
+      "Turn this season into a keepsake you’ll treasure later.\n\nReflect as you prepare and create a virtual baby book along the way.\nCapture what you learned, the choices you made, and how you felt — so one day, you can look back on this season with clarity and care.",
     image: reflectPillar,
     alt: "Ribboned journal symbolizing reflection and keepsakes",
   },
@@ -73,6 +83,7 @@ const pillarHighlights = [
 
 
 function PillarHighlightsSection() {
+
   return (
     <SectionBand bg="white" className="py-16 md:py-24 lg:py-28">
       <div className="space-y-10">
@@ -233,37 +244,82 @@ function ExperienceIllustrationSection() {
 }
 
 function InviteFlowSection() {
+  const inviteSteps = [
+    {
+      icon: requestInviteIcon,
+      alt: "Request an invite",
+      label: "Request Invite",
+    },
+    {
+      icon: conciergeIntakeIcon,
+      alt: "Concierge intake",
+      label: "Concierge Intake",
+    },
+    {
+      icon: matchIcon,
+      alt: "Mentor match",
+      label: "Match",
+    },
+    {
+      icon: startExperienceIcon,
+      alt: "Start experience",
+      label: "Start Experience",
+    },
+  ];
+
+  const iconWidthClass = (label: string) => {
+    switch (label) {
+      case "Request Invite":
+        return "w-[54px] md:w-[66px]";
+      case "Match":
+        return "w-[64px] md:w-[74px]";
+      case "Start Experience":
+        return "w-[44px] md:w-[56px]";
+      default:
+        return "w-12 md:w-16";
+    }
+  };
+
   return (
-    // Invite Flow Guardrails:
-    // - Single static image (no cards, no icons recreated in JSX)
-    // - No animations or hover effects
-    // - Always centered
-    // - Never stacked as individual steps on desktop
-    // - Mobile: image scales down, never breaks into columns
-    <SectionBand bg="white" className="relative py-16 md:py-24 lg:py-28">
-      <div className="mx-auto w-full max-w-6xl space-y-6 text-center">
-        <div className={`${textCage("intro")} text-center`}>
-          <MarketingHeading level="h2" className="mx-auto leading-snug tracking-tight">
-            How the Taylor-Made Experience Begins
-          </MarketingHeading>
-          <p className="mx-auto max-w-[640px] text-center text-base md:text-lg text-[var(--tmbc-charcoal)] text-opacity-80">
-            We keep access intentional — so every family is supported with care, not algorithms.
-          </p>
-        </div>
-        {/* DO NOT convert this section into cards or steps. This image is the canonical invite flow representation. */}
-        <div className="relative w-full max-w-5xl mx-auto mt-12">
-          <div className="absolute inset-0 pointer-events-none rounded-[46px] bg-[var(--tmbc-ivory)]/20" aria-hidden="true" />
-          <Image
-            src={ILLUSTRATIONS.INVITE_ICONS}
-            alt="Invite flow: Request invite, concierge intake, mentor match, start experience"
-            width={ILLUSTRATIONS.INVITE_ICONS.width}
-            height={ILLUSTRATIONS.INVITE_ICONS.height}
-            className="relative z-10 mx-auto h-auto w-full rounded-[42px]"
-            priority
-          />
+    <section className="relative py-20">
+      <div className="mx-auto max-w-6xl px-5">
+        <div className="rounded-[36px] bg-gradient-to-br from-[var(--tmbc-ivory)] via-[var(--tmbc-blush-soft)] to-[var(--tmbc-blush-soft)] px-6 py-12">
+          <div className="flex flex-col items-center gap-6 text-center md:flex-row md:items-center md:gap-0 md:text-center">
+            {inviteSteps.map((step, index) => (
+              <Fragment key={step.label}>
+                <div className="flex flex-col items-center gap-1 px-3 md:flex-1">
+                  <div className="flex items-end justify-center h-[76px] md:h-[88px] lg:scale-[0.92] lg:[transform-origin:center_bottom]">
+                    <Image
+                      src={step.icon}
+                      alt={step.alt}
+                      width={64}
+                      height={64}
+                      priority
+                      unoptimized
+                      style={{ height: "auto" }}
+                      className={`mx-auto h-auto object-contain ${iconWidthClass(
+                        step.label
+                      )}`}
+                    />
+                  </div>
+                  <p className="font-serif italic text-[0.85rem] leading-[1.5] tracking-[0.04em] text-[var(--tmbc-charcoal)]/90">
+                    {step.label}
+                  </p>
+                </div>
+                {index < inviteSteps.length - 1 && (
+                  <div className="hidden md:flex md:items-center md:px-4">
+                    <span
+                      className="h-2 w-2 rounded-full bg-[var(--tmbc-charcoal)]/15"
+                      aria-hidden="true"
+                    />
+                  </div>
+                )}
+              </Fragment>
+            ))}
+          </div>
         </div>
       </div>
-    </SectionBand>
+    </section>
   );
 }
 
@@ -366,6 +422,41 @@ export default function HomePage() {
         }
         heroImage={HERO_IMAGE_REGISTRY.heroMarketingSignature}
       />
+      {/* Invite Code Entry */}
+      <div className="mt-12 flex w-full justify-center px-4">
+        <div className="w-full max-w-md text-center">
+          <p className="mb-3 text-xs uppercase tracking-widest text-[var(--tmbc-charcoal)]/60">
+            Already invited?
+          </p>
+
+          <form action="/verify" method="GET" className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <input
+              type="text"
+              name="code"
+              required
+              placeholder="Enter invite code"
+              className="w-full rounded-full border border-[var(--tmbc-blush)]/40 bg-white px-5 py-3 text-sm focus:border-[var(--tmbc-blush)] focus:outline-none sm:w-64"
+            />
+
+            <button
+              type="submit"
+              className="rounded-full bg-[var(--tmbc-blush)] px-6 py-3 text-sm font-medium text-white transition hover:bg-[var(--tmbc-blush)]/90"
+            >
+              Continue
+            </button>
+          </form>
+
+          <p className="mt-3 text-xs text-[var(--tmbc-charcoal)]/60">
+            Don’t have a code?{" "}
+            <Link
+              href="/request-invite"
+              className="underline underline-offset-4 hover:text-[var(--tmbc-charcoal)]"
+            >
+              Request an invite
+            </Link>
+          </p>
+        </div>
+      </div>
       {/* FLOW RULE: Experience invitation imagery must stay above partner proof and below the hero. */}
       <InviteFlowSection />
       <div className="my-10 md:my-24">
@@ -374,7 +465,9 @@ export default function HomePage() {
       <WhyInviteOnlySection />
       <PillarHighlightsSection />
       <TrustSection />
-      <JournalSpotlight />
+      <div className="mb-8 md:mb-20">
+        <JournalSpotlight />
+      </div>
       <ExperienceIllustrationSection />
       <div className="my-20 md:my-24">
         <SectionDivider />

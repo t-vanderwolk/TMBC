@@ -85,6 +85,10 @@ export async function adminApproveInvite(req: Request, res: Response, next: Next
   }
 }
 
+// Invite Code Guardrails:
+// - Only APPROVED invites may proceed
+// - Homepage + Login both route through /verify
+// - Admin approval is the single source of truth
 export async function verifyInviteCode(req: Request, res: Response, next: NextFunction) {
   try {
     const { code } = req.body;
@@ -94,7 +98,11 @@ export async function verifyInviteCode(req: Request, res: Response, next: NextFu
     });
 
     if (!match) {
-      return res.status(400).json({ error: 'Invalid code' });
+      return res
+        .status(400)
+        .json({
+          error: "This code hasn’t been approved yet — we’ll email you when it is.",
+        });
     }
 
     const token = generateToken({ inviteRequestId: match.id });
