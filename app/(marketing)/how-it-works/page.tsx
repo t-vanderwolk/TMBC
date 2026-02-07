@@ -92,7 +92,7 @@ export default function HowItWorksPage() {
           label: "See the steps",
           href: "#process",
         }}
-        heroImage={HERO_IMAGE_REGISTRY.horizontalRibbon}
+        heroImage={HERO_IMAGE_REGISTRY.upperLowerRibbonHero}
       />
       <SectionBand bg="white">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">

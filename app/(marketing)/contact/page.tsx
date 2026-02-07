@@ -36,7 +36,7 @@ export default function ContactPage() {
           label: "Request an Invite",
           href: "/request-invite",
         }}
-        heroImage={HERO_IMAGE_REGISTRY.horizontalRibbon}
+        heroImage={HERO_IMAGE_REGISTRY.heroMarketingSignature}
       />
 
       <SectionBand bg="white">

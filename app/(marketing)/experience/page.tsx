@@ -185,7 +185,7 @@ export default function ExperiencePage() {
           label: "See how it works",
           href: "/how-it-works",
         }}
-        heroImage={HERO_IMAGE_REGISTRY.rightRibbonHero}
+        heroImage={HERO_IMAGE_REGISTRY.learningFlowHero}
       />
 
       <WhyWeExistSection />

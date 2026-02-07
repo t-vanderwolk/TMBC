@@ -70,14 +70,14 @@ const formatDate = (value?: string | null) => {
 const marketingHeroBlock = (
   <>
     {/* Hero must render instantly and avoid additional entrance wrappers. */}
-    <MarketingHero
-      eyebrow="Journal"
-      headline="Thoughtful guidance, shared gently."
-      lead="Reflections, planning support, and calm perspectives for modern parents."
-      primaryCta={{ label: "Request an Invite", href: "/request-invite" }}
-      secondaryCta={{ label: "Learn about membership", href: "/membership" }}
-      heroImage={HERO_IMAGE_REGISTRY.horizontalRibbon}
-    />
+      <MarketingHero
+        eyebrow="Journal"
+        headline="Thoughtful guidance, shared gently."
+        lead="Reflections, planning support, and calm perspectives for modern parents."
+        primaryCta={{ label: "Request an Invite", href: "/request-invite" }}
+        secondaryCta={{ label: "Learn about membership", href: "/membership" }}
+        heroImage={HERO_IMAGE_REGISTRY.heroMarketingSignature}
+      />
   </>
 );
 

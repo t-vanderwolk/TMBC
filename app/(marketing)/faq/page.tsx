@@ -124,7 +124,7 @@ export default function FAQPage() {
           label: "Request an Invite",
           href: "/request-invite",
         }}
-        heroImage={HERO_IMAGE_REGISTRY.rightRibbonHero}
+        heroImage={HERO_IMAGE_REGISTRY.learningFlowHero}
       />
       <SectionBand bg="white">
         <div className="mx-auto max-w-3xl">

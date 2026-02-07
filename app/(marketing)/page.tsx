@@ -373,6 +373,14 @@ function TrustSection() {
             </span>
           ))}
         </div>
+        <div className="mt-6 flex flex-col items-center gap-1 text-center translate-x-2 md:translate-x-6">
+          <p className="font-script text-[3rem] leading-[1] text-[var(--tmbc-charcoal)]/70 -rotate-6">
+            XOXO
+          </p>
+          <p className="font-script text-[2.5rem] leading-[1] text-[var(--tmbc-charcoal)]/70 opacity-80 -rotate-6">
+            — T
+          </p>
+        </div>
       </div>
     </section>
   );
