@@ -7,6 +7,17 @@ const formatPercent = (value: number | null | undefined) =>
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 
+const formatSeconds = (value: number | null | undefined) => {
+  if (value == null || value <= 0) return "—";
+  const rounded = Math.round(value);
+  const minutes = Math.floor(rounded / 60);
+  const seconds = rounded % 60;
+  if (minutes > 0) {
+    return `${minutes}m ${seconds.toString().padStart(2, "0")}s`;
+  }
+  return `${seconds}s`;
+};
+
 type Props = {
   data: AdminAnalyticsPayload["content"];
 };
@@ -40,6 +51,55 @@ export default function ContentAnalyticsSection({ data }: Props) {
           value={formatCurrency(data.kpis.blogInfluencedRevenue)}
           detail="Brand + affiliate lift"
         />
+      </div>
+
+      <div className="space-y-3 rounded-3xl border border-[#E3D1DA] bg-[#FDF9FB] p-6 shadow-sm">
+        <div>
+          <p className="text-xs uppercase tracking-[0.35em] text-[#C8A1B4]">Blog impact</p>
+          <h3 className="text-2xl font-serif text-[#3E2F35]">The Art of the Registry</h3>
+          <p className="text-sm text-[#3E2F35]/70">
+            Confidence signals collected from this authoritative clarity piece.
+          </p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-4">
+          <AdminStatCard
+            title="Total views"
+            value={data.blogImpact.totalViews.toLocaleString()}
+            detail="Readers reached"
+          />
+          <AdminStatCard
+            title="% from spotlight"
+            value={`${data.blogImpact.spotlightPct.toFixed(1)}%`}
+            detail="Journal spotlight origin"
+          />
+          <AdminStatCard
+            title="Avg scroll depth"
+            value={`${data.blogImpact.avgScrollDepthPct.toFixed(1)}%`}
+            detail="Depth reached across views"
+          />
+          <AdminStatCard
+            title="Avg time on page"
+            value={formatSeconds(data.blogImpact.avgTimeOnPageSeconds)}
+            detail="Bucketed dwell time"
+          />
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          <AdminStatCard
+            title="Invite requests influenced"
+            value={data.blogImpact.inviteRequestsInfluenced.toLocaleString()}
+            detail="Soft attribution"
+          />
+          <AdminStatCard
+            title="Onboarding completions"
+            value={data.blogImpact.onboardingCompletionsInfluenced.toLocaleString()}
+            detail="Members completing after reading"
+          />
+          <AdminStatCard
+            title="Registry actions"
+            value={data.blogImpact.registryActionsInfluenced.toLocaleString()}
+            detail="Adds/removals/deferrals captured"
+          />
+        </div>
       </div>
 
       <div className="space-y-4">

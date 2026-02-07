@@ -1,7 +1,11 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 import { prisma } from "@/lib/prisma";
+import { BLOG_SESSION_COOKIE, BLOG_IMPACT_SLUG } from "@/lib/constants/blogAnalytics";
+import { recordBlogInfluenceAction } from "@/lib/services/server/blogInfluence.service";
+import { BlogInfluenceActionType } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
@@ -53,8 +57,15 @@ export async function POST(request: NextRequest) {
   const referral = typeof payload?.referral === "string" ? payload.referral.trim() : undefined;
   const message = formatMessage(city, dueDate, referral);
 
+  const sessionId = cookies().get(BLOG_SESSION_COOKIE)?.value ?? null;
   const existing = await prisma.inviteRequest.findUnique({ where: { email } });
   if (existing) {
+    void recordBlogInfluenceAction({
+      slug: BLOG_IMPACT_SLUG,
+      action: BlogInfluenceActionType.INVITE_REQUEST,
+      referenceId: existing.id,
+      sessionId,
+    });
     return NextResponse.json({ ok: true, requestId: existing.id });
   }
 
@@ -65,6 +76,13 @@ export async function POST(request: NextRequest) {
       lastName,
       message,
     },
+  });
+
+  void recordBlogInfluenceAction({
+    slug: BLOG_IMPACT_SLUG,
+    action: BlogInfluenceActionType.INVITE_REQUEST,
+    referenceId: created.id,
+    sessionId,
   });
 
   return NextResponse.json({ ok: true, requestId: created.id });

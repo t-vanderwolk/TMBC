@@ -47,6 +47,9 @@ export async function GET(request: Request) {
 
     const metrics: Record<BlogEngagementType, number> = {
       VIEW: 0,
+      BLOG_VIEW: 0,
+      BLOG_SCROLL_DEPTH: 0,
+      TIME_ON_PAGE: 0,
       READ_75: 0,
       SHARE: 0,
     };

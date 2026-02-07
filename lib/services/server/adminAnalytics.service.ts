@@ -7,10 +7,11 @@
   Gaps addressed with heuristics: decisionStatus isn’t explicit so we infer from purchaseSource + status + timestamps, revenue lacks confirmed commissions so we derive estimates, and blog influence counts are stored in the newly added influence table.
 */
 
-import { Prisma, RegistryItemStatus } from '@prisma/client';
+import { Prisma, RegistryItemStatus, BlogInfluenceActionType } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 import { MYREGISTRY_CANON, MYREGISTRY_SIGNUP_COMPLETED } from '@/lib/constants/affiliateCanon';
+import { BLOG_IMPACT_SLUG, BLOG_SOURCE_CONTEXTS } from '@/lib/constants/blogAnalytics';
 import type { AdminAnalyticsPayload, AffiliateDecisionSource } from '@/types/adminAnalytics';
 
 const ALLOWED_RANGE_DAYS = [7, 30, 90];
@@ -735,9 +736,86 @@ export const getAdminAnalytics = async (options?: { rangeDays?: number }): Promi
 
   const influencedAcceptanceRatePct = formatPercent(influencedAcceptedTotal, influencedItemsTotal);
   const influencedPurchaseRatePct = formatPercent(influencedPurchasedTotal, influencedItemsTotal);
+
+  const blogPost = await prisma.blogPost.findUnique({
+    where: { slug: BLOG_IMPACT_SLUG },
+    select: { id: true },
+  });
+
+  const blogEngagementEvents = blogPost
+    ? await prisma.blogEngagementEvent.findMany({
+        where: {
+          blogPostId: blogPost.id,
+          createdAt: { gte: rangeStart },
+        },
+        select: {
+          event: true,
+          sourceContext: true,
+          scrollDepth: true,
+          timeOnPageBucket: true,
+        },
+      })
+    : [];
+
+  const viewEvents = blogEngagementEvents.filter(
+    (entry) => entry.event === "BLOG_VIEW" || entry.event === "VIEW",
+  );
+  const totalViews = viewEvents.length;
+  const spotlightViews = viewEvents.filter(
+    (entry) => entry.sourceContext === BLOG_SOURCE_CONTEXTS.JOURNAL_SPOTLIGHT,
+  ).length;
+
+  const scrollEvents = blogEngagementEvents.filter(
+    (event) => event.event === "BLOG_SCROLL_DEPTH" && typeof event.scrollDepth === "number",
+  );
+  const avgScrollDepth =
+    scrollEvents.length === 0
+      ? 0
+      : scrollEvents.reduce((acc, entry) => acc + (entry.scrollDepth ?? 0), 0) / scrollEvents.length;
+
+  const bucketSeconds: Record<string, number> = {
+    "<30s": 15,
+    "30-90s": 60,
+    "90s+": 120,
+  };
+  const timeEvents = blogEngagementEvents.filter(
+    (event) => event.event === "TIME_ON_PAGE" && typeof event.timeOnPageBucket === "string",
+  );
+  const totalSeconds = timeEvents.reduce((acc, entry) => {
+    const bucket = entry.timeOnPageBucket ?? "";
+    return acc + (bucketSeconds[bucket] ?? 0);
+  }, 0);
+  const avgTimeOnPageSeconds = timeEvents.length === 0 ? 0 : totalSeconds / timeEvents.length;
+
+  const influenceActions = await prisma.blogInfluenceAction.findMany({
+    where: {
+      slug: BLOG_IMPACT_SLUG,
+      createdAt: { gte: rangeStart },
+    },
+  });
+  const inviteRequestsInfluenced = influenceActions.filter(
+    (row) => row.action === BlogInfluenceActionType.INVITE_REQUEST,
+  ).length;
+  const onboardingCompletionsInfluenced = influenceActions.filter(
+    (row) => row.action === BlogInfluenceActionType.ONBOARDING_COMPLETE,
+  ).length;
+  const registryActionsInfluenced = influenceActions.filter(
+    (row) => row.action === BlogInfluenceActionType.REGISTRY_ACTION,
+  ).length;
+
+  const blogImpact = {
+    totalViews,
+    spotlightPct: totalViews ? Number(((spotlightViews / totalViews) * 100).toFixed(1)) : 0,
+    avgScrollDepthPct: Number(avgScrollDepth.toFixed(1)),
+    avgTimeOnPageSeconds,
+    inviteRequestsInfluenced,
+    onboardingCompletionsInfluenced,
+    registryActionsInfluenced,
+  };
+
   const contentPayload = {
     kpis: {
-      totalViews: 0,
+      totalViews: blogImpact.totalViews,
       blogToOnboardingConversionPct: registryKpis.registriesSeeded
         ? Number(((influencerRegistries.size / registryKpis.registriesSeeded) * 100).toFixed(1))
         : null,
@@ -753,6 +831,7 @@ export const getAdminAnalytics = async (options?: { rangeDays?: number }): Promi
       blogInfluencedRevenue: Number(influencedRevenueTotal.toFixed(2)),
     },
     byPost: contentPosts,
+    blogImpact,
   };
 
   return {

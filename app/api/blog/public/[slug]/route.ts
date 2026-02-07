@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 import { handleMissingBlogTable, isBlogFeatureEnabled } from "@/lib/blog/blogReadiness";
 import { blogAffiliatePolicy } from "@/lib/blog/affiliatePolicy";
 import { prisma } from "@/lib/prisma";
+import { BLOG_SESSION_COOKIE } from "@/lib/constants/blogAnalytics";
 
 export const dynamic = "force-dynamic";
 
@@ -10,8 +12,11 @@ type RouteContext = {
   params: { slug: string };
 };
 
-export async function GET(_request: Request, context: RouteContext) {
+export async function GET(request: Request, context: RouteContext) {
   const { slug } = context.params;
+  const url = new URL(request.url);
+  const sourceContext = url.searchParams.get("sourceContext") ?? null;
+  const sessionId = cookies().get(BLOG_SESSION_COOKIE)?.value ?? null;
 
   if (!isBlogFeatureEnabled()) {
     return NextResponse.json(
@@ -85,6 +90,8 @@ export async function GET(_request: Request, context: RouteContext) {
         data: {
           blogPostId: post.id,
           event: "VIEW",
+          sourceContext: sourceContext ?? undefined,
+          sessionId: sessionId ?? undefined,
         },
       })
       .catch((error) => {

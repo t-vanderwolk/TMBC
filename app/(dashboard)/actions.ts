@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 import { getUserOrThrow } from '@/lib/auth/getUser';
 import {
   saveIntakeStep as persistIntake,
@@ -17,7 +18,9 @@ import {
 } from '@/lib/services/timecapsule.service';
 import { rsvpEvent as confirmRsvp } from '@/lib/services/events.service';
 import { sendMessage as sendThreadMessage } from '@/lib/services/messages.service';
-import { RegistrySection } from '@prisma/client';
+import { RegistrySection, BlogInfluenceActionType } from '@prisma/client';
+import { BLOG_IMPACT_SLUG, BLOG_SESSION_COOKIE } from '@/lib/constants/blogAnalytics';
+import { recordBlogInfluenceAction } from '@/lib/services/server/blogInfluence.service';
 
 const toRecord = (formData: FormData) => {
   const payload: Record<string, string> = {};
@@ -60,7 +63,7 @@ export async function addRegistryItem(formData: FormData) {
     reasoning: formData.get('reasoning')?.toString(),
     mentorNotes: formData.get('mentorNotes')?.toString(),
   };
-  return addCustomItem({
+  const result = await addCustomItem({
     userId: user.id,
     title: item.title,
     url: item.affiliateUrl ?? 'https://taylor-madebaby.com',
@@ -70,12 +73,34 @@ export async function addRegistryItem(formData: FormData) {
     price: item.price,
     image: item.image,
   });
+
+  const sessionId = cookies().get(BLOG_SESSION_COOKIE)?.value ?? null;
+  void recordBlogInfluenceAction({
+    slug: BLOG_IMPACT_SLUG,
+    action: BlogInfluenceActionType.REGISTRY_ACTION,
+    registryItemId: result.id,
+    referenceId: result.id,
+    sessionId,
+    userId: user.id,
+  });
+
+  return result;
 }
 
 export async function removeRegistryItem(formData: FormData) {
   const user = await getUserOrThrow();
   const itemId = formData.get('itemId')?.toString() ?? '';
-  return discardRegistryItem(user.id, itemId);
+  const result = await discardRegistryItem(user.id, itemId);
+  const sessionId = cookies().get(BLOG_SESSION_COOKIE)?.value ?? null;
+  void recordBlogInfluenceAction({
+    slug: BLOG_IMPACT_SLUG,
+    action: BlogInfluenceActionType.REGISTRY_ACTION,
+    registryItemId: itemId,
+    referenceId: itemId,
+    sessionId,
+    userId: user.id,
+  });
+  return result;
 }
 
 export async function updateRegistryItem(formData: FormData) {

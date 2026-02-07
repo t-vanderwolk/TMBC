@@ -1,5 +1,8 @@
 import { Metadata } from "next";
-import { TmbcSeal } from "@/components/marketing/TmbcSeal";
+import { caveat } from "@/lib/fonts";
+import { MarketingHeading } from "@/components/marketing/Typography";
+import RibbonDivider from "@/components/blog/RibbonDivider";
+import EndRibbonBow from "@/components/blog/EndRibbonBow";
 
 export const metadata: Metadata = {
   title: "The Art of the Registry | Taylor-Made Baby Co.",
@@ -7,28 +10,51 @@ export const metadata: Metadata = {
     "How to prepare for baby without overbuying — and without losing yourself in the process.",
 };
 
+const proseClasses = [
+  "blog-editorial",
+  "prose prose-neutral",
+  "max-w-[720px]",
+  "mx-auto",
+  "px-6 sm:px-8",
+  "prose-p:leading-relaxed",
+  "prose-p:text-[17px]",
+  "prose-p:text-neutral-700",
+  "prose-h2:font-playfair",
+  "prose-h2:text-[26px]",
+  "prose-h2:mt-20",
+  "prose-h2:mb-6",
+  "prose-h3:text-[20px]",
+  "prose-h3:mt-12",
+  "prose-strong:font-medium",
+  "prose-strong:text-neutral-900",
+  "prose-em:text-neutral-700",
+  "relative",
+  "space-y-8",
+  "w-full",
+].join(" ");
+
 export default function ArtOfTheRegistryPage() {
   return (
     <article className="bg-white">
-      <header className="py-24 md:py-28 lg:py-32">
-        <div className="mx-auto max-w-3xl px-6 md:px-10">
-          <p className="mb-4 text-xs uppercase tracking-[0.18em] text-muted-foreground">
+      <section className="relative w-full overflow-visible bg-[linear-gradient(to_bottom,#fff8f6,#ffffff,#fff8f6)]">
+        <div className="mx-auto max-w-3xl px-6 text-center pt-28 pb-24 md:pt-36 md:pb-32">
+          <p className="uppercase tracking-[0.25em] text-xs text-neutral-500 mb-6">
             The Journal
           </p>
-
-          <h1 className="text-4xl md:text-5xl leading-tight">
+          <MarketingHeading
+            level="h1"
+            className="font-playfair text-[38px] leading-[1.15] md:text-[54px] tracking-[-0.5px] text-neutral-800 mb-6"
+          >
             The Art of the Registry
-          </h1>
-
-          <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-[48ch]">
-            How to prepare for baby without overbuying — or feeling like you’re
-            doing it wrong.
+          </MarketingHeading>
+          <p className="text-[17px] md:text-[19px] leading-[1.6] text-neutral-600 max-w-2xl mx-auto">
+            How to prepare for baby without overbuying — or feeling like you’re doing it wrong.
           </p>
         </div>
-      </header>
+      </section>
 
-      <section className="pb-28">
-        <div className="mx-auto max-w-2xl px-6 md:px-10 space-y-8 text-base leading-relaxed text-muted-foreground">
+      <section className="bg-white py-16 sm:py-20">
+        <div className={proseClasses}>
           <p>
             There’s a moment in early pregnancy (or adoption planning) when it hits you:
           </p>
@@ -53,9 +79,13 @@ export default function ArtOfTheRegistryPage() {
           <p>
             <strong>This is the art of the registry.</strong>
           </p>
+        </div>
+      </section>
 
-          <hr className="my-10 border-muted" />
+      <RibbonDivider />
 
+      <section className="bg-rose-50/40 py-16 sm:py-20">
+        <div className={proseClasses}>
           <h2 className="text-2xl text-foreground">
             Why registries get overwhelming (and why it’s not your fault)
           </h2>
@@ -80,9 +110,13 @@ export default function ArtOfTheRegistryPage() {
             That’s not overbuying because you’re careless.
             That’s overbuying because you’re unsupported.
           </p>
+        </div>
+      </section>
 
-          <hr className="my-10 border-muted" />
+      <RibbonDivider />
 
+      <section className="bg-[#FAF6F2] py-16 sm:py-20">
+        <div className={proseClasses}>
           <h2 className="text-2xl text-foreground">
             The Taylor-Made approach: Learn · Plan · Connect · Reflect
           </h2>
@@ -94,8 +128,6 @@ export default function ArtOfTheRegistryPage() {
           <p>
             Here’s how our process works — in real, human terms.
           </p>
-
-          <hr className="my-10 border-muted" />
 
           <h3 className="text-xl text-foreground">Learn</h3>
 
@@ -118,8 +150,6 @@ export default function ArtOfTheRegistryPage() {
             understand it.
           </p>
 
-          <hr className="my-10 border-muted" />
-
           <h3 className="text-xl text-foreground">Plan</h3>
 
           <p>
@@ -140,8 +170,6 @@ export default function ArtOfTheRegistryPage() {
           <p>
             This is where overbuying quietly disappears.
           </p>
-
-          <hr className="my-10 border-muted" />
 
           <h3 className="text-xl text-foreground">Connect</h3>
 
@@ -167,8 +195,6 @@ export default function ArtOfTheRegistryPage() {
             You’re not crowdsourcing chaos — you’re sharing clarity.
           </p>
 
-          <hr className="my-10 border-muted" />
-
           <h3 className="text-xl text-foreground">Reflect</h3>
 
           <p>
@@ -189,9 +215,13 @@ export default function ArtOfTheRegistryPage() {
             So one day, you can look back — not at how much you bought — but at how
             thoughtfully you prepared for your baby.
           </p>
+        </div>
+      </section>
 
-          <hr className="my-10 border-muted" />
+      <RibbonDivider />
 
+      <section className="bg-white py-16 sm:py-20">
+        <div className={proseClasses}>
           <h2 className="text-2xl text-foreground">
             The member-to-mentor path (because wisdom compounds)
           </h2>
@@ -206,8 +236,6 @@ export default function ArtOfTheRegistryPage() {
             platform grounded, human, and real.
           </p>
 
-          <hr className="my-10 border-muted" />
-
           <p>
             Preparing without overbuying isn’t about restraint — it’s about trust.
           </p>
@@ -217,9 +245,9 @@ export default function ArtOfTheRegistryPage() {
             everything to be a great parent.
           </p>
 
-          <p>
+          <blockquote className="my-16 pl-6 border-l-2 border-neutral-200 italic text-neutral-800">
             You just need the right things — chosen with care.
-          </p>
+          </blockquote>
 
           <p>
             <strong>That’s the art of the registry.</strong>
@@ -227,11 +255,17 @@ export default function ArtOfTheRegistryPage() {
         </div>
       </section>
 
-      <section className="pb-24">
-        <div className="mx-auto max-w-2xl px-6 md:px-10">
-          <TmbcSeal />
+      <div className="mt-4 flex justify-center">
+        <div
+          className={`${caveat.className} text-neutral-600 text-lg`}
+          style={{ transform: "rotate(-6deg) scale(3) translateY(6px)" }}
+        >
+          <div>XOXO</div>
+          <div className="-mt-1">— T</div>
         </div>
-      </section>
+      </div>
+      <EndRibbonBow />
+      <div className="mt-10 sm:mt-14" />
     </article>
   );
 }

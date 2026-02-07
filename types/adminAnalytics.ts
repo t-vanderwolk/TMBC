@@ -90,6 +90,16 @@ export type ContentKpis = {
   blogInfluencedRevenue: number;
 };
 
+export type BlogImpactMetrics = {
+  totalViews: number;
+  spotlightPct: number;
+  avgScrollDepthPct: number;
+  avgTimeOnPageSeconds: number;
+  inviteRequestsInfluenced: number;
+  onboardingCompletionsInfluenced: number;
+  registryActionsInfluenced: number;
+};
+
 export type RegistryKpis = {
   registriesSeeded: number;
   activeRegistries30d: number;
@@ -133,5 +143,6 @@ export type AdminAnalyticsPayload = {
   content: {
     kpis: ContentKpis;
     byPost: BlogPostInfluence[];
+    blogImpact: BlogImpactMetrics;
   };
 };

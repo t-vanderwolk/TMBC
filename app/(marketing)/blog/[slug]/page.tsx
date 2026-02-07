@@ -7,9 +7,12 @@ import BlogContentRenderer, {
   type BlogContentBlock,
 } from "@/components/blog/BlogContentRenderer";
 import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
+import BlogAnalyticsTracker from "@/components/blog/BlogAnalyticsTracker";
 import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
+import EndRibbonBow from "@/components/blog/EndRibbonBow";
 import { MarketingHeading } from "@/components/marketing/Typography";
-import { TmbcSeal } from "@/components/marketing/TmbcSeal";
+import { BLOG_IMPACT_SLUG } from "@/lib/constants/blogAnalytics";
+import { caveat } from "@/lib/fonts";
 
 // Marketing background cadence is intentional.
 // Do not reorder or recolor section backgrounds.
@@ -77,6 +80,11 @@ type PublicBlogPostResult = {
   unavailable: boolean;
 };
 
+type BlogPageProps = {
+  params: Params;
+  searchParams?: { sourceContext?: string };
+};
+
 const fetchPublicPosts = async () => {
   if (SHOULD_SKIP_PUBLIC_BLOG_FETCH) {
     return [] as Array<{ slug: string }>;
@@ -98,13 +106,17 @@ const fetchPublicPosts = async () => {
   }
 };
 
-const fetchPublicPost = async (slug: string): Promise<PublicBlogPostResult> => {
+const fetchPublicPost = async (slug: string, sourceContext?: string): Promise<PublicBlogPostResult> => {
   if (SHOULD_SKIP_PUBLIC_BLOG_FETCH) {
     return { post: null, unavailable: false };
   }
 
   try {
-    const response = await fetch(new URL(`/api/blog/public/${slug}`, API_BASE_URL), {
+    const endpoint = new URL(`/api/blog/public/${slug}`, API_BASE_URL);
+    if (sourceContext) {
+      endpoint.searchParams.set("sourceContext", sourceContext);
+    }
+    const response = await fetch(endpoint, {
       next: { revalidate: 300 },
     });
 
@@ -193,8 +205,8 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
   };
 };
 
-const BlogArticlePage = async ({ params }: { params: Params }) => {
-  const { post, unavailable } = await fetchPublicPost(params.slug);
+const BlogArticlePage = async ({ params, searchParams }: BlogPageProps) => {
+  const { post, unavailable } = await fetchPublicPost(params.slug, searchParams?.sourceContext);
   if (unavailable) {
     return (
       <SectionBand bg="white">
@@ -298,7 +310,33 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
               </div>
             </div>
           </aside>
-          <div className={`${cardBase("space-y-8")} tm-print-wrapper`}>
+          <article
+            className="
+              tm-print-wrapper
+              blog-editorial
+              prose prose-neutral
+              max-w-[720px]
+              mx-auto
+              px-6 sm:px-8
+              pt-16 sm:pt-20
+              pb-32
+              prose-p:leading-relaxed
+              prose-p:text-[17px]
+              prose-p:text-neutral-700
+              prose-h2:font-playfair
+              prose-h2:text-[26px]
+              prose-h2:mt-20
+              prose-h2:mb-6
+              prose-h3:text-[20px]
+              prose-h3:mt-12
+              prose-strong:font-medium
+              prose-strong:text-neutral-900
+              prose-em:text-neutral-700
+              relative
+              space-y-8
+              w-full
+            "
+          >
             <div className="tm-print-brand-mark tm-print-only">
               <p className="text-[0.7rem] uppercase tracking-[0.4em] text-tmCharcoal/60">Taylor-Made Baby Co.</p>
               <div className="tm-print-divider" />
@@ -307,7 +345,19 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
             <p className="subtle-note">
               Every family is different. Your mentor can help you decide what actually fits your life.
             </p>
-          </div>
+            <div className="mt-24" />
+            <EndRibbonBow />
+            <div className="mt-4 flex justify-start">
+              <div
+                className={`${caveat.className} text-neutral-600 text-lg`}
+                style={{ transform: "rotate(-6deg) scale(3) translateY(6px)" }}
+              >
+                <div>XOXO</div>
+                <div className="-mt-1">— T</div>
+              </div>
+            </div>
+            <div className="mt-10 sm:mt-14" />
+          </article>
         </div>
       </SectionBand>
       <SectionBand bg="blush">
@@ -347,9 +397,9 @@ const BlogArticlePage = async ({ params }: { params: Params }) => {
           </div>
         </div>
       </SectionBand>
-      <div className="mt-24">
-        <TmbcSeal />
-      </div>
+      {post.slug === BLOG_IMPACT_SLUG && (
+        <BlogAnalyticsTracker slug={post.slug} sourceContext={searchParams?.sourceContext ?? null} />
+      )}
     </>
   );
 };

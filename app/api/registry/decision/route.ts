@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
-import { RegistryDecisionStatus, RegistryItemStatus } from "@prisma/client";
+import { cookies } from "next/headers";
+import { RegistryDecisionStatus, RegistryItemStatus, BlogInfluenceActionType } from "@prisma/client";
 
 import { getUserOrThrow } from "@/lib/auth/getUser";
 import { prisma } from "@/lib/prisma";
+import { BLOG_IMPACT_SLUG, BLOG_SESSION_COOKIE } from "@/lib/constants/blogAnalytics";
+import { recordBlogInfluenceAction } from "@/lib/services/server/blogInfluence.service";
 
 // TMBC Canon:
 // The Plan is a mentor-led registry builder.
@@ -52,6 +55,15 @@ export async function POST(request: Request) {
           decisionStatus: null,
           status: RegistryItemStatus.REMOVED,
         },
+      });
+      const sessionId = cookies().get(BLOG_SESSION_COOKIE)?.value ?? null;
+      void recordBlogInfluenceAction({
+        slug: BLOG_IMPACT_SLUG,
+        action: BlogInfluenceActionType.REGISTRY_ACTION,
+        registryItemId: payload.itemId,
+        referenceId: payload.itemId,
+        sessionId,
+        userId: user.id,
       });
     }
 

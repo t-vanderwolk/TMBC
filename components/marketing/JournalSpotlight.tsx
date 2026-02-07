@@ -18,7 +18,10 @@ export function JournalSpotlight() {
         <p>Pull up a journal-style note for a mentor-led perspective, no pressure.</p>
       </div>
       <Link
-        href="/blog/the-art-of-the-registry"
+        href={{
+          pathname: "/blog/the-art-of-the-registry",
+          query: { sourceContext: "homepage_journal_spotlight" },
+        }}
         className="inline-flex items-center gap-2 rounded-full border border-[var(--tmbc-charcoal)]/20 px-5 py-2 text-[13px] font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] transition hover:border-[var(--tmbc-charcoal)]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--tmbc-charcoal)] focus-visible:outline-offset-4"
       >
         <span>Read full article</span>

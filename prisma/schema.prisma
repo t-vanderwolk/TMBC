@@ -78,6 +78,7 @@ model User {
   mentees                   User[]                    @relation("Mentorship")
   workbookEntries           WorkbookEntry[]
   conversations             Conversation[]            @relation("ConversationParticipants")
+  blogInfluenceActions      BlogInfluenceAction[]
 }
 
 model AffiliateEvent {
@@ -158,17 +159,40 @@ model BlogAffiliateLink {
 }
 
 model BlogEngagementEvent {
-  id         String             @id @default(cuid())
-  blogPostId String
-  event      BlogEngagementType
-  viewerId   String?
-  metadata   Json?
-  createdAt  DateTime           @default(now())
-  blogPost   BlogPost           @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  id               String             @id @default(cuid())
+  blogPostId       String
+  event            BlogEngagementType
+  viewerId         String?
+  metadata         Json?
+  sessionId        String?
+  sourceContext    String?
+  scrollDepth      Int?
+  timeOnPageBucket String?
+  createdAt        DateTime           @default(now())
+  blogPost         BlogPost           @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
 
   @@index([blogPostId])
   @@index([event])
   @@index([createdAt])
+}
+
+model BlogInfluenceAction {
+  id             String                  @id @default(cuid())
+  slug           String
+  action         BlogInfluenceActionType
+  referenceId    String?
+  sessionId      String?
+  userId         String?
+  registryItemId String?
+  createdAt      DateTime                @default(now())
+
+  user         User?         @relation(fields: [userId], references: [id])
+  registryItem RegistryItem? @relation(fields: [registryItemId], references: [id])
+
+  @@index([slug])
+  @@index([userId])
+  @@index([sessionId])
+  @@index([registryItemId])
 }
 
 model BlogHighlight {
@@ -353,45 +377,46 @@ model Product {
 }
 
 model RegistryItem {
-  id                String                      @id @default(cuid())
-  userId            String
-  productId         String
-  title             String?
-  url               String?
-  merchant          String?
-  category          String?
-  image             String?
-  price             Float?
-  myRegistryId      String?
-  notes             String?
-  quantity          Int?
-  purchaseSource    String?
-  createdAt         DateTime                    @default(now())
-  updatedAt         DateTime                    @updatedAt
-  affiliateId       String?
-  affiliateLink     String?
-  brand             String?
-  externalGiftId    String?
-  imageUrl          String?
-  name              String?
-  registryId        String?
-  source            String?
-  myRegistryItemId  String?
-  addedByMentor     Boolean                     @default(false)
-  mentorNote        String?
-  purchasedAt       DateTime?
-  section           RegistrySection
-  userNote          String?
-  status            RegistryItemStatus          @default(CONSIDERING)
-  decisionStatus    RegistryDecisionStatus?
-  mentorFeedback    MentorFeedback[]            @relation("RegistryFeedback")
-  registryConflicts RegistryConflict[]
-  affiliate         AffiliatePartner?           @relation(fields: [affiliateId], references: [id])
-  product           Product                     @relation(fields: [productId], references: [id])
-  registry          Registry?                   @relation("RegistryItems", fields: [registryId], references: [id])
-  user              User                        @relation(fields: [userId], references: [id])
-  blogInfluences    RegistryItemBlogInfluence[]
-  priceWatch        RegistryPriceWatch?
+  id                   String                      @id @default(cuid())
+  userId               String
+  productId            String
+  title                String?
+  url                  String?
+  merchant             String?
+  category             String?
+  image                String?
+  price                Float?
+  myRegistryId         String?
+  notes                String?
+  quantity             Int?
+  purchaseSource       String?
+  createdAt            DateTime                    @default(now())
+  updatedAt            DateTime                    @updatedAt
+  affiliateId          String?
+  affiliateLink        String?
+  brand                String?
+  externalGiftId       String?
+  imageUrl             String?
+  name                 String?
+  registryId           String?
+  source               String?
+  myRegistryItemId     String?
+  addedByMentor        Boolean                     @default(false)
+  mentorNote           String?
+  purchasedAt          DateTime?
+  section              RegistrySection
+  userNote             String?
+  status               RegistryItemStatus          @default(CONSIDERING)
+  decisionStatus       RegistryDecisionStatus?
+  mentorFeedback       MentorFeedback[]            @relation("RegistryFeedback")
+  registryConflicts    RegistryConflict[]
+  affiliate            AffiliatePartner?           @relation(fields: [affiliateId], references: [id])
+  product              Product                     @relation(fields: [productId], references: [id])
+  registry             Registry?                   @relation("RegistryItems", fields: [registryId], references: [id])
+  user                 User                        @relation(fields: [userId], references: [id])
+  blogInfluences       RegistryItemBlogInfluence[]
+  priceWatch           RegistryPriceWatch?
+  blogInfluenceActions BlogInfluenceAction[]
 
   @@index([affiliateId])
 }
@@ -629,16 +654,16 @@ model AdminSettings {
 }
 
 model AffiliateAdminMeta {
-  affiliateKey    String   @id
+  affiliateKey    String  @id
   network         String?
   programId       String?
   tier            String?
-  enabled         Boolean  @default(true)
+  enabled         Boolean @default(true)
   overrideBaseUrl String?
   notes           String?
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("AffiliateAdminMeta")
 }
@@ -856,46 +881,46 @@ model PlanSection {
 }
 
 model PlanRegistrySection {
-  id         String               @id @default(cuid())
+  id         String             @id @default(cuid())
   registryId String
   title      String
   sectionKey String?
-  createdAt  DateTime             @default(now())
-  updatedAt  DateTime             @updatedAt
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
   items      PlanRegistryItem[]
 }
 
 model PlanRegistryItem {
-  id         String              @id @default(cuid())
-  sectionId  String
-  title      String
-  category   String
-  status     String
-  priceMin   Int?
-  priceMax   Int?
-  createdAt  DateTime            @default(now())
-  updatedAt  DateTime            @updatedAt
+  id        String   @id @default(cuid())
+  sectionId String
+  title     String
+  category  String
+  status    String
+  priceMin  Int?
+  priceMax  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  section    PlanRegistrySection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  section PlanRegistrySection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model PlanBudget {
-  id             String             @id @default(cuid())
-  registryId     String             @unique
+  id             String               @id @default(cuid())
+  registryId     String               @unique
   total          Int?
-  allocatedTotal Int                @default(0)
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
+  allocatedTotal Int                  @default(0)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
   categories     PlanBudgetCategory[]
 }
 
 model PlanBudgetCategory {
-  id        String    @id @default(cuid())
+  id        String @id @default(cuid())
   budgetId  String
   category  String
   allocated Int
 
-  budget    PlanBudget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  budget PlanBudget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 }
 
 model PlanMentorNote {
@@ -1024,12 +1049,21 @@ enum BlogAuthorRole {
 
 enum BlogEngagementType {
   VIEW
+  BLOG_VIEW
+  BLOG_SCROLL_DEPTH
+  TIME_ON_PAGE
   READ_75
   SHARE
 }
 
 enum BlogHighlightEventType {
   CLICK
+}
+
+enum BlogInfluenceActionType {
+  INVITE_REQUEST
+  ONBOARDING_COMPLETE
+  REGISTRY_ACTION
 }
 
 enum AffiliatePosition {
