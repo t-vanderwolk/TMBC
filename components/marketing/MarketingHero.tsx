@@ -7,6 +7,7 @@
  * It owns the editorial spacing, typography, CTA rhythm, and hero layout guardrails.
  */
 
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { StaticImageData } from "next/image";
@@ -70,9 +71,6 @@ export default function MarketingHero({
   postLeadMicroLineClassName = "",
   heroImage,
 }: MarketingHeroProps) {
-  const backgroundImageStyle = {
-    backgroundImage: `url(${heroImage.src})`,
-  };
   return (
     /**
      * MARKETING HERO HEIGHT — LOCKED
@@ -108,9 +106,14 @@ export default function MarketingHero({
         3. All hero images must be sourced from the shared `lib/heroImages.ts` registry.
       */}
       <div className="pointer-events-none absolute inset-0 z-0">
-        <div
-          className="absolute inset-0 h-full w-full bg-[length:100%_100%] bg-center bg-no-repeat"
-          style={backgroundImageStyle}
+        <Image
+          src={heroImage}
+          alt=""
+          aria-hidden="true"
+          priority
+          sizes="100vw"
+          fill
+          className="object-fill object-center"
         />
       </div>
       <div className="relative z-10 w-full px-6 md:px-10 py-8 sm:py-12">

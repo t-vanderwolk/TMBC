@@ -10,6 +10,7 @@ import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
 import { SectionBand, cardBase } from "@/components/marketing/MarketingCadence";
 import { JournalSpotlight } from "@/components/marketing/JournalSpotlight";
 import PillarHighlightsSection from "@/components/marketing/PillarHighlightsSection";
+import ExpandableCopy from "@/components/marketing/ExpandableCopy";
 
 // Marketing visual guardrails:
 // - All cards/panels use canonical marketing-card / marketing-panel styles
@@ -21,6 +22,7 @@ import PillarHighlightsSection from "@/components/marketing/PillarHighlightsSect
 // Pattern: white → ivory → white → blush
 import inviteNarrativeBg from "@/assets/images/inviteonlynarritive.png";
 import requestInviteIcon from "@/assets/logos/requestinviteicon.png";
+import robellogo from "@/assets/logos/robellogo.png";
 import conciergeIntakeIcon from "@/assets/logos/conciergeintakelogo.png";
 import matchIcon from "@/assets/logos/matchicon.png";
 import startExperienceIcon from "@/assets/logos/startexperienceicon.png";
@@ -91,6 +93,7 @@ const partnerLogos = [
   { id: "happiest-baby", name: "happiest-baby", src: happiestBabyLogo, alt: "Happiest Baby" },
   { id: "inglesina", name: "inglesina", src: inglesinaLogo, alt: "Inglesina" },
   { id: "kyte-baby", name: "kyte-baby", src: kyteBabyLogo, alt: "Kyte Baby" },
+  { id: "robel", name: "robel", src: robellogo, alt: "Robel" },
   { id: "momcozy", name: "momcozy", src: momCozyLogo, alt: "MomCozy" },
   { id: "newton-baby", name: "newton-baby", src: newtonBabyLogo, alt: "Newton Baby" },
   { id: "owlet", name: "owlet", src: owletLogo, alt: "Owlet" },
@@ -151,21 +154,25 @@ function InviteFlowSection() {
       icon: requestInviteIcon,
       alt: "Request an invite",
       label: "Request Invite",
+      description: "Share basic details so we can hold you an invite window.",
     },
     {
       icon: conciergeIntakeIcon,
       alt: "Concierge intake",
       label: "Concierge Intake",
+      description: "A mentor-led concierge reviews your story and answers questions calmly.",
     },
     {
       icon: matchIcon,
       alt: "Mentor match",
       label: "Match",
+      description: "We match you with a mentor who’s been there and can guide the whole season.",
     },
     {
       icon: startExperienceIcon,
       alt: "Start experience",
       label: "Start Experience",
+      description: "Begin planning together with clarity, one thoughtful decision at a time.",
     },
   ];
 
@@ -189,10 +196,13 @@ function InviteFlowSection() {
           How the Taylor-Made experience begins
         </h2>
         <div className="rounded-[36px] bg-gradient-to-br from-[var(--tmbc-ivory)] via-[var(--tmbc-blush-soft)] to-[var(--tmbc-blush-soft)] px-6 py-12">
-          <div className="flex flex-col items-center gap-6 text-center md:flex-row md:items-center md:gap-0 md:text-center">
+          <div className="flex flex-col gap-6 text-center md:flex-row md:items-center md:gap-0 md:text-center">
             {inviteSteps.map((step, index) => (
               <Fragment key={step.label}>
-                <div className="flex flex-col items-center gap-1 px-3 md:flex-1">
+                <div className="flex flex-col items-center gap-3 px-3 md:flex-1">
+                  <span className="text-[10px] tracking-[0.35em] uppercase text-[var(--tmbc-charcoal)]/60">
+                    Step {index + 1}
+                  </span>
                   <div className="flex items-end justify-center h-[76px] md:h-[88px] lg:scale-[0.92] lg:[transform-origin:center_bottom]">
                     <Image
                       src={step.icon}
@@ -207,19 +217,27 @@ function InviteFlowSection() {
                       )}`}
                     />
                   </div>
-                  <p className="font-serif italic text-[0.85rem] leading-[1.5] tracking-[0.04em] text-[var(--tmbc-charcoal)]/90">
+                  <p className="font-serif italic text-[0.95rem] leading-[1.4] tracking-[0.04em] text-[var(--tmbc-charcoal)]/90">
                     {step.label}
                   </p>
+                  <ExpandableCopy className="text-[0.75rem] leading-[1.4] text-[var(--tmbc-charcoal)]/80 max-w-[220px]">
+                    <p>{step.description}</p>
+                  </ExpandableCopy>
                 </div>
                 {index < inviteSteps.length - 1 && (
-                  <div className="hidden md:flex md:items-center md:px-4">
-                    <span
-                      className="text-[28px] leading-none text-[var(--tmbc-charcoal)]/30"
-                      aria-hidden="true"
-                    >
-                      →
-                    </span>
-                  </div>
+                  <>
+                    <div className="mt-3 md:hidden text-[20px] text-[var(--tmbc-charcoal)]/30 text-center">
+                      ↓
+                    </div>
+                    <div className="hidden md:flex md:items-center md:px-4">
+                      <span
+                        className="text-[28px] leading-none text-[var(--tmbc-charcoal)]/30"
+                        aria-hidden="true"
+                      >
+                        →
+                      </span>
+                    </div>
+                  </>
                 )}
               </Fragment>
             ))}
@@ -362,7 +380,7 @@ function TrustSection() {
 
 export default function HomePage() {
   return (
-    <div className="bg-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)]">
+    <div className="bg-[var(--tmbc-ivory)] text-[var(--tmbc-charcoal)] overflow-x-hidden">
       {/* Mobile spacing rule:
           Marketing sections should breathe on mobile.
           Prefer py-20+ over dense stacking. */}
@@ -379,34 +397,21 @@ export default function HomePage() {
         */}
       <MarketingHero
         eyebrow="Invitation-only · Mentor-led"
-        headline="Baby prep, with someone who’s already done it"
-        lead="A calm, guided approach to preparing for baby—without pressure or guesswork."
+        headline="Baby prep, without the overwhelm"
+        lead="Taylor-Made pairs you with a dedicated mentor so you can plan for baby with clarity, without pressure."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
         }}
-        secondaryCta={{
-          label: "Explore how it works",
-          href: "/how-it-works",
-          className: "mt-2 md:mt-0",
-        }}
-        className="pt-24 pb-20 md:pt-32 md:pb-28"
+        className="pt-20 pb-16 md:pt-32 md:pb-28"
         textContainerClassName="max-w-full md:max-w-[720px] px-6 md:px-8 p-6 space-y-6 md:space-y-8 leading-relaxed"
         headlineClassName="hero-line-clamp leading-snug"
         leadClassName="mt-6"
-        ctaContainerClassName="mt-8 flex flex-col gap-6 sm:flex-row sm:gap-5"
+        ctaContainerClassName="mt-8 flex flex-col items-center gap-4"
         primaryAction={
-          <Button href="/request-invite" variant="primary" className="px-8 py-3 uppercase tracking-[0.35em]">
+          <Button href="/request-invite" variant="primary" className="px-8 py-4 uppercase tracking-[0.35em]">
             Request an Invite
           </Button>
-        }
-        secondaryAction={
-          <Link
-            href="/how-it-works"
-            className="text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] underline"
-          >
-            See how it works
-          </Link>
         }
         heroImage={HERO_IMAGE_REGISTRY.heroMarketingSignature}
       />
@@ -435,13 +440,7 @@ export default function HomePage() {
           </form>
 
           <p className="mt-3 text-xs text-[var(--tmbc-charcoal)]/60">
-            Don’t have a code?{" "}
-            <Link
-              href="/request-invite"
-              className="underline underline-offset-4 hover:text-[var(--tmbc-charcoal)]"
-            >
-              Request an invite
-            </Link>
+            Need an invite code? Submit the request above and we’ll send one once your space is confirmed.
           </p>
         </div>
       </div>
@@ -460,7 +459,7 @@ export default function HomePage() {
         <PartnerLogoCarousel logos={partnerLogos} />
         <div className="mx-auto mt-6 md:mt-8 flex max-w-6xl px-6">
           <p className="text-xs md:text-sm text-muted-foreground max-w-3xl text-left">
-            Some of the brands featured here are affiliate partners. That simply means we may earn a small commission if you choose to purchase through links we recommend — at no additional cost to you. We only partner with brands our mentors trust and would suggest regardless of affiliation.
+            These are calm, mentor-approved relationships. If a purchase happens through our guidance, we may earn a small commission at no extra cost, and only when it feels right for your experience.
           </p>
         </div>
       </SectionBand>

@@ -71,29 +71,24 @@ export default function PartnerLogoCarousel({ logos: overrideLogos }: PartnerLog
   const hasLogos = sourceLogos.length > 0;
 
   return (
-    <div className="py-16 space-y-6 text-center">
-      <p className="text-[0.7rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70 mx-auto">
-        Only Partnered With The Best
-      </p>
+    <div className="py-12">
       {hasLogos ? (
-        <>
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 px-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            {sourceLogos.map((logo) => {
-              const src = typeof logo.src === "string" ? logo.src : logo.src.src;
-              return (
-                <div key={logo.id} className="flex items-center justify-center h-[56px] md:h-[64px]">
-                  <img
-                    src={src}
-                    alt={logo.alt}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-auto object-contain opacity-90"
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </>
+        <div className="mx-auto grid max-w-5xl grid-cols-2 items-center gap-6 px-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {sourceLogos.map((logo) => {
+            const src = typeof logo.src === "string" ? logo.src : logo.src.src;
+            return (
+              <div key={logo.id} className="flex items-center justify-center h-[46px] md:h-[54px]">
+                <img
+                  src={src}
+                  alt={logo.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="max-h-full w-auto object-contain opacity-90"
+                />
+              </div>
+            );
+          })}
+        </div>
       ) : (
         <div className="h-16" aria-hidden />
       )}
