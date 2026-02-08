@@ -11,6 +11,7 @@ import { SectionBand, cardBase } from "@/components/marketing/MarketingCadence";
 import { JournalSpotlight } from "@/components/marketing/JournalSpotlight";
 import PillarHighlightsSection from "@/components/marketing/PillarHighlightsSection";
 import ExpandableCopy from "@/components/marketing/ExpandableCopy";
+import { caveat } from "@/lib/fonts";
 
 // Marketing visual guardrails:
 // - All cards/panels use canonical marketing-card / marketing-panel styles
@@ -373,13 +374,14 @@ function TrustSection() {
             </span>
           ))}
         </div>
-        <div className="mt-6 flex flex-col items-center gap-1 text-center translate-x-2 md:translate-x-6">
-          <p className="font-script text-[3rem] leading-[1] text-[var(--tmbc-charcoal)]/70 -rotate-6">
-            XOXO
-          </p>
-          <p className="font-script text-[2.5rem] leading-[1] text-[var(--tmbc-charcoal)]/70 opacity-80 -rotate-6">
-            — T
-          </p>
+        <div className="mt-6 flex justify-center">
+          <div
+            className={`${caveat.className} text-[var(--tmbc-blush-primary)] text-[3rem] leading-none`}
+            style={{ transform: "rotate(-6deg) scale(2.5) translateY(4px) translateX(12px)" }}
+          >
+            <div>XOXO</div>
+            <div className="-mt-1 text-[2rem]">— T</div>
+          </div>
         </div>
       </div>
     </section>

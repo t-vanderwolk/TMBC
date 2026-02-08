@@ -257,11 +257,11 @@ export default function ArtOfTheRegistryPage() {
 
       <div className="mt-4 flex justify-center">
         <div
-          className={`${caveat.className} text-neutral-600 text-lg`}
-          style={{ transform: "rotate(-6deg) scale(3) translateY(6px)" }}
+          className={`${caveat.className} text-[var(--tmbc-blush-primary)] text-[3rem] leading-none`}
+          style={{ transform: "rotate(-6deg) scale(2.5) translateY(4px) translateX(12px)" }}
         >
           <div>XOXO</div>
-          <div className="-mt-1">— T</div>
+          <div className="-mt-1 text-[2rem]">— T</div>
         </div>
       </div>
       <EndRibbonBow />
