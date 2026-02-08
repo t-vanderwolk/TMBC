@@ -462,10 +462,16 @@ export default function HomePage() {
       <WhyInviteOnlySection />
       <PillarHighlightsSection />
       <TrustSection />
+      <ExperienceIllustrationSection />
       <div className="my-20 md:my-24">
         <SectionDivider />
       </div>
       <SectionBand bg="white" className="border-t border-black/5 py-20 md:py-24">
+        <div className="mx-auto mb-6 max-w-6xl px-6 text-center">
+          <p className="text-[0.65rem] uppercase tracking-[0.6em] text-muted-foreground">
+            ONLY PARTNERED WITH THE BEST
+          </p>
+        </div>
         <PartnerLogoCarousel logos={partnerLogos} />
         <div className="mx-auto mt-6 md:mt-8 flex max-w-6xl px-6">
           <p className="text-xs md:text-sm text-muted-foreground max-w-3xl text-left">
