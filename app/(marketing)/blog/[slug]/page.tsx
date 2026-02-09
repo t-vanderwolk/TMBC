@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -10,6 +11,8 @@ import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
 import BlogAnalyticsTracker from "@/components/blog/BlogAnalyticsTracker";
 import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
 import EndRibbonBow from "@/components/blog/EndRibbonBow";
+import defaultBlogOgImage from "@/assets/images/hero-marketing-signature.png";
+import tmbcSeal from "@/assets/images/tmbc-seal.png";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import { BLOG_IMPACT_SLUG } from "@/lib/constants/blogAnalytics";
 import { caveat } from "@/lib/fonts";
@@ -34,6 +37,7 @@ const SHOULD_SKIP_PUBLIC_BLOG_FETCH =
   process.env.npm_lifecycle_event === "build";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.taylormadebaby.co";
+const DEFAULT_BLOG_OG_IMAGE = `${siteUrl}${defaultBlogOgImage.src}`;
 
 type PublicAffiliateLink = {
   id: string;
@@ -83,6 +87,183 @@ type PublicBlogPostResult = {
 type BlogPageProps = {
   params: Params;
   searchParams?: { sourceContext?: string };
+};
+
+const ART_OF_REGISTRY_FALLBACK: PublicBlogPost = {
+  id: "fallback-art-of-the-registry",
+  slug: BLOG_IMPACT_SLUG,
+  title: "The Art of the Registry",
+  excerpt:
+    "How to prepare for baby without overbuying — or feeling like you’re doing it wrong.",
+  content: [
+    {
+      type: "paragraph",
+      text: "There’s a moment in early pregnancy (or adoption planning) when it hits you:",
+    },
+    {
+      type: "paragraph",
+      text: "Everyone is telling you to buy something — and none of them agree.",
+    },
+    {
+      type: "paragraph",
+      text: "One person swears you must have a wipe warmer. Another says they never used half their registry. Instagram shows perfectly styled nurseries. Your group chat is sending Amazon links at 11pm. And suddenly, preparing for your baby feels less like care… and more like consumer overwhelm.",
+    },
+    {
+      type: "paragraph",
+      text: "At Taylor-Made Baby Co., we believe baby prep isn’t about buying more. It’s about choosing intentionally — with support from someone who’s already been exactly where you are.",
+    },
+    {
+      type: "paragraph",
+      text: "This is the art of the registry.",
+    },
+    {
+      type: "heading",
+      level: 2,
+      text: "Why registries get overwhelming (and why it’s not your fault)",
+    },
+    {
+      type: "paragraph",
+      text: "Modern baby prep happens at the intersection of marketing algorithms, well-meaning advice, and a very real desire to “get it right.”",
+    },
+    {
+      type: "paragraph",
+      text: "Most registries fail not because parents don’t care — but because no one explains what products actually do, when you’ll need them, or whether your life even calls for them.",
+    },
+    {
+      type: "paragraph",
+      text: "So parents default to “just in case,” “everyone else has this,” or “I don’t want to forget something.”",
+    },
+    {
+      type: "paragraph",
+      text: "That’s not overbuying because you’re careless. That’s overbuying because you’re unsupported.",
+    },
+    {
+      type: "heading",
+      level: 2,
+      text: "The Taylor-Made approach: Learn · Plan · Connect · Reflect",
+    },
+    {
+      type: "paragraph",
+      text: "We built TMBC around a simple belief: you deserve clarity before you purchase.",
+    },
+    {
+      type: "paragraph",
+      text: "Here’s how our process works — in real, human terms.",
+    },
+    { type: "heading", level: 3, text: "Learn" },
+    {
+      type: "paragraph",
+      text: "What does this actually do — and do I need it?",
+    },
+    {
+      type: "paragraph",
+      text: "Before anything touches your registry, you learn what each product is designed to solve, when it’s typically used, and which features actually matter for your home, lifestyle, and baby.",
+    },
+    {
+      type: "paragraph",
+      text: "No pressure. No brand bias. Just calm explanation.",
+    },
+    {
+      type: "paragraph",
+      text: "Because it’s a lot easier to say “no” to something once you actually understand it.",
+    },
+    { type: "heading", level: 3, text: "Plan" },
+    {
+      type: "paragraph",
+      text: "Build your registry while you learn — with a mentor who’s done this before.",
+    },
+    {
+      type: "paragraph",
+      text: "Instead of building a registry all at once, you plan in layers: essentials versus nice-to-haves, buy now versus wait and see, borrow, rent, secondhand, or skip entirely.",
+    },
+    {
+      type: "paragraph",
+      text: "You don’t do this alone. You plan alongside a trusted mentor — someone who’s been through babyhood, gear decisions, and the emotional side of it all.",
+    },
+    {
+      type: "paragraph",
+      text: "This is where overbuying quietly disappears.",
+    },
+    { type: "heading", level: 3, text: "Connect" },
+    {
+      type: "paragraph",
+      text: "You’re not the only one asking these questions.",
+    },
+    {
+      type: "paragraph",
+      text: "Inside TMBC, you connect with other parents at the same stage, mentors who guide conversations, and people asking the same things you’re wondering at 2am.",
+    },
+    {
+      type: "paragraph",
+      text: "“Do I really need this?” “Did anyone else skip this?” “What actually mattered in the first month?”",
+    },
+    {
+      type: "paragraph",
+      text: "You’re not crowdsourcing chaos — you’re sharing clarity.",
+    },
+    { type: "heading", level: 3, text: "Reflect" },
+    {
+      type: "paragraph",
+      text: "Turn preparation into something you’ll actually want to keep.",
+    },
+    {
+      type: "paragraph",
+      text: "Most baby prep disappears into receipts and boxes. We believe it should become a keepsake.",
+    },
+    {
+      type: "paragraph",
+      text: "Inside TMBC, you can reflect as you go: what you learned, what you chose (and why), and how your confidence grew.",
+    },
+    {
+      type: "paragraph",
+      text: "So one day, you can look back — not at how much you bought — but at how thoughtfully you prepared for your baby.",
+    },
+    {
+      type: "heading",
+      level: 2,
+      text: "The member-to-mentor path (because wisdom compounds)",
+    },
+    {
+      type: "paragraph",
+      text: "Some members eventually become mentors.",
+    },
+    {
+      type: "paragraph",
+      text: "Parents who once asked the questions become the ones helping others navigate them. It’s a cycle of lived experience passed forward — and it keeps the platform grounded, human, and real.",
+    },
+    {
+      type: "paragraph",
+      text: "Preparing without overbuying isn’t about restraint — it’s about trust.",
+    },
+    {
+      type: "paragraph",
+      text: "Trust in yourself, your ability to learn, and the idea that you don’t need everything to be a great parent.",
+    },
+    {
+      type: "paragraph",
+      text: "You just need the right things — chosen with care.",
+    },
+    {
+      type: "paragraph",
+      text: "That’s the art of the registry.",
+    },
+    {
+      type: "heading",
+      level: 2,
+      text: "END_CARD",
+    },
+    {
+      type: "paragraph",
+      text: "If this raised questions, that’s normal. A mentor can help you decide what fits your life.",
+    },
+  ],
+  heroImage: null,
+  publishedAt: "2024-10-28T00:00:00.000Z",
+  authorName: "Taylor-Made Baby Co.",
+  authorRoleSnapshot: "MENTOR",
+  tags: ["registry", "planning", "clarity"],
+  highlights: [],
+  affiliateLinks: [],
 };
 
 const fetchPublicPosts = async () => {
@@ -172,31 +353,32 @@ export const generateStaticParams = async () => {
 
 export const generateMetadata = async ({ params }: { params: Params }): Promise<Metadata> => {
   const { post } = await fetchPublicPost(params.slug);
-  if (!post) return {};
+  const resolvedPost = post ?? (params.slug === BLOG_IMPACT_SLUG ? ART_OF_REGISTRY_FALLBACK : null);
+  if (!resolvedPost) return {};
 
-  const url = `${siteUrl}/blog/${post.slug}`;
+  const url = `${siteUrl}/blog/${resolvedPost.slug}`;
 
   const openGraph: Metadata["openGraph"] = {
-    title: post.title,
-    description: post.excerpt ?? "",
+    title: resolvedPost.title,
+    description: resolvedPost.excerpt ?? "",
     url,
     siteName: "Taylor-Made Baby Co.",
     type: "article",
-    publishedTime: post.publishedAt ?? undefined,
-    authors: [post.authorName],
-    ...(post.heroImage ? { images: [{ url: post.heroImage }] } : {}),
+    publishedTime: resolvedPost.publishedAt ?? undefined,
+    authors: [resolvedPost.authorName],
+    images: [{ url: resolvedPost.heroImage ?? DEFAULT_BLOG_OG_IMAGE }],
   };
 
   const twitter: Metadata["twitter"] = {
     card: "summary_large_image",
-    title: post.title,
-    description: post.excerpt ?? "",
-    ...(post.heroImage ? { images: [post.heroImage] } : {}),
+    title: resolvedPost.title,
+    description: resolvedPost.excerpt ?? "",
+    images: [resolvedPost.heroImage ?? DEFAULT_BLOG_OG_IMAGE],
   };
 
   return {
-    title: `${post.title} | Taylor-Made Baby Co.`,
-    description: post.excerpt ?? "",
+    title: `${resolvedPost.title} | Taylor-Made Baby Co.`,
+    description: resolvedPost.excerpt ?? "",
     alternates: {
       canonical: url,
     },
@@ -207,6 +389,7 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
 
 const BlogArticlePage = async ({ params, searchParams }: BlogPageProps) => {
   const { post, unavailable } = await fetchPublicPost(params.slug, searchParams?.sourceContext);
+  const resolvedPost = post ?? (params.slug === BLOG_IMPACT_SLUG ? ART_OF_REGISTRY_FALLBACK : null);
   if (unavailable) {
     return (
       <SectionBand bg="white">
@@ -217,15 +400,15 @@ const BlogArticlePage = async ({ params, searchParams }: BlogPageProps) => {
     );
   }
 
-  if (!post) notFound();
+  if (!resolvedPost) notFound();
 
-  const contentBlocks = Array.isArray(post.content) ? post.content : [];
+  const contentBlocks = Array.isArray(resolvedPost.content) ? resolvedPost.content : [];
   const mainBlocks = splitContentBlocks(contentBlocks);
   const toc = getTableOfContents(mainBlocks);
-  const shareUrl = encodeURIComponent(`${siteUrl}/blog/${post.slug}`);
-  const shareText = encodeURIComponent(post.title);
-  const publishedLabel = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString("en-US", {
+  const shareUrl = encodeURIComponent(`${siteUrl}/blog/${resolvedPost.slug}`);
+  const shareText = encodeURIComponent(resolvedPost.title);
+  const publishedLabel = resolvedPost.publishedAt
+    ? new Date(resolvedPost.publishedAt).toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
         year: "numeric",
@@ -243,15 +426,15 @@ const BlogArticlePage = async ({ params, searchParams }: BlogPageProps) => {
             <div className={textCage("intro")}>
               <p className="text-xs uppercase tracking-[0.6em] text-tmCharcoal/60">Taylor-Made Journal</p>
               <MarketingHeading level="h1" className="text-tmCharcoal">
-                {post.title}
+                {resolvedPost.title}
               </MarketingHeading>
-              {post.excerpt && <p className="text-base italic text-tmCharcoal/70">{post.excerpt}</p>}
+              {resolvedPost.excerpt && <p className="text-base italic text-tmCharcoal/70">{resolvedPost.excerpt}</p>}
               <p className="text-xs uppercase tracking-[0.45em] text-tmCharcoal/60">
                 Calm context from mentors who've been here.
               </p>
             </div>
             <div className="flex flex-wrap gap-3 text-[0.65rem] uppercase tracking-[0.4em] text-tmCharcoal/65">
-              {post.tags.map((tag) => (
+              {resolvedPost.tags.map((tag) => (
                 <span key={tag} className="rounded-full border border-tmMauve/40 px-3 py-1 text-[0.55rem] font-semibold text-tmCharcoal">
                   {tag}
                 </span>
@@ -260,9 +443,9 @@ const BlogArticlePage = async ({ params, searchParams }: BlogPageProps) => {
             <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.35em] text-tmCharcoal/60">
               <span>{publishedLabel}</span>
               <span>•</span>
-              <span>{post.authorName}</span>
+              <span>{resolvedPost.authorName}</span>
               <span>•</span>
-              <span>{formatAuthorRole(post.authorRoleSnapshot)}</span>
+              <span>{formatAuthorRole(resolvedPost.authorRoleSnapshot)}</span>
             </div>
           </div>
         </div>
@@ -356,14 +539,27 @@ const BlogArticlePage = async ({ params, searchParams }: BlogPageProps) => {
                 <div className="-mt-1">— T</div>
               </div>
             </div>
+            <div className="relative mt-32 flex justify-end">
+              <div className="opacity-75 rotate-[-8deg] pointer-events-none">
+                <Image
+                  src={tmbcSeal}
+                  alt=""
+                  aria-hidden="true"
+                  width={120}
+                  height={120}
+                  className="w-[100px] sm:w-[120px]"
+                  priority={false}
+                />
+              </div>
+            </div>
             <div className="mt-10 sm:mt-14" />
           </article>
         </div>
       </SectionBand>
       <SectionBand bg="blush">
         <div className={`${textCage("standard")} space-y-8`}>
-          <BlogHighlightSection highlights={post.highlights ?? []} />
-          <BlogAffiliateEndCard links={post.affiliateLinks} />
+          <BlogHighlightSection highlights={resolvedPost.highlights ?? []} />
+          <BlogAffiliateEndCard links={resolvedPost.affiliateLinks} />
           <div className="rounded-3xl border-l-4 border-tmGold/60 bg-tmIvory/80 px-6 py-6">
             <p className="font-playfair text-2xl uppercase tracking-[0.3em] text-tmCharcoal">
               "Mentor-led planning turns preparation into something steady and kind."
@@ -397,8 +593,8 @@ const BlogArticlePage = async ({ params, searchParams }: BlogPageProps) => {
           </div>
         </div>
       </SectionBand>
-      {post.slug === BLOG_IMPACT_SLUG && (
-        <BlogAnalyticsTracker slug={post.slug} sourceContext={searchParams?.sourceContext ?? null} />
+      {resolvedPost.slug === BLOG_IMPACT_SLUG && (
+        <BlogAnalyticsTracker slug={resolvedPost.slug} sourceContext={searchParams?.sourceContext ?? null} />
       )}
     </>
   );

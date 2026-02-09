@@ -73,17 +73,17 @@ export default function PartnerLogoCarousel({ logos: overrideLogos }: PartnerLog
   return (
     <div className="py-12">
       {hasLogos ? (
-        <div className="mx-auto grid max-w-5xl grid-cols-2 items-center gap-6 px-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <div className="mx-auto grid max-w-5xl grid-cols-2 items-center gap-y-10 gap-x-8 px-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {sourceLogos.map((logo) => {
             const src = typeof logo.src === "string" ? logo.src : logo.src.src;
             return (
-              <div key={logo.id} className="flex items-center justify-center h-[46px] md:h-[54px]">
+              <div key={logo.id} className="flex items-center justify-center">
                 <img
                   src={src}
                   alt={logo.alt}
                   loading="lazy"
                   decoding="async"
-                  className="max-h-full w-auto object-contain opacity-90"
+                  className="partner-logo max-h-[56px] md:max-h-[64px]"
                 />
               </div>
             );

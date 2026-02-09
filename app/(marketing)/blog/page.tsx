@@ -67,6 +67,20 @@ const formatDate = (value?: string | null) => {
   });
 };
 
+const PRIORITIZED_SECOND_SLUG = "baby-and-pet-safety-guidelines";
+
+const ensureSecondPosition = (posts: PublicBlogPost[]) => {
+  const ordered = [...posts];
+  const targetIndex = ordered.findIndex((post) => post.slug === PRIORITIZED_SECOND_SLUG);
+  if (targetIndex > 1) {
+    const [targetPost] = ordered.splice(targetIndex, 1);
+    if (targetPost) {
+      ordered.splice(1, 0, targetPost);
+    }
+  }
+  return ordered;
+};
+
 const marketingHeroBlock = (
   <>
     {/* Hero must render instantly and avoid additional entrance wrappers. */}
@@ -113,6 +127,45 @@ function FeaturedPost({ post }: { post: PublicBlogPost }) {
             className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] transition hover:text-[var(--tmbc-mauve)]"
           >
             Read more
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SecondaryPostPreview({ post }: { post: PublicBlogPost }) {
+  const primaryCategory = post.tags.at(0) ?? "Journal";
+
+  return (
+    <section className={cardBase("bg-[var(--tmbc-ivory)]/80 border border-[var(--tmbc-ivory)]")}>
+      <div className="grid gap-6 lg:grid-cols-[1fr_1fr] items-center">
+        <div className="relative h-48 w-full overflow-hidden rounded-[20px] bg-white/80 border border-[var(--tmbc-ivory)]">
+          {post.heroImage ? (
+            <Image
+              src={post.heroImage}
+              alt={post.title}
+              fill
+              sizes="(min-width: 1024px) 420px, 100vw"
+              className="object-cover"
+            />
+          ) : (
+            <div aria-hidden className="absolute inset-0 bg-[var(--tmbc-ivory)]" />
+          )}
+        </div>
+        <div className="space-y-3">
+          <p className="text-xs uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
+            {primaryCategory} · {formatDate(post.publishedAt)}
+          </p>
+          <MarketingHeading level="h3" className="text-[var(--tmbc-charcoal)]">
+            {post.title}
+          </MarketingHeading>
+          <p className="mkt-body text-[var(--tmbc-charcoal)] text-opacity-80">{post.excerpt ?? ""}</p>
+          <Link
+            href={`/blog/${post.slug}`}
+            className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--tmbc-charcoal)] transition hover:text-[var(--tmbc-mauve)]"
+          >
+            Read the preview
           </Link>
         </div>
       </div>
@@ -235,7 +288,8 @@ function EvergreenPreviewCard() {
 
 export default async function BlogMarketingPage() {
   const { posts, unavailable } = await fetchPublicPosts();
-  const [featuredPost, ...otherPosts] = posts;
+  const orderedPosts = ensureSecondPosition(posts);
+  const [featuredPost, secondPost, ...otherPosts] = orderedPosts;
 
   if (unavailable || !featuredPost) {
     return (
@@ -262,6 +316,13 @@ export default async function BlogMarketingPage() {
       <SectionBand bg="white">
         <FeaturedPost post={featuredPost} />
       </SectionBand>
+      {secondPost && (
+        <SectionBand bg="ivory">
+          <div className={`${textCage("standard")}`}>
+            <SecondaryPostPreview post={secondPost} />
+          </div>
+        </SectionBand>
+      )}
       <SectionBand bg="ivory">
         <div className={`${textCage("standard")}`}>
           <CategoryFilter />

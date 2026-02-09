@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import Button from "@/components/ui/Button";
+import { caveat } from "@/lib/fonts";
 
 // Marketing background cadence is intentional.
 // Do not reorder or recolor section backgrounds.
@@ -141,11 +142,14 @@ function WhyWeExistSection() {
 
   return (
     <SectionBand bg="ivory" className="py-16 md:py-20 lg:py-24">
-      <div className="mx-auto max-w-4xl space-y-6 text-left">
-        <MarketingHeading level="h2" className="text-[var(--tmbc-text-primary)]">
+      <div className="mx-auto max-w-4xl space-y-6 text-center">
+        <MarketingHeading
+          level="h2"
+          className="text-[var(--tmbc-text-primary)] text-center mx-auto"
+        >
           Why We Exist
         </MarketingHeading>
-        <div className="space-y-4 text-[var(--tmbc-text-secondary)] leading-[1.6] max-w-[46ch]">
+        <div className="space-y-4 text-[var(--tmbc-text-secondary)] leading-[1.6] max-w-[46ch] mx-auto">
           <p className="mkt-body text-[var(--tmbc-text-secondary)] text-opacity-80 leading-[1.6]">
             Those slow, early hours—scrolling through yet another careful checklist while the house stays still—feel like a murmured question asking whether the next decision will be kinder.
           </p>
@@ -157,6 +161,15 @@ function WhyWeExistSection() {
           <p className="text-sm text-[var(--tmbc-text-secondary)] text-opacity-70 leading-[1.6]">
             Most parents just need someone to say, “You can skip that,” so we stay small and keep the care calm.
           </p>
+          <div className="mt-8 flex justify-center">
+            <div
+              className={`${caveat.className} text-[var(--tmbc-blush-primary)] text-[3rem] leading-none`}
+              style={{ transform: "rotate(-6deg) scale(2.5) translateY(12px) translateX(16px)" }}
+            >
+              <div>XOXO</div>
+              <div className="-mt-1 text-[2rem]">— T</div>
+            </div>
+          </div>
         </div>
       </div>
     </SectionBand>
@@ -185,7 +198,7 @@ export default function ExperiencePage() {
           label: "See how it works",
           href: "/how-it-works",
         }}
-        heroImage={HERO_IMAGE_REGISTRY.learningFlowHero}
+        heroImage={HERO_IMAGE_REGISTRY.upperLowerRibbonHero}
       />
 
       <WhyWeExistSection />

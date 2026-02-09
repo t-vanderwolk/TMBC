@@ -4,6 +4,8 @@
 
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
+const { spawnSync } = require("node:child_process");
+const path = require("node:path");
 const seedAcademyModules = require("./seedAcademyModules");
 const seedAffiliates = require("./seedAffiliates");
 
@@ -83,6 +85,18 @@ async function seedDemoRegistryProduct() {
   console.log("⚡️ Seeded demo registry product & affiliate link");
 }
 
+function seedBlogCanon() {
+  const scriptPath = path.join(__dirname, "seedBlogCanon.ts");
+  const result = spawnSync(process.execPath, [scriptPath], {
+    stdio: "inherit",
+    env: process.env,
+  });
+
+  if (result.status !== 0) {
+    throw new Error(`seedBlogCanon failed with exit code ${result.status ?? "unknown"}`);
+  }
+}
+
 /* ----------------------------- MAIN ------------------------------ */
 
 async function main() {
@@ -103,6 +117,7 @@ async function main() {
   await seedAcademyModules();
   await seedDemoRegistryProduct();
   await seedAffiliates();
+  seedBlogCanon();
 
   console.log("🎉 TMBC seed complete");
 }

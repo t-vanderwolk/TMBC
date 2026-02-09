@@ -13,6 +13,7 @@ import reflectPillar from "@/assets/images/reflectpillar.png";
 const pillarHighlights = [
   {
     title: "Learn",
+    microHook: "without brand bias",
     summary: "What baby gear actually does — and why it matters.",
     description:
       "Understand what you’re being told to buy — and why.\n\nLearn what baby gear actually does, when it’s typically used, and what truly matters for your life.\nNo pressure. No brand bias. Just calm, clear explanations so you can make confident choices.",
@@ -21,6 +22,7 @@ const pillarHighlights = [
   },
   {
     title: "Plan",
+    microHook: "skip what you don’t need",
     summary: "Figure out what you need. Skip what you don’t.",
     description:
       "Build your registry with intention — not panic.\n\nPlan as you learn, alongside a trusted mentor who’s been exactly where you are.\nDecide what you need now, what can wait, what to skip entirely — and what actually fits your home, lifestyle, and values.",
@@ -29,6 +31,7 @@ const pillarHighlights = [
   },
   {
     title: "Connect",
+    microHook: "real parents, real mentors",
     summary: "You’re not meant to do this alone.",
     description:
       "You’re not the only one asking these questions.\n\nConnect with other parents in the same season and mentors who guide the conversation.\nShare questions, trade perspective, and get clarity — without the chaos of crowdsourced advice.",
@@ -37,6 +40,7 @@ const pillarHighlights = [
   },
   {
     title: "Reflect",
+    microHook: "your future baby book",
     summary: "A record of this season, saved for later.",
     description:
       "Turn this season into a keepsake you’ll treasure later.\n\nReflect as you prepare and create a virtual baby book along the way.\nCapture what you learned, the choices you made, and how you felt — so one day, you can look back on this season with clarity and care.",
@@ -94,7 +98,12 @@ export default function PillarHighlightsSection() {
                     />
                   </div>
                   <div className="space-y-3 px-6 py-6 text-[var(--tmbc-charcoal)]">
-                    <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">{pillar.title}</p>
+                    <div className="flex flex-wrap items-baseline gap-2">
+                      <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
+                        {pillar.title}
+                      </p>
+                      {pillar.microHook && <span className="micro-hook">({pillar.microHook})</span>}
+                    </div>
                     <MarketingHeading level="h3">{pillar.summary}</MarketingHeading>
                     <div
                       className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-out ${

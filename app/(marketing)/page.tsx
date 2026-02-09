@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import PartnerLogoCarousel from "@/components/marketing/PartnerLogoCarousel";
 import SectionDivider from "@/components/marketing/SectionDivider";
+import RibbonDivider from "@/components/ui/RibbonDivider";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import Button from "@/components/ui/Button";
 import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
@@ -104,7 +105,7 @@ const partnerLogos = [
 
 function ExperienceIllustrationSection() {
   return (
-    <SectionBand bg="white" className="py-16 md:py-20 lg:py-24">
+    <SectionBand bg="ivory" className="py-16 md:py-20 lg:py-24">
       <div className="mx-auto max-w-5xl px-6">
         <p className="mb-3 text-xs uppercase tracking-[0.22em] text-neutral-500">
           WHY PARENTS LOVE TMBC
@@ -154,36 +155,36 @@ function InviteFlowSection() {
     {
       icon: requestInviteIcon,
       alt: "Request an invite",
-      label: "Request Invite",
+      label: "Request Your Invite Window",
       description: "Share basic details so we can hold you an invite window.",
     },
     {
       icon: conciergeIntakeIcon,
       alt: "Concierge intake",
-      label: "Concierge Intake",
+      label: "Tell Us About You",
       description: "A mentor-led concierge reviews your story and answers questions calmly.",
     },
     {
       icon: matchIcon,
       alt: "Mentor match",
-      label: "Match",
+      label: "Meet Your Mentor",
       description: "We match you with a mentor who’s been there and can guide the whole season.",
     },
     {
       icon: startExperienceIcon,
       alt: "Start experience",
-      label: "Start Experience",
+      label: "Begin Your Taylor-Made Journey",
       description: "Begin planning together with clarity, one thoughtful decision at a time.",
     },
   ];
 
   const iconWidthClass = (label: string) => {
     switch (label) {
-      case "Request Invite":
+      case "Request Your Invite Window":
         return "max-w-[58px] md:max-w-[66px]";
-      case "Match":
+      case "Meet Your Mentor":
         return "max-w-[64px] md:max-w-[74px]";
-      case "Start Experience":
+      case "Begin Your Taylor-Made Journey":
         return "max-w-[56px] md:max-w-[66px]";
       default:
         return "max-w-[58px] md:max-w-[68px]";
@@ -327,13 +328,16 @@ function WhyInviteOnlySection() {
                   A mentor whispers, “You are allowed to set the pace that feels right.”
                 </span>
               </div>
+              <div className="mt-6 space-y-3 border-l border-[var(--tmbc-charcoal)]/15 pl-5 text-[var(--tmbc-charcoal)]/70">
+                <p className="text-sm font-light italic leading-[1.6]">
+                  “I finally felt like I could slow down and trust my decisions.”
+                </p>
+                <p className="text-[0.55rem] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/50">
+                  — A voice you might hear from someone who’s been here.
+                </p>
+              </div>
               <div className="mt-8 text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
                 MENTORS GUARD THE PACE
-              </div>
-              <div className="mt-4 space-y-2 text-[var(--tmbc-text-secondary)] leading-[1.6]">
-                <p>Invite-only allows us to move at a human pace.</p>
-                <p>Fewer people. Better care.</p>
-                <p>Space for real questions — without pressure to keep up.</p>
               </div>
               <div className="mt-6 space-y-1 text-[var(--tmbc-text-secondary)] leading-[1.6]">
                 <p>No feeds.</p>
@@ -350,6 +354,7 @@ function WhyInviteOnlySection() {
 
 function TrustSection() {
   const promiseLines = [
+    "We help you prepare with confidence, not pressure.",
     "We believe baby prep should feel calm, supported, and intentional — not rushed or overwhelming.",
     "Understand first — before you buy anything.",
     "Decide intentionally, with guidance from someone who’s been there.",
@@ -408,7 +413,7 @@ export default function HomePage() {
       <MarketingHero
         eyebrow="Invitation-only · Mentor-led"
         headline="Baby prep, without the overwhelm"
-        lead="Taylor-Made pairs you with a dedicated mentor so you can plan for baby with clarity, without pressure."
+        lead="Know what to buy, what to skip, and why — so decisions feel calm, intentional, and confident."
         primaryCta={{
           label: "Request an Invite",
           href: "/request-invite",
@@ -416,17 +421,26 @@ export default function HomePage() {
         className="pt-20 pb-16 md:pt-32 md:pb-28"
         textContainerClassName="max-w-full md:max-w-[720px] px-6 md:px-8 p-6 space-y-6 md:space-y-8 leading-relaxed"
         headlineClassName="hero-line-clamp leading-snug"
-        leadClassName="mt-6"
+        leadClassName="mt-10 md:mt-12"
         ctaContainerClassName="mt-8 flex flex-col items-center gap-4"
         primaryAction={
           <Button href="/request-invite" variant="primary" className="px-8 py-4 uppercase tracking-[0.35em]">
             Request an Invite
           </Button>
         }
+        secondaryAction={
+          <Link
+            href="/how-it-works"
+            className="flex items-center gap-1 text-sm font-semibold uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)] text-opacity-80 transition hover:text-[var(--tmbc-mauve)]"
+          >
+            <span>See How It Works</span>
+            <span aria-hidden>→</span>
+          </Link>
+        }
         heroImage={HERO_IMAGE_REGISTRY.heroMarketingSignature}
       />
       {/* Invite Code Entry */}
-      <div className="mt-12 flex w-full justify-center px-4">
+      <div id="request-invite" className="mt-12 flex w-full justify-center px-4">
         <div className="w-full max-w-md text-center">
           <p className="mb-3 text-xs uppercase tracking-widest text-[var(--tmbc-charcoal)]/60">
             Already invited?
@@ -460,16 +474,18 @@ export default function HomePage() {
         <SectionDivider />
       </div>
       <WhyInviteOnlySection />
+      <RibbonDivider />
       <PillarHighlightsSection />
       <TrustSection />
-      <ExperienceIllustrationSection />
       <div className="my-20 md:my-24">
         <SectionDivider />
       </div>
+      <ExperienceIllustrationSection />
+      <RibbonDivider />
       <SectionBand bg="white" className="border-t border-black/5 py-20 md:py-24">
         <div className="mx-auto mb-6 max-w-6xl px-6 text-center">
-          <p className="text-[0.65rem] uppercase tracking-[0.6em] text-muted-foreground">
-            ONLY PARTNERED WITH THE BEST
+          <p className="text-sm font-light uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
+            Mentor-Approved Partnerships
           </p>
         </div>
         <PartnerLogoCarousel logos={partnerLogos} />

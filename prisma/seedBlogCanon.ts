@@ -8,6 +8,205 @@ const SUPPORTED_NETWORKS = new Set(['CJ', 'IMPACT', 'AWIN', 'SHAREASALE', 'MYREG
 
 const blogCanon = [
   {
+    slug: 'baby-and-pet-safety-guidelines',
+    title: 'Baby & Pet Safety Guidelines',
+    excerpt: 'A calm, realistic approach to keeping baby and pets safe—without panic, guilt, or impossible rules.',
+    authorName: 'Taylor-Made Baby Co. Mentors',
+    authorRoleSnapshot: 'MENTOR',
+    tags: ['safety', 'transitions', 'routines', 'intro'],
+    publishedAt: '2025-09-01T10:00:00.000Z',
+    content: [
+      {
+        type: 'paragraph',
+        text: 'A calm, realistic approach to keeping baby and pets safe—without panic, guilt, or impossible rules.',
+      },
+      { type: 'heading', level: 2, text: 'Intro' },
+      {
+        type: 'paragraph',
+        text: 'Babies and pets can absolutely coexist—and often beautifully.',
+      },
+      {
+        type: 'paragraph',
+        text: 'But bringing a baby into a home with pets introduces a layer of responsibility that is new for everyone.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Safety here isn’t about fear. It’s about awareness, boundaries, and support.',
+      },
+      {
+        type: 'paragraph',
+        text: 'These guidelines are meant to help you prepare calmly, observe confidently, and adjust as your family grows—without turning your home into a rulebook.',
+      },
+      { type: 'heading', level: 2, text: 'Why This Matters' },
+      {
+        type: 'paragraph',
+        text: 'Pets don’t understand babies. Babies don’t understand pets.',
+      },
+      {
+        type: 'paragraph',
+        text: 'What keeps everyone safe is predictability, supervision, and thoughtful setup.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Most baby–pet incidents happen because of overstimulation, missed body-language cues, fatigue, and assumptions that “it’ll be fine.”',
+      },
+      { type: 'paragraph', text: 'The goal isn’t perfection—it’s prevention through structure.' },
+      { type: 'heading', level: 2, text: 'Core Safety Principles' },
+      {
+        type: 'list',
+        items: [
+          'Supervision is non-negotiable—babies and pets should never interact without an adult present.',
+          'Boundaries protect everyone—safe zones help pets retreat and help babies explore without risk.',
+          'Behavior beats intention—a “good dog” or “gentle cat” can still react when startled, cornered, or overwhelmed.',
+          'Preparation matters more than reaction—set up your home before baby arrives to reduce stress later.',
+        ],
+      },
+      { type: 'heading', level: 2, text: 'Before Baby Arrives' },
+      { type: 'heading', level: 3, text: 'Set Up Physical Boundaries' },
+      {
+        type: 'list',
+        items: [
+          'Install baby gates early so pets don’t associate them with the baby.',
+          'Create pet-only spaces—beds, crates, and quiet rooms where pets can reset.',
+          'Establish baby-only zones like the nursery and play areas so the new spaces stay clear.',
+        ],
+      },
+      { type: 'heading', level: 3, text: 'Adjust Routines Gradually' },
+      {
+        type: 'list',
+        items: [
+          'Shift feeding, walking, or play schedules in advance so pets already expect new rhythms.',
+          'Practice shorter attention windows if you anticipate limited energy after the baby arrives.',
+        ],
+      },
+      { type: 'heading', level: 3, text: 'Introduce Baby Sounds & Smells' },
+      {
+        type: 'list',
+        items: [
+          'Play recordings of baby noises at low volume and gradually raise the sound.',
+          'Bring home baby-scented items before the hospital return so the house already smells new.',
+        ],
+      },
+      { type: 'heading', level: 2, text: 'The First Weeks Home' },
+      { type: 'heading', level: 3, text: 'Introductions Should Be Calm & Controlled' },
+      {
+        type: 'list',
+        items: [
+          'One adult handles the baby while one handles the pet to keep both grounded.',
+          'Keep interactions brief and positive—think seconds, not minutes.',
+          'Allow curiosity without forcing closeness; let pets approach at their own pace.',
+        ],
+      },
+      { type: 'heading', level: 3, text: 'Watch Body Language Closely' },
+      {
+        type: 'list',
+        items: [
+          'Turning away or avoiding eye contact.',
+          'Lip licking, yawning, or stiff posture.',
+          'Growling, hissing, or tail flicking.',
+        ],
+      },
+      {
+        type: 'paragraph',
+        text: 'Stress signals are communication—not misbehavior.',
+      },
+      { type: 'heading', level: 2, text: 'Ongoing Daily Safety Habits' },
+      { type: 'heading', level: 3, text: 'Always Separate When' },
+      {
+        type: 'list',
+        items: [
+          'You leave the room.',
+          'Your pet is eating or resting.',
+          'Your baby is on the floor exploring.',
+        ],
+      },
+      { type: 'heading', level: 3, text: 'Teach Gentle Interaction Early' },
+      {
+        type: 'list',
+        items: [
+          'Model gentle touch.',
+          'Redirect grabbing immediately.',
+          'Narrate calmly: “We touch softly.”',
+        ],
+      },
+      { type: 'heading', level: 3, text: 'Protect Pet Resources' },
+      {
+        type: 'list',
+        items: [
+          'Never allow babies to climb on pets.',
+          'Keep hands off tails, ears, or fur.',
+          'Keep babies away from food bowls, toys, and litter boxes.',
+        ],
+      },
+      { type: 'heading', level: 2, text: 'Special Notes by Pet Type' },
+      { type: 'heading', level: 3, text: 'Dogs' },
+      {
+        type: 'list',
+        items: [
+          'Never leave a dog alone with a sleeping baby.',
+          'Supervise all floor play.',
+          'Use a leash or gate if their energy is high.',
+        ],
+      },
+      { type: 'heading', level: 3, text: 'Cats' },
+      {
+        type: 'list',
+        items: [
+          'Keep cats out of sleep spaces.',
+          'Secure bassinet and crib areas.',
+          'Monitor climbing and jumping behavior.',
+        ],
+      },
+      { type: 'heading', level: 3, text: 'Small Pets (Rabbits, Reptiles, Birds)' },
+      {
+        type: 'list',
+        items: [
+          'Keep enclosures baby-proofed.',
+          'Supervise all viewing and interactions.',
+          'Wash hands after any contact.',
+        ],
+      },
+      { type: 'heading', level: 2, text: 'Mentor Notes' },
+      {
+        type: 'paragraph',
+        text: 'Safety isn’t about assuming the worst—it’s about respecting unpredictability.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Pets are family, but they’re still animals. Babies are curious, but they’re still learning control.',
+      },
+      { type: 'heading', level: 2, text: 'Things No One Tells You (But We Will)' },
+      {
+        type: 'list',
+        items: [
+          'Most issues happen during “just a second” moments.',
+          'A calm pet still needs boundaries.',
+          'A loving home can still have accidents.',
+          'Asking for help—trainers, vets, mentors—is a strength.',
+        ],
+      },
+      { type: 'heading', level: 2, text: 'Final Thought' },
+      {
+        type: 'paragraph',
+        text: 'Babies and pets can grow up together safely, lovingly, and joyfully.',
+      },
+      {
+        type: 'paragraph',
+        text: 'The foundation isn’t trust alone—it’s structure, supervision, and patience.',
+      },
+      {
+        type: 'paragraph',
+        text: 'If you ever feel unsure, overwhelmed, or second-guessing yourself, that’s normal—and it’s why you don’t have to figure this out alone.',
+      },
+      { type: 'heading', level: 2, text: 'END_CARD' },
+      {
+        type: 'paragraph',
+        text: 'Your mentor is here to help you think through safety—calmly and without judgment.',
+      },
+    ],
+    isAffiliate: false,
+  },
+  {
     slug: 'bringing-baby-home-with-pets',
     title: 'Bringing Baby Home When You Already Have Pets',
     excerpt: 'How to prepare your home, your pets, and yourself for a calm transition.',
@@ -305,18 +504,18 @@ const blogCanon = [
   },
 ];
 
-type SeedAffiliatePartner = {
+type AffiliatePartner = {
   partnerName: string;
   network: string;
 };
 
-type SeedBlogPost = {
+type AffiliatePost = {
   slug: string;
-  affiliatePartners?: SeedAffiliatePartner[];
+  affiliatePartners?: AffiliatePartner[];
   affiliateCTAs?: string[];
 };
 
-type SeedAffiliateLink = {
+type AffiliateLink = {
   partnerName: string;
   network: string;
   label: string;
@@ -325,10 +524,10 @@ type SeedAffiliateLink = {
   isPrimary: boolean;
 };
 
-const buildAffiliateLinks = (post: SeedBlogPost) => {
+const buildAffiliateLinks = (post: AffiliatePost) => {
   const partners = post.affiliatePartners || [];
   const ctas = post.affiliateCTAs || [];
-  const links: SeedAffiliateLink[] = [];
+  const links: AffiliateLink[] = [];
 
   if (partners.length !== ctas.length) {
     console.warn(
@@ -373,12 +572,38 @@ const seed = async () => {
   let skippedPosts = 0;
   let createdLinks = 0;
 
+  type SeedAuthor = {
+    id: string;
+    role: 'ADMIN' | 'MENTOR';
+  };
+
+  const seedAuthors = await prisma.user.findMany({
+    where: { role: { in: ['ADMIN', 'MENTOR'] } },
+    select: { id: true, role: true },
+  }) as SeedAuthor[];
+
+  const fallbackAdminAuthorId = seedAuthors.find((user) => user.role === 'ADMIN')?.id ?? null;
+  const fallbackMentorAuthorId = seedAuthors.find((user) => user.role === 'MENTOR')?.id ?? null;
+
+  if (!fallbackAdminAuthorId && !fallbackMentorAuthorId) {
+    throw new Error('seedBlogCanon requires at least one ADMIN or MENTOR user to assign blog authors.');
+  }
+
   for (const post of blogCanon) {
     const existing = await prisma.blogPost.findUnique({ where: { slug: post.slug } });
     if (existing) {
       skippedPosts += 1;
       console.log(`[skip] ${post.slug} exists`);
       continue;
+    }
+
+    const authorId =
+      post.authorRoleSnapshot === 'MENTOR'
+        ? fallbackMentorAuthorId ?? fallbackAdminAuthorId
+        : fallbackAdminAuthorId ?? fallbackMentorAuthorId;
+
+    if (!authorId) {
+      throw new Error(`Unable to resolve authorId for ${post.slug}`);
     }
 
     const created = await prisma.blogPost.create({
@@ -389,12 +614,12 @@ const seed = async () => {
         content: post.content,
         heroImage: null,
         status: 'PUBLISHED',
-        isAffiliate: true,
-        publishedAt: new Date(),
-        authorId: 'seeded-canon',
+        publishedAt: post.publishedAt ? new Date(post.publishedAt) : new Date(),
+        authorId,
         authorName: post.authorName,
         authorRoleSnapshot: post.authorRoleSnapshot,
         tags: post.tags,
+        isAffiliate: post.isAffiliate ?? true,
       },
       select: { id: true },
     });

@@ -19,7 +19,6 @@ import { MarketingHeading } from "@/components/marketing/Typography";
 import { onboardingApi } from "@/lib/api";
 import inviteEnvelopeImage from "@/assets/images/envelope.png";
 import { HERO_IMAGE_REGISTRY } from "@/lib/heroImages";
-import { ILLUSTRATIONS } from "@/lib/images";
 
 const RequestInvitePage = () => {
   const router = useRouter();
@@ -141,17 +140,6 @@ const RequestInvitePage = () => {
                 className="w-full rounded-[26px]"
                 width={inviteEnvelopeImage.width}
                 height={inviteEnvelopeImage.height}
-              />
-            </ImageFrame>
-          </div>
-          <div className="flex justify-center w-full">
-            <ImageFrame className="max-w-[520px] border-[var(--tmbc-mauve)]/30">
-              <Image
-                src={ILLUSTRATIONS.INVITE_ICONS}
-                alt="How the Taylor-Made Baby Co. invitation process works"
-                width={ILLUSTRATIONS.INVITE_ICONS.width}
-                height={ILLUSTRATIONS.INVITE_ICONS.height}
-                className="w-full h-auto"
               />
             </ImageFrame>
           </div>
