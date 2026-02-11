@@ -77,12 +77,12 @@ export default function InviteFlowSection() {
   };
 
   return (
-    <section className="invite-flow-section relative py-20">
+    <section className="invite-flow-section relative py-16">
       <div className="mx-auto max-w-6xl px-5">
         <h2 className="mb-12 text-center text-3xl md:text-4xl font-serif">
           How the Taylor-Made experience begins
         </h2>
-        <div className="invite-flow-inner rounded-[36px] bg-gradient-to-br from-[var(--tmbc-ivory)] via-[var(--tmbc-blush-soft)] to-[var(--tmbc-blush-soft)] px-6 py-12">
+        <div className="invite-flow-inner rounded-[36px] bg-gradient-to-br from-[var(--tmbc-ivory)] via-[var(--tmbc-blush-soft)] to-[var(--tmbc-blush-soft)] px-6 py-10">
           <div className="flex flex-col gap-6 text-center md:flex-row md:items-start md:gap-0 md:text-center">
             {inviteSteps.map((step, index) => {
               const stepKey = `step-${index + 1}`;
@@ -123,10 +123,8 @@ export default function InviteFlowSection() {
                         <h4 className="step-title font-serif italic text-[0.95rem] leading-[1.4] tracking-[0.04em] text-[var(--tmbc-charcoal)]/90">
                           {step.label}
                         </h4>
-                      </div>
-                      <div className="step-affordance">
                         <span className="step-state-label">{isExpanded ? "Collapse" : "Tap to expand"}</span>
-                        <span className={`step-chevron chevron ${isExpanded ? "rotate-180" : ""}`} aria-hidden="true">
+                        <span className="step-chevron chevron" aria-hidden="true">
                           ▾
                         </span>
                       </div>
@@ -144,19 +142,14 @@ export default function InviteFlowSection() {
                     </div>
                   </div>
                   {index < inviteSteps.length - 1 && (
-                    <>
-                      <div className="mt-3 md:hidden text-[20px] text-[var(--tmbc-charcoal)]/30 text-center">
-                        ↓
-                      </div>
-                      <div className="hidden md:flex step-arrow-column md:px-4">
-                        <span
-                          className="text-[28px] leading-none text-[var(--tmbc-charcoal)]/30"
-                          aria-hidden="true"
-                        >
-                          →
-                        </span>
-                      </div>
-                    </>
+                    <div className="hidden md:flex step-arrow-column md:px-4">
+                      <span
+                        className="invite-step-arrow text-[28px] leading-none text-[var(--tmbc-charcoal)]/30"
+                        aria-hidden="true"
+                      >
+                        →
+                      </span>
+                    </div>
                   )}
                 </Fragment>
               );

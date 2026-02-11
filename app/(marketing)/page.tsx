@@ -79,7 +79,7 @@ const partnerLogos = [
 
 function ExperienceIllustrationSection() {
   return (
-    <SectionBand bg="blush" className="py-16 md:py-20 lg:py-24 why-parents-gradient">
+    <SectionBand bg="blush" className="py-12 md:py-16 lg:py-20 why-parents-gradient">
       <div className="mx-auto max-w-5xl px-6">
         <p className="mb-3 text-xs uppercase tracking-[0.22em] text-neutral-500">
           WHY PARENTS LOVE TMBC
@@ -187,7 +187,7 @@ export default function HomePage() {
           label: "Request an Invite",
           href: "/request-invite",
         }}
-        className="pt-20 pb-16 md:pt-32 md:pb-28"
+        className="pt-16 pb-12 md:pt-28 md:pb-24"
         textContainerClassName="max-w-full md:max-w-[720px] px-6 md:px-8 p-6 space-y-6 md:space-y-8 leading-relaxed"
         headlineClassName="hero-line-clamp leading-snug"
         leadClassName="mt-10 md:mt-12"
@@ -251,7 +251,7 @@ export default function HomePage() {
       </div>
       <ExperienceIllustrationSection />
       <RibbonDivider />
-      <SectionBand bg="white" className="border-t border-black/5 py-20 md:py-24">
+      <SectionBand bg="white" className="border-t border-black/5 py-16 md:py-20">
         <div className="mx-auto mb-6 max-w-6xl px-6 text-center">
           <p className="text-sm font-light uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/60">
             Mentor-Approved Partnerships

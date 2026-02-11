@@ -40,7 +40,7 @@ export default function WhyParentsAccordion() {
   const toggle = (id: string) => setExpanded((current) => (current === id ? null : id));
 
   return (
-    <div className="rounded-[36px] bg-gradient-to-br from-[#fdf6f8] via-[#fdecef] to-[#fdf6f8] px-6 py-8 md:px-8 md:py-10 mt-10">
+    <div className="rounded-[36px] bg-gradient-to-br from-[#fdf6f8] via-[#fdecef] to-[#fdf6f8] px-6 py-8 md:px-8 md:py-10 mt-8">
       <div className="space-y-4">
         {loveReasons.map((reason) => {
           const isOpen = expanded === reason.id;

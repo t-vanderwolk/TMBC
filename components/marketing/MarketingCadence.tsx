@@ -22,7 +22,7 @@ export function bgClass(bg: Bg): string {
 }
 
 export function sectionWrap(bg: Bg): string {
-  return `${bgClass(bg)} py-16 sm:py-20 md:py-24 lg:py-28`;
+  return `${bgClass(bg)} py-12 sm:py-16 md:py-20 lg:py-24`;
 }
 
 export function textCage(kind: "standard" | "intro" | "narrow" = "standard"): string {
