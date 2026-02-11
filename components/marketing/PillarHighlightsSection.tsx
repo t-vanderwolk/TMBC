@@ -63,7 +63,7 @@ export default function PillarHighlightsSection() {
   const toggleExpanded = (title: string) => setExpanded((current) => (current === title ? null : title));
 
   return (
-    <SectionBand bg="white" className="py-16 md:py-24 lg:py-28">
+    <SectionBand bg="white" className="py-16 md:py-24 lg:py-28 bg-[#f6f3eb]">
       <div className="mx-auto w-full max-w-6xl px-6 space-y-10">
         <h2 className="text-center font-serif text-4xl mb-0 max-w-4xl mx-auto text-[var(--tmbc-charcoal)]">
           Pillars That<br />

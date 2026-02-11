@@ -20,7 +20,7 @@ import matchImage from "@/assets/images/match.png";
 import welcomeImage from "@/assets/images/welcome.png";
 import invitationStill from "@/assets/images/tmbcinvite.png";
 import tmbcSeal from "@/assets/images/tmbc-seal.png";
-import { SectionBand, textCage, cardBase } from "@/components/marketing/MarketingCadence";
+import { textCage, cardBase } from "@/components/marketing/MarketingCadence";
 
 // Marketing visual guardrails:
 // - All cards/panels use canonical marketing-card / marketing-panel styles
@@ -79,60 +79,64 @@ const processSteps = [
 export default function HowItWorksPage() {
   return (
     <>
-      {/* Hero must render instantly and avoid additional entrance wrappers. */}
-      <MarketingHero
-        eyebrow="How It Works"
-        headline="A calm, guided path into Taylor-Made Baby Co."
-        lead="A welcoming invite, thoughtful guidance, and steady support—never a rush or a forced decision."
-        primaryCta={{
-          label: "Request an Invite",
-          href: "/request-invite",
-        }}
-        secondaryCta={{
-          label: "See the steps",
-          href: "#process",
-        }}
-        heroImage={HERO_IMAGE_REGISTRY.upperLowerRibbonHero}
-      />
-      <SectionBand bg="white">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
-          <div className="space-y-6">
-            <div className={`${textCage("standard")} space-y-6`}>
-              <MarketingHeading level="h2" className="tracking-[0.02em] text-neutral-900">
-                Why we start with an invitation
-              </MarketingHeading>
-              <p className="text-[16px] leading-[1.7] text-neutral-600">
-                Invitations keep the landing space calm while we stay present for the people behind every request.
-              </p>
+      <section className="bg-ivory">
+        <MarketingHero
+          eyebrow="How It Works"
+          headline="A calm, guided path into Taylor-Made Baby Co."
+          lead="A welcoming invite, thoughtful guidance, and steady support—never a rush or a forced decision."
+          primaryCta={{
+            label: "Request an Invite",
+            href: "/request-invite",
+          }}
+          secondaryCta={{
+            label: "See the steps",
+            href: "#process",
+          }}
+          heroImage={HERO_IMAGE_REGISTRY.upperLowerRibbonHero}
+        />
+      </section>
+
+      <section className="bg-white py-20 md:py-32">
+        <div className="mx-auto w-full max-w-7xl px-6 md:px-10">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
+            <div className="space-y-6">
+              <div className={`${textCage("standard")} space-y-6`}>
+                <MarketingHeading level="h2" className="tracking-[0.02em] text-neutral-900">
+                  Why we start with an invitation
+                </MarketingHeading>
+                <p className="text-[16px] leading-[1.7] text-neutral-600">
+                  Invitations keep the landing space calm while we stay present for the people behind every request.
+                </p>
+              </div>
+              <ul className={`${textCage("standard")} space-y-3 text-[15px] leading-[1.7] text-neutral-700`}>
+                {invitationPoints.map((point) => (
+                  <li key={point} className="flex gap-3">
+                    <span className="mt-1 h-2 w-2 rounded-full bg-[var(--tmbc-blush)]/70" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className={`${textCage("standard")} space-y-3 text-[15px] leading-[1.7] text-neutral-700`}>
-              {invitationPoints.map((point) => (
-                <li key={point} className="flex gap-3">
-                  <span className="mt-1 h-2 w-2 rounded-full bg-[var(--tmbc-blush)]/70" />
-                  {point}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex justify-center">
-            <div className="relative mx-auto w-full max-w-md">
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl">
-                <Image
-                  src={invitationStill}
-                  alt="Taylor-Made Baby Co. invitation still life representing calm, intentional welcome"
-                  fill
-                  sizes="(min-width: 1024px) 420px, 90vw"
-                  className="object-cover"
-                  priority={false}
-                />
+            <div className="flex justify-center">
+              <div className="relative mx-auto w-full max-w-md">
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl">
+                  <Image
+                    src={invitationStill}
+                    alt="Taylor-Made Baby Co. invitation still life representing calm, intentional welcome"
+                    fill
+                    sizes="(min-width: 1024px) 420px, 90vw"
+                    className="object-cover"
+                    priority={false}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </SectionBand>
+      </section>
 
-      <SectionBand bg="ivory" id="process">
-        <div className="space-y-10">
+      <section className="bg-linen py-20 md:py-32" id="process">
+        <div className="mx-auto w-full max-w-7xl px-6 md:px-10 space-y-10">
           <div className="flex items-center gap-3">
             <span className="h-px flex-1 bg-[var(--tmbc-charcoal)]/10" aria-hidden="true" />
             <p className="text-[11px] uppercase tracking-[0.5em] text-[var(--tmbc-charcoal)]/70">THE PROCESS</p>
@@ -192,10 +196,10 @@ export default function HowItWorksPage() {
             );
           })}
         </div>
-      </SectionBand>
+      </section>
 
-      <SectionBand bg="blush">
-        <div className={`${textCage("intro")} text-center`}>
+      <section className="bg-white py-20 md:py-32">
+        <div className={`${textCage("intro")} mx-auto px-6 text-center`}>
           <Image
             src={tmbcSeal}
             alt="Baby Approved — Taylor-Made Baby Co."
@@ -212,33 +216,35 @@ export default function HowItWorksPage() {
             Calm guidance. Thoughtful standards. Always baby-first.
           </p>
         </div>
-      </SectionBand>
+      </section>
 
-      <SectionBand bg="white">
-        <div className={`${textCage("intro")} text-center space-y-8`}>
-          <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">CALM START</p>
-          <MarketingHeading level="h2" className="text-[var(--tmbc-charcoal)]">
+      <section className="bg-blush py-20 md:py-32 flex justify-center">
+        <div className="w-full max-w-[520px] px-6">
+          <article className="marketing-card marketing-card-padding rounded-2xl border border-[var(--tmbc-charcoal)]/10 bg-white/90 text-center space-y-8">
+            <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/70">CALM START</p>
+          <h2 className="font-serif text-[32px] leading-[1.15] text-[var(--tmbc-charcoal)] text-center">
             Guidance that stays present with you, whatever this season looks like.
-          </MarketingHeading>
-          <p className="text-[15px] leading-[1.7] text-[var(--tmbc-charcoal)]/80">
-            Request an invite when the time feels right; we’ll stay ready with thoughtful mentors and steady next steps.
-          </p>
-          <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-center">
-            <Link
-              href="/request-invite"
-              className="inline-flex items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3 text-[14px] font-semibold tracking-[0.35em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] shadow-[0_20px_45px_rgba(0,0,0,0.18)]"
-            >
-              Request an Invite
-            </Link>
-            <Link
-              href="/request-invite"
-              className="text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 transition hover:underline underline-offset-4"
-            >
-              Already have a code?
-            </Link>
-          </div>
+          </h2>
+            <p className="text-[15px] leading-[1.7] text-[var(--tmbc-charcoal)]/80">
+              Request an invite when the time feels right; we’ll stay ready with thoughtful mentors and steady next steps.
+            </p>
+            <div className="flex flex-col gap-5 items-center w-full">
+              <Link
+                href="/request-invite"
+                className="inline-flex w-full max-w-[320px] items-center justify-center rounded-full bg-[var(--tmbc-blush-primary)] px-6 py-3 text-[14px] font-semibold tracking-[0.35em] text-white transition hover:bg-[var(--tmbc-blush-primary-hover)] shadow-[0_20px_45px_rgba(0,0,0,0.18)]"
+              >
+                Request an Invite
+              </Link>
+              <Link
+                href="/request-invite"
+                className="w-full max-w-[320px] text-[11px] uppercase tracking-[0.35em] text-[var(--tmbc-charcoal)]/80 transition hover:underline underline-offset-4 text-center"
+              >
+                Already have a code?
+              </Link>
+            </div>
+          </article>
         </div>
-      </SectionBand>
+      </section>
     </>
   );
 }

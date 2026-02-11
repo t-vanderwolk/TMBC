@@ -9,10 +9,8 @@ import BlogContentRenderer, {
 } from "@/components/blog/BlogContentRenderer";
 import BlogAffiliateEndCard from "@/components/blog/BlogAffiliateEndCard";
 import BlogAnalyticsTracker from "@/components/blog/BlogAnalyticsTracker";
-import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
-import EndRibbonBow from "@/components/blog/EndRibbonBow";
 import defaultBlogOgImage from "@/assets/images/hero-marketing-signature.png";
-import tmbcSeal from "@/assets/images/tmbc-seal.png";
+import BlogHighlightSection from "@/components/blog/BlogHighlightSection";
 import { MarketingHeading } from "@/components/marketing/Typography";
 import { BLOG_IMPACT_SLUG } from "@/lib/constants/blogAnalytics";
 import { caveat } from "@/lib/fonts";
@@ -529,27 +527,13 @@ const BlogArticlePage = async ({ params, searchParams }: BlogPageProps) => {
               Every family is different. Your mentor can help you decide what actually fits your life.
             </p>
             <div className="mt-24" />
-            <EndRibbonBow />
             <div className="mt-4 flex justify-start">
               <div
-                className={`${caveat.className} text-neutral-600 text-lg`}
-                style={{ transform: "rotate(-6deg) scale(3) translateY(6px)" }}
+                className={`${caveat.className} text-[var(--tmbc-blush-primary)] text-[3rem] leading-none`}
+                style={{ transform: "rotate(-6deg) scale(2.5) translateY(4px) translateX(12px)" }}
               >
                 <div>XOXO</div>
-                <div className="-mt-1">— T</div>
-              </div>
-            </div>
-            <div className="relative mt-32 flex justify-end">
-              <div className="opacity-75 rotate-[-8deg] pointer-events-none">
-                <Image
-                  src={tmbcSeal}
-                  alt=""
-                  aria-hidden="true"
-                  width={120}
-                  height={120}
-                  className="w-[100px] sm:w-[120px]"
-                  priority={false}
-                />
+                <div className="-mt-1 text-[2rem]">— T</div>
               </div>
             </div>
             <div className="mt-10 sm:mt-14" />
